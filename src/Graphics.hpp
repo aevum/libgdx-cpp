@@ -179,7 +179,7 @@ class Graphics {
     /** Sets the icon of the window. Ignored on Android.
      *
      * @param pixmap */
-    virtual void setIcon (Pixmap pixmap) = 0;
+    virtual void setIcon (Pixmap& pixmap) = 0;
 
     /** Enable/Disable vsynching. This is a best-effort attempt which might not work on all platforms.
      *
@@ -191,7 +191,7 @@ class Graphics {
 
     /** @param extension the extension name
      * @return whether the extension is supported */
-    virtual bool supportsExtension (String extension) = 0;
+    virtual bool supportsExtension (stlport::string& extension) = 0;
 
     // /**
     // * Opens the first back facing video camera. Only one camera
