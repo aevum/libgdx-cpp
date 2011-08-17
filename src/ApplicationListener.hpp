@@ -1,6 +1,9 @@
 
-#pragma once
+#ifndef GDXCPP_APPLICATION_LISTENER_H
+#define GDXCPP_APPLICATION_LISTENER_H
 
+namespace gdx_cpp {
+  
 class ApplicationListener {
     /** Called when the {@link Application} is first created. */
     virtual void create () = 0;
@@ -27,3 +30,7 @@ class ApplicationListener {
     /** Called when the {@link Application} is destroyed. Preceded by a call to {@link #pause()}. */
     virtual void dispose () = 0;
 };
+
+}
+
+#endif // GDXCPP_APPLICATION_LISTENER_H
