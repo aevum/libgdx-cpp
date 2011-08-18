@@ -1,7 +1,7 @@
 file(GLOB GDX_HEADERS *.hpp)
 set(GDX_SRC )
 
-file(GLOB GDX_HEADERS_MATH math/Rectangle.cpp math/Rectangle.cpp math/Rectangle.cpp math/rectangle.cpp math/*.hpp)
+file(GLOB GDX_HEADERS_MATH math/*.hpp)
 file(GLOB GDX_SOURCE_MATH math/*.cpp)
 
 file(COPY ${GDX_HEADERS} DESTINATION ${GDXCPP_INCLUDE_DIR}/gdx)
