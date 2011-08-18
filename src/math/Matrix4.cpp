@@ -15,11 +15,41 @@
 */
 #include "Matrix4.hpp"
 
+#include "Vector3.hpp"
+#include "Matrix3.hpp"
+#include "MathUtils.hpp"
+
+#include <string>
+#include <sstream>
+#include <cmath>
+#include <iostream>
+#include <cassert>
+#include <string.h>
+
 using namespace gdx_cpp::math;
 
+#define M00 0
+#define M01 4
+#define M02 8
+#define M03 12
+#define M10 1
+#define M11 5
+#define M12 9
+#define M13 13
+#define M20 2
+#define M21 6
+#define M22 10
+#define M23 14
+#define M30 3
+#define M31 7
+#define M32 11
+#define M33 15
+
+float _tmp[16];
 
 Matrix4::Matrix4(const Matrix4& other)
 {
+  this->set(other);
 }
 
 Matrix4::~Matrix4()
@@ -28,31 +58,16 @@ Matrix4::~Matrix4()
 
 Matrix4& Matrix4::operator=(const Matrix4& other)
 {
-    return *this;
+  return this->set(other);
 }
 
-bool Matrix4::operator==(const Matrix4& other) const
-{
-///TODO: return ...;
-}
-
-/** Constructs an identity matrix */
 Matrix4::Matrix4 () {
-    val[M00] = 1f;
-    val[M11] = 1f;
-    val[M22] = 1f;
-    val[M33] = 1f;
+    val[M00] = 1;
+    val[M11] = 1;
+    val[M22] = 1;
+    val[M33] = 1;
 }
 
-/** Constructs a matrix from the given matrix
- *
- * @param matrix The matrix */
-Matrix4::Matrix4 (const Matrix4& matrix) {
-    this->set(matrix);
-}
-
-/** Constructs a matrix from the given float array. The array must have at least 16 elements
- * @param values The float array */
 Matrix4::Matrix4 (float* values) {
     this->set(values);
 }
@@ -65,7 +80,7 @@ Matrix4& Matrix4::set(const Matrix4& matrix) {
     return this->set(matrix.val);
 }
 
-Matrix4& Matrix4::set(float* values) {
+Matrix4& Matrix4::set(const float* values) {
     val[M00] = values[M00];
     val[M10] = values[M10];
     val[M20] = values[M20];
@@ -82,7 +97,7 @@ Matrix4& Matrix4::set(float* values) {
     val[M13] = values[M13];
     val[M23] = values[M23];
     val[M33] = values[M33];
-    return this;
+    return *this;
 }
 
 Matrix4& Matrix4::set(const Quaternion& quaternion) {
@@ -116,14 +131,7 @@ Matrix4& Matrix4::set(const Quaternion& quaternion) {
     return *this;
 }
 
-/** Sets the four columns of the matrix which correspond to the x-, y- and z-axis of the vector space this matrix creates as
- * well as the 4th column representing the translation of any point that is multiplied by this matrix.
- *
- * @param xAxis The x-axis
- * @param yAxis The y-axis
- * @param zAxis The z-axis
- * @param pos The translation vector */
-void Matrix4::set(Vector3 xAxis, Vector3 yAxis, Vector3 zAxis, Vector3 pos) {
+void Matrix4::set(Vector3& xAxis, Vector3& yAxis, Vector3& zAxis, const Vector3& pos) {
     val[M00] = xAxis.x;
     val[M01] = xAxis.y;
     val[M02] = xAxis.z;
@@ -141,108 +149,89 @@ void Matrix4::set(Vector3 xAxis, Vector3 yAxis, Vector3 zAxis, Vector3 pos) {
     val[M32] = 0;
     val[M33] = 1;
 }
-
-/** @return a copy of this matrix */
-Matrix4 Matrix4::cpy() {
-    return new Matrix4(this);
+ 
+Matrix4::ptr Matrix4::cpy() {
+    return Matrix4::ptr(new Matrix4(*this));
 }
 
-/** Adds a translational component to the matrix in the 4th column. The other columns are untouched.
- *
- * @param vector The translation vector
- * @return This matrix for chaining */
-Matrix4 Matrix4::trn(Vector3 vector) {
+Matrix4& Matrix4::trn(const Vector3& vector) {
     val[M03] += vector.x;
     val[M13] += vector.y;
     val[M23] += vector.z;
-    return this;
+    return *this;
 }
 
-/** Adds a translational component to the matrix in the 4th column. The other columns are untouched.
- *
- * @param x The x-component of the translation vector
- * @param y The y-component of the translation vector
- * @param z The z-component of the translation vector
- * @return This matrix for chaining */
-Matrix4 Matrix4::trn(float x, float y, float z) {
+Matrix4& Matrix4::trn(float x, float y, float z) {
     val[M03] += x;
     val[M13] += y;
     val[M23] += z;
-    return this;
+    return *this;
 }
 
-/** @return the backing float array */
-float[] Matrix4::getValues() {
+float* Matrix4::getValues() {
     return val;
 }
 
-/** Multiplies this matrix with the given matrix, storing the result in this matrix.
- *
- * @param matrix The other matrix
- * @return This matrix for chaining. */
-Matrix4 Matrix4::mul(Matrix4 matrix) {
-    tmp[M00] = val[M00] * matrix.val[M00] + val[M01] * matrix.val[M10] + val[M02] * matrix.val[M20] + val[M03]
-               * matrix.val[M30];
-    *                tmp[M01] = val[M00] * matrix.val[M01] + val[M01] * matrix.val[M11] + val[M02] * matrix.val[M21] + val[M03]
-                                * matrix.val[M31];
-    *                tmp[M02] = val[M00] * matrix.val[M02] + val[M01] * matrix.val[M12] + val[M02] * matrix.val[M22] + val[M03]
-                                * matrix.val[M32];
-    *                tmp[M03] = val[M00] * matrix.val[M03] + val[M01] * matrix.val[M13] + val[M02] * matrix.val[M23] + val[M03]
-                                * matrix.val[M33];
-    *                tmp[M10] = val[M10] * matrix.val[M00] + val[M11] * matrix.val[M10] + val[M12] * matrix.val[M20] + val[M13]
-                                * matrix.val[M30];
-    *                tmp[M11] = val[M10] * matrix.val[M01] + val[M11] * matrix.val[M11] + val[M12] * matrix.val[M21] + val[M13]
-                                * matrix.val[M31];
-    *                tmp[M12] = val[M10] * matrix.val[M02] + val[M11] * matrix.val[M12] + val[M12] * matrix.val[M22] + val[M13]
-                                * matrix.val[M32];
-    *                tmp[M13] = val[M10] * matrix.val[M03] + val[M11] * matrix.val[M13] + val[M12] * matrix.val[M23] + val[M13]
-                                * matrix.val[M33];
-    *                tmp[M20] = val[M20] * matrix.val[M00] + val[M21] * matrix.val[M10] + val[M22] * matrix.val[M20] + val[M23]
-                                * matrix.val[M30];
-    *                tmp[M21] = val[M20] * matrix.val[M01] + val[M21] * matrix.val[M11] + val[M22] * matrix.val[M21] + val[M23]
-                                * matrix.val[M31];
-    *                tmp[M22] = val[M20] * matrix.val[M02] + val[M21] * matrix.val[M12] + val[M22] * matrix.val[M22] + val[M23]
-                                * matrix.val[M32];
-    *                tmp[M23] = val[M20] * matrix.val[M03] + val[M21] * matrix.val[M13] + val[M22] * matrix.val[M23] + val[M23]
-                                * matrix.val[M33];
-    *                tmp[M30] = val[M30] * matrix.val[M00] + val[M31] * matrix.val[M10] + val[M32] * matrix.val[M20] + val[M33]
-                                * matrix.val[M30];
-    *                tmp[M31] = val[M30] * matrix.val[M01] + val[M31] * matrix.val[M11] + val[M32] * matrix.val[M21] + val[M33]
-                                * matrix.val[M31];
-    *                tmp[M32] = val[M30] * matrix.val[M02] + val[M31] * matrix.val[M12] + val[M32] * matrix.val[M22] + val[M33]
-                                * matrix.val[M32];
-    *                tmp[M33] = val[M30] * matrix.val[M03] + val[M31] * matrix.val[M13] + val[M32] * matrix.val[M23] + val[M33]
-                                * matrix.val[M33];
-    *                return this->set(tmp);
+Matrix4& Matrix4::mul(const Matrix4& matrix) {
+    _tmp[M00] = val[M00] * matrix.val[M00] + val[M01] * matrix.val[M10] + val[M02] * matrix.val[M20] + val[M03]
+                 * matrix.val[M30];
+    _tmp[M01] = val[M00] * matrix.val[M01] + val[M01] * matrix.val[M11] + val[M02] * matrix.val[M21] + val[M03]
+                 * matrix.val[M31];
+    _tmp[M02] = val[M00] * matrix.val[M02] + val[M01] * matrix.val[M12] + val[M02] * matrix.val[M22] + val[M03]
+                 * matrix.val[M32];
+    _tmp[M03] = val[M00] * matrix.val[M03] + val[M01] * matrix.val[M13] + val[M02] * matrix.val[M23] + val[M03]
+                 * matrix.val[M33];
+    _tmp[M10] = val[M10] * matrix.val[M00] + val[M11] * matrix.val[M10] + val[M12] * matrix.val[M20] + val[M13]
+                 * matrix.val[M30];
+    _tmp[M11] = val[M10] * matrix.val[M01] + val[M11] * matrix.val[M11] + val[M12] * matrix.val[M21] + val[M13]
+                 * matrix.val[M31];
+    _tmp[M12] = val[M10] * matrix.val[M02] + val[M11] * matrix.val[M12] + val[M12] * matrix.val[M22] + val[M13]
+                 * matrix.val[M32];
+    _tmp[M13] = val[M10] * matrix.val[M03] + val[M11] * matrix.val[M13] + val[M12] * matrix.val[M23] + val[M13]
+                * matrix.val[M33];
+    _tmp[M20] = val[M20] * matrix.val[M00] + val[M21] * matrix.val[M10] + val[M22] * matrix.val[M20] + val[M23]
+                * matrix.val[M30];
+    _tmp[M21] = val[M20] * matrix.val[M01] + val[M21] * matrix.val[M11] + val[M22] * matrix.val[M21] + val[M23]
+                * matrix.val[M31];
+    _tmp[M22] = val[M20] * matrix.val[M02] + val[M21] * matrix.val[M12] + val[M22] * matrix.val[M22] + val[M23]
+                 * matrix.val[M32];
+    _tmp[M23] = val[M20] * matrix.val[M03] + val[M21] * matrix.val[M13] + val[M22] * matrix.val[M23] + val[M23]
+                 * matrix.val[M33];
+    _tmp[M30] = val[M30] * matrix.val[M00] + val[M31] * matrix.val[M10] + val[M32] * matrix.val[M20] + val[M33]
+                * matrix.val[M30];
+    _tmp[M31] = val[M30] * matrix.val[M01] + val[M31] * matrix.val[M11] + val[M32] * matrix.val[M21] + val[M33]
+                * matrix.val[M31];
+    _tmp[M32] = val[M30] * matrix.val[M02] + val[M31] * matrix.val[M12] + val[M32] * matrix.val[M22] + val[M33]
+                * matrix.val[M32];
+    _tmp[M33] = val[M30] * matrix.val[M03] + val[M31] * matrix.val[M13] + val[M32] * matrix.val[M23] + val[M33]
+                 * matrix.val[M33];
+    return this->set(_tmp);
 }
 
-/** Transposes the matrix
- *
- * @return This matrix for chaining */
-Matrix4 Matrix4::tra() {
-    tmp[M00] = val[M00];
-    tmp[M01] = val[M10];
-    tmp[M02] = val[M20];
-    tmp[M03] = val[M30];
-    tmp[M10] = val[M01];
-    tmp[M11] = val[M11];
-    tmp[M12] = val[M21];
-    tmp[M13] = val[M31];
-    tmp[M20] = val[M02];
-    tmp[M21] = val[M12];
-    tmp[M22] = val[M22];
-    tmp[M23] = val[M32];
-    tmp[M30] = val[M03];
-    tmp[M31] = val[M13];
-    tmp[M32] = val[M23];
-    tmp[M33] = val[M33];
-    return this->set(tmp);
+Matrix4& Matrix4::tra() {
+    _tmp[M00] = val[M00];
+    _tmp[M01] = val[M10];
+    _tmp[M02] = val[M20];
+    _tmp[M03] = val[M30];
+    _tmp[M10] = val[M01];
+    _tmp[M11] = val[M11];
+    _tmp[M12] = val[M21];
+    _tmp[M13] = val[M31];
+    _tmp[M20] = val[M02];
+    _tmp[M21] = val[M12];
+    _tmp[M22] = val[M22];
+    _tmp[M23] = val[M32];
+    _tmp[M30] = val[M03];
+    _tmp[M31] = val[M13];
+    _tmp[M32] = val[M23];
+    _tmp[M33] = val[M33];
+    return this->set(_tmp);
 }
 
 /** Sets the matrix to an identity matrix
  *
  * @return This matrix for chaining */
-Matrix4 Matrix4::idt() {
+Matrix4& Matrix4::idt() {
     val[M00] = 1;
     val[M01] = 0;
     val[M02] = 0;
@@ -259,13 +248,10 @@ Matrix4 Matrix4::idt() {
     val[M31] = 0;
     val[M32] = 0;
     val[M33] = 1;
-    return this;
+    return *this;
 }
 
-/** Inverts the matrix. Throws a RuntimeException in case the matrix is not invertible. Stores the result in this matrix
- *
- * @return This matrix for chaining */
-Matrix4 Matrix4::inv() {
+Matrix4& Matrix4::inv() {
     float l_det = val[M30] * val[M21] * val[M12] * val[M03] - val[M20] * val[M31] * val[M12] * val[M03] - val[M30] * val[M11]
                   * val[M22] * val[M03] + val[M10] * val[M31] * val[M22] * val[M03] + val[M20] * val[M11] * val[M32] * val[M03] - val[M10]
                   * val[M21] * val[M32] * val[M03] - val[M30] * val[M21] * val[M02] * val[M13] + val[M20] * val[M31] * val[M02] * val[M13]
@@ -275,60 +261,62 @@ Matrix4 Matrix4::inv() {
                   * val[M01] * val[M32] * val[M23] - val[M00] * val[M11] * val[M32] * val[M23] - val[M20] * val[M11] * val[M02] * val[M33]
                   *                        + val[M10] * val[M21] * val[M02] * val[M33] + val[M20] * val[M01] * val[M12] * val[M33] - val[M00] * val[M21] * val[M12]
                   * val[M33] - val[M10] * val[M01] * val[M22] * val[M33] + val[M00] * val[M11] * val[M22] * val[M33];
-    *                if (l_det == 0f) throw new RuntimeException("non-invertible matrix");
-    *                float inv_det = 1.0f / l_det;
-    *                tmp[M00] = val[M12] * val[M23] * val[M31] - val[M13] * val[M22] * val[M31] + val[M13] * val[M21] * val[M32] - val[M11]
-                                * val[M23] * val[M32] - val[M12] * val[M21] * val[M33] + val[M11] * val[M22] * val[M33];
-    *                tmp[M01] = val[M03] * val[M22] * val[M31] - val[M02] * val[M23] * val[M31] - val[M03] * val[M21] * val[M32] + val[M01]
-                                * val[M23] * val[M32] + val[M02] * val[M21] * val[M33] - val[M01] * val[M22] * val[M33];
-    *                tmp[M02] = val[M02] * val[M13] * val[M31] - val[M03] * val[M12] * val[M31] + val[M03] * val[M11] * val[M32] - val[M01]
-                                * val[M13] * val[M32] - val[M02] * val[M11] * val[M33] + val[M01] * val[M12] * val[M33];
-    *                tmp[M03] = val[M03] * val[M12] * val[M21] - val[M02] * val[M13] * val[M21] - val[M03] * val[M11] * val[M22] + val[M01]
-                                * val[M13] * val[M22] + val[M02] * val[M11] * val[M23] - val[M01] * val[M12] * val[M23];
-    *                tmp[M10] = val[M13] * val[M22] * val[M30] - val[M12] * val[M23] * val[M30] - val[M13] * val[M20] * val[M32] + val[M10]
-                                * val[M23] * val[M32] + val[M12] * val[M20] * val[M33] - val[M10] * val[M22] * val[M33];
-    *                tmp[M11] = val[M02] * val[M23] * val[M30] - val[M03] * val[M22] * val[M30] + val[M03] * val[M20] * val[M32] - val[M00]
-                                * val[M23] * val[M32] - val[M02] * val[M20] * val[M33] + val[M00] * val[M22] * val[M33];
-    *                tmp[M12] = val[M03] * val[M12] * val[M30] - val[M02] * val[M13] * val[M30] - val[M03] * val[M10] * val[M32] + val[M00]
-                                * val[M13] * val[M32] + val[M02] * val[M10] * val[M33] - val[M00] * val[M12] * val[M33];
-    *                tmp[M13] = val[M02] * val[M13] * val[M20] - val[M03] * val[M12] * val[M20] + val[M03] * val[M10] * val[M22] - val[M00]
-                                * val[M13] * val[M22] - val[M02] * val[M10] * val[M23] + val[M00] * val[M12] * val[M23];
-    *                tmp[M20] = val[M11] * val[M23] * val[M30] - val[M13] * val[M21] * val[M30] + val[M13] * val[M20] * val[M31] - val[M10]
-                                * val[M23] * val[M31] - val[M11] * val[M20] * val[M33] + val[M10] * val[M21] * val[M33];
-    *                tmp[M21] = val[M03] * val[M21] * val[M30] - val[M01] * val[M23] * val[M30] - val[M03] * val[M20] * val[M31] + val[M00]
-                                * val[M23] * val[M31] + val[M01] * val[M20] * val[M33] - val[M00] * val[M21] * val[M33];
-    *                tmp[M22] = val[M01] * val[M13] * val[M30] - val[M03] * val[M11] * val[M30] + val[M03] * val[M10] * val[M31] - val[M00]
-                                * val[M13] * val[M31] - val[M01] * val[M10] * val[M33] + val[M00] * val[M11] * val[M33];
-    *                tmp[M23] = val[M03] * val[M11] * val[M20] - val[M01] * val[M13] * val[M20] - val[M03] * val[M10] * val[M21] + val[M00]
-                                * val[M13] * val[M21] + val[M01] * val[M10] * val[M23] - val[M00] * val[M11] * val[M23];
-    *                tmp[M30] = val[M12] * val[M21] * val[M30] - val[M11] * val[M22] * val[M30] - val[M12] * val[M20] * val[M31] + val[M10]
-                                * val[M22] * val[M31] + val[M11] * val[M20] * val[M32] - val[M10] * val[M21] * val[M32];
-    *                tmp[M31] = val[M01] * val[M22] * val[M30] - val[M02] * val[M21] * val[M30] + val[M02] * val[M20] * val[M31] - val[M00]
-                                * val[M22] * val[M31] - val[M01] * val[M20] * val[M32] + val[M00] * val[M21] * val[M32];
-    *                tmp[M32] = val[M02] * val[M11] * val[M30] - val[M01] * val[M12] * val[M30] - val[M02] * val[M10] * val[M31] + val[M00]
-                                * val[M12] * val[M31] + val[M01] * val[M10] * val[M32] - val[M00] * val[M11] * val[M32];
-    *                tmp[M33] = val[M01] * val[M12] * val[M20] - val[M02] * val[M11] * val[M20] + val[M02] * val[M10] * val[M21] - val[M00]
-                                * val[M12] * val[M21] - val[M01] * val[M10] * val[M22] + val[M00] * val[M11] * val[M22];
-    *                val[M00] = tmp[M00] * inv_det;
-    *                val[M01] = tmp[M01] * inv_det;
-    *                val[M02] = tmp[M02] * inv_det;
-    *                val[M03] = tmp[M03] * inv_det;
-    *                val[M10] = tmp[M10] * inv_det;
-    *                val[M11] = tmp[M11] * inv_det;
-    *                val[M12] = tmp[M12] * inv_det;
-    *                val[M13] = tmp[M13] * inv_det;
-    *                val[M20] = tmp[M20] * inv_det;
-    *                val[M21] = tmp[M21] * inv_det;
-    *                val[M22] = tmp[M22] * inv_det;
-    *                val[M23] = tmp[M23] * inv_det;
-    *                val[M30] = tmp[M30] * inv_det;
-    *                val[M31] = tmp[M31] * inv_det;
-    *                val[M32] = tmp[M32] * inv_det;
-    *                val[M33] = tmp[M33] * inv_det;
-    *                return this;
+    if (l_det == 0) {
+      std::cerr << "non-invertible matrix" << std::endl;
+      assert(false);
+    }
+    float inv_det = 1.0f / l_det;
+    _tmp[M00] = val[M12] * val[M23] * val[M31] - val[M13] * val[M22] * val[M31] + val[M13] * val[M21] * val[M32] - val[M11]
+                * val[M23] * val[M32] - val[M12] * val[M21] * val[M33] + val[M11] * val[M22] * val[M33];
+    _tmp[M01] = val[M03] * val[M22] * val[M31] - val[M02] * val[M23] * val[M31] - val[M03] * val[M21] * val[M32] + val[M01]
+                * val[M23] * val[M32] + val[M02] * val[M21] * val[M33] - val[M01] * val[M22] * val[M33];
+    _tmp[M02] = val[M02] * val[M13] * val[M31] - val[M03] * val[M12] * val[M31] + val[M03] * val[M11] * val[M32] - val[M01]
+                * val[M13] * val[M32] - val[M02] * val[M11] * val[M33] + val[M01] * val[M12] * val[M33];
+    _tmp[M03] = val[M03] * val[M12] * val[M21] - val[M02] * val[M13] * val[M21] - val[M03] * val[M11] * val[M22] + val[M01]
+                * val[M13] * val[M22] + val[M02] * val[M11] * val[M23] - val[M01] * val[M12] * val[M23];
+    _tmp[M10] = val[M13] * val[M22] * val[M30] - val[M12] * val[M23] * val[M30] - val[M13] * val[M20] * val[M32] + val[M10]
+                * val[M23] * val[M32] + val[M12] * val[M20] * val[M33] - val[M10] * val[M22] * val[M33];
+    _tmp[M11] = val[M02] * val[M23] * val[M30] - val[M03] * val[M22] * val[M30] + val[M03] * val[M20] * val[M32] - val[M00]
+                * val[M23] * val[M32] - val[M02] * val[M20] * val[M33] + val[M00] * val[M22] * val[M33];
+    _tmp[M12] = val[M03] * val[M12] * val[M30] - val[M02] * val[M13] * val[M30] - val[M03] * val[M10] * val[M32] + val[M00]
+                * val[M13] * val[M32] + val[M02] * val[M10] * val[M33] - val[M00] * val[M12] * val[M33];
+    _tmp[M13] = val[M02] * val[M13] * val[M20] - val[M03] * val[M12] * val[M20] + val[M03] * val[M10] * val[M22] - val[M00]
+                * val[M13] * val[M22] - val[M02] * val[M10] * val[M23] + val[M00] * val[M12] * val[M23];
+    _tmp[M20] = val[M11] * val[M23] * val[M30] - val[M13] * val[M21] * val[M30] + val[M13] * val[M20] * val[M31] - val[M10]
+                * val[M23] * val[M31] - val[M11] * val[M20] * val[M33] + val[M10] * val[M21] * val[M33];
+    _tmp[M21] = val[M03] * val[M21] * val[M30] - val[M01] * val[M23] * val[M30] - val[M03] * val[M20] * val[M31] + val[M00]
+                * val[M23] * val[M31] + val[M01] * val[M20] * val[M33] - val[M00] * val[M21] * val[M33];
+    _tmp[M22] = val[M01] * val[M13] * val[M30] - val[M03] * val[M11] * val[M30] + val[M03] * val[M10] * val[M31] - val[M00]
+                * val[M13] * val[M31] - val[M01] * val[M10] * val[M33] + val[M00] * val[M11] * val[M33];
+    _tmp[M23] = val[M03] * val[M11] * val[M20] - val[M01] * val[M13] * val[M20] - val[M03] * val[M10] * val[M21] + val[M00]
+                * val[M13] * val[M21] + val[M01] * val[M10] * val[M23] - val[M00] * val[M11] * val[M23];
+    _tmp[M30] = val[M12] * val[M21] * val[M30] - val[M11] * val[M22] * val[M30] - val[M12] * val[M20] * val[M31] + val[M10]
+                * val[M22] * val[M31] + val[M11] * val[M20] * val[M32] - val[M10] * val[M21] * val[M32];
+    _tmp[M31] = val[M01] * val[M22] * val[M30] - val[M02] * val[M21] * val[M30] + val[M02] * val[M20] * val[M31] - val[M00]
+                * val[M22] * val[M31] - val[M01] * val[M20] * val[M32] + val[M00] * val[M21] * val[M32];
+    _tmp[M32] = val[M02] * val[M11] * val[M30] - val[M01] * val[M12] * val[M30] - val[M02] * val[M10] * val[M31] + val[M00]
+                * val[M12] * val[M31] + val[M01] * val[M10] * val[M32] - val[M00] * val[M11] * val[M32];
+    _tmp[M33] = val[M01] * val[M12] * val[M20] - val[M02] * val[M11] * val[M20] + val[M02] * val[M10] * val[M21] - val[M00]
+                * val[M12] * val[M21] - val[M01] * val[M10] * val[M22] + val[M00] * val[M11] * val[M22];
+    val[M00] = _tmp[M00] * inv_det;
+    val[M01] = _tmp[M01] * inv_det;
+    val[M02] = _tmp[M02] * inv_det;
+    val[M03] = _tmp[M03] * inv_det;
+    val[M10] = _tmp[M10] * inv_det;
+    val[M11] = _tmp[M11] * inv_det;
+    val[M12] = _tmp[M12] * inv_det;
+    val[M13] = _tmp[M13] * inv_det;
+    val[M20] = _tmp[M20] * inv_det;
+    val[M21] = _tmp[M21] * inv_det;
+    val[M22] = _tmp[M22] * inv_det;
+    val[M23] = _tmp[M23] * inv_det;
+    val[M30] = _tmp[M30] * inv_det;
+    val[M31] = _tmp[M31] * inv_det;
+    val[M32] = _tmp[M32] * inv_det;
+    val[M33] = _tmp[M33] * inv_det;
+    return *this;
 }
 
-/** @return The determinant of this matrix */
 float Matrix4::det() {
     return val[M30] * val[M21] * val[M12] * val[M03] - val[M20] * val[M31] * val[M12] * val[M03] - val[M30] * val[M11]
            * val[M22] * val[M03] + val[M10] * val[M31] * val[M22] * val[M03] + val[M20] * val[M11] * val[M32] * val[M03] - val[M10]
@@ -341,16 +329,9 @@ float Matrix4::det() {
            * val[M33] - val[M10] * val[M01] * val[M22] * val[M33] + val[M00] * val[M11] * val[M22] * val[M33];
 }
 
-/** Sets the matrix to a projection matrix with a near- and far plane, a field of view in degrees and an aspect ratio.
- *
- * @param near The near plane
- * @param far The far plane
- * @param fov The field of view in degrees
- * @param aspectRatio The aspect ratio
- * @return This matrix for chaining */
-Matrix4 Matrix4::setToProjection(float near, float far, float fov, float aspectRatio) {
+Matrix4& Matrix4::setToProjection(float near, float far, float fov, float aspectRatio) {
     this->idt();
-    float l_fd = (float)(1.0 / Math.tan((fov * (Math.PI / 180)) / 2.0));
+    float l_fd = (float)(1.0 / std::tan((fov * (PI / 180)) / 2.0));
     float l_a1 = (far + near) / (near - far);
     float l_a2 = (2 * far * near) / (near - far);
     val[M00] = l_fd / aspectRatio;
@@ -370,49 +351,20 @@ Matrix4 Matrix4::setToProjection(float near, float far, float fov, float aspectR
     val[M23] = l_a2;
     val[M33] = 0;
 
-    return this;
+    return *this;
 }
 
-/** Sets this matrix to an orthographic projection matrix with the origin at (x,y) extending by width and height. The near plane
- * is set to 0, the far plane is set to 1.
- *
- * @param x The x-coordinate of the origin
- * @param y The y-coordinate of the origin
- * @param width The width
- * @param height The height
- * @return This matrix for chaining */
-Matrix4 Matrix4::setToOrtho2D(float x, float y, float width, float height) {
+Matrix4& Matrix4::setToOrtho2D(float x, float y, float width, float height) {
     setToOrtho(x, x + width, y, y + height, 0, 1);
-    return this;
+    return *this;
 }
 
-/** Sets this matrix to an orthographic projection matrix with the origin at (x,y) extending by width and height, having a near
- * and far plane.
- *
- * @param x The x-coordinate of the origin
- * @param y The y-coordinate of the origin
- * @param width The width
- * @param height The height
- * @param near The near plane
- * @param far The far plane
- * @return This matrix for chaining */
-Matrix4 Matrix4::setToOrtho2D(float x, float y, float width, float height, float near, float far) {
+Matrix4& Matrix4::setToOrtho2D(float x, float y, float width, float height, float near, float far) {
     setToOrtho(x, x + width, y, y + height, near, far);
-    return this;
+    return *this;
 }
 
-/** Sets the matrix to an orthographic projection like glOrtho (http://www.opengl.org/sdk/docs/man/xhtml/glOrtho.xml) following
- * the OpenGL equivalent
- *
- * @param left The left clipping plane
- * @param right The right clipping plane
- * @param bottom The bottom clipping plane
- * @param top The top clipping plane
- * @param near The near clipping plane
- * @param far The far clipping plane
- * @return This matrix for chaining */
-Matrix4 Matrix4::setToOrtho(float left, float right, float bottom, float top, float near, float far) {
-
+Matrix4& Matrix4::setToOrtho(float left, float right, float bottom, float top, float near, float far) {
     this->idt();
     float x_orth = 2 / (right - left);
     float y_orth = 2 / (top - bottom);
@@ -439,44 +391,26 @@ Matrix4 Matrix4::setToOrtho(float left, float right, float bottom, float top, fl
     val[M23] = tz;
     val[M33] = 1;
 
-    return this;
+    return *this;
 }
 
-/** Sets this matrix to a translation matrix, overwriting it first by an identity matrix and then setting the 4th column to the
- * translation vector.
- *
- * @param vector The translation vector
- * @return This matrix for chaining */
-Matrix4 Matrix4::setToTranslation(Vector3 vector) {
+Matrix4& Matrix4::setToTranslation(const Vector3& vector) {
     this->idt();
     val[M03] = vector.x;
     val[M13] = vector.y;
     val[M23] = vector.z;
-    return this;
+    return *this;
 }
 
-/** Sets this matrix to a translation matrix, overwriting it first by an identity matrix and then setting the 4th column to the
- * translation vector.
- *
- * @param x The x-component of the translation vector
- * @param y The y-component of the translation vector
- * @param z The z-component of the translation vector
- * @return This matrix for chaining */
-Matrix4 Matrix4::setToTranslation(float x, float y, float z) {
+Matrix4& Matrix4::setToTranslation(float x, float y, float z) {
     idt();
     val[M03] = x;
     val[M13] = y;
     val[M23] = z;
-    return this;
+    return *this;
 }
 
-/** Sets this matrix to a translation and scaling matrix by first overwritting it with an identity and then setting the
- * translation vector in the 4th column and the scaling vector in the diagonal.
- *
- * @param translation The translation vector
- * @param scaling The scaling vector
- * @return This matrix for chaining */
-Matrix4 Matrix4::setToTranslationAndScaling(Vector3 translation, Vector3 scaling) {
+Matrix4& Matrix4::setToTranslationAndScaling(const Vector3& translation, const Vector3& scaling) {
     idt();
     val[M03] = translation.x;
     val[M13] = translation.y;
@@ -484,21 +418,11 @@ Matrix4 Matrix4::setToTranslationAndScaling(Vector3 translation, Vector3 scaling
     val[M00] = scaling.x;
     val[M11] = scaling.y;
     val[M22] = scaling.z;
-    return this;
+    return *this;
 }
 
-/** Sets this matrix to a translation and scaling matrix by first overwritting it with an identity and then setting the
- * translation vector in the 4th column and the scaling vector in the diagonal.
- *
- * @param translationX The x-component of the translation vector
- * @param translationY The y-component of the translation vector
- * @param translationZ The z-component of the translation vector
- * @param scalingX The x-component of the scaling vector
- * @param scalingY The x-component of the scaling vector
- * @param scalingZ The x-component of the scaling vector
- * @return This matrix for chaining */
-public Matrix4 setToTranslationAndScaling (float translationX, float translationY, float translationZ, float scalingX,
-        float scalingY, float scalingZ) {
+Matrix4& Matrix4::setToTranslationAndScaling (float translationX, float translationY, float translationZ, float scalingX,
+                                     float scalingY, float scalingZ) {
     this->idt();
     val[M03] = translationX;
     val[M13] = translationY;
@@ -506,85 +430,57 @@ public Matrix4 setToTranslationAndScaling (float translationX, float translation
     val[M00] = scalingX;
     val[M11] = scalingY;
     val[M22] = scalingZ;
-    return this;
+    return *this;
 }
 
-static Quaternion quat = new Quaternion();
+static Quaternion quat;
 
 /** Sets the matrix to a rotation matrix around the given axis.
  *
  * @param axis The axis
  * @param angle The angle in degrees
  * @return This matrix for chaining */
-Matrix4 Matrix4::setToRotation(Vector3 axis, float angle) {
+Matrix4& Matrix4::setToRotation(Vector3 axis, float angle) {
     idt();
-    if (angle == 0) return this;
+    if (angle == 0) return *this;
     return this->set(quat.set(axis, angle));
 }
 
-/** Sets the matrix to a rotation matrix around the given axis.
- *
- * @param axisX The x-component of the axis
- * @param axisY The y-component of the axis
- * @param axisZ The z-component of the axis
- * @param angle The angle in degrees
- * @return This matrix for chaining */
-Matrix4 Matrix4::setToRotation(float axisX, float axisY, float axisZ, float angle) {
+static Vector3 tmpV;
+
+Matrix4& Matrix4::setToRotation(float axisX, float axisY, float axisZ, float angle) {
     idt();
-    if (angle == 0) return this;
+    if (angle == 0) return *this;
     return this->set(quat.set(tmpV.set(axisX, axisY, axisZ), angle));
 }
 
-static final Vector3 tmpV = new Vector3();
-
-/** Sets this matrix to a rotation matrix from the given euler angles.
- * @param yaw the yaw in degrees
- * @param pitch the pitch in degress
- * @param roll the roll in degrees
- * @return this matrix */
-Matrix4 Matrix4::setFromEulerAngles(float yaw, float pitch, float roll) {
+Matrix4& Matrix4::setFromEulerAngles(float yaw, float pitch, float roll) {
     idt();
     quat.setEulerAngles(yaw, pitch, roll);
     return this->set(quat);
 }
 
-/** Sets this matrix to a scaling matrix
- *
- * @param vector The scaling vector
- * @return This matrix for chaining. */
-Matrix4 Matrix4::setToScaling(Vector3 vector) {
+Matrix4& Matrix4::setToScaling(const Vector3& vector) {
     idt();
     val[M00] = vector.x;
     val[M11] = vector.y;
     val[M22] = vector.z;
-    return this;
+    return *this;
 }
 
-/** Sets this matrix to a scaling matrix
- *
- * @param x The x-component of the scaling vector
- * @param y The y-component of the scaling vector
- * @param z The z-component of the scaling vector
- * @return This matrix for chaining. */
-Matrix4 Matrix4::setToScaling(float x, float y, float z) {
+Matrix4& Matrix4::setToScaling(float x, float y, float z) {
     idt();
     val[M00] = x;
     val[M11] = y;
     val[M22] = z;
-    return this;
+    return *this;
 }
 
-static Vector3 l_vez = new Vector3();
-static Vector3 l_vex = new Vector3();
-static Vector3 l_vey = new Vector3();
+static Vector3 l_vez;
+static Vector3 l_vex;
+static Vector3 l_vey;
 
-/** Sets the matrix to a look at matrix with a direction and an up vector. Multiply with a translation matrix to get a camera
- * model view matrix.
- *
- * @param direction The direction vector
- * @param up The up vector
- * @return This matrix for chaining */
-Matrix4 Matrix4::setToLookAt(Vector3 direction, Vector3 up) {
+Matrix4& Matrix4::setToLookAt(const Vector3& direction, const Vector3& up) {
     l_vez.set(direction).nor();
     l_vex.set(direction).nor();
     l_vex.crs(up).nor();
@@ -600,57 +496,49 @@ Matrix4 Matrix4::setToLookAt(Vector3 direction, Vector3 up) {
     val[M21] = -l_vez.y;
     val[M22] = -l_vez.z;
 
-    return this;
+    return *this;
 }
 
-static final Vector3 tmpVec = new Vector3();
-static final Matrix4 tmpMat = new Matrix4();
+static Vector3 tmpVec;
+static Matrix4 tmpMat;
 
-/** Sets this matrix to a look at matrix with the given position, target and up vector.
- *
- * @param position the position
- * @param target the target
- * @param up the up vector
- * @return this matrix */
-Matrix4 Matrix4::setToLookAt(Vector3 position, Vector3 target, Vector3 up) {
+Matrix4& Matrix4::setToLookAt(Vector3& position, const Vector3& target, const Vector3& up) {
     tmpVec.set(target).sub(position);
     setToLookAt(tmpVec, up);
     this->mul(tmpMat.setToTranslation(position.tmp().mul(-1)));
 
-    return this;
+    return *this;
 }
 
-static Vector3 right = new Vector3();
-static Vector3 tmpForward = new Vector3();
-static Vector3 tmpUp = new Vector3();
+static Vector3 right;
+static Vector3 tmpForward;
+static Vector3 tmpUp;
 
-Matrix4 Matrix4::setToWorld(Vector3 position, Vector3 forward, Vector3 up) {
+Matrix4& Matrix4::setToWorld(const Vector3& position, const Vector3& forward, const Vector3& up) {
     tmpForward.set(forward).nor();
     right.set(tmpForward).crs(up).nor();
     tmpUp.set(right).crs(tmpForward).nor();
 
     this->set(right, tmpUp, tmpForward, position);
-    return this;
+    return *this;
 }
 
-/** {@inheritDoc} */
-String Matrix4::toString() {
-    return "[" + val[M00] + "|" + val[M01] + "|" + val[M02] + "|" + val[M03] + "]\n" + "[" + val[M10] + "|" + val[M11] + "|"
-           + val[M12] + "|" + val[M13] + "]\n" + "[" + val[M20] + "|" + val[M21] + "|" + val[M22] + "|" + val[M23] + "]\n" + "["
-           + val[M30] + "|" + val[M31] + "|" + val[M32] + "|" + val[M33] + "]\n";
+std::string Matrix4::toString() {
+    std::stringstream ss;
+
+    ss << "[" << val[M00] << "|" << val[M01] << "|" << val[M02] << "|" << val[M03] << "]\n" << "[" << val[M10] << "|" << val[M11] << "|"
+    << val[M12] << "|" << val[M13] << "]\n" << "[" << val[M20] << "|" << val[M21] << "|" << val[M22] << "|" << val[M23] << "]\n" << "["
+    << val[M30] << "|" << val[M31] << "|" << val[M32] << "|" << val[M33] << "]\n";
+
+    return ss.str();
 }
 
-/** Linearly interpolates between this matrix and the given matrix mixing by alpha
- * @param matrix the matrix
- * @param alpha the alpha value in the range [0,1] */
-void Matrix4::lerp(Matrix4 matrix, float alpha) {
+void Matrix4::lerp(const Matrix4& matrix, float alpha) {
     for (int i = 0; i < 16; i++)
         this->val[i] = this->val[i] * (1 - alpha) + matrix.val[i] * alpha;
 }
 
-/** Sets this matrix to the given 3x3 matrix. The third column of this matrix is set to (0,0,1,0).
- * @param mat the matrix */
-Matrix4 Matrix4::set(Matrix3 mat) {
+Matrix4& Matrix4::set(const Matrix3& mat) {
     val[0] = mat.vals[0];
     val[1] = mat.vals[1];
     val[2] = mat.vals[2];
@@ -667,27 +555,26 @@ Matrix4 Matrix4::set(Matrix3 mat) {
     val[13] = mat.vals[7];
     val[14] = 0;
     val[15] = mat.vals[8];
-    return this;
+    return *this;
 }
 
-void Matrix4::scl(Vector3 scale) {
+void Matrix4::scl(const Vector3& scale) {
     val[M00] *= scale.x;
     val[M11] *= scale.y;
     val[M22] *= scale.z;
 }
 
-void Matrix4::getTranslation(Vector3 position) {
+void Matrix4::getTranslation(Vector3& position) {
     position.x = val[M03];
     position.y = val[M13];
     position.z = val[M23];
 }
 
-void Matrix4::getRotation(Quaternion rotation) {
+void Matrix4::getRotation(const Quaternion& rotation) {
     rotation.setFromMatrix(this);
 }
 
-/** removes the translational part and transposes the matrix. */
-Matrix4 Matrix4::toNormalMatrix() {
+Matrix4& Matrix4::toNormalMatrix() {
     val[M03] = 0;
     val[M13] = 0;
     val[M23] = 0;
@@ -695,86 +582,146 @@ Matrix4 Matrix4::toNormalMatrix() {
     return tra();
 }
 
-/** Multiplies the matrix mata with matrix matb, storing the result in mata. The arrays are assumed to hold 4x4 column major
- * matrices as you can get from {@link Matrix4#val}. This is the same as {@link Matrix4#mul(Matrix4)}.
- *
- * @param mata the first matrix.
- * @param matb the second matrix. */
-public static native void mul (float[] mata, float[] matb) /*-{ }-*/;
+inline static void mul (float* mata, float* matb) {
+    float tmp[16];
+    tmp[M00] = mata[M00] * matb[M00] + mata[M01] * matb[M10] + mata[M02] * matb[M20] + mata[M03] * matb[M30];
+    tmp[M01] = mata[M00] * matb[M01] + mata[M01] * matb[M11] + mata[M02] * matb[M21] + mata[M03] * matb[M31];
+    tmp[M02] = mata[M00] * matb[M02] + mata[M01] * matb[M12] + mata[M02] * matb[M22] + mata[M03] * matb[M32];
+    tmp[M03] = mata[M00] * matb[M03] + mata[M01] * matb[M13] + mata[M02] * matb[M23] + mata[M03] * matb[M33];
+    tmp[M10] = mata[M10] * matb[M00] + mata[M11] * matb[M10] + mata[M12] * matb[M20] + mata[M13] * matb[M30];
+    tmp[M11] = mata[M10] * matb[M01] + mata[M11] * matb[M11] + mata[M12] * matb[M21] + mata[M13] * matb[M31];
+    tmp[M12] = mata[M10] * matb[M02] + mata[M11] * matb[M12] + mata[M12] * matb[M22] + mata[M13] * matb[M32];
+    tmp[M13] = mata[M10] * matb[M03] + mata[M11] * matb[M13] + mata[M12] * matb[M23] + mata[M13] * matb[M33];
+    tmp[M20] = mata[M20] * matb[M00] + mata[M21] * matb[M10] + mata[M22] * matb[M20] + mata[M23] * matb[M30];
+    tmp[M21] = mata[M20] * matb[M01] + mata[M21] * matb[M11] + mata[M22] * matb[M21] + mata[M23] * matb[M31];
+    tmp[M22] = mata[M20] * matb[M02] + mata[M21] * matb[M12] + mata[M22] * matb[M22] + mata[M23] * matb[M32];
+    tmp[M23] = mata[M20] * matb[M03] + mata[M21] * matb[M13] + mata[M22] * matb[M23] + mata[M23] * matb[M33];
+    tmp[M30] = mata[M30] * matb[M00] + mata[M31] * matb[M10] + mata[M32] * matb[M20] + mata[M33] * matb[M30];
+    tmp[M31] = mata[M30] * matb[M01] + mata[M31] * matb[M11] + mata[M32] * matb[M21] + mata[M33] * matb[M31];
+    tmp[M32] = mata[M30] * matb[M02] + mata[M31] * matb[M12] + mata[M32] * matb[M22] + mata[M33] * matb[M32];
+    tmp[M33] = mata[M30] * matb[M03] + mata[M31] * matb[M13] + mata[M32] * matb[M23] + mata[M33] * matb[M33];
+    memcpy(mata, tmp, sizeof(float) *  16);
+}
 
-/** Multiplies the vector with the given matrix. The matrix array is assumed to hold a 4x4 column major matrix as you can get
- * from {@link Matrix4#val}. The vector array is assumed to hold a 3-component vector, with x being the first element, y being
- * the second and z being the last component. The result is stored in the vector array. This is the same as
- * {@link Vector3#mul(Matrix4)}.
- * @param mat the matrix
- * @param vec the vector. */
-public static native void mulVec (float[] mat, float[] vec) /*-{ }-*/;
+inline static void mulVec (float* mat, float* vec) {
+    float x = vec[0] * mat[M00] + vec[1] * mat[M01] + vec[2] * mat[M02] + mat[M03];
+    float y = vec[0] * mat[M10] + vec[1] * mat[M11] + vec[2] * mat[M12] + mat[M13];
+    float z = vec[0] * mat[M20] + vec[1] * mat[M21] + vec[2] * mat[M22] + mat[M23];
+    vec[0] = x;
+    vec[1] = y;
+    vec[2] = z;
+}
 
-/** Multiplies the vectors with the given matrix. The matrix array is assumed to hold a 4x4 column major matrix as you can get
- * from {@link Matrix4#val}. The vectors array is assumed to hold 3-component vectors. Offset specifies the offset into the
- * array where the x-component of the first vector is located. The numVecs parameter specifies the number of vectors stored in
- * the vectors array. The stride parameter specifies the number of floats between subsequent vectors and must be >= 3. This is
- * the same as {@link Vector3#mul(Matrix4)} applied to multiple vectors.
- *
- * @param mat the matrix
- * @param vecs the vectors
- * @param offset the offset into the vectors array
- * @param numVecs the number of vectors
- * @param stride the stride between vectors in floats */
-public static native void mulVec (float[] mat, float[] vecs, int offset, int numVecs, int stride) /*-{ }-*/;
+inline static void mulVec (float* mat, float* vecs, int offset, int numVecs, int stride) {
+    float* vecPtr = vecs + offset;
+    for (int i = 0; i < numVecs; i++) {
+        mulVec(mat, vecPtr);
+        vecPtr += stride;
+    }
+}
 
-/** Multiplies the vector with the given matrix, performing a division by w. The matrix array is assumed to hold a 4x4 column
- * major matrix as you can get from {@link Matrix4#val}. The vector array is assumed to hold a 3-component vector, with x being
- * the first element, y being the second and z being the last component. The result is stored in the vector array. This is the
- * same as {@link Vector3#prj(Matrix4)}.
- * @param mat the matrix
- * @param vec the vector. */
-public static native void prj (float[] mat, float[] vec) /*-{ }-*/;
+inline static void prj (float* mat, float* vec) {
+    float inv_w = 1.0f / (vec[0] * mat[M30] + vec[1] * mat[M31] + vec[2] * mat[M32] + mat[M33]);
+    float x = (vec[0] * mat[M00] + vec[1] * mat[M01] + vec[2] * mat[M02] + mat[M03]) * inv_w;
+    float y = (vec[0] * mat[M10] + vec[1] * mat[M11] + vec[2] * mat[M12] + mat[M13]) * inv_w;
+    float z = (vec[0] * mat[M20] + vec[1] * mat[M21] + vec[2] * mat[M22] + mat[M23]) * inv_w;
+    vec[0] = x;
+    vec[1] = y;
+    vec[2] = z;
+}
 
-/** Multiplies the vectors with the given matrix, , performing a division by w. The matrix array is assumed to hold a 4x4 column
- * major matrix as you can get from {@link Matrix4#val}. The vectors array is assumed to hold 3-component vectors. Offset
- * specifies the offset into the array where the x-component of the first vector is located. The numVecs parameter specifies
- * the number of vectors stored in the vectors array. The stride parameter specifies the number of floats between subsequent
- * vectors and must be >= 3. This is the same as {@link Vector3#prj(Matrix4)} applied to multiple vectors.
- *
- * @param mat the matrix
- * @param vecs the vectors
- * @param offset the offset into the vectors array
- * @param numVecs the number of vectors
- * @param stride the stride between vectors in floats */
-public static native void prj (float[] mat, float[] vecs, int offset, int numVecs, int stride) /*-{ }-*/;
+inline static void prj (float* mat, float* vecs, int offset, int numVecs, int stride)  {
+    float* vecPtr = vecs + offset;
+    for (int i = 0; i < numVecs; i++) {
+        prj(mat, vecPtr);
+        vecPtr += stride;
+    }
+}
 
-/** Multiplies the vector with the top most 3x3 sub-matrix of the given matrix. The matrix array is assumed to hold a 4x4 column
- * major matrix as you can get from {@link Matrix4#val}. The vector array is assumed to hold a 3-component vector, with x being
- * the first element, y being the second and z being the last component. The result is stored in the vector array. This is the
- * same as {@link Vector3#rot(Matrix4)}.
- * @param mat the matrix
- * @param vec the vector. */
-public static native void rot (float[] mat, float[] vec) /*-{ }-*/;
+inline static void rot (float* mat, float* vec) {
+    float x = vec[0] * mat[M00] + vec[1] * mat[M01] + vec[2] * mat[M02];
+    float y = vec[0] * mat[M10] + vec[1] * mat[M11] + vec[2] * mat[M12];
+    float z = vec[0] * mat[M20] + vec[1] * mat[M21] + vec[2] * mat[M22];
+    vec[0] = x;
+    vec[1] = y;
+    vec[2] = z;
+}
 
-/** Multiplies the vectors with the top most 3x3 sub-matrix of the given matrix. The matrix array is assumed to hold a 4x4
- * column major matrix as you can get from {@link Matrix4#val}. The vectors array is assumed to hold 3-component vectors.
- * Offset specifies the offset into the array where the x-component of the first vector is located. The numVecs parameter
- * specifies the number of vectors stored in the vectors array. The stride parameter specifies the number of floats between
- * subsequent vectors and must be >= 3. This is the same as {@link Vector3#rot(Matrix4)} applied to multiple vectors.
- *
- * @param mat the matrix
- * @param vecs the vectors
- * @param offset the offset into the vectors array
- * @param numVecs the number of vectors
- * @param stride the stride between vectors in floats */
-public static native void rot (float[] mat, float[] vecs, int offset, int numVecs, int stride) /*-{ }-*/;
+inline static void rot (float* mat, float* vecs, int offset, int numVecs, int stride)  {
+    float* vecPtr = vecs + offset;
+    for (int i = 0; i < numVecs; i++) {
+        rot(mat, vecPtr);
+        vecPtr += stride;
+    }
+}
 
-/** Computes the inverse of the given matrix. The matrix array is assumed to hold a 4x4 column major matrix as you can get from
- * {@link Matrix4#val}.
- * @param values the matrix values.
- * @return false in case the inverse could not be calculated, true otherwise. */
-public static native boolean inv (float[] values) /*-{ }-*/;
+inline static float det (float* val) {
+  return val[M30] * val[M21] * val[M12] * val[M03] - val[M20] * val[M31] * val[M12] * val[M03] - val[M30] * val[M11]
+  * val[M22] * val[M03] + val[M10] * val[M31] * val[M22] * val[M03] + val[M20] * val[M11] * val[M32] * val[M03] - val[M10]
+  * val[M21] * val[M32] * val[M03] - val[M30] * val[M21] * val[M02] * val[M13] + val[M20] * val[M31] * val[M02] * val[M13]
+  *          + val[M30] * val[M01] * val[M22] * val[M13] - val[M00] * val[M31] * val[M22] * val[M13] - val[M20] * val[M01] * val[M32]
+  * val[M13] + val[M00] * val[M21] * val[M32] * val[M13] + val[M30] * val[M11] * val[M02] * val[M23] - val[M10] * val[M31]
+  * val[M02] * val[M23] - val[M30] * val[M01] * val[M12] * val[M23] + val[M00] * val[M31] * val[M12] * val[M23] + val[M10]
+  * val[M01] * val[M32] * val[M23] - val[M00] * val[M11] * val[M32] * val[M23] - val[M20] * val[M11] * val[M02] * val[M33]
+  *          + val[M10] * val[M21] * val[M02] * val[M33] + val[M20] * val[M01] * val[M12] * val[M33] - val[M00] * val[M21] * val[M12]
+  * val[M33] - val[M10] * val[M01] * val[M22] * val[M33] + val[M00] * val[M11] * val[M22] * val[M33];
+}
 
-/** Computes the determinante of the given matrix. The matrix array is assumed to hold a 4x4 column major matrix as you can get
- * from {@link Matrix4#val}.
- * @param values the matrix values.
- * @return the determinante. */
-public static native float det (float[] values) /*-{ }-*/;
+inline static bool inv (float* val) {
+    float tmp[16];
+    float l_det = det(val);
+    if (l_det == 0) return false;
 
+    tmp[M00] = val[M12] * val[M23] * val[M31] - val[M13] * val[M22] * val[M31] + val[M13] * val[M21] * val[M32] - val[M11]
+               * val[M23] * val[M32] - val[M12] * val[M21] * val[M33] + val[M11] * val[M22] * val[M33];
+    tmp[M01] = val[M03] * val[M22] * val[M31] - val[M02] * val[M23] * val[M31] - val[M03] * val[M21] * val[M32] + val[M01]
+               * val[M23] * val[M32] + val[M02] * val[M21] * val[M33] - val[M01] * val[M22] * val[M33];
+    tmp[M02] = val[M02] * val[M13] * val[M31] - val[M03] * val[M12] * val[M31] + val[M03] * val[M11] * val[M32] - val[M01]
+               * val[M13] * val[M32] - val[M02] * val[M11] * val[M33] + val[M01] * val[M12] * val[M33];
+    tmp[M03] = val[M03] * val[M12] * val[M21] - val[M02] * val[M13] * val[M21] - val[M03] * val[M11] * val[M22] + val[M01]
+               * val[M13] * val[M22] + val[M02] * val[M11] * val[M23] - val[M01] * val[M12] * val[M23];
+    tmp[M10] = val[M13] * val[M22] * val[M30] - val[M12] * val[M23] * val[M30] - val[M13] * val[M20] * val[M32] + val[M10]
+               * val[M23] * val[M32] + val[M12] * val[M20] * val[M33] - val[M10] * val[M22] * val[M33];
+    tmp[M11] = val[M02] * val[M23] * val[M30] - val[M03] * val[M22] * val[M30] + val[M03] * val[M20] * val[M32] - val[M00]
+               * val[M23] * val[M32] - val[M02] * val[M20] * val[M33] + val[M00] * val[M22] * val[M33];
+    tmp[M12] = val[M03] * val[M12] * val[M30] - val[M02] * val[M13] * val[M30] - val[M03] * val[M10] * val[M32] + val[M00]
+               * val[M13] * val[M32] + val[M02] * val[M10] * val[M33] - val[M00] * val[M12] * val[M33];
+    tmp[M13] = val[M02] * val[M13] * val[M20] - val[M03] * val[M12] * val[M20] + val[M03] * val[M10] * val[M22] - val[M00]
+               * val[M13] * val[M22] - val[M02] * val[M10] * val[M23] + val[M00] * val[M12] * val[M23];
+    tmp[M20] = val[M11] * val[M23] * val[M30] - val[M13] * val[M21] * val[M30] + val[M13] * val[M20] * val[M31] - val[M10]
+               * val[M23] * val[M31] - val[M11] * val[M20] * val[M33] + val[M10] * val[M21] * val[M33];
+    tmp[M21] = val[M03] * val[M21] * val[M30] - val[M01] * val[M23] * val[M30] - val[M03] * val[M20] * val[M31] + val[M00]
+               * val[M23] * val[M31] + val[M01] * val[M20] * val[M33] - val[M00] * val[M21] * val[M33];
+    tmp[M22] = val[M01] * val[M13] * val[M30] - val[M03] * val[M11] * val[M30] + val[M03] * val[M10] * val[M31] - val[M00]
+               * val[M13] * val[M31] - val[M01] * val[M10] * val[M33] + val[M00] * val[M11] * val[M33];
+    tmp[M23] = val[M03] * val[M11] * val[M20] - val[M01] * val[M13] * val[M20] - val[M03] * val[M10] * val[M21] + val[M00]
+               * val[M13] * val[M21] + val[M01] * val[M10] * val[M23] - val[M00] * val[M11] * val[M23];
+    tmp[M30] = val[M12] * val[M21] * val[M30] - val[M11] * val[M22] * val[M30] - val[M12] * val[M20] * val[M31] + val[M10]
+               * val[M22] * val[M31] + val[M11] * val[M20] * val[M32] - val[M10] * val[M21] * val[M32];
+    tmp[M31] = val[M01] * val[M22] * val[M30] - val[M02] * val[M21] * val[M30] + val[M02] * val[M20] * val[M31] - val[M00]
+               * val[M22] * val[M31] - val[M01] * val[M20] * val[M32] + val[M00] * val[M21] * val[M32];
+    tmp[M32] = val[M02] * val[M11] * val[M30] - val[M01] * val[M12] * val[M30] - val[M02] * val[M10] * val[M31] + val[M00]
+               * val[M12] * val[M31] + val[M01] * val[M10] * val[M32] - val[M00] * val[M11] * val[M32];
+    tmp[M33] = val[M01] * val[M12] * val[M20] - val[M02] * val[M11] * val[M20] + val[M02] * val[M10] * val[M21] - val[M00]
+               * val[M12] * val[M21] - val[M01] * val[M10] * val[M22] + val[M00] * val[M11] * val[M22];
+
+    float inv_det = 1.0f / l_det;
+    val[M00] = tmp[M00] * inv_det;
+    val[M01] = tmp[M01] * inv_det;
+    val[M02] = tmp[M02] * inv_det;
+    val[M03] = tmp[M03] * inv_det;
+    val[M10] = tmp[M10] * inv_det;
+    val[M11] = tmp[M11] * inv_det;
+    val[M12] = tmp[M12] * inv_det;
+    val[M13] = tmp[M13] * inv_det;
+    val[M20] = tmp[M20] * inv_det;
+    val[M21] = tmp[M21] * inv_det;
+    val[M22] = tmp[M22] * inv_det;
+    val[M23] = tmp[M23] * inv_det;
+    val[M30] = tmp[M30] * inv_det;
+    val[M31] = tmp[M31] * inv_det;
+    val[M32] = tmp[M32] * inv_det;
+    val[M33] = tmp[M33] * inv_det;
+    return true;
+}
 

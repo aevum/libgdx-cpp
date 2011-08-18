@@ -40,7 +40,7 @@ Vector2::Vector2(const Vector2& other)
 }
 
 float Vector2::len () {
-    return (float)stlport::sqrt(x * x + y * y);
+    return (float)std::sqrt(x * x + y * y);
 }
 
 Vector2::~Vector2()
@@ -104,13 +104,13 @@ Vector2& Vector2::mul (float scalar) {
 float Vector2::dst (const Vector2& v) {
     float x_d = v.x - x;
     float y_d = v.y - y;
-    return (float)stlp_std::sqrt(x_d * x_d + y_d * y_d);
+    return (float)std::sqrt(x_d * x_d + y_d * y_d);
 }
 
 float Vector2::dst (float x, float y) {
     float x_d = x - this->x;
     float y_d = y - this->y;
-    return (float)stlp_std::sqrt(x_d * x_d + y_d * y_d);
+    return (float)std::sqrt(x_d * x_d + y_d * y_d);
 }
 
 float Vector2::dst2 (const Vector2& v) {
@@ -119,8 +119,8 @@ float Vector2::dst2 (const Vector2& v) {
     return x_d * x_d + y_d * y_d;
 }
 
-stlport::string Vector2::toString () {
-    stlport::stringstream ss;
+std::string Vector2::toString () {
+    std::stringstream ss;
     ss <<  x << ":" << y << "]";
     return ss.str();
 }
@@ -152,15 +152,15 @@ float Vector2::crs (float x, float y) {
 }
 
 float Vector2::angle () {
-    float angle =  (float) stlp_std::atan2(y, x) *  radiansToDegrees;
+    float angle =  (float) std::atan2(y, x) *  radiansToDegrees;
     if (angle < 0) angle += 360;
     return angle;
 }
 
 Vector2 Vector2::rotate (float angle) {
     float rad = angle * degreesToRadians;
-    float cos = (float)stlp_std::cos(rad);
-    float sin = (float)stlp_std::sin(rad);
+    float cos = (float)std::cos(rad);
+    float sin = (float)std::sin(rad);
 
     float newX = this->x * cos - this->y * sin;
     float newY = this->x * sin + this->y * cos;

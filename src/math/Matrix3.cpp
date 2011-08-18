@@ -91,8 +91,8 @@ Matrix3& Matrix3::mul(const Matrix3& m) {
 
 Matrix3& Matrix3::setToRotation(float angle) {
     angle = DEGREE_TO_RAD * angle;
-    float cos = (float)stlp_std::cos(angle);
-    float sin = (float)stlp_std::sin(angle);
+    float cos = (float)std::cos(angle);
+    float sin = (float)std::sin(angle);
 
     this->vals[0] = cos;
     this->vals[1] = sin;
@@ -141,8 +141,8 @@ Matrix3& Matrix3::setToScaling(float sx, float sy) {
     return *this;
 }
 
-stlport::string Matrix3::toString() {
-    stlport::stringstream ss;
+std::string Matrix3::toString() {
+    std::stringstream ss;
     ss << "[" << vals[0] << "|" << vals[3] << "|" << vals[6] << "]\n" << "[" << vals[1] << "|" << vals[4] << "|" << vals[7] << "]\n" << "["
     << vals[2] << "|" << vals[5] << "|" << vals[8] << "]";
     return ss.str();
