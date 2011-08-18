@@ -68,7 +68,7 @@ public:
     bool isZero();
     Vector3& lerp(Vector3& target, float alpha);
     Vector3& slerp(Vector3& target, float alpha);
-    stlport::string toString();
+    std::string toString();
     float dot(float x, float y, float z);
     float dst2(Vector3 point);
     float dst2(float x, float y, float z);

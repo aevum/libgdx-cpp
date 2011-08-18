@@ -16,13 +16,15 @@
 #include "Matrix4.hpp"
 
 #include "Vector3.hpp"
-
 #include "Matrix3.hpp"
+#include "MathUtils.hpp"
 
 #include <string>
 #include <sstream>
 #include <cmath>
-#include <tr1/shared_ptr.h>
+#include <iostream>
+#include <cassert>
+#include <string.h>
 
 using namespace gdx_cpp::math;
 
@@ -57,10 +59,6 @@ Matrix4::~Matrix4()
 Matrix4& Matrix4::operator=(const Matrix4& other)
 {
   return this->set(other);
-}
-
-bool Matrix4::operator==(const Matrix4& other) const
-{
 }
 
 Matrix4::Matrix4 () {
@@ -133,13 +131,6 @@ Matrix4& Matrix4::set(const Quaternion& quaternion) {
     return *this;
 }
 
-/** Sets the four columns of the matrix which correspond to the x-, y- and z-axis of the vector space this matrix creates as
- * well as the 4th column representing the translation of any point that is multiplied by this matrix.
- *
- * @param xAxis The x-axis
- * @param yAxis The y-axis
- * @param zAxis The z-axis
- * @param pos The translation vector */
 void Matrix4::set(Vector3& xAxis, Vector3& yAxis, Vector3& zAxis, const Vector3& pos) {
     val[M00] = xAxis.x;
     val[M01] = xAxis.y;
@@ -159,8 +150,8 @@ void Matrix4::set(Vector3& xAxis, Vector3& yAxis, Vector3& zAxis, const Vector3&
     val[M33] = 1;
 }
  
-Matrix4& Matrix4::cpy() {
-    return new Matrix4(this);
+Matrix4::ptr Matrix4::cpy() {
+    return Matrix4::ptr(new Matrix4(*this));
 }
 
 Matrix4& Matrix4::trn(const Vector3& vector) {
@@ -270,7 +261,10 @@ Matrix4& Matrix4::inv() {
                   * val[M01] * val[M32] * val[M23] - val[M00] * val[M11] * val[M32] * val[M23] - val[M20] * val[M11] * val[M02] * val[M33]
                   *                        + val[M10] * val[M21] * val[M02] * val[M33] + val[M20] * val[M01] * val[M12] * val[M33] - val[M00] * val[M21] * val[M12]
                   * val[M33] - val[M10] * val[M01] * val[M22] * val[M33] + val[M00] * val[M11] * val[M22] * val[M33];
-    if (l_det == 0) throw new RuntimeException("non-invertible matrix");
+    if (l_det == 0) {
+      std::cerr << "non-invertible matrix" << std::endl;
+      assert(false);
+    }
     float inv_det = 1.0f / l_det;
     _tmp[M00] = val[M12] * val[M23] * val[M31] - val[M13] * val[M22] * val[M31] + val[M13] * val[M21] * val[M32] - val[M11]
                 * val[M23] * val[M32] - val[M12] * val[M21] * val[M33] + val[M11] * val[M22] * val[M33];
@@ -320,7 +314,7 @@ Matrix4& Matrix4::inv() {
     val[M31] = _tmp[M31] * inv_det;
     val[M32] = _tmp[M32] * inv_det;
     val[M33] = _tmp[M33] * inv_det;
-    return this;
+    return *this;
 }
 
 float Matrix4::det() {
@@ -337,7 +331,7 @@ float Matrix4::det() {
 
 Matrix4& Matrix4::setToProjection(float near, float far, float fov, float aspectRatio) {
     this->idt();
-    float l_fd = (float)(1.0 / stlp_std::tan((fov * (Math.PI / 180)) / 2.0));
+    float l_fd = (float)(1.0 / std::tan((fov * (PI / 180)) / 2.0));
     float l_a1 = (far + near) / (near - far);
     float l_a2 = (2 * far * near) / (near - far);
     val[M00] = l_fd / aspectRatio;
@@ -448,7 +442,7 @@ static Quaternion quat;
  * @return This matrix for chaining */
 Matrix4& Matrix4::setToRotation(Vector3 axis, float angle) {
     idt();
-    if (angle == 0) return this;
+    if (angle == 0) return *this;
     return this->set(quat.set(axis, angle));
 }
 
@@ -456,7 +450,7 @@ static Vector3 tmpV;
 
 Matrix4& Matrix4::setToRotation(float axisX, float axisY, float axisZ, float angle) {
     idt();
-    if (angle == 0) return this;
+    if (angle == 0) return *this;
     return this->set(quat.set(tmpV.set(axisX, axisY, axisZ), angle));
 }
 
@@ -529,8 +523,8 @@ Matrix4& Matrix4::setToWorld(const Vector3& position, const Vector3& forward, co
     return *this;
 }
 
-stlport::string Matrix4::toString() {
-    stlport::stringstream ss;
+std::string Matrix4::toString() {
+    std::stringstream ss;
 
     ss << "[" << val[M00] << "|" << val[M01] << "|" << val[M02] << "|" << val[M03] << "]\n" << "[" << val[M10] << "|" << val[M11] << "|"
     << val[M12] << "|" << val[M13] << "]\n" << "[" << val[M20] << "|" << val[M21] << "|" << val[M22] << "|" << val[M23] << "]\n" << "["

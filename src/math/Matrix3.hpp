@@ -38,7 +38,7 @@ public:
     Matrix3& setToRotation(float angle);
     Matrix3& setToTranslation(float x, float y);
     Matrix3& setToScaling(float sx, float sy);
-    stlport::string toString();
+    std::string toString();
     float det();
     Matrix3& inv();
     Matrix3& set(const Matrix3& mat);

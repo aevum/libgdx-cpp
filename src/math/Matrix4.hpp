@@ -20,6 +20,9 @@
 
 #include <string>
 
+#include <tr1/memory>
+#include <tr1/shared_ptr.h>
+
 namespace gdx_cpp {
   
 namespace math {
@@ -31,10 +34,11 @@ class Matrix3;
 class Matrix4
 {
 public:
+    typedef std::tr1::shared_ptr<Matrix4> ptr;
+  
     Matrix4(const Matrix4& other);
     ~Matrix4();
     Matrix4& operator=(const Matrix4& other);
-    bool operator==(const Matrix4& other) const;
     Matrix4 ();
     Matrix4 (float* values);
     Matrix4 (const Quaternion& quaternion);
@@ -42,7 +46,7 @@ public:
     Matrix4& set(const float* values);
     Matrix4& set(const Quaternion& quaternion);
     void set(Vector3& xAxis, Vector3& yAxis, Vector3& zAxis, const Vector3& pos);
-    Matrix4& cpy();
+    Matrix4::ptr cpy();
     Matrix4& trn(const Vector3& vector);
     Matrix4& trn(float x, float y, float z);
     float* getValues();
@@ -68,7 +72,7 @@ public:
     Matrix4& setToLookAt(const Vector3& direction, const Vector3& up);
     Matrix4& setToLookAt(Vector3& position, const Vector3& target, const Vector3& up);
     Matrix4& setToWorld(const Vector3& position, const Vector3& forward, const Vector3& up);
-    stlport::string toString();
+    std::string toString();
     void lerp(const Matrix4& matrix, float alpha);
     Matrix4& set(const Matrix3& mat);
     void scl(const Vector3& scale);

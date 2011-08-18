@@ -18,6 +18,7 @@
 #ifndef GDX_CPP_MATH_MATHUTILS_H
 #define GDX_CPP_MATH_MATHUTILS_H
 
+#include <cstdlib>
 #include <cmath>
 
 #define PI 3.1415927
@@ -67,7 +68,7 @@ namespace detail {
 #define ATAN2_COUNT ATAN2_MASK + 1
 #define INV_ATAN2_DIM_MINUS_1 1.0 / (detail::ATAN2_DIM - 1)
 
-static const int ATAN2_DIM ((int) stlp_std::sqrt((float)ATAN2_COUNT));
+static const int ATAN2_DIM ((int) std::sqrt((float)ATAN2_COUNT));
 static float _atan2[ATAN2_COUNT];
 
 struct calc_atan {
@@ -76,7 +77,7 @@ struct calc_atan {
             for (int j = 0; j < ATAN2_DIM; j++) {
                 float x0 = (float)i / detail::ATAN2_DIM;
                 float y0 = (float)j / detail::ATAN2_DIM;
-                detail::_atan2[j * detail::ATAN2_DIM + i] = (float)stlp_std::atan2(y0, x0);
+                detail::_atan2[j * detail::ATAN2_DIM + i] = (float)std::atan2(y0, x0);
             }
         }
     }
@@ -86,12 +87,12 @@ struct calc_sin {
     calc_sin() {
         for (int i = 0; i < SIN_COUNT; ++i) {
             float a = (i + 0.5f) / SIN_COUNT * radFull;
-            utils::_sin[i] = (float) stlp_std::sin(a);
-            utils::_cos[i] = (float) stlp_std::cos(a);
+            utils::_sin[i] = (float) std::sin(a);
+            utils::_cos[i] = (float) std::cos(a);
         }
         for (int i = 0; i < 360; i += 90) {
-            utils::_sin[(int)(i * degToIndex) & SIN_MASK] = (float) stlp_std::sin(i * degreesToRadians);
-            utils::_cos[(int)(i * degToIndex) & SIN_MASK] = (float) stlp_std::cos(i * degreesToRadians);
+            utils::_sin[(int)(i * degToIndex) & SIN_MASK] = (float) std::sin(i * degreesToRadians);
+            utils::_cos[(int)(i * degToIndex) & SIN_MASK] = (float) std::cos(i * degreesToRadians);
         }
 
     }
@@ -125,7 +126,7 @@ static float atan2 (float y, float x) {
 
 /** Returns a random number between 0 (inclusive) and the specified value (inclusive). */
 static int random (int range) {
-    return stlp_std::rand() % range + 1;
+    return std::rand() % range + 1;
 }
 
 static int random (int start, int end) {
@@ -133,11 +134,11 @@ static int random (int start, int end) {
 }
 
 static bool randomBoolean () {
-    return stlp_std::rand() % 2;
+    return std::rand() % 2;
 }
 
 static float random () {
-    return ( stlp_std::rand() / (static_cast<float>(RAND_MAX) + 1.0));
+    return ( std::rand() / (static_cast<float>(RAND_MAX) + 1.0));
 }
 
 static float random (float range) {

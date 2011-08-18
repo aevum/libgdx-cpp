@@ -127,7 +127,7 @@ Vector3& Vector3::div(float value) {
 }
 
 float Vector3::len() {
-    return (float)stlp_std::sqrt(x * x + y * y + z * z);
+    return (float)std::sqrt(x * x + y * y + z * z);
 }
 
 float Vector3::len2() {
@@ -147,7 +147,7 @@ float Vector3::dst(const Vector3& vector) {
     b *= b;
     c *= c;
 
-    return (float)stlp_std::sqrt(a + b + c);
+    return (float)std::sqrt(a + b + c);
 }
 
 Vector3& Vector3::nor() {
@@ -217,15 +217,15 @@ Vector3& Vector3::slerp(Vector3& target, float alpha) {
     if (dot > 1) dot = 1;
     if (dot < -1) dot = -1;
 
-    float theta0 = (float)stlp_std::acos(dot);
+    float theta0 = (float)std::acos(dot);
     float theta = theta0 * alpha;
     Vector3 v2 = target.tmp().sub(x * dot, y * dot, z * dot);
     v2.nor();
-    return this->mul((float)stlp_std::cos(theta)).add(v2.mul((float)stlp_std::sin(theta))).nor();
+    return this->mul((float)std::cos(theta)).add(v2.mul((float)std::sin(theta))).nor();
 }
 
-stlport::string Vector3::toString() {
-    stlport::stringstream ss;
+std::string Vector3::toString() {
+    std::stringstream ss;
     ss << x << "," << y << "," << z;
     return ss.str();
 }
@@ -260,7 +260,7 @@ float Vector3::dst2(float x, float y, float z) {
 }
 
 float Vector3::dst(float x, float y, float z) {
-    return (float)stlp_std::sqrt(dst2(x, y, z));
+    return (float)std::sqrt(dst2(x, y, z));
 }
 
 int Vector3::hashCode() {

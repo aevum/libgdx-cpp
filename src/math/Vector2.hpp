@@ -47,7 +47,7 @@ public:
     float dst (const Vector2& v);
     float dst (float x, float y);
     float dst2 (const Vector2& v);
-    stlport::string toString ();
+    std::string toString ();
     Vector2& sub (float x, float y);
     Vector2& tmp ();
     Vector2& mul (const Matrix3& mat);
