@@ -1,8 +1,8 @@
-file(GLOB GDX_HEADERS *.hpp)
+file(GLOB GDX_HEADERS Quaternion.hpp)
 set(GDX_SRC )
 
-file(GLOB GDX_HEADERS_MATH math/*.hpp)
-file(GLOB GDX_SOURCE_MATH math/*.cpp)
+file(GLOB GDX_HEADERS_MATH math/Quaternion.cpp math/Quaternion.hpp)
+file(GLOB GDX_SOURCE_MATH math/Quaternion.cpp)
 
 file(COPY ${GDX_HEADERS} DESTINATION ${GDXCPP_INCLUDE_DIR}/gdx)
 file(COPY ${GDX_HEADERS_MATH} DESTINATION ${GDXCPP_INCLUDE_DIR}/gdx/math)

@@ -39,7 +39,7 @@ public:
     virtual bool operator==(const Vector3& other) const;
 
     Vector3& set(float x, float y, float z);
-    Vector3& set(Vector3 vector);
+    Vector3& set(const Vector3& vector);
     Vector3& set(float* values);
     Vector3& cpy();
     Vector3& tmp();

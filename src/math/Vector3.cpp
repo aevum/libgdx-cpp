@@ -37,6 +37,7 @@ Vector3::~Vector3()
 
 Vector3& Vector3::operator=(const Vector3& other)
 {
+    this->set(other.x, other.y, other.z);
     return *this;
 }
 
@@ -69,7 +70,7 @@ Vector3& Vector3::set(float x, float y, float z) {
     return *this;
 }
 
-Vector3& Vector3::set(Vector3 vector) {
+Vector3& Vector3::set(const Vector3& vector) {
     return this->set(vector.x, vector.y, vector.z);
 }
 
