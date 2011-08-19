@@ -1,0 +1,1 @@
+/home/desenvolvedor/Desenvolvimento/libgdx/Clone/libgdx-cpp/build/src/CMakeFiles/gdx-cpp.dir
