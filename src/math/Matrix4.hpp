@@ -24,7 +24,7 @@
 #include <tr1/shared_ptr.h>
 
 namespace gdx_cpp {
-  
+
 namespace math {
 
 class Quaternion;
@@ -34,8 +34,25 @@ class Matrix3;
 class Matrix4
 {
 public:
+    static const int M00 = 0;
+    static const int M01 = 4;
+    static const int M02 = 8;
+    static const int M03 = 12;
+    static const int M10 = 1;
+    static const int M11 = 5;
+    static const int M12 = 9;
+    static const int M13 = 13;
+    static const int M20 = 2;
+    static const int M21 = 6;
+    static const int M22 = 10;
+    static const int M23 = 14;
+    static const int M30 = 3;
+    static const int M31 = 7;
+    static const int M32 = 11;
+    static const int M33 = 15;
+
     typedef std::tr1::shared_ptr<Matrix4> ptr;
-  
+
     Matrix4(const Matrix4& other);
     ~Matrix4();
     Matrix4& operator=(const Matrix4& other);

@@ -28,23 +28,6 @@
 
 using namespace gdx_cpp::math;
 
-#define M00 0
-#define M01 4
-#define M02 8
-#define M03 12
-#define M10 1
-#define M11 5
-#define M12 9
-#define M13 13
-#define M20 2
-#define M21 6
-#define M22 10
-#define M23 14
-#define M30 3
-#define M31 7
-#define M32 11
-#define M33 15
-
 float _tmp[16];
 
 Matrix4::Matrix4(const Matrix4& other)
