@@ -75,7 +75,7 @@ private:
    
     static Quaternion tmp1;
     static Quaternion tmp2;
-    static const float NORMALIZATION_TOLERANCE;
+    static const float NORMALIZATION_TOLERANCE;//TODO falta inicializar
 };
 
 }

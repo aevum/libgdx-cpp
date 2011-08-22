@@ -21,11 +21,14 @@
 #ifndef GDX_CPP_MATH_INTERSECTOR_HPP_
 #define GDX_CPP_MATH_INTERSECTOR_HPP_
 
+#include "Vector3.hpp"
+
 namespace gdx_cpp {
 namespace math {
 
 class Intersector {
 public:
+  
     static float getLowestPositiveRoot (float a,float b,float c);
     static bool isPointInTriangle (const Vector3& point,const Vector3& t1,const Vector3& t2,const Vector3& t3);
     static bool intersectSegmentPlane (const Vector3& start,const Vector3& end,const Plane& plane,const Vector3& intersection);
@@ -48,10 +51,16 @@ public:
     static bool overlapCircleRectangle (const Circle& c,const Rectangle& r);
 
 protected:
-
+    static Vector3 tmp;
+    static Vector3 best;
+    static Vector3 tmp1;
+    static Vector3 tmp2;
+    static Vector3 tmp3;
 
 private:
-
+        static Vector3 v0;
+        static Vector3 v1;
+        static Vector3 v2;
 };
 
 } // namespace gdx_cpp

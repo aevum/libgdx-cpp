@@ -22,6 +22,17 @@
 
 using namespace gdx_cpp::math;
 
+
+Intersector::v0;
+Intersector::v1;
+Intersector::v2;
+Intersector::temp;
+Intersector::temp1;
+Intersector::temp2;
+Intersector::temp3;
+Intersector::best;
+
+
 float Intersector::getLowestPositiveRoot (float a,float b,float c) {
     float det = b * b - 4 * a * c;
     if (det < 0) return Float.NaN;
