@@ -43,7 +43,7 @@ public:
     bool isFrontFacing (const Vector3& direction);
     Vector3& getNormal ();
     float getD ();
-    void set (const gdx_cpp::math::Vector3& point, const gdx_cpp::math::Vector3& normal) const;
+    void set (const gdx_cpp::math::Vector3& point, const gdx_cpp::math::Vector3& normal);
     void set (const Plane& plane);
     std::string toString ();
 

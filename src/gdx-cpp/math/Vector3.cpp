@@ -65,7 +65,7 @@ Vector3::Vector3(float* values) {
     this->set(values[0], values[1], values[2]);
 }
 
-Vector3& Vector3::set(float x, float y, float z) {
+Vector3& Vector3::set(float x, float y, float z)  {
     this->x = x;
     this->y = y;
     this->z = z;
@@ -129,7 +129,7 @@ Vector3& Vector3::div(float value) {
     return this->set(this->x * d, this->y * d, this->z * d);
 }
 
-float Vector3::len() {
+float Vector3::len() const {
     return (float)std::sqrt(x * x + y * y + z * z);
 }
 

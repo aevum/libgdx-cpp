@@ -69,7 +69,7 @@ float Plane::getD () {
     return d;
 }
 
-void Plane::set (const Vector3& point,const Vector3& normal) const{
+void Plane::set (const Vector3& point,const Vector3& normal){
     this->normal.set(normal);
     d = -point.dot(normal);
 }

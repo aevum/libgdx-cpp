@@ -23,7 +23,7 @@
 
 #include <vector>
 #include "Vector3.hpp"
-#include "utils/Aliases.hpp"
+#include "gdx-cpp/utils/Aliases.hpp"
 
 namespace gdx_cpp {
 namespace math {
