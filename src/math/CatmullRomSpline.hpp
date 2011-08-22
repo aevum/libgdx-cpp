@@ -21,25 +21,37 @@
 #ifndef GDX_CPP_MATH_CATMULLROMSPLINE_HPP_
 #define GDX_CPP_MATH_CATMULLROMSPLINE_HPP_
 
+#include <vector>
+#include "Vector3.hpp"
+#include "utils/Aliases.hpp"
+
 namespace gdx_cpp {
 namespace math {
 
+class Vector3;
+  
 class CatmullRomSpline {
 public:
-    void add (const Vector3& point);
-    std::list<Vector3>& getControlPoints ();
-    std::list<Vector3>& getPath (int numPoints);
-    void getPath (int numPoints);
-    std::list<Vector3>& getTangents (int numPoints);
-    std::list<Vector3>& getTangentNormals2D (int numPoints);
-    std::list<Vector3>& getTangentNormals (int numPoints,const Vector3& up);
-    std::list<Vector3>& getTangentNormals (int numPoints,std::list<Vector3>& up);
+    CatmullRomSpline();
 
+    typedef ref_ptr_maker< std::vector<Vector3> >::type vector3_vector_ptr;
+    
+    void add (const Vector3& point);
+    std::vector<Vector3>& getControlPoints ();
+    vector3_vector_ptr getPath (int numPoints);   
+    void getPath (std::vector<Vector3>& points, int numPoints);
+    
+    vector3_vector_ptr getTangents (int numPoints);
+    vector3_vector_ptr getTangentNormals2D (int numPoints);
+    vector3_vector_ptr getTangentNormals (int numPoints,const Vector3& up);
+    vector3_vector_ptr getTangentNormals (int numPoints, std::vector<Vector3>& up);
+    
+    Vector3 T1;
+    Vector3 T2;
 protected:
 
-
 private:
-
+  std::vector<Vector3> controlPoints;
 };
 
 } // namespace gdx_cpp

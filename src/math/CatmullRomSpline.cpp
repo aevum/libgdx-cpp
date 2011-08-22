@@ -22,29 +22,33 @@
 
 using namespace gdx_cpp::math;
 
-void CatmullRomSpline::add (const Vector3& point) {
-    controlPoints.add(point);
+gdx_cpp::math::CatmullRomSpline::CatmullRomSpline()
+{
 }
 
-std::list<Vector3>& CatmullRomSpline::getControlPoints () {
+void CatmullRomSpline::add (const Vector3& point) {
+    controlPoints.push_back(point);
+}
+
+std::vector<Vector3>& CatmullRomSpline::getControlPoints () {
     return controlPoints;
 }
 
-std::list<Vector3>& CatmullRomSpline::getPath (int numPoints) {
-    ArrayList<Vector3> points = new ArrayList<Vector3>();
+CatmullRomSpline::vector3_vector_ptr CatmullRomSpline::getPath (int numPoints) {
+    vector3_vector_ptr points = vector3_vector_ptr (new std::vector<Vector3>());
 
     if (controlPoints.size() < 4) return points;
 
-    Vector3 T1 = new Vector3();
-    Vector3 T2 = new Vector3();
+    Vector3 T1;
+    Vector3 T2;
 
     for (int i = 1; i <= controlPoints.size() - 3; i++) {
-        points.add(controlPoints.get(i));
+        points->push_back(controlPoints[i]);
         float increment = 1.0f / (numPoints + 1);
         float t = increment;
 
-        T1.set(controlPoints.get(i + 1)).sub(controlPoints.get(i - 1)).mul(0.5f);
-        T2.set(controlPoints.get(i + 2)).sub(controlPoints.get(i)).mul(0.5f);
+        T1.set(controlPoints[i + 1].sub(controlPoints[i - 1])).mul(0.5f);
+        T2.set(controlPoints[i + 2].sub(controlPoints[i])).mul(0.5f);
 
         for (int j = 0; j < numPoints; j++) {
             float h1 = 2 * t * t * t - 3 * t * t + 1; // calculate basis
@@ -55,31 +59,32 @@ std::list<Vector3>& CatmullRomSpline::getPath (int numPoints) {
             // function 3
             float h4 = t * t * t - t * t; // calculate basis function 4
 
-            Vector3 point = new Vector3(controlPoints.get(i)).mul(h1);
-            point.add(controlPoints.get(i + 1).tmp().mul(h2));
+            Vector3 point(controlPoints[i]);
+            point.mul(h1);
+            point.add(controlPoints[i + 1].tmp().mul(h2));
             point.add(T1.tmp().mul(h3));
             point.add(T2.tmp().mul(h4));
-            points.add(point);
+            points->push_back(point);
             t += increment;
         }
     }
 
-    if (controlPoints.size() >= 4) points.add(controlPoints.get(controlPoints.size() - 2));
+    if (controlPoints.size() >= 4) points->push_back(controlPoints[controlPoints.size() - 2]);
 
     return points;
 }
 
-void CatmullRomSpline::getPath (int numPoints) {
+void CatmullRomSpline::getPath (std::vector<Vector3>& points, int numPoints) {
     int idx = 0;
     if (controlPoints.size() < 4) return;
 
     for (int i = 1; i <= controlPoints.size() - 3; i++) {
-        points[idx++].set(controlPoints.get(i));
+        points[idx++] = controlPoints[i];
         float increment = 1.0f / (numPoints + 1);
         float t = increment;
 
-        T1.set(controlPoints.get(i + 1)).sub(controlPoints.get(i - 1)).mul(0.5f);
-        T2.set(controlPoints.get(i + 2)).sub(controlPoints.get(i)).mul(0.5f);
+        T1.set(controlPoints[i + 1]).sub(controlPoints[i - 1]).mul(0.5f);
+        T2.set(controlPoints[i + 2]).sub(controlPoints[i]).mul(0.5f);
 
         for (int j = 0; j < numPoints; j++) {
             float h1 = 2 * t * t * t - 3 * t * t + 1; // calculate basis
@@ -90,33 +95,33 @@ void CatmullRomSpline::getPath (int numPoints) {
             // function 3
             float h4 = t * t * t - t * t; // calculate basis function 4
 
-            Vector3 point = points[idx++].set(controlPoints.get(i)).mul(h1);
-            point.add(controlPoints.get(i + 1).tmp().mul(h2));
+            Vector3 point = points[idx++].set(controlPoints[i]).mul(h1);
+            point.add(controlPoints[i + 1].tmp().mul(h2));
             point.add(T1.tmp().mul(h3));
             point.add(T2.tmp().mul(h4));
             t += increment;
         }
     }
 
-    points[idx].set(controlPoints.get(controlPoints.size() - 2));
+    points[idx].set(controlPoints[controlPoints.size() - 2]);
 }
 
-std::list<Vector3>& CatmullRomSpline::getTangents (int numPoints) {
-    ArrayList<Vector3> tangents = new ArrayList<Vector3>();
+CatmullRomSpline::vector3_vector_ptr CatmullRomSpline::getTangents (int numPoints) {
+    vector3_vector_ptr tangents = vector3_vector_ptr(new std::vector<Vector3>());
 
     if (controlPoints.size() < 4) return tangents;
 
-    Vector3 T1 = new Vector3();
-    Vector3 T2 = new Vector3();
+    Vector3 T1;
+    Vector3 T2;
 
     for (int i = 1; i <= controlPoints.size() - 3; i++) {
         float increment = 1.0f / (numPoints + 1);
         float t = increment;
 
-        T1.set(controlPoints.get(i + 1)).sub(controlPoints.get(i - 1)).mul(0.5f);
-        T2.set(controlPoints.get(i + 2)).sub(controlPoints.get(i)).mul(0.5f);
+        T1.set(controlPoints[i + 1]).sub(controlPoints[i - 1]).mul(0.5f);
+        T2.set(controlPoints[i + 2]).sub(controlPoints[i]).mul(0.5f);
 
-        tangents.add(new Vector3(T1).nor());
+        tangents->push_back(Vector3(T1).nor());
 
         for (int j = 0; j < numPoints; j++) {
             float h1 = 6 * t * t - 6 * t; // calculate basis function 1
@@ -124,42 +129,43 @@ std::list<Vector3>& CatmullRomSpline::getTangents (int numPoints) {
             float h3 = 3 * t * t - 4 * t + 1; // calculate basis function 3
             float h4 = 3 * t * t - 2 * t; // calculate basis function 4
 
-            Vector3 point = new Vector3(controlPoints.get(i)).mul(h1);
-            point.add(controlPoints.get(i + 1).tmp().mul(h2));
+            Vector3 point(controlPoints[i]);
+            point.mul(h1);
+            point.add(controlPoints[i + 1].tmp().mul(h2));
             point.add(T1.tmp().mul(h3));
             point.add(T2.tmp().mul(h4));
-            tangents.add(point.nor());
+            tangents->push_back(point.nor());
             t += increment;
         }
     }
 
     if (controlPoints.size() >= 4)
-        tangents.add(T1.set(controlPoints.get(controlPoints.size() - 1)).sub(controlPoints.get(controlPoints.size() - 3))
-                     .mul(0.5f).cpy().nor());
+        tangents->push_back(T1.set(controlPoints[controlPoints.size() - 1]).sub(controlPoints[controlPoints.size() - 3])
+                            .mul(0.5f).cpy().nor());
 
     return tangents;
 }
 
-std::list<Vector3>& CatmullRomSpline::getTangentNormals2D (int numPoints) {
-    ArrayList<Vector3> tangents = new ArrayList<Vector3>();
+CatmullRomSpline::vector3_vector_ptr CatmullRomSpline::getTangentNormals2D (int numPoints) {
+    vector3_vector_ptr tangents = vector3_vector_ptr(new std::vector<Vector3>());
 
     if (controlPoints.size() < 4) return tangents;
 
-    Vector3 T1 = new Vector3();
-    Vector3 T2 = new Vector3();
+    Vector3 T1;
+    Vector3 T2;
 
     for (int i = 1; i <= controlPoints.size() - 3; i++) {
         float increment = 1.0f / (numPoints + 1);
         float t = increment;
 
-        T1.set(controlPoints.get(i + 1)).sub(controlPoints.get(i - 1)).mul(0.5f);
-        T2.set(controlPoints.get(i + 2)).sub(controlPoints.get(i)).mul(0.5f);
+        T1.set(controlPoints[i + 1]).sub(controlPoints[i - 1]).mul(0.5f);
+        T2.set(controlPoints[i + 2]).sub(controlPoints[i]).mul(0.5f);
 
-        Vector3 normal = new Vector3(T1).nor();
+        Vector3 normal = Vector3(T1).nor();
         float x = normal.x;
         normal.x = normal.y;
         normal.y = -x;
-        tangents.add(normal);
+        tangents->push_back(normal);
 
         for (int j = 0; j < numPoints; j++) {
             float h1 = 6 * t * t - 6 * t; // calculate basis function 1
@@ -167,15 +173,16 @@ std::list<Vector3>& CatmullRomSpline::getTangentNormals2D (int numPoints) {
             float h3 = 3 * t * t - 4 * t + 1; // calculate basis function 3
             float h4 = 3 * t * t - 2 * t; // calculate basis function 4
 
-            Vector3 point = new Vector3(controlPoints.get(i)).mul(h1);
-            point.add(controlPoints.get(i + 1).tmp().mul(h2));
+            Vector3 point(controlPoints[i]);
+            point.mul(h1);
+            point.add(controlPoints[i + 1].tmp().mul(h2));
             point.add(T1.tmp().mul(h3));
             point.add(T2.tmp().mul(h4));
             point.nor();
             x = point.x;
             point.x = point.y;
             point.y = -x;
-            tangents.add(point);
+            tangents->push_back(point);
             t += increment;
         }
     }
@@ -183,23 +190,30 @@ std::list<Vector3>& CatmullRomSpline::getTangentNormals2D (int numPoints) {
     return tangents;
 }
 
-std::list<Vector3>& CatmullRomSpline::getTangentNormals (int numPoints,const Vector3& up) {
-    List<Vector3> tangents = getTangents(numPoints);
-    ArrayList<Vector3> normals = new ArrayList<Vector3>();
+CatmullRomSpline::vector3_vector_ptr CatmullRomSpline::getTangentNormals (int numPoints,const Vector3& up) {
+    vector3_vector_ptr tangents = getTangents(numPoints);
+    vector3_vector_ptr normals = vector3_vector_ptr(new std::vector<Vector3>());
 
-for (Vector3 tangent : tangents)
-        normals.add(new Vector3(tangent).crs(up).nor());
+    vector3_vector_ptr::element_type::iterator it = tangents->begin();
+    vector3_vector_ptr::element_type::iterator end = tangents->end();
+
+    for (;it != end; ++it)
+        normals->push_back(it->crs(up).nor());
 
     return normals;
 }
 
-std::list<Vector3>& CatmullRomSpline::getTangentNormals (int numPoints,std::list<Vector3>& up) {
-    List<Vector3> tangents = getTangents(numPoints);
-    ArrayList<Vector3> normals = new ArrayList<Vector3>();
+CatmullRomSpline::vector3_vector_ptr CatmullRomSpline::getTangentNormals (int numPoints, std::vector<Vector3>& up) {
+    vector3_vector_ptr tangents = getTangents(numPoints);
+    vector3_vector_ptr normals = vector3_vector_ptr(new std::vector<Vector3>());
+
+    vector3_vector_ptr::element_type::iterator it = tangents->begin();
+    vector3_vector_ptr::element_type::iterator end = tangents->end();
 
     int i = 0;
-for (Vector3 tangent : tangents)
-        normals.add(new Vector3(tangent).crs(up.get(i++)).nor());
+    for (;it != end; ++it) {
+        normals->push_back(it->crs(up[i++]).nor());
+    }
 
     return normals;
 }
