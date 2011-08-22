@@ -20,12 +20,18 @@
 
 #ifndef GDX_CPP_MATH_WINDOWEDMEAN_HPP_
 #define GDX_CPP_MATH_WINDOWEDMEAN_HPP_
+#include <vector>
+#include "gdx-cpp/utils/Aliases.hpp"
 
 namespace gdx_cpp {
 namespace math {
 
 class WindowedMean {
 public:
+    WindowedMean (int window_size);
+
+    typedef ref_ptr_maker< std::vector<float> >::type float_vector_ptr;
+    
     bool hasEnoughData ();
     void clear ();
     void addValue (float value);
@@ -35,7 +41,11 @@ public:
     float standardDeviation ();
 
 protected:
-
+    std::vector<float> values;
+    int added_values;
+    int last_value;
+    float mean;
+    bool dirty;
 
 private:
 

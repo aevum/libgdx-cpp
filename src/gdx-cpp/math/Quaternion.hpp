@@ -20,6 +20,8 @@
 
 #ifndef GDX_CPP_MATH_QUATERNION_HPP
 #define GDX_CPP_MATH_QUATERNION_HPP
+#include <tr1/memory>
+#include <tr1/shared_ptr.h>
 
 #include <string>
 #include <tr1/memory>
@@ -34,6 +36,7 @@ class Quaternion
 {
   
 public:
+  typedef std::tr1::shared_ptr<Quaternion> ptr;
     typedef std::tr1::shared_ptr<Quaternion> ptr;
   
     Quaternion();
@@ -66,10 +69,10 @@ public:
     float dot (const Quaternion& other);
     Quaternion& mul (float scalar);
     
-    float x;
-    float y;
-    float z;
-    float w;	
+    float x = 0.0;
+    float y = 0.0;
+    float z = 0.0;
+    float w = 0.0;	
 	
 private:
    
