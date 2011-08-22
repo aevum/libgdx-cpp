@@ -21,30 +21,28 @@
 #ifndef GDX_CPP__GDX_HPP_
 #define GDX_CPP__GDX_HPP_
 
+#include "Application.hpp"
+#include "Graphics.hpp"
+#include "Audio.hpp"
+#include "Files.hpp"
+#include "Input.hpp"
+
 namespace gdx_cpp {
-namespace  {
 
 class Gdx {
 public:
-    static Application app;
-    static Graphics graphics;
-    static Audio audio;
-    static Input input;
-    static Files files;
-    static GLCommon gl;
-    static GL10 gl10;
-    static GL11 gl11;
-    static GL20 gl20;
-    static GLU glu;
-
-protected:
-
-
-private:
-
+    static Application& app;
+    static Graphics& graphics;
+    static Audio& audio;
+    static Input& input;
+    static Files& files;
+    static GLCommon& gl;
+    static GL10& gl10;
+    static GL11& gl11;
+    static GL20& gl20;
+    static GLU& glu;
 };
 
 } // namespace gdx_cpp
-} // namespace
 
 #endif // GDX_CPP__GDX_HPP_

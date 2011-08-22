@@ -1,8 +1,8 @@
 file(GLOB GDX_HEADERS WindowedMean.hpp)
 set(GDX_SRC )
 
-file(GLOB GDX_HEADERS_MATH math/WindowedMean.hpp)
-file(GLOB GDX_SOURCE_MATH math/WindowedMean.cpp)
+file(GLOB GDX_HEADERS_MATH math/Polygon.hpp)
+file(GLOB GDX_SOURCE_MATH math/Polygon.cpp)
 
 file(COPY ${GDX_HEADERS} DESTINATION ${GDXCPP_INCLUDE_DIR}/gdx)
 file(COPY ${GDX_HEADERS_MATH} DESTINATION ${GDXCPP_INCLUDE_DIR}/gdx/math)

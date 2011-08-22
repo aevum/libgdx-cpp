@@ -42,6 +42,13 @@ Frustum::Frustum()
     }
 }
 
+gdx_cpp::math::Frustum::~Frustum()
+{
+  for (int i = 0; i < 6; i++) {
+    delete planes[i];
+  }
+}
+
 void Frustum::update (const Matrix4& inverseProjectionView) {
     memcpy(planePointsArray, clipSpacePlanePointsArray, 24 );
 

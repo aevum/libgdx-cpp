@@ -17,7 +17,9 @@
 
 #ifndef GDX_CPP_MATH_RECTANGLE_HPP
 #define GDX_CPP_MATH_RECTANGLE_HPP
+
 #include <string>
+
 namespace gdx_cpp {
 
 namespace math {
@@ -48,7 +50,7 @@ public:
     bool contains (float x, float y);
     void set (const Rectangle& rect);
     void merge(const Rectangle& rect);
-    stlport::string toString ();
+    std::string toString ();
 };
 
 }

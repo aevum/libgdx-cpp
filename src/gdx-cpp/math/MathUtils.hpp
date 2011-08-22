@@ -1,17 +1,20 @@
 /*
- *    Copyright 2011 <copyright holder> <email>
+ *  Copyright 2011 Aevum Software aevum @ aevumlab.com
  *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *  @author Victor Vicente de Carvalho victor.carvalho@aevumlab.com
+ *  @author Ozires Bortolon de Faria ozires@aevumlab.com
  */
 
 
@@ -34,6 +37,8 @@
 #define radiansToDegrees 180.0 / 3.1415927
 #define degreesToRadians  PI / 180
 
+#include "gdx-cpp/utils/NumberUtils.hpp"
+
 namespace gdx_cpp {
 
 namespace math {
@@ -42,24 +47,29 @@ namespace utils {
 
 static float _sin[SIN_COUNT];
 static float _cos[SIN_COUNT];
+static int BIG_ENOUGH_INT = 16 * 1024;
+static double BIG_ENOUGH_FLOOR = BIG_ENOUGH_INT;
+static double CEIL = 0.9999999;
+static double BIG_ENOUGH_CEIL = gdx_cpp::utils::NumberUtils::longBitsToDouble(gdx_cpp::utils::NumberUtils::doubleToLongBits(BIG_ENOUGH_INT + 1) - 1);
+static double BIG_ENOUGH_ROUND = BIG_ENOUGH_INT + 0.5f;
 
-static float signum(float value) {
-  return value < 0 ? -1 : (value == 0 ? 0 : 1);
+float signum(float value) {
+    return value < 0 ? -1 : (value == 0 ? 0 : 1);
 }
 
-static float sin (float rad) {
+float sin (float rad) {
     return utils::_sin[(int)(rad * radToIndex) & SIN_MASK];
 }
 
-static float cos (float rad) {
+float cos (float rad) {
     return utils::_cos[(int)(rad * radToIndex) & SIN_MASK];
 }
 
-static float sinDeg (float deg) {
+float sinDeg (float deg) {
     return utils::_sin[(int)(deg * degToIndex) & SIN_MASK];
 }
 
-static float cosDeg (float deg) {
+float cosDeg (float deg) {
     return utils::_cos[(int)(deg * degToIndex) & SIN_MASK];
 }
 
@@ -104,7 +114,7 @@ struct calc_sin {
 
 }
 
-static float atan2 (float y, float x) {
+float atan2 (float y, float x) {
     float add = 0, mul = 0;
     if (x < 0) {
         if (y < 0) {
@@ -129,23 +139,23 @@ static float atan2 (float y, float x) {
 }
 
 /** Returns a random number between 0 (inclusive) and the specified value (inclusive). */
-static int random (int range) {
+int random (int range) {
     return std::rand() % range + 1;
 }
 
-static int random (int start, int end) {
+int random (int start, int end) {
     return start + random(end - start + 1);
 }
 
-static bool randomBoolean () {
+bool randomBoolean () {
     return std::rand() % 2;
 }
 
-static float random () {
+float random () {
     return ( std::rand() / (static_cast<float>(RAND_MAX) + 1.0));
 }
 
-static float random (float range) {
+float random (float range) {
     return utils::random() * range;
 }
 
@@ -164,6 +174,45 @@ float random(float low, float high)
     /* calculate the random number & return it */
     temp = utils::random() * (high - low) + low;
     return temp;
+}
+
+int nextPowerOfTwo (int value) {
+    if (value == 0) return 1;
+    value--;
+    value |= value >> 1;
+    value |= value >> 2;
+    value |= value >> 4;
+    value |= value >> 8;
+    value |= value >> 16;
+    return value + 1;
+}
+
+bool isPowerOfTwo (int value) {
+    return value != 0 && (value & value - 1) == 0;
+}
+
+int floor (float x) {
+    return (int)(x + BIG_ENOUGH_FLOOR) - BIG_ENOUGH_INT;
+}
+
+int floorPositive (float x) {
+    return (int)x;
+}
+
+int ceil (float x) {
+    return (int)(x + BIG_ENOUGH_CEIL) - BIG_ENOUGH_INT;
+}
+
+int ceilPositive (float x) {
+    return (int)(x + CEIL);
+}
+
+int round (float x) {
+    return (int)(x + BIG_ENOUGH_ROUND) - BIG_ENOUGH_INT;
+}
+
+int roundPositive (float x) {
+    return (int)(x + 0.5f);
 }
 
 }

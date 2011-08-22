@@ -20,19 +20,43 @@
 
 #include "Polygon.hpp"
 
+#include <cassert>
+#include <iostream>
+
+#include "MathUtils.hpp"
+#include "gdx-cpp/Gdx.hpp"
+
 using namespace gdx_cpp::math;
 
-float* Polygon::getVertices () {
+Polygon::Polygon(const std::vector< float >& vertices)
+  : vertices(vertices)
+  , scaleX(1)
+  , scaleY(1)
+  , x(0)
+  , y(0)
+  , originX(0)
+  , originY(0)
+  , rotation(0)
+  , dirty(false)
+{
+  if (vertices.size() < 6) {
+     std::cerr << "polygons must contain at least 3 points." << std::endl;
+     assert(false);
+  }
+}
+
+std::vector<float>& Polygon::getVertices () {
     if (!dirty) return vertices;
 
-    float[] vertices = this.vertices;
-    final int numFloats = vertices.length;
+    int numFloats = vertices.size();
 
-    final float translateX = x + originX;
-    final float translateY = y + originY;
-    final float cos = MathUtils.cosDeg(rotation);
-    final float sin = MathUtils.sinDeg(rotation);
+    float translateX = x + originX;
+    float translateY = y + originY;
+    float cos = utils::cosDeg(rotation);
+    float sin = utils::sinDeg(rotation);
+    
     float x, y;
+    
     for (int i = 0; i < numFloats; i += 2) {
         x = vertices[i];
         y = vertices[i + 1];
@@ -67,25 +91,25 @@ float* Polygon::getVertices () {
 }
 
 void Polygon::setOrigin (float originX,float originY) {
-    this.originX = originX;
-    this.originY = originY;
+    this->originX = originX;
+    this->originY = originY;
     dirty = true;
 }
 
 void Polygon::setPosition (float x,float y) {
-    this.x = x;
-    this.y = y;
+    this->x = x;
+    this->y = y;
     dirty = true;
 }
 
 void Polygon::translate (float x,float y) {
-    this.x += x;
-    this.y += y;
+    this->x += x;
+    this->y += y;
     dirty = true;
 }
 
 void Polygon::setRotation (float degrees) {
-    this.rotation = degrees;
+    this->rotation = degrees;
     dirty = true;
 }
 
@@ -95,22 +119,22 @@ void Polygon::rotate (float degrees) {
 }
 
 void Polygon::setScale (float scaleX,float scaleY) {
-    this.scaleX = scaleX;
-    this.scaleY = scaleY;
+    this->scaleX = scaleX;
+    this->scaleY = scaleY;
     dirty = true;
 }
 
 void Polygon::scale (float amount) {
-    this.scaleX += amount;
-    this.scaleY += amount;
+    this->scaleX += amount;
+    this->scaleY += amount;
     dirty = true;
 }
 
 float Polygon::area () {
     float area = 0;
 
-    float[] vertices = getVertices();
-    final int numFloats = vertices.length;
+    const std::vector<float>& vertices = getVertices();
+    int numFloats = vertices.size();
 
     int x1, y1, x2, y2;
     for (int i = 0; i < numFloats; i += 2) {
@@ -128,14 +152,15 @@ float Polygon::area () {
 
 Rectangle& Polygon::getBoundingRectangle () {
 
-    float[] vertices = getVertices();
+    const std::vector<float>& vertices = getVertices();
 
     float minX = vertices[0];
     float minY = vertices[1];
     float maxX = vertices[0];
     float maxY = vertices[1];
 
-    final int numFloats = vertices.length;
+    int numFloats = vertices.size();
+    
     for (int i = 2; i < numFloats; i += 2) {
         minX = minX > vertices[i] ? vertices[i] : minX;
         minY = minY > vertices[i + 1] ? vertices[i + 1] : minY;
@@ -152,8 +177,8 @@ Rectangle& Polygon::getBoundingRectangle () {
 }
 
 bool Polygon::contains (float x,float y) {
-    final float[] vertices = getVertices();
-    final int numFloats = vertices.length;
+    const std::vector<float>& vertices = getVertices();
+    int numFloats = vertices.size();
     int intersects = 0;
 
     for (int i = 0; i < numFloats; i += 2) {
@@ -161,8 +186,8 @@ bool Polygon::contains (float x,float y) {
         float y1 = vertices[i + 1];
         float x2 = vertices[(i + 2) % numFloats];
         float y2 = vertices[(i + 3) % numFloats];
-        Gdx.app.log("Poly Test: ", "Testing Point (" + x + ", " + y + ") against (" + x1 + ", " + y1 + ") and (" + x2 + ", "
-                    + y2 + ")");
+        gdx_cpp::Gdx::app.log("Poly Test: ") << "Testing Point (" << x << ", " << y << ") against (" << x1 << ", " << y1 << ") and (" << x2 << ", "
+                    << y2 << ")";
         if (((y1 <= y && y < y2) || (y2 <= y && y < y1)) && x < ((x2 - x1) / (y2 - y1) * (y - y1) + x1)) intersects++;
     }
     return (intersects & 1) == 1;
