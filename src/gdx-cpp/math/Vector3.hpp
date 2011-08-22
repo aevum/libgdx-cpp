@@ -42,9 +42,11 @@ public:
     Vector3& set(const Vector3& vector);
     Vector3& set(const float* values);
     Vector3 cpy();
-    Vector3& tmp();
-    Vector3& tmp2();
-    Vector3& tmp3();
+    Vector3& tmp() const;
+    Vector3& tmp2() const;
+    Vector3& tmp3() const;
+
+    
     Vector3& add(const Vector3& vector);
     Vector3& add(float x, float y, float z);
     Vector3& add(float values);
@@ -53,7 +55,7 @@ public:
     Vector3& sub(float value);
     Vector3& mul(float value);
     Vector3& div(float value);
-    float len();
+    float len() const;
     float len2();
     bool idt(const Vector3& vector);
     float dst(const Vector3& vector);
@@ -64,7 +66,7 @@ public:
     Vector3& mul(const Matrix4& matrix);
     Vector3& prj(const Matrix4& matrix);
     Vector3& rot(const Matrix4& matrix);
-    bool isUnit();
+    bool isUnit() const;
     bool isZero();
     Vector3 lerp(gdx_cpp::math::Vector3& target, float alpha);
     Vector3& slerp(Vector3& target, float alpha);

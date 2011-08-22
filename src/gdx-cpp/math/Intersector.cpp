@@ -19,14 +19,42 @@
 */
 
 #include "Intersector.hpp"
+#include "Vector2.hpp"
+#include "Vector3.hpp"
+#include "Rectangle.hpp"
+#include <math.h>
+#include <vector>
+#include "Plane.hpp"
+#include "collision/BoundingBox.hpp"
+#include <limits>
+#include "collision/Ray.hpp"
+#include <cassert>
+#include "gdx-cpp/Gdx.hpp"
+#include "Circle.hpp"
+
+
 
 using namespace gdx_cpp::math;
 
+
+Vector3 Intersector::v0;
+Vector3 Intersector::v1;
+Vector3 Intersector::v2;
+Vector3 Intersector::tmp;
+Vector3 Intersector::tmp1;
+Vector3 Intersector::tmp2;
+Vector3 Intersector::tmp3;
+Vector3 Intersector::best;
+Plane Intersector::p = Plane(Vector3(), 0);
+Vector3 Intersector::i;
+Vector3 Intersector::dir;
+Vector3 Intersector::start;
+
 float Intersector::getLowestPositiveRoot (float a,float b,float c) {
     float det = b * b - 4 * a * c;
-    if (det < 0) return Float.NaN;
+    if (det < 0) return std::numeric_limits<float>::quiet_NaN();
 
-    float sqrtD = (float)Math.sqrt(det);
+    float sqrtD = (float)sqrt(det);
     float invA = 1 / (2 * a);
     float r1 = (-b - sqrtD) * invA;
     float r2 = (-b + sqrtD) * invA;
@@ -41,10 +69,10 @@ float Intersector::getLowestPositiveRoot (float a,float b,float c) {
 
     if (r2 > 0) return r2;
 
-    return Float.NaN;
+    return std::numeric_limits<float>::quiet_NaN();
 }
 
-bool Intersector::isPointInTriangle (const Vector3& point,const Vector3& t1,const Vector3& t2,const Vector3& t3) {
+bool Intersector::isPointInTriangle (const Vector3& point, const Vector3& t1, const Vector3& t2, const Vector3& t3) {
     v0.set(t1).sub(point);
     v1.set(t2).sub(point);
     v2.set(t3).sub(point);
@@ -60,25 +88,25 @@ bool Intersector::isPointInTriangle (const Vector3& point,const Vector3& t1,cons
     return true;
 }
 
-bool Intersector::intersectSegmentPlane (const Vector3& start,const Vector3& end,const Plane& plane,const Vector3& intersection) {
+bool Intersector::intersectSegmentPlane (const Vector3& start,const Vector3& end, Plane& plane, Vector3* intersection) {
     Vector3 dir = end.tmp().sub(start);
     float denom = dir.dot(plane.getNormal());
     float t = -(start.dot(plane.getNormal()) + plane.getD()) / denom;
     if (t < 0 || t > 1) return false;
 
-    intersection.set(start).add(dir.mul(t));
+    intersection->set(start).add(dir.mul(t));
     return true;
 }
 
-bool Intersector::isPointInPolygon (std::list<Vector2>& polygon,const Vector2& point) {
+bool Intersector::isPointInPolygon (std::vector<Vector2>& polygon,const Vector2& point) {
 
     int j = polygon.size() - 1;
-    boolean oddNodes = false;
+    bool oddNodes = false;
     for (int i = 0; i < polygon.size(); i++) {
-        if ((polygon.get(i).y < point.y && polygon.get(j).y >= point.y)
-                || (polygon.get(j).y < point.y && polygon.get(i).y >= point.y)) {
-            if (polygon.get(i).x + (point.y - polygon.get(i).y) / (polygon.get(j).y - polygon.get(i).y)
-                    * (polygon.get(j).x - polygon.get(i).x) < point.x) {
+        if ((polygon.at(i).y < point.y && polygon.at(j).y >= point.y)
+                || (polygon.at(j).y < point.y && polygon.at(i).y >= point.y)) {
+            if (polygon.at(i).x + (point.y - polygon.at(i).y) / (polygon.at(j).y - polygon.at(i).y)
+                    * (polygon.at(j).x - polygon.at(i).x) < point.x) {
                 oddNodes = !oddNodes;
             }
         }
@@ -115,11 +143,11 @@ bool Intersector::intersectSegmentCircle (const Vector2& start,const Vector2& en
     return x * x + y * y <= squareRadius;
 }
 
-float Intersector::intersectSegmentCircleDisplace (const Vector2& start,const Vector2& end,const Vector2& point,float radius,const Vector2& displacement) {
+float Intersector::intersectSegmentCircleDisplace (const Vector2& start,const Vector2& end,const Vector2& point,float radius, Vector2& displacement) {
     float u = (point.x - start.x) * (end.x - start.x) + (point.y - start.y) * (end.y - start.y);
     float d = start.dst(end);
     u /= (d * d);
-    if (u < 0 || u > 1) return Float.POSITIVE_INFINITY;
+    if (u < 0 || u > 1) return std::numeric_limits<float>::infinity();
     tmp.set(end.x, end.y, 0).sub(start.x, start.y, 0);
     tmp2.set(start.x, start.y, 0).add(tmp.mul(u));
     d = tmp2.dst(point.x, point.y, 0);
@@ -127,27 +155,27 @@ float Intersector::intersectSegmentCircleDisplace (const Vector2& start,const Ve
         displacement.set(point).sub(tmp2.x, tmp2.y).nor();
         return d;
     } else
-        return Float.POSITIVE_INFINITY;
+        return std::numeric_limits<float>::infinity();
 }
 
-bool Intersector::intersectRayPlane (const gdx_cpp::math::collision::Ray& ray,const Plane& plane,const Vector3& intersection) {
+bool Intersector::intersectRayPlane (const gdx_cpp::math::collision::Ray& ray, Plane& plane, Vector3* intersection) {
     float denom = ray.direction.dot(plane.getNormal());
     if (denom != 0) {
         float t = -(ray.origin.dot(plane.getNormal()) + plane.getD()) / denom;
         if (t < 0) return false;
 
-        if (intersection != null) intersection.set(ray.origin).add(ray.direction.tmp().mul(t));
+        if (intersection != NULL) intersection->set(ray.origin).add(ray.direction.tmp().mul(t));
         return true;
-    } else if (plane.testPoint(ray.origin) == Plane.PlaneSide.OnPlane) {
-        if (intersection != null) intersection.set(ray.origin);
+    } else if (plane.testPoint(ray.origin) == Plane::PlaneSide_OnPlane) {
+        if (intersection != NULL) intersection->set(ray.origin);
         return true;
     } else
         return false;
 }
 
-bool Intersector::intersectRayTriangle (const gdx_cpp::math::collision::Ray& ray,const Vector3& t1,const Vector3& t2,const Vector3& t3,const Vector3& intersection) {
+bool Intersector::intersectRayTriangle (const gdx_cpp::math::collision::Ray& ray,const Vector3& t1,const Vector3& t2,const Vector3& t3, Vector3* intersection) {
     p.set(t1, t2, t3);
-    if (!intersectRayPlane(ray, p, i)) return false;
+    if (!intersectRayPlane(ray, p, &i)) return false;
 
     v0.set(t3).sub(t1);
     v1.set(t2).sub(t1);
@@ -166,7 +194,7 @@ bool Intersector::intersectRayTriangle (const gdx_cpp::math::collision::Ray& ray
     float v = (dot00 * dot12 - dot01 * dot02) / denom;
 
     if (u >= 0 && v >= 0 && u + v <= 1) {
-        if (intersection != null) intersection.set(i);
+        if (intersection != NULL) intersection->set(i);
         return true;
     } else {
         return false;
@@ -174,7 +202,7 @@ bool Intersector::intersectRayTriangle (const gdx_cpp::math::collision::Ray& ray
 
 }
 
-bool Intersector::intersectRaySphere (const gdx_cpp::math::collision::Ray& ray,const Vector3& center,float radius,const Vector3& intersection) {
+bool Intersector::intersectRaySphere (const gdx_cpp::math::collision::Ray& ray,const Vector3& center,float radius, Vector3* intersection) {
     dir.set(ray.direction).nor();
     start.set(ray.origin);
     float b = 2 * (dir.dot(start.tmp().sub(center)));
@@ -183,7 +211,7 @@ bool Intersector::intersectRaySphere (const gdx_cpp::math::collision::Ray& ray,c
     if (disc < 0) return false;
 
     // compute q as described above
-    float distSqrt = (float)Math.sqrt(disc);
+    float distSqrt = (float)sqrt(disc);
     float q;
     if (b < 0)
         q = (-b - distSqrt) / 2.0f;
@@ -209,17 +237,17 @@ bool Intersector::intersectRaySphere (const gdx_cpp::math::collision::Ray& ray,c
 
     // if t0 is less than zero, the intersection point is at t1
     if (t0 < 0) {
-        if (intersection != null) intersection.set(start).add(dir.tmp().mul(t1));
+        if (intersection != NULL) intersection->set(start).add(dir.tmp().mul(t1));
         return true;
     }
     // else the intersection point is at t0
     else {
-        if (intersection != null) intersection.set(start).add(dir.tmp().mul(t0));
+        if (intersection != NULL) intersection->set(start).add(dir.tmp().mul(t0));
         return true;
     }
 }
 
-bool Intersector::intersectRayBoundsFast (const gdx_cpp::math::collision::Ray& ray,const gdx_cpp::math::collision::BoundingBox& box) {
+bool Intersector::intersectRayBoundsFast (const gdx_cpp::math::collision::Ray& ray, const gdx_cpp::math::collision::BoundingBox& box) {
     float a, b;
     float min, max;
     float divX = 1 / ray.direction.x;
@@ -261,16 +289,20 @@ bool Intersector::intersectRayBoundsFast (const gdx_cpp::math::collision::Ray& r
     return (max >= 0) && (max >= min);
 }
 
-bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ray,const Vector3& intersection) {
-    float min_dist = Float.MAX_VALUE;
-    boolean hit = false;
+bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ray, const std::vector<float>& triangles, Vector3* intersection) {
+    float min_dist = std::numeric_limits<float>::max();
+    bool hit = false;
 
-    if ((triangles.length / 3) % 3 != 0) throw new RuntimeException("triangle list size is not a multiple of 3");
+    if ((triangles.size() / 3) % 3 != 0)
+    {
+      gdx_cpp::Gdx::app.log("GDX-CPP Intersector.cpp") << "triangle list size is not a multiple of 3";
+      assert(false);
+    }
 
-    for (int i = 0; i < triangles.length - 6; i += 9) {
-        boolean result = intersectRayTriangle(ray, tmp1.set(triangles[i], triangles[i + 1], triangles[i + 2]),
+    for (int i = 0; i < triangles.size() - 6; i += 9) {
+        bool result = intersectRayTriangle(ray, tmp1.set(triangles[i], triangles[i + 1], triangles[i + 2]),
                                               tmp2.set(triangles[i + 3], triangles[i + 4], triangles[i + 5]),
-                                              tmp3.set(triangles[i + 6], triangles[i + 7], triangles[i + 8]), tmp);
+                                              tmp3.set(triangles[i + 6], triangles[i + 7], triangles[i + 8]), &tmp);
 
         if (result == true) {
             float dist = ray.origin.tmp().sub(tmp).len();
@@ -285,25 +317,29 @@ bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ra
     if (hit == false)
         return false;
     else {
-        if (intersection != null) intersection.set(best);
+        if (intersection != NULL) intersection->set(best);
         return true;
     }
 }
 
-bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ray,int vertexSize,const Vector3& intersection) {
-    float min_dist = Float.MAX_VALUE;
-    boolean hit = false;
+bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ray, const std::vector<float>& vertices, const std::vector<short>& indices, int vertexSize, Vector3* intersection) {
+    float min_dist = std::numeric_limits<float>::max();
+    bool hit = false;
 
-    if ((indices.length % 3) != 0) throw new RuntimeException("triangle list size is not a multiple of 3");
+    if ((indices.size() % 3) != 0)
+    {
+      gdx_cpp::Gdx::app.log("GDX-CPP Intersector.cpp") << "triangle list size is not a multiple of 3";
+      assert(false);
+    } 
 
-    for (int i = 0; i < indices.length; i += 3) {
+    for (int i = 0; i < indices.size(); i += 3) {
         int i1 = indices[i] * vertexSize;
         int i2 = indices[i + 1] * vertexSize;
         int i3 = indices[i + 2] * vertexSize;
 
-        boolean result = intersectRayTriangle(ray, tmp1.set(vertices[i1], vertices[i1 + 1], vertices[i1 + 2]),
+        bool result = intersectRayTriangle(ray, tmp1.set(vertices[i1], vertices[i1 + 1], vertices[i1 + 2]),
                                               tmp2.set(vertices[i2], vertices[i2 + 1], vertices[i2 + 2]),
-                                              tmp3.set(vertices[i3], vertices[i3 + 1], vertices[i3 + 2]), tmp);
+                                              tmp3.set(vertices[i3], vertices[i3 + 1], vertices[i3 + 2]), &tmp);
 
         if (result == true) {
             float dist = ray.origin.tmp().sub(tmp).len();
@@ -318,18 +354,22 @@ bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ra
     if (hit == false)
         return false;
     else {
-        if (intersection != null) intersection.set(best);
+        if (intersection != NULL) intersection->set(best);
         return true;
     }
 }
 
-bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ray,std::list<Vector3>& triangles,const Vector3& intersection) {
-    float min_dist = Float.MAX_VALUE;
+bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ray, const std::vector<gdx_cpp::math::Vector3>& triangles, gdx_cpp::math::Vector3* intersection) {
+    float min_dist = std::numeric_limits<float>::max();
 
-    if (triangles.size() % 3 != 0) throw new RuntimeException("triangle list size is not a multiple of 3");
+    if (triangles.size() % 3 != 0)
+    {
+      gdx_cpp::Gdx::app.log("GDX-CPP Intersector.cpp") << "triangle list size is not a multiple of 3";
+      assert(false);
+    } 
 
     for (int i = 0; i < triangles.size() - 2; i += 3) {
-        boolean result = intersectRayTriangle(ray, triangles.get(i), triangles.get(i + 1), triangles.get(i + 2), tmp);
+        bool result = intersectRayTriangle(ray, triangles.at(i), triangles.at(i + 1), triangles.at(i + 2), &tmp);
 
         if (result == true) {
             float dist = ray.origin.tmp().sub(tmp).len();
@@ -340,10 +380,10 @@ bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ra
         }
     }
 
-    if (best == null)
+    if (best == NULL)
         return false;
     else {
-        if (intersection != null) intersection.set(best);
+        if (intersection != NULL) intersection->set(best);
         return true;
     }
 }
@@ -353,7 +393,7 @@ bool Intersector::intersectRectangles (const Rectangle& a,const Rectangle& b) {
              .getY() + a.getHeight() < b.getY());
 }
 
-bool Intersector::intersectLines (const Vector2& p1,const Vector2& p2,const Vector2& p3,const Vector2& p4,const Vector2& intersection) {
+bool Intersector::intersectLines (const Vector2& p1, const Vector2& p2, const Vector2& p3, const Vector2& p4, Vector2& intersection) {
     float x1 = p1.x, y1 = p1.y, x2 = p2.x, y2 = p2.y, x3 = p3.x, y3 = p3.y, x4 = p4.x, y4 = p4.y;
 
     float det1 = det(x1, y1, x2, y2);
@@ -369,7 +409,7 @@ bool Intersector::intersectLines (const Vector2& p1,const Vector2& p2,const Vect
     return true;
 }
 
-bool Intersector::intersectSegments (const Vector2& p1,const Vector2& p2,const Vector2& p3,const Vector2& p4,const Vector2& intersection) {
+bool Intersector::intersectSegments (const Vector2& p1,const Vector2& p2,const Vector2& p3,const Vector2& p4, Vector2* intersection) {
     float x1 = p1.x, y1 = p1.y, x2 = p2.x, y2 = p2.y, x3 = p3.x, y3 = p3.y, x4 = p4.x, y4 = p4.y;
 
     float d = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
@@ -381,7 +421,7 @@ bool Intersector::intersectSegments (const Vector2& p1,const Vector2& p2,const V
     if (ua < 0 || ua > 1) return false;
     if (ub < 0 || ub > 1) return false;
 
-    if (intersection != null) intersection.set(x1 + (x2 - x1) * ua, y1 + (y2 - y1) * ua);
+    if (intersection != NULL) intersection->set(x1 + (x2 - x1) * ua, y1 + (y2 - y1) * ua);
     return true;
 }
 
@@ -391,6 +431,14 @@ bool Intersector::overlapCircles (const Circle& c1,const Circle& c2) {
     float distance = x * x + y * y;
     float radiusSum = c1.radius + c2.radius;
     return distance <= radiusSum * radiusSum;
+}
+
+static float det (float a, float b, float c, float d) {
+    return a * d - b * c;
+}
+
+static double detd (double a, double b, double c, double d) {
+    return a * d - b * c;
 }
 
 bool Intersector::overlapRectangles (const Rectangle& r1,const Rectangle& r2) {

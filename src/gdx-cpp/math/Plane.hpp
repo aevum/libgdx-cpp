@@ -36,14 +36,14 @@ public:
     
     Plane (const Vector3& normal, float d);
 
-    void set (gdx_cpp::math::Vector3& point1, gdx_cpp::math::Vector3& point2, const gdx_cpp::math::Vector3& point3);
+    void set (const Vector3& point1, const gdx_cpp::math::Vector3& point2, const gdx_cpp::math::Vector3& point3);
     void set (float nx,float ny,float nz,float d);
     float distance (const Vector3& point);
     PlaneSide testPoint (const Vector3& point);
     bool isFrontFacing (const Vector3& direction);
     Vector3& getNormal ();
     float getD ();
-    void set (const Vector3& point,const Vector3& normal);
+    void set (const gdx_cpp::math::Vector3& point, const gdx_cpp::math::Vector3& normal) const;
     void set (const Plane& plane);
     std::string toString ();
 

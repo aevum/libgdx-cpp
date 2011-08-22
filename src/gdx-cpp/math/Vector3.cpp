@@ -84,15 +84,15 @@ Vector3 Vector3::cpy() {
     return Vector3(*this);
 }
 
-Vector3& Vector3::tmp() {
+Vector3& Vector3::tmp() const {
     return _tmp.set(*this);
 }
 
-Vector3& Vector3::tmp2() {
+Vector3& Vector3::tmp2() const {
     return _tmp2.set(*this);
 }
 
-Vector3& Vector3::tmp3() {
+Vector3& Vector3::tmp3() const {
     return _tmp3.set(*this);
 }
 
@@ -162,7 +162,7 @@ Vector3& Vector3::nor() {
     }
 }
 
-float Vector3::dot(const Vector3& vector) const {
+float Vector3::dot(const Vector3& vector) const{
     return x * vector.x + y * vector.y + z * vector.z;
 }
 
@@ -192,7 +192,7 @@ Vector3& Vector3::rot(const Matrix4& matrix) {
                      * matrix.val[Matrix4::M11] + z * matrix.val[Matrix4::M12], x * matrix.val[Matrix4::M20] + y * matrix.val[Matrix4::M21] + z * matrix.val[Matrix4::M22]);
 }
 
-bool Vector3::isUnit() {
+bool Vector3::isUnit() const {
     return this->len() == 1;
 }
 
