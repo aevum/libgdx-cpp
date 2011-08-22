@@ -19,8 +19,17 @@
 #define GDX_CPP_GRAPHICS_H
 
 #include <string>
+#include <sstream>
 
 namespace gdx_cpp {
+
+class GLCommon;
+class GL10;
+class GL11;
+class GL20;
+class GLU;
+
+class Pixmap;
 
 class Graphics {
     /** Enumeration describing different types of {@link Graphics} implementations.
@@ -40,10 +49,12 @@ class Graphics {
         int refreshRate;
         int bitsPerPixel;
 
-        stlport::string toString () {
-            return width + "x" + height + ", bpp: " + bitsPerPixel + ", hz: " + refreshRate;
+        std::string toString () {
+            std::stringstream ss;
+            ss << width << "x" << height << ", bpp: " << bitsPerPixel << ", hz: " << refreshRate;
+            return ss.str();
         }
-        
+
     protected:
         DisplayMode (int width, int height, int refreshRate, int bitsPerPixel) {
             this->width = width;
@@ -56,14 +67,14 @@ class Graphics {
     /** Class describing the bits per pixel, depth buffer precision, stencil precision and number of MSAA samples. */
     class BufferFormat {
         /** number of bits per color channel **/
-        public:
-          int r, g, b, a;
+    public:
+        int r, g, b, a;
         /** number of bits for depth and stencil buffer **/
-          int depth, stencil;
+        int depth, stencil;
         /** number of samples for MSAA **/
-          int samples;
+        int samples;
         /** whether coverage sampling anti-aliasing is used. in that case you have to clear the coverage buffer as well! */
-          bool coverageSampling;
+        bool coverageSampling;
 
         BufferFormat (int r, int g, int b, int a, int depth, int stencil, int samples, bool coverageSampling) {
             this->r = r;
@@ -76,9 +87,11 @@ class Graphics {
             this->coverageSampling = coverageSampling;
         }
 
-        String toString () {
-            return "r: " + r + ", g: " + g + ", b: " + b + ", a: " + a + ", depth: " + depth + ", stencil: " + stencil
-                   + ", num samples: " + samples + ", coverage sampling: " + coverageSampling;
+        std::string toString () {
+            std::stringstream ss;
+            ss << "r: " << r << ", g: " << g << ", b: " << b << ", a: " << a << ", depth: " << depth << ", stencil: " << stencil
+            << ", num samples: " << samples << ", coverage sampling: " << coverageSampling;
+            return ss.str();
         }
     };
 
@@ -150,7 +163,7 @@ class Graphics {
     virtual bool supportsDisplayModeChange () = 0;
 
     /** @return the supported fullscreen {@link DisplayMode}. */
-    virtual DisplayMode[] getDisplayModes () = 0;
+    virtual std::vector<DisplayMode>& getDisplayModes () = 0;
 
     /** @return the display mode of the primary graphics adapter. */
     virtual DisplayMode getDesktopDisplayMode () = 0;
@@ -174,7 +187,7 @@ class Graphics {
     /** Sets the title of the window. Ignored on Android.
      *
      * @param title the title. */
-    virtual void setTitle (String title) = 0;
+    virtual void setTitle (const std::string& title) = 0;
 
     /** Sets the icon of the window. Ignored on Android.
      *
@@ -191,7 +204,7 @@ class Graphics {
 
     /** @param extension the extension name
      * @return whether the extension is supported */
-    virtual bool supportsExtension (stlport::string& extension) = 0;
+    virtual bool supportsExtension (const std::string& extension) = 0;
 
     // /**
     // * Opens the first back facing video camera. Only one camera
