@@ -22,25 +22,28 @@
 #define GDX_CPP_MATH_COLLISION_RAY_HPP_
 
 #include "math/Vector3.hpp"
+#include "utils/Aliases.hpp"
 
 namespace gdx_cpp {
 namespace math {
+  class Matrix4;
+  
 namespace collision {
 
 class Ray {
-public:
-    Ray& cpy ();
-    gdx_cpp::math::Vector3& getEndPoint (float distance);
+public:   
+    Ray cpy ();
+    Vector3& getEndPoint (float distance);
     Ray& mul (const gdx_cpp::math::Matrix4& matrix);
     std::string& toString ();
     Ray& set (const gdx_cpp::math::Vector3& origin,const gdx_cpp::math::Vector3& direction);
     Ray& set (float x,float y,float z,float dx,float dy,float dz);
     Ray& set (const Ray& ray);
 
+    Vector3 origin;
+    Vector3 direction;
 protected:
-
-
-private:
+    static Vector3 tmp;
 
 };
 

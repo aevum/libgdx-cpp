@@ -21,24 +21,50 @@
 #ifndef GDX_CPP_MATH_FRUSTUM_HPP_
 #define GDX_CPP_MATH_FRUSTUM_HPP_
 
+#include "Plane.hpp"
+#include "Vector3.hpp"
+
 namespace gdx_cpp {
 namespace math {
 
+class Matrix4;
+
+namespace collision {
+class Ray;
+class BoundingBox;
+}
+
 class Frustum {
 public:
+    Frustum();
     void update (const Matrix4& inverseProjectionView);
     bool pointInFrustum (const Vector3& point);
     bool sphereInFrustum (const Vector3& center,float radius);
     bool sphereInFrustumWithoutNearFar (const Vector3& center,float radius);
     bool boundsInFrustum (const gdx_cpp::math::collision::BoundingBox& bounds);
-    Ray& calculatePickRay (float screen_width,float screen_height,float mouse_x,float mouse_y,const Vector3& pos,const Vector3& dir,const Vector3& up);
+//     collision::Ray& calculatePickRay (float screen_width,float screen_height,float mouse_x,float mouse_y,const Vector3& pos,const Vector3& dir,const Vector3& up);
     static void main ();
 
+    Plane* planes[6];
+    Vector3 planePoints[8];
+
+    virtual ~Frustum();
+    
 protected:
-
-
+    static Vector3 clipSpacePlanePoints[];
+    static float clipSpacePlanePointsArray[];
+    float planePointsArray[24];
 private:
-
+    static class init {
+        init() {
+            int j = 0;
+            for (int i = 0; i < 8; ++i) {
+                clipSpacePlanePointsArray[j++] = clipSpacePlanePoints[i].x;
+                clipSpacePlanePointsArray[j++] = clipSpacePlanePoints[i].y;
+                clipSpacePlanePointsArray[j++] = clipSpacePlanePoints[i].z;
+            }
+        }
+    } _i;
 };
 
 } // namespace gdx_cpp
