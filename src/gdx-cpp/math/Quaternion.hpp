@@ -36,12 +36,9 @@ class Quaternion
 {
   
 public:
-<<<<<<< HEAD
   typedef std::tr1::shared_ptr<Quaternion> ptr;
-=======
     typedef std::tr1::shared_ptr<Quaternion> ptr;
   
->>>>>>> 361bf7cc2df930a76f2365c184d6edc9e7a0eac5
     Quaternion();
     Quaternion(float x, float y, float z, float w);
     Quaternion(const Quaternion& quaternion);
@@ -72,10 +69,10 @@ public:
     float dot (const Quaternion& other);
     Quaternion& mul (float scalar);
     
-    float x;
-    float y;
-    float z;
-    float w;	
+    float x = 0.0;
+    float y = 0.0;
+    float z = 0.0;
+    float w = 0.0;	
 	
 private:
    
