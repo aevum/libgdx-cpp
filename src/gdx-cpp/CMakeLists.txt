@@ -1,4 +1,4 @@
-file(GLOB GDX_HEADERS Quaternion.hpp)
+file(GLOB GDX_HEADERS WindowedMean.hpp)
 set(GDX_SRC )
 
 file(GLOB GDX_HEADERS_MATH math/Polygon.hpp)
