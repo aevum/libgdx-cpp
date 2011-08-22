@@ -17,6 +17,8 @@
 #include <string>
 #ifndef GDX_CPP_MATH_QUATERNION_HPP
 #define GDX_CPP_MATH_QUATERNION_HPP
+#include <tr1/memory>
+#include <tr1/shared_ptr.h>
 
 namespace gdx_cpp {
 
@@ -27,6 +29,7 @@ class Quaternion
 {
   
 public:
+  typedef std::tr1::shared_ptr<Quaternion> ptr;
     Quaternion();
     Quaternion(float x, float y, float z, float w);
     Quaternion(const Quaternion& quaternion);
@@ -37,7 +40,7 @@ public:
     Quaternion& set (float x, float y, float z, float w);
     Quaternion& set (const Quaternion& quaternion);
     Quaternion& set (const Vector3& axis, float angle);
-    Quaternion& cpy ();
+    Quaternion::ptr cpy ();
     float len ();
     std::string toString ();
     Quaternion& setEulerAngles (float yaw, float pitch, float roll);

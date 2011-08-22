@@ -17,6 +17,7 @@
 
 #include "Quaternion.hpp"
 #include "Vector3.hpp"
+#include "Matrix4.hpp"
 #include "MathUtils.hpp"
 #include <cstdlib>
 #include <cmath>
@@ -87,9 +88,9 @@ Quaternion& Quaternion::set (const Vector3& axis, float angle)
     return this->set( axis.x * l_sin, axis.y * l_sin, axis.z * l_sin, l_cos).nor();
 }
 
-Quaternion& Quaternion::cpy ()
+Quaternion::ptr Quaternion::cpy ()
 {
-    return new Quaternion(*this);
+    return Quaternion::ptr(new Quaternion(*this));
 }
 
 float Quaternion::len ()
