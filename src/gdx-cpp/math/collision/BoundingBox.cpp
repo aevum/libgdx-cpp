@@ -20,7 +20,19 @@
 
 #include "BoundingBox.hpp"
 
+#include "gdx-cpp/math/Vector3.hpp"
+
+#include <limits>
+#include <cmath>
+#include <string>
+#include <sstream>
+
 using namespace gdx_cpp::math::collision;
+
+BoundingBox::BoundingBox (const BoundingBox& bounds) : crn_dirty(true) {
+    this->crn.reserve(8);
+    this->set(bounds);
+}
 
 gdx_cpp::math::Vector3& BoundingBox::getCenter () {
     return cnt;
@@ -40,7 +52,7 @@ void BoundingBox::updateCorners () {
     crn_dirty = false;
 }
 
-gdx_cpp::math::Vector3* BoundingBox::getCorners () {
+const std::vector< gdx_cpp::math::Vector3 >& BoundingBox::getCorners () const {
     updateCorners();
     return crn;
 }
@@ -59,7 +71,7 @@ gdx_cpp::math::Vector3& BoundingBox::getMax () {
 
 BoundingBox& BoundingBox::set (const BoundingBox& bounds) {
     crn_dirty = true;
-    return this.set(bounds.min, bounds.max);
+    return this->set(bounds.min, bounds.max);
 }
 
 BoundingBox& BoundingBox::set (const gdx_cpp::math::Vector3& minimum,const gdx_cpp::math::Vector3& maximum) {
@@ -70,43 +82,41 @@ BoundingBox& BoundingBox::set (const gdx_cpp::math::Vector3& minimum,const gdx_c
     cnt.set(min).add(max).mul(0.5f);
     dim.set(max).sub(min);
     crn_dirty = true;
-    return this;
+    return *this;
 }
 
-BoundingBox& BoundingBox::set () {
-    this.inf();
-for (Vector3 l_point : points)
-        this.ext(l_point);
-    crn_dirty = true;
-    return this;
-}
+BoundingBox& BoundingBox::set (const std::vector<Vector3>& points) {
+    this->inf();
 
-BoundingBox& BoundingBox::set (std::list<Vector3>& points) {
-    this.inf();
-for (Vector3 l_point : points)
-        this.ext(l_point);
+    std::vector<Vector3>::const_iterator it = points.begin();
+    std::vector<Vector3>::const_iterator end = points.end();
+
+    for (; it != end; ++it)
+        this->ext(*it);
+
     crn_dirty = true;
-    return this;
+    return *this;
 }
 
 BoundingBox& BoundingBox::inf () {
-    min.set(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
-    max.set(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY);
+    //TODO: not sure if this works
+    min.set(std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity());
+    max.set(-std::numeric_limits<float>::infinity(), -std::numeric_limits<float>::infinity(), -std::numeric_limits<float>::infinity());
     cnt.set(0, 0, 0);
     dim.set(0, 0, 0);
     crn_dirty = true;
-    return this;
+    return *this;
 }
 
 BoundingBox& BoundingBox::ext (const gdx_cpp::math::Vector3& point) {
     crn_dirty = true;
-    return this.set(min.set(min(min.x, point.x), min(min.y, point.y), min(min.z, point.z)),
-                    max.set(Math.max(max.x, point.x), Math.max(max.y, point.y), Math.max(max.z, point.z)));
+    return this->set(min.set(_min(min.x, point.x), _min(min.y, point.y), _min(min.z, point.z)),
+                     max.set(std::max(max.x, point.x), std::max(max.y, point.y), std::max(max.z, point.z)));
 }
 
 BoundingBox& BoundingBox::clr () {
     crn_dirty = true;
-    return this.set(min.set(0, 0, 0), max.set(0, 0, 0));
+    return this->set(min.set(0, 0, 0), max.set(0, 0, 0));
 }
 
 bool BoundingBox::isValid () {
@@ -115,20 +125,22 @@ bool BoundingBox::isValid () {
 
 BoundingBox& BoundingBox::ext (const BoundingBox& a_bounds) {
     crn_dirty = true;
-    return this.set(min.set(min(min.x, a_bounds.min.x), min(min.y, a_bounds.min.y), min(min.z, a_bounds.min.z)),
-                    max.set(max(max.x, a_bounds.max.x), max(max.y, a_bounds.max.y), max(max.z, a_bounds.max.z)));
+    return this->set(min.set(_min(min.x, a_bounds.min.x), _min(min.y, a_bounds.min.y), _min(min.z, a_bounds.min.z)),
+                     max.set(_max(max.x, a_bounds.max.x), _max(max.y, a_bounds.max.y), _max(max.z, a_bounds.max.z)));
 }
 
 BoundingBox& BoundingBox::mul (const gdx_cpp::math::Matrix4& matrix) {
     updateCorners();
-    this.inf();
-for (Vector3 l_pnt : crn) {
-        l_pnt.mul(matrix);
-        min.set(min(min.x, l_pnt.x), min(min.y, l_pnt.y), min(min.z, l_pnt.z));
-        max.set(max(max.x, l_pnt.x), max(max.y, l_pnt.y), max(max.z, l_pnt.z));
+    this->inf();
+
+    for ( int i = 0; i < 8; ++i) {
+        crn[i].mul(matrix);
+        min.set(_min(min.x, crn[i].x), _min(min.y, crn[i].y), _min(min.z, crn[i].z));
+        max.set(_max(max.x, crn[i].x), _max(max.y, crn[i].y), _max(max.z, crn[i].z));
     }
+
     crn_dirty = true;
-    return this.set(min, max);
+    return this->set(min, max);
 }
 
 bool BoundingBox::contains (const BoundingBox& bounds) {
@@ -153,12 +165,14 @@ bool BoundingBox::contains (const gdx_cpp::math::Vector3& v) {
     return true;
 }
 
-std::string& BoundingBox::toString () {
-    return "[" + min + "|" + max + "]";
+std::string BoundingBox::toString () {
+    std::stringstream ss;
+    ss << "[" + min.toString() << "|" + max.toString() << "]";
+    return ss.str();
 }
 
 BoundingBox& BoundingBox::ext (float x,float y,float z) {
     crn_dirty = true;
-    return this.set(min.set(min(min.x, x), min(min.y, y), min(min.z, z)), max.set(max(max.x, x), max(max.y, y), max(max.z, z)));
+    return this->set(min.set(_min(min.x, x), _min(min.y, y), _min(min.z, z)), max.set(_max(max.x, x), _max(max.y, y), _max(max.z, z)));
 }
 

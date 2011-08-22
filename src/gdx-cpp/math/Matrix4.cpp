@@ -18,6 +18,7 @@
 #include "Vector3.hpp"
 #include "Matrix3.hpp"
 #include "MathUtils.hpp"
+#include "Quaternion.hpp"
 
 #include <string>
 #include <sstream>
@@ -418,11 +419,6 @@ Matrix4& Matrix4::setToTranslationAndScaling (float translationX, float translat
 
 static Quaternion quat;
 
-/** Sets the matrix to a rotation matrix around the given axis.
- *
- * @param axis The axis
- * @param angle The angle in degrees
- * @return This matrix for chaining */
 Matrix4& Matrix4::setToRotation(Vector3 axis, float angle) {
     idt();
     if (angle == 0) return *this;
@@ -553,8 +549,8 @@ void Matrix4::getTranslation(Vector3& position) {
     position.z = val[M23];
 }
 
-void Matrix4::getRotation(const Quaternion& rotation) {
-    rotation.setFromMatrix(this);
+void Matrix4::getRotation(Quaternion& rotation) {
+    rotation.setFromMatrix(*this);
 }
 
 Matrix4& Matrix4::toNormalMatrix() {
@@ -565,7 +561,7 @@ Matrix4& Matrix4::toNormalMatrix() {
     return tra();
 }
 
-inline static void mul (float* mata, float* matb) {
+void Matrix4::mul (float* mata, float* matb) {
     float tmp[16];
     tmp[M00] = mata[M00] * matb[M00] + mata[M01] * matb[M10] + mata[M02] * matb[M20] + mata[M03] * matb[M30];
     tmp[M01] = mata[M00] * matb[M01] + mata[M01] * matb[M11] + mata[M02] * matb[M21] + mata[M03] * matb[M31];
@@ -586,7 +582,7 @@ inline static void mul (float* mata, float* matb) {
     memcpy(mata, tmp, sizeof(float) *  16);
 }
 
-inline static void mulVec (float* mat, float* vec) {
+void Matrix4::mulVec (float* mat, float* vec) {
     float x = vec[0] * mat[M00] + vec[1] * mat[M01] + vec[2] * mat[M02] + mat[M03];
     float y = vec[0] * mat[M10] + vec[1] * mat[M11] + vec[2] * mat[M12] + mat[M13];
     float z = vec[0] * mat[M20] + vec[1] * mat[M21] + vec[2] * mat[M22] + mat[M23];
@@ -595,7 +591,7 @@ inline static void mulVec (float* mat, float* vec) {
     vec[2] = z;
 }
 
-inline static void mulVec (float* mat, float* vecs, int offset, int numVecs, int stride) {
+void Matrix4::mulVec (float* mat, float* vecs, int offset, int numVecs, int stride) {
     float* vecPtr = vecs + offset;
     for (int i = 0; i < numVecs; i++) {
         mulVec(mat, vecPtr);
@@ -603,7 +599,7 @@ inline static void mulVec (float* mat, float* vecs, int offset, int numVecs, int
     }
 }
 
-inline static void prj (float* mat, float* vec) {
+void Matrix4::prj (const float* mat, float* vec) {
     float inv_w = 1.0f / (vec[0] * mat[M30] + vec[1] * mat[M31] + vec[2] * mat[M32] + mat[M33]);
     float x = (vec[0] * mat[M00] + vec[1] * mat[M01] + vec[2] * mat[M02] + mat[M03]) * inv_w;
     float y = (vec[0] * mat[M10] + vec[1] * mat[M11] + vec[2] * mat[M12] + mat[M13]) * inv_w;
@@ -613,7 +609,7 @@ inline static void prj (float* mat, float* vec) {
     vec[2] = z;
 }
 
-inline static void prj (float* mat, float* vecs, int offset, int numVecs, int stride)  {
+void Matrix4::prj (const float* mat, float* vecs, int offset, int numVecs, int stride)  {
     float* vecPtr = vecs + offset;
     for (int i = 0; i < numVecs; i++) {
         prj(mat, vecPtr);
@@ -621,7 +617,7 @@ inline static void prj (float* mat, float* vecs, int offset, int numVecs, int st
     }
 }
 
-inline static void rot (float* mat, float* vec) {
+void Matrix4::rot (float* mat, float* vec) {
     float x = vec[0] * mat[M00] + vec[1] * mat[M01] + vec[2] * mat[M02];
     float y = vec[0] * mat[M10] + vec[1] * mat[M11] + vec[2] * mat[M12];
     float z = vec[0] * mat[M20] + vec[1] * mat[M21] + vec[2] * mat[M22];
@@ -630,7 +626,7 @@ inline static void rot (float* mat, float* vec) {
     vec[2] = z;
 }
 
-inline static void rot (float* mat, float* vecs, int offset, int numVecs, int stride)  {
+void Matrix4::rot (float* mat, float* vecs, int offset, int numVecs, int stride)  {
     float* vecPtr = vecs + offset;
     for (int i = 0; i < numVecs; i++) {
         rot(mat, vecPtr);
@@ -638,7 +634,7 @@ inline static void rot (float* mat, float* vecs, int offset, int numVecs, int st
     }
 }
 
-inline static float det (float* val) {
+float Matrix4::det (float* val) {
   return val[M30] * val[M21] * val[M12] * val[M03] - val[M20] * val[M31] * val[M12] * val[M03] - val[M30] * val[M11]
   * val[M22] * val[M03] + val[M10] * val[M31] * val[M22] * val[M03] + val[M20] * val[M11] * val[M32] * val[M03] - val[M10]
   * val[M21] * val[M32] * val[M03] - val[M30] * val[M21] * val[M02] * val[M13] + val[M20] * val[M31] * val[M02] * val[M13]
@@ -650,7 +646,7 @@ inline static float det (float* val) {
   * val[M33] - val[M10] * val[M01] * val[M22] * val[M33] + val[M00] * val[M11] * val[M22] * val[M33];
 }
 
-inline static bool inv (float* val) {
+bool Matrix4::inv (float* val) {
     float tmp[16];
     float l_det = det(val);
     if (l_det == 0) return false;

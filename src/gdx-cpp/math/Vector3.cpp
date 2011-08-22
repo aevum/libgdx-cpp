@@ -63,18 +63,18 @@ Vector3::Vector3(float* values) {
     this->set(values[0], values[1], values[2]);
 }
 
-Vector3& Vector3::set(float x, float y, float z) {
+Vector3& Vector3::set(float x, float y, float z) const {
     this->x = x;
     this->y = y;
     this->z = z;
     return *this;
 }
 
-Vector3& Vector3::set(const Vector3& vector) {
+Vector3& Vector3::set(const Vector3& vector) const {
     return this->set(vector.x, vector.y, vector.z);
 }
 
-Vector3& Vector3::set(float* values) {
+Vector3& Vector3::set(float* values) const {
     return this->set(values[0], values[1], values[2]);
 }
 

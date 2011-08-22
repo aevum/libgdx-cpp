@@ -38,9 +38,9 @@ public:
     virtual Vector3& operator=(const Vector3& other);
     virtual bool operator==(const Vector3& other) const;
 
-    Vector3& set(float x, float y, float z);
-    Vector3& set(const Vector3& vector);
-    Vector3& set(float* values);
+    Vector3& set(float x, float y, float z) const;
+    Vector3& set(const Vector3& vector) const;
+    Vector3& set(float* values) const;
     Vector3& cpy();
     Vector3& tmp();
     Vector3& tmp2();
