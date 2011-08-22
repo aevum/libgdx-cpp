@@ -43,6 +43,10 @@ namespace utils {
 static float _sin[SIN_COUNT];
 static float _cos[SIN_COUNT];
 
+static float signum(float value) {
+  return value < 0 ? -1 : (value == 0 ? 0 : 1);
+}
+
 static float sin (float rad) {
     return utils::_sin[(int)(rad * radToIndex) & SIN_MASK];
 }
