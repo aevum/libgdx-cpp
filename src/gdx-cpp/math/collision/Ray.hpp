@@ -21,6 +21,8 @@
 #ifndef GDX_CPP_MATH_COLLISION_RAY_HPP_
 #define GDX_CPP_MATH_COLLISION_RAY_HPP_
 
+#include "math/Vector3.hpp"
+
 namespace gdx_cpp {
 namespace math {
 namespace collision {
