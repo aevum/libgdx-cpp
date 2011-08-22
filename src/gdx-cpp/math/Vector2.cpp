@@ -101,7 +101,7 @@ Vector2& Vector2::mul (float scalar) {
     return *this;
 }
 
-float Vector2::dst (const Vector2& v) {
+float Vector2::dst (const gdx_cpp::math::Vector2& v) const {
     float x_d = v.x - x;
     float y_d = v.y - y;
     return (float)std::sqrt(x_d * x_d + y_d * y_d);

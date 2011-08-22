@@ -82,15 +82,15 @@ Vector3& Vector3::cpy() {
     return Vector3(*this);
 }
 
-Vector3& Vector3::tmp() {
+Vector3& Vector3::tmp() const {
     return _tmp.set(*this);
 }
 
-Vector3& Vector3::tmp2() {
+Vector3& Vector3::tmp2() const {
     return _tmp2.set(*this);
 }
 
-Vector3& Vector3::tmp3() {
+Vector3& Vector3::tmp3() const {
     return _tmp3.set(*this);
 }
 

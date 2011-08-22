@@ -28,7 +28,7 @@ Plane::Plane (const Vector3& normal, float d) : d(d) {
   this->normal.set(normal).nor();
 }
 
-void Plane::set (Vector3& point1, Vector3& point2,const Vector3& point3) {
+void Plane::set (const Vector3& point1,const Vector3& point2,const Vector3& point3) {
     Vector3 l = point1.tmp().sub(point2);
     Vector3 r = point2.tmp2().sub(point3);
     Vector3 nor = l.crs(r).nor();
@@ -69,7 +69,7 @@ float Plane::getD () {
     return d;
 }
 
-void Plane::set (const Vector3& point,const Vector3& normal) {
+void Plane::set (const Vector3& point,const Vector3& normal) const{
     this->normal.set(normal);
     d = -point.dot(normal);
 }

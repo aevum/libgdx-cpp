@@ -21,8 +21,8 @@
 #ifndef GDX_CPP_MATH_COLLISION_RAY_HPP_
 #define GDX_CPP_MATH_COLLISION_RAY_HPP_
 
-#include "math/Vector3.hpp"
-#include "utils/Aliases.hpp"
+#include "gdx-cpp/math/Vector3.hpp"
+#include "gdx-cpp/utils/Aliases.hpp"
 
 namespace gdx_cpp {
 namespace math {

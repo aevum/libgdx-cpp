@@ -44,7 +44,7 @@ public:
     Vector2& add (float x, float y);
     float dot (const Vector2& v);
     Vector2& mul (float scalar);
-    float dst (const Vector2& v);
+    float dst (const Vector2& v) const;
     float dst (float x, float y);
     float dst2 (const Vector2& v);
     std::string toString ();

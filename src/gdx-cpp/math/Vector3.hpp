@@ -42,9 +42,9 @@ public:
     Vector3& set(const Vector3& vector) const;
     Vector3& set(float* values) const;
     Vector3& cpy();
-    Vector3& tmp();
-    Vector3& tmp2();
-    Vector3& tmp3();
+    Vector3& tmp() const;
+    Vector3& tmp2() const;
+    Vector3& tmp3() const;
     Vector3& add(const Vector3& vector);
     Vector3& add(float x, float y, float z);
     Vector3& add(float values);
