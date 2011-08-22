@@ -20,6 +20,7 @@
 
 #include <string>
 #include <sstream>
+#include <vector>
 
 namespace gdx_cpp {
 

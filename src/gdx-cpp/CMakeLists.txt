@@ -1,4 +1,4 @@
-file(GLOB GDX_HEADERS WindowedMean.hpp)
+file(GLOB GDX_HEADERS Intersector.hpp)
 set(GDX_SRC )
 
 file(GLOB GDX_HEADERS_MATH math/*.hpp)

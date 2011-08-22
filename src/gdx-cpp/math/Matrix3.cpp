@@ -20,10 +20,14 @@
 
 #include <string>
 #include <sstream>
+#include <cassert>
+
+#include "gdx-cpp/Gdx.hpp"
+#include "Vector3.hpp"
 
 using namespace gdx_cpp::math;
 
-#define DEGREE_TO_RAD = (float)PI / 180
+#define DEGREE_TO_RAD (float) PI / 180
 
 Matrix3::Matrix3()
 {
@@ -106,7 +110,7 @@ Matrix3& Matrix3::setToRotation(float angle) {
     this->vals[7] = 0;
     this->vals[8] = 1;
 
-    return this;
+    return *this;
 }
 
 Matrix3& Matrix3::setToTranslation(float x, float y) {
@@ -154,10 +158,13 @@ float Matrix3::det() {
 }
 
 Matrix3& Matrix3::inv() {
-    float det = det();
-    if (det == 0) throw new GdxRuntimeException("Can't invert a singular matrix");
+    float _det = det();
+    if (_det == 0) {
+      gdx_cpp::Gdx::app.error("Matrix3.cpp") << "Can't invert a singular matrix";
+      assert(false);
+    }
 
-    float inv_det = 1.0f / det;
+    float inv_det = 1.0f / _det;
     float tmp[] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     tmp[0] = vals[4] * vals[8] - vals[5] * vals[7];
