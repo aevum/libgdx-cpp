@@ -19,17 +19,27 @@
 */
 
 #include "WindowedMean.hpp"
+#include <cmath>
 
 using namespace gdx_cpp::math;
 
+WindowedMean::WindowedMean (int window_size)
+{
+    added_values = 0;
+    last_value = 0;
+    mean = 0;
+    dirty = true;
+    values.resize(window_size);
+}
+
 bool WindowedMean::hasEnoughData () {
-    return added_values >= values.length;
+    return added_values >= values.size();
 }
 
 void WindowedMean::clear () {
     added_values = 0;
     last_value = 0;
-    for (int i = 0; i < values.length; i++)
+    for (int i = 0; i < values.size(); i++)
         values[i] = 0;
     dirty = true;
 }
@@ -37,7 +47,7 @@ void WindowedMean::clear () {
 void WindowedMean::addValue (float value) {
     added_values++;
     values[last_value++] = value;
-    if (last_value > values.length - 1) last_value = 0;
+    if (last_value > values.size() - 1) last_value = 0;
     dirty = true;
 }
 
@@ -45,23 +55,23 @@ float WindowedMean::getMean () {
     if (hasEnoughData()) {
         if (dirty == true) {
             float mean = 0;
-            for (int i = 0; i < values.length; i++)
+            for (int i = 0; i < values.size(); i++)
                 mean += values[i];
 
-            this.mean = mean / values.length;
+            this->mean = mean / values.size();
             dirty = false;
         }
-        return this.mean;
+        return this->mean;
     } else
         return 0;
 }
 
 float WindowedMean::getOldest () {
-    return last_value == values.length - 1 ? values[0] : values[last_value + 1];
+    return last_value == (values.size() - 1) ? values[0] : values[last_value + 1];
 }
 
 float WindowedMean::getLatest () {
-    return values[last_value - 1 == -1 ? values.length - 1 : last_value - 1];
+    return values[(last_value - 1 == -1) ? values.size() - 1 : last_value - 1];
 }
 
 float WindowedMean::standardDeviation () {
@@ -69,10 +79,10 @@ float WindowedMean::standardDeviation () {
 
     float mean = getMean();
     float sum = 0;
-    for (int i = 0; i < values.length; i++) {
+    for (int i = 0; i < values.size(); i++) {
         sum += (values[i] - mean) * (values[i] - mean);
     }
 
-    return (float)Math.sqrt(sum / values.length);
+    return (float) std::sqrt(sum / values.size());
 }
 
