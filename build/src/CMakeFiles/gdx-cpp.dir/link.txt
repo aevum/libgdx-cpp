@@ -1,2 +1,0 @@
-/usr/bin/ar cr libgdx-cpp.a  CMakeFiles/gdx-cpp.dir/math/Quaternion.cpp.o
-/usr/bin/ranlib libgdx-cpp.a

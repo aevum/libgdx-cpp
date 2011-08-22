@@ -1,5 +1,6 @@
+
 /*
-    Copyright 2011 <copyright holder> <email>
+    Copyright 2011 Aevum Software aevum @ aevumlab.com
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -12,11 +13,17 @@
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+
+    @author Victor Vicente de Carvalho victor.carvalho@aevumlab.com
+    @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include <string>
 #ifndef GDX_CPP_MATH_QUATERNION_HPP
 #define GDX_CPP_MATH_QUATERNION_HPP
+#include <tr1/memory>
+#include <tr1/shared_ptr.h>
+
+#include <string>
 #include <tr1/memory>
 #include <tr1/shared_ptr.h>
 
@@ -29,7 +36,12 @@ class Quaternion
 {
   
 public:
+<<<<<<< HEAD
   typedef std::tr1::shared_ptr<Quaternion> ptr;
+=======
+    typedef std::tr1::shared_ptr<Quaternion> ptr;
+  
+>>>>>>> 361bf7cc2df930a76f2365c184d6edc9e7a0eac5
     Quaternion();
     Quaternion(float x, float y, float z, float w);
     Quaternion(const Quaternion& quaternion);
@@ -51,7 +63,7 @@ public:
     Quaternion& mul (const Quaternion& q);
     Quaternion& mulLeft (const Quaternion& q);
     void toMatrix (float *matrix);
-    static Quaternion& idt ();
+    static const Quaternion& idt ();
     Quaternion& setFromAxis (const Vector3& axis, float angle);
     Quaternion& setFromAxis (float x, float y, float z, float angle);
     Quaternion& setFromMatrix (const Matrix4& matrix);
@@ -66,8 +78,7 @@ public:
     float w;	
 	
 private:
-
-    
+   
     static Quaternion tmp1;
     static Quaternion tmp2;
     static const float NORMALIZATION_TOLERANCE;
