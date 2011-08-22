@@ -63,6 +63,12 @@ Vector2& Vector2::set (const Vector2& v) {
     return *this;
 }
 
+Vector2& Vector2::set (float _x, float _y) {
+    x = _x;
+    y = _y;
+    return *this;
+}
+
 Vector2& Vector2::sub (const Vector2& v) {
     x -= v.x;
     y -= v.y;

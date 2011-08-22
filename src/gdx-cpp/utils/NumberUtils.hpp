@@ -21,21 +21,18 @@
 #ifndef GDX_CPP_UTILS_NUMBERUTILS_HPP_
 #define GDX_CPP_UTILS_NUMBERUTILS_HPP_
 
+#include <stdint.h>
+
 namespace gdx_cpp {
 namespace utils {
 
 class NumberUtils {
 public:
-    static int floatToIntBits (float value);
+    uint32_t floatToIntBits (float value);
     static int floatToRawIntBits (float value);
     static float intBitsToFloat (int value);
     static long doubleToLongBits (double value);
     static double longBitsToDouble (long value);
-
-protected:
-
-
-private:
 
 };
 

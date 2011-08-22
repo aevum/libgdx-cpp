@@ -22,6 +22,13 @@
 
 namespace gdx_cpp {
 
+class Graphics;
+class Audio;
+class Input;
+class Files;
+class Preferences;
+class Runnable;
+
 class Application
 {
 public:
@@ -36,61 +43,33 @@ public:
     static const int LOG_INFO = 1;
     static const int LOG_ERROR = 2;
     
-    /** @return the {@link Graphics} instance */
-    Graphics& getGraphics () = 0;
+    virtual Graphics& getGraphics () = 0;
     
-    /** @return the {@link Audio} instance */
-    Audio& getAudio () = 0;
+    virtual Audio& getAudio () = 0;
     
-    /** @return the {@link Input} instance */
-    Input& getInput () = 0;
+    virtual Input& getInput () = 0;
     
-    /** @return the {@link Files} instance */
-    Files& getFiles () = 0;
+    virtual Files& getFiles () = 0;
     
-    /** Logs a message to the console or logcat */
-    void log (stlport::string& tag, stlport::string& message) = 0;
+    virtual std::ostream& log (const std::string& tag) = 0;
     
-    /** Logs a message to the console or logcat */
-    void log (stlport::string& tag, stlport::string& message, stlport::exception& exception) = 0;
+    virtual std::ostream& error (const std::string& tag) = 0;
     
-    /** Logs an error message to the console or logcat */
-    void error (stlport::string& tag, stlport::string& message) = 0;
+    virtual void setLogLevel (int logLevel) = 0;
     
-    /** Logs an error message to the console or logcat */
-    void error (stlport::string& tag, stlport::string& message, stlport::exception& exception) = 0;
+    virtual ApplicationType getType () = 0;
     
-    /** Sets the log level. {@link #LOG_NONE} will mute all log output. {@link #LOG_ERROR} will only let messages issued with
-     * {@link #error(stlport::string&, stlport::string&)} through. {@link #LOG_INFO} will let all messages though, either logged via
-     * {@link #error(stlport::string&, stlport::string&)} or {@link #log(stlport::string&, stlport::string&)}.
-     * @param logLevel {@link #LOG_NONE}, {@link #LOG_ERROR}, {@link #LOG_INFO}. */
-    void setLogLevel (int logLevel) = 0;
+    virtual int getVersion () = 0;
     
-    /** @return what {@link ApplicationType} this application has, e.g. Android or Desktop */
-    ApplicationType getType () = 0;
+    virtual long getJavaHeap () = 0;
     
-    /** @return the Android API level on Android or 0 on the desktop. */
-    int getVersion () = 0;
+    virtual long getNativeHeap () = 0;
     
-    /** @return the Java heap memory use in bytes */
-    long getJavaHeap () = 0;
+    virtual Preferences& getPreferences (std::string& name) = 0;
     
-    /** @return the Native heap memory use in bytes */
-    long getNativeHeap () = 0;
+    virtual void postRunnable (Runnable runnable) = 0;
     
-    /** Returns the {@link Preferences} instance of this Application. It can be used to store application settings across runs.
-     * @param name the name of the preferences, must be useable as a file name.
-     * @return the preferences. */
-    Preferences& getPreferences (stlport::string& name) = 0;
-    
-    /** Posts a {@link Runnable} on the main loop thread.
-     * 
-     * @param runnable the runnable. */
-    void postRunnable (Runnable runnable) = 0;
-    
-    /** Exits the application. This will cause a call to pause() and dispose() some time in the loadFuture, it will not immediately
-     * finish your application! */
-    void exit () = 0;
+    virtual void exit () = 0;
 };
 
 }

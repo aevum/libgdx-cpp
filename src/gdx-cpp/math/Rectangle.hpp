@@ -17,7 +17,9 @@
 
 #ifndef GDX_CPP_MATH_RECTANGLE_HPP
 #define GDX_CPP_MATH_RECTANGLE_HPP
+
 #include <string>
+
 namespace gdx_cpp {
 
 namespace math {
@@ -34,13 +36,13 @@ public:
     virtual ~Rectangle();
     virtual Rectangle& operator=(const Rectangle& other);
     virtual bool operator==(const Rectangle& other) const;
-    float getX ();
-    float setX (float x);
-    float getY ();
+    float getX () const;
+    float setX (float _x);
+    float getY () const;
     float setY (float y);
-    float getWidth ();
+    float getWidth () const;
     float setWidth (float width);
-    float getHeight ();
+    float getHeight () const;
     float setHeight (float height);
     bool contains (const Rectangle& rectangle);
     bool overlaps (const Rectangle& rectangle);
@@ -48,7 +50,7 @@ public:
     bool contains (float x, float y);
     void set (const Rectangle& rect);
     void merge(const Rectangle& rect);
-    stlport::string toString ();
+    std::string toString ();
 };
 
 }

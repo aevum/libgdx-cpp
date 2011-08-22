@@ -21,12 +21,20 @@
 #ifndef GDX_CPP_MATH_POLYGON_HPP_
 #define GDX_CPP_MATH_POLYGON_HPP_
 
+#include <vector>
+#include "Rectangle.hpp"
+
 namespace gdx_cpp {
 namespace math {
 
+class Rectangle;
+
 class Polygon {
 public:
-    float* getVertices ();
+    Polygon (const std::vector<float>& vertices);
+  
+    std::vector<float>& getVertices ();
+
     void setOrigin (float originX,float originY);
     void setPosition (float x,float y);
     void translate (float x,float y);
@@ -49,7 +57,13 @@ protected:
 
 
 private:
-    float[] vertices;
+  std::vector<float> vertices;
+  float x, y;
+  float originX, originY;
+  float rotation;
+  float scaleX, scaleY;
+  bool dirty;
+  Rectangle bounds;
 };
 
 } // namespace gdx_cpp

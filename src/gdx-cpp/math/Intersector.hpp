@@ -55,15 +55,17 @@ public:
     static bool intersectRayBoundsFast (const gdx_cpp::math::collision::Ray& ray,const gdx_cpp::math::collision::BoundingBox& box);
     static bool intersectRayTriangles (const gdx_cpp::math::collision::Ray& ray, const std::vector< float, std::allocator< float > >& triangles, gdx_cpp::math::Vector3* intersection);
     static bool intersectRayTriangles (const gdx_cpp::math::collision::Ray& ray, const std::vector< float, std::allocator< float > >& vertices, const std::vector< short int, std::allocator< short int > >& indices, int vertexSize, gdx_cpp::math::Vector3* intersection);
-    static bool intersectRayTriangles (const gdx_cpp::math::collision::Ray& ray,std::vector<Vector3>& triangles, Vector3* intersection);
+    static bool intersectRayTriangles (const gdx_cpp::math::collision::Ray& ray, const std::vector< gdx_cpp::math::Vector3 >& triangles, gdx_cpp::math::Vector3* intersection);
     static bool intersectRectangles (const Rectangle& a,const Rectangle& b);
     static bool intersectLines (const Vector2& p1,const Vector2& p2,const Vector2& p3,const Vector2& p4, Vector2& intersection);
-    static bool intersectSegments (const gdx_cpp::math::Vector2& p1, const gdx_cpp::math::Vector2& p2, const gdx_cpp::math::Vector2& p3, const gdx_cpp::math::Vector2& p4, gdx_cpp::math::Vector2& intersection);
+    static bool intersectSegments (const gdx_cpp::math::Vector2& p1, const gdx_cpp::math::Vector2& p2, const gdx_cpp::math::Vector2& p3, const gdx_cpp::math::Vector2& p4, gdx_cpp::math::Vector2* intersection);
     static bool overlapCircles (const Circle& c1,const Circle& c2);
     static bool overlapRectangles (const Rectangle& r1,const Rectangle& r2);
     static bool overlapCircleRectangle (const Circle& c,const Rectangle& r);
 
 protected:
+    static float det (float a, float b, float c, float d);
+    static double detd (double a, double b, double c, double d);
     static Vector3 tmp;
     static Vector3 best;
     static Vector3 tmp1;

@@ -21,6 +21,7 @@
 #include "Intersector.hpp"
 #include "Vector2.hpp"
 #include "Vector3.hpp"
+#include "Rectangle.hpp"
 #include <math.h>
 #include <vector>
 #include "Plane.hpp"
@@ -29,6 +30,7 @@
 #include "collision/Ray.hpp"
 #include <cassert>
 #include "gdx-cpp/Gdx.hpp"
+#include "Circle.hpp"
 
 
 
@@ -293,17 +295,14 @@ bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ra
 
     if ((triangles.size() / 3) % 3 != 0)
     {
-
+      gdx_cpp::Gdx::app.log("GDX-CPP Intersector.cpp") << "triangle list size is not a multiple of 3";
       assert(false);
-    
-      "triangle list size is not a multiple of 3";
-      
     }
 
     for (int i = 0; i < triangles.size() - 6; i += 9) {
         bool result = intersectRayTriangle(ray, tmp1.set(triangles[i], triangles[i + 1], triangles[i + 2]),
                                               tmp2.set(triangles[i + 3], triangles[i + 4], triangles[i + 5]),
-                                              tmp3.set(triangles[i + 6], triangles[i + 7], triangles[i + 8]), tmp);
+                                              tmp3.set(triangles[i + 6], triangles[i + 7], triangles[i + 8]), &tmp);
 
         if (result == true) {
             float dist = ray.origin.tmp().sub(tmp).len();
@@ -327,7 +326,11 @@ bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ra
     float min_dist = std::numeric_limits<float>::max();
     bool hit = false;
 
-    if ((indices.size() % 3) != 0) throw new RuntimeException("triangle list size is not a multiple of 3");
+    if ((indices.size() % 3) != 0)
+    {
+      gdx_cpp::Gdx::app.log("GDX-CPP Intersector.cpp") << "triangle list size is not a multiple of 3";
+      assert(false);
+    } 
 
     for (int i = 0; i < indices.size(); i += 3) {
         int i1 = indices[i] * vertexSize;
@@ -336,7 +339,7 @@ bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ra
 
         bool result = intersectRayTriangle(ray, tmp1.set(vertices[i1], vertices[i1 + 1], vertices[i1 + 2]),
                                               tmp2.set(vertices[i2], vertices[i2 + 1], vertices[i2 + 2]),
-                                              tmp3.set(vertices[i3], vertices[i3 + 1], vertices[i3 + 2]), tmp);
+                                              tmp3.set(vertices[i3], vertices[i3 + 1], vertices[i3 + 2]), &tmp);
 
         if (result == true) {
             float dist = ray.origin.tmp().sub(tmp).len();
@@ -356,13 +359,17 @@ bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ra
     }
 }
 
-bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ray,const std::vector<Vector3>& triangles, Vector3* intersection) {
+bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ray, const std::vector<gdx_cpp::math::Vector3>& triangles, gdx_cpp::math::Vector3* intersection) {
     float min_dist = std::numeric_limits<float>::max();
 
-    if (triangles.size() % 3 != 0) throw new RuntimeException("triangle list size is not a multiple of 3");
+    if (triangles.size() % 3 != 0)
+    {
+      gdx_cpp::Gdx::app.log("GDX-CPP Intersector.cpp") << "triangle list size is not a multiple of 3";
+      assert(false);
+    } 
 
     for (int i = 0; i < triangles.size() - 2; i += 3) {
-        bool result = intersectRayTriangle(ray, triangles.at(i), triangles.at(i + 1), triangles.at(i + 2), tmp);
+        bool result = intersectRayTriangle(ray, triangles.at(i), triangles.at(i + 1), triangles.at(i + 2), &tmp);
 
         if (result == true) {
             float dist = ray.origin.tmp().sub(tmp).len();
@@ -402,7 +409,7 @@ bool Intersector::intersectLines (const Vector2& p1, const Vector2& p2, const Ve
     return true;
 }
 
-bool Intersector::intersectSegments (const Vector2& p1,const Vector2& p2,const Vector2& p3,const Vector2& p4, Vector2& intersection) {
+bool Intersector::intersectSegments (const Vector2& p1,const Vector2& p2,const Vector2& p3,const Vector2& p4, Vector2* intersection) {
     float x1 = p1.x, y1 = p1.y, x2 = p2.x, y2 = p2.y, x3 = p3.x, y3 = p3.y, x4 = p4.x, y4 = p4.y;
 
     float d = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);

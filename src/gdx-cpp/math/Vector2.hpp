@@ -38,6 +38,7 @@ public:
     virtual bool operator==(const Vector2& other) const;
 
     Vector2& set (const Vector2& v);
+    Vector2& set (float _x, float _y);
     Vector2& sub (const Vector2& v);
     Vector2& nor ();
     Vector2& add (const Vector2& v);
