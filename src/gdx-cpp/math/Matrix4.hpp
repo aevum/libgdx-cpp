@@ -94,9 +94,20 @@ public:
     Matrix4& set(const Matrix3& mat);
     void scl(const Vector3& scale);
     void getTranslation(gdx_cpp::math::Vector3& position);
-    void getRotation(const Quaternion& rotation);
+    void getRotation(gdx_cpp::math::Quaternion& rotation);
     Matrix4& toNormalMatrix();
 
+
+    static bool inv (float* val);
+    static float det (float* val);
+    static void rot (float* mat, float* vecs, int offset, int numVecs, int stride) ;
+    static void rot (float* mat, float* vec);
+    static void prj (const float* mat, float* vecs, int offset, int numVecs, int stride) ;
+    static void prj (const float* mat, float* vec);
+    static void mulVec (float* mat, float* vecs, int offset, int numVecs, int stride);
+    static void mulVec (float* mat, float* vec);
+    static void mul (float* mata, float* matb);
+    
     float val[16];
 };
 

@@ -20,9 +20,15 @@
 
 #include "Plane.hpp"
 
+#include <sstream>
+
 using namespace gdx_cpp::math;
 
-void Plane::set (const Vector3& point1,const Vector3& point2,const Vector3& point3) {
+Plane::Plane (const Vector3& normal, float d) : d(d) {
+  this->normal.set(normal).nor();
+}
+
+void Plane::set (Vector3& point1, Vector3& point2,const Vector3& point3) {
     Vector3 l = point1.tmp().sub(point2);
     Vector3 r = point2.tmp2().sub(point3);
     Vector3 nor = l.crs(r).nor();
@@ -32,22 +38,22 @@ void Plane::set (const Vector3& point1,const Vector3& point2,const Vector3& poin
 
 void Plane::set (float nx,float ny,float nz,float d) {
     normal.set(nx, ny, nz);
-    this.d = d;
+    this->d = d;
 }
 
 float Plane::distance (const Vector3& point) {
     return normal.dot(point) + d;
 }
 
-PlaneSide& Plane::testPoint (const Vector3& point) {
+Plane::PlaneSide Plane::testPoint (const Vector3& point) {
     float dist = normal.dot(point) + d;
 
     if (dist == 0)
-        return PlaneSide.OnPlane;
+      return PlaneSide_OnPlane;
     else if (dist < 0)
-        return PlaneSide.Back;
+      return PlaneSide_Back;
     else
-        return PlaneSide.Front;
+      return PlaneSide_Front;
 }
 
 bool Plane::isFrontFacing (const Vector3& direction) {
@@ -64,16 +70,19 @@ float Plane::getD () {
 }
 
 void Plane::set (const Vector3& point,const Vector3& normal) {
-    this.normal.set(normal);
+    this->normal.set(normal);
     d = -point.dot(normal);
 }
 
 void Plane::set (const Plane& plane) {
-    this.normal.set(plane.normal);
-    this.d = plane.d;
+    this->normal.set(plane.normal);
+    this->d = plane.d;
 }
 
-std::string& Plane::toString () {
-    return normal.toString() + ", " + d;
+std::string Plane::toString () {
+    std::stringstream ss;
+    ss << normal.toString() << ", " << d;
+    
+    return ss.str();
 }
 

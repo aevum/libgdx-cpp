@@ -20,14 +20,20 @@
 
 #include "Ray.hpp"
 
+#include "math/Matrix4.hpp"
+
+#include <sstream>
+#include <string>
+
 using namespace gdx_cpp::math::collision;
 
-Ray& Ray::cpy () {
-    return new Ray(this.origin, this.direction);
+Ray Ray::cpy () {
+    return Ray(this->origin, this->direction);
 }
 
 gdx_cpp::math::Vector3& Ray::getEndPoint (float distance) {
-    return new Vector3(origin).add(direction.tmp().mul(distance));
+    gdx_cpp::math::Vector3 o(origin);
+    return o.add(direction.tmp().mul(distance));
 }
 
 Ray& Ray::mul (const gdx_cpp::math::Matrix4& matrix) {
@@ -35,29 +41,31 @@ Ray& Ray::mul (const gdx_cpp::math::Matrix4& matrix) {
     tmp.mul(matrix);
     origin.mul(matrix);
     direction.set(tmp.sub(origin));
-    return this;
+    return *this;
 }
 
 std::string& Ray::toString () {
-    return "ray [" + origin + ":" + direction + "]";
+    std::stringstream ss;
+    ss << "ray [" << origin << ":" << direction << "]";
+    return ss.str();
 }
 
 Ray& Ray::set (const gdx_cpp::math::Vector3& origin,const gdx_cpp::math::Vector3& direction) {
-    this.origin.set(origin);
-    this.direction.set(direction);
-    return this;
+    this->origin.set(origin);
+    this->direction.set(direction);
+    return *this;
 }
 
 Ray& Ray::set (float x,float y,float z,float dx,float dy,float dz) {
-    this.origin.set(x, y, z);
-    this.direction.set(dx, dy, dz);
-    return this;
+  this->origin.set(x, y, z);
+  this->direction.set(dx, dy, dz);
+    return *this;
 }
 
 Ray& Ray::set (const Ray& ray) {
 
-    this.origin.set(ray.origin);
-    this.direction.set(ray.direction);
-    return this;
+    this->origin.set(ray.origin);
+    this->direction.set(ray.direction);
+    return *this;
 }
 
