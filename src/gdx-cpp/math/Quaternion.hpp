@@ -24,8 +24,7 @@
 #include <tr1/shared_ptr.h>
 
 #include <string>
-#include <tr1/memory>
-#include <tr1/shared_ptr.h>
+#include "gdx-cpp/utils/Aliases.hpp"
 
 namespace gdx_cpp {
 
@@ -36,8 +35,7 @@ class Quaternion
 {
   
 public:
-  typedef std::tr1::shared_ptr<Quaternion> ptr;
-    typedef std::tr1::shared_ptr<Quaternion> ptr;
+    typedef ref_ptr_maker<Quaternion>::type ptr;
   
     Quaternion();
     Quaternion(float x, float y, float z, float w);
@@ -69,11 +67,10 @@ public:
     float dot (const Quaternion& other);
     Quaternion& mul (float scalar);
     
-    float x = 0.0;
-    float y = 0.0;
-    float z = 0.0;
-    float w = 0.0;	
-	
+    float x;
+    float y;
+    float z;
+    float w;	
 private:
    
     static Quaternion tmp1;

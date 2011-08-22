@@ -126,20 +126,20 @@ void Rectangle::set (const Rectangle& rect) {
 
 void Rectangle::merge(const Rectangle& rect)
 {
-    float minX = stlp_std::min(x, rect.x);
-    float maxX = stlp_std::max(x + width, rect.x + rect.width);
+    float minX = std::min(x, rect.x);
+    float maxX = std::max(x + width, rect.x + rect.width);
     x = minX;
     width = maxX - minX;
 
-    float minY = stlp_std::min(y, rect.y);
-    float maxY = stlp_std::max(y + height, rect.y + rect.height);
+    float minY = std::min(y, rect.y);
+    float maxY = std::max(y + height, rect.y + rect.height);
     y = minY;
     height = maxY - minY;
 }
 
-stlport::string Rectangle::toString ()
+std::string Rectangle::toString ()
 {
-    stlport::stringstream ss;
+    std::stringstream ss;
     ss << x << "," << y << "," << width << "," << height;
     return ss.str();
 }

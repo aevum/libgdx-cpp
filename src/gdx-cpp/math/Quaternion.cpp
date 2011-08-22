@@ -29,7 +29,7 @@ using namespace gdx_cpp::math;
 
 Quaternion Quaternion::tmp1(0, 0, 0, 0);
 Quaternion Quaternion::tmp2(0, 0, 0, 0);
-float Quaternion::NORMALIZATION_TOLERANCE = 0.00001f;
+const float Quaternion::NORMALIZATION_TOLERANCE = 0.00001f;
 
 Quaternion::Quaternion () : x(0), y(0), z(0), w(0)
 {
@@ -202,27 +202,28 @@ void Quaternion::toMatrix (float *matrix)
     float yw = y * w;
     float zz = z * z;
     float zw = z * w;
-    matrix[Matrix4.M00] = 1 - 2 * (yy + zz);
-    matrix[Matrix4.M01] = 2 * (xy - zw);
-    matrix[Matrix4.M02] = 2 * (xz + yw);
-    matrix[Matrix4.M03] = 0;
-    matrix[Matrix4.M10] = 2 * (xy + zw);
-    matrix[Matrix4.M11] = 1 - 2 * (xx + zz);
-    matrix[Matrix4.M12] = 2 * (yz - xw);
-    matrix[Matrix4.M13] = 0;
-    matrix[Matrix4.M20] = 2 * (xz - yw);
-    matrix[Matrix4.M21] = 2 * (yz + xw);
-    matrix[Matrix4.M22] = 1 - 2 * (xx + yy);
-    matrix[Matrix4.M23] = 0;
-    matrix[Matrix4.M30] = 0;
-    matrix[Matrix4.M31] = 0;
-    matrix[Matrix4.M32] = 0;
-    matrix[Matrix4.M33] = 1;
+    matrix[Matrix4::M00] = 1 - 2 * (yy + zz);
+    matrix[Matrix4::M01] = 2 * (xy - zw);
+    matrix[Matrix4::M02] = 2 * (xz + yw);
+    matrix[Matrix4::M03] = 0;
+    matrix[Matrix4::M10] = 2 * (xy + zw);
+    matrix[Matrix4::M11] = 1 - 2 * (xx + zz);
+    matrix[Matrix4::M12] = 2 * (yz - xw);
+    matrix[Matrix4::M13] = 0;
+    matrix[Matrix4::M20] = 2 * (xz - yw);
+    matrix[Matrix4::M21] = 2 * (yz + xw);
+    matrix[Matrix4::M22] = 1 - 2 * (xx + yy);
+    matrix[Matrix4::M23] = 0;
+    matrix[Matrix4::M30] = 0;
+    matrix[Matrix4::M31] = 0;
+    matrix[Matrix4::M32] = 0;
+    matrix[Matrix4::M33] = 1;
 }
 
-static Quaternion& Quaternion::idt ()
+const Quaternion& Quaternion::idt ()
 {
-    return new Quaternion(0, 0, 0, 1);
+    static Quaternion i(0, 0, 0, 1);
+    return i;
 }
 
 Quaternion& Quaternion::setFromAxis (const Vector3& axis, float angle)
@@ -240,9 +241,9 @@ Quaternion& Quaternion::setFromAxis (float x, float y, float z, float angle)
 
 Quaternion& Quaternion::setFromMatrix (const Matrix4& matrix)
 {
-    return setFromAxes(matrix.val[Matrix4.M00], matrix.val[Matrix4.M01], matrix.val[Matrix4.M02], matrix.val[Matrix4.M10],
-                        matrix.val[Matrix4.M11], matrix.val[Matrix4.M12], matrix.val[Matrix4.M20], matrix.val[Matrix4.M21],
-                        matrix.val[Matrix4.M22]);
+    return setFromAxes(matrix.val[Matrix4::M00], matrix.val[Matrix4::M01], matrix.val[Matrix4::M02], matrix.val[Matrix4::M10],
+                        matrix.val[Matrix4::M11], matrix.val[Matrix4::M12], matrix.val[Matrix4::M20], matrix.val[Matrix4::M21],
+                        matrix.val[Matrix4::M22]);
 }
 
 Quaternion& Quaternion::setFromAxes (float xx, float xy, float xz, float yx, float yy, float yz, float zx, float zy, float zz)

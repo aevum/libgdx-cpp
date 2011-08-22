@@ -24,6 +24,8 @@ namespace gdx_cpp {
 
 namespace math {
 
+class Vector3;
+
 class Matrix3
 {
 public:

@@ -38,10 +38,10 @@ public:
     virtual Vector3& operator=(const Vector3& other);
     virtual bool operator==(const Vector3& other) const;
 
-    Vector3& set(float x, float y, float z) const;
-    Vector3& set(const Vector3& vector) const;
-    Vector3& set(float* values) const;
-    Vector3& cpy();
+    Vector3& set(float x, float y, float z);
+    Vector3& set(const Vector3& vector);
+    Vector3& set(const float* values);
+    Vector3 cpy();
     Vector3& tmp();
     Vector3& tmp2();
     Vector3& tmp3();
@@ -66,7 +66,7 @@ public:
     Vector3& rot(const Matrix4& matrix);
     bool isUnit();
     bool isZero();
-    Vector3& lerp(Vector3& target, float alpha);
+    Vector3 lerp(gdx_cpp::math::Vector3& target, float alpha);
     Vector3& slerp(Vector3& target, float alpha);
     std::string toString();
     float dot(float x, float y, float z);
