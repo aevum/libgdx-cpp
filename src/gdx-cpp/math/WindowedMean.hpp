@@ -29,8 +29,6 @@ namespace math {
 class WindowedMean {
 public:
     WindowedMean (int window_size);
-
-    typedef ref_ptr_maker< std::vector<float> >::type float_vector_ptr;
     
     bool hasEnoughData ();
     void clear ();
