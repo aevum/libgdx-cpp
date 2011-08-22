@@ -22,7 +22,14 @@
 
 using namespace gdx_cpp::math::collision;
 
-bool Sphere::overlaps (const Sphere& sphere) {
+Sphere::Sphere (const Vector3& center, float radius)
+{
+                this->center.set(center);
+                this->radius = radius;
+}
+
+bool Sphere::overlaps (const Sphere& sphere)
+{
     return center.dst2(sphere.center) < radius * radius + sphere.radius * radius;
 }
 

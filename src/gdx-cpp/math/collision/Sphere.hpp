@@ -20,6 +20,7 @@
 
 #ifndef GDX_CPP_MATH_COLLISION_SPHERE_HPP_
 #define GDX_CPP_MATH_COLLISION_SPHERE_HPP_
+#include "gdx-cpp/math/Vector3.hpp"
 
 namespace gdx_cpp {
 namespace math {
@@ -27,8 +28,11 @@ namespace collision {
 
 class Sphere {
 public:
-    bool overlaps (const Sphere& sphere);
+  
+    float radius;
     Vector3 center;
+    Sphere (const Vector3& center, float radius);
+    bool overlaps (const Sphere& sphere);
 
 protected:
 
