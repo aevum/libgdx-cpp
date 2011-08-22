@@ -58,13 +58,13 @@ public:
     bool idt(const Vector3& vector);
     float dst(const Vector3& vector);
     Vector3& nor();
-    float dot(const Vector3& vector);
+    float dot(const gdx_cpp::math::Vector3& vector) const;
     Vector3& crs(const Vector3& vector);
     Vector3 crs(float x, float y, float z);
     Vector3& mul(const Matrix4& matrix);
     Vector3& prj(const Matrix4& matrix);
     Vector3& rot(const Matrix4& matrix);
-    bool isUnit();
+    bool isUnit() const;
     bool isZero();
     Vector3& lerp(Vector3& target, float alpha);
     Vector3& slerp(Vector3& target, float alpha);

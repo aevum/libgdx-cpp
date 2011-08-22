@@ -160,7 +160,7 @@ Vector3& Vector3::nor() {
     }
 }
 
-float Vector3::dot(const Vector3& vector) {
+float Vector3::dot(const Vector3& vector) const{
     return x * vector.x + y * vector.y + z * vector.z;
 }
 
@@ -193,7 +193,7 @@ Vector3& Vector3::rot(const Matrix4& matrix) {
                      * l_mat[Matrix4.M11] + z * l_mat[Matrix4.M12], x * l_mat[Matrix4.M20] + y * l_mat[Matrix4.M21] + z * l_mat[Matrix4.M22]);
 }
 
-bool Vector3::isUnit() {
+bool Vector3::isUnit() const {
     return this->len() == 1;
 }
 
