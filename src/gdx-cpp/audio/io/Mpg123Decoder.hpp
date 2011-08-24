@@ -21,25 +21,38 @@
 #ifndef GDX_CPP_AUDIO_IO_MPG123DECODER_HPP_
 #define GDX_CPP_AUDIO_IO_MPG123DECODER_HPP_
 
+#include <vector>
+#include <string>
+#include "Decoder.hpp"
+
+struct Mp3File;
 namespace gdx_cpp {
 namespace audio {
 namespace io {
 
-class Mpg123Decoder {
+class Mpg123Decoder : public Decoder {
 public:
-    int readSamples (const ShortBuffer& samples);
+    Mpg123Decoder (std::string filename);
+    ~Mpg123Decoder();
+    int readSamples (std::vector< short >& samples);
     int skipSamples (int numSamples);
     int getNumChannels ();
     int getRate ();
     float getLength ();
     void dispose ();
-    long handle;
 
 protected:
 
 
 private:
-
+    Mp3File* handle;    
+    Mp3File* openFile (std::string file);
+    int getNumChannels (Mp3File* mp3);
+    int getRate (Mp3File* mp3);
+    float getLength (Mp3File* mp3);
+    int readSamples (Mp3File* mp3, std::vector< short >& buffer, int numSamples);
+    int skipSamples (Mp3File* mp3, int numSamples);
+    void closeFile (Mp3File* mp3);
 };
 
 } // namespace gdx_cpp

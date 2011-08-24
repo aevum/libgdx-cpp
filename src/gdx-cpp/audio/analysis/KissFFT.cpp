@@ -38,7 +38,7 @@ void KissFFT::getImagPart (const ShortBuffer& imag) {
     getImagPart(handle, imag);
 }
 
-void KissFFT::main () {
+// void KissFFT::main () {
 // final float frequency = 440;
 // float increment = (float)(2 * Math.PI) * frequency / 44100; // angular increment for each sample
 // float angle = 0;

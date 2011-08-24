@@ -21,24 +21,40 @@
 #ifndef GDX_CPP_AUDIO_IO_VORBISDECODER_HPP_
 #define GDX_CPP_AUDIO_IO_VORBISDECODER_HPP_
 
+#include <vector>
+#include <string>
+#include "Decoder.hpp"
+#include <cassert>
+
+struct OggFile;
+
 namespace gdx_cpp {
 namespace audio {
 namespace io {
 
-class VorbisDecoder {
+class VorbisDecoder : public Decoder {
 public:
+    VorbisDecoder (std::string filename);
+    ~VorbisDecoder ();
     void dispose ();
     float getLength ();
     int getNumChannels ();
     int getRate ();
-    int readSamples (const ShortBuffer& samples);
+    int readSamples (std::vector< short >& samples);
     int skipSamples (int numSamples);
 
 protected:
 
-
 private:
-    long handle;
+    OggFile* handle;
+
+    OggFile* openFile(std::string filename);
+    int getNumChannels(OggFile* file);
+    int getRate(OggFile* file);
+    float getLength(OggFile* file);
+    int readSamples(OggFile* file, std::vector< short >& samples, int numSamples);
+    int skipSamples(OggFile* file, int numSamples);
+    void closeFile(OggFile* file);
 };
 
 } // namespace gdx_cpp

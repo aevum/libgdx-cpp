@@ -19,18 +19,33 @@
 */
 
 #include "FFT.hpp"
+#include <vector>
+#include "gdx-cpp/Gdx.hpp"
+#include <cmath>
+#include "gdx-cpp/math/MathUtils.hpp"
 
 using namespace gdx_cpp::audio::analysis;
 
+
+FFT::FFT(int ts, float sr): FourierTransform(ts, sr)
+{
+    if ((ts & (ts - 1)) != 0)
+    {
+        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FFT.cpp") << "FFT: timeSize must be a power of two.";
+    }
+    buildReverseTable();
+    buildTrigTables();
+}
+
 void FFT::allocateArrays () {
-    spectrum = new float[timeSize / 2 + 1];
-    real = new float[timeSize];
-    imag = new float[timeSize];
+    spectrum = std::vector<float>(timeSizeVar / 2 + 1);
+    real = std::vector<float>(timeSizeVar);
+    imag = std::vector<float>(timeSizeVar);
 }
 
 void FFT::scaleBand (int i,float s) {
     if (s < 0) {
-        throw new IllegalArgumentException("Can't scale a frequency band by a negative value.");
+       gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FFT.cpp") << "Can't scale a frequency band by a negative value.";
     }
     if (spectrum[i] != 0) {
         real[i] /= spectrum[i];
@@ -39,15 +54,15 @@ void FFT::scaleBand (int i,float s) {
         real[i] *= spectrum[i];
         imag[i] *= spectrum[i];
     }
-    if (i != 0 && i != timeSize / 2) {
-        real[timeSize - i] = real[i];
-        imag[timeSize - i] = -imag[i];
+    if (i != 0 && i != timeSizeVar / 2) {
+        real[timeSizeVar - i] = real[i];
+        imag[timeSizeVar - i] = -imag[i];
     }
 }
 
 void FFT::setBand (int i,float a) {
     if (a < 0) {
-        throw new IllegalArgumentException("Can't set a frequency band to a negative value.");
+        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FFT.cpp") << "Can't set a frequency band to a negative value.";
     }
     if (real[i] == 0 && imag[i] == 0) {
         real[i] = a;
@@ -59,14 +74,14 @@ void FFT::setBand (int i,float a) {
         real[i] *= spectrum[i];
         imag[i] *= spectrum[i];
     }
-    if (i != 0 && i != timeSize / 2) {
-        real[timeSize - i] = real[i];
-        imag[timeSize - i] = -imag[i];
+    if (i != 0 && i != timeSizeVar / 2) {
+        real[timeSizeVar - i] = real[i];
+        imag[timeSizeVar - i] = -imag[i];
     }
 }
 
 void FFT::fft () {
-    for (int halfSize = 1; halfSize < real.length; halfSize *= 2) {
+    for (int halfSize = 1; halfSize < real.size(); halfSize *= 2) {
         // float k = -(float)Math.PI/halfSize;
         // phase shift step
         // float phaseShiftStepR = (float)Math.cos(k);
@@ -78,7 +93,7 @@ void FFT::fft () {
         float currentPhaseShiftR = 1.0f;
         float currentPhaseShiftI = 0.0f;
         for (int fftStep = 0; fftStep < halfSize; fftStep++) {
-            for (int i = fftStep; i < real.length; i += 2 * halfSize) {
+            for (int i = fftStep; i < real.size(); i += 2 * halfSize) {
                 int off = i + halfSize;
                 float tr = (currentPhaseShiftR * real[off]) - (currentPhaseShiftI * imag[off]);
                 float ti = (currentPhaseShiftR * imag[off]) + (currentPhaseShiftI * real[off]);
@@ -94,9 +109,9 @@ void FFT::fft () {
     }
 }
 
-void FFT::forward () {
-    if (buffer.length != timeSize) {
-        throw new IllegalArgumentException("FFT.forward: The length of the passed sample buffer must be equal to timeSize().");
+void FFT::forward (std::vector<float>& buffer) {
+    if (buffer.size() != timeSizeVar) {
+        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FFT.cpp") << "FFT.forward: The length of the passed sample buffer must be equal to timeSize().";
     }
     doWindow(buffer);
     // copy samples to real/imag in bit-reversed order
@@ -107,9 +122,9 @@ void FFT::forward () {
     fillSpectrum();
 }
 
-void FFT::forward () {
-    if (buffReal.length != timeSize || buffImag.length != timeSize) {
-        throw new IllegalArgumentException("FFT.forward: The length of the passed buffers must be equal to timeSize().");
+void FFT::forward (std::vector<float>& buffReal, std::vector<float>& buffImag) {
+    if (buffReal.size() != timeSizeVar || buffImag.size() != timeSizeVar) {
+       gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FFT.cpp") << "FFT.forward: The length of the passed buffers must be equal to timeSize().";
     }
     setComplex(buffReal, buffImag);
     bitReverseComplex();
@@ -117,25 +132,25 @@ void FFT::forward () {
     fillSpectrum();
 }
 
-void FFT::inverse () {
-    if (buffer.length > real.length) {
-        throw new IllegalArgumentException("FFT.inverse: the passed array's length must equal FFT.timeSize().");
+void FFT::inverse (std::vector<float>& buffer) {
+    if (buffer.size() > real.size()) {
+        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FFT.cpp") << "FFT.inverse: the passed array's length must equal FFT.timeSize().";
     }
     // conjugate
-    for (int i = 0; i < timeSize; i++) {
+    for (int i = 0; i < timeSizeVar; i++) {
         imag[i] *= -1;
     }
     bitReverseComplex();
     fft();
     // copy the result in real into buffer, scaling as we do
-    for (int i = 0; i < buffer.length; i++) {
-        buffer[i] = real[i] / real.length;
+    for (int i = 0; i < buffer.size(); i++) {
+        buffer[i] = real[i] / real.size();
     }
 }
 
 void FFT::buildReverseTable () {
-    int N = timeSize;
-    reverse = new int[N];
+    int N = timeSizeVar;
+    reverse = std::vector<int>(N);
 
     // set up the bit reversing table
     reverse[0] = 0;
@@ -144,17 +159,17 @@ void FFT::buildReverseTable () {
             reverse[i + limit] = reverse[i] + bit;
 }
 
-void FFT::bitReverseSamples () {
-    for (int i = 0; i < samples.length; i++) {
+void FFT::bitReverseSamples (std::vector<float> samples) {
+    for (int i = 0; i < samples.size(); i++) {
         real[i] = samples[reverse[i]];
         imag[i] = 0.0f;
     }
 }
 
 void FFT::bitReverseComplex () {
-    float[] revReal = new float[real.length];
-    float[] revImag = new float[imag.length];
-    for (int i = 0; i < real.length; i++) {
+    std::vector<float> revReal = std::vector<float>(real.size());
+    std::vector<float> revImag = std::vector<float>(imag.size());
+    for (int i = 0; i < real.size(); i++) {
         revReal[i] = real[reverse[i]];
         revImag[i] = imag[reverse[i]];
     }
@@ -171,18 +186,11 @@ float FFT::cos (int i) {
 }
 
 void FFT::buildTrigTables () {
-    int N = timeSize;
-    sinlookup = new float[N];
-    coslookup = new float[N];
+    int N = timeSizeVar;
+    sinlookup = std::vector<float>(N);
+    coslookup = std::vector<float>(N);
     for (int i = 0; i < N; i++) {
-        sinlookup[i] = (float)Math.sin(-(float)Math.PI / i);
-        coslookup[i] = (float)Math.cos(-(float)Math.PI / i);
+        sinlookup[i] = (float)std::sin(-(float)PI / i);
+        coslookup[i] = (float)std::cos(-(float)PI / i);
     }
 }
-
-void FFT::main () {
-// FFT fft = new FFT(1024, 44100);
-// System.out.println(fft.getRealPart().length);
-// System.out.println(fft.getSpectrum().length);
-// }
-

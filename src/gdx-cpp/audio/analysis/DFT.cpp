@@ -19,13 +19,26 @@
 */
 
 #include "DFT.hpp"
+#include <vector>
+#include "gdx-cpp/Gdx.hpp"
+#include <cmath>
 
 using namespace gdx_cpp::audio::analysis;
 
+DFT::DFT(int ts, float sr): FourierTransform(ts, sr)
+{
+    if (ts % 2 != 0)
+    {
+      gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS DFT.cpp") << "DFT: timeSize must be even.";
+    }
+    buildTrigTables();
+}
+
+
 void DFT::allocateArrays () {
-    spectrum = new float[timeSize / 2 + 1];
-    real = new float[timeSize / 2 + 1];
-    imag = new float[timeSize / 2 + 1];
+    spectrum = std::vector<float>(timeSizeVar / 2 + 1);
+    real = std::vector<float>(timeSizeVar / 2 + 1);
+    imag = std::vector<float>(timeSizeVar / 2 + 1);
 }
 
 void DFT::scaleBand (int i,float s) {
@@ -34,13 +47,13 @@ void DFT::scaleBand (int i,float s) {
 void DFT::setBand (int i,float a) {
 }
 
-void DFT::forward () {
-    if (samples.length != timeSize) {
-        throw new IllegalArgumentException(
-            "DFT.forward: The length of the passed sample buffer must be equal to DFT.timeSize().");
+void DFT::forward (std::vector<float>& samples) {
+    if (samples.size() != timeSizeVar)
+    {
+        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS DFT.cpp") << "DFT.forward: The length of the passed sample buffer must be equal to DFT.timeSize().";
     }
     doWindow(samples);
-    int N = samples.length;
+    int N = samples.size();
     for (int f = 0; f <= N / 2; f++) {
         real[f] = 0.0f;
         imag[f] = 0.0f;
@@ -52,8 +65,8 @@ void DFT::forward () {
     fillSpectrum();
 }
 
-void DFT::inverse () {
-    int N = buffer.length;
+void DFT::inverse (std::vector<float>& buffer) {
+    int N = buffer.size();
     real[0] /= N;
     imag[0] = -imag[0] / (N / 2);
     real[N / 2] /= N;
@@ -71,12 +84,12 @@ void DFT::inverse () {
 }
 
 void DFT::buildTrigTables () {
-    int N = spectrum.length * timeSize;
-    sinlookup = new float[N];
-    coslookup = new float[N];
+    int N = spectrum.size() * timeSizeVar;
+    sinlookup = std::vector<float>(N);
+    coslookup = std::vector<float>(N);
     for (int i = 0; i < N; i++) {
-        sinlookup[i] = (float)Math.sin(i * TWO_PI / timeSize);
-        coslookup[i] = (float)Math.cos(i * TWO_PI / timeSize);
+        sinlookup[i] = (float)std::sin(i * TWO_PI / timeSizeVar);
+        coslookup[i] = (float)std::cos(i * TWO_PI / timeSizeVar);
     }
 }
 
