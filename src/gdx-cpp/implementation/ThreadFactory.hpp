@@ -1,6 +1,5 @@
-
 /*
-    Copyright 2011 Aevum Software aevum @ aevumlab.com
+    Copyright 2011 <copyright holder> <email>
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -13,14 +12,25 @@
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
-    @author Victor Vicente de Carvalho victor.carvalho@aevumlab.com
-    @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "BitmapFontParameter.hpp"
 
-using namespace gdx_cpp::assets::loaders;
+#ifndef GDX_CPP_IMPLEMENTATION_THREADFACTORY_HPP
+#define GDX_CPP_IMPLEMENTATION_THREADFACTORY_HPP
 
+#include "Thread.hpp"
 
+namespace gdx_cpp {
 
+namespace implementation {
+
+class ThreadFactory
+{
+public:
+    virtual Thread::ptr createThread(Thread* t) = 0;
+};
+
+}
+}
+
+#endif // GDX_CPP_IMPLEMENTATION_THREADFACTORY_HPP

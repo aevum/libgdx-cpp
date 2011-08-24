@@ -22,18 +22,15 @@
 #define GDX_CPP_ASSETS_LOADERS_FILEHANDLERESOLVER_HPP_
 
 namespace gdx_cpp {
+namespace files {
+    class FileHandle;
+}
 namespace assets {
 namespace loaders {
 
 class FileHandleResolver {
 public:
-    virtual   gdx_cpp::files::FileHandle& resolve (const std::string& fileName) = 0;
-
-protected:
-
-
-private:
-
+    virtual  gdx_cpp::files::FileHandle& resolve (const std::string& fileName) const = 0;
 };
 
 } // namespace gdx_cpp

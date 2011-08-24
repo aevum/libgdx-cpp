@@ -98,7 +98,7 @@ std::string& FileHandle::readString (const std::string& charset) {
     return output.toString();
 }
 
-char* FileHandle::readBytes () {
+void FileHandle::readBytes (std::vector< char >& buffer) {
     int length = (int)length();
     if (length == 0) length = 512;
     byte[] buffer = new byte[length];

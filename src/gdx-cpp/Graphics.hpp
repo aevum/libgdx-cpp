@@ -33,6 +33,7 @@ class GLU;
 class Pixmap;
 
 class Graphics {
+public:
     /** Enumeration describing different types of {@link Graphics} implementations.
      *
      * @author mzechner */

@@ -21,19 +21,23 @@
 #ifndef GDX_CPP_ASSETS_LOADERS_TEXTUREPARAMETER_HPP_
 #define GDX_CPP_ASSETS_LOADERS_TEXTUREPARAMETER_HPP_
 
+#include "gdx-cpp/graphics/Texture.hpp"
+#include "Parameter.hpp"
+
 namespace gdx_cpp {
 namespace assets {
 namespace loaders {
 
-class TextureParameter {
-public:
+struct TextureParameter : public Parameter{
+    /** the format of the final Texture. Uses the source images format if null **/
+    int format;
+    /** whether to generate mipmaps **/
+    bool genMipMaps;
+    /** The texture to put the {@link TextureData} in **/
+    graphics::Texture::ptr texture;
 
-
-protected:
-
-
-private:
-
+    TextureParameter() : genMipMaps(true) , format(0) {
+    }
 };
 
 } // namespace gdx_cpp

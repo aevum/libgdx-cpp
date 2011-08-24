@@ -26,21 +26,31 @@
 #include "Audio.hpp"
 #include "Files.hpp"
 #include "Input.hpp"
+#include "graphics/GL10.hpp"
+#include "graphics/GL11.hpp"
+#include "graphics/GL20.hpp"
+#include "graphics/GLCommon.hpp"
+#include "graphics/GLU.hpp"
+#include "implementation/MutexFactory.hpp"
+#include "implementation/ThreadFactory.hpp"
 
 namespace gdx_cpp {
 
 class Gdx {
 public:
-    static Application& app;
-    static Graphics& graphics;
-    static Audio& audio;
-    static Input& input;
-    static Files& files;
-    static GLCommon& gl;
-    static GL10& gl10;
-    static GL11& gl11;
-    static GL20& gl20;
-    static GLU& glu;
+    static Application* app;
+    static Graphics* graphics;
+    static Audio* audio;
+    static Input* input;
+    static Files* files;
+    static graphics::GLCommon* gl;
+    static graphics::GL10* gl10;
+    static graphics::GL11* gl11;
+    static graphics::GL20* gl20;
+    static graphics::GLU* glu;
+
+    static implementation::ThreadFactory* threadFactory;
+    static implementation::MutexFactory* mutexFactory;
 };
 
 } // namespace gdx_cpp

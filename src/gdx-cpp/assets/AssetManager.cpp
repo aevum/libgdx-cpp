@@ -19,8 +19,25 @@
 */
 
 #include "AssetManager.hpp"
+#include "loaders/BitmapFontLoader.hpp"
+#include "loaders/MusicLoader.hpp"
+#include "loaders/PixmapLoader.hpp"
+#include "loaders/SoundLoader.hpp"
+#include "loaders/TextureAtlasLoader.hpp"
+#include "loaders/TextureLoader.hpp"
 
 using namespace gdx_cpp::assets;
+
+gdx_cpp::assets::AssetManager::AssetManager()
+{
+    setLoader(BitmapFont, new BitmapFontLoader(new InternalFileHandleResolver()));
+    setLoader(Music, new MusicLoader(new InternalFileHandleResolver()));
+    setLoader(Pixmap, new PixmapLoader(new InternalFileHandleResolver()));
+    setLoader(Sound, new SoundLoader(new InternalFileHandleResolver()));
+    setLoader(TextureAtlas, new TextureAtlasLoader(new InternalFileHandleResolver()));
+    setLoader(Texture, new TextureLoader(new InternalFileHandleResolver()));
+}
+
 
 Thread& AssetManager::newThread (const Runnable& r) {
     Thread thread = new Thread(r, "AssetManager-Loader-Thread");

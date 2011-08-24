@@ -1,6 +1,5 @@
-
 /*
-    Copyright 2011 Aevum Software aevum @ aevumlab.com
+    Copyright 2011 <copyright holder> <email>
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -13,31 +12,26 @@
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
-    @author Victor Vicente de Carvalho victor.carvalho@aevumlab.com
-    @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#ifndef GDX_CPP_GRAPHICS_VERTEXATTRIBUTE_HPP_
-#define GDX_CPP_GRAPHICS_VERTEXATTRIBUTE_HPP_
 
-#include <string>
+#ifndef GDX_CPP_ASSETS_LOADERS_PARAMETER_HPP
+#define GDX_CPP_ASSETS_LOADERS_PARAMETER_HPP
 
 namespace gdx_cpp {
-namespace graphics {
 
-class VertexAttribute {
-public:
-  VertexAttribute(int usage, int numComponents, const std::string& alias);
-  
-  int usage;
-  int numComponents;
-  int offset;
-  std::string alias;
+namespace assets {
 
+namespace loaders {
+
+struct Parameter
+{
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+}
 
-#endif // GDX_CPP_GRAPHICS_VERTEXATTRIBUTE_HPP_
+}
+
+}
+
+#endif // GDX_CPP_ASSETS_LOADERS_PARAMETER_HPP

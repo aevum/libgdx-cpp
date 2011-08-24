@@ -24,7 +24,7 @@ namespace gdx_cpp {
 class FileHandle;
 
 class Files {
-
+public:
     enum FileType {
         /** Path relative to the asset directory on Android and to the application's root directory on the desktop. On the desktop,
          * if the file is not found, then the classpath is checked. This enables files to be found when using JWS or applets.
