@@ -21,12 +21,43 @@
 #ifndef GDX_CPP_ASSETS_ASSETMANAGER_HPP_
 #define GDX_CPP_ASSETS_ASSETMANAGER_HPP_
 
+#include "gdx-cpp/utils/Disposable.hpp"
+#include "gdx-cpp/utils/Synchronized.hpp"
+#include "gdx-cpp/implementation/MutexFactory.hpp"
+#include "gdx-cpp/implementation/Thread.hpp"
+
+#include "loaders/AssetLoader.hpp"
+
+#include <tr1/unordered_map>
+#include <string>
+
 namespace gdx_cpp {
+
+namespace utils {
+class Logger;
+}
+
 namespace assets {
 
-class AssetManager: public gdx_cpp::utils::Disposable {
+class AssetErrorListener;
+class AssetDescriptor;
+
+class AssetManager: public gdx_cpp::utils::Disposable
+                  , public Synchronizable
+{
 public:
-    Thread& newThread (const Runnable& r);
+    AssetManager();
+
+    enum {
+        BitmapFont,
+        Music,
+        Pixmap,
+        Sound,
+        TextureAtlas,
+        Texture
+    };
+
+    implementation::Thread::ptr newThread (const Runnable& r);
     void remove (const std::string& fileName);
     bool isLoaded (const std::string& fileName);
     bool update ();
@@ -39,15 +70,35 @@ public:
     gdx_cpp::utils::Logger& getLogger ();
     std::string& getDiagonistics ();
 
+    template <typename T>
+    std::string getAssetFileName (T asset) {
+        Synchronizable::lock_holder hnd(synchronize());
+
+         std::tr1::unordered_map <std::string, Object> typedAssets = assets.get(asset.getId());
+         
+         for (String fileName : typedAssets.keys()) {
+             Object otherAsset = typedAssets.get(fileName);
+            if (otherAsset == asset || asset.equals(otherAsset))
+                return fileName;
+        }
+        return N;
+    }
+
+    template <typename T, typename P>
+    void setLoader (int type, loaders::AssetLoader* loader) {
+        loaders[type] = loader;
+    }
+
 protected:
 
-
+    std::tr1::unordered_map<int, loaders::AssetLoader* > loaders;
+    
 private:
     void nextTask ();
     void addTask (const AssetDescriptor& assetDesc);
     bool updateTask ();
     void incrementRefCountedDependencies (const std::string& parent);
-    void handleTaskError (const Throwable& t);
+    //void handleTaskError (const Throwable& t);
 };
 
 } // namespace gdx_cpp

@@ -1,6 +1,5 @@
-
 /*
-    Copyright 2011 Aevum Software aevum @ aevumlab.com
+    Copyright 2011 <copyright holder> <email>
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -13,31 +12,35 @@
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
-    @author Victor Vicente de Carvalho victor.carvalho@aevumlab.com
-    @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#ifndef GDX_CPP_GRAPHICS_VERTEXATTRIBUTE_HPP_
-#define GDX_CPP_GRAPHICS_VERTEXATTRIBUTE_HPP_
+
+#ifndef GDX_CPP_IMPLEMENTATION_THREAD_HPP
+#define GDX_CPP_IMPLEMENTATION_THREAD_HPP
+
+#include "gdx-cpp/utils/Runnable.hpp"
+#include "gdx-cpp/utils/Aliases.hpp"
 
 #include <string>
 
 namespace gdx_cpp {
-namespace graphics {
 
-class VertexAttribute {
+namespace implementation {
+
+class Thread : public Runnable
+{
 public:
-  VertexAttribute(int usage, int numComponents, const std::string& alias);
-  
-  int usage;
-  int numComponents;
-  int offset;
-  std::string alias;
+    typedef ref_ptr_maker<Thread>::type ptr;
+    
+    virtual void run() = 0;
+    virtual void yield() = 0;
+    virtual void sleep(long millis) = 0;
 
+    virtual std::string& getThreadName() = 0;
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+}
 
-#endif // GDX_CPP_GRAPHICS_VERTEXATTRIBUTE_HPP_
+}
+
+#endif // GDX_CPP_IMPLEMENTATION_THREAD_HPP

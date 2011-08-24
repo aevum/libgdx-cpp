@@ -19,26 +19,35 @@
 */
 
 #include "BitmapFontLoader.hpp"
+#include "gdx-cpp/files/FileHandle.hpp"
+#include "gdx-cpp/assets/AssetDescriptor.hpp"
+#include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
+#include <assets/AssetManager.hpp>
 
+using namespace gdx_cpp::files;
+using namespace gdx_cpp::assets;
 using namespace gdx_cpp::assets::loaders;
 
-gdx_cpp::utils::ArrayAssetDescriptor>& BitmapFontLoader::getDependencies (const std::string& fileName,const BitmapFontParameter& parameter) {
+std::vector<AssetDescriptor> BitmapFontLoader::getDependencies (const std::string& fileName,const Parameter* parameter) {
     FileHandle handle = resolve(fileName);
-    data = new BitmapFontData(handle, parameter != null ? parameter.flip : false);
+    data = BitmapFontData::ptr(new BitmapFontData(handle, parameter != NULL ? ((BitmapFontParameter*)parameter)->flip : false));
 
-    Array<AssetDescriptor> deps = new Array<AssetDescriptor>();
-    deps.add(new AssetDescriptor(data.getImageFile(), Texture.class, null));
+    std::vector<AssetDescriptor> deps;
+    deps.push_back(AssetDescriptor(data->getImageFile(), AssetManager::Texture, NULL));
+    
     return deps;
 }
 
-void BitmapFontLoader::loadAsync (const gdx_cpp::assets::AssetManager& manager,const std::string& fileName,const BitmapFontParameter& parameter) {
-    this.manager = manager;
-    this.fileName = fileName;
+void BitmapFontLoader::loadAsync (const gdx_cpp::assets::AssetManager* manager,
+                                  const std::string& fileName,
+                                  const BitmapFontParameter& parameter) {
+    this->manager = manager;
+    this->fileName = fileName;
 }
 
 gdx_cpp::graphics::g2d::BitmapFont& BitmapFontLoader::loadSync () {
-    FileHandle handle = resolve(fileName);
-    TextureRegion region = new TextureRegion(manager.get(data.getImageFile(), Texture.class));
+    const FileHandle& handle = resolve(fileName);
+    graphics::gd2::TextureRegion region = TextureRegion::ptr(new TextureRegion(manager.get(data->getImageFile(), AssetManager::Texture)));
     return new BitmapFont(data, region, true);
 }
 

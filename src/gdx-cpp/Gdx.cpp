@@ -20,7 +20,17 @@
 
 #include "Gdx.hpp"
 
-using namespace gdx_cpp::;
+using namespace gdx_cpp;
 
-
-
+Application* Gdx::app = 0;
+Graphics* Gdx::graphics = 0;
+Audio* Gdx::audio = 0;
+Input* Gdx::input = 0;
+Files* Gdx::files = 0;
+graphics::GLCommon* Gdx::gl = 0;
+graphics::GL10* Gdx::gl10 = 0;
+graphics::GL11* Gdx::gl11 = 0;
+graphics::GL20* Gdx::gl20 = 0;
+graphics::GLU* Gdx::glu = 0;
+implementation::ThreadFactory* threadFactory = 0;
+implementation::MutexFactory* mutexFactory = 0;

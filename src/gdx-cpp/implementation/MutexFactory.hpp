@@ -1,6 +1,5 @@
-
 /*
-    Copyright 2011 Aevum Software aevum @ aevumlab.com
+    Copyright 2011 <copyright holder> <email>
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -13,16 +12,28 @@
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
-    @author Victor Vicente de Carvalho victor.carvalho@aevumlab.com
-    @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "AssetLoader<T, P>.hpp"
 
-using namespace gdx_cpp::assets::loaders;
+#ifndef GDX_CPP_IMPLEMENTATION_MUTEXFACTORY_HPP
+#define GDX_CPP_IMPLEMENTATION_MUTEXFACTORY_HPP
 
-gdx_cpp::files::FileHandle& AssetLoader<T, P>::resolve (const std::string& fileName) {
-    return resolver.resolve(fileName);
+#include "Mutex.hpp"
+
+namespace gdx_cpp {
+
+namespace implementation {
+
+class MutexFactory
+{
+public:
+    typedef Mutex::ptr mutex_ptr;
+    typedef Mutex mutex_t;
+    virtual Mutex::ptr createMutex() = 0;
+};
+
 }
 
+}
+
+#endif // GDX_CPP_IMPLEMENTATION_MUTEXFACTORY_HPP

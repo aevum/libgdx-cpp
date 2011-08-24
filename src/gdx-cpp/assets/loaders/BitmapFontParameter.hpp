@@ -21,19 +21,14 @@
 #ifndef GDX_CPP_ASSETS_LOADERS_BITMAPFONTPARAMETER_HPP_
 #define GDX_CPP_ASSETS_LOADERS_BITMAPFONTPARAMETER_HPP_
 
+#include "Parameter.hpp"
+
 namespace gdx_cpp {
 namespace assets {
 namespace loaders {
 
-class BitmapFontParameter {
-public:
-
-
-protected:
-
-
-private:
-
+struct BitmapFontParameter : public Parameter {
+    bool flip = false;
 };
 
 } // namespace gdx_cpp

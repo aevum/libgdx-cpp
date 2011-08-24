@@ -160,7 +160,7 @@ float Matrix3::det() {
 Matrix3& Matrix3::inv() {
     float _det = det();
     if (_det == 0) {
-      gdx_cpp::Gdx::app.error("Matrix3.cpp") << "Can't invert a singular matrix";
+      gdx_cpp::Gdx::app->error("Matrix3.cpp") << "Can't invert a singular matrix";
       assert(false);
     }
 

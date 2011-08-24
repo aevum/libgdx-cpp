@@ -21,12 +21,32 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_GDX2DPIXMAP_HPP_
 #define GDX_CPP_GRAPHICS_G2D_GDX2DPIXMAP_HPP_
 
+#include "gdx-cpp/utils/Disposable.hpp"
+#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/graphics/g2d/detail/gdx2d.h"
+
+#include <string>
+#include <vector>
+#include <istream>
+
 namespace gdx_cpp {
 namespace graphics {
 namespace g2d {
 
-class Gdx2DPixmap: public gdx_cpp::utils::Disposable {
+class Gdx2DPixmap: public utils::Disposable {
 public:
+    typedef ref_ptr_maker<Gdx2DPixmap>::type ptr;
+
+    static const int GDX2D_SCALE_LINEAR = 1;
+
+    Gdx2DPixmap (std::istream& in, int requestedFormat);
+    Gdx2DPixmap (int width, int height, int format);
+    Gdx2DPixmap (const Gdx2DPixmap& other);
+    Gdx2DPixmap (unsigned char* encodedData, int offset, int len, int requestedFormat);
+
+    static Gdx2DPixmap::ptr newPixmap (int width,int height,int format);
+    static Gdx2DPixmap::ptr newPixmap (std::istream& in, int requestedFormat);
+    
     void dispose ();
     void clear (int color);
     void setPixel (int x,int y,int color);
@@ -38,19 +58,32 @@ public:
     void fillCircle (int x,int y,int radius,int color);
     void drawPixmap (const Gdx2DPixmap& src,int srcX,int srcY,int dstX,int dstY,int width,int height);
     void drawPixmap (const Gdx2DPixmap& src,int srcX,int srcY,int srcWidth,int srcHeight,int dstX,int dstY,int dstWidth,int dstHeight);
-    static Gdx2DPixmap& newPixmap (const InputStream& in,int requestedFormat);
-    static Gdx2DPixmap& newPixmap (int width,int height,int format);
-    ByteBuffer& getPixels ();
+    
+    const unsigned char*const getPixels ();
     int getHeight ();
     int getWidth ();
     int getFormat ();
     int getGLInternalFormat ();
     int getGLFormat ();
     int getGLType ();
-    std::string& getFormatString ();
+    const std::string getFormatString ();
 
+    static void setBlend (int blend);
+    static void setScale (int scale);
+    
+    static struct init {
+      init()
+      {
+        Gdx2DPixmap::setBlend(GDX2D_BLEND_SRC_OVER);
+        Gdx2DPixmap::setScale(GDX2D_SCALE_LINEAR);
+      }
+      
+    } init;
+
+    virtual ~Gdx2DPixmap();
+    
 protected:
-
+  gdx2d_pixmap* pixData;
 
 private:
 

@@ -21,7 +21,16 @@
 #ifndef GDX_CPP_FILES_FILEHANDLE_HPP_
 #define GDX_CPP_FILES_FILEHANDLE_HPP_
 
+#include <iosfwd>
+#include <string>
+#include <vector>
+
+#include "gdx-cpp/Files.hpp"
+
 namespace gdx_cpp {
+
+class File;
+
 namespace files {
 
 class FileHandle {
@@ -31,11 +40,11 @@ public:
     std::string& extension ();
     std::string& nameWithoutExtension ();
     gdx_cpp::Files::FileType& type ();
-    InputStream& read ();
+    std::istream& read ();
     std::string& readString ();
     std::string& readString (const std::string& charset);
-    char* readBytes ();
-    OutputStream& write (bool append);
+    void readBytes (std::vector<char>& buffer);
+    std::ostream& write (bool append);
     FileHandle* list ();
     FileHandle* list (const std::string& suffix);
     bool isDirectory ();
@@ -43,7 +52,7 @@ public:
     FileHandle& parent ();
     void mkdirs ();
     bool exists ();
-    bool delete ();
+    bool deleteFile ();
     bool deleteDirectory ();
     void copyTo (const FileHandle& dest);
     void moveTo (const FileHandle& dest);

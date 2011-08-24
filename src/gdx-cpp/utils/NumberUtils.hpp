@@ -28,12 +28,11 @@ namespace utils {
 
 class NumberUtils {
 public:
-    uint32_t floatToIntBits (float value);
+    static uint32_t floatToIntBits (float value);
     static int floatToRawIntBits (float value);
     static float intBitsToFloat (int value);
     static long doubleToLongBits (double value);
     static double longBitsToDouble (long value);
-
 };
 
 } // namespace gdx_cpp

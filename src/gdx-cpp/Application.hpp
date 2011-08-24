@@ -19,6 +19,9 @@
 #define GDXCPP_APPLICATION_H
 
 #include <string>
+#include "gdx-cpp/utils/Runnable.hpp"
+
+class Runnable;
 
 namespace gdx_cpp {
 
@@ -27,7 +30,6 @@ class Audio;
 class Input;
 class Files;
 class Preferences;
-class Runnable;
 
 class Application
 {
@@ -67,7 +69,7 @@ public:
     
     virtual Preferences& getPreferences (std::string& name) = 0;
     
-    virtual void postRunnable (Runnable runnable) = 0;
+    virtual void postRunnable (Runnable::ptr runnable) = 0;
     
     virtual void exit () = 0;
 };

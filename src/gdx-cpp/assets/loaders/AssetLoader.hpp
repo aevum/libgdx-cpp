@@ -18,8 +18,15 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#ifndef GDX_CPP_ASSETS_LOADERS_ASSETLOADER<T, P>_HPP_
-#define GDX_CPP_ASSETS_LOADERS_ASSETLOADER<T, P>_HPP_
+#ifndef GDX_CPP_ASSETS_LOADERS_ASSETLOADER_HPP_
+#define GDX_CPP_ASSETS_LOADERS_ASSETLOADER_HPP_
+
+#include "gdx-cpp/assets/AssetDescriptor.hpp"
+#include "FileHandleResolver.hpp"
+#include "gdx-cpp/files/FileHandle.hpp"
+
+#include <vector>
+#include "Parameter.hpp"
 
 namespace gdx_cpp {
 namespace assets {
@@ -27,18 +34,22 @@ namespace loaders {
 
 class AssetLoader {
 public:
-    gdx_cpp::files::FileHandle& resolve (const std::string& fileName);
-    virtual   gdx_cpp::utils::ArrayAssetDescriptor>& getDependencies (const std::string& fileName,const P& parameter) = 0;
+    const gdx_cpp::files::FileHandle& resolve (const std::string& fileName)
+    {
+        return resolver.resolve(fileName);
+    }
+    
+    AssetLoader(const FileHandleResolver& resolver) : resolver(resolver) {
+    }
 
-protected:
-
+    virtual std::vector<AssetDescriptor> getDependencies (std::string fileName, const Parameter* parameter) = 0;
 
 private:
-
+    const FileHandleResolver& resolver;
 };
 
 } // namespace gdx_cpp
 } // namespace assets
 } // namespace loaders
 
-#endif // GDX_CPP_ASSETS_LOADERS_ASSETLOADER<T, P>_HPP_
+#endif // GDX_CPP_ASSETS_LOADERS_ASSETLOADER_HPP_
