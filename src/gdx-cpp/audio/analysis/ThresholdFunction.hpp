@@ -21,13 +21,18 @@
 #ifndef GDX_CPP_AUDIO_ANALYSIS_THRESHOLDFUNCTION_HPP_
 #define GDX_CPP_AUDIO_ANALYSIS_THRESHOLDFUNCTION_HPP_
 
+#include "gdx-cpp/utils/Aliases.hpp"
+#include <vector>
+
 namespace gdx_cpp {
 namespace audio {
 namespace analysis {
 
 class ThresholdFunction {
 public:
-    std::list<Float>& calculate (std::list<Float>& spectralFlux);
+
+    typedef ref_ptr_maker<std::vector<float> >::type ptr;
+    ThresholdFunction::ptr calculate (std::vector<float>& spectralFlux);
 
 protected:
 

@@ -42,7 +42,7 @@ VorbisDecoder::VorbisDecoder (std::string filename) {
     handle = openFile(filename);
     if (handle == NULL)
     {
-      gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::IO VorbisDecoder.cpp") << "couldn't open file '" << filename << "'";
+      gdx_cpp::Gdx::app->error("GDX-CPP::AUDIO::IO VorbisDecoder.cpp") << "couldn't open file '" << filename << "'";
     }
 }
 

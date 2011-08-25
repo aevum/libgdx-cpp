@@ -21,19 +21,23 @@
 #ifndef GDX_CPP_AUDIO_ANALYSIS_NATIVEFFT_HPP_
 #define GDX_CPP_AUDIO_ANALYSIS_NATIVEFFT_HPP_
 
+#include <vector>
+#include "gdx-cpp/utils/Disposable.hpp"
+
 namespace gdx_cpp {
 namespace audio {
 namespace analysis {
 
 class NativeFFT: public gdx_cpp::utils::Disposable {
 public:
-    void spectrum (const FloatBuffer& samples,const FloatBuffer& spectrum,int numSamples);
+    void spectrum (std::vector<float>& samples,std::vector<float>& spectrum,int numSamples);
     void dispose ();
 
 protected:
 
 
 private:
+  
 
 };
 
