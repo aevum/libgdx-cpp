@@ -27,6 +27,7 @@
 #include "glutils/MipMapGenerator.hpp"
 #include "gdx-cpp/assets/AssetLoaderParameters.hpp"
 #include "gdx-cpp/assets/loaders/TextureParameter.hpp"
+#include "gdx-cpp/graphics/glutils/PixmapTextureData.hpp"
 
 #include <list>
 
@@ -44,11 +45,7 @@ const Texture::TextureFilter Texture::TextureFilter::MipMapLinearNearest = Textu
 const Texture::TextureFilter Texture::TextureFilter::MipMapNearestLinear = Texture::TextureFilter(GL10::GL_NEAREST_MIPMAP_LINEAR);
 const Texture::TextureFilter Texture::TextureFilter::MipMapLinearLinear = Texture::TextureFilter(GL10::GL_LINEAR_MIPMAP_LINEAR);
 
-void Texture::create (const TextureData::ptr& data) {
-    this->minFilter = TextureFilter::Nearest;
-    this->magFilter = TextureFilter::Nearest;
-    this->uWrap = TextureWrap::ClampToEdge;
-    this->vWrap = TextureWrap::ClampToEdge;
+void Texture::create (TextureData::ptr data) {
     this->glHandle = 0;
     this->enforcePotImages = true;
     this->useHWMipMap = true;
@@ -70,7 +67,7 @@ void Texture::load (const TextureData::ptr& data) {
 
     this->data = data;
 
-    if (data->getType() == TextureData::Pixmap) {
+    if (data->getType() == TextureData::TextureDataType::Pixmap) {
         Pixmap::ptr pixmap = data->getPixmap();
         uploadImageData(pixmap);
         if (data->disposePixmap()) pixmap->dispose();
@@ -78,7 +75,7 @@ void Texture::load (const TextureData::ptr& data) {
         setWrap(uWrap, vWrap);
     }
 
-    if (data->getType() == TextureData::Compressed) {
+    if (data->getType() == TextureData::TextureDataType::Compressed) {
         Gdx::gl->glBindTexture(GL10::GL_TEXTURE_2D, glHandle);
         data->uploadCompressedData();
         setFilter(minFilter, magFilter);
@@ -218,6 +215,11 @@ void Texture::clearAllTextures (gdx_cpp::Application* app) {
     managedTextures.erase(app);
 }
 
+const assets::AssetType& Texture::getAssetType()
+{
+    return assets::AssetType::Texture;
+}
+
 void Texture::invalidateAllTextures (gdx_cpp::Application* app) {
     textureList& managedTexureList = managedTextures[app];
 
@@ -235,28 +237,27 @@ void Texture::invalidateAllTextures (gdx_cpp::Application* app) {
 
         textureList::iterator it = t.begin();
         textureList::iterator end = t.end();
-        
-        for (; it != end; ++it) {
 
-            std::string filename = assetManager->getAssetFileName(*it);
-            
-            if (filename.empty()) {
+        std::string filename;
+        
+        for (; it != end; ++it) {           
+            if (!assetManager->getAssetFileName((Asset&) *it, filename)) {
                 (*it)->reload();
             } else {
-                assets::loaders::TextureParameter params;
-                params.format = (*it)->getTextureData()->getFormat();
-                params.genMipMaps = (*it)->getTextureData()->useMipMaps();
-                params.texture = *it;
+                assets::loaders::TextureParameter::ptr params;
+                params->format = (*it)->getTextureData()->getFormat();
+                params->genMipMaps = (*it)->getTextureData()->useMipMaps();
+                params->texture = *it;
                 (*it)->glHandle = Texture::createGLHandle();
-                assetManager->remove(fileName);
-                assetManager->preload(fileName, assets::AssetManager::Texture, params);
+                assetManager->remove(filename);
+                assetManager->preload(filename, assets::AssetType::Texture, params);
             }
             managedTexureList.push_back(*it);
         }
     }
 }
 
-void Texture::setAssetManager (const gdx_cpp::assets::AssetManager* manager) {
+void Texture::setAssetManager (gdx_cpp::assets::AssetManager* manager) {
     Texture::assetManager = manager;
 }
 
@@ -276,46 +277,79 @@ std::string Texture::getManagedStatus () {
 }
 
 Texture::Texture(const TextureData::ptr data)
+:
+minFilter(TextureFilter::Nearest)
+,magFilter(TextureFilter::Nearest)
+,uWrap(TextureWrap::ClampToEdge)
+,vWrap(TextureWrap::ClampToEdge)
 {
     create(data);
 }
 
 Texture::Texture(int width, int height, const Pixmap::Format& format)
+:
+minFilter(TextureFilter::Nearest)
+,magFilter(TextureFilter::Nearest)
+,uWrap(TextureWrap::ClampToEdge)
+,vWrap(TextureWrap::ClampToEdge)
 {
-    create(PixmapTextureData::ptr(new PixmapTextureData(Pixmap::ptr(new Pixmap(width, height, format)), NULL, false, true)));
+    Pixmap::ptr pixmap(new Pixmap(width, height, format));
+    glutils::PixmapTextureData::ptr ptd(new glutils::PixmapTextureData(pixmap, NULL, false, true));
+    create(ptd);
 }
 
 Texture::Texture(Pixmap::ptr pixmap, const Pixmap::Format& format, bool useMipMaps)
+:
+minFilter(TextureFilter::Nearest)
+,magFilter(TextureFilter::Nearest)
+,uWrap(TextureWrap::ClampToEdge)
+,vWrap(TextureWrap::ClampToEdge)
 {
-    create(PixmapTextureData::ptr(new PixmapTextureData(pixmap, format, useMipMaps, false)));
+    create(glutils::PixmapTextureData::ptr(new glutils::PixmapTextureData(pixmap, &format, useMipMaps, false)));
 }
 
 Texture::Texture(const gdx_cpp::files::FileHandle& file, bool useMipMaps)
+:
+minFilter(TextureFilter::Nearest)
+,magFilter(TextureFilter::Nearest)
+,uWrap(TextureWrap::ClampToEdge)
+,vWrap(TextureWrap::ClampToEdge)
 {
     initialize(file, NULL, useMipMaps);
 }
 
-Texture::Texture(const gdx_cpp::files::FileHandle& file, Pixmap::Format& format, bool useMipMaps)
+Texture::Texture(const gdx_cpp::files::FileHandle& file,const Pixmap::Format& format, bool useMipMaps)
+:
+minFilter(TextureFilter::Nearest)
+,magFilter(TextureFilter::Nearest)
+,uWrap(TextureWrap::ClampToEdge)
+,vWrap(TextureWrap::ClampToEdge)
 {
-   initialize(file, format, useMipMaps);
+   initialize(file, &format, useMipMaps);
 }
 
 Texture::Texture(const gdx_cpp::files::FileHandle file)
+:
+minFilter(TextureFilter::Nearest)
+,magFilter(TextureFilter::Nearest)
+,uWrap(TextureWrap::ClampToEdge)
+,vWrap(TextureWrap::ClampToEdge)
 {
     initialize(file, NULL, false);
 }
 
 Texture::Texture(const Pixmap& pixmap, bool useMipMaps)
+:
+minFilter(TextureFilter::Nearest)
+,magFilter(TextureFilter::Nearest)
+,uWrap(TextureWrap::ClampToEdge)
+,vWrap(TextureWrap::ClampToEdge)
 {
     Gdx::files::internal(internalPath);
 }
 
-void Texture::initialize(const gdx_cpp::files::FileHandle& file, Pixmap::Format& format, bool useMipMaps)
+void Texture::initialize(const gdx_cpp::files::FileHandle& file,const Pixmap::Format* format, bool useMipMaps)
 {
-    this->minFilter = TextureFilter::Nearest;
-    this->magFilter = TextureFilter::Nearest;
-    this->uWrap = TextureWrap::ClampToEdge;
-    this->vWrap = TextureWrap::ClampToEdge;
     this->glHandle(0);
     this->enforcePotImages = true;
     this->useHWMipMap = true;

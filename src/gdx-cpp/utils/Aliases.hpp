@@ -30,6 +30,7 @@
 template <typename T>
 struct ref_ptr_maker
 {
+public:
   typedef std::tr1::shared_ptr< T > type;
 };
 

@@ -25,11 +25,16 @@
 #include "gdx-cpp/utils/Synchronized.hpp"
 #include "gdx-cpp/implementation/MutexFactory.hpp"
 #include "gdx-cpp/implementation/Thread.hpp"
-
+#include "gdx-cpp/Gdx.hpp"
+#include "Asset.hpp"
+#include "AssetLoaderParameters.hpp"
 #include "loaders/AssetLoader.hpp"
+#include "AssetDescriptor.hpp"
 
 #include <tr1/unordered_map>
 #include <string>
+#include <list>
+#include <cassert>
 
 namespace gdx_cpp {
 
@@ -39,23 +44,22 @@ class Logger;
 
 namespace assets {
 
+class AssetLoadingTask;
+class AssetType;
+class AssetErrorListener;
 class AssetErrorListener;
 class AssetDescriptor;
 
 class AssetManager: public gdx_cpp::utils::Disposable
-                  , public Synchronizable
+            , public Synchronizable
 {
+    typedef ref_ptr_maker<AssetDescriptor>::type AssetDescriptorPtr;
+    typedef std::tr1::unordered_map<std::string, Asset::ptr> AssetMap;
+    typedef std::list< AssetDescriptorPtr > PreloadQueueType;
+    typedef std::tr1::unordered_map<std::string, int> AssetTypeMap;
+
 public:
     AssetManager();
-
-    enum {
-        BitmapFont,
-        Music,
-        Pixmap,
-        Sound,
-        TextureAtlas,
-        Texture
-    };
 
     implementation::Thread::ptr newThread (const Runnable& r);
     void remove (const std::string& fileName);
@@ -71,28 +75,41 @@ public:
     std::string& getDiagonistics ();
 
     template <typename T>
-    std::string getAssetFileName (T asset) {
+    T& get (const std::string& filename, int type) {
         Synchronizable::lock_holder hnd(synchronize());
 
-         std::tr1::unordered_map <std::string, Object> typedAssets = assets.get(asset.getId());
-         
-         for (String fileName : typedAssets.keys()) {
-             Object otherAsset = typedAssets.get(fileName);
-            if (otherAsset == asset || asset.equals(otherAsset))
-                return fileName;
+        if (assets.count(type) == 0) {
+            gdx_cpp::Gdx::app->error("AssetManager.hpp") << "Asset '" + filename + "' not loaded";
         }
-        return N;
+
+        const AssetMap& assetsByType = assets[type];
+        assert(assetsByType.count(filename));
+
+        T& asset = (T&) *assetsByType[filename];
+        return asset;
     }
 
-    template <typename T, typename P>
-    void setLoader (int type, loaders::AssetLoader* loader) {
-        loaders[type] = loader;
-    }
+    bool getAssetFileName (const Asset& asset, std::string& result) ;
+    void preload (const std::string& fileName, const AssetType& type, AssetLoaderParameters::ptr parameter) ;
+    void preload (const std::string& fileName, const AssetType& type) ;
+    void setLoader (AssetType& type, loaders::AssetLoader* loader) ;
 
 protected:
 
-    std::tr1::unordered_map<int, loaders::AssetLoader* > loaders;
-    
+    std::tr1::unordered_map<AssetType, loaders::AssetLoader* > loaders;
+    std::tr1::unordered_map<int, AssetMap > assets;
+
+    AssetTypeMap assetTypes;
+    std::tr1::unordered_map<std::string, std::vector<std::string> > assetDependencies;
+    PreloadQueueType preloadQueue;
+    std::list<AssetLoadingTask*> tasks;
+
+    AssetErrorListener* errorListener;
+
+    int toLoad;
+    int loaded;
+
+    void injectDependency (const std::string& parentAssetFilename, AssetDescriptorPtr dependendAssetDesc);
 private:
     void nextTask ();
     void addTask (const AssetDescriptor& assetDesc);

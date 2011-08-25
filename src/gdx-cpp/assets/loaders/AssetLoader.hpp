@@ -21,7 +21,6 @@
 #ifndef GDX_CPP_ASSETS_LOADERS_ASSETLOADER_HPP_
 #define GDX_CPP_ASSETS_LOADERS_ASSETLOADER_HPP_
 
-#include "gdx-cpp/assets/AssetDescriptor.hpp"
 #include "FileHandleResolver.hpp"
 #include "gdx-cpp/files/FileHandle.hpp"
 
@@ -30,6 +29,9 @@
 
 namespace gdx_cpp {
 namespace assets {
+
+class AssetDescriptor;
+    
 namespace loaders {
 
 class AssetLoader {

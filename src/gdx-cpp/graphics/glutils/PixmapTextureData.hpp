@@ -21,25 +21,36 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_PIXMAPTEXTUREDATA_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_PIXMAPTEXTUREDATA_HPP_
 
+#include "gdx-cpp/graphics/TextureData.hpp"
+#include "gdx-cpp/graphics/Pixmap.hpp"
+#include "gdx-cpp/utils/Aliases.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 namespace glutils {
 
 class PixmapTextureData: public gdx_cpp::graphics::TextureData {
 public:
+    typedef ref_ptr_maker<PixmapTextureData>::type ptr;
+
+    PixmapTextureData (gdx_cpp::graphics::Pixmap::ptr pixmap, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps, bool disposePixmap) ;
+    
     bool disposePixmap ();
-    gdx_cpp::graphics::Pixmap& getPixmap ();
+    gdx_cpp::graphics::Pixmap::ptr getPixmap ();
     int getWidth ();
     int getHeight ();
     gdx_cpp::graphics::Pixmap::Format& getFormat ();
     bool useMipMaps ();
     bool isManaged ();
-    TextureDataType& getType ();
+    const TextureData::TextureDataType& getType ();
     void uploadCompressedData ();
 
 protected:
-
-
+    graphics::Pixmap::ptr pixmap;
+    graphics::Pixmap::Format& format;
+    
+    bool _useMipMaps;
+    bool _disposePixmap;
 private:
 
 };
