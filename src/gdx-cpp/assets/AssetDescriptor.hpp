@@ -23,19 +23,25 @@
 
 #include <string>
 #include "AssetLoaderParameters.hpp"
+#include "gdx-cpp/utils/Aliases.hpp"
+#include "AssetType.hpp"
 
 namespace gdx_cpp {
 namespace assets {
 
+    
 class AssetDescriptor {
 public:
-    const std::string& toString ();
-    AssetDescriptor(const std::string& filename, int type, AssetLoaderParameters& params);
+    typedef ref_ptr_maker<AssetDescriptor>::type ptr;
     
-protected:
+    
+    AssetDescriptor(const std::string& filename, AssetType& type, AssetLoaderParameters::ptr params);
+
+    const std::string& toString ();
+    
     std::string fileName;
-    unsigned int type;
-    AssetLoaderParameters params;
+    const AssetType& type;
+    AssetLoaderParameters::ptr params;
 
 private:
 

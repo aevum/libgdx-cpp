@@ -30,21 +30,29 @@ namespace graphics {
 class TextureData {
 public:
     typedef ref_ptr_maker< TextureData >::type ptr;
-    
-    enum TextureDataType {
-      Pixmap,
-      Compressed
+
+    struct TextureDataType {
+        const static TextureDataType Pixmap;
+        const static TextureDataType Compressed;
+
+        bool operator == (const TextureDataType& other) const {
+            return this == &other;
+        }
+
+        bool operator != (const TextureDataType& other) const {
+            return !(*this == other);
+        }
     };
-    
-    virtual   TextureDataType getType () = 0;
-    virtual   graphics::Pixmap::ptr getPixmap () = 0;
-    virtual   bool disposePixmap () = 0;
-    virtual   void uploadCompressedData () = 0;
-    virtual   int getWidth () = 0;
-    virtual   int getHeight () = 0;
-    virtual   Pixmap::Format& getFormat () = 0;
-    virtual   bool useMipMaps () = 0;
-    virtual   bool isManaged () = 0;
+
+    virtual const TextureDataType& getType () = 0;
+    virtual graphics::Pixmap::ptr getPixmap () = 0;
+    virtual bool disposePixmap () = 0;
+    virtual void uploadCompressedData () = 0;
+    virtual int getWidth () = 0;
+    virtual int getHeight () = 0;
+    virtual Pixmap::Format& getFormat () = 0;
+    virtual bool useMipMaps () = 0;
+    virtual bool isManaged () = 0;
 
 protected:
 

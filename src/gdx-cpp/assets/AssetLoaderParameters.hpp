@@ -21,11 +21,15 @@
 #ifndef GDX_CPP_ASSETS_ASSETLOADERPARAMETERS_HPP_
 #define GDX_CPP_ASSETS_ASSETLOADERPARAMETERS_HPP_
 
+#include "gdx-cpp/utils/Aliases.hpp"
+#include "loaders/Parameter.hpp"
+
 namespace gdx_cpp {
 namespace assets {
 
-class AssetLoaderParameters {
-
+class AssetLoaderParameters : public loaders::Parameter {
+public:   
+    typedef ref_ptr_maker<AssetLoaderParameters>::type ptr;
 };
 
 } // namespace gdx_cpp

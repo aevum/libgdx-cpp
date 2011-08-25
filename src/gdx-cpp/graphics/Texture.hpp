@@ -30,6 +30,7 @@
 #include <tr1/unordered_map>
 #include <tr1/shared_ptr.h>
 #include <list>
+#include "gdx-cpp/assets/Asset.hpp"
 
 namespace gdx_cpp {
 
@@ -41,6 +42,7 @@ namespace graphics {
 
 class Texture
     : public gdx_cpp::utils::Disposable,
+      public gdx_cpp::assets::Asset,
       public std::tr1::enable_shared_from_this<Texture> {
 public:
     typedef ref_ptr_maker<Texture>::type ptr;
@@ -91,13 +93,14 @@ public:
     Texture (const gdx_cpp::graphics::TextureData::ptr data) ;
     Texture (gdx_cpp::graphics::Pixmap::ptr pixmap, const gdx_cpp::graphics::Pixmap::Format& format, bool useMipMaps) ;
     Texture (const files::FileHandle& file, bool useMipMaps) ;
-    Texture (const files::FileHandle& file, int format, bool useMipMaps) ;
     Texture (const gdx_cpp::files::FileHandle& file, const Pixmap::Format& format, bool useMipMaps) ;
     Texture (const gdx_cpp::files::FileHandle file) ;
     Texture (const gdx_cpp::graphics::Pixmap& pixmap, bool useMipMaps) ;
-    Texture (int width, int height, int format) ;
+    Texture (int width, int height, const Pixmap::Format& format) ;
     Texture (const TextureData& data) ;
-        
+
+
+    const gdx_cpp::assets::AssetType& getAssetType();
     void load (const gdx_cpp::graphics::TextureData::ptr& data);
     void bind ();
     void bind (int unit);
@@ -117,16 +120,15 @@ public:
     void setEnforcePotImages (bool enforcePotImages);
     static void clearAllTextures (gdx_cpp::Application* app);
     static void invalidateAllTextures (gdx_cpp::Application* app);
-    static void setAssetManager (const gdx_cpp::assets::AssetManager* manager);
+    static void setAssetManager (gdx_cpp::assets::AssetManager* manager);
     std::string getManagedStatus ();
     static int createGLHandle ();
-
     
 protected:
-    void initialize(const gdx_cpp::files::FileHandle& file, Pixmap::Format& format, bool useMipMaps);
+    void initialize(const gdx_cpp::files::FileHandle& file, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps);
 
 private:
-    void create (const gdx_cpp::graphics::TextureData::ptr data);
+    void create (gdx_cpp::graphics::TextureData::ptr data);
     void uploadImageData (const Pixmap::ptr pixmap);
     void reload ();
     static void addManagedTexture (gdx_cpp::Application* app, const gdx_cpp::graphics::Texture::ptr texture);
@@ -143,9 +145,11 @@ private:
     TextureFilter magFilter;
     TextureWrap uWrap;
     TextureWrap vWrap;
-    int glHandle;
+    
     TextureData::ptr data;
 
+    int glHandle;
+    
     bool enforcePotImages;
     bool useHWMipMap;
 };
