@@ -21,6 +21,9 @@
 #ifndef GDX_CPP_AUDIO_MUSIC_HPP_
 #define GDX_CPP_AUDIO_MUSIC_HPP_
 
+#include "gdx-cpp/utils/Disposable.hpp"
+
+
 namespace gdx_cpp {
 namespace audio {
 

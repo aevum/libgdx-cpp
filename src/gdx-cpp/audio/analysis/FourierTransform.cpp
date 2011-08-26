@@ -19,31 +19,54 @@
 */
 
 #include "FourierTransform.hpp"
+#include <vector>
+#include <cmath>
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/math/MathUtils.hpp"
 
 using namespace gdx_cpp::audio::analysis;
 
-void FourierTransform::setComplex () {
-    if (real.length != r.length && imag.length != i.length) {
-        throw new IllegalArgumentException("This won't work");
+
+const int FourierTransform::NONE = 0; //FINAL
+/** A constant indicating a Hamming window should be used on sample buffers. */
+const int FourierTransform::HAMMING = 1;
+const int FourierTransform::LINAVG = 2;
+const int FourierTransform::LOGAVG = 3;
+const int FourierTransform::NOAVG = 4;
+const float FourierTransform::TWO_PI = (float)(2 * PI);
+
+
+FourierTransform::FourierTransform(int ts, float sr): timeSizeVar(ts), sampleRate((int)sr), real(), imag(),spectrum (), octaves(0), avgPerOctave(0)
+{
+    bandWidth = (2.0 / timeSizeVar) * ((float)sampleRate / 2.0);
+    noAverages();
+    allocateArrays();
+    whichWindow = NONE;
+}
+
+void FourierTransform::setComplex (std::vector<float>& r,  std::vector<float>& i) {
+    if (real.size() && imag.size() != i.size())
+    {
+        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FourierTransform.cpp") << "This won't work";
     } else {
-        System.arraycopy(r, 0, real, 0, r.length);
-        System.arraycopy(i, 0, imag, 0, i.length);
+        real.insert(real.end(), r.begin(), r.end());
+        imag.insert(imag.end(), i.begin(), i.end());
     }
 }
 
 void FourierTransform::fillSpectrum () {
-    for (int i = 0; i < spectrum.length; i++) {
-        spectrum[i] = (float)Math.sqrt(real[i] * real[i] + imag[i] * imag[i]);
+    for (int i = 0; i < spectrum.size(); i++) {
+        spectrum[i] = (float)std::sqrt(real[i] * real[i] + imag[i] * imag[i]);
     }
 
     if (whichAverage == LINAVG) {
-        int avgWidth = (int)spectrum.length / averages.length;
-        for (int i = 0; i < averages.length; i++) {
+        int avgWidth = (int)spectrum.size() / averages.size();
+        for (int i = 0; i < averages.size(); i++) {
             float avg = 0;
             int j;
             for (j = 0; j < avgWidth; j++) {
                 int offset = j + i * avgWidth;
-                if (offset < spectrum.length) {
+                if (offset < spectrum.size()) {
                     avg += spectrum[offset];
                 } else {
                     break;
@@ -58,9 +81,9 @@ void FourierTransform::fillSpectrum () {
             if (i == 0) {
                 lowFreq = 0;
             } else {
-                lowFreq = (sampleRate / 2) / (float)Math.pow(2, octaves - i);
+                lowFreq = (sampleRate / 2) / (float)std::pow(2, octaves - i);
             }
-            hiFreq = (sampleRate / 2) / (float)Math.pow(2, octaves - i - 1);
+            hiFreq = (sampleRate / 2) / (float)std::pow(2, octaves - i - 1);
             freqStep = (hiFreq - lowFreq) / avgPerOctave;
             float f = lowFreq;
             for (int j = 0; j < avgPerOctave; j++) {
@@ -73,40 +96,40 @@ void FourierTransform::fillSpectrum () {
 }
 
 void FourierTransform::noAverages () {
-    averages = new float[0];
+    averages = std::vector<float>(0);
     whichAverage = NOAVG;
 }
 
 void FourierTransform::linAverages (int numAvg) {
-    if (numAvg > spectrum.length / 2) {
-        throw new IllegalArgumentException("The number of averages for this transform can be at most " + spectrum.length / 2
-                                           + ".");
+    if (numAvg > spectrum.size() / 2)
+    {
+        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FourierTransform.cpp") << "The number of averages for this transform can be at most " << spectrum.size()/2 << ".";
     } else {
-        averages = new float[numAvg];
+        averages = std::vector<float>(numAvg);
     }
     whichAverage = LINAVG;
 }
 
 void FourierTransform::logAverages (int minBandwidth,int bandsPerOctave) {
-    float nyq = (float)sampleRate / 2f;
+    float nyq = (float)sampleRate / 2.0;
     octaves = 1;
     while ((nyq /= 2) > minBandwidth) {
         octaves++;
     }
     avgPerOctave = bandsPerOctave;
-    averages = new float[octaves * bandsPerOctave];
+    averages = std::vector<float>(octaves * bandsPerOctave);
     whichAverage = LOGAVG;
 }
 
 void FourierTransform::window (int which) {
     if (which < 0 || which > 1) {
-        throw new IllegalArgumentException("Invalid window type.");
+        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FourierTransform.cpp") << "Invalid window type.";
     } else {
         whichWindow = which;
     }
 }
 
-void FourierTransform::doWindow () {
+void FourierTransform::doWindow (std::vector<float>& samples) {
     switch (whichWindow) {
     case HAMMING:
         hamming(samples);
@@ -114,23 +137,23 @@ void FourierTransform::doWindow () {
     }
 }
 
-void FourierTransform::hamming () {
-    for (int i = 0; i < samples.length; i++) {
-        samples[i] *= (0.54f - 0.46f * Math.cos(TWO_PI * i / (samples.length - 1)));
+void FourierTransform::hamming (std::vector<float>& samples) {
+    for (int i = 0; i < samples.size(); i++) {
+        samples[i] *= (0.54f - 0.46f * std::cos(TWO_PI * i / (samples.size() - 1)));
     }
 }
 
 int FourierTransform::timeSize () {
-    return timeSize;
+    return timeSizeVar;
 }
 
 int FourierTransform::specSize () {
-    return spectrum.length;
+    return spectrum.size();
 }
 
 float FourierTransform::getBand (int i) {
     if (i < 0) i = 0;
-    if (i > spectrum.length - 1) i = spectrum.length - 1;
+    if (i > spectrum.size() - 1) i = spectrum.size() - 1;
     return spectrum[i];
 }
 
@@ -142,10 +165,10 @@ int FourierTransform::freqToIndex (float freq) {
     // special case: freq is lower than the bandwidth of spectrum[0]
     if (freq < getBandWidth() / 2) return 0;
     // special case: freq is within the bandwidth of spectrum[spectrum.length - 1]
-    if (freq > sampleRate / 2 - getBandWidth() / 2) return spectrum.length - 1;
+    if (freq > sampleRate / 2 - getBandWidth() / 2) return spectrum.size() - 1;
     // all other cases
     float fraction = freq / (float)sampleRate;
-    int i = Math.round(timeSize * fraction);
+    int i = std::floor(timeSizeVar * fraction + 0.5);
     return i;
 }
 
@@ -155,7 +178,7 @@ float FourierTransform::indexToFreq (int i) {
     // so the center frequency is a quarter of the way.
     if (i == 0) return bw * 0.25f;
     // special case: the width of the last bin is half that of the others.
-    if (i == spectrum.length - 1) {
+    if (i == spectrum.size() - 1) {
         float lastBinBeginFreq = (sampleRate / 2) - (bw / 2);
         float binHalfWidth = bw * 0.25f;
         return lastBinBeginFreq + binHalfWidth;
@@ -170,7 +193,7 @@ float FourierTransform::indexToFreq (int i) {
 float FourierTransform::getAverageCenterFrequency (int i) {
     if (whichAverage == LINAVG) {
         // an average represents a certain number of bands in the spectrum
-        int avgWidth = (int)spectrum.length / averages.length;
+        int avgWidth = (int)spectrum.size() / averages.size();
         // the "center" bin of the average, this is fudgy.
         int centerBinIndex = i * avgWidth + avgWidth / 2;
         return indexToFreq(centerBinIndex);
@@ -185,10 +208,10 @@ float FourierTransform::getAverageCenterFrequency (int i) {
         if (octave == 0) {
             lowFreq = 0;
         } else {
-            lowFreq = (sampleRate / 2) / (float)Math.pow(2, octaves - octave);
+            lowFreq = (sampleRate / 2) / (float)std::pow(2, octaves - octave);
         }
         // and the high frequency for this octave
-        hiFreq = (sampleRate / 2) / (float)Math.pow(2, octaves - octave - 1);
+        hiFreq = (sampleRate / 2) / (float)std::pow(2, octaves - octave - 1);
         // each average band within the octave will be this big
         freqStep = (hiFreq - lowFreq) / avgPerOctave;
         // figure out the low frequency of the band we care about
@@ -213,12 +236,12 @@ void FourierTransform::scaleFreq (float freq,float s) {
 }
 
 int FourierTransform::avgSize () {
-    return averages.length;
+    return averages.size();
 }
 
 float FourierTransform::getAvg (int i) {
     float ret;
-    if (averages.length > 0)
+    if (averages.size() > 0)
         ret = averages[i];
     else
         ret = 0;
@@ -236,32 +259,33 @@ float FourierTransform::calcAvg (float lowFreq,float hiFreq) {
     return avg;
 }
 
-void FourierTransform::forward (int startAt) {
-    if (buffer.length - startAt < timeSize) {
-        throw new IllegalArgumentException("FourierTransform.forward: not enough samples in the buffer between " + startAt
-                                           + " and " + buffer.length + " to perform a transform.");
+void FourierTransform::forward (std::vector<float>& buffer, int startAt) {
+    if (buffer.size() - startAt < timeSizeVar) {
+        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FourierTransform.cpp") << "FourierTransform.forward: not enough samples in the buffer between "
+        << startAt << " and " << buffer.size() << " to perform a transform.";
     }
 
     // copy the section of samples we want to analyze
-    float[] section = new float[timeSize];
-    System.arraycopy(buffer, startAt, section, 0, section.length);
+    std::vector<float> section = std::vector<float>(timeSizeVar);
+    section.reserve(buffer.size());
+    section.insert(section.end(), buffer.begin(), buffer.end());
     forward(section);
 }
 
-void FourierTransform::inverse () {
+void FourierTransform::inverse (std::vector<float>& freqReal, std::vector<float>& freqImag, std::vector<float>& buffer) {
     setComplex(freqReal, freqImag);
     inverse(buffer);
 }
 
-float* FourierTransform::getSpectrum () {
+std::vector<float> FourierTransform::getSpectrum () {
     return spectrum;
 }
 
-float* FourierTransform::getRealPart () {
+std::vector<float> FourierTransform::getRealPart () {
     return real;
 }
 
-float* FourierTransform::getImaginaryPart () {
+std::vector<float> FourierTransform::getImaginaryPart () {
     return imag;
 }
 

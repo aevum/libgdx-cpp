@@ -1,6 +1,5 @@
-
 /*
-    Copyright 2011 Aevum Software aevum @ aevumlab.com
+    Copyright 2011 <copyright holder> <email>
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -13,34 +12,30 @@
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
-    @author Victor Vicente de Carvalho victor.carvalho@aevumlab.com
-    @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#ifndef GDX_CPP_AUDIO_SOUND_HPP_
-#define GDX_CPP_AUDIO_SOUND_HPP_
 
-#include "gdx-cpp/utils/Disposable.hpp"
+#ifndef GENERICBUFFER _HPP
+#define GENERICBUFFER _HPP
 
-namespace gdx_cpp {
-namespace audio {
+class GenericBuffer <T>
+{
 
-class Sound: public gdx_cpp::utils::Disposable {
 public:
-    virtual   void play () = 0;
-    virtual   void play (float volume) = 0;
-    virtual   void stop () = 0;
-    virtual   void dispose () = 0;
+    GenericBuffer();
+    GenericBuffer(const GenericBuffer& other);
+    virtual ~GenericBuffer();
+    virtual GenericBuffer& operator=(const GenericBuffer& other);
+    virtual bool operator==(const GenericBuffer& other) const;
 
 protected:
 
-
 private:
-
+  T* buffer[];
+  int mark = -1;
+  int position = 0;
+  int limit;
+  int capacity;
 };
 
-} // namespace gdx_cpp
-} // namespace audio
-
-#endif // GDX_CPP_AUDIO_SOUND_HPP_
+#endif // GENERICBUFFER _HPP

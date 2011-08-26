@@ -19,21 +19,24 @@
 */
 
 #include "ThresholdFunction.hpp"
+#include <cmath>
+#include <vector>
 
 using namespace gdx_cpp::audio::analysis;
 
-std::list<Float>& ThresholdFunction::calculate (std::list<Float>& spectralFlux) {
-    ArrayList<Float> thresholds = new ArrayList<Float>(spectralFlux.size());
+ThresholdFunction::ptr ThresholdFunction::calculate (std::vector< float >& spectralFlux) {
+    ThresholdFunction::ptr thresholds(new std::vector< float > (spectralFlux.size()));
 
     for (int i = 0; i < spectralFlux.size(); i++) {
         float sum = 0;
-        int start = Math.max(0, i - historySize / 2);
-        int end = Math.min(spectralFlux.size() - 1, i + historySize / 2);
+        int start = std::max(0, i - historySize / 2);
+        int size = spectralFlux.size();
+        int end = std::min( size - 1, i + historySize / 2);
         for (int j = start; j <= end; j++)
-            sum += spectralFlux.get(j);
+            sum += spectralFlux.at(j);
         sum /= (end - start);
         sum *= multiplier;
-        thresholds.add(sum);
+        thresholds->push_back(sum);
     }
 
     return thresholds;
