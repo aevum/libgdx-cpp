@@ -21,10 +21,12 @@
 #ifndef GDX_CPP_GRAPHICS_GL20_HPP_
 #define GDX_CPP_GRAPHICS_GL20_HPP_
 
+#include "GLCommon.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 
-class GL20 {
+class GL20 : public GLCommon {
 public:
   static const int GL_ES_VERSION_2_0 = 1;
   static const int GL_DEPTH_BUFFER_BIT = 0x00000100;

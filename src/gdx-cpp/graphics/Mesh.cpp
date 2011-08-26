@@ -22,6 +22,10 @@
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/graphics/glutils/VertexData.hpp"
 #include "gdx-cpp/graphics/glutils/IndexData.hpp"
+#include "gdx-cpp/graphics/glutils/VertexBufferObject.hpp"
+#include "gdx-cpp/graphics/glutils/IndexBufferObject.hpp"
+#include "gdx-cpp/math/collision/BoundingBox.hpp"
+
 #include <stdexcept>
 
 using namespace gdx_cpp::graphics;
