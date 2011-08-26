@@ -21,6 +21,8 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_SPRITEBATCH_HPP_
 #define GDX_CPP_GRAPHICS_G2D_SPRITEBATCH_HPP_
 
+#include "gdx-cpp/graphics/Texture.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 namespace g2d {
@@ -62,7 +64,40 @@ protected:
 private:
     void createShader ();
     void renderMesh ();
-    float[] vertices;
+    float vertices*;
+
+    Mesh mesh;
+    Mesh buffers*;
+    
+    Texture::ptr lastTexture = null;
+    private float invTexWidth = 0;
+    private float invTexHeight = 0;
+    
+    private int idx = 0;
+    private int currBufferIdx = 0;
+    private float[] vertices;
+    
+    private final Matrix4 transformMatrix = new Matrix4();
+    private final Matrix4 projectionMatrix = new Matrix4();
+    private final Matrix4 combinedMatrix = new Matrix4();
+    
+    private boolean drawing = false;
+    
+    private boolean blendingDisabled = false;
+    private int blendSrcFunc = GL11.GL_SRC_ALPHA;
+    private int blendDstFunc = GL11.GL_ONE_MINUS_SRC_ALPHA;
+    
+    private ShaderProgram shader;
+    
+    float color = Color.WHITE.toFloatBits();
+    private Color tempColor = new Color(1, 1, 1, 1);
+    
+    /** number of render calls **/
+    public int renderCalls = 0;
+    
+    /** the maximum number of sprites rendered in one batch so far **/
+    public int maxSpritesInBatch = 0;
+    private ShaderProgram customShader = null;
 };
 
 } // namespace gdx_cpp
