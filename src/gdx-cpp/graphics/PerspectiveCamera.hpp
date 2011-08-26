@@ -21,16 +21,21 @@
 #ifndef GDX_CPP_GRAPHICS_PERSPECTIVECAMERA_HPP_
 #define GDX_CPP_GRAPHICS_PERSPECTIVECAMERA_HPP_
 
+#include "gdx-cpp/graphics/Camera.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 
-class PerspectiveCamera {
+class PerspectiveCamera : public Camera {
 public:
+    PerspectiveCamera();
+    PerspectiveCamera (float fieldOfView, float viewportWidth, float viewportHeight);
     void update ();
 
+    float fieldOfView;
 protected:
 
-
+    math::Vector3 tmp;
 private:
 
 };

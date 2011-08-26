@@ -21,11 +21,34 @@
 #ifndef GDX_CPP_GRAPHICS_MESH_HPP_
 #define GDX_CPP_GRAPHICS_MESH_HPP_
 
+#include "gdx-cpp/utils/Disposable.hpp"
+
+#include <tr1/unordered_map.h>
+#include <list>
+#include <Application.hpp>
+
+#include "VertexAttribute.hpp"
+#include "VertexAttributes.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 
+namespace glutils {
+    class VertexData;
+    class IndexData;
+}
+
 class Mesh: public gdx_cpp::utils::Disposable {
 public:
+
+    class VertexDataType {
+        enum {
+            VertexArray, VertexBufferObject, VertexBufferObjectSubData,
+        };
+    };
+
+    Mesh (bool isStatic, int maxVertices, int maxIndices, std::vector<VertexAttribute> attributes);
+    
     void setVertices ();
     void setVertices (int offset,int count);
     void getVertices ();
@@ -49,7 +72,7 @@ public:
     void dispose ();
     VertexAttribute& getVertexAttribute (int usage);
     VertexAttributes& getVertexAttributes ();
-    FloatBuffer& getVerticesBuffer ();
+    std::vector<float> getVerticesBuffer ();
     gdx_cpp::math::collision::BoundingBox& calculateBoundingBox ();
     void calculateBoundingBox (const gdx_cpp::math::collision::BoundingBox& bbox);
     ShortBuffer& getIndicesBuffer ();
@@ -58,11 +81,20 @@ public:
     static std::string& getManagedStatus ();
     void scale (float scaleX,float scaleY,float scaleZ);
 
+    static bool forceVBO;
+    
 protected:
-
-
+    static std::tr1::unordered_map<gdx_cpp::Application*, std::list<Mesh*> > meshes;
+    glutils::VertexData* vertices;
+    glutils::IndexData* indices;
+    bool autoBind = true;
+    bool isVertexArray;
+    
+    int refCount = 0;
+    
 private:
-    static void addManagedMesh (const gdx_cpp::Application& app,const Mesh& mesh);
+    static void addManagedMesh (const gdx_cpp::Application& app, Mesh* mesh);
+    
 };
 
 } // namespace gdx_cpp

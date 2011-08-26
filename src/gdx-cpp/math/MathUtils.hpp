@@ -24,7 +24,6 @@
 #include <cstdlib>
 #include <cmath>
 
-#define PI 3.1415927
 #define SIN_BITS 13
 #define SIN_MASK ~(-1 << SIN_BITS)
 #define SIN_COUNT SIN_MASK + 1
@@ -45,6 +44,7 @@ namespace math {
 
 namespace utils {
 
+const double PI = 4.0 * std::atan(1);
 static float _sin[SIN_COUNT];
 static float _cos[SIN_COUNT];
 static int BIG_ENOUGH_INT = 16 * 1024;
@@ -52,6 +52,15 @@ static double BIG_ENOUGH_FLOOR = BIG_ENOUGH_INT;
 static double CEIL = 0.9999999;
 static double BIG_ENOUGH_CEIL = gdx_cpp::utils::NumberUtils::longBitsToDouble(gdx_cpp::utils::NumberUtils::doubleToLongBits(BIG_ENOUGH_INT + 1) - 1);
 static double BIG_ENOUGH_ROUND = BIG_ENOUGH_INT + 0.5f;
+
+float toDegrees(float radians) {
+    return radians * (180.0 / PI);
+}
+
+float toRadians(float degrees) {
+    return degrees * (PI / 180.0);
+}
+
 
 float signum(float value) {
     return value < 0 ? -1 : (value == 0 ? 0 : 1);

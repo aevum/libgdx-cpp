@@ -21,12 +21,37 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_ETC1_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_ETC1_HPP_
 
+#include "gdx-cpp/utils/Disposable.hpp"
+#include <string>
+
 namespace gdx_cpp {
+namespace files {
+
+class FileHandle;
+}
+
 namespace graphics {
 namespace glutils {
 
 class ETC1 {
 public:
+    class ETC1Data : public utils::Disposable {
+        public:
+            int width;
+            int height;
+            char* compressedData;          
+            int dataOffset;
+
+            ETC1Data (int width, int height, const char* compressedData, int dataOffset) ;
+            ETC1Data (files::FileHandle& pkmFile) ;
+
+            bool hasPKMHeader ();
+            void write (files::FileHandle& file);
+            void dispose () ;
+
+            std::string toString();
+    };
+    
     bool hasPKMHeader ();
     void write (const gdx_cpp::files::FileHandle& file);
     void dispose ();

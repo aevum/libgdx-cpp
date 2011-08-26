@@ -26,11 +26,11 @@ namespace graphics {
 
 class GLU {
 public:
-    virtual   void gluLookAt (const GL10& gl,float eyeX,float eyeY,float eyeZ,float centerX,float centerY,float centerZ,float upX,float upY,float upZ) = 0;
-    virtual   void gluOrtho2D (const GL10& gl,float left,float right,float bottom,float top) = 0;
-    virtual   void gluPerspective (const GL10& gl,float fovy,float aspect,float zNear,float zFar) = 0;
-    virtual   bool gluProject (float objX,float objY,float objZ,int modelOffset,int projectOffset,int viewOffset,int winOffset) = 0;
-    virtual   bool gluUnProject (float winX,float winY,float winZ,int modelOffset,int projectOffset,int viewOffset,int objOffset) = 0;
+    virtual void gluLookAt (const GL10& gl,float eyeX,float eyeY,float eyeZ,float centerX,float centerY,float centerZ,float upX,float upY,float upZ) const = 0;
+    virtual void gluOrtho2D (const GL10& gl,float left,float right,float bottom,float top) const = 0;
+    virtual void gluPerspective (const GL10& gl,float fovy,float aspect,float zNear,float zFar) const = 0;
+    virtual   bool gluProject (float objX,float objY,float objZ,int modelOffset,int projectOffset,int viewOffset,int winOffset) const = 0;
+    virtual   bool gluUnProject (float winX,float winY,float winZ,int modelOffset,int projectOffset,int viewOffset,int objOffset) const = 0;
 
 protected:
 
