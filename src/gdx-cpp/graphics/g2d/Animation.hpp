@@ -32,9 +32,9 @@ class Animation {
 public:
 
     Animation (float frameDuration, List keyFrames);
-    Animation (float frameDuration, std::vector<TextureRegion::ptr> keyFrames);
+    Animation (float frameDuration, const std::vector<TextureRegion::ptr>& keyFrames);
     
-    TextureRegion& getKeyFrame (float stateTime,bool looping);
+    TextureRegion::ptr getKeyFrame (float stateTime,bool looping);
     
     float frameDuration;
 protected:

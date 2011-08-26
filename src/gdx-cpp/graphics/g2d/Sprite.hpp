@@ -21,12 +21,24 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_SPRITE_HPP_
 #define GDX_CPP_GRAPHICS_G2D_SPRITE_HPP_
 
+#include "gdx-cpp/graphics/Color.hpp"
+#include "gdx-cpp/graphics/Texture.hpp"
+#include "gdx-cpp/math/Rectangle.hpp"
+#include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 namespace g2d {
 
-class Sprite {
+class Sprite : public TextureRegion {
 public:
+    Sprite();
+    Sprite (graphics::Texture::ptr texture) ;
+    Sprite (Texture texture, int srcWidth, int srcHeight) ;
+    Sprite (Texture::ptr texture, int srcX, int srcY, int srcWidth, int srcHeight) ;
+    Sprite (TextureRegion region) ;
+    Sprite (TextureRegion region, int srcX, int srcY, int srcWidth, int srcHeight) ;
+    
     void set (const Sprite& sprite);
     void setBounds (float x,float y,float width,float height);
     void setSize (float width,float height);
@@ -41,8 +53,8 @@ public:
     void setScale (float scaleXY);
     void setScale (float scaleX,float scaleY);
     void scale (float amount);
-    float* getVertices ();
-    gdx_cpp::math::Rectangle& getBoundingRectangle ();
+    float* const getVertices ();
+    const gdx_cpp::math::Rectangle& getBoundingRectangle ();
     void draw (const SpriteBatch& spriteBatch);
     void draw (const SpriteBatch& spriteBatch,float alphaModulation);
     float getX ();
@@ -63,11 +75,41 @@ public:
     void flip (bool x,bool y);
     void scroll (float xAmount,float yAmount);
 
+    static const int X1 = 0;
+    static const int Y1 = 1;
+    static const int C1 = 2;
+    static const int U1 = 3;
+    static const int V1 = 4;
+    static const int X2 = 5;
+    static const int Y2 = 6;
+    static const int C2 = 7;
+    static const int U2 = 8;
+    static const int V2 = 9;
+    static const int X3 = 10;
+    static const int Y3 = 11;
+    static const int C3 = 12;
+    static const int U3 = 13;
+    static const int V3 = 14;
+    static const int X4 = 15;
+    static const int Y4 = 16;
+    static const int C4 = 17;
+    static const int U4 = 18;
+    static const int V4 = 19;
 protected:
-
-
-private:
-
+    static const int VERTEX_SIZE = 2 + 1 + 2;
+    static const int SPRITE_SIZE = 4 * VERTEX_SIZE;
+    float vertices[20];
+    
+private:   
+    graphics::Color color = new Color(1, 1, 1, 1);
+    float x, y;
+    float width, height;
+    float originX, originY;
+    float rotation;
+    float scaleX = 1, scaleY = 1;
+    bool dirty = true;
+    void initialize(Texture arg1,  arg2, int arg3, int arg4, int arg5);
+    math::Rectangle bounds;   
 };
 
 } // namespace gdx_cpp
