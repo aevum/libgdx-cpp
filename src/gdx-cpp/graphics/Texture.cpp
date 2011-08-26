@@ -49,7 +49,8 @@ void Texture::create (TextureData::ptr data) {
     this->glHandle = 0;
     this->enforcePotImages = true;
     this->useHWMipMap = true;
-
+    this->assetManager = 0;
+    
     glHandle = createGLHandle();
     load(data);
     if (data->isManaged()) addManagedTexture(gdx_cpp::Gdx::app, shared_from_this());
@@ -350,9 +351,10 @@ minFilter(TextureFilter::Nearest)
 
 void Texture::initialize(const gdx_cpp::files::FileHandle& file,const Pixmap::Format* format, bool useMipMaps)
 {
-    this->glHandle(0);
+    this->glHandle = 0;
     this->enforcePotImages = true;
     this->useHWMipMap = true;
+    this->assetManager = 0;
     
     if (file.name().endsWith(".etc1")) {
         create(new ETC1TextureData(file, useMipMaps));

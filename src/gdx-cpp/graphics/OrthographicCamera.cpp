@@ -19,8 +19,29 @@
 */
 
 #include "OrthographicCamera.hpp"
+#include <cmath>
+
+#include "gdx-cpp/math/Vector2.hpp"
+#include "gdx-cpp/math/MathUtils.hpp"
 
 using namespace gdx_cpp::graphics;
+using namespace gdx_cpp;
+
+gdx_cpp::graphics::OrthographicCamera::OrthographicCamera()
+ : Camera(0, 0, 0, 100), zoom(1)
+{
+}
+
+gdx_cpp::graphics::OrthographicCamera::OrthographicCamera(float viewportWidth, float viewportHeight)
+: Camera(viewportHeight, viewportWidth, 0, 100)
+{
+}
+
+gdx_cpp::graphics::OrthographicCamera::OrthographicCamera(float viewportWidth, float viewportHeight, float diamondAngle)
+: Camera(viewportHeight, viewportWidth, 0, 100)
+{
+    findDirectionForIsoView(diamondAngle, 0.00000001f, 20);
+}
 
 void OrthographicCamera::findDirectionForIsoView (float targetAngle,float epsilon,int maxIterations) {
     float start = targetAngle - 5;
@@ -29,7 +50,7 @@ void OrthographicCamera::findDirectionForIsoView (float targetAngle,float epsilo
 
     int iterations = 0;
     float aMid = 0;
-    while (Math.abs(targetAngle - aMid) > epsilon && iterations++ < maxIterations) {
+    while (std::abs(targetAngle - aMid) > epsilon && iterations++ < maxIterations) {
         aMid = calculateAngle(mid);
 
         if (targetAngle < aMid) {
@@ -39,44 +60,44 @@ void OrthographicCamera::findDirectionForIsoView (float targetAngle,float epsilo
         }
         mid = start + (end - start) / 2;
     }
-    position.set(calculateDirection(mid));
+    calculateDirection(mid, position);
     position.y = -position.y;
     lookAt(0, 0, 0);
     normalizeUp();
 }
 
 float OrthographicCamera::calculateAngle (float a) {
-    Vector3 camPos = calculateDirection(a);
+    math::Vector3 camPos;
+    calculateDirection(a, camPos);
     position.set(camPos.mul(30));
     lookAt(0, 0, 0);
     normalizeUp();
     update();
 
-    Vector3 orig = new Vector3(0, 0, 0);
-    Vector3 vec = new Vector3(1, 0, 0);
+    math::Vector3 orig(0, 0, 0);
+    math::Vector3 vec (1, 0, 0);
     project(orig);
     project(vec);
-    Vector2 d = new Vector2(vec.x - orig.x, -(vec.y - orig.y));
+    math::Vector2 d(vec.x - orig.x, -(vec.y - orig.y));
     return d.angle();
 }
 
-gdx_cpp::math::Vector3& OrthographicCamera::calculateDirection (float angle) {
-    Matrix4 transform = new Matrix4();
-    Vector3 dir = new Vector3(-1, 0, 1).nor();
-    float rotAngle = (float)Math.toDegrees(Math.asin(Math.tan(Math.toRadians(angle))));
-    transform.setToRotation(new Vector3(1, 0, 1).nor(), angle);
+void OrthographicCamera::calculateDirection (float angle, gdx_cpp::math::Vector3& dir) {
+    math::Matrix4 transform;
+    dir = math::Vector3(-1, 0, 1).nor();
+    float rotAngle = math::utils::toDegrees(std::asin(std::tan(math::utils::toRadians(angle))));
+    transform.setToRotation(math::Vector3(1, 0, 1).nor(), angle);
     dir.mul(transform).nor();
-    return dir;
 }
 
 void OrthographicCamera::update () {
     projection.setToOrtho(zoom * -viewportWidth / 2, zoom * viewportWidth / 2, zoom * -viewportHeight / 2, zoom
-                          * viewportHeight / 2, Math.abs(near), Math.abs(far));
+                          * viewportHeight / 2, std::abs(near), std::abs(far));
     view.setToLookAt(position, tmp.set(position).add(direction), up);
     combined.set(projection);
-    Matrix4.mul(combined.val, view.val);
+    math::Matrix4::mul(combined.val, view.val);
     invProjectionView.set(combined);
-    Matrix4.inv(invProjectionView.val);
+    math::Matrix4::inv(invProjectionView.val);
     frustum.update(invProjectionView);
 }
 

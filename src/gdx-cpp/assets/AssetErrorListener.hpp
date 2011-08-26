@@ -21,18 +21,15 @@
 #ifndef GDX_CPP_ASSETS_ASSETERRORLISTENER_HPP_
 #define GDX_CPP_ASSETS_ASSETERRORLISTENER_HPP_
 
+#include <string>
+#include "AssetType.hpp"
+
 namespace gdx_cpp {
 namespace assets {
 
 class AssetErrorListener {
 public:
-    virtual   void error (const std::string& fileName,const Class& type,const Throwable& throwable) = 0;
-
-protected:
-
-
-private:
-
+    virtual void error (const std::string& fileName,const AssetType& type, const std::exception& throwable) = 0;
 };
 
 } // namespace gdx_cpp

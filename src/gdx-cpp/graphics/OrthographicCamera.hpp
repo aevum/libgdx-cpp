@@ -21,20 +21,28 @@
 #ifndef GDX_CPP_GRAPHICS_ORTHOGRAPHICCAMERA_HPP_
 #define GDX_CPP_GRAPHICS_ORTHOGRAPHICCAMERA_HPP_
 
+#include "Camera.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 
-class OrthographicCamera {
+class OrthographicCamera : public graphics::Camera {
 public:
+    OrthographicCamera();
+    OrthographicCamera (float viewportWidth, float viewportHeight);
+    OrthographicCamera (float viewportWidth, float viewportHeight, float diamondAngle);
+    
     void findDirectionForIsoView (float targetAngle,float epsilon,int maxIterations);
     void update ();
 
+    float zoom;
+    
 protected:
-
-
+    math::Vector3 tmp;
+    
 private:
     float calculateAngle (float a);
-    gdx_cpp::math::Vector3& calculateDirection (float angle);
+    void calculateDirection (float angle, gdx_cpp::math::Vector3& dir);
 };
 
 } // namespace gdx_cpp

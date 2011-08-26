@@ -21,18 +21,12 @@
 #ifndef GDX_CPP_UTILS_GDXRUNTIMEEXCEPTION_HPP_
 #define GDX_CPP_UTILS_GDXRUNTIMEEXCEPTION_HPP_
 
+#include <exception>
+
 namespace gdx_cpp {
 namespace utils {
 
-class GdxRuntimeException {
-public:
-
-
-protected:
-
-
-private:
-
+class GdxRuntimeException : public std::exception {
 };
 
 } // namespace gdx_cpp

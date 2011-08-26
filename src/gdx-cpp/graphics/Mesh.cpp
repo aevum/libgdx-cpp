@@ -19,22 +19,46 @@
 */
 
 #include "Mesh.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/graphics/glutils/VertexData.hpp"
+#include "gdx-cpp/graphics/glutils/IndexData.hpp"
+#include <stdexcept>
 
 using namespace gdx_cpp::graphics;
 
+bool Mesh::forceVBO = false;
+
+Mesh::Mesh(bool isStatic, int maxVertices, int maxIndices, std::vector< gdx_cpp::graphics::VertexAttribute > attributes)
+: vertices(0)
+{
+    if (gdx_cpp::Gdx::gl20 != NULL || gdx_cpp::Gdx::gl11 != NULL || Mesh::forceVBO) {
+        vertices = new glutils::VertexBufferObject(isStatic, maxVertices, attributes);
+        indices = new glutils::IndexBufferObject(isStatic, maxIndices);
+        isVertexArray = false;
+    } else {
+        vertices = new glutils::VertexArray(maxVertices, attributes);
+        indices = new glutils::IndexBufferObject(maxIndices);
+        isVertexArray = true;
+    }
+    
+    addManagedMesh(gdx_cpp::Gdx::app, this);
+}
+
+
 void Mesh::setVertices () {
-    this.vertices.setVertices(vertices, 0, vertices.length);
+    this->vertices->setVertices(vertices, 0, vertices.length);
 }
 
 void Mesh::setVertices (int offset,int count) {
-    this.vertices.setVertices(vertices, offset, count);
+    this->vertices->setVertices(vertices, offset, count);
 }
 
 void Mesh::getVertices () {
     if (vertices.length < getNumVertices() * getVertexSize() / 4)
-        throw new IllegalArgumentException("not enough room in vertices array, has " + vertices.length + " floats, needs "
+        throw std::runtime_error("not enough room in vertices array, has " + vertices.length + " floats, needs "
                                            + getNumVertices() * getVertexSize() / 4);
     int pos = getVerticesBuffer().position();
+    
     getVerticesBuffer().position(0);
     getVerticesBuffer().get(vertices, 0, getNumVertices() * getVertexSize() / 4);
     getVerticesBuffer().position(pos);
@@ -224,7 +248,7 @@ ShortBuffer& Mesh::getIndicesBuffer () {
     return indices.getBuffer();
 }
 
-void Mesh::addManagedMesh (const gdx_cpp::Application& app,const Mesh& mesh) {
+void Mesh::addManagedMesh (const gdx_cpp::Application& app, gdx_cpp::graphics::Mesh* mesh) {
     List<Mesh> managedResources = meshes.get(app);
     if (managedResources == null) managedResources = new ArrayList<Mesh>();
     managedResources.add(mesh);
@@ -295,4 +319,3 @@ void Mesh::scale (float scaleX,float scaleY,float scaleZ) {
 
     setVertices(vertices);
 }
-

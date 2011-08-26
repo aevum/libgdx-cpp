@@ -21,29 +21,56 @@
 #ifndef GDX_CPP_GRAPHICS_CAMERA_HPP_
 #define GDX_CPP_GRAPHICS_CAMERA_HPP_
 
+#include "gdx-cpp/math/Vector3.hpp"
+#include "gdx-cpp/math/Matrix4.hpp"
+#include "gdx-cpp/math/collision/Ray.hpp"
+#include "gdx-cpp/math/Frustum.hpp"
+#include "gdx-cpp/graphics/GL10.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 
 class Camera {
 public:
+    Camera();
+    Camera(float viewportHeight, float viewportWidth,float near, float far);
+    
     virtual   void update () = 0;
     void apply (const GL10& gl);
     void lookAt (float x,float y,float z);
     void normalizeUp ();
     void rotate (float angle,float axisX,float axisY,float axisZ);
     void translate (float x,float y,float z);
-    void unproject (const gdx_cpp::math::Vector3& vec,float viewportX,float viewportY,float viewportWidth,float viewportHeight);
-    void unproject (const gdx_cpp::math::Vector3& vec);
-    void project (const gdx_cpp::math::Vector3& vec);
-    void project (const gdx_cpp::math::Vector3& vec,float viewportX,float viewportY,float viewportWidth,float viewportHeight);
-    gdx_cpp::math::collision::Ray& getPickRay (float x,float y,float viewportX,float viewportY,float viewportWidth,float viewportHeight);
-    gdx_cpp::math::collision::Ray& getPickRay (float x,float y);
-
+    void unproject (gdx_cpp::math::Vector3& vec, float viewportX, float viewportY, float viewportWidth, float viewportHeight);
+    void unproject (gdx_cpp::math::Vector3& vec);
+    void project (gdx_cpp::math::Vector3& vec);
+    void project (gdx_cpp::math::Vector3& vec, float viewportX, float viewportY, float viewportWidth, float viewportHeight);
+    math::collision::Ray& getPickRay (float x,float y,float viewportX,float viewportY,float viewportWidth,float viewportHeight);
+    math::collision::Ray& getPickRay (float x,float y);
+    
+    math::Vector3 position;
+    math::Vector3 direction;
+    math::Vector3 up;
+    
+    math::Matrix4 projection;
+    math::Matrix4 view;
+    math::Matrix4 combined ;
+    math::Matrix4 invProjectionView;
+    
+    float near;
+    float far;    
+    float viewportWidth;
+    
+    float viewportHeight;
+    
+    math::Frustum frustum;
 protected:
-
-
+    math::Vector3 right;
+    math::collision::Ray ray;
+    
 private:
-
+    math::Matrix4 tmpMat;
+    math::Vector3 tmpVec;
 };
 
 } // namespace gdx_cpp

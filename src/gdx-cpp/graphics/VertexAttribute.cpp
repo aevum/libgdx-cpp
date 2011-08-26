@@ -22,7 +22,7 @@
 
 using namespace gdx_cpp::graphics;
 
-VertexAttribute(int usage, int numComponents, const std::string& alias)
+VertexAttribute::VertexAttribute(int usage, int numComponents, const std::string& alias)
         : usage(usage)
         , numComponents(numComponents)
         , alias(alias)

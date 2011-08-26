@@ -30,6 +30,8 @@ public:
     bool update ();
     Object& getAsset ();
 
+
+    AssetLoadingTask (AssetManager manager, AssetDescriptor assetDesc, AssetLoader loader, ExecutorService threadPool);
 protected:
 
 
