@@ -21,19 +21,31 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_TEXTUREREGION_HPP_
 #define GDX_CPP_GRAPHICS_G2D_TEXTUREREGION_HPP_
 
+#include "gdx-cpp/graphics/Texture.hpp"
+#include <gdx-cpp/utils/MatrixBase.hpp>//TODO check
+
 namespace gdx_cpp {
 namespace graphics {
 namespace g2d {
 
 class TextureRegion {
 public:
-    void setRegion (const gdx_cpp::graphics::Texture& texture);
+    typedef ref_ptr_maker<TextureRegion>::type ptr;
+    typedef ref_ptr_maker<gdx_cpp::graphics::Texture >::type ptrTexture;
+
+    TextureRegion ();
+    TextureRegion (TextureRegion::ptrTexture _texture);
+    TextureRegion (TextureRegion::ptrTexture _texture, int x, int y, int width, int height);
+    TextureRegion (TextureRegion::ptrTexture _texture, float u, float v, float u2, float v2);
+    TextureRegion (gdx_cpp::graphics::g2d::TextureRegion& region);
+    TextureRegion (gdx_cpp::graphics::g2d::TextureRegion& region, int x, int y, int width, int height);
+    void setRegion (gdx_cpp::graphics::g2d::TextureRegion::ptrTexture texture);
     void setRegion (int x,int y,int width,int height);
     void setRegion (float u,float v,float u2,float v2);
     void setRegion (const TextureRegion& region);
-    void setRegion (const TextureRegion& region,int x,int y,int width,int height);
-    gdx_cpp::graphics::Texture& getTexture ();
-    void setTexture (const gdx_cpp::graphics::Texture& texture);
+    void setRegion (gdx_cpp::graphics::g2d::TextureRegion& region, int x, int y, int width, int height);
+    ptrTexture getTexture ();
+    void setTexture (gdx_cpp::graphics::g2d::TextureRegion::ptrTexture texture);
     float getU ();
     void setU (float u);
     float getV ();
@@ -52,11 +64,13 @@ public:
     void setRegionHeight (int height);
     void flip (bool x,bool y);
     void scroll (float xAmount,float yAmount);
-    TextureRegion* split (int tileWidth,int tileHeight);
-    static TextureRegion* split (const gdx_cpp::graphics::Texture& texture,int tileWidth,int tileHeight);
+    utils::MatrixBase< gdx_cpp::graphics::g2d::TextureRegion::ptr > split (int tileWidth, int tileHeight);
+    utils::MatrixBase< gdx_cpp::graphics::g2d::TextureRegion::ptr > split (gdx_cpp::graphics::Texture::ptr texture, int tileWidth, int tileHeight);
 
 protected:
-
+    TextureRegion::ptrTexture texture;
+    float u, v;
+    float u2, v2;
 
 private:
 
