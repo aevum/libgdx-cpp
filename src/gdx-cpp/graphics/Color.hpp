@@ -50,8 +50,8 @@ public:
     const std::string toString ();
     static float toFloatBits (int r,int g,int b,int a);
     static int toIntBits (int r,int g,int b,int a);
-    float toFloatBits ();
-    int toIntBits ();
+    float toFloatBits () const;
+    int toIntBits () const;
     static float toFloatBits (float r,float g,float b,float a);
     static int alpha (float alpha);
     static int luminanceAlpha (float luminance,float alpha);
