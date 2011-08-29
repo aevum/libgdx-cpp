@@ -21,6 +21,7 @@
 #include "VertexBufferObjectSubData.hpp"
 
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
 
 using namespace gdx_cpp::graphics::glutils;
 using namespace gdx_cpp::graphics;
@@ -58,7 +59,7 @@ utils::float_buffer& VertexBufferObjectSubData::getBuffer () {
     return buffer;
 }
 
-void VertexBufferObjectSubData::setVertices (float* vertices, int offset,int count) {
+void VertexBufferObjectSubData::setVertices (const std::vector< float >& vertices, int offset, int count) {
     isDirty = true;
     if (isDirect) {
         byteBuffer.copy(vertices , count , offset);
@@ -141,7 +142,7 @@ void VertexBufferObjectSubData::bind () {
     isBound = true;
 }
 
-void VertexBufferObjectSubData::bind (const ShaderProgram& shader) {
+void VertexBufferObjectSubData::bind (ShaderProgram& shader) {
     GL20& gl = *Gdx::gl20;
 
     gl.glBindBuffer(GL20::GL_ARRAY_BUFFER, bufferHandle);
@@ -205,7 +206,7 @@ void VertexBufferObjectSubData::unbind () {
     isBound = false;
 }
 
-void VertexBufferObjectSubData::unbind (const ShaderProgram& shader) {
+void VertexBufferObjectSubData::unbind (ShaderProgram& shader) {
     GL20& gl = *Gdx::gl20;
     int numAttributes = attributes.size();
     for (int i = 0; i < numAttributes; i++) {

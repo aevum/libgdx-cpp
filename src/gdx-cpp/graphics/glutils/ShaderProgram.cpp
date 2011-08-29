@@ -403,7 +403,7 @@ void ShaderProgram::setAttributef (std::string& name,float value1,float value2,f
 }
 
 void ShaderProgram::ensureBufferCapacity (int numBytes) {
-    if (buffer ==NULL || buffer.capacity() != numBytes) {
+    if (buffer.capacity() != numBytes) {
         buffer = gdx_cpp::utils::byte_buffer(numBytes);
         floatBuffer = buffer.convert<float>();
         intBuffer = buffer.convert<int>();

@@ -67,10 +67,10 @@ public:
     utils::MatrixBase< gdx_cpp::graphics::g2d::TextureRegion::ptr > split (int tileWidth, int tileHeight);
     utils::MatrixBase< gdx_cpp::graphics::g2d::TextureRegion::ptr > split (gdx_cpp::graphics::Texture::ptr texture, int tileWidth, int tileHeight);
 
-protected:
-    TextureRegion::ptrTexture texture;
     float u, v;
     float u2, v2;
+protected:
+    TextureRegion::ptrTexture texture;
 
 private:
 

@@ -52,12 +52,13 @@ namespace glutils {
 class Mesh: public gdx_cpp::utils::Disposable {
 public:
 
-    class VertexDataType {
-        enum {
-            VertexArray, VertexBufferObject, VertexBufferObjectSubData,
-        };
+    struct VertexDataType {
+        static const int VertexArray = 0;
+        static const int VertexBufferObject = 1;
+        static const int VertexBufferObjectSubData = 2;
     };
 
+    Mesh (int type, bool isStatic, int maxVertices, int maxIndices, const std::vector< gdx_cpp::graphics::VertexAttribute >& attributes) ;
     Mesh (bool isStatic, int maxVertices, int maxIndices, std::vector<VertexAttribute> attributes);
     
     void setVertices (const std::vector< float >& vertices);
@@ -74,12 +75,12 @@ public:
     void setAutoBind (bool autoBind);
     void bind ();
     void unbind ();
-    void bind (const glutils::ShaderProgram& shader);
-    void unbind (const gdx_cpp::graphics::glutils::ShaderProgram& shader);
+    void bind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
+    void unbind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
     void render (int primitiveType);
     void render (int primitiveType,int offset,int count);
-    void render (const gdx_cpp::graphics::glutils::ShaderProgram& shader,int primitiveType);
-    void render (const gdx_cpp::graphics::glutils::ShaderProgram& shader,int primitiveType,int offset,int count);
+    void render (gdx_cpp::graphics::glutils::ShaderProgram& shader, int primitiveType);
+    void render (gdx_cpp::graphics::glutils::ShaderProgram& shader, int primitiveType, int offset, int count);
     void dispose ();
     VertexAttribute& getVertexAttribute (int usage);
     VertexAttributes& getVertexAttributes ();

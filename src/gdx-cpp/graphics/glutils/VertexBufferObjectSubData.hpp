@@ -39,13 +39,13 @@ public:
     gdx_cpp::graphics::VertexAttributes& getAttributes ();
     int getNumVertices ();
     int getNumMaxVertices ();
-    void setVertices(int offset,int count);
+    void setVertices(const std::vector<float>& vertices, int offset,int count);
 
-    utils::float_buffer getBuffer();
+    utils::float_buffer& getBuffer();
     void bind ();
-    void bind (const ShaderProgram& shader);
+    void bind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
     void unbind ();
-    void unbind (const ShaderProgram& shader);
+    void unbind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
     void invalidate ();
     void dispose ();
     int getBufferHandle ();

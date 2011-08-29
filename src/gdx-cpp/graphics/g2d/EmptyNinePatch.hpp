@@ -25,6 +25,9 @@ namespace gdx_cpp {
 namespace graphics {
 namespace g2d {
 
+class SpriteBatch;
+class TextureRegion;
+
 class EmptyNinePatch {
 public:
     EmptyNinePatch& getInstance ();

@@ -42,9 +42,9 @@ public:
     utils::float_buffer& getBuffer ();
     void setVertices (const std::vector< float >& vertices, int offset, int count);
     void bind ();
-    void bind (const ShaderProgram& shader);
+    void bind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
     void unbind ();
-    void unbind (const ShaderProgram& shader);
+    void unbind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
     void invalidate ();
     void dispose ();
 

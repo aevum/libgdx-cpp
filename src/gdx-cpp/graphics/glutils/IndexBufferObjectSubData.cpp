@@ -77,7 +77,7 @@ void IndexBufferObjectSubData::setIndices (const std::vector<short>& indices, in
     }
 }
 
-gdx_cpp::utils::short_buffer IndexBufferObjectSubData::getBuffer () {
+gdx_cpp::utils::short_buffer& IndexBufferObjectSubData::getBuffer () {
     isDirty = true;
     return buffer;
 }

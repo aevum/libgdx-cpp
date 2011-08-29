@@ -97,10 +97,11 @@ public:
     static const int C4 = 17;
     static const int U4 = 18;
     static const int V4 = 19;
-    
-protected:
+
     static const int VERTEX_SIZE = 2 + 1 + 2;
     static const int SPRITE_SIZE = 4 * VERTEX_SIZE;
+
+protected:
     float vertices[20];
     
 private:   

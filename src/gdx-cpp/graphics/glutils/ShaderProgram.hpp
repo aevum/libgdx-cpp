@@ -30,17 +30,16 @@
 
 namespace gdx_cpp {
 namespace math
-  {
-  class Matrix4;
-  class Matrix3;
-  }
-  
+{
+class Matrix4;
+class Matrix3;
+}
+
 namespace graphics {
 namespace glutils {
 
 class ShaderProgram: public gdx_cpp::utils::Disposable {
 public:
-    class FloatBuffer;
     /** default name for position attributes **/
     const static std::string POSITION_ATTRIBUTE;
     /** default name for normal attribtues **/
@@ -98,7 +97,7 @@ protected:
     static int intbuf;
     int params;
     int type;
-    
+
 
 
 private:

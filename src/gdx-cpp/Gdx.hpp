@@ -33,6 +33,7 @@
 #include "graphics/GLU.hpp"
 #include "implementation/MutexFactory.hpp"
 #include "implementation/ThreadFactory.hpp"
+#include "implementation/System.hpp"
 
 namespace gdx_cpp {
 
@@ -51,6 +52,7 @@ public:
 
     static implementation::ThreadFactory* threadFactory;
     static implementation::MutexFactory* mutexFactory;
+    static implementation::System* system;
 };
 
 } // namespace gdx_cpp

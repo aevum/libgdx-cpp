@@ -143,27 +143,27 @@ void Texture::draw (const Pixmap& pixmap,int x,int y) {
                            pixmap.getGLType(), pixmap.getPixels());
 }
 
-int Texture::getWidth () {
+int Texture::getWidth () const {
     return data->getWidth();
 }
 
-int Texture::getHeight () {
+int Texture::getHeight () const {
     return data->getHeight();
 }
 
-Texture::TextureFilter& Texture::getMinFilter () {
+Texture::TextureFilter& Texture::getMinFilter () const {
     return minFilter;
 }
 
-Texture::TextureFilter& Texture::getMagFilter () {
+Texture::TextureFilter& Texture::getMagFilter () const {
     return magFilter;
 }
 
-Texture::TextureWrap& Texture::getUWrap () {
+Texture::TextureWrap& Texture::getUWrap () const {
     return uWrap;
 }
 
-Texture::TextureWrap& Texture::getVWrap () {
+Texture::TextureWrap& Texture::getVWrap () const {
     return vWrap;
 }
 

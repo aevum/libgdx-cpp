@@ -50,7 +50,7 @@ public:
     virtual void uploadCompressedData () = 0;
     virtual int getWidth () = 0;
     virtual int getHeight () = 0;
-    virtual Pixmap::Format* getFormat () = 0;
+    virtual const Pixmap::Format* getFormat () = 0;
     virtual bool useMipMaps () = 0;
     virtual bool isManaged () = 0;
 

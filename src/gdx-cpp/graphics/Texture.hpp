@@ -105,12 +105,12 @@ public:
     void bind ();
     void bind (int unit);
     void draw (const Pixmap& pixmap,int x,int y);
-    int getWidth ();
-    int getHeight ();
-    TextureFilter& getMinFilter ();
-    TextureFilter& getMagFilter ();
-    TextureWrap& getUWrap ();
-    TextureWrap& getVWrap ();
+    int getWidth () const;
+    int getHeight () const;
+    TextureFilter& getMinFilter () const;
+    TextureFilter& getMagFilter () const;
+    TextureWrap& getUWrap () const;
+    TextureWrap& getVWrap () const;
     TextureData::ptr getTextureData ();
     bool isManaged ();
     int getTextureObjectHandle ();

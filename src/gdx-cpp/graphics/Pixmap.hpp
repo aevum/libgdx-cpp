@@ -58,7 +58,7 @@ public:
         const static Format RGBA8888;
         
         static int toGdx2DPixmapFormat (const Format& format);
-        static Format& fromGdx2DPixmapFormat (int format);
+        static const gdx_cpp::graphics::Pixmap::Format& fromGdx2DPixmapFormat (int format);
 
         inline bool operator == (const Format& other) const {
             return this == &other;
@@ -66,6 +66,14 @@ public:
 
         inline bool operator !=(const Format& other) const {
             return !(*this == other);
+        }
+
+        const std::string& toString() const {
+            return name;
+        }
+    private:
+        std::string name;
+        Format(const std::string& name) : name(name) {
         }
     };
 

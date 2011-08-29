@@ -26,17 +26,18 @@
 #include "gdx-cpp/files/FileHandle.hpp"
 
 #include <cassert>
+#include <stdexcept>
 
 using namespace gdx_cpp::graphics;
 
 Pixmap::Blending Pixmap::blending = SourceOver;
 
-const Pixmap::Format Pixmap::Format::Alpha;
-const Pixmap::Format Pixmap::Format::LuminanceAlpha;
-const Pixmap::Format Pixmap::Format::RGB565;
-const Pixmap::Format Pixmap::Format::RGBA4444;
-const Pixmap::Format Pixmap::Format::RGB888;
-const Pixmap::Format Pixmap::Format::RGBA8888;
+const Pixmap::Format Pixmap::Format::Alpha = Pixmap::Format("Alpha");
+const Pixmap::Format Pixmap::Format::LuminanceAlpha = Pixmap::Format("LuminanceAlpha");
+const Pixmap::Format Pixmap::Format::RGB565 = Pixmap::Format("RGB565");
+const Pixmap::Format Pixmap::Format::RGBA4444 = Pixmap::Format("RGBA4444");
+const Pixmap::Format Pixmap::Format::RGB888 = Pixmap::Format("RGB888");
+const Pixmap::Format Pixmap::Format::RGBA8888 = Pixmap::Format("RGBA888");
 
 void Pixmap::setBlending (const Blending& blending) {
     Pixmap::blending = blending;
@@ -95,7 +96,7 @@ int Pixmap::getWidth () const {
     return pixmap->getWidth();
 }
 
-int Pixmap::getHeight () {
+int Pixmap::getHeight () const {
     return pixmap->getHeight();
 }
 
@@ -139,9 +140,12 @@ int Pixmap::Format::toGdx2DPixmapFormat(const gdx_cpp::graphics::Pixmap::Format&
     if (format == Pixmap::Format::RGB888) return GDX2D_FORMAT_RGB888;
     if (format == Pixmap::Format::RGBA8888) return GDX2D_FORMAT_RGBA8888;
 
-    gdx_cpp::Gdx::app.error("Pixmap.cpp") << "Unknown Format: " << format;
+    std::stringstream ss;
+    ss << "Unknown Format: " << format.toString();
+    throw std::runtime_error(ss.str());
 }
-Pixmap::Format& Pixmap::Format::fromGdx2DPixmapFormat(int format) {
+
+const Pixmap::Format& Pixmap::Format::fromGdx2DPixmapFormat(int format) {
     if (format == GDX2D_FORMAT_ALPHA) return Pixmap::Format::Alpha;
     if (format == GDX2D_FORMAT_LUMINANCE_ALPHA) return Pixmap::Format::LuminanceAlpha;
     if (format == GDX2D_FORMAT_RGB565) return Pixmap::Format::RGB565;
@@ -149,10 +153,12 @@ Pixmap::Format& Pixmap::Format::fromGdx2DPixmapFormat(int format) {
     if (format == GDX2D_FORMAT_RGB888) return Pixmap::Format::RGB888;
     if (format == GDX2D_FORMAT_RGBA8888) return Pixmap::Format::RGBA8888;
 
-    gdx_cpp::Gdx::app.error("Pixmap.cpp") << "Unknown Gdx2DPixmap Format: " << format;
+    std::stringstream ss;
+    ss << "Unknown Gdx2DPixmap Format: " << format;
+    throw std::runtime_error(ss.str());
 }
 
-Pixmap::Pixmap(int width, int height, gdx_cpp::graphics::Pixmap::Format::_Format format)
+Pixmap::Pixmap(int width, int height, const gdx_cpp::graphics::Pixmap::Format& format)
         : color(0)
 {
     pixmap = g2d::Gdx2DPixmap::newPixmap(width, height, Format::toGdx2DPixmapFormat(format));

@@ -138,7 +138,7 @@ void VertexBufferObject::bind () {
     isBound = true;
 }
 
-void VertexBufferObject::bind (const ShaderProgram& shader) {
+void VertexBufferObject::bind (ShaderProgram& shader) {
     GL20& gl = *Gdx::gl20;
 
     gl.glBindBuffer(GL20::GL_ARRAY_BUFFER, bufferHandle);
@@ -196,7 +196,7 @@ void VertexBufferObject::unbind () {
     isBound = false;
 }
 
-void VertexBufferObject::unbind (const ShaderProgram& shader) {
+void VertexBufferObject::unbind (ShaderProgram& shader) {
     GL20& gl = *Gdx::gl20;
     int numAttributes = attributes.size();
     for (int i = 0; i < numAttributes; i++) {

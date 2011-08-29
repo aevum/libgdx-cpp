@@ -19,16 +19,22 @@
 */
 
 #include "SpriteBatch.hpp"
+
+#include <string.h>
+#include <stdexcept>
+
 #include "gdx-cpp/graphics/Mesh.hpp"
 #include "gdx-cpp/graphics/VertexAttribute.hpp"
 #include "gdx-cpp/graphics/GL20.hpp"
 #include "gdx-cpp/Gdx.hpp"
 #include "Sprite.hpp"
 #include "gdx-cpp/utils/NumberUtils.hpp"
-#include <stdexcept>
 #include "gdx-cpp/math/MathUtils.hpp"
-#include <string.h>
+#include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
+#include "gdx-cpp/graphics/Mesh.hpp"
+#include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
 
+using namespace gdx_cpp::graphics::glutils;
 using namespace gdx_cpp::graphics::g2d;
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
@@ -50,31 +56,35 @@ gdx_cpp::graphics::g2d::SpriteBatch::SpriteBatch(int size) :
   , shader(0)
   , customShader(0)
 {
+
+    std::vector<VertexAttribute> attributes;
+    attributes.push_back(VertexAttribute(VertexAttributes::Usage::Position, 2,  ShaderProgram::POSITION_ATTRIBUTE));
+    attributes.push_back(VertexAttribute(VertexAttributes::Usage::ColorPacked, 4,  ShaderProgram::COLOR_ATTRIBUTE));
+    attributes.push_back(VertexAttribute(VertexAttributes::Usage::TextureCoordinates, 2,  ShaderProgram::TEXCOORD_ATTRIBUTE + "0"));
+
     this->buffers.push_back(new Mesh(Mesh::VertexDataType::VertexArray,
                                      false,
                                      size * 4,
                                      size * 6,
-                                     new VertexAttribute(Usage.Position, 2,
-                                     ShaderProgram.POSITION_ATTRIBUTE), new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
-                               new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
+                                     attributes));
     
     projectionMatrix.setToOrtho2D(0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getWidth());
     
     vertices.reserve(size * Sprite::SPRITE_SIZE);
     
     int len = size * 6;
-    short indices[len];
+    std::vector<short> indices(len);
     
     short j = 0;
     for (int i = 0; i < len; i += 6, j += 4) {
-        indices[i + 0] = (short)(j + 0);
-        indices[i + 1] = (short)(j + 1);
-        indices[i + 2] = (short)(j + 2);
-        indices[i + 3] = (short)(j + 2);
-        indices[i + 4] = (short)(j + 3);
-        indices[i + 5] = (short)(j + 0);
+        indices[i + 0] = (j + 0);
+        indices[i + 1] = (j + 1);
+        indices[i + 2] = (j + 2);
+        indices[i + 3] = (j + 2);
+        indices[i + 4] = (j + 3);
+        indices[i + 5] = (j + 0);
     }
-    buffers[0].setIndices(indices);
+    buffers[0]->setIndices(indices);
     mesh = buffers[0];
     
     if (Gdx::graphics->isGL20Available()) createShader();
@@ -82,29 +92,29 @@ gdx_cpp::graphics::g2d::SpriteBatch::SpriteBatch(int size) :
 
 
 void SpriteBatch::createShader () {
-    std::string vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
-                          + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
-                          + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
-                          + "uniform mat4 u_projectionViewMatrix;\n" //
-                          + "varying vec4 v_color;\n" //
-                          + "varying vec2 v_texCoords;\n" //
-                          + "\n" //
-                          + "void main()\n" //
-                          + "{\n" //
-                          + "   v_color = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
-                          + "   v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
-                          + "   gl_Position =  u_projectionViewMatrix * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
-                          + "}\n";
+    std::string vertexShader = "attribute vec4 " + ShaderProgram::POSITION_ATTRIBUTE + ";\n" 
+                          "attribute vec4 " + ShaderProgram::COLOR_ATTRIBUTE + ";\n" //
+                          "attribute vec2 " + ShaderProgram::TEXCOORD_ATTRIBUTE + "0;\n" //
+                          "uniform mat4 u_projectionViewMatrix;\n" //
+                          "varying vec4 v_color;\n" //
+                          "varying vec2 v_texCoords;\n" //
+                          "\n" //
+                          "void main()\n" //
+                          "{\n" //
+                          "   v_color = " + ShaderProgram::COLOR_ATTRIBUTE + ";\n" //
+                          "   v_texCoords = " + ShaderProgram::TEXCOORD_ATTRIBUTE + "0;\n" //
+                          "   gl_Position =  u_projectionViewMatrix * " + ShaderProgram::POSITION_ATTRIBUTE + ";\n" //
+                          "}\n";
     std::string fragmentShader = "#ifdef GL_ES\n" //
-                            + "precision mediump float;\n" //
-                            + "#endif\n" //
-                            + "varying vec4 v_color;\n" //
-                            + "varying vec2 v_texCoords;\n" //
-                            + "uniform sampler2D u_texture;\n" //
-                            + "void main()\n"//
-                            + "{\n" //
-                            + "  gl_FragColor = v_color * texture2D(u_texture, v_texCoords);\n" //
-                            + "}";
+                            "precision mediump float;\n" //
+                            "#endif\n" //
+                            "varying vec4 v_color;\n" //
+                            "varying vec2 v_texCoords;\n" //
+                            "uniform sampler2D u_texture;\n" //
+                            "void main()\n"//
+                            "{\n" //
+                            "  gl_FragColor = v_color * texture2D(u_texture, v_texCoords);\n" //
+                            "}";
 
     shader = new ShaderProgram(vertexShader, fragmentShader);
     if (shader.isCompiled() == false) throw new IllegalArgumentException("couldn't compile shader: " + shader.getLog());
@@ -188,10 +198,10 @@ void SpriteBatch::setColor (float color) {
 gdx_cpp::graphics::Color& SpriteBatch::getColor () {
     int intBits = utils::NumberUtils::floatToRawIntBits(color);
     Color color = this.tempColor;
-    color.r = (intBits & 0xff) / 255f;
-    color.g = (((unsigned int)intBits >> 8) & 0xff) / 255f;
-    color.b = (((unsigned int)intBits >> 16) & 0xff) / 255f;
-    color.a = (((unsigned int)intBits >> 24) & 0xff) / 255f;
+    color.r = (intBits & 0xff) / 255.0f;
+    color.g = (((unsigned int)intBits >> 8) & 0xff) / 255.0f;
+    color.b = (((unsigned int)intBits >> 16) & 0xff) / 255.0f;
+    color.a = (((unsigned int)intBits >> 24) & 0xff) / 255.0f;
     return color;
 }
 
@@ -505,8 +515,8 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
     if (texture != lastTexture) {
         renderMesh();
         lastTexture = texture;
-        invTexWidth = 1f / texture.getWidth();
-        invTexHeight = 1f / texture.getHeight();
+        invTexWidth = 1.0f / texture.getWidth();
+        invTexHeight = 1.0f / texture.getHeight();
     } else if (idx == vertices.size()) //
         renderMesh();
 
@@ -570,8 +580,8 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float width,
     if (texture != lastTexture) {
         renderMesh();
         lastTexture = texture;
-        invTexWidth = 1f / texture->getWidth();
-        invTexHeight = 1f / texture->getHeight();
+        invTexWidth = 1.0f / texture->getWidth();
+        invTexHeight = 1.0f / texture->getHeight();
     } else if (idx == vertices.size()) //
         renderMesh();
 
@@ -615,8 +625,8 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float origin
     if (texture != lastTexture) {
         renderMesh();
         lastTexture = texture;
-        invTexWidth = 1f / texture->getWidth();
-        invTexHeight = 1f / texture->etHeight();
+        invTexWidth = 1.0f / texture->getWidth();
+        invTexHeight = 1.0f / texture->getHeight();
     } else if (idx == vertices.size()) //
         renderMesh();
 
@@ -732,8 +742,8 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float origin
     if (texture != lastTexture) {
         renderMesh();
         lastTexture = texture;
-        invTexWidth = 1f / texture->getWidth();
-        invTexHeight = 1f / texture->getHeight();
+        invTexWidth = 1.0f / texture->getWidth();
+        invTexHeight = 1.0f / texture->getHeight();
     } else if (idx == vertices.size()) //
         renderMesh();
 
@@ -1024,4 +1034,5 @@ SpriteBatch::~SpriteBatch()
         delete buffers[i];
     }
 }
+
 

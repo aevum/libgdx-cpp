@@ -35,7 +35,7 @@ public:
     int getNumIndices ();
     int getNumMaxIndices ();
     void setIndices (const std::vector< short int >& indices, int offset, int count);
-    utils::short_buffer getBuffer ();
+    utils::short_buffer& getBuffer ();
     void bind ();
     void unbind ();
     void invalidate ();

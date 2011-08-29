@@ -19,7 +19,7 @@
 */
 
 #include "PixmapTextureData.hpp"
-#include <Gdx.hpp>
+#include "gdx-cpp/Gdx.hpp"
 
 using namespace gdx_cpp::graphics::glutils;
 
@@ -39,8 +39,8 @@ int PixmapTextureData::getHeight () {
     return pixmap->getHeight();
 }
 
-gdx_cpp::graphics::Pixmap::Format& PixmapTextureData::getFormat () {
-    return format;
+const gdx_cpp::graphics::Pixmap::Format* PixmapTextureData::getFormat () {
+    return &format;
 }
 
 bool PixmapTextureData::useMipMaps () {

@@ -35,6 +35,9 @@ namespace glutils {
 
 namespace g2d {
 
+class TextureRegion;
+
+
 class SpriteBatch: public gdx_cpp::utils::Disposable {
 public:
     SpriteBatch(int size = 1000);
@@ -69,8 +72,8 @@ public:
     void setShader (const gdx_cpp::graphics::glutils::ShaderProgram& shader);
     bool isBlendingEnabled ();
 
-    int renderCalls = 0;
-    int maxSpritesInBatch = 0;
+    int renderCalls;
+    int maxSpritesInBatch;
 
     virtual ~SpriteBatch();
     
@@ -85,24 +88,24 @@ private:
     std::vector<Mesh*> buffers;
     
     Texture::ptr lastTexture;
-    float invTexWidth = 0;
-    float invTexHeight = 0;
+    float invTexWidth;
+    float invTexHeight;
     
-    int idx = 0;
-    int currBufferIdx = 0;
+    int idx;
+    int currBufferIdx;
     
     math::Matrix4 transformMatrix;
     math::Matrix4 projectionMatrix;
     math::Matrix4 combinedMatrix;
     
-    bool drawing = false;
+    bool drawing;
     
-    bool blendingDisabled = false;
-    int blendSrcFunc = GL11.GL_SRC_ALPHA;
-    int blendDstFunc = GL11.GL_ONE_MINUS_SRC_ALPHA;
+    bool blendingDisabled ;
+    int blendSrcFunc;
+    int blendDstFunc;
     
     glutils::ShaderProgram *shader;
-    Color tempColor = new Color(1, 1, 1, 1);
+    Color tempColor;
     
     glutils::ShaderProgram* customShader;
 };

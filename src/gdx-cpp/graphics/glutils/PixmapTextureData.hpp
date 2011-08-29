@@ -33,13 +33,15 @@ class PixmapTextureData: public gdx_cpp::graphics::TextureData {
 public:
     typedef ref_ptr_maker<PixmapTextureData>::type ptr;
 
-    PixmapTextureData (gdx_cpp::graphics::Pixmap::ptr pixmap, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps, bool disposePixmap) ;
+    PixmapTextureData (gdx_cpp::graphics::Pixmap::ptr pixmap,
+                       gdx_cpp::graphics::Pixmap::Format* format,
+                       bool useMipMaps, bool disposePixmap) ;
     
     bool disposePixmap ();
     gdx_cpp::graphics::Pixmap::ptr getPixmap ();
     int getWidth ();
     int getHeight ();
-    gdx_cpp::graphics::Pixmap::Format& getFormat ();
+    const gdx_cpp::graphics::Pixmap::Format* getFormat ();
     bool useMipMaps ();
     bool isManaged ();
     const TextureData::TextureDataType& getType ();
@@ -47,7 +49,7 @@ public:
 
 protected:
     graphics::Pixmap::ptr pixmap;
-    graphics::Pixmap::Format& format;
+    const graphics::Pixmap::Format& format;
     
     bool _useMipMaps;
     bool _disposePixmap;

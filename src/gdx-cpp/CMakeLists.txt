@@ -119,7 +119,7 @@ graphics/Texture.hpp
 graphics/Pixmap.hpp
 graphics/VertexAttribute.hpp
 graphics/GL11.hpp
-graphics/TextureDict.hpp
+# graphics/TextureDict.hpp
 graphics/Mesh.hpp
 graphics/Camera.hpp
 graphics/PerspectiveCamera.hpp
@@ -142,7 +142,7 @@ graphics/glutils/VertexData.hpp
 graphics/glutils/PixmapTextureData.hpp
 graphics/GLU.hpp
 graphics/VertexAttributes.hpp
-graphics/TextureRef.hpp
+# graphics/TextureRef.hpp
 graphics/GL10.hpp
 graphics/TextureData.hpp
 graphics/GLCommon.hpp
@@ -174,17 +174,17 @@ graphics/g3d/keyframed/Keyframe.hpp
 graphics/g3d/keyframed/KeyframeAnimator.hpp
 graphics/g3d/keyframed/KeyframedModel.hpp
 graphics/g3d/keyframed/KeyframeAnimation.hpp
-graphics/g2d/BitmapFontCache.hpp
+# graphics/g2d/BitmapFontCache.hpp
 graphics/g2d/Animation.hpp
-graphics/g2d/BitmapFont.hpp
+# graphics/g2d/BitmapFont.hpp
 graphics/g2d/TextureRegion.hpp
 graphics/g2d/SpriteCache.hpp
-graphics/g2d/ParticleEffect.hpp
+# graphics/g2d/ParticleEffect.hpp
 graphics/g2d/TextureAtlas.hpp
 graphics/g2d/NinePatch.hpp
-graphics/g2d/ParticleEmitter.hpp
+# graphics/g2d/ParticleEmitter.hpp
 graphics/g2d/Sprite.hpp
-graphics/g2d/EmptyNinePatch.hpp
+# graphics/g2d/EmptyNinePatch.hpp
 graphics/g2d/SpriteBatch.hpp
 graphics/g2d/tiled/TiledLayer.hpp
 graphics/g2d/tiled/SimpleTileAtlas.hpp
@@ -287,7 +287,7 @@ InputProcessor.hpp
 Preferences.hpp
 InputMultiplexer.hpp
 InputAdapter.hpp)
->>>>>>> b49924c3a36acabf758a1c369d9e5f28f9c00a8d
+
 
 set(GDX_SRC
 Version.cpp
@@ -425,7 +425,7 @@ graphics/glutils/VertexBufferObjectSubData.cpp
 # graphics/glutils/ImmediateModeRenderer20.cpp
 # graphics/glutils/ETC1TextureData.cpp
 graphics/glutils/VertexArray.cpp
-graphics/TextureDict.cpp
+# graphics/TextureDict.cpp
 graphics/FPSLogger.cpp
 graphics/Pixmap.cpp
 # graphics/g3d/decals/DefaultGroupStrategy.cpp
@@ -454,10 +454,10 @@ graphics/Pixmap.cpp
 # graphics/g3d/keyframed/KeyframedModel.cpp
 # graphics/g3d/keyframed/KeyframeAnimator.cpp
 # graphics/g3d/Animator.cpp
-graphics/g2d/BitmapFont.cpp
-graphics/g2d/BitmapFontCache.cpp
-graphics/g2d/EmptyNinePatch.cpp
-graphics/g2d/ParticleEmitter.cpp
+# graphics/g2d/BitmapFont.cpp
+# # graphics/g2d/BitmapFontCache.cpp
+# graphics/g2d/EmptyNinePatch.cpp
+# graphics/g2d/ParticleEmitter.cpp
 graphics/g2d/SpriteBatch.cpp
 graphics/g2d/SpriteCache.cpp
 graphics/g2d/NinePatch.cpp
@@ -472,12 +472,12 @@ graphics/g2d/Gdx2DPixmap.cpp
 # graphics/g2d/tiled/TiledObjectGroup.cpp
 # graphics/g2d/tiled/TiledLayer.cpp
 graphics/g2d/TextureRegion.cpp
-graphics/g2d/ParticleEffect.cpp
+# graphics/g2d/ParticleEffect.cpp
 graphics/g2d/Animation.cpp
 graphics/g2d/Sprite.cpp
 graphics/g2d/TextureAtlas.cpp
 graphics/OrthographicCamera.cpp
-graphics/TextureRef.cpp
+# graphics/TextureRef.cpp
 graphics/Camera.cpp
 # utils/Sort.cpp
 utils/gzstream.cpp

@@ -24,7 +24,10 @@
 #include "gdx-cpp/graphics/glutils/VertexArray.hpp"
 #include "gdx-cpp/graphics/glutils/IndexData.hpp"
 #include "gdx-cpp/graphics/glutils/VertexBufferObject.hpp"
+#include "gdx-cpp/graphics/glutils/VertexBufferObjectSubData.hpp"
 #include "gdx-cpp/graphics/glutils/IndexBufferObject.hpp"
+#include "gdx-cpp/graphics/glutils/IndexBufferObjectSubData.hpp"
+#include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
 #include "gdx-cpp/math/collision/BoundingBox.hpp"
 
 #include <stdexcept>
@@ -142,7 +145,7 @@ void Mesh::unbind () {
     if (!isVertexArray && indices->getNumIndices() > 0) indices->unbind();
 }
 
-void Mesh::bind (const glutils::ShaderProgram& shader) {
+void Mesh::bind (glutils::ShaderProgram& shader) {
     if (!Gdx::graphics->isGL20Available())
         throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
 
@@ -150,7 +153,7 @@ void Mesh::bind (const glutils::ShaderProgram& shader) {
     if (indices->getNumIndices() > 0) indices->bind();
 }
 
-void Mesh::unbind (const gdx_cpp::graphics::glutils::ShaderProgram& shader) {
+void Mesh::unbind (gdx_cpp::graphics::glutils::ShaderProgram& shader) {
     if (!Gdx::graphics->isGL20Available()) throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
 
     ((VertexBufferObject*)vertices)->unbind(shader);
@@ -188,11 +191,11 @@ void Mesh::render (int primitiveType,int offset,int count) {
     if (autoBind) unbind();
 }
 
-void Mesh::render (const gdx_cpp::graphics::glutils::ShaderProgram& shader,int primitiveType) {
+void Mesh::render (gdx_cpp::graphics::glutils::ShaderProgram& shader,int primitiveType) {
     render(shader, primitiveType, 0, indices->getNumMaxIndices() > 0 ? getNumIndices() : getNumVertices());
 }
 
-void Mesh::render (const gdx_cpp::graphics::glutils::ShaderProgram& shader,int primitiveType,int offset,int count) {
+void Mesh::render (gdx_cpp::graphics::glutils::ShaderProgram& shader,int primitiveType,int offset,int count) {
     if (!Gdx::graphics->isGL20Available()) throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
 
     if (autoBind) bind(shader);
@@ -345,4 +348,27 @@ void Mesh::scale (float scaleX,float scaleY,float scaleZ) {
     }
 
     setVertices(vertices);
+}
+Mesh::Mesh(int type, bool isStatic, int maxVertices, int maxIndices, const std::vector< VertexAttribute >& attributes)
+: vertices(0)
+, autoBind(true)
+, refCount(0)
+{
+    if (type == VertexDataType::VertexArray && Gdx::graphics->isGL20Available())
+        type = VertexDataType::VertexBufferObject;
+
+    if (type == VertexDataType::VertexBufferObject) {
+        vertices = new VertexBufferObject(isStatic, maxVertices, attributes);
+        indices = new IndexBufferObject(isStatic, maxIndices);
+        isVertexArray = false;
+    } else if (type == VertexDataType::VertexBufferObjectSubData) {
+        vertices = new VertexBufferObjectSubData(isStatic, maxVertices, attributes);
+        indices = new IndexBufferObjectSubData(isStatic, maxIndices);
+        isVertexArray = false;
+    } else {
+        vertices = new VertexArray(maxVertices, attributes);
+        indices = new IndexBufferObject(maxIndices);
+        isVertexArray = true;
+    }
+    addManagedMesh(Gdx::app, this);
 }
