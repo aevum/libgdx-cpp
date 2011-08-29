@@ -34,7 +34,7 @@
 #define degToIndex SIN_COUNT / degFull
 
 #define radiansToDegrees 180.0 / 3.1415927
-#define degreesToRadians  PI / 180
+#define degreesToRadians  math::utils::PI / 180
 
 #include "gdx-cpp/utils/NumberUtils.hpp"
 

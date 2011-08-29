@@ -21,6 +21,7 @@
 #include "VertexBufferObject.hpp"
 
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
 
 using namespace gdx_cpp::graphics::glutils;
 using namespace gdx_cpp::graphics;

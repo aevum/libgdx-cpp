@@ -23,6 +23,7 @@
 #include "gdx-cpp/Gdx.hpp"
 #include <cmath>
 #include "gdx-cpp/math/MathUtils.hpp"
+#include <stdexcept>
 
 using namespace gdx_cpp::audio::analysis;
 
@@ -31,7 +32,7 @@ FFT::FFT(int ts, float sr): FourierTransform(ts, sr)
 {
     if ((ts & (ts - 1)) != 0)
     {
-        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FFT.cpp") << "FFT: timeSize must be a power of two.";
+        throw std::runtime_error("FFT: timeSize must be a power of two.");
     }
     buildReverseTable();
     buildTrigTables();
@@ -45,7 +46,7 @@ void FFT::allocateArrays () {
 
 void FFT::scaleBand (int i,float s) {
     if (s < 0) {
-       gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FFT.cpp") << "Can't scale a frequency band by a negative value.";
+       throw std::runtime_error("Can't scale a frequency band by a negative value.");
     }
     if (spectrum[i] != 0) {
         real[i] /= spectrum[i];
@@ -62,7 +63,7 @@ void FFT::scaleBand (int i,float s) {
 
 void FFT::setBand (int i,float a) {
     if (a < 0) {
-        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FFT.cpp") << "Can't set a frequency band to a negative value.";
+        throw std::runtime_error("Can't set a frequency band to a negative value.");
     }
     if (real[i] == 0 && imag[i] == 0) {
         real[i] = a;
@@ -111,7 +112,7 @@ void FFT::fft () {
 
 void FFT::forward (std::vector<float>& buffer) {
     if (buffer.size() != timeSizeVar) {
-        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FFT.cpp") << "FFT.forward: The length of the passed sample buffer must be equal to timeSize().";
+        throw std::runtime_error("FFT.forward: The length of the passed sample buffer must be equal to timeSize().");
     }
     doWindow(buffer);
     // copy samples to real/imag in bit-reversed order
@@ -124,7 +125,7 @@ void FFT::forward (std::vector<float>& buffer) {
 
 void FFT::forward (std::vector<float>& buffReal, std::vector<float>& buffImag) {
     if (buffReal.size() != timeSizeVar || buffImag.size() != timeSizeVar) {
-       gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FFT.cpp") << "FFT.forward: The length of the passed buffers must be equal to timeSize().";
+       throw std::runtime_error("FFT.forward: The length of the passed buffers must be equal to timeSize().");
     }
     setComplex(buffReal, buffImag);
     bitReverseComplex();
@@ -134,7 +135,7 @@ void FFT::forward (std::vector<float>& buffReal, std::vector<float>& buffImag) {
 
 void FFT::inverse (std::vector<float>& buffer) {
     if (buffer.size() > real.size()) {
-        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FFT.cpp") << "FFT.inverse: the passed array's length must equal FFT.timeSize().";
+        throw std::runtime_error("FFT.inverse: the passed array's length must equal FFT.timeSize().");
     }
     // conjugate
     for (int i = 0; i < timeSizeVar; i++) {
@@ -190,7 +191,7 @@ void FFT::buildTrigTables () {
     sinlookup = std::vector<float>(N);
     coslookup = std::vector<float>(N);
     for (int i = 0; i < N; i++) {
-        sinlookup[i] = (float)std::sin(-(float)PI / i);
-        coslookup[i] = (float)std::cos(-(float)PI / i);
+        sinlookup[i] = (float)std::sin(-(float)math::utils::PI / i);
+        coslookup[i] = (float)std::cos(-(float)math::utils::PI / i);
     }
 }

@@ -58,7 +58,7 @@ gdx_cpp::graphics::Pixmap::Format* FileTextureData::getFormat () {
 }
 
 bool FileTextureData::useMipMaps () {
-    return useMipMaps;
+    return _useMipMaps;
 }
 
 bool FileTextureData::isManaged () {
@@ -81,7 +81,7 @@ FileTextureData::FileTextureData(gdx_cpp::FileHandle file, gdx_cpp::graphics::Pi
                                  Pixmap::Format* format, bool useMipMaps)
 :
 file(file)
-, useMipMaps(useMipMaps)
+, _useMipMaps(useMipMaps)
 , format(format)
 , pixmap(preloadedPixmap)
 {

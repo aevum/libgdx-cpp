@@ -20,6 +20,7 @@
 
 #ifndef GDX_CPP_MATH_COLLISION_SEGMENT_HPP_
 #define GDX_CPP_MATH_COLLISION_SEGMENT_HPP_
+
 #include "gdx-cpp/math/Vector3.hpp"
 
 namespace gdx_cpp {
@@ -28,13 +29,13 @@ namespace collision {
 
 class Segment {
 public:
-    const Vector3 a;
-    const Vector3 b;
+    Vector3 a;
+    Vector3 b;
     Segment (const Vector3& a, const Vector3& b);
     Segment (float aX, float aY, float aZ, float bX, float bY, float bZ);
     
 protected:
-
+    
 
 private:
 

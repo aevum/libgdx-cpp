@@ -24,12 +24,13 @@
 #include "gdx-cpp/graphics/Pixmap.hpp"
 #include "gdx-cpp/math/MathUtils.hpp"
 #include "GL10.hpp"
-#include "glutils/MipMapGenerator.hpp"
+#include "gdx-cpp/graphics/glutils/MipMapGenerator.hpp"
 #include "gdx-cpp/assets/AssetLoaderParameters.hpp"
 #include "gdx-cpp/assets/loaders/TextureParameter.hpp"
 #include "gdx-cpp/graphics/glutils/PixmapTextureData.hpp"
 
 #include <list>
+#include "glutils/FileTextureData.hpp"
 
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
@@ -232,29 +233,29 @@ void Texture::invalidateAllTextures (gdx_cpp::Application* app) {
             (*it)->reload();
         }
     } else {
-        textureList t(managedTexureList);
-
-        managedTexureList.clear();
-
-        textureList::iterator it = t.begin();
-        textureList::iterator end = t.end();
-
-        std::string filename;
-        
-        for (; it != end; ++it) {           
-            if (!assetManager->getAssetFileName((Asset&) *it, filename)) {
-                (*it)->reload();
-            } else {
-                assets::loaders::TextureParameter::ptr params;
-                params->format = (*it)->getTextureData()->getFormat();
-                params->genMipMaps = (*it)->getTextureData()->useMipMaps();
-                params->texture = *it;
-                (*it)->glHandle = Texture::createGLHandle();
-                assetManager->remove(filename);
-                assetManager->preload(filename, assets::AssetType::Texture, params);
-            }
-            managedTexureList.push_back(*it);
-        }
+//         textureList t(managedTexureList);
+// 
+//         managedTexureList.clear();
+// 
+//         textureList::iterator it = t.begin();
+//         textureList::iterator end = t.end();
+// 
+//         std::string filename;
+//         
+//         for (; it != end; ++it) {           
+//             if (!assetManager->getAssetFileName((Asset&) *it, filename)) {
+//                 (*it)->reload();
+//             } else {
+//                 assets::loaders::TextureParameter::ptr params;
+//                 params->format = (*it)->getTextureData()->getFormat();
+//                 params->genMipMaps = (*it)->getTextureData()->useMipMaps();
+//                 params->texture = *it;
+//                 (*it)->glHandle = Texture::createGLHandle();
+//                 assetManager->remove(filename);
+//                 assetManager->preload(filename, assets::AssetType::Texture, params);
+//             }
+//             managedTexureList.push_back(*it);
+//         }
     }
 }
 
@@ -357,9 +358,9 @@ void Texture::initialize(const gdx_cpp::files::FileHandle& file,const Pixmap::Fo
     this->assetManager = 0;
     
     if (file.name().endsWith(".etc1")) {
-        create(new ETC1TextureData(file, useMipMaps));
+//         create(new ETC1TextureData(file, useMipMaps));
     } else {
-        create(new FileTextureData(file, NULL, format, useMipMaps));
+        create(new glutils::FileTextureData(file, NULL, format, useMipMaps));
     }
 }
 

@@ -52,7 +52,7 @@ void BoundingBox::updateCorners () {
     crn_dirty = false;
 }
 
-const std::vector< gdx_cpp::math::Vector3 >& BoundingBox::getCorners () const {
+const std::vector< gdx_cpp::math::Vector3 >& BoundingBox::getCorners () {
     updateCorners();
     return crn;
 }

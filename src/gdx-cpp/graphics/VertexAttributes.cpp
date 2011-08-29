@@ -24,15 +24,15 @@
 #include <cassert>
 
 #include "gdx-cpp/Gdx.hpp"
+#include <stdexcept>
 
 using namespace gdx_cpp::graphics;
 
-va_list argptr;
 VertexAttributes::VertexAttributes (const std::vector<VertexAttribute>& attributes)
         : attributes(attributes)
 {
     if (attributes.size() == 0) {
-        gdx_cpp::Gdx::app.error(__FILE__) << "attributes must be >= 1";
+        throw std::runtime_error("attributes must be >= 1");
     }
 
     checkValidity();
@@ -62,7 +62,7 @@ void VertexAttributes::checkValidity () {
         const VertexAttribute& attribute = attributes[i];
         if (attribute.usage == Usage::Position) {
             if (pos) {
-                gdx_cpp::Gdx::app.error(__FILE__) << "two position attributes were specified";
+                throw std::runtime_error("two position attributes were specified");
             }
 
             pos = true;
@@ -70,17 +70,17 @@ void VertexAttributes::checkValidity () {
 
         if (attribute.usage == Usage::Normal) {
             if (nors) {
-                gdx_cpp::Gdx::app.error(__FILE__) << "two normal attributes were specified";
+                throw std::runtime_error("two normal attributes were specified");
             }
         }
 
         if (attribute.usage == Usage::Color || attribute.usage == Usage::ColorPacked) {
             if (attribute.numComponents != 4) {
-                gdx_cpp::Gdx::app.error(__FILE__) << "color attribute must have 4 components";
+                throw std::runtime_error("color attribute must have 4 components");
             }
 
             if (cols) {
-                gdx_cpp::Gdx::app.error(__FILE__) << "two color attributes were specified";
+                throw std::runtime_error("two color attributes were specified");
             }
 
             cols = true;
@@ -88,7 +88,7 @@ void VertexAttributes::checkValidity () {
     }
 
     if (pos == false) {
-      gdx_cpp::Gdx::app.error(__FILE__) << ("no position attribute was specified");
+      throw std::runtime_error("no position attribute was specified");
     }
 }
 
@@ -100,13 +100,13 @@ VertexAttribute& VertexAttributes::get (int index) {
     return attributes[index];
 }
 
-std::string& VertexAttributes::toString () {
+std::string VertexAttributes::toString () {
     std::stringstream builder;
     for (int i = 0; i < attributes.size(); i++) {
         builder << attributes[i].alias << ", " <<
         attributes[i].usage << ", " <<
         attributes[i].numComponents <<  ", " <<
-        attributes[i].offset <<  std::endl();
+        attributes[i].offset <<  std::endl;
     }
     return builder.str();
 }

@@ -51,7 +51,7 @@ private:
     int height;
     Pixmap::Format* format;
     Pixmap::ptr pixmap;
-    bool useMipMaps;
+    bool _useMipMaps;
 };
 
 } // namespace gdx_cpp

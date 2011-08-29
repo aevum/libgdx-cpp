@@ -25,6 +25,7 @@
 #include "gdx-cpp/graphics/GL10.hpp"
 #include "gdx-cpp/Application.hpp"
 #include "gdx-cpp/Gdx.hpp"
+#include <stdexcept>
 
 using namespace gdx_cpp;
 using namespace gdx_cpp::graphics;
@@ -42,8 +43,8 @@ void MipMapGenerator::generateMipMap (gdx_cpp::graphics::Pixmap& pixmap,int text
         return;
     }
 
-    if (gdx_cpp::Gdx::app.getType() == gdx_cpp::Application::Android) {
-        if (gdx_cpp::Gdx::graphics.isGL20Available())
+    if (gdx_cpp::Gdx::app->getType() == gdx_cpp::Application::Android) {
+        if (gdx_cpp::Gdx::graphics->isGL20Available())
             generateMipMapGLES20(pixmap, disposePixmap);
         else
             generateMipMapCPU(pixmap, textureWidth, textureHeight, disposePixmap);
@@ -60,16 +61,16 @@ void MipMapGenerator::generateMipMapGLES20 (gdx_cpp::graphics::Pixmap& pixmap,bo
 }
 
 void MipMapGenerator::generateMipMapDesktop (gdx_cpp::graphics::Pixmap& pixmap,int textureWidth,int textureHeight,bool disposePixmap) {
-    if (Gdx::graphics.isGL20Available()
-            && (Gdx::graphics.supportsExtension("GL_ARB_framebuffer_object") || Gdx::graphics
-                .supportsExtension("GL_EXT_framebuffer_object"))) {
+    if (Gdx::graphics->isGL20Available()
+            && (Gdx::graphics->supportsExtension("GL_ARB_framebuffer_object") || Gdx::graphics
+                ->supportsExtension("GL_EXT_framebuffer_object"))) {
         Gdx::gl->glTexImage2D(GL20::GL_TEXTURE_2D, 0, pixmap.getGLInternalFormat(), pixmap.getWidth(), pixmap.getHeight(), 0,
                             pixmap.getGLFormat(), pixmap.getGLType(), pixmap.getPixels());
         Gdx::gl20->glGenerateMipmap(GL20::GL_TEXTURE_2D);
         if (disposePixmap) pixmap.dispose();
-    } else if (Gdx::graphics.supportsExtension("GL_SGIS_generate_mipmap")) {
+    } else if (Gdx::graphics->supportsExtension("GL_SGIS_generate_mipmap")) {
         if ((Gdx::gl20 == NULL) && textureWidth != textureHeight) {
-            Gdx::app.error("MipMapGenerator.cpp") << "texture width and height must be square when using mipmapping in OpenGL ES 1.x";
+            throw std::runtime_error("texture width and height must be square when using mipmapping in OpenGL ES 1.x");
         }
         
         Gdx::gl->glTexParameterf(GL20::GL_TEXTURE_2D, GLCommon::GL_GENERATE_MIPMAP, GL10::GL_TRUE);
@@ -85,7 +86,7 @@ void MipMapGenerator::generateMipMapCPU (Pixmap& pixmap,int textureWidth,int tex
     Gdx::gl->glTexImage2D(GL10::GL_TEXTURE_2D, 0, pixmap.getGLInternalFormat(), pixmap.getWidth(), pixmap.getHeight(), 0,
                         pixmap.getGLFormat(), pixmap.getGLType(), pixmap.getPixels());
     if ((Gdx::gl20 == NULL) && textureWidth != textureHeight) { 
-        Gdx::app.error("MipMapGenerator.cpp") << "texture width and height must be square when using mipmapping.";
+        std::runtime_error("texture width and height must be square when using mipmapping.");
     }
     
     int width = pixmap.getWidth() / 2;

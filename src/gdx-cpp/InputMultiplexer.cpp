@@ -19,62 +19,68 @@
 */
 
 #include "InputMultiplexer.hpp"
+#include "InputProcessor.hpp"
 
-using namespace gdx_cpp::;
+using namespace gdx_cpp;
 
-void InputMultiplexer::addProcessor (const InputProcessor& processor) {
-    processors.add(processor);
+InputMultiplexer::InputMultiplexer()
+ : processors(4)
+{
 }
 
-void InputMultiplexer::removeProcessor (const InputProcessor& processor) {
-    processors.remove(processor);
+void InputMultiplexer::addProcessor (InputProcessor* processor) {
+    processors.push_back(processor);
+}
+
+void InputMultiplexer::removeProcessor (InputProcessor* processor) {
+    processors.push_back(processor);
 }
 
 bool InputMultiplexer::keyDown (int keycode) {
     for (int i = 0, n = processors.size(); i < n; i++)
-        if (processors.get(i).keyDown(keycode)) return true;
+        if (processors[i]->keyDown(keycode)) return true;
     return false;
 }
 
 bool InputMultiplexer::keyUp (int keycode) {
     for (int i = 0, n = processors.size(); i < n; i++)
-        if (processors.get(i).keyUp(keycode)) return true;
+        if (processors[i]->keyUp(keycode)) return true;
     return false;
 }
 
 bool InputMultiplexer::keyTyped (char character) {
     for (int i = 0, n = processors.size(); i < n; i++)
-        if (processors.get(i).keyTyped(character)) return true;
+        if (processors[i]->keyTyped(character)) return true;
     return false;
 }
 
 bool InputMultiplexer::touchDown (int x,int y,int pointer,int button) {
     for (int i = 0, n = processors.size(); i < n; i++)
-        if (processors.get(i).touchDown(x, y, pointer, button)) return true;
+        if (processors[i]->touchDown(x, y, pointer, button)) return true;
     return false;
 }
 
 bool InputMultiplexer::touchUp (int x,int y,int pointer,int button) {
     for (int i = 0, n = processors.size(); i < n; i++)
-        if (processors.get(i).touchUp(x, y, pointer, button)) return true;
+        if (processors[i]->touchUp(x, y, pointer, button)) return true;
     return false;
 }
 
 bool InputMultiplexer::touchDragged (int x,int y,int pointer) {
     for (int i = 0, n = processors.size(); i < n; i++)
-        if (processors.get(i).touchDragged(x, y, pointer)) return true;
+        if (processors[i]->touchDragged(x, y, pointer)) return true;
     return false;
 }
 
 bool InputMultiplexer::touchMoved (int x,int y) {
     for (int i = 0, n = processors.size(); i < n; i++)
-        if (processors.get(i).touchMoved(x, y)) return true;
+        if (processors[i]->touchMoved(x, y)) return true;
     return false;
 }
 
 bool InputMultiplexer::scrolled (int amount) {
     for (int i = 0, n = processors.size(); i < n; i++)
-        if (processors.get(i).scrolled(amount)) return true;
+        if (processors[i]->scrolled(amount)) return true;
     return false;
 }
 

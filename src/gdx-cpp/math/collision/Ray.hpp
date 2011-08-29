@@ -31,11 +31,12 @@ namespace math {
 namespace collision {
 
 class Ray {
-public:   
+public:
+    Ray (Vector3& origin, Vector3& direction);
     Ray cpy ();
     Vector3& getEndPoint (float distance);
     Ray& mul (const gdx_cpp::math::Matrix4& matrix);
-    std::string& toString ();
+    std::string toString ();
     Ray& set (const gdx_cpp::math::Vector3& origin,const gdx_cpp::math::Vector3& direction);
     Ray& set (float x,float y,float z,float dx,float dy,float dz);
     Ray& set (const Ray& ray);
