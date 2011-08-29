@@ -372,7 +372,7 @@ public:
     virtual void glGetBufferParameteriv (int target,int pname,const int*& params) const = 0;
     virtual void glGetFloatv (int pname,const float*& params) const = 0;
     virtual void glGetFramebufferAttachmentParameteriv (int target,int attachment,int pname,const int*& params) const = 0;
-    virtual void glGetProgramiv (int program,int pname,const int*& params) const = 0;
+    virtual void glGetProgramiv (int program,int pname,const int* params) const = 0;
     virtual   std::string& glGetProgramInfoLog (int program) const = 0;
     virtual void glGetRenderbufferParameteriv (int target,int pname,const int*& params) const = 0;
     virtual void glGetShaderiv (int shader,int pname,const int*& params) const = 0;

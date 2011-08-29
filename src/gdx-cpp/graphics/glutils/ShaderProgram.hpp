@@ -21,12 +21,41 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_SHADERPROGRAM_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_SHADERPROGRAM_HPP_
 
+#include "gdx-cpp/utils/Disposable.hpp"
+#include <vector>
+#include <string>
+#include <tr1/unordered_map>
+#include <gdx-cpp/Application.hpp>
+
 namespace gdx_cpp {
+namespace math
+  {
+  class Matrix4;
+  class Matrix3;
+  }
+  
 namespace graphics {
 namespace glutils {
 
 class ShaderProgram: public gdx_cpp::utils::Disposable {
 public:
+    class FloatBuffer;
+    /** default name for position attributes **/
+    const static std::string POSITION_ATTRIBUTE;
+    /** default name for normal attribtues **/
+    const static std::string NORMAL_ATTRIBUTE;
+    /** default name for color attributes **/
+    const static std::string COLOR_ATTRIBUTE;
+    /** default name for texcoords attributes, append texture unit number **/
+    const static std::string TEXCOORD_ATTRIBUTE;
+    /** default name for tangent attribute **/
+    const static std::string TANGENT_ATTRIBUTE;
+    /** default name for binormal attribute **/
+    const static std::string BINORMAL_ATTRIBUTE;
+    /** flag indicating whether attributes & uniforms must be present at all times **/
+    static bool pedantic;
+
+
     std::string& getLog ();
     bool isCompiled ();
     void setUniformi (const std::string& name,int value);
@@ -67,6 +96,8 @@ public:
 
 protected:
 
+    static int * intbuf;
+
 
 private:
     void compileShaders (const std::string& vertexShader,const std::string& fragmentShader);
@@ -79,9 +110,34 @@ private:
     void ensureBufferCapacity (int numBytes);
     void fetchUniforms ();
     void fetchAttributes ();
-    FloatBuffer matrix;
-    String vertexShaderSource;
-    String fragmentShaderSource;
+
+    const static std::tr1::unordered_map <gdx_cpp::Application *, std::vector<ShaderProgram> > * shaders;
+
+    std::string log;
+    bool isCompiledVar;
+
+    const std::tr1::unordered_map <std::string, int> * uniforms;
+    const std::tr1::unordered_map <std::string, int> * uniformTypes;
+    std::vector<std::string> uniformNames;
+
+     std::tr1::unordered_map <std::string, int> * attributes;
+    const std::tr1::unordered_map <std::string, int> * attributeTypes;
+    std::vector<std::string> attributeNames;
+
+    int program;
+    int vertexShaderHandle;
+    int fragmentShaderHandle;
+    std::vector<float> matrix;
+    std::string vertexShaderSource;
+    std::string fragmentShaderSource;
+    bool invalidated;
+
+    char * buffer;
+    float * floatBuffer;
+    int * intBuffer;
+
+    int refCount;
+
 };
 
 } // namespace gdx_cpp
