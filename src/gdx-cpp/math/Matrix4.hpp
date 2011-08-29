@@ -106,8 +106,9 @@ public:
     static void mulVec (float* mat, float* vecs, int offset, int numVecs, int stride);
     static void mulVec (float* mat, float* vec);
     static void mul (float* mata, float* matb);
-    
-    float val[16];
+
+    const static int length = 16;
+    float val[length];
 };
 
 }

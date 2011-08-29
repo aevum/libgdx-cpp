@@ -366,8 +366,8 @@ public:
     virtual void glGenerateMipmap (int target) const = 0;
     virtual void glGenFramebuffers (int n,const int* framebuffers) const = 0;
     virtual void glGenRenderbuffers (int n,const int* renderbuffers) const = 0;
-    virtual   std::string& glGetActiveAttrib (int program,int index,const int* size,const char* type) const = 0;
-    virtual   std::string& glGetActiveUniform (int program,int index,const int* size,const char* type) const = 0;
+    virtual   std::string glGetActiveAttrib (int program,int index,const int* size,const char* type) const = 0;
+    virtual   std::string glGetActiveUniform (int program,int index,const int* size,const char* type) const = 0;
     virtual void glGetAttachedShaders (int program,int maxcount,const char* count,const int* shaders) const = 0;
     virtual   int glGetAttribLocation (int program,const std::string& name) const = 0;
     virtual void glGetBooleanv (int pname,const char* params) const = 0;
@@ -437,7 +437,7 @@ public:
     virtual void glVertexAttrib3fv (int indx,const float* values) const = 0;
     virtual void glVertexAttrib4f (int indx,float x,float y,float z,float w) const = 0;
     virtual void glVertexAttrib4fv (int indx,const float* values) const = 0;
-    virtual void glVertexAttribPointer (int indx,int size,int type,bool normalized,int stride,const char* ptr) const = 0;
+    virtual void glVertexAttribPointer (int indx,int size,int type,bool normalized,int stride,const void* ptr) const = 0;
     virtual void glVertexAttribPointer (int indx,int size,int type,bool normalized,int stride,int ptr) const = 0;
 
 protected:
