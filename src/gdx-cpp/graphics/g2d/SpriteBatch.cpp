@@ -1038,4 +1038,21 @@ SpriteBatch::~SpriteBatch()
     }
 }
 
+void SpriteBatch::draw(const Texture& texture, float* const spriteVertices, int size, int offset, int length) {
+    if (!drawing)
+        throw std::runtime_error("SpriteBatch.begin must be called before draw.");
+
+    if (&texture != lastTexture) {
+        renderMesh();
+        lastTexture = const_cast<Texture*>(&texture);
+        invTexWidth = 1.0f / texture.getWidth();
+        invTexHeight = 1.0f / texture.getHeight();
+    } else if (idx + length >= vertices.size() ) renderMesh();
+
+    memcpy(&vertices[idx], &spriteVertices[offset], length);
+    idx += length;
+}
+
+
+
 

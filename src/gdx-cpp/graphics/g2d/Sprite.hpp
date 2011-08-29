@@ -57,8 +57,8 @@ public:
     void scale (float amount);
     float* const getVertices ();
     const gdx_cpp::math::Rectangle& getBoundingRectangle ();
-    void draw (const SpriteBatch& spriteBatch);
-    void draw (const SpriteBatch& spriteBatch,float alphaModulation);
+    void draw (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch);
+    void draw (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, float alphaModulation);
     float getX ();
     float getY ();
     float getWidth ();

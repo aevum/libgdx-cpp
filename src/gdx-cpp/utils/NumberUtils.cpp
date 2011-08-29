@@ -50,13 +50,13 @@ float NumberUtils::intBitsToFloat (int value) {
 }
 
 long NumberUtils::doubleToLongBits (double value) {
-  const union { double f; uint64_t i; } u;
+  union { double f; uint64_t i; } u;
   u.f = value;
   return u.i;
 }
 
 double NumberUtils::longBitsToDouble (long value) {
-  const union { double f; uint64_t i; } u;
+  union { double f; uint64_t i; } u;
   u.i = value;
   return u.i;
 }

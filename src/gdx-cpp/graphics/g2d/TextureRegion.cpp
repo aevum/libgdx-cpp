@@ -108,7 +108,7 @@ void TextureRegion::setU (float u) {
     this->u = u;
 }
 
-float TextureRegion::getV () {
+float TextureRegion::getV () const {
     return v;
 }
 

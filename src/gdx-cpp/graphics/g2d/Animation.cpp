@@ -28,11 +28,11 @@ gdx_cpp::graphics::g2d::Animation::Animation(float frameDuration, const std::vec
 }
 
 
-TextureRegion::ptr Animation::getKeyFrame (float stateTime,bool looping) {
+TextureRegion::ptr Animation::getKeyFrame (float stateTime, bool looping) {
     int frameNumber = (int)(stateTime / frameDuration);
 
     if (!looping) {
-        frameNumber = std::min(keyFrames.size() - 1, frameNumber);
+        frameNumber = std::min((float) keyFrames.size() - 1, (float) frameNumber);
     } else {
         frameNumber = frameNumber % keyFrames.size();
     }

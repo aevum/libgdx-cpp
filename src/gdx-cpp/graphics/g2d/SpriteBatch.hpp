@@ -60,6 +60,7 @@ public:
     void draw (const TextureRegion& region,float x,float y,float width,float height);
     void draw (const TextureRegion& region,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation);
     void draw (const TextureRegion& region,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation,bool clockwise);
+    void draw (const gdx_cpp::graphics::Texture& texture, float* const spriteVertices, int size, int offset, int length) ;
     void flush ();
     void disableBlending ();
     void enableBlending ();

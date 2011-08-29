@@ -26,7 +26,7 @@
 // Standard C++ Library".
 // ============================================================================
 
-#include <lm_access/gzstream.hpp>
+#include "gzstream.hpp"
 #include <iostream>
 #include <string.h>  // for memcpy
 

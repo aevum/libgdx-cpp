@@ -33,6 +33,7 @@ namespace collision {
 class Ray {
 public:
     Ray (Vector3& origin, Vector3& direction);
+    Ray();
     Ray cpy ();
     Vector3& getEndPoint (float distance);
     Ray& mul (const gdx_cpp::math::Matrix4& matrix);

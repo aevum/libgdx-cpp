@@ -24,6 +24,7 @@
 
 #include "gdx-cpp/utils/NumberUtils.hpp"
 #include "gdx-cpp/math/MathUtils.hpp"
+#include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
 #include <stdexcept>
 
 using namespace gdx_cpp::graphics::g2d;
@@ -304,11 +305,11 @@ const gdx_cpp::math::Rectangle& Sprite::getBoundingRectangle () {
     return bounds;
 }
 
-void Sprite::draw (const SpriteBatch& spriteBatch) {
-    spriteBatch.draw(texture, getVertices(), 0, SPRITE_SIZE);
+void Sprite::draw (SpriteBatch& spriteBatch) {
+    spriteBatch.draw(*texture, getVertices(), 20, 0, SPRITE_SIZE);
 }
 
-void Sprite::draw (const SpriteBatch& spriteBatch,float alphaModulation) {
+void Sprite::draw (SpriteBatch& spriteBatch,float alphaModulation) {
     Color color = getColor();
     float oldAlpha = color.a;
     color.a *= alphaModulation;

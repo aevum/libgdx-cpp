@@ -26,6 +26,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <string.h>
+#include <stdexcept>
 
 using namespace gdx_cpp::graphics::g2d;
 using namespace gdx_cpp;
@@ -66,7 +67,7 @@ Gdx2DPixmap::Gdx2DPixmap (std::istream& in, int requestedFormat) {
   free(nativeBuffer);
   
   if (pixData == NULL) {
-    Gdx::app.error("Gdx2DPixmap") << "couldn't load pixmap";
+     throw std::runtime_error("couldn't load pixmap");
 
   }
 }
@@ -86,7 +87,7 @@ Gdx2DPixmap::Gdx2DPixmap (unsigned char* encodedData, int offset, int len, int r
 {
   this->pixData = load(encodedData, offset, len, requestedFormat);
     if (!pixData) {
-        Gdx::app.error(__FILE__) << "Failed loading pixmap";
+        throw std::runtime_error("Failed loading pixmap");
     }
 }
 
@@ -203,7 +204,11 @@ int Gdx2DPixmap::getGLInternalFormat () {
     case GDX2D_FORMAT_RGBA4444:
         return GL10::GL_RGBA;
     default:
-      Gdx::app.error("Gdx2DPixmap") << "unknown format: " << pixData->format;
+    {
+        std::stringstream ss;
+        ss << "unknown format: " << pixData->format;
+      throw std::runtime_error(ss.str());
+    }
     }
 }
 
@@ -224,7 +229,11 @@ int Gdx2DPixmap::getGLType () {
     case GDX2D_FORMAT_RGBA4444:
         return GL10::GL_UNSIGNED_SHORT_4_4_4_4;
     default:
-      gdx_cpp::Gdx::app.error("Gdx2DPixmap") <<"unknown format: " << pixData->format;
+    {
+        std::stringstream ss;
+        ss << "unknown format: " << pixData->format;
+        throw std::runtime_error(ss.str());
+    }
     }
 }
 

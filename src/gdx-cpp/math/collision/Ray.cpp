@@ -28,6 +28,11 @@
 using namespace gdx_cpp::math::collision;
 
 
+gdx_cpp::math::collision::Ray::Ray()
+{
+    direction.nor();
+}
+
 Ray::Ray (Vector3& origin, Vector3& direction)
 :
 origin(origin)

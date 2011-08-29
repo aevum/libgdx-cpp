@@ -31,7 +31,6 @@ namespace g2d {
 class Animation {
 public:
 
-    Animation (float frameDuration, List keyFrames);
     Animation (float frameDuration, const std::vector<TextureRegion::ptr>& keyFrames);
     
     TextureRegion::ptr getKeyFrame (float stateTime,bool looping);

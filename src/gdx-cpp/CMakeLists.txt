@@ -180,7 +180,7 @@ graphics/g2d/Animation.hpp
 graphics/g2d/TextureRegion.hpp
 graphics/g2d/SpriteCache.hpp
 # graphics/g2d/ParticleEffect.hpp
-graphics/g2d/TextureAtlas.hpp
+# graphics/g2d/TextureAtlas.hpp
 graphics/g2d/NinePatch.hpp
 # graphics/g2d/ParticleEmitter.hpp
 graphics/g2d/Sprite.hpp
@@ -474,7 +474,7 @@ graphics/g2d/TextureRegion.cpp
 # graphics/g2d/ParticleEffect.cpp
 graphics/g2d/Animation.cpp
 graphics/g2d/Sprite.cpp
-graphics/g2d/TextureAtlas.cpp
+# graphics/g2d/TextureAtlas.cpp
 graphics/OrthographicCamera.cpp
 # graphics/TextureRef.cpp
 graphics/Camera.cpp
@@ -491,7 +491,7 @@ utils/gzstream.cpp
 # utils/GdxRuntimeException.cpp
 # utils/PauseableThread.cpp
 # utils/PooledLinkedList.cpp
-utils/Base64Coder.cpp
+# utils/Base64Coder.cpp
 # utils/ObjectMap.cpp
 # utils/Logger.cpp
 # utils/SortedIntList.cpp
