@@ -84,8 +84,22 @@ struct buffer : public buffer_base {
         return ((T*)bf.get())[nextGetIndex()];
     }
 
-    T& get(const int position) const {
+    T& get(const int position) {
         return ((T*)bf.get())[checkIndex(position)];
+    }
+
+    buffer<T>& get(T* dst, int dstSize, int offset, int length) {
+        checkBounds(offset, length, dstSize);
+        if (length > remaining())
+            throw std::runtime_error("buffer underflow");
+        int end = offset + length;
+        for (int i = offset; i < end; i++)
+            dst[i] = get();
+        return *this;
+    }
+
+    buffer<T>& get(std::vector<T>& dst, int offset, int length) {
+        return get(&dst[0], dst.size(), offset, length);
     }
 
     T& operator[](int position) {
@@ -135,10 +149,11 @@ struct buffer : public buffer_base {
     }
 
 
-    operator T*() {
-        return (T*) bf.get();
+    //SHIVER ME TIMBERS!!! YARRRR
+    template <typename U>
+    operator U*() {
+        return (U*) bf.get();
     }
-
 
     buffer<T>& mark() {
         mark = _position;

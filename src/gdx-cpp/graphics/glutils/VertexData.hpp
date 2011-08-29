@@ -33,11 +33,20 @@ namespace glutils {
 
 class VertexData: public gdx_cpp::utils::Disposable {
 public:
+    struct Kind {
+        static const int VertexBufferObject = 0;
+        static const int Other = 1;
+    };
+
+    virtual int getKind() {
+        return Kind::Other;
+    }
+    
     virtual int getNumVertices () = 0;
     virtual int getNumMaxVertices () = 0;
     virtual gdx_cpp::graphics::VertexAttributes& getAttributes () = 0;
-    virtual void setVertices (int offset,int count) = 0;
-    virtual utils::float_buffer getBuffer () = 0;
+    virtual void setVertices (const std::vector<float>& vertices, int offset,int count) = 0;
+    virtual utils::float_buffer& getBuffer () = 0;
     virtual void bind () = 0;
     virtual void unbind () = 0;
     virtual void dispose () = 0;

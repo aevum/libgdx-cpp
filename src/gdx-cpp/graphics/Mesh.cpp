@@ -21,6 +21,7 @@
 #include "Mesh.hpp"
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/graphics/glutils/VertexData.hpp"
+#include "gdx-cpp/graphics/glutils/VertexArray.hpp"
 #include "gdx-cpp/graphics/glutils/IndexData.hpp"
 #include "gdx-cpp/graphics/glutils/VertexBufferObject.hpp"
 #include "gdx-cpp/graphics/glutils/IndexBufferObject.hpp"
@@ -29,11 +30,15 @@
 #include <stdexcept>
 
 using namespace gdx_cpp::graphics;
+using namespace gdx_cpp;
+using namespace gdx_cpp::graphics::glutils;
 
 bool Mesh::forceVBO = false;
 
 Mesh::Mesh(bool isStatic, int maxVertices, int maxIndices, std::vector< gdx_cpp::graphics::VertexAttribute > attributes)
 : vertices(0)
+, autoBind(true)
+, refCount(0)
 {
     if (gdx_cpp::Gdx::gl20 != NULL || gdx_cpp::Gdx::gl11 != NULL || Mesh::forceVBO) {
         vertices = new glutils::VertexBufferObject(isStatic, maxVertices, attributes);
@@ -49,137 +54,153 @@ Mesh::Mesh(bool isStatic, int maxVertices, int maxIndices, std::vector< gdx_cpp:
 }
 
 
-void Mesh::setVertices () {
-    this->vertices->setVertices(vertices, 0, vertices.length);
+void Mesh::setVertices (const std::vector<float>& vertices) {
+    this->vertices->setVertices(vertices, 0, vertices.size());
 }
 
-void Mesh::setVertices (int offset,int count) {
+void Mesh::setVertices (const std::vector<float>& vertices, int offset,int count) {
     this->vertices->setVertices(vertices, offset, count);
 }
 
-void Mesh::getVertices () {
-    if (vertices.length < getNumVertices() * getVertexSize() / 4)
-        throw std::runtime_error("not enough room in vertices array, has " + vertices.length + " floats, needs "
-                                           + getNumVertices() * getVertexSize() / 4);
-    int pos = getVerticesBuffer()._position();
+void Mesh::getVertices (std::vector<float>& vertices) {
+    if (vertices.size() < getNumVertices() * getVertexSize() / 4)
+    {
+        std::stringstream ss;
+        ss <<"not enough room in vertices array, has " << vertices.size() << " floats, needs "
+        << getNumVertices() * getVertexSize() / 4;
+        
+        throw std::runtime_error(ss.str());
+    }
     
-    getVerticesBuffer()._position(0);
+    int pos = getVerticesBuffer().position();
+    
+    getVerticesBuffer().position(0);
     getVerticesBuffer().get(vertices, 0, getNumVertices() * getVertexSize() / 4);
-    getVerticesBuffer()._position(pos);
+    getVerticesBuffer().position(pos);
 }
 
-void Mesh::setIndices () {
-    this.indices.setIndices(indices, 0, indices.length);
+void Mesh::setIndices (std::vector<short>& indices) {
+    this->indices->setIndices(indices, 0, indices.size());
 }
 
-void Mesh::setIndices (int offset,int count) {
-    this.indices.setIndices(indices, offset, count);
+void Mesh::setIndices (std::vector<short>& indices, int offset,int count) {
+    this->indices->setIndices(indices, offset, count);
 }
 
-void Mesh::getIndices () {
-    if (indices.length < getNumIndices())
-        throw new IllegalArgumentException("not enough room in indices array, has " + indices.length + " floats, needs "
-                                           + getNumIndices());
-    int pos = getIndicesBuffer()._position();
-    getIndicesBuffer()._position(0);
-    getIndicesBuffer().get(indices, 0, getNumIndices());
-    getIndicesBuffer()._position(pos);
+void Mesh::getIndices (std::vector<short>& indices) {
+    if (indices.size() < getNumIndices())
+    {
+        std::stringstream ss;
+        ss << "not enough room in indices array, has " << indices.size() << " floats, needs "
+        << getNumIndices();
+        throw std::runtime_error(ss.str());
+    }
+
+    utils::short_buffer& indices_buffer = getIndicesBuffer();
+    int pos = indices_buffer.position();
+    
+    indices_buffer.position(0);
+    indices_buffer.get(indices, 0, getNumIndices());
+    indices_buffer.position(pos);
 }
 
 int Mesh::getNumIndices () {
-    return indices.getNumIndices();
+    return indices->getNumIndices();
 }
 
 int Mesh::getNumVertices () {
-    return vertices.getNumVertices();
+    return vertices->getNumVertices();
 }
 
 int Mesh::getMaxVertices () {
-    return vertices.getNumMaxVertices();
+    return vertices->getNumMaxVertices();
 }
 
 int Mesh::getMaxIndices () {
-    return indices.getNumMaxIndices();
+    return indices->getNumMaxIndices();
 }
 
 int Mesh::getVertexSize () {
-    return vertices.getAttributes().vertexSize;
+    return vertices->getAttributes().vertexSize;
 }
 
 void Mesh::setAutoBind (bool autoBind) {
-    this.autoBind = autoBind;
+    this->autoBind = autoBind;
 }
 
 void Mesh::bind () {
-    if (Gdx.graphics.isGL20Available()) throw new IllegalStateException("can't use this render method with OpenGL ES 2.0");
-    vertices.bind();
-    if (!isVertexArray && indices.getNumIndices() > 0) indices.bind();
+    if (Gdx::graphics->isGL20Available())
+        throw std::runtime_error("can't use this render method with OpenGL ES 2.0");
+    vertices->bind();
+    if (!isVertexArray && indices->getNumIndices() > 0) indices->bind();
 }
 
 void Mesh::unbind () {
-    if (Gdx.graphics.isGL20Available()) throw new IllegalStateException("can't use this render method with OpenGL ES 2.0");
-    vertices.unbind();
-    if (!isVertexArray && indices.getNumIndices() > 0) indices.unbind();
+    if (Gdx::graphics->isGL20Available())
+        throw std::runtime_error("can't use this render method with OpenGL ES 2.0");
+    vertices->unbind();
+    if (!isVertexArray && indices->getNumIndices() > 0) indices->unbind();
 }
 
-void Mesh::bind (const gdx_cpp::graphics::glutils::ShaderProgram& shader) {
-    if (!Gdx.graphics.isGL20Available()) throw new IllegalStateException("can't use this render method with OpenGL ES 1.x");
+void Mesh::bind (const glutils::ShaderProgram& shader) {
+    if (!Gdx::graphics->isGL20Available())
+        throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
 
-    ((VertexBufferObject)vertices).bind(shader);
-    if (indices.getNumIndices() > 0) indices.bind();
+    ((VertexBufferObject*)vertices)->bind(shader);
+    if (indices->getNumIndices() > 0) indices->bind();
 }
 
 void Mesh::unbind (const gdx_cpp::graphics::glutils::ShaderProgram& shader) {
-    if (!Gdx.graphics.isGL20Available()) throw new IllegalStateException("can't use this render method with OpenGL ES 1.x");
+    if (!Gdx::graphics->isGL20Available()) throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
 
-    ((VertexBufferObject)vertices).unbind(shader);
-    if (indices.getNumIndices() > 0) indices.unbind();
+    ((VertexBufferObject*)vertices)->unbind(shader);
+    if (indices->getNumIndices() > 0) indices->unbind();
 }
 
 void Mesh::render (int primitiveType) {
-    render(primitiveType, 0, indices.getNumMaxIndices() > 0 ? getNumIndices() : getNumVertices());
+    render(primitiveType, 0, indices->getNumMaxIndices() > 0 ? getNumIndices() : getNumVertices());
 }
 
 void Mesh::render (int primitiveType,int offset,int count) {
-    if (Gdx.graphics.isGL20Available()) throw new IllegalStateException("can't use this render method with OpenGL ES 2.0");
+    if (Gdx::graphics->isGL20Available()) throw std::runtime_error("can't use this render method with OpenGL ES 2.0");
 
     if (autoBind) bind();
 
     if (isVertexArray) {
-        if (indices.getNumIndices() > 0) {
-            ShortBuffer buffer = indices.getBuffer();
+        if (indices->getNumIndices() > 0) {
+            utils::short_buffer buffer = indices->getBuffer();
             int oldPosition = buffer.position();
             int oldLimit = buffer.limit();
             buffer.position(offset);
             buffer.limit(offset + count);
-            Gdx.gl10.glDrawElements(primitiveType, count, GL10.GL_UNSIGNED_SHORT, buffer);
+            Gdx::gl10->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, (void *) buffer);
             buffer.position(oldPosition);
             buffer.limit(oldLimit);
         } else
-            Gdx.gl10.glDrawArrays(primitiveType, offset, count);
+            Gdx::gl10->glDrawArrays(primitiveType, offset, count);
     } else {
-        if (indices.getNumIndices() > 0)
-            Gdx.gl11.glDrawElements(primitiveType, count, GL10.GL_UNSIGNED_SHORT, offset * 2);
+        if (indices->getNumIndices() > 0)
+            Gdx::gl11->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, offset * 2);
         else
-            Gdx.gl11.glDrawArrays(primitiveType, offset, count);
+            Gdx::gl11->glDrawArrays(primitiveType, offset, count);
     }
 
     if (autoBind) unbind();
 }
 
 void Mesh::render (const gdx_cpp::graphics::glutils::ShaderProgram& shader,int primitiveType) {
-    render(shader, primitiveType, 0, indices.getNumMaxIndices() > 0 ? getNumIndices() : getNumVertices());
+    render(shader, primitiveType, 0, indices->getNumMaxIndices() > 0 ? getNumIndices() : getNumVertices());
 }
 
 void Mesh::render (const gdx_cpp::graphics::glutils::ShaderProgram& shader,int primitiveType,int offset,int count) {
-    if (!Gdx.graphics.isGL20Available()) throw new IllegalStateException("can't use this render method with OpenGL ES 1.x");
+    if (!Gdx::graphics->isGL20Available()) throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
 
     if (autoBind) bind(shader);
 
-    if (indices.getNumIndices() > 0)
-        Gdx.gl20.glDrawElements(primitiveType, count, GL10.GL_UNSIGNED_SHORT, offset * 2);
+    if (indices->getNumIndices() > 0)
+        Gdx::gl20->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, offset * 2);
     else
-        Gdx.gl20.glDrawArrays(primitiveType, offset, count);
+        Gdx::gl20->glDrawArrays(primitiveType, offset, count);
 
     if (autoBind) unbind(shader);
 }
@@ -187,43 +208,42 @@ void Mesh::render (const gdx_cpp::graphics::glutils::ShaderProgram& shader,int p
 void Mesh::dispose () {
     refCount--;
     if (refCount > 0) return;
-    if (meshes.get(Gdx.app) != null) meshes.get(Gdx.app).remove(this);
-    vertices.dispose();
-    indices.dispose();
+    if (meshes.count(Gdx::app) > 0) meshes[Gdx::app].erase(this);
+    vertices->dispose();
+    indices->dispose();
 }
 
 VertexAttribute& Mesh::getVertexAttribute (int usage) {
-    VertexAttributes attributes = vertices.getAttributes();
+    VertexAttributes& attributes = vertices->getAttributes();
     int len = attributes.size();
-    for (int i = 0; i < len; i++)
-        if (attributes.get(i).usage == usage) return attributes.get(i);
+    for (int i = 0; i < len; i++) {
+        if (attributes.get(i).usage == usage){
+            return attributes.get(i);
+        }
+    }
 
-    return null;
+    std::stringstream ss;
+    ss << "vertex attribute not found: " << usage;
+    throw std::runtime_error(ss.str());
 }
 
 VertexAttributes& Mesh::getVertexAttributes () {
-    return vertices.getAttributes();
+    return vertices->getAttributes();
 }
 
-FloatBuffer& Mesh::getVerticesBuffer () {
-    return vertices.getBuffer();
+utils::float_buffer& Mesh::getVerticesBuffer () {
+    return vertices->getBuffer();
 }
 
-gdx_cpp::math::collision::BoundingBox& Mesh::calculateBoundingBox () {
-    BoundingBox bbox = new BoundingBox();
-    calculateBoundingBox(bbox);
-    return bbox;
-}
+void Mesh::calculateBoundingBox (gdx_cpp::math::collision::BoundingBox& bbox) {
+    int numVertices = getNumVertices();
+    if (numVertices == 0) throw std::runtime_error("No vertices defined");
 
-void Mesh::calculateBoundingBox (const gdx_cpp::math::collision::BoundingBox& bbox) {
-    final int numVertices = getNumVertices();
-    if (numVertices == 0) throw new GdxRuntimeException("No vertices defined");
-
-    final FloatBuffer verts = vertices.getBuffer();
+    utils::float_buffer verts = vertices->getBuffer();
     bbox.inf();
-    final VertexAttribute posAttrib = getVertexAttribute(Usage.Position);
-    final int offset = posAttrib.offset / 4;
-    final int vertexSize = vertices.getAttributes().vertexSize / 4;
+    VertexAttribute& posAttrib = getVertexAttribute(VertexAttributes::Usage::Position);
+    int offset = posAttrib.offset / 4;
+    int vertexSize = vertices->getAttributes().vertexSize / 4;
     int idx = offset;
 
     switch (posAttrib.numComponents) {
@@ -248,52 +268,55 @@ void Mesh::calculateBoundingBox (const gdx_cpp::math::collision::BoundingBox& bb
     }
 }
 
-ShortBuffer& Mesh::getIndicesBuffer () {
-    return indices.getBuffer();
+utils::short_buffer& Mesh::getIndicesBuffer () {
+    return indices->getBuffer();
 }
 
-void Mesh::addManagedMesh (const gdx_cpp::Application& app, gdx_cpp::graphics::Mesh* mesh) {
-    List<Mesh> managedResources = meshes.get(app);
-    if (managedResources == null) managedResources = new ArrayList<Mesh>();
-    managedResources.add(mesh);
-    meshes.put(app, managedResources);
+void Mesh::addManagedMesh (gdx_cpp::Application* app, gdx_cpp::graphics::Mesh* mesh) {
+    meshes[app].insert(mesh);
 }
 
-void Mesh::invalidateAllMeshes (const gdx_cpp::Application& app) {
-    List<Mesh> meshesList = meshes.get(app);
-    if (meshesList == null) return;
-    for (int i = 0; i < meshesList.size(); i++) {
-        if (meshesList.get(i).vertices instanceof VertexBufferObject) {
-            ((VertexBufferObject)meshesList.get(i).vertices).invalidate();
-            meshesList.get(i).indices.invalidate();
+void Mesh::invalidateAllMeshes (gdx_cpp::Application* app) {
+    MeshMap::value_type::second_type::iterator it = meshes[app].begin();
+    MeshMap::value_type::second_type::iterator end = meshes[app].end();
+    
+    
+    for (; it != end; ++it) {
+        if ((*it)->vertices->getKind() ==  VertexData::Kind::VertexBufferObject) {
+            (((VertexBufferObject*)(*it)->vertices))->invalidate();
+            (*it)->indices->invalidate();
         }
     }
 }
 
-void Mesh::clearAllMeshes (const gdx_cpp::Application& app) {
-    meshes.remove(app);
+void Mesh::clearAllMeshes (gdx_cpp::Application* app) {
+    meshes.erase(app);
 }
 
-std::string& Mesh::getManagedStatus () {
-    StringBuilder builder = new StringBuilder();
+std::string Mesh::getManagedStatus () {
+    std::stringstream  builder;
     int i = 0;
-    builder.append("Managed meshes/app: { ");
-for (Application app : meshes.keySet()) {
-        builder.append(meshes.get(app).size());
-        builder.append(" ");
+    builder << "Managed meshes/app: { ";
+
+    MeshMap::iterator it = meshes.begin();
+    MeshMap::iterator end = meshes.end();
+    
+    for (; it != end; ++it) {
+        builder << it->second.size();
+        builder << " ";
     }
-    builder.append("}");
-    return builder.toString();
+    builder << "}";
+    return builder.str();
 }
 
 void Mesh::scale (float scaleX,float scaleY,float scaleZ) {
-    VertexAttribute posAttr = getVertexAttribute(Usage.Position);
+    VertexAttribute& posAttr = getVertexAttribute(VertexAttributes::Usage::Position);
     int offset = posAttr.offset / 4;
     int numComponents = posAttr.numComponents;
     int numVertices = getNumVertices();
     int vertexSize = getVertexSize() / 4;
 
-    float[] vertices = new float[numVertices * vertexSize];
+    std::vector<float> vertices(numVertices * vertexSize);
     getVertices(vertices);
 
     int idx = offset;

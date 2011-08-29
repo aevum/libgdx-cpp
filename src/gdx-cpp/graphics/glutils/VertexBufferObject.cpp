@@ -35,6 +35,11 @@ int VertexBufferObject::createBufferObject () {
     return tmpHandle;
 }
 
+int VertexBufferObject::getKind()
+{
+    return VertexData::Kind::VertexBufferObject;
+}
+
 gdx_cpp::graphics::VertexAttributes& VertexBufferObject::getAttributes () {
     return attributes;
 }
@@ -47,7 +52,7 @@ int VertexBufferObject::getNumMaxVertices () {
     return byteBuffer.capacity() / attributes.vertexSize;
 }
 
-utils::float_buffer VertexBufferObject::getBuffer () {
+utils::float_buffer& VertexBufferObject::getBuffer () {
     isDirty = true;
     return buffer;
 }

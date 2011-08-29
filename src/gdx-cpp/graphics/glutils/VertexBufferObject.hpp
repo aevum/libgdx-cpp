@@ -39,7 +39,7 @@ public:
     gdx_cpp::graphics::VertexAttributes& getAttributes ();
     int getNumVertices ();
     int getNumMaxVertices ();
-    utils::float_buffer getBuffer ();
+    utils::float_buffer& getBuffer ();
     void setVertices (const std::vector< float >& vertices, int offset, int count);
     void bind ();
     void bind (const ShaderProgram& shader);
@@ -48,6 +48,8 @@ public:
     void invalidate ();
     void dispose ();
 
+    int getKind();
+    
 protected:
     graphics::VertexAttributes attributes;
     utils::float_buffer buffer;

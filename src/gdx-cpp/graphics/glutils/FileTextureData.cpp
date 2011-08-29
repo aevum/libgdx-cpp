@@ -20,18 +20,23 @@
 
 #include "FileTextureData.hpp"
 
+#include "gdx-cpp/graphics/Pixmap.hpp"
+#include <stdexcept>
+
+using namespace gdx_cpp;
+using namespace gdx_cpp::graphics;
 using namespace gdx_cpp::graphics::glutils;
 
-gdx_cpp::graphics::Pixmap& FileTextureData::getPixmap () {
-    if (pixmap != null) {
-        Pixmap tmp = pixmap;
-        this.pixmap = null;
+gdx_cpp::graphics::Pixmap::ptr FileTextureData::getPixmap () {
+    if (pixmap != NULL) {
+        Pixmap::ptr tmp = pixmap;
+        this->pixmap = NULL;
         return tmp;
     } else {
-        Pixmap pixmap = new Pixmap(file);
-        width = pixmap.getWidth();
-        height = pixmap.getHeight();
-        if (format == null) format = pixmap.getFormat();
+        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(file));
+        width = pixmap->getWidth();
+        height = pixmap->getHeight();
+        if (format == NULL) format = pixmap->getFormat();
         return pixmap;
     }
 }
@@ -48,7 +53,7 @@ int FileTextureData::getHeight () {
     return height;
 }
 
-gdx_cpp::graphics::Pixmap::Format& FileTextureData::getFormat () {
+gdx_cpp::graphics::Pixmap::Format* FileTextureData::getFormat () {
     return format;
 }
 
@@ -64,11 +69,28 @@ gdx_cpp::files::FileHandle& FileTextureData::getFileHandle () {
     return file;
 }
 
-TextureDataType& FileTextureData::getType () {
-    return TextureDataType.Pixmap;
+TextureData::TextureDataType& FileTextureData::getType () {
+    return TextureDataType::Pixmap;
 }
 
 void FileTextureData::uploadCompressedData () {
-    throw new GdxRuntimeException("This TextureData implementation does not upload data itself");
+    throw std::runtime_error("This TextureData implementation does not upload data itself");
 }
+
+FileTextureData::FileTextureData(gdx_cpp::FileHandle file, gdx_cpp::graphics::Pixmap::ptr preloadedPixmap,
+                                 Pixmap::Format* format, bool useMipMaps)
+:
+file(file)
+, useMipMaps(useMipMaps)
+, format(format)
+, pixmap(preloadedPixmap)
+{
+    if (pixmap != NULL) {
+        width = pixmap->getWidth();
+        height = pixmap->getHeight();
+        if (format == NULL)
+            this->format = pixmap->getFormat();
+    }
+}
+
 

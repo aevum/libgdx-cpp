@@ -49,7 +49,7 @@ public:
     virtual void glDepthRangef (float zNear,float zFar) const = 0;
     virtual void glDisable (int cap) const = 0;
     virtual void glDrawArrays (int mode,int first,int count) const = 0;
-    virtual void glDrawElements (int mode,int count,int type,const unsigned char* indices) const = 0;
+    virtual void glDrawElements (int mode,int count,int type, const void* indices) const = 0;
     virtual void glEnable (int cap) const = 0;
     virtual void glFinish () const = 0;
     virtual void glFlush () const = 0;

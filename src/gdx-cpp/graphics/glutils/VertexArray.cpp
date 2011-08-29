@@ -29,7 +29,7 @@ using namespace gdx_cpp;
 void VertexArray::dispose () {
 }
 
-gdx_cpp::utils::float_buffer VertexArray::getBuffer () {
+utils::float_buffer& VertexArray::getBuffer () {
     return buffer;
 }
 
@@ -41,7 +41,7 @@ int VertexArray::getNumMaxVertices () {
     return byteBuffer.capacity() / attributes.vertexSize;
 }
 
-void VertexArray::setVertices (float* vertices, int offset,int count) {
+void VertexArray::setVertices (const std::vector< float >& vertices, int offset, int count) {
     byteBuffer.copy(vertices, count, offset);
     buffer.position(0);
     buffer.limit(count);

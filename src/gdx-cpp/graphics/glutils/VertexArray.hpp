@@ -33,10 +33,10 @@ public:
     VertexArray (int numVertices, const gdx_cpp::graphics::VertexAttributes& attributes) ;
     
     void dispose ();
-    utils::float_buffer getBuffer ();
+    utils::float_buffer& getBuffer ();
     int getNumVertices ();
     int getNumMaxVertices ();
-    void setVertices (float* vertices, int offset, int count);
+    void setVertices (const std::vector<float>& vertices, int offset, int count);
     void bind ();
     void unbind ();
     gdx_cpp::graphics::VertexAttributes& getAttributes ();
@@ -46,7 +46,7 @@ protected:
     VertexAttributes attributes;
     utils::float_buffer buffer;
     utils::byte_buffer byteBuffer;
-    bool isBound = false;
+    bool isBound;
 private:
 
 };
