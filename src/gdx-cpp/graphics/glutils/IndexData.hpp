@@ -34,8 +34,8 @@ class IndexData: public gdx_cpp::utils::Disposable {
 public:
     virtual   int getNumIndices () = 0;
     virtual   int getNumMaxIndices () = 0;
-    virtual   void setIndices (int offset,int count) = 0;
-    virtual   utils::short_buffer getBuffer () = 0;
+    virtual   void setIndices (const std::vector<short>& indices, int offset,int count) = 0;
+    virtual   utils::short_buffer& getBuffer () = 0;
     virtual   void bind () = 0;
     virtual   void unbind () = 0;
     virtual   void invalidate () = 0;

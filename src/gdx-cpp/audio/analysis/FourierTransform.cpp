@@ -23,6 +23,7 @@
 #include <cmath>
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/math/MathUtils.hpp"
+#include <stdexcept>
 
 using namespace gdx_cpp::audio::analysis;
 
@@ -33,7 +34,7 @@ const int FourierTransform::HAMMING = 1;
 const int FourierTransform::LINAVG = 2;
 const int FourierTransform::LOGAVG = 3;
 const int FourierTransform::NOAVG = 4;
-const float FourierTransform::TWO_PI = (float)(2 * PI);
+const float FourierTransform::TWO_PI = (float)(2 * math::utils::PI);
 
 
 FourierTransform::FourierTransform(int ts, float sr): timeSizeVar(ts), sampleRate((int)sr), real(), imag(),spectrum (), octaves(0), avgPerOctave(0)
@@ -47,7 +48,7 @@ FourierTransform::FourierTransform(int ts, float sr): timeSizeVar(ts), sampleRat
 void FourierTransform::setComplex (std::vector<float>& r,  std::vector<float>& i) {
     if (real.size() && imag.size() != i.size())
     {
-        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FourierTransform.cpp") << "This won't work";
+        throw std::runtime_error("This won't work");
     } else {
         real.insert(real.end(), r.begin(), r.end());
         imag.insert(imag.end(), i.begin(), i.end());
@@ -103,7 +104,9 @@ void FourierTransform::noAverages () {
 void FourierTransform::linAverages (int numAvg) {
     if (numAvg > spectrum.size() / 2)
     {
-        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FourierTransform.cpp") << "The number of averages for this transform can be at most " << spectrum.size()/2 << ".";
+        std::stringstream ss;
+        ss << "The number of averages for this transform can be at most " << spectrum.size()/2 << ".";
+        throw std::runtime_error(ss.str());
     } else {
         averages = std::vector<float>(numAvg);
     }
@@ -123,7 +126,7 @@ void FourierTransform::logAverages (int minBandwidth,int bandsPerOctave) {
 
 void FourierTransform::window (int which) {
     if (which < 0 || which > 1) {
-        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FourierTransform.cpp") << "Invalid window type.";
+        throw std::runtime_error("Invalid window type.");
     } else {
         whichWindow = which;
     }
@@ -261,8 +264,10 @@ float FourierTransform::calcAvg (float lowFreq,float hiFreq) {
 
 void FourierTransform::forward (std::vector<float>& buffer, int startAt) {
     if (buffer.size() - startAt < timeSizeVar) {
-        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS FourierTransform.cpp") << "FourierTransform.forward: not enough samples in the buffer between "
+        std::stringstream ss;
+        ss << "GDX-CPP::AUDIO::ANALYSIS FourierTransform.cpp: " << "FourierTransform.forward: not enough samples in the buffer between "
         << startAt << " and " << buffer.size() << " to perform a transform.";
+        throw std::runtime_error(ss.str());
     }
 
     // copy the section of samples we want to analyze

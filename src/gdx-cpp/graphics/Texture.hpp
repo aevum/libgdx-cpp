@@ -63,7 +63,7 @@ public:
             return glEnum != GL10::GL_NEAREST && glEnum != GL10::GL_LINEAR;
         }
 
-        int getGLEnum () {
+        int getGLEnum () const {
             return glEnum;
         }
 
@@ -78,7 +78,7 @@ public:
         static const TextureWrap ClampToEdge;
         static const TextureWrap Repeat;
        
-        int getGLEnum () {
+        int getGLEnum () const {
             return glEnum;
         }
 

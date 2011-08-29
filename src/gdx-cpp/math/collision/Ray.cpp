@@ -20,12 +20,21 @@
 
 #include "Ray.hpp"
 
-#include "math/Matrix4.hpp"
+#include "gdx-cpp/math/Matrix4.hpp"
 
 #include <sstream>
 #include <string>
 
 using namespace gdx_cpp::math::collision;
+
+
+Ray::Ray (Vector3& origin, Vector3& direction)
+:
+origin(origin)
+,direction(direction)
+{
+    direction.nor();
+}
 
 Ray Ray::cpy () {
     return Ray(this->origin, this->direction);
@@ -44,9 +53,9 @@ Ray& Ray::mul (const gdx_cpp::math::Matrix4& matrix) {
     return *this;
 }
 
-std::string& Ray::toString () {
+std::string Ray::toString () {
     std::stringstream ss;
-    ss << "ray [" << origin << ":" << direction << "]";
+    ss << "ray [" << origin.toString() << ":" << direction.toString() << "]";
     return ss.str();
 }
 

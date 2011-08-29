@@ -22,6 +22,7 @@
 #include <vector>
 #include "gdx-cpp/Gdx.hpp"
 #include <cmath>
+#include <stdexcept>
 
 using namespace gdx_cpp::audio::analysis;
 
@@ -29,7 +30,7 @@ DFT::DFT(int ts, float sr): FourierTransform(ts, sr)
 {
     if (ts % 2 != 0)
     {
-      gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS DFT.cpp") << "DFT: timeSize must be even.";
+      throw std::runtime_error("DFT: timeSize must be even.");
     }
     buildTrigTables();
 }
@@ -50,7 +51,7 @@ void DFT::setBand (int i,float a) {
 void DFT::forward (std::vector<float>& samples) {
     if (samples.size() != timeSizeVar)
     {
-        gdx_cpp::Gdx::app.error("GDX-CPP::AUDIO::ANALYSIS DFT.cpp") << "DFT.forward: The length of the passed sample buffer must be equal to DFT.timeSize().";
+        throw std::runtime_error("DFT.forward: The length of the passed sample buffer must be equal to DFT.timeSize().");
     }
     doWindow(samples);
     int N = samples.size();

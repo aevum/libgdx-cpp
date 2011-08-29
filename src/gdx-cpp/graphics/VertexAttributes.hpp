@@ -44,7 +44,7 @@ public:
     
     int size ();
     VertexAttribute& get (int index);
-    std::string& toString ();
+    std::string toString ();
     int vertexSize;
 
 private:

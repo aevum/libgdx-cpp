@@ -21,6 +21,7 @@
 #include "VertexBufferObject.hpp"
 
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
 
 using namespace gdx_cpp::graphics::glutils;
 using namespace gdx_cpp::graphics;
@@ -35,6 +36,11 @@ int VertexBufferObject::createBufferObject () {
     return tmpHandle;
 }
 
+int VertexBufferObject::getKind()
+{
+    return VertexData::Kind::VertexBufferObject;
+}
+
 gdx_cpp::graphics::VertexAttributes& VertexBufferObject::getAttributes () {
     return attributes;
 }
@@ -47,7 +53,7 @@ int VertexBufferObject::getNumMaxVertices () {
     return byteBuffer.capacity() / attributes.vertexSize;
 }
 
-utils::float_buffer VertexBufferObject::getBuffer () {
+utils::float_buffer& VertexBufferObject::getBuffer () {
     isDirty = true;
     return buffer;
 }

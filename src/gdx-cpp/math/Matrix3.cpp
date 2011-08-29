@@ -27,7 +27,7 @@
 
 using namespace gdx_cpp::math;
 
-#define DEGREE_TO_RAD (float) PI / 180
+#define DEGREE_TO_RAD (float) math::utils::PI / 180
 
 Matrix3::Matrix3()
 {

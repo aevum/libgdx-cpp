@@ -46,7 +46,7 @@ int IndexBufferObject::getNumMaxIndices () {
     return buffer.capacity();
 }
 
-void IndexBufferObject::setIndices (std::vector<short>& indices, int offset,int count) {
+void IndexBufferObject::setIndices (const std::vector< short int >& indices, int offset, int count) {
     isDirty = true;
     buffer.clear();
     buffer.put(indices, offset, count);
@@ -66,7 +66,7 @@ void IndexBufferObject::setIndices (std::vector<short>& indices, int offset,int 
     }
 }
 
-gdx_cpp::utils::short_buffer IndexBufferObject::getBuffer () {
+utils::short_buffer& IndexBufferObject::getBuffer () {
     isDirty = true;
     return buffer;
 }
