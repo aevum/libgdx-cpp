@@ -551,6 +551,7 @@ Game.cpp
 InputAdapter.cpp
 Gdx.cpp)
 
-file(COPY ${GDX_HEADERS} DESTINATION ${GDXCPP_INCLUDE_DIR}/gdx)
+install(DIRECTORY src DESTINATION include/gdx-cpp
+          FILES_MATCHING PATTERN "*.hpp")
 
 add_library(gdx-cpp SHARED ${GDX_HEADERS} ${GDX_SRC})
