@@ -21,35 +21,39 @@
 #ifndef GDX_CPP_UTILS_BUFFERUTILS_HPP_
 #define GDX_CPP_UTILS_BUFFERUTILS_HPP_
 
+#include "Buffer.hpp"
+
 namespace gdx_cpp {
 namespace utils {
 
 class BufferUtils {
 public:
-    static void copy (const Buffer& dst,int numFloats,int offset);
-    static void copy (int srcOffset,const Buffer& dst,int numElements);
-    static void copy (int srcOffset,const Buffer& dst,int numElements);
-    static void copy (int srcOffset,const Buffer& dst,int numElements);
-    static void copy (int srcOffset,const Buffer& dst,int numElements);
-    static void copy (int srcOffset,const Buffer& dst,int numElements);
-    static void copy (int srcOffset,const Buffer& dst,int numElements);
-    static void copy (int srcOffset,const Buffer& dst,int numElements);
-    static void copy (const Buffer& src,const Buffer& dst,int numElements);
-    static FloatBuffer& newFloatBuffer (int numFloats);
-    static DoubleBuffer& newDoubleBuffer (int numDoubles);
-    static ByteBuffer& newByteBuffer (int numBytes);
-    static ShortBuffer& newShortBuffer (int numShorts);
-    static CharBuffer& newCharBuffer (int numChars);
-    static IntBuffer& newIntBuffer (int numInts);
-    static LongBuffer& newLongBuffer (int numLongs);
+    static void copy (float * value, const gdx_cpp::utils::buffer<float>& dst, int numFloats,int offset);
+
+//     static void copy (const Buffer& dst,int numFloats,int offset);
+//     static void copy (int srcOffset,const Buffer& dst,int numElements);
+//     static void copy (int srcOffset,const Buffer& dst,int numElements);
+//     static void copy (int srcOffset,const Buffer& dst,int numElements);
+//     static void copy (int srcOffset,const Buffer& dst,int numElements);
+//     static void copy (int srcOffset,const Buffer& dst,int numElements);
+//     static void copy (int srcOffset,const Buffer& dst,int numElements);
+//     static void copy (int srcOffset,const Buffer& dst,int numElements);
+//     static void copy (const Buffer& src,const Buffer& dst,int numElements);
+//     static FloatBuffer& newFloatBuffer (int numFloats);
+//     static DoubleBuffer& newDoubleBuffer (int numDoubles);
+//     static ByteBuffer& newByteBuffer (int numBytes);
+//     static ShortBuffer& newShortBuffer (int numShorts);
+//     static CharBuffer& newCharBuffer (int numChars);
+//     static IntBuffer& newIntBuffer (int numInts);
+//     static LongBuffer& newLongBuffer (int numLongs);
 
 protected:
 
 
 private:
-    static int positionInBytes (const Buffer& dst);
-    static int bytesToElements (const Buffer& dst,int bytes);
-    static int elementsToBytes (const Buffer& dst,int elements);
+//     static int positionInBytes (const Buffer& dst);
+//     static int bytesToElements (const Buffer& dst,int bytes);
+//     static int elementsToBytes (const Buffer& dst,int elements);
 };
 
 } // namespace gdx_cpp

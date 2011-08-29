@@ -1,4 +1,3 @@
-
 file(GLOB GDX_HEADERS
 Files.hpp
 Input.hpp
@@ -288,6 +287,7 @@ InputProcessor.hpp
 Preferences.hpp
 InputMultiplexer.hpp
 InputAdapter.hpp)
+>>>>>>> b49924c3a36acabf758a1c369d9e5f28f9c00a8d
 
 set(GDX_SRC
 Version.cpp
