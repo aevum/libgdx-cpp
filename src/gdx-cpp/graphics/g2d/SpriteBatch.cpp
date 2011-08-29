@@ -117,7 +117,8 @@ void SpriteBatch::createShader () {
                             "}";
 
     shader = new ShaderProgram(vertexShader, fragmentShader);
-    if (shader.isCompiled() == false) throw new IllegalArgumentException("couldn't compile shader: " + shader.getLog());
+    if (shader->isCompiled() == false)
+        throw std::runtime_error("couldn't compile shader: " + shader->getLog());
 }
 
 void SpriteBatch::begin () {
@@ -139,20 +140,20 @@ void SpriteBatch::begin () {
     } else {
         combinedMatrix.set(projectionMatrix).mul(transformMatrix);
 
-        GL20& gl = *Gdx.gl20;
+        GL20& gl = *Gdx::gl20;
         gl.glDepthMask(false);
         gl.glEnable(GL20::GL_TEXTURE_2D);
 
         if (customShader != NULL) {
-            customShader.begin();
-            customShader.setUniformMatrix("u_proj", projectionMatrix);
-            customShader.setUniformMatrix("u_trans", transformMatrix);
-            customShader.setUniformMatrix("u_projTrans", combinedMatrix);
-            customShader.setUniformi("u_texture", 0);
+            customShader->begin();
+            customShader->setUniformMatrix("u_proj", projectionMatrix);
+            customShader->setUniformMatrix("u_trans", transformMatrix);
+            customShader->setUniformMatrix("u_projTrans", combinedMatrix);
+            customShader->setUniformi("u_texture", 0);
         } else {
-            shader.begin();
-            shader.setUniformMatrix("u_projectionViewMatrix", combinedMatrix);
-            shader.setUniformi("u_texture", 0);
+            shader->begin();
+            shader->setUniformMatrix("u_projectionViewMatrix", combinedMatrix);
+            shader->setUniformi("u_texture", 0);
         }
     }
 
@@ -169,16 +170,16 @@ void SpriteBatch::end () {
     idx = 0;
     drawing = false;
 
-    GLCommon& gl = &Gdx::gl;
+    GLCommon& gl = *Gdx::gl;
     gl.glDepthMask(true);
     if (isBlendingEnabled()) gl.glDisable(GL10::GL_BLEND);
     gl.glDisable(GL10::GL_TEXTURE_2D);
 
-    if (Gdx::graphics.isGL20Available()) {
+    if (Gdx::graphics->isGL20Available()) {
         if (customShader != NULL)
-            customShader.end();
+            customShader->end();
         else
-            shader.end();
+            shader->end();
     }
 }
 
@@ -192,26 +193,25 @@ void SpriteBatch::setColor (float r,float g,float b,float a) {
 }
 
 void SpriteBatch::setColor (float color) {
-    this.color = color;
+    this->color = color;
 }
 
 gdx_cpp::graphics::Color& SpriteBatch::getColor () {
     int intBits = utils::NumberUtils::floatToRawIntBits(color);
-    Color color = this.tempColor;
-    color.r = (intBits & 0xff) / 255.0f;
-    color.g = (((unsigned int)intBits >> 8) & 0xff) / 255.0f;
-    color.b = (((unsigned int)intBits >> 16) & 0xff) / 255.0f;
-    color.a = (((unsigned int)intBits >> 24) & 0xff) / 255.0f;
-    return color;
+    this->tempColor.r = (intBits & 0xff) / 255.0f;
+    this->tempColor.g = (((unsigned int)intBits >> 8) & 0xff) / 255.0f;
+    this->tempColor.b = (((unsigned int)intBits >> 16) & 0xff) / 255.0f;
+    this->tempColor.a = (((unsigned int)intBits >> 24) & 0xff) / 255.0f;
+    return this->tempColor;
 }
 
 void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation,int srcX,int srcY,int srcWidth,int srcHeight,bool flipX,bool flipY) {
     if (!drawing)
         throw new std::runtime_error("SpriteBatch.begin must be called before draw.");
 
-    if (texture != lastTexture) {
+    if (&texture != lastTexture) {
         renderMesh();
-        lastTexture = texture;
+        lastTexture = const_cast<Texture*>(&texture);
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
     } else if (idx == vertices.size()) renderMesh();
@@ -336,9 +336,9 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
     if (!drawing)
         throw std::runtime_error("SpriteBatch.begin must be called before draw.");
 
-    if (texture != lastTexture) {
+    if (&texture != lastTexture) {
         renderMesh();
-        lastTexture = texture;
+        lastTexture = const_cast<Texture*>(&texture);
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
     } else if (idx == vertices.size()) renderMesh();
@@ -391,9 +391,9 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
     if (!drawing)
         throw std::runtime_error("SpriteBatch.begin must be called before draw.");
 
-    if (texture != lastTexture) {
+    if (&texture != lastTexture) {
         renderMesh();
-        lastTexture = texture;
+        lastTexture = const_cast<Texture*>(&texture);
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
     } else if (idx == vertices.size()) renderMesh();
@@ -434,9 +434,9 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
     if (!drawing)
         throw std::runtime_error("SpriteBatch.begin must be called before draw.");
 
-    if (texture != lastTexture) {
+    if (&texture != lastTexture) {
         renderMesh();
-        lastTexture = texture;
+        lastTexture = const_cast<Texture*>(&texture);
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
     } else if (idx == vertices.size()) renderMesh();
@@ -473,9 +473,9 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
     if (!drawing)
         throw std::runtime_error("SpriteBatch.begin must be called before draw.");
 
-    if (texture != lastTexture) {
+    if (&texture != lastTexture) {
         renderMesh();
-        lastTexture = texture;
+        lastTexture = const_cast<Texture*>(&texture);
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
     } else if (idx == vertices.size()) renderMesh();
@@ -512,9 +512,9 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
     if (!drawing)
         throw std::runtime_error("SpriteBatch.begin must be called before draw.");
 
-    if (texture != lastTexture) {
+    if (&texture != lastTexture) {
         renderMesh();
-        lastTexture = texture;
+        lastTexture = const_cast<Texture*>(&texture);
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
     } else if (idx == vertices.size()) //
@@ -556,9 +556,9 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,const std::vec
     if (!drawing)
         throw std::runtime_error("SpriteBatch.begin must be called before draw.");
 
-    if (texture != lastTexture) {
+    if (&texture != lastTexture) {
         renderMesh();
-        lastTexture = texture;
+        lastTexture = const_cast<Texture*>(&texture);
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
     } else if (idx + length >= vertices.size()) renderMesh();
@@ -576,10 +576,10 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float width,
     if (!drawing)
         throw std::runtime_error("SpriteBatch.begin must be called before draw.");
 
-    Texture::ptr texture = region.texture;
-    if (texture != lastTexture) {
+    Texture::ptr texture = region.getTexture();
+    if (texture.get() != lastTexture) {
         renderMesh();
-        lastTexture = texture;
+        lastTexture = texture.get();
         invTexWidth = 1.0f / texture->getWidth();
         invTexHeight = 1.0f / texture->getHeight();
     } else if (idx == vertices.size()) //
@@ -621,10 +621,10 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float origin
     if (!drawing)
         throw std::runtime_error("SpriteBatch.begin must be called before draw.");
 
-    Texture::ptr texture = region.texture;
-    if (texture != lastTexture) {
+    Texture::ptr texture = region.getTexture();
+    if (texture.get() != lastTexture) {
         renderMesh();
-        lastTexture = texture;
+        lastTexture = texture.get();
         invTexWidth = 1.0f / texture->getWidth();
         invTexHeight = 1.0f / texture->getHeight();
     } else if (idx == vertices.size()) //
@@ -738,10 +738,10 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float origin
     if (!drawing)
         throw std::runtime_error("SpriteBatch.begin must be called before draw.");
 
-    Texture::ptr texture = region.texture;
-    if (texture != lastTexture) {
+    Texture::ptr texture = region.getTexture();
+    if (texture.get() != lastTexture) {
         renderMesh();
-        lastTexture = texture;
+        lastTexture = texture.get();
         invTexWidth = 1.0f / texture->getWidth();
         invTexHeight = 1.0f / texture->getHeight();
     } else if (idx == vertices.size()) //
@@ -879,7 +879,7 @@ void SpriteBatch::renderMesh () {
     if (spritesInBatch > maxSpritesInBatch) maxSpritesInBatch = spritesInBatch;
 
     lastTexture->bind();
-    mesh.setVertices(vertices, 0, idx);
+    mesh->setVertices(vertices, 0, idx);
 
     if (Gdx::graphics->isGL20Available()) {
         if (blendingDisabled) {
@@ -891,18 +891,18 @@ void SpriteBatch::renderMesh () {
         }
 
         if (customShader != NULL)
-            mesh.render(customShader, GL10::GL_TRIANGLES, 0, spritesInBatch * 6);
+            mesh->render(*customShader, GL10::GL_TRIANGLES, 0, spritesInBatch * 6);
         else
-            mesh.render(shader, GL10::GL_TRIANGLES, 0, spritesInBatch * 6);
+            mesh->render(*shader, GL10::GL_TRIANGLES, 0, spritesInBatch * 6);
     } else {
         if (blendingDisabled) {
-            Gdx::gl10->glDisable(GL10.GL_BLEND);
+            Gdx::gl10->glDisable(GL10::GL_BLEND);
         } else {
             GL10& gl10 = *Gdx::gl10;
             gl10.glEnable(GL10::GL_BLEND);
             gl10.glBlendFunc(blendSrcFunc, blendDstFunc);
         }
-        mesh.render(GL10::GL_TRIANGLES, 0, spritesInBatch * 6);
+        mesh->render(GL10::GL_TRIANGLES, 0, spritesInBatch * 6);
     }
 
     idx = 0;
@@ -957,7 +957,7 @@ void SpriteBatch::setTransformMatrix (const gdx_cpp::math::Matrix4& transform) {
     transformMatrix.set(transform);
 }
 
-void SpriteBatch::setShader (const gdx_cpp::graphics::glutils::ShaderProgram& shader) {
+void SpriteBatch::setShader (gdx_cpp::graphics::glutils::ShaderProgram* shader) {
     customShader = shader;
 }
 
@@ -984,18 +984,21 @@ color(Color::WHITE.toFloatBits())
 {
     this->buffers.reserve(buffers);
 
+    std::vector<VertexAttribute> attributes;
+    attributes.push_back(VertexAttribute(VertexAttributes::Usage::Position, 2, ShaderProgram::POSITION_ATTRIBUTE));
+    attributes.push_back(VertexAttribute(VertexAttributes::Usage::ColorPacked, 4, ShaderProgram::COLOR_ATTRIBUTE));
+    attributes.push_back(VertexAttribute(VertexAttributes::Usage::TextureCoordinates, 2, ShaderProgram::TEXCOORD_ATTRIBUTE + "0"));
+    
     for (int i = 0; i < buffers; i++) {
-        this->buffers[i] = new Mesh(false, size * 4, size * 6, new VertexAttribute(Usage.Position, 2,
-                                   ShaderProgram.POSITION_ATTRIBUTE), new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
-                                   new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
+        this->buffers[i] = new Mesh(false, size * 4, size * 6, attributes);
     }
 
     projectionMatrix.setToOrtho2D(0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
 
-    vertices = new float[size * Sprite::SPRITE_SIZE];
+    vertices.reserve(size * Sprite::SPRITE_SIZE);
 
     int len = size * 6;
-    short indices[len];
+    std::vector<short> indices(len);
     short j = 0;
     
     for (int i = 0; i < len; i += 6, j += 4) {
@@ -1008,7 +1011,7 @@ color(Color::WHITE.toFloatBits())
     }
     
     for (int i = 0; i < buffers; i++) {
-        this->buffers[i].setIndices(indices);
+        this->buffers[i]->setIndices(indices);
     }
     mesh = this->buffers[0];
 

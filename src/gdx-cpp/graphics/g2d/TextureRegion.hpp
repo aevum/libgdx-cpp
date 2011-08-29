@@ -44,7 +44,7 @@ public:
     void setRegion (float u,float v,float u2,float v2);
     void setRegion (const TextureRegion& region);
     void setRegion (const gdx_cpp::graphics::g2d::TextureRegion& region, int x, int y, int width, int height);
-    ptrTexture getTexture ();
+    ptrTexture getTexture () const;
     void setTexture (gdx_cpp::graphics::g2d::TextureRegion::ptrTexture texture);
     float getU () const;
     void setU (float u);
@@ -69,6 +69,7 @@ public:
 
     float u, v;
     float u2, v2;
+
 protected:
     TextureRegion::ptrTexture texture;
 

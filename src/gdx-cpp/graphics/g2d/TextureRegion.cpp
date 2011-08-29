@@ -92,7 +92,7 @@ void TextureRegion::setRegion (const gdx_cpp::graphics::g2d::TextureRegion& regi
     setRegion(region.getRegionX() + x, region.getRegionY() + y, width, height);
 }
 
-TextureRegion::ptrTexture TextureRegion::getTexture () {
+TextureRegion::ptrTexture TextureRegion::getTexture () const {
     return texture;
 }
 
@@ -222,6 +222,8 @@ gdx_cpp::utils::MatrixBase<TextureRegion::ptr> TextureRegion::split (int tileWid
 
     return matrix;
 }
+
+
 
 gdx_cpp::utils::MatrixBase<TextureRegion::ptr> TextureRegion::split (gdx_cpp::graphics::Texture::ptr texture, int tileWidth, int tileHeight) {
     TextureRegion region(texture);

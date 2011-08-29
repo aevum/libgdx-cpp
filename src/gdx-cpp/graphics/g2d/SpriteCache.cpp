@@ -23,13 +23,47 @@
 #include "gdx-cpp/graphics/Color.hpp"
 #include "gdx-cpp/graphics/Mesh.hpp"
 #include "gdx-cpp/utils/NumberUtils.hpp"
-#include <stdexcept>
+#include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
 #include "gdx-cpp/math/MathUtils.hpp"
 #include <string.h>
+#include <stdexcept>
 
+using namespace gdx_cpp::graphics::glutils;
 using namespace gdx_cpp::graphics::g2d;
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
+
+ShaderProgram* createDefaultShader () {
+    if (!Gdx::graphics->isGL20Available()) return NULL;
+    std::string vertexShader = "attribute vec4 " + ShaderProgram::POSITION_ATTRIBUTE + ";\n" //
+     "attribute vec4 " + ShaderProgram::COLOR_ATTRIBUTE + ";\n" //
+     "attribute vec2 " + ShaderProgram::TEXCOORD_ATTRIBUTE + "0;\n" //
+     "uniform mat4 u_projectionViewMatrix;\n" //
+     "varying vec4 v_color;\n" //
+     "varying vec2 v_texCoords;\n" //
+     "\n" //
+     "void main()\n" //
+     "{\n" //
+     "   v_color = " + ShaderProgram::COLOR_ATTRIBUTE + ";\n" //
+     "   v_texCoords = " + ShaderProgram::TEXCOORD_ATTRIBUTE + "0;\n" //
+     "   gl_Position =  u_projectionViewMatrix * " + ShaderProgram::POSITION_ATTRIBUTE + ";\n" //
+     "}\n";
+    std::string fragmentShader = "#ifdef GL_ES\n" //
+     "precision mediump float;\n" //
+     "#endif\n" //
+     "varying vec4 v_color;\n" //
+     "varying vec2 v_texCoords;\n" //
+     "uniform sampler2D u_texture;\n" //
+     "void main()\n"//
+     "{\n" //
+     "  gl_FragColor = v_color * texture2D(u_texture, v_texCoords);\n" //
+     "}";
+
+    ShaderProgram* shader = new ShaderProgram(vertexShader, fragmentShader);
+    if (shader->isCompiled() == false)
+        throw std::runtime_error("Error compiling shader: " + shader->getLog());
+    return shader;
+}
 
 gdx_cpp::graphics::g2d::SpriteCache::SpriteCache(int size = 1000, ShaderProgram* shader = createDefaultShader(), bool useIndices = false) :
  color(Color::WHITE.toFloatBits())
@@ -43,15 +77,18 @@ gdx_cpp::graphics::g2d::SpriteCache::SpriteCache(int size = 1000, ShaderProgram*
     textures.reserve(8);
     counts.reserve(8);
 
-    mesh = new Mesh(true, size * (useIndices ? 4 : 6), useIndices ? size * 6 : 0, new VertexAttribute(Usage.Position, 2,
-                                                                                                      ShaderProgram.POSITION_ATTRIBUTE), new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
-                    new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
+    std::vector<VertexAttribute> attribute;
+    attribute.push_back(VertexAttribute(VertexAttributes::Usage::Position, 2, ShaderProgram::POSITION_ATTRIBUTE));
+    attribute.push_back(VertexAttribute(VertexAttributes::Usage::ColorPacked, 4, ShaderProgram::COLOR_ATTRIBUTE));
+    attribute.push_back(VertexAttribute(VertexAttributes::Usage::TextureCoordinates, 2, ShaderProgram::TEXCOORD_ATTRIBUTE + "0"));
+    
+    mesh = new Mesh(true, size * (useIndices ? 4 : 6), useIndices ? size * 6 : 0, attribute);
 
     mesh->setAutoBind(false);
     
     if (useIndices) {
         int length = size * 6;
-        short indices[length];
+        std::vector<short> indices(length);
         short j = 0;
         for (int i = 0; i < length; i += 6, j += 4) {
             indices[i + 0] = (short)j;
@@ -78,17 +115,16 @@ void SpriteCache::setColor (float r, float g, float b, float a) {
 }
 
 void SpriteCache::setColor (float color) {
-    this.color = color;
+    this->color = color;
 }
 
 gdx_cpp::graphics::Color& SpriteCache::getColor () {
     int intBits = utils::NumberUtils::floatToRawIntBits(color);
-    Color color = this.tempColor;
-    color.r = (intBits & 0xff) / 255f;
-    color.g = (((unsigned int) intBits >> 8) & 0xff) / 255f;
-    color.b = (((unsigned int)intBits >> 16) & 0xff) / 255f;
-    color.a = (((unsigned int)intBits >> 24) & 0xff) / 255f;
-    return color;
+    tempColor.r = (intBits & 0xff) / 255.0f;
+    tempColor.g = (((unsigned int) intBits >> 8) & 0xff) / 255.0f;
+    tempColor.b = (((unsigned int)intBits >> 16) & 0xff) / 255.0f;
+    tempColor.a = (((unsigned int)intBits >> 24) & 0xff) / 255.0f;
+    return tempColor;
 }
 
 void SpriteCache::beginCache () {
@@ -96,7 +132,7 @@ void SpriteCache::beginCache () {
         throw std::runtime_error("endCache must be called before begin.");
     
     int verticesPerImage = mesh->getNumIndices() > 0 ? 4 : 6;
-    currentCache = new Cache(caches.size(), mesh.getNumVertices() / verticesPerImage * 6);
+    currentCache = new Cache(caches.size(), mesh->getNumVertices() / verticesPerImage * 6);
     caches.push_back(currentCache);
     mesh->getVerticesBuffer().compact();
 }
@@ -111,15 +147,15 @@ void SpriteCache::beginCache (int cacheID) {
         return;
     }
     currentCache = caches[cacheID];
-    mesh->getVerticesBuffer()._position(currentCache.offset);
+    mesh->getVerticesBuffer().position(currentCache->offset);
 }
 
 int SpriteCache::endCache () {
     if (currentCache == NULL)
         throw std::runtime_error("beginCache must be called before endCache.");
  
-    int cacheCount = mesh->getVerticesBuffer()._position() - currentCache->offset;
-    if (currentCache->textures == NULL) {
+    int cacheCount = mesh->getVerticesBuffer().position() - currentCache->offset;
+    if (currentCache->textures.size() == 0) {
         // New cache.
         currentCache->maxCount = cacheCount;
         currentCache->textures = textures;
@@ -130,22 +166,22 @@ int SpriteCache::endCache () {
         if (cacheCount > currentCache->maxCount) {
             std::stringstream ss;
             ss << "If a cache is not the last created, it cannot be redefined with more entries than when it was first created: "
-               << cacheCount << " (" + currentCache->maxCount + " max)";
+               << cacheCount << " (" + currentCache->maxCount  << " max)";
             throw std::runtime_error(ss.str());
         }
 
-        if (currentCache->textures.length < textures.size()) {
-            currentCache->textures = new Texture[textures.size()];
+        if (currentCache->textures.size() < textures.size()) {
+            currentCache->textures.reserve(textures.size());
         }
         
         for (int i = 0, n = textures.size(); i < n; i++)
             currentCache->textures[i] = textures[i];
 
-        if (currentCache->counts.length < counts.size()) currentCache->counts = new int[counts.size()];
+        if (currentCache->counts.size() < counts.size()) currentCache->counts.reserve(counts.size());
         for (int i = 0, n = counts.size(); i < n; i++)
             currentCache->counts[i] = counts[i];
 
-        FloatBuffer vertices = mesh->getVerticesBuffer();
+        utils::float_buffer& vertices = mesh->getVerticesBuffer();
         vertices.position(0);
         Cache* lastCache = caches[caches.size() - 1];
         vertices.limit(lastCache->offset + lastCache->maxCount);
@@ -161,24 +197,7 @@ int SpriteCache::endCache () {
 
 void SpriteCache::clear () {
     caches.clear();
-    mesh.getVerticesBuffer().clear().flip();
-}
-
-void SpriteCache::add (gdx_cpp::graphics::Texture::ptr texture,int offset,int length) {
-    if (currentCache == NULL)
-        throw std::runtime_error("beginCache must be called before add.");
-
-    int verticesPerImage = mesh->getNumIndices() > 0 ? 4 : 6;
-    int count = length / (verticesPerImage * Sprite::VERTEX_SIZE) * 6;
-    int lastIndex = textures.size() - 1;
-    if (lastIndex < 0 || textures.get(lastIndex) != texture) {
-        textures.push_back(texture);
-        counts.push_back(count);
-    } else {
-        counts[lastIndex] = counts[lastIndex] + count;
-    }
-
-    mesh->getVerticesBuffer().put(vertices, offset, length);
+    mesh->getVerticesBuffer().clear().flip();
 }
 
 void SpriteCache::add (gdx_cpp::graphics::Texture::ptr texture,float x,float y) {
@@ -203,13 +222,13 @@ void SpriteCache::add (gdx_cpp::graphics::Texture::ptr texture,float x,float y) 
     tempVertices[13] = 1;
     tempVertices[14] = 0;
 
-    if (mesh.getNumIndices() > 0) {
+    if (mesh->getNumIndices() > 0) {
         tempVertices[15] = fx2;
         tempVertices[16] = y;
         tempVertices[17] = color;
         tempVertices[18] = 1;
         tempVertices[19] = 1;
-        add(texture, tempVertices, 0, 20);
+        add(texture, tempVertices, 30, 0, 20);
     } else {
         tempVertices[15] = fx2;
         tempVertices[16] = fy2;
@@ -228,11 +247,11 @@ void SpriteCache::add (gdx_cpp::graphics::Texture::ptr texture,float x,float y) 
         tempVertices[27] = color;
         tempVertices[28] = 0;
         tempVertices[29] = 1;
-        add(texture, tempVertices, 0, 30);
+        add(texture, tempVertices, 30, 0, 30);
     }
 }
 
-void SpriteCache::add (gdx_cpp::graphics::Texture::ptr texture,float x,float y,int srcWidth,int srcHeight,float u,float v,float u2,float v2,float color) {
+void SpriteCache::add (const gdx_cpp::graphics::Texture::ptr texture, float x, float y, int srcWidth, int srcHeight, float u, float v, float u2, float v2, float color) {
     float fx2 = x + srcWidth;
     float fy2 = y + srcHeight;
 
@@ -260,7 +279,7 @@ void SpriteCache::add (gdx_cpp::graphics::Texture::ptr texture,float x,float y,i
         tempVertices[17] = color;
         tempVertices[18] = u2;
         tempVertices[19] = v;
-        add(texture, tempVertices, 0, 20);
+        add(texture, tempVertices, 30, 0, 20);
     } else {
         tempVertices[15] = fx2;
         tempVertices[16] = fy2;
@@ -279,11 +298,11 @@ void SpriteCache::add (gdx_cpp::graphics::Texture::ptr texture,float x,float y,i
         tempVertices[27] = color;
         tempVertices[28] = u;
         tempVertices[29] = v;
-        add(texture, tempVertices, 0, 30);
+        add(texture, tempVertices, 30, 0, 30);
     }
 }
 
-void SpriteCache::add (const gdx_cpp::graphics::Texture::ptr texture,float x,float y,int srcX,int srcY,int srcWidth,int srcHeight) {
+void SpriteCache::add (const gdx_cpp::graphics::Texture::ptr texture, float x, float y, int srcWidth, int srcHeight, int srcX, int srcY) {
     float invTexWidth = 1.0f / texture->getWidth();
     float invTexHeight = 1.0f / texture->getHeight();
     float u = srcX * invTexWidth;
@@ -317,7 +336,7 @@ void SpriteCache::add (const gdx_cpp::graphics::Texture::ptr texture,float x,flo
         tempVertices[17] = color;
         tempVertices[18] = u2;
         tempVertices[19] = v;
-        add(texture, tempVertices, 0, 20);
+        add(texture, tempVertices, 30, 0, 20);
     } else {
         tempVertices[15] = fx2;
         tempVertices[16] = fy2;
@@ -336,7 +355,7 @@ void SpriteCache::add (const gdx_cpp::graphics::Texture::ptr texture,float x,flo
         tempVertices[27] = color;
         tempVertices[28] = u;
         tempVertices[29] = v;
-        add(texture, tempVertices, 0, 30);
+        add(texture, tempVertices, 30, 0, 30);
     }
 }
 
@@ -386,7 +405,7 @@ void SpriteCache::add (gdx_cpp::graphics::Texture::ptr texture,float x,float y,f
         tempVertices[17] = color;
         tempVertices[18] = u2;
         tempVertices[19] = v;
-        add(texture, tempVertices, 0, 20);
+        add(texture, tempVertices, 30, 0, 20);
     } else {
         tempVertices[15] = fx2;
         tempVertices[16] = fy2;
@@ -405,7 +424,7 @@ void SpriteCache::add (gdx_cpp::graphics::Texture::ptr texture,float x,float y,f
         tempVertices[27] = color;
         tempVertices[28] = u;
         tempVertices[29] = v;
-        add(texture, tempVertices, 0, 30);
+        add(texture, tempVertices, 30, 0, 30);
     }
 }
 
@@ -528,7 +547,7 @@ void SpriteCache::add (gdx_cpp::graphics::Texture::ptr texture,float x,float y,f
         tempVertices[17] = color;
         tempVertices[18] = u2;
         tempVertices[19] = v;
-        add(texture, tempVertices, 0, 20);
+        add(texture, tempVertices, 30, 0, 20);
     } else {
         tempVertices[15] = x3;
         tempVertices[16] = y3;
@@ -547,7 +566,7 @@ void SpriteCache::add (gdx_cpp::graphics::Texture::ptr texture,float x,float y,f
         tempVertices[27] = color;
         tempVertices[28] = u;
         tempVertices[29] = v;
-        add(texture, tempVertices, 0, 30);
+        add(texture, tempVertices, 30, 0, 30);
     }
 }
 
@@ -587,7 +606,7 @@ void SpriteCache::add (TextureRegion& region,float x,float y,float width,float h
         tempVertices[17] = color;
         tempVertices[18] = u2;
         tempVertices[19] = v;
-        add(region.texture, tempVertices, 0, 20);
+        add(region.getTexture(), tempVertices, 30, 0, 20);
     } else {
         tempVertices[15] = fx2;
         tempVertices[16] = fy2;
@@ -606,7 +625,7 @@ void SpriteCache::add (TextureRegion& region,float x,float y,float width,float h
         tempVertices[27] = color;
         tempVertices[28] = u;
         tempVertices[29] = v;
-        add(region.texture, tempVertices, 0, 30);
+        add(region.getTexture(), tempVertices, 30, 0, 30);
     }
 }
 
@@ -715,7 +734,7 @@ void SpriteCache::add (const TextureRegion& region,float x,float y,float originX
         tempVertices[17] = color;
         tempVertices[18] = u2;
         tempVertices[19] = v;
-        add(region.texture, tempVertices, 0, 20);
+        add(region.getTexture(), tempVertices, 30, 0, 20);
     } else {
         tempVertices[15] = x3;
         tempVertices[16] = y3;
@@ -734,24 +753,24 @@ void SpriteCache::add (const TextureRegion& region,float x,float y,float originX
         tempVertices[27] = color;
         tempVertices[28] = u;
         tempVertices[29] = v;
-        add(region.texture, tempVertices, 0, 30);
+        add(region.getTexture(), tempVertices, Sprite::SPRITE_SIZE, 0, 30);
     }
 }
 
-void SpriteCache::add (const Sprite& sprite) {
+void SpriteCache::add (Sprite& sprite) {
     if (mesh->getNumIndices() > 0) {
-        add(sprite.getTexture(), sprite.getVertices(), 0, Sprite::SPRITE_SIZE);
+        add(sprite.getTexture(), sprite.getVertices(), Sprite::SPRITE_SIZE, 0, Sprite::SPRITE_SIZE);
         return;
     }
 
     float* const spriteVertices = sprite.getVertices();
 
     memcpy(tempVertices, spriteVertices, sizeof(float) * 3 * Sprite::VERTEX_SIZE);
-    memcpy(tempVertices, spriteVertices[2 * Sprite::VERTEX_SIZE], sizeof(float) * 3 * Sprite::VERTEX_SIZE);
-    memcpy(tempVertices, spriteVertices[3 * Sprite::VERTEX_SIZE], sizeof(float) * 4 * Sprite::VERTEX_SIZE);
+    memcpy(tempVertices, &spriteVertices[2 * Sprite::VERTEX_SIZE], sizeof(float) * 3 * Sprite::VERTEX_SIZE);
+    memcpy(tempVertices, &spriteVertices[3 * Sprite::VERTEX_SIZE], sizeof(float) * 4 * Sprite::VERTEX_SIZE);
     memcpy(tempVertices, spriteVertices, sizeof(float) * 5 * Sprite::VERTEX_SIZE);
     
-    add(sprite.getTexture(), tempVertices, 0, 30);
+    add(sprite.getTexture(), tempVertices, Sprite::SPRITE_SIZE, 0, 30);
 }
 
 void SpriteCache::begin () {
@@ -788,7 +807,7 @@ void SpriteCache::begin () {
             shader->setUniformi("u_texture", 0);
         }
 
-        mesh->bind(shader);
+        mesh->bind(*shader);
     }
     drawing = true;
 }
@@ -800,16 +819,16 @@ void SpriteCache::end () {
     drawing = false;
 
     if (Gdx::graphics->isGL20Available() == false) {
-        GL10& gl = Gdx.gl10;
+        GL10& gl = *Gdx::gl10;
         gl.glDepthMask(true);
-        gl.glDisable(GL10.GL_TEXTURE_2D);
+        gl.glDisable(GL10::GL_TEXTURE_2D);
         mesh->unbind();
     } else {
         shader->end();
-        GL20& gl = *Gdx.gl20;
+        GL20& gl = *Gdx::gl20;
         gl.glDepthMask(true);
-        gl.glDisable(GL20.GL_TEXTURE_2D);
-        mesh->unbind(shader);
+        gl.glDisable(GL20::GL_TEXTURE_2D);
+        mesh->unbind(*shader);
     }
 }
 
@@ -818,17 +837,17 @@ void SpriteCache::draw (int cacheID) {
         throw std::runtime_error("SpriteCache.begin must be called before draw.");
 
     Cache* cache = caches[cacheID];
-    int offset = cache.offset;
-    std::vector<Texture::ptr>& textures = cache.textures;
-    std::vector<Texture::ptr>& counts = cache.counts;
+    int offset = cache->offset;
+    std::vector<Texture::ptr>& textures = cache->textures;
+    std::vector<int>& counts = cache->counts;
     if (Gdx::graphics->isGL20Available()) {
         for (int i = 0, n = textures.size(); i < n; i++) {
             int count = counts[i];
             textures[i]->bind();
             if (customShader != NULL)
-                mesh->render(customShader, GL10::GL_TRIANGLES, offset, count);
+                mesh->render(*customShader, GL10::GL_TRIANGLES, offset, count);
             else
-                mesh->render(shader, GL10::GL_TRIANGLES, offset, count);
+                mesh->render(*shader, GL10::GL_TRIANGLES, offset, count);
             offset += count;
         }
     } else {
@@ -846,7 +865,7 @@ void SpriteCache::draw (int cacheID,int offset,int length) {
         throw std::runtime_error("SpriteCache.begin must be called before draw.");
 
     Cache* cache = caches[cacheID];
-    offset = offset * 6 + cache.offset;
+    offset = offset * 6 + cache->offset;
     length *= 6;
     std::vector<Texture::ptr>& textures = cache->textures;
     std::vector<int>& counts = cache->counts;
@@ -860,9 +879,9 @@ void SpriteCache::draw (int cacheID,int offset,int length) {
             } else
                 length -= count;
             if (customShader != NULL)
-                mesh->render(customShader, GL10.GL_TRIANGLES, offset, count);
+                mesh->render(*customShader, GL10::GL_TRIANGLES, offset, count);
             else
-                mesh->render(shader, GL10.GL_TRIANGLES, offset, count);
+                mesh->render(*shader, GL10::GL_TRIANGLES, offset, count);
             offset += count;
         }
     } else {
@@ -882,7 +901,7 @@ void SpriteCache::draw (int cacheID,int offset,int length) {
 
 void SpriteCache::dispose () {
     mesh->dispose();
-    if (shader != NULL) shader.dispose();
+    if (shader != NULL) shader->dispose();
 }
 
 gdx_cpp::math::Matrix4& SpriteCache::getProjectionMatrix () {
@@ -905,7 +924,24 @@ void SpriteCache::setTransformMatrix (const gdx_cpp::math::Matrix4& transform) {
     transformMatrix.set(transform);
 }
 
-void SpriteCache::setShader (const gdx_cpp::graphics::glutils::ShaderProgram& shader) {
+void SpriteCache::setShader (gdx_cpp::graphics::glutils::ShaderProgram* shader) {
     customShader = shader;
+}
+
+void SpriteCache::add(Texture::ptr texture, float* vertices, int size, int offset, int length) {
+    if (currentCache == NULL)
+        throw std::runtime_error("beginCache must be called before add.");
+
+    int verticesPerImage = mesh->getNumIndices() > 0 ? 4 : 6;
+    int count = length / (verticesPerImage * Sprite::VERTEX_SIZE) * 6;
+    int lastIndex = textures.size() - 1;
+
+    if (lastIndex < 0 || textures[lastIndex] != texture) {
+        textures.push_back(texture);
+        counts.push_back(count);
+    } else
+        counts[lastIndex] = counts[lastIndex] + count;
+
+    mesh->getVerticesBuffer().put(vertices, size, offset, length);
 }
 

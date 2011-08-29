@@ -40,6 +40,12 @@ public:
     {
     }
 
+    buffer_base() : _capacity(0)
+            , _position(0)
+            , _mark(-1)
+            , _limit(0) {
+    }
+
     char_ptr bf;
     int _capacity;
     int _position;
@@ -50,7 +56,7 @@ public:
 template <typename T>
 struct buffer : public buffer_base {
     buffer(int mark, int pos, int lim , int capacity)
-    : buffer_base(buffer_base::char_ptr(new char[capacity]), capacity, pos, mark, lim)
+            : buffer_base(buffer_base::char_ptr(new char[capacity]), capacity, pos, mark, lim)
     {
         limit(lim);
         position(pos);
@@ -63,6 +69,9 @@ struct buffer : public buffer_base {
         }
     }
 
+    buffer() : buffer_base() {
+    }
+    
     int capacity() {
         return _capacity;
     }
@@ -140,6 +149,14 @@ struct buffer : public buffer_base {
         memcpy(casted_array, &array[0] + offset, sizeof(U) * count);
     }
 
+    buffer<T>& compact() {
+        memcpy(bf.get(), bf.get() + position(), remaining());
+        position(remaining());
+        limit(capacity());
+        discardMark();
+        return *this;
+    }
+
     buffer<T>& reset() {
         int m = _mark;
         if (m < 0)
@@ -195,7 +212,7 @@ struct buffer : public buffer_base {
         int end = offset + length;
         for (int i = offset; i < end; i++)
             this->put(src[i]);
-        
+
         return *this;
     }
 
@@ -206,7 +223,7 @@ struct buffer : public buffer_base {
     buffer<T>& put(const std::vector<T>& src) {
         return put(src, 0, src.size());
     }
-    
+
     buffer<T>& put(const std::vector<T>& src, int offset, int length) {
         checkBounds(offset, length, src.size());
         if (length > remaining())
@@ -283,12 +300,15 @@ struct buffer : public buffer_base {
 template <typename T>
 struct default_buffer : public buffer<T> {
     default_buffer(int capacity) :
-        buffer<T>(-1, 0, capacity, capacity)
+            buffer<T>(-1, 0, capacity, capacity)
     {
     }
 
+    default_buffer() : buffer<T>() {
+    }
+
     default_buffer(const buffer_base& other) :
-        buffer<T>(other)
+            buffer<T>(other)
     {
     }
 };

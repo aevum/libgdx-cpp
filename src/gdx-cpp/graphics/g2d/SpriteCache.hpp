@@ -30,6 +30,10 @@ namespace graphics {
 
 class Mesh;
 
+namespace glutils {
+    class ShaderProgram;
+}
+
 namespace g2d {
 
 class SpriteCache: public gdx_cpp::utils::Disposable {
@@ -47,7 +51,7 @@ class SpriteCache: public gdx_cpp::utils::Disposable {
     };
     
 public:
-    SpriteCache(int size, ShaderProgram* shader, bool useIndices);
+    SpriteCache(int size, glutils::ShaderProgram* shader, bool useIndices);
     
     void setColor (const gdx_cpp::graphics::Color& tint);
     void setColor (float r,float g,float b,float a);
@@ -57,16 +61,19 @@ public:
     void beginCache (int cacheID);
     int endCache ();
     void clear ();
-    void add (const gdx_cpp::graphics::Texture& texture,int offset,int length);
-    void add (const gdx_cpp::graphics::Texture::ptr texture, float x, float y);
-    void add (const gdx_cpp::graphics::Texture& texture,float x,float y,int srcWidth,int srcHeight,float u,float v,float u2,float v2,float color);
-    void add (const gdx_cpp::graphics::Texture& texture,float x,float y,int srcX,int srcY,int srcWidth,int srcHeight);
+
+    void add (const gdx_cpp::graphics::Texture::ptr texture, float* vertices, int size, int offset, int length) ;
+    void add (gdx_cpp::graphics::Texture::ptr texture,float x,float y);
+    void add (const gdx_cpp::graphics::Texture::ptr texture, float* vertices, int offset, int length);
+    void add (gdx_cpp::graphics::g2d::TextureRegion& region, float x, float y, float width, float height);
+    void add (const gdx_cpp::graphics::Texture::ptr texture,float x,float y,int srcWidth,int srcHeight,float u,float v,float u2,float v2,float color);
+    void add (const gdx_cpp::graphics::Texture::ptr texture,float x,float y,int srcX,int srcY,int srcWidth,int srcHeight);
     void add (gdx_cpp::graphics::Texture::ptr texture, float x, float y, float width, float height, int srcX, int srcY, int srcWidth, int srcHeight, bool flipX, bool flipY);
     void add (gdx_cpp::graphics::Texture::ptr texture, float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float rotation, int srcX, int srcY, int srcWidth, int srcHeight, bool flipX, bool flipY);
     void add (gdx_cpp::graphics::g2d::TextureRegion::ptr region, float x, float y);
     void add (gdx_cpp::graphics::g2d::TextureRegion::ptr region, float x, float y, float width, float height);
     void add (const TextureRegion& region,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation);
-    void add (const Sprite& sprite);
+    void add (gdx_cpp::graphics::g2d::Sprite& sprite);
     void begin ();
     void end ();
     void draw (int cacheID);
@@ -76,10 +83,10 @@ public:
     void setProjectionMatrix (const gdx_cpp::math::Matrix4& projection);
     gdx_cpp::math::Matrix4& getTransformMatrix ();
     void setTransformMatrix (const gdx_cpp::math::Matrix4& transform);
-    void setShader (const gdx_cpp::graphics::glutils::ShaderProgram& shader);
+    void setShader (gdx_cpp::graphics::glutils::ShaderProgram* shader);
 
 private:
-    static const float tempVertices[Sprite::VERTEX_SIZE * 6];
+    static float tempVertices[Sprite::VERTEX_SIZE * 6];
     
     Mesh* mesh;
     bool drawing;
@@ -88,7 +95,7 @@ private:
     std::vector<Cache*> caches;
     
     math::Matrix4 combinedMatrix;
-    ShaderProgram* shader;
+    glutils::ShaderProgram* shader;
     
     Cache* currentCache;
     std::vector<Texture::ptr> textures;
@@ -97,9 +104,7 @@ private:
     float color;
     Color tempColor;
     
-    ShaderProgram* customShader;
-    Mesh* mesh;
-    ShaderProgram* shader;
+    glutils::ShaderProgram* customShader;
 };
 
 } // namespace gdx_cpp

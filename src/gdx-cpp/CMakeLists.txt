@@ -288,7 +288,6 @@ Preferences.hpp
 InputMultiplexer.hpp
 InputAdapter.hpp)
 
-
 set(GDX_SRC
 Version.cpp
 # assets/AssetLoadingTask.cpp

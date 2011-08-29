@@ -69,7 +69,7 @@ public:
     const gdx_cpp::math::Matrix4& getTransformMatrix ();
     void setProjectionMatrix (const gdx_cpp::math::Matrix4& projection);
     void setTransformMatrix (const gdx_cpp::math::Matrix4& transform);
-    void setShader (const gdx_cpp::graphics::glutils::ShaderProgram& shader);
+    void setShader (gdx_cpp::graphics::glutils::ShaderProgram* shader);
     bool isBlendingEnabled ();
 
     int renderCalls;
@@ -87,7 +87,7 @@ private:
     Mesh* mesh;
     std::vector<Mesh*> buffers;
     
-    Texture::ptr lastTexture;
+    Texture* lastTexture;
     float invTexWidth;
     float invTexHeight;
     
