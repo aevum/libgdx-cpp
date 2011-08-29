@@ -20,6 +20,8 @@
 
 #include "Aliases.hpp"
 #include <stdexcept>
+#include <vector>
+#include <sstream>
 
 namespace gdx_cpp {
 
@@ -30,27 +32,27 @@ public:
     typedef ref_ptr_maker<char>::type char_ptr;
     buffer_base(char_ptr bf, int capacity, int position, int mark, int limit)
             : bf(bf)
-            , capacity(capacity)
-            , position(position)
-            , mark(mark)
-            , limit(limit)
+            , _capacity(capacity)
+            , _position(position)
+            , _mark(mark)
+            , _limit(limit)
     {
     }
 
     char_ptr bf;
-    int capacity;
-    int position;
-    int mark;
-    int limit;
+    int _capacity;
+    int _position;
+    int _mark;
+    int _limit;
 };
 
 template <typename T>
-struct buffer : protected buffer_base {
+struct buffer : public buffer_base {
     buffer(int mark, int pos, int lim , int capacity)
-    : buffer_base(buffer_base::char_ptr(new char[capacity]), capacity, position, mark, lim)
+    : buffer_base(buffer_base::char_ptr(new char[capacity]), capacity, pos, mark, lim)
     {
-        setLimit(lim);
-        setPosition(pos);
+        limit(lim);
+        position(pos);
         if (mark >= 0) {
             if (mark > pos) {
                 std::stringstream ss;
@@ -60,12 +62,12 @@ struct buffer : protected buffer_base {
         }
     }
 
-    int getCapacity() {
-        return capacity;
+    int capacity() {
+        return _capacity;
     }
 
-    int getPosition() {
-        return position;
+    int position() {
+        return _position;
     }
 
     template <typename Other>
@@ -89,138 +91,178 @@ struct buffer : protected buffer_base {
         return ((T*)bf.get())[checkIndex(position)];
     }
 
-    buffer<T>& setPosition(int newPosition) {
-        if ((newPosition > limit) || (newPosition < 0))
+    buffer<T>& position(int newPosition) {
+        if ((newPosition > _limit) || (newPosition < 0))
             throw std::runtime_error("");
-        position = newPosition;
-        if (mark > position) clearMark();
+        _position = newPosition;
+        if (_mark > _position) clearMark();
         return *this;
     }
 
-    int getLimit() {
-        return limit;
+    int limit() {
+        return _limit;
     }
 
-    buffer<T>& setLimit(int newLimit)
+    buffer<T>& limit(int newLimit)
     {
-        if ((newLimit > capacity) || (newLimit < 0))
+        if ((newLimit > _capacity) || (newLimit < 0))
             throw std::runtime_error("");
-        limit = newLimit;
-        if (position > limit) position = limit;
-        if (mark > position) clearMark();
+        _limit = newLimit;
+        if (_position > _limit) _position = _limit;
+        if (_mark > _position) clearMark();
         return *this;
     }
 
     buffer<T>& reset() {
-        int m = mark;
+        int m = _mark;
         if (m < 0)
-            throw std::runtime_error();
-        position = m;
+            throw std::runtime_error("buffer underflow");
+        _position = m;
         return *this;
     }
 
-    buffer<T>& newMark() {
-        mark = position;
+
+    operator T*() {
+        return (T*) bf.get();
+    }
+
+
+    buffer<T>& mark() {
+        mark = _position;
         return *this;
     }
 
     buffer<T>& clear() {
-        position = 0;
-        limit = capacity;
+        _position = 0;
+        _limit = _capacity;
         clearMark();
         return *this;
     }
 
     buffer<T>& flip() {
-        limit = position;
-        position = 0;
+        _limit = _position;
+        _position = 0;
         clearMark();
-        return this;
+        return *this;
     }
 
     buffer<T>& rewind() {
-        position = 0;
+        _position = 0;
         clearMark();
         return *this;
     }
 
     int remaining() {
-        return limit - position;
+        return _limit - _position;
     }
 
     bool hasRemaining() {
-        return position < limit;
+        return _position < _limit;
     }
 
+    buffer<T>& put(T* src, int size, int offset, int length) {
+        checkBounds(offset, length, size);
+        if (length > remaining())
+            throw std::runtime_error("buffer overflow");
+        int end = offset + length;
+        for (int i = offset; i < end; i++)
+            this->put(src[i]);
+        
+        return *this;
+    }
+
+    buffer<T>& put(T* src, int size) {
+        return put(src, size, 0, size);
+        return *this;
+    }
+
+    buffer<T>& put(std::vector<T>& src) {
+        return put(src, 0, src.size());
+        return *this;
+    }
+    
+    buffer<T>& put(std::vector<T>& src, int offset, int length) {
+        checkBounds(offset, length, src.size());
+        if (length > remaining())
+            throw std::runtime_error("buffer overflow");
+        int end = offset + length;
+        for (int i = offset; i < end; i++)
+            this->put(src[i]);
+
+        return *this;
+    }
 
     buffer(const buffer_base& other)
             : buffer_base(other)
     {
     }
-
-protected:
     int nextGetIndex() {
-        if (position >= limit)
+        if (_position >= _limit)
             throw std::runtime_error("buffer underflow");
-        return position++;
+        return _position++;
     }
 
     int nextGetIndex(int nb) {
-        if (limit - position < nb)
+        if (_limit - _position < nb)
             throw std::runtime_error("buffer underflow");
-        int p = position;
-        position += nb;
+        int p = _position;
+        _position += nb;
         return p;
     }
 
     int nextPutIndex() {
-        if (position >= limit)
+        if (_position >= _limit)
             throw std::runtime_error("buffer overflow");
-        return position++;
+        return _position++;
     }
 
     int nextPutIndex(int nb) {
-        if (limit - position < nb)
+        if (_limit - _position < nb)
             throw std::runtime_error("buffer overflow");
-        int p = position;
-        position += nb;
+        int p = _position;
+        _position += nb;
         return p;
     }
 
     int checkIndex(int i) {
-        if ((i < 0) || (i >= limit))
+        if ((i < 0) || (i >= _limit))
             throw std::runtime_error("invalid index");
         return i;
     }
 
     int checkIndex(int i, int nb) {
-        if ((i < 0) || (nb > limit - i))
+        if ((i < 0) || (nb > _limit - i))
             throw std::runtime_error();
         return i;
     }
 
     void discardMark() {
-        mark = -1;
+        _mark = -1;
     }
 
     static void checkBounds(int off, int len, int size) {
         if ((off | len | (off + len) | (size - (off + len))) < 0)
-            throw std::runtime_error();
+            throw std::runtime_error("index out of bounds");
     }
 
-    int markValue() {
-        return mark;
+    int _markValue() {
+        return _mark;
     }
 
     void clearMark() {
-        mark = -1;
+        _mark = -1;
     }
 };
 
 template <typename T>
 struct default_buffer : public buffer<T> {
     default_buffer(int capacity) :
-            buffer<T>(-1, 0, capacity, capacity)
+        buffer<T>(-1, 0, capacity, capacity)
+    {
+    }
+
+    default_buffer(const buffer_base& other) :
+        buffer<T>(other)
     {
     }
 };

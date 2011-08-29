@@ -46,7 +46,7 @@ int IndexBufferObject::getNumMaxIndices () {
     return buffer.capacity();
 }
 
-void IndexBufferObject::setIndices (std::vector<short> indices, int offset,int count) {
+void IndexBufferObject::setIndices (std::vector<short>& indices, int offset,int count) {
     isDirty = true;
     buffer.clear();
     buffer.put(indices, offset, count);
@@ -72,10 +72,11 @@ gdx_cpp::utils::short_buffer IndexBufferObject::getBuffer () {
 }
 
 void IndexBufferObject::bind () {
-    if (bufferHandle == 0) throw new GdxRuntimeException("buuh");
+    if (bufferHandle == 0)
+        throw std::runtime_error("buuh");
 
     if (Gdx::gl11 != NULL) {
-        GL11& gl = Gdx::gl11;
+        GL11& gl = *Gdx::gl11;
         gl.glBindBuffer(GL11::GL_ELEMENT_ARRAY_BUFFER, bufferHandle);
         if (isDirty) {
             byteBuffer.limit(buffer.limit() * 2);
@@ -110,27 +111,29 @@ void IndexBufferObject::invalidate () {
 
 void IndexBufferObject::dispose () {
     if (Gdx::gl20 != NULL) {
-        tmpHandle.clear();
-        tmpHandle.put(bufferHandle);
-        tmpHandle.flip();
+        tmpHandle = bufferHandle;
         GL20& gl = *Gdx::gl20;
         gl.glBindBuffer(GL20::GL_ELEMENT_ARRAY_BUFFER, 0);
-        gl.glDeleteBuffers(1, tmpHandle);
+        gl.glDeleteBuffers(1, &tmpHandle);
         bufferHandle = 0;
     } else if (Gdx::gl11 != NULL) {
-        tmpHandle.clear();
-        tmpHandle.put(bufferHandle);
-        tmpHandle.flip();
-        GL11& gl = *Gdx.gl11;
+        tmpHandle = bufferHandle;
+        GL11& gl = *Gdx::gl11;
         gl.glBindBuffer(GL11::GL_ELEMENT_ARRAY_BUFFER, 0);
-        gl.glDeleteBuffers(1, tmpHandle);
+        gl.glDeleteBuffers(1, &tmpHandle);
         bufferHandle = 0;
     }
 }
 
-IndexBufferObject::IndexBufferObject(boolean isStatic, int maxIndices)
+IndexBufferObject::IndexBufferObject(bool isStatic, int maxIndices)
     : byteBuffer(maxIndices * 2)
     , buffer(byteBuffer.convert<short>())
+    , isDirty(true)
+    , isBound(false)
+    , usage(0)
+    , tmpHandle(0)
+    , bufferHandle(0)
+    , isDirect(true)
 {
     isDirect = true;
 
@@ -143,9 +146,13 @@ IndexBufferObject::IndexBufferObject(boolean isStatic, int maxIndices)
 IndexBufferObject::IndexBufferObject(int maxIndices)
 : byteBuffer(maxIndices * 2)
 , buffer(byteBuffer.convert<short>())
+, isDirty(true)
+, isBound(false)
+, usage(0)
+, tmpHandle(0)
+, bufferHandle(0)
+, isDirect(true)
 {
-    this.isDirect = true;
-
     buffer.flip();
     byteBuffer.flip();
     bufferHandle = createBufferObject();

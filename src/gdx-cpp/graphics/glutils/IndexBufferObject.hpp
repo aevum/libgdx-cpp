@@ -30,12 +30,12 @@ namespace glutils {
 class IndexBufferObject : public IndexData {
 public:
 
-    IndexBufferObject (boolean isStatic, int maxIndices) ;
+    IndexBufferObject (bool isStatic, int maxIndices) ;
     IndexBufferObject (int maxIndices) ;
     
     int getNumIndices ();
     int getNumMaxIndices ();
-    void setIndices (std::vector< short int > indices, int offset, int count);
+    void setIndices (std::vector< short int >& indices, int offset, int count);
     utils::short_buffer getBuffer ();
     void bind ();
     void unbind ();
@@ -47,8 +47,8 @@ protected:
     utils::byte_buffer byteBuffer;
     int bufferHandle;
     bool isDirect;
-    bool isDirty = true;
-    bool isBound = false;
+    bool isDirty;
+    bool isBound;
     int usage;
     int tmpHandle;
     

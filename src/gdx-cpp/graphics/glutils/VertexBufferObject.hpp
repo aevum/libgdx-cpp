@@ -21,16 +21,26 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_VERTEXBUFFEROBJECT_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_VERTEXBUFFEROBJECT_HPP_
 
+#include "VertexData.hpp"
+#include "gdx-cpp/graphics/VertexAttributes.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 namespace glutils {
 
-class VertexBufferObject {
+class ShaderProgram;
+
+class VertexBufferObject : public VertexData {
 public:
+
+    VertexBufferObject (bool isStatic, int numVertices, std::vector<VertexAttribute>& attributes) ;
+
+    VertexBufferObject (boolean isStatic, int numVertices, VertexAttributes attributes) ;
+    
     gdx_cpp::graphics::VertexAttributes& getAttributes ();
     int getNumVertices ();
     int getNumMaxVertices ();
-    FloatBuffer& getBuffer ();
+    utils::float_buffer getBuffer ();
     void setVertices (int offset,int count);
     void bind ();
     void bind (const ShaderProgram& shader);
@@ -40,8 +50,15 @@ public:
     void dispose ();
 
 protected:
-
-
+    graphics::VertexAttributes attributes;
+    utils::float_buffer buffer;
+    utils::byte_buffer byteBuffer;
+    int bufferHandle;
+    bool isDirect;
+    bool isStatic;
+    int usage;
+    bool isDirty = false;
+    bool isBound = false;
 private:
     int createBufferObject ();
 };
