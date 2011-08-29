@@ -56,6 +56,8 @@ public:
     /** flag indicating whether attributes & uniforms must be present at all times **/
     static bool pedantic;
 
+    ShaderProgram();
+
     std::string getLog ();
     bool isCompiled ();
     void setUniformi (std::string& name, int value);

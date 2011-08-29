@@ -42,19 +42,15 @@ const std::string ShaderProgram::BINORMAL_ATTRIBUTE = "a_binormal";
 
 std::tr1::unordered_map <gdx_cpp::Application *, std::set<ShaderProgram *> * > shaders();
 
-
-std::string log;
-bool isCompiledVar;
-
-// const std::tr1::unordered_map <std::string, int> * ShaderProgram::uniforms = new std::tr1::unordered_map <std::string, int>();
-// const std::tr1::unordered_map <std::string, int> * ShaderProgram::uniformTypes = new std::tr1::unordered_map <std::string, int>();
-
-std::vector<std::string> uniformNames;
-
-// const std::tr1::unordered_map <std::string, int> * ShaderProgram::attributes = new std::tr1::unordered_map <std::string, int>();
-// const std::tr1::unordered_map <std::string, int> * ShaderProgram::attributeTypes = new std::tr1::unordered_map <std::string, int>();
-
 bool ShaderProgram::pedantic = true;
+bool ShaderProgram::intbuf = 0;
+
+ShaderProgram::ShaderProgram(): params(0), type (0),
+                                isCompiledVar(false), program(0), vertexShaderHandle(0),
+                                fragmentShaderHandle(0), invalidated(false), refCount(0)
+{
+  
+}
 
 void ShaderProgram::compileShaders (const std::string& vertexShader,const std::string& fragmentShader) {
     vertexShaderHandle = loadShader(GL20::GL_VERTEX_SHADER, vertexShader);
