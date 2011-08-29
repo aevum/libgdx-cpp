@@ -1,8 +1,8 @@
 file(GLOB GDX_HEADERS *.hpp)
 set(GDX_SRC )
 
-file(GLOB GDX_HEADERS_MATH graphics/g2d/Sprite.hpp)
-file(GLOB GDX_SOURCE_MATH graphics/g2d/Sprite.cpp)
+file(GLOB GDX_HEADERS_MATH graphics/glutils/FrameBuffer.hpp)
+file(GLOB GDX_SOURCE_MATH graphics/glutils/FrameBuffer.cpp)
 
 #file(COPY ${GDX_HEADERS} DESTINATION ${GDXCPP_INCLUDE_DIR}/gdx)
 #file(COPY ${GDX_HEADERS_MATH} DESTINATION ${GDXCPP_INCLUDE_DIR}/gdx/math)

@@ -21,32 +21,48 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_FRAMEBUFFER_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_FRAMEBUFFER_HPP_
 
+#include "gdx-cpp/graphics/Pixmap.hpp"
+#include "gdx-cpp/graphics/Texture.hpp"
+#include "gdx-cpp/utils/Aliases.hpp"
+
+#include <tr1/unordered_map>
+
+#include <set>
+
 namespace gdx_cpp {
 namespace graphics {
 namespace glutils {
 
-class FrameBuffer: public gdx_cpp::utils::Disposable {
+class FrameBuffer:
+    public gdx_cpp::utils::Disposable,
+    public std::tr1::enable_shared_from_this<FrameBuffer> {
 public:
+    typedef ref_ptr_maker<FrameBuffer>::type ptr;
+    
+    FrameBuffer (const Pixmap::Format& format, int width, int height, bool hasDepth) ;
+    
     void dispose ();
     void begin ();
     void end ();
-    static void invalidateAllFrameBuffers (const gdx_cpp::Application& app);
-    static void clearAllFrameBuffers (const gdx_cpp::Application& app);
-    static std::string& getManagedStatus ();
-    gdx_cpp::graphics::Texture& getColorBufferTexture ();
+    static void invalidateAllFrameBuffers (gdx_cpp::Application* app);
+    static void clearAllFrameBuffers (gdx_cpp::Application* app);
+    std::string getManagedStatus ();
+    Texture::ptr getColorBufferTexture ();
     int getHeight ();
     int getWidth ();
 
-protected:
-
-
 private:
+    typedef std::tr1::unordered_map<gdx_cpp::Application*, std::set < FrameBuffer* > > buffer_map;
+    static buffer_map buffers;
     void build ();
-    void addManagedFrameBuffer (const gdx_cpp::Application& app,const FrameBuffer& frameBuffer);
+    void addManagedFrameBuffer (gdx_cpp::Application* app, gdx_cpp::graphics::glutils::FrameBuffer* frameBuffer);
+    Texture::ptr colorTexture;  
+    int framebufferHandle;
+    int depthbufferHandle;
     int width;
     int height;
-    boolean hasDepth;
-    Pixmap.Format format;
+    bool hasDepth;
+    Pixmap::Format format;
 };
 
 } // namespace gdx_cpp

@@ -42,7 +42,7 @@ VertexAttributes::VertexAttributes (const std::vector<VertexAttribute>& attribut
 int VertexAttributes::calculateOffsets () {
     int count = 0;
     for (int i = 0; i < attributes.size(); i++) {
-        VertexAttribute attribute = attributes[i];
+        VertexAttribute& attribute = attributes[i];
         attribute.offset = count;
         if (attribute.usage == VertexAttributes::Usage::ColorPacked)
             count += 4;
