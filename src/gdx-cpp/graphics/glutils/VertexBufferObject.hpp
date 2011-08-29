@@ -33,15 +33,14 @@ class ShaderProgram;
 class VertexBufferObject : public VertexData {
 public:
 
-    VertexBufferObject (bool isStatic, int numVertices, std::vector<VertexAttribute>& attributes) ;
-
-    VertexBufferObject (boolean isStatic, int numVertices, VertexAttributes attributes) ;
+    VertexBufferObject (bool isStatic, int numVertices, const gdx_cpp::graphics::VertexAttributes& attributes);
+    VertexBufferObject (bool isStatic, int numVertices, const std::vector< gdx_cpp::graphics::VertexAttribute >& attributes);
     
     gdx_cpp::graphics::VertexAttributes& getAttributes ();
     int getNumVertices ();
     int getNumMaxVertices ();
     utils::float_buffer getBuffer ();
-    void setVertices (int offset,int count);
+    void setVertices (const std::vector< float >& vertices, int offset, int count);
     void bind ();
     void bind (const ShaderProgram& shader);
     void unbind ();
@@ -54,11 +53,13 @@ protected:
     utils::float_buffer buffer;
     utils::byte_buffer byteBuffer;
     int bufferHandle;
+    int tmpHandle;
     bool isDirect;
     bool isStatic;
     int usage;
-    bool isDirty = false;
-    bool isBound = false;
+    bool isDirty;
+    bool isBound;
+    
 private:
     int createBufferObject ();
 };

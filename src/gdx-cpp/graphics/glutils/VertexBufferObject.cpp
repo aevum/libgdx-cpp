@@ -47,15 +47,15 @@ int VertexBufferObject::getNumMaxVertices () {
     return byteBuffer.capacity() / attributes.vertexSize;
 }
 
-FloatBuffer& VertexBufferObject::getBuffer () {
+utils::float_buffer VertexBufferObject::getBuffer () {
     isDirty = true;
     return buffer;
 }
 
-void VertexBufferObject::setVertices (int offset,int count) {
+void VertexBufferObject::setVertices (const std::vector<float>& vertices, int offset, int count) {
     isDirty = true;
     if (isDirect) {
-        BufferUtils.copy(vertices, byteBuffer, count, offset);
+        byteBuffer.copy(vertices, count, offset);
         buffer.position(0);
         buffer.limit(count);
     } else {
@@ -102,11 +102,13 @@ void VertexBufferObject::bind () {
 
         case VertexAttributes::Usage::Color:
         case VertexAttributes::Usage::ColorPacked:
+        {
             int colorType = GL10::GL_FLOAT;
             if (attribute.usage == VertexAttributes::Usage::ColorPacked) colorType = GL11::GL_UNSIGNED_BYTE;
 
             gl.glEnableClientState(GL10::GL_COLOR_ARRAY);
             gl.glColorPointer(attribute.numComponents, colorType, attributes.vertexSize, attribute.offset);
+        }
             break;
 
         case VertexAttributes::Usage::Normal:
@@ -122,6 +124,7 @@ void VertexBufferObject::bind () {
             break;
 
         default:
+            break;
             // throw new GdxRuntimeException("unkown vertex attribute type: " + attribute.usage);
         }
     }
@@ -130,7 +133,7 @@ void VertexBufferObject::bind () {
 }
 
 void VertexBufferObject::bind (const ShaderProgram& shader) {
-    GL20& gl = *Gd::gl20;
+    GL20& gl = *Gdx::gl20;
 
     gl.glBindBuffer(GL20::GL_ARRAY_BUFFER, bufferHandle);
     if (isDirty) {
@@ -141,10 +144,10 @@ void VertexBufferObject::bind (const ShaderProgram& shader) {
 
     int numAttributes = attributes.size();
     for (int i = 0; i < numAttributes; i++) {
-        VertexAttribute attribute = attributes.get(i);
+        VertexAttribute& attribute = attributes.get(i);
         shader.enableVertexAttribute(attribute.alias);
         int colorType = GL20::GL_FLOAT;
-        boolean normalize = false;
+        bool normalize = false;
         if (attribute.usage == VertexAttributes::Usage::ColorPacked) {
             colorType = GL20::GL_UNSIGNED_BYTE;
             normalize = true;
@@ -156,7 +159,7 @@ void VertexBufferObject::bind (const ShaderProgram& shader) {
 }
 
 void VertexBufferObject::unbind () {
-    GL11 gl = Gdx.gl11;
+    GL11& gl = *Gdx::gl11;
     int textureUnit = 0;
     int numAttributes = attributes.size();
 
@@ -179,7 +182,7 @@ void VertexBufferObject::unbind () {
             textureUnit++;
             break;
         default:
-            // throw new GdxRuntimeException("unkown vertex attribute type: " + attribute.usage);
+            break;
         }
     }
 
@@ -188,7 +191,7 @@ void VertexBufferObject::unbind () {
 }
 
 void VertexBufferObject::unbind (const ShaderProgram& shader) {
-    GL20& gl = *Gdx.gl20;
+    GL20& gl = *Gdx::gl20;
     int numAttributes = attributes.size();
     for (int i = 0; i < numAttributes; i++) {
         VertexAttribute attribute = attributes.get(i);
@@ -204,7 +207,7 @@ void VertexBufferObject::invalidate () {
 }
 
 void VertexBufferObject::dispose () {
-    if (Gdx::gl20 != NULL) {       
+    if (Gdx::gl20 != NULL) {
         tmpHandle = bufferHandle;
         GL20& gl = *Gdx::gl20;
         gl.glBindBuffer(GL20::GL_ARRAY_BUFFER, 0);
@@ -212,7 +215,7 @@ void VertexBufferObject::dispose () {
         bufferHandle = 0;
     } else {
         tmpHandle = bufferHandle;
-        GL11& gl = *Gdx.gl11;
+        GL11& gl = *Gdx::gl11;
         gl.glBindBuffer(GL11::GL_ARRAY_BUFFER, 0);
         gl.glDeleteBuffers(1, &tmpHandle);
         bufferHandle = 0;
@@ -220,25 +223,42 @@ void VertexBufferObject::dispose () {
 
 }
 
-VertexBufferObject::VertexBufferObject(boolean isStatic, int numVertices, gdx_cpp::graphics::VertexAttributes attributes)
-
+VertexBufferObject::VertexBufferObject(bool isStatic, int numVertices, const gdx_cpp::graphics::VertexAttributes& attributes)
+:
+  bufferHandle(0)
+, tmpHandle(0)
+, isDirect(true)
+, usage(0)
+, isDirty(false)
+, isBound(false)
+, attributes(attributes)
+, isStatic(isStatic)
+, byteBuffer(attributes.vertexSize * numVertices)
+, buffer(byteBuffer.convert<float>())
 {
-    this.isStatic = isStatic;
-    this.attributes = attributes;
-
-    byteBuffer = ByteBuffer.allocateDirect(this.attributes.vertexSize * numVertices);
-    byteBuffer.order(ByteOrder.nativeOrder());
-    isDirect = true;
-    buffer = byteBuffer.asFloatBuffer();
-    buffer.flip();
+//TODO:     byteBuffer.order(ByteOrder.nativeOrder());
     byteBuffer.flip();
     bufferHandle = createBufferObject();
     usage = isStatic ? GL11::GL_STATIC_DRAW : GL11::GL_DYNAMIC_DRAW;
 }
 
 
-VertexBufferObject::VertexBufferObject(bool isStatic, int numVertices, std::vector< VertexAttribute >& attributes) {
-    this(isStatic, numVertices, new VertexAttributes(attributes));
+VertexBufferObject::VertexBufferObject(bool isStatic, int numVertices, const std::vector< VertexAttribute >& attributes)
+:
+bufferHandle(0)
+, tmpHandle(0)
+, isDirect(true)
+, usage(0)
+, isDirty(false)
+, isBound(false)
+, attributes(attributes)
+, isStatic(isStatic)
+, byteBuffer(this->attributes.vertexSize * numVertices)
+, buffer(byteBuffer.convert<float>())
+{
+    byteBuffer.flip();
+    bufferHandle = createBufferObject();
+    usage = isStatic ? GL11::GL_STATIC_DRAW : GL11::GL_DYNAMIC_DRAW;
 }
 
 
