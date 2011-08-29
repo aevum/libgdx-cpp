@@ -131,12 +131,12 @@ int Color::toIntBits (int r,int g,int b,int a) {
     return (a << 24) | (b << 16) | (g << 8) | r;
 }
 
-float Color::toFloatBits () {
+float Color::toFloatBits () const {
     int color = ((int)(255 * a) << 24) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r));
     return gdx_cpp::utils::NumberUtils::intBitsToFloat(color & 0xfeffffff);
 }
 
-int Color::toIntBits () {
+int Color::toIntBits () const {
     int color = ((int)(255 * a) << 24) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r));
     return color;
 }

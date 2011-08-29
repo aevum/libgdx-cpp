@@ -21,16 +21,24 @@
 #ifndef GDX_CPP_GRAPHICS_MESH_HPP_
 #define GDX_CPP_GRAPHICS_MESH_HPP_
 
-#include "gdx-cpp/utils/Disposable.hpp"
-
 #include <tr1/unordered_map.h>
 #include <list>
-#include <Application.hpp>
 
+#include "gdx-cpp/utils/Disposable.hpp"
+#include "gdx-cpp/utils/Buffer.hpp"
+#include "gdx-cpp/Application.hpp"
 #include "VertexAttribute.hpp"
 #include "VertexAttributes.hpp"
 
+
 namespace gdx_cpp {
+namespace math {
+namespace collision {
+
+class BoundingBox;
+}
+}
+
 namespace graphics {
 
 namespace glutils {
@@ -72,10 +80,10 @@ public:
     void dispose ();
     VertexAttribute& getVertexAttribute (int usage);
     VertexAttributes& getVertexAttributes ();
-    std::vector<float> getVerticesBuffer ();
+    utils::float_buffer getVerticesBuffer ();
     gdx_cpp::math::collision::BoundingBox& calculateBoundingBox ();
     void calculateBoundingBox (const gdx_cpp::math::collision::BoundingBox& bbox);
-    ShortBuffer& getIndicesBuffer ();
+    utils::short_buffer getIndicesBuffer ();
     static void invalidateAllMeshes (const gdx_cpp::Application& app);
     static void clearAllMeshes (const gdx_cpp::Application& app);
     static std::string& getManagedStatus ();

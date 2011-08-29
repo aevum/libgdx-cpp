@@ -24,6 +24,7 @@
 #include <vector>
 
 #include "gdx-cpp/utils/Disposable.hpp"
+#include "gdx-cpp/utils/Buffer.hpp"
 #include "gdx-cpp/graphics/VertexAttributes.hpp"
 
 namespace gdx_cpp {
@@ -36,7 +37,7 @@ public:
     virtual   int getNumMaxVertices () = 0;
     virtual   gdx_cpp::graphics::VertexAttributes& getAttributes () = 0;
     virtual   void setVertices (int offset,int count) = 0;
-    virtual   std::vector<float> getBuffer () = 0;
+    virtual   utils::float_buffer getBuffer () = 0;
     virtual   void bind () = 0;
     virtual   void unbind () = 0;
     virtual   void dispose () = 0;

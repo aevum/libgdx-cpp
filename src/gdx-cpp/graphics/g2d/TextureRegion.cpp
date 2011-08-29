@@ -87,7 +87,7 @@ void TextureRegion::setRegion (const TextureRegion& region) {
     setRegion(region.u, region.v, region.u2, region.v2);
 }
 
-void TextureRegion::setRegion (TextureRegion& region,int x,int y,int width,int height) {
+void TextureRegion::setRegion (const gdx_cpp::graphics::g2d::TextureRegion& region, int x, int y, int width, int height) {
     texture = region.texture;
     setRegion(region.getRegionX() + x, region.getRegionY() + y, width, height);
 }
@@ -100,7 +100,7 @@ void TextureRegion::setTexture (TextureRegion::ptrTexture texture) {
     this->texture = texture;
 }
 
-float TextureRegion::getU () {
+float TextureRegion::getU () const {
     return u;
 }
 
@@ -116,7 +116,7 @@ void TextureRegion::setV (float v) {
     this->v = v;
 }
 
-float TextureRegion::getU2 () {
+float TextureRegion::getU2 () const {
     return u2;
 }
 
@@ -124,7 +124,7 @@ void TextureRegion::setU2 (float u2) {
     this->u2 = u2;
 }
 
-float TextureRegion::getV2 () {
+float TextureRegion::getV2 () const {
     return v2;
 }
 
@@ -132,7 +132,7 @@ void TextureRegion::setV2 (float v2) {
     this->v2 = v2;
 }
 
-int TextureRegion::getRegionX () {
+int TextureRegion::getRegionX () const {
     return (int)(u * texture->getWidth());
 }
 
@@ -140,7 +140,7 @@ void TextureRegion::setRegionX (int x) {
     setU(x / (float)texture->getWidth());
 }
 
-int TextureRegion::getRegionY () {
+int TextureRegion::getRegionY () const {
     return (int)(v * texture->getHeight());
 }
 
@@ -148,7 +148,7 @@ void TextureRegion::setRegionY (int y) {
     setV(y / (float)texture->getHeight());
 }
 
-int TextureRegion::getRegionWidth () {
+int TextureRegion::getRegionWidth () const {
     return (int)((u2 - u) * texture->getWidth());
 }
 
@@ -156,7 +156,7 @@ void TextureRegion::setRegionWidth (int width) {
     setU2(u + width / (float)texture->getWidth());
 }
 
-int TextureRegion::getRegionHeight () {
+int TextureRegion::getRegionHeight () const {
     return (int)((v2 - v) * texture->getHeight());
 }
 

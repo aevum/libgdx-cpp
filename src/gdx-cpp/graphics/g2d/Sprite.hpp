@@ -30,14 +30,16 @@ namespace gdx_cpp {
 namespace graphics {
 namespace g2d {
 
+class SpriteBatch;
+
 class Sprite : public TextureRegion {
 public:
     Sprite();
     Sprite (graphics::Texture::ptr texture) ;
-    Sprite (Texture texture, int srcWidth, int srcHeight) ;
+    Sprite (Texture::ptr texture, int srcWidth, int srcHeight) ;
     Sprite (Texture::ptr texture, int srcX, int srcY, int srcWidth, int srcHeight) ;
-    Sprite (TextureRegion region) ;
-    Sprite (TextureRegion region, int srcX, int srcY, int srcWidth, int srcHeight) ;
+    Sprite (const TextureRegion& region) ;
+    Sprite (const TextureRegion& region, int srcX, int srcY, int srcWidth, int srcHeight) ;
     
     void set (const Sprite& sprite);
     void setBounds (float x,float y,float width,float height);
@@ -66,7 +68,7 @@ public:
     float getRotation ();
     float getScaleX ();
     float getScaleY ();
-    gdx_cpp::graphics::Color& getColor ();
+    const gdx_cpp::graphics::Color& getColor ();
     void setRegion (float u,float v,float u2,float v2);
     void setU (float u);
     void setV (float v);
@@ -95,21 +97,22 @@ public:
     static const int C4 = 17;
     static const int U4 = 18;
     static const int V4 = 19;
+    
 protected:
     static const int VERTEX_SIZE = 2 + 1 + 2;
     static const int SPRITE_SIZE = 4 * VERTEX_SIZE;
     float vertices[20];
     
 private:   
-    graphics::Color color = new Color(1, 1, 1, 1);
+    graphics::Color color;
     float x, y;
     float width, height;
     float originX, originY;
     float rotation;
-    float scaleX = 1, scaleY = 1;
-    bool dirty = true;
-    void initialize(Texture arg1,  arg2, int arg3, int arg4, int arg5);
+    float scaleX, scaleY;
+    bool dirty;
     math::Rectangle bounds;   
+    void initialize(Texture::ptr arg1, int arg2, int arg3, int arg4, int arg5);
 };
 
 } // namespace gdx_cpp
