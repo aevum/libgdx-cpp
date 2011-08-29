@@ -48,7 +48,9 @@ public:
     Matrix3& trn(float x, float y);
     float* getValues();
 
-    float vals[9];
+
+    const static int length = 9;
+    float vals[length];
 };
 
 }

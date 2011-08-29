@@ -178,7 +178,7 @@ int Texture::getTextureObjectHandle () {
     return glHandle;
 }
 
-void Texture::setWrap (Texture::TextureWrap& u, Texture::TextureWrap& v) {
+void Texture::setWrap (const gdx_cpp::graphics::Texture::TextureWrap& u, const gdx_cpp::graphics::Texture::TextureWrap& v) {
     this->uWrap = u;
     this->vWrap = v;
     bind();
@@ -186,7 +186,7 @@ void Texture::setWrap (Texture::TextureWrap& u, Texture::TextureWrap& v) {
     Gdx::gl->glTexParameterf(GL10::GL_TEXTURE_2D, GL10::GL_TEXTURE_WRAP_T, v.getGLEnum());
 }
 
-void Texture::setFilter (Texture::TextureFilter& minFilter, Texture::TextureFilter& magFilter) {
+void Texture::setFilter (const gdx_cpp::graphics::Texture::TextureFilter& minFilter, const gdx_cpp::graphics::Texture::TextureFilter& magFilter) {
     this->minFilter = minFilter;
     this->magFilter = magFilter;
     bind();

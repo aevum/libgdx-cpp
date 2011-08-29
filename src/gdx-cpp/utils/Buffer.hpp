@@ -22,6 +22,7 @@
 #include <stdexcept>
 #include <vector>
 #include <sstream>
+#include <string.h>
 
 namespace gdx_cpp {
 
@@ -113,6 +114,18 @@ struct buffer : public buffer_base {
         return *this;
     }
 
+    template <typename U>
+    void copy(const U* array, int count, int offset) {
+        T* casted_array = *this;
+        memcpy(casted_array + offset, array, sizeof(U) * count);
+    }
+
+    template <typename U>
+    void copy(const std::vector<U>& array, int count, int offset) {
+        T* casted_array = *this;
+        memcpy(casted_array, &array[0] + offset, sizeof(U) * count);
+    }
+
     buffer<T>& reset() {
         int m = _mark;
         if (m < 0)
@@ -171,17 +184,15 @@ struct buffer : public buffer_base {
         return *this;
     }
 
-    buffer<T>& put(T* src, int size) {
+    buffer<T>& put(const T* src, int size) {
         return put(src, size, 0, size);
-        return *this;
     }
 
-    buffer<T>& put(std::vector<T>& src) {
+    buffer<T>& put(const std::vector<T>& src) {
         return put(src, 0, src.size());
-        return *this;
     }
     
-    buffer<T>& put(std::vector<T>& src, int offset, int length) {
+    buffer<T>& put(const std::vector<T>& src, int offset, int length) {
         checkBounds(offset, length, src.size());
         if (length > remaining())
             throw std::runtime_error("buffer overflow");

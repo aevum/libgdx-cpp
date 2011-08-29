@@ -114,8 +114,8 @@ public:
     TextureData::ptr getTextureData ();
     bool isManaged ();
     int getTextureObjectHandle ();
-    void setWrap (TextureWrap& u, TextureWrap& v);
-    void setFilter (TextureFilter& minFilter, TextureFilter& magFilter);
+    void setWrap (const TextureWrap& u, const TextureWrap& v);
+    void setFilter (const TextureFilter& minFilter, const TextureFilter& magFilter);
     void dispose ();
     void setEnforcePotImages (bool enforcePotImages);
     static void clearAllTextures (gdx_cpp::Application* app);
