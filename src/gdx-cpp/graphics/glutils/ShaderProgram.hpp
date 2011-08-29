@@ -26,6 +26,7 @@
 #include <string>
 #include <tr1/unordered_map>
 #include <gdx-cpp/Application.hpp>
+#include <gdx-cpp/utils/Buffer.hpp>
 
 namespace gdx_cpp {
 namespace math
@@ -58,33 +59,33 @@ public:
 
     std::string& getLog ();
     bool isCompiled ();
-    void setUniformi (const std::string& name,int value);
-    void setUniformi (const std::string& name,int value1,int value2);
-    void setUniformi (const std::string& name,int value1,int value2,int value3);
-    void setUniformi (const std::string& name,int value1,int value2,int value3,int value4);
-    void setUniformf (const std::string& name,float value);
-    void setUniformf (const std::string& name,float value1,float value2);
-    void setUniformf (const std::string& name,float value1,float value2,float value3);
-    void setUniformf (const std::string& name,float value1,float value2,float value3,float value4);
-    void setUniform1fv (const std::string& name,int offset,int length);
-    void setUniform2fv (const std::string& name,int offset,int length);
-    void setUniform3fv (const std::string& name,int offset,int length);
-    void setUniform4fv (const std::string& name,int offset,int length);
-    void setUniformMatrix (const std::string& name,const gdx_cpp::math::Matrix4& matrix);
-    void setUniformMatrix (const std::string& name,const gdx_cpp::math::Matrix4& matrix,bool transpose);
-    void setUniformMatrix (const std::string& name,const gdx_cpp::math::Matrix3& matrix);
-    void setUniformMatrix (const std::string& name,const gdx_cpp::math::Matrix3& matrix,bool transpose);
-    void setVertexAttribute (const std::string& name,int size,int type,bool normalize,int stride,const FloatBuffer& buffer);
-    void setVertexAttribute (const std::string& name,int size,int type,bool normalize,int stride,int offset);
+    void setUniformi (std::string& name, int value);
+    void setUniformi (std::string& name, int value1, int value2);
+    void setUniformi (std::string& name, int value1, int value2, int value3);
+    void setUniformi (std::string& name, int value1, int value2, int value3, int value4);
+    void setUniformf (std::string& name, float value);
+    void setUniformf (std::string& name, float value1, float value2);
+    void setUniformf (std::string& name, float value1, float value2, float value3);
+    void setUniformf (std::string& name, float value1, float value2, float value3, float value4);
+    void setUniform1fv (std::string& name, float* values, int offset, int length);
+    void setUniform2fv (std::string& name, float* values, int offset, int length);
+    void setUniform3fv (std::string& name, float* values, int offset, int length);
+    void setUniform4fv (std::string& name, float* values, int offset, int length);
+    void setUniformMatrix (std::string& name, const gdx_cpp::math::Matrix4& matrix);
+    void setUniformMatrix (std::string& name, const gdx_cpp::math::Matrix4& matrix, bool transpose);
+    void setUniformMatrix (std::string& name, const gdx_cpp::math::Matrix3& matrix);
+    void setUniformMatrix (std::string& name, const gdx_cpp::math::Matrix3& matrix, bool transpose);
+    void setVertexAttribute (std::string& name, int size, int type, bool normalize, int stride, const gdx_cpp::graphics::glutils::ShaderProgram::FloatBuffer& buffer);
+    void setVertexAttribute (std::string& name, int size, int type, bool normalize, int stride, int offset);
     void begin ();
     void end ();
     void dispose ();
-    void disableVertexAttribute (const std::string& name);
-    void enableVertexAttribute (const std::string& name);
+    void disableVertexAttribute (std::string& name);
+    void enableVertexAttribute (std::string& name);
     static void invalidateAllShaderPrograms (const gdx_cpp::Application& app);
     static void clearAllShaderPrograms (const gdx_cpp::Application& app);
     static std::string& getManagedStatus ();
-    void setAttributef (const std::string& name,float value1,float value2,float value3,float value4);
+    void setAttributef (std::string& name, float value1, float value2, float value3, float value4);
     bool hasAttribute (const std::string& name);
     int getAttributeType (const std::string& name);
     int getAttributeLocation (const std::string& name);
@@ -104,7 +105,7 @@ private:
     int loadShader (int type,const std::string& source);
     int linkProgram ();
     int fetchAttributeLocation (const std::string& name);
-    int fetchUniformLocation (const std::string& name);
+    int fetchUniformLocation (std::string& name);
     void checkManaged ();
     void addManagedShader (const gdx_cpp::Application& app,const ShaderProgram& shaderProgram);
     void ensureBufferCapacity (int numBytes);
@@ -116,25 +117,28 @@ private:
     std::string log;
     bool isCompiledVar;
 
-    const std::tr1::unordered_map <std::string, int> * uniforms;
-    const std::tr1::unordered_map <std::string, int> * uniformTypes;
+//     const
+    std::tr1::unordered_map <std::string, int> * uniforms;
+//     const
+    std::tr1::unordered_map <std::string, int> * uniformTypes;
     std::vector<std::string> uniformNames;
 
-     std::tr1::unordered_map <std::string, int> * attributes;
-    const std::tr1::unordered_map <std::string, int> * attributeTypes;
+    std::tr1::unordered_map <std::string, int> * attributes;
+//     const
+    std::tr1::unordered_map <std::string, int> * attributeTypes;
     std::vector<std::string> attributeNames;
 
     int program;
     int vertexShaderHandle;
     int fragmentShaderHandle;
-    std::vector<float> matrix;
+    gdx_cpp::utils::buffer<float> matrix;
     std::string vertexShaderSource;
     std::string fragmentShaderSource;
     bool invalidated;
 
-    char * buffer;
-    float * floatBuffer;
-    int * intBuffer;
+    gdx_cpp::utils::buffer<char> * buffer;
+    gdx_cpp::utils::buffer<float> * floatBuffer;
+    gdx_cpp::utils::buffer<int> * intBuffer;
 
     int refCount;
 

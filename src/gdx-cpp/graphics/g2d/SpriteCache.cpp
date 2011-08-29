@@ -111,14 +111,14 @@ void SpriteCache::beginCache (int cacheID) {
         return;
     }
     currentCache = caches[cacheID];
-    mesh->getVerticesBuffer().position(currentCache.offset);
+    mesh->getVerticesBuffer()._position(currentCache.offset);
 }
 
 int SpriteCache::endCache () {
     if (currentCache == NULL)
         throw std::runtime_error("beginCache must be called before endCache.");
  
-    int cacheCount = mesh->getVerticesBuffer().position() - currentCache->offset;
+    int cacheCount = mesh->getVerticesBuffer()._position() - currentCache->offset;
     if (currentCache->textures == NULL) {
         // New cache.
         currentCache->maxCount = cacheCount;

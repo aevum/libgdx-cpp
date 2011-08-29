@@ -61,11 +61,11 @@ void Mesh::getVertices () {
     if (vertices.length < getNumVertices() * getVertexSize() / 4)
         throw std::runtime_error("not enough room in vertices array, has " + vertices.length + " floats, needs "
                                            + getNumVertices() * getVertexSize() / 4);
-    int pos = getVerticesBuffer().position();
+    int pos = getVerticesBuffer()._position();
     
-    getVerticesBuffer().position(0);
+    getVerticesBuffer()._position(0);
     getVerticesBuffer().get(vertices, 0, getNumVertices() * getVertexSize() / 4);
-    getVerticesBuffer().position(pos);
+    getVerticesBuffer()._position(pos);
 }
 
 void Mesh::setIndices () {
@@ -80,10 +80,10 @@ void Mesh::getIndices () {
     if (indices.length < getNumIndices())
         throw new IllegalArgumentException("not enough room in indices array, has " + indices.length + " floats, needs "
                                            + getNumIndices());
-    int pos = getIndicesBuffer().position();
-    getIndicesBuffer().position(0);
+    int pos = getIndicesBuffer()._position();
+    getIndicesBuffer()._position(0);
     getIndicesBuffer().get(indices, 0, getNumIndices());
-    getIndicesBuffer().position(pos);
+    getIndicesBuffer()._position(pos);
 }
 
 int Mesh::getNumIndices () {
