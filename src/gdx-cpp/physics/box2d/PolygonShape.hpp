@@ -20,26 +20,37 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_POLYGONSHAPE_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_POLYGONSHAPE_HPP_
+#include "Shape.hpp"
+#include <vector>
 
+
+class b2PolygonShape;
 namespace gdx_cpp {
+namespace math {
+  class Vector2;
+}
+  
 namespace physics {
 namespace box2d {
 
-class PolygonShape {
+class PolygonShape : public Shape {
 public:
-    Type& getType ();
-    void set ();
+
+    PolygonShape ();
+    Shape::Type getType ();
+    void set (std::vector< gdx_cpp::math::Vector2, std::allocator< gdx_cpp::math::Vector2 > >& vertices);
     void setAsBox (float hx,float hy);
     void setAsBox (float hx,float hy,const gdx_cpp::math::Vector2& center,float angle);
     void setAsEdge (const gdx_cpp::math::Vector2& v1,const gdx_cpp::math::Vector2& v2);
     int getVertexCount ();
-    void getVertex (int index,const gdx_cpp::math::Vector2& vertex);
+    void getVertex (int index, gdx_cpp::math::Vector2& vertex);
 
 protected:
 
 
 private:
-
+    static float verts[2];
+    b2PolygonShape* newPolygonShape();
 };
 
 } // namespace gdx_cpp

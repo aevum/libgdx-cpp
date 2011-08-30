@@ -4,11 +4,14 @@ cmake_minimum_required(VERSION 2.8)
 
 LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/finders)
 set(GDXCPP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(GDXCPP_BOX2D_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/Box2D)
 
 option(BUILD_BACKEND_LINUX "Builds the linux backend for gdx-cpp" ${UNIX})
 option(BUILD_BACKEND_IOS "Builds the ios backend for gdx-cpp" FALSE)
 option(BUILD_BACKEND_ANDROID "Builds the android backend for gdx-cpp" FALSE)
 option(BUILD_BACKEND_WINDOWS "Builds the windows backend for gdx-cpp" ${WIN32})
+
+option(BUILD_BOX2D "Builds Box2D" TRUE)
 
 option(BUILD_TESTS "Builds(tries) all libgdx tests" TRUE)
 
@@ -17,6 +20,10 @@ add_subdirectory(src/gdx-cpp)
 
 if (BUILD_BACKEND_LINUX)
     add_subdirectory(src/backends/linux)
+endif()
+
+if (BUILD_BOX2D)
+    add_subdirectory(src/Box2D)
 endif()
 
 if (BUILD_BACKEND_IOS)

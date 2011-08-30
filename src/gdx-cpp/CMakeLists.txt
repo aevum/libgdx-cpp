@@ -247,48 +247,6 @@ InputProcessor.hpp
 # utils/Aliases.hpp
 # utils/JsonReader.hpp
 # Version.hpp
-# physics/box2d/PolygonShape.hpp
-# physics/box2d/JointEdge.hpp
-# physics/box2d/Transform.hpp
-# physics/box2d/Body.hpp
-# physics/box2d/QueryCallback.hpp
-# physics/box2d/CircleShape.hpp
-# physics/box2d/JointDef.hpp
-# physics/box2d/ContactImpulse.hpp
-# physics/box2d/Shape.hpp
-# physics/box2d/Manifold.hpp
-# physics/box2d/ContactFilter.hpp
-# physics/box2d/Box2DDebugRenderer.hpp
-# physics/box2d/WorldManifold.hpp
-# physics/box2d/Filter.hpp
-# physics/box2d/ContactListener.hpp
-# physics/box2d/FixtureDef.hpp
-# physics/box2d/World.hpp
-# physics/box2d/Fixture.hpp
-# physics/box2d/RayCastCallback.hpp
-# physics/box2d/MassData.hpp
-# physics/box2d/joints/DistanceJointDef.hpp
-# physics/box2d/joints/PrismaticJoint.hpp
-# physics/box2d/joints/MouseJoint.hpp
-# physics/box2d/joints/FrictionJointDef.hpp
-# physics/box2d/joints/RevoluteJointDef.hpp
-# physics/box2d/joints/WeldJointDef.hpp
-# physics/box2d/joints/FrictionJoint.hpp
-# physics/box2d/joints/PulleyJointDef.hpp
-# physics/box2d/joints/LineJoint.hpp
-# physics/box2d/joints/GearJoint.hpp
-# physics/box2d/joints/PulleyJoint.hpp
-# physics/box2d/joints/MouseJointDef.hpp
-# physics/box2d/joints/GearJointDef.hpp
-# physics/box2d/joints/RevoluteJoint.hpp
-# physics/box2d/joints/LineJointDef.hpp
-# physics/box2d/joints/DistanceJoint.hpp
-# physics/box2d/joints/WeldJoint.hpp
-# physics/box2d/joints/PrismaticJointDef.hpp
-# physics/box2d/Contact.hpp
-# physics/box2d/DestructionListener.hpp
-# physics/box2d/Joint.hpp
-# physics/box2d/BodyDef.hpp
 Preferences.hpp
 InputMultiplexer.hpp
 InputAdapter.hpp)
@@ -522,43 +480,6 @@ utils/NumberUtils.cpp
 # utils/ScreenUtils.cpp
 # utils/IntMap.cpp
 # utils/Json.cpp
-# physics/box2d/PolygonShape.cpp
-# physics/box2d/JointDef.cpp
-# physics/box2d/Joint.cpp
-# physics/box2d/CircleShape.cpp
-# physics/box2d/Box2DDebugRenderer.cpp
-# physics/box2d/World.cpp
-# physics/box2d/Transform.cpp
-# physics/box2d/MassData.cpp
-# physics/box2d/Contact.cpp
-# physics/box2d/Manifold.cpp
-# physics/box2d/Shape.cpp
-# physics/box2d/ContactImpulse.cpp
-# physics/box2d/Filter.cpp
-# physics/box2d/WorldManifold.cpp
-# physics/box2d/Fixture.cpp
-# physics/box2d/BodyDef.cpp
-# physics/box2d/FixtureDef.cpp
-# physics/box2d/JointEdge.cpp
-# physics/box2d/joints/PulleyJointDef.cpp
-# physics/box2d/joints/WeldJointDef.cpp
-# physics/box2d/joints/MouseJointDef.cpp
-# physics/box2d/joints/GearJointDef.cpp
-# physics/box2d/joints/RevoluteJointDef.cpp
-# physics/box2d/joints/DistanceJointDef.cpp
-# physics/box2d/joints/FrictionJointDef.cpp
-# physics/box2d/joints/WeldJoint.cpp
-# physics/box2d/joints/DistanceJoint.cpp
-# physics/box2d/joints/FrictionJoint.cpp
-# physics/box2d/joints/RevoluteJoint.cpp
-# physics/box2d/joints/PulleyJoint.cpp
-# physics/box2d/joints/GearJoint.cpp
-# physics/box2d/joints/LineJoint.cpp
-# physics/box2d/joints/LineJointDef.cpp
-# physics/box2d/joints/MouseJoint.cpp
-# physics/box2d/joints/PrismaticJoint.cpp
-# physics/box2d/joints/PrismaticJointDef.cpp
-# physics/box2d/Body.cpp
 Game.cpp
 InputAdapter.cpp
 Gdx.cpp)
@@ -568,3 +489,4 @@ install(DIRECTORY src DESTINATION include/gdx-cpp
 
 add_library(gdx-cpp SHARED ${GDX_HEADERS} ${GDX_SRC})
 target_link_libraries(gdx-cpp mpg123 vorbis z vorbisfile)
+add_subdirectory(physics/box2d)

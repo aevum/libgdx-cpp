@@ -19,41 +19,65 @@
 */
 
 #include "PolygonShape.hpp"
+#include <vector>
+#include "gdx-cpp/math/Vector2.hpp"
+#include "Box2D.h"
 
 using namespace gdx_cpp::physics::box2d;
 
-Type& PolygonShape::getType () {
-    return Type.Polygon;
+
+
+PolygonShape::PolygonShape () {
+    addr = newPolygonShape();
 }
 
-void PolygonShape::set () {
-    float[] verts = new float[vertices.length * 2];
-    for (int i = 0, j = 0; i < vertices.length * 2; i += 2, j++) {
+b2PolygonShape* PolygonShape::newPolygonShape()
+{
+    b2PolygonShape* poly = new b2PolygonShape();
+    return poly;
+}
+
+Shape::Type PolygonShape::getType () {
+    return Shape::Polygon;
+}
+
+void PolygonShape::set (std::vector<gdx_cpp::math::Vector2>& vertices) {
+    int size = vertices.size() * 2;
+    float verts [size];
+    for (int i = 0, j = 0; i < size; i += 2, j++) {
         verts[i] = vertices[j].x;
         verts[i + 1] = vertices[j].y;
     }
-    jniSet(addr, verts);
+    int numVertices = size / 2;
+    b2Vec2* verticesOut = new b2Vec2[numVertices];
+    for ( int i = 0; i < numVertices; i++ )
+    {
+        verticesOut[i] = b2Vec2(verts[i<<1], verts[(i<<1)+1]);
+    }
+    static_cast<b2PolygonShape*>(addr)->Set( verticesOut, numVertices );
+    delete verticesOut;
+
 }
 
 void PolygonShape::setAsBox (float hx,float hy) {
-    jniSetAsBox(addr, hx, hy);
+    static_cast<b2PolygonShape*>(addr)->SetAsBox(hx, hy);
 }
 
 void PolygonShape::setAsBox (float hx,float hy,const gdx_cpp::math::Vector2& center,float angle) {
-    jniSetAsBox(addr, hx, hy, center.x, center.y, angle);
+    static_cast<b2PolygonShape*>(addr)->SetAsBox( hx, hy, b2Vec2( center.x, center.y), angle );
 }
 
 void PolygonShape::setAsEdge (const gdx_cpp::math::Vector2& v1,const gdx_cpp::math::Vector2& v2) {
-    jniSetAsEdge(addr, v1.x, v1.y, v2.x, v2.y);
+    static_cast<b2PolygonShape*>(addr)->SetAsEdge(b2Vec2( v1.x, v1.y), b2Vec2(v2.x, v2.y));
 }
 
 int PolygonShape::getVertexCount () {
-    return jniGetVertexCount(addr);
+    return static_cast<b2PolygonShape*>(addr)->GetVertexCount();
 }
 
-void PolygonShape::getVertex (int index,const gdx_cpp::math::Vector2& vertex) {
-    jniGetVertex(addr, index, verts);
-    vertex.x = verts[0];
-    vertex.y = verts[1];
+void PolygonShape::getVertex (int index, gdx_cpp::math::Vector2& vertex) {
+    b2Vec2 v = static_cast<b2PolygonShape*>(addr)->GetVertex( index );
+    vertex.x = v.x;
+    vertex.y = v.y;
 }
 
