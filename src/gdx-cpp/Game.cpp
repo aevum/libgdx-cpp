@@ -20,6 +20,7 @@
 
 #include "Game.hpp"
 #include "Gdx.hpp"
+#include "Graphics.hpp"
 
 using namespace gdx_cpp;
 
