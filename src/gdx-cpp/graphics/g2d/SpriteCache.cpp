@@ -306,7 +306,7 @@ void SpriteCache::add (const gdx_cpp::graphics::Texture::ptr texture, float x, f
     }
 }
 
-void SpriteCache::add (const gdx_cpp::graphics::Texture::ptr texture, float x, float y, int srcWidth, int srcHeight, int srcX, int srcY) {
+void SpriteCache::add (Texture::ptr texture, float x, float y, int srcX, int srcY, int srcWidth, int srcHeight) {
     float invTexWidth = 1.0f / texture->getWidth();
     float invTexHeight = 1.0f / texture->getHeight();
     float u = srcX * invTexWidth;
@@ -578,13 +578,13 @@ void SpriteCache::add (TextureRegion::ptr region,float x,float y) {
     add(region, x, y, region->getRegionWidth(), region->getRegionHeight());
 }
 
-void SpriteCache::add (TextureRegion& region,float x,float y,float width,float height) {
+void SpriteCache::add (TextureRegion::ptr region,float x,float y,float width,float height) {
     float fx2 = x + width;
     float fy2 = y + height;
-    float u = region.u;
-    float v = region.v2;
-    float u2 = region.u2;
-    float v2 = region.v;
+    float u = region->u;
+    float v = region->v2;
+    float u2 = region->u2;
+    float v2 = region->v;
 
     tempVertices[0] = x;
     tempVertices[1] = y;
@@ -610,7 +610,7 @@ void SpriteCache::add (TextureRegion& region,float x,float y,float width,float h
         tempVertices[17] = color;
         tempVertices[18] = u2;
         tempVertices[19] = v;
-        add(region.getTexture(), tempVertices, 30, 0, 20);
+        add(region->getTexture(), tempVertices, 30, 0, 20);
     } else {
         tempVertices[15] = fx2;
         tempVertices[16] = fy2;
@@ -629,11 +629,11 @@ void SpriteCache::add (TextureRegion& region,float x,float y,float width,float h
         tempVertices[27] = color;
         tempVertices[28] = u;
         tempVertices[29] = v;
-        add(region.getTexture(), tempVertices, 30, 0, 30);
+        add(region->getTexture(), tempVertices, 30, 0, 30);
     }
 }
 
-void SpriteCache::add (const TextureRegion& region,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation) {
+void SpriteCache::add (TextureRegion::ptr region, float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float rotation) {
 
     // bottom left and top right corner points relative to origin
     float worldOriginX = x + originX;
@@ -709,10 +709,10 @@ void SpriteCache::add (const TextureRegion& region,float x,float y,float originX
     x4 += worldOriginX;
     y4 += worldOriginY;
 
-    float u = region.u;
-    float v = region.v2;
-    float u2 = region.u2;
-    float v2 = region.v;
+    float u = region->u;
+    float v = region->v2;
+    float u2 = region->u2;
+    float v2 = region->v;
 
     tempVertices[0] = x1;
     tempVertices[1] = y1;
@@ -738,7 +738,7 @@ void SpriteCache::add (const TextureRegion& region,float x,float y,float originX
         tempVertices[17] = color;
         tempVertices[18] = u2;
         tempVertices[19] = v;
-        add(region.getTexture(), tempVertices, 30, 0, 20);
+        add(region->getTexture(), tempVertices, 30, 0, 20);
     } else {
         tempVertices[15] = x3;
         tempVertices[16] = y3;
@@ -757,7 +757,7 @@ void SpriteCache::add (const TextureRegion& region,float x,float y,float originX
         tempVertices[27] = color;
         tempVertices[28] = u;
         tempVertices[29] = v;
-        add(region.getTexture(), tempVertices, Sprite::SPRITE_SIZE, 0, 30);
+        add(region->getTexture(), tempVertices, Sprite::SPRITE_SIZE, 0, 30);
     }
 }
 

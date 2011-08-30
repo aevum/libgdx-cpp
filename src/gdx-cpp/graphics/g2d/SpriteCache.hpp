@@ -67,12 +67,12 @@ public:
     void add (const gdx_cpp::graphics::Texture::ptr texture, float* vertices, int offset, int length);
     void add (gdx_cpp::graphics::g2d::TextureRegion& region, float x, float y, float width, float height);
     void add (const gdx_cpp::graphics::Texture::ptr texture,float x,float y,int srcWidth,int srcHeight,float u,float v,float u2,float v2,float color);
-    void add (const gdx_cpp::graphics::Texture::ptr texture,float x,float y,int srcX,int srcY,int srcWidth,int srcHeight);
-    void add (gdx_cpp::graphics::Texture::ptr texture, float x, float y, float width, float height, int srcX, int srcY, int srcWidth, int srcHeight, bool flipX, bool flipY);
-    void add (gdx_cpp::graphics::Texture::ptr texture, float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float rotation, int srcX, int srcY, int srcWidth, int srcHeight, bool flipX, bool flipY);
-    void add (gdx_cpp::graphics::g2d::TextureRegion::ptr region, float x, float y);
-    void add (gdx_cpp::graphics::g2d::TextureRegion::ptr region, float x, float y, float width, float height);
-    void add (const TextureRegion& region,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation);
+    void add (Texture::ptr texture,float x,float y,int srcX,int srcY,int srcWidth,int srcHeight);
+    void add (Texture::ptr texture, float x, float y, float width, float height, int srcX, int srcY, int srcWidth, int srcHeight, bool flipX, bool flipY);
+    void add (Texture::ptr texture, float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float rotation, int srcX, int srcY, int srcWidth, int srcHeight, bool flipX, bool flipY);
+    void add (TextureRegion::ptr region, float x, float y);
+    void add (TextureRegion::ptr region, float x, float y, float width, float height);
+    void add (TextureRegion::ptr region,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation);
     void add (gdx_cpp::graphics::g2d::Sprite& sprite);
     void begin ();
     void end ();

@@ -157,6 +157,10 @@ void Gdx2DPixmap::fillCircle (int x,int y,int radius,int color) {
   gdx2d_fill_circle((gdx2d_pixmap*)pixData, x, y, radius, color);
 }
 
+void Gdx2DPixmap::drawPixmap (const Gdx2DPixmap& src, int srcX, int srcY, int dstX, int dstY, int width, int height) {
+    drawPixmap(src, srcX, srcY, width, height, dstX, dstY, width, height);
+}
+
 void Gdx2DPixmap::drawPixmap (const Gdx2DPixmap& src,int srcX,int srcY,int srcWidth,int srcHeight,int dstX,int dstY,int dstWidth,int dstHeight) {
   assert(pixData != NULL);
   gdx2d_draw_pixmap((gdx2d_pixmap*)src.pixData, (gdx2d_pixmap*)pixData, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight);
