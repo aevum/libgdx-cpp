@@ -22,101 +22,163 @@
 
 using namespace gdx_cpp::files;
 
+FileHandle::FileHandle (){}
+
+FileHandle::FileHandle (const std::string &fileName)
+{
+    this->file = File(fileName);
+    type = gdx_cpp::Files::Absolute;
+}
+
+FileHandle::FileHandle (File const& file)
+{
+    this->file = file;
+    this->type = gdx_cpp::Files::Absolute;
+}
+
+FileHandle::FileHandle (const std::string &fileName, gdx_cpp::Files::FileType type)
+{
+    this->type = type;
+    this->file = File(fileName);
+}
+
+FileHandle::FileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type)
+{
+    this->file = file;
+    this->type = type;
+}
+
 std::string& FileHandle::path () {
     return file.getPath();
 }
 
-std::string& FileHandle::name () {
+std::string FileHandle::name () {
     return file.getName();
 }
 
-std::string& FileHandle::extension () {
-    String name = file.getName();
-    int dotIndex = name.lastIndexOf('.');
-    if (dotIndex == -1) return "";
-    return name.substring(dotIndex + 1);
+std::string FileHandle::extension () {
+    std::string name = file.getName();
+    int dotIndex = name.rfind('.');
+    if (dotIndex == std::string::npos) return "";
+    return name.substr(dotIndex + 1);
 }
 
-std::string& FileHandle::nameWithoutExtension () {
-    String name = file.getName();
-    int dotIndex = name.lastIndexOf('.');
-    if (dotIndex == -1) return name;
-    return name.substring(0, dotIndex);
+std::string FileHandle::nameWithoutExtension () {
+    std::string name = file.getName();
+    int dotIndex = name.rfind('.');
+    if (dotIndex == std::string::npos) return name;
+    return name.substr(0, dotIndex);
 }
 
-gdx_cpp::Files::FileType& FileHandle::type () {
+std::string FileHandle::typetoString () {
+    if(type == gdx_cpp::Files::Absolute) return "Absolute";
+    if (type == gdx_cpp::Files::External) return "External";
+    if (type == gdx_cpp::Files::Internal) return "Internal";
+    return "Classpath";
+}
+
+gdx_cpp::Files::FileType& FileHandle::getType () {
     return type;
 }
 
-File& FileHandle::file () {
-    if (type == FileType.External) return new File(Gdx.files.getExternalStoragePath(), file.getPath());
+File FileHandle::getFile () {
+    if (type == gdx_cpp::Files::External) return File( gdx_cpp::Gdx::files.getExternalStoragePath(), file.getPath());
     return file;
 }
 
-InputStream& FileHandle::read () {
-    if (type == FileType.Classpath || (type == FileType.Internal && !file.exists())) {
-        InputStream input = FileHandle.class.getResourceAsStream("/" + file.getPath().replace('\\', '/'));
-        if (input == null) throw new GdxRuntimeException("File not found: " + file + " (" + type + ")");
+FileHandle::ifstream_ptr FileHandle::read ()
+{
+    ifstream_ptr input;
+    
+    if (type == gdx_cpp::Files::Internal && !file.exists()) {
+        //Original InputStream input = FileHandle.class.getResourceAsStream("/" + file.getPath().replace('\\', '/'));
+        //FAZENDO COM ISTREAM
+        //filebuf fb;
+        //fb.open ("/" + file.getPath().replace('\\', '/'), std::ios::in);
+        //if(fb.is_open())
+        //{
+            //input = istream_ptr (new std::istream(&fb);
+        //}
+        int found;
+        std::string s = "/" + file.getPath();
+        while((found = s.find("//")) != s.npos) s.replace(found, 2, "/");
+        input = ifstream_ptr (new std::ifstream( s.c_str(), std::ios::in));
+        if(!input->is_open()) gdx_cpp::Gdx::app.error("File not found: " + file.getPath() + " (" + typetoString() + ")");
+        
         return input;
     }
-    try {
-        return new FileInputStream(file());
-    } catch (FileNotFoundException ex) {
-        if (file().isDirectory())
-            throw new GdxRuntimeException("Cannot open a stream to a directory: " + file + " (" + type + ")", ex);
-        throw new GdxRuntimeException("Error reading file: " + file + " (" + type + ")", ex);
+
+    input = ifstream_ptr (new std::ifstream(file.getPath().c_str(), std::ios::in));
+
+    if(!input->is_open())
+    {
+      if(file.isDirectory()) gdx_cpp::Gdx::app.error("Cannot open a stream to a directory: " + file.getPath() + " (" + typetoString() + ")");
+      else gdx_cpp::Gdx::app.error("Error reading file: " + file.getPath() + " (" + typetoString() + ")");
     }
+    return input; 
 }
 
-std::string& FileHandle::readString () {
-    return readString(null);
+std::string FileHandle::readString () {
+    return readString("");
 }
 
-std::string& FileHandle::readString (const std::string& charset) {
-    StringBuilder output = new StringBuilder(512);
-    InputStreamReader reader = null;
-    try {
-        if (charset == null)
-            reader = new InputStreamReader(read());
-        else
-            reader = new InputStreamReader(read(), charset);
-        char[] buffer = new char[256];
+std::string FileHandle::readString (const std::string& charset) {
+    std::string output = "";
+    ifstream_ptr reader;
+
+    if (charset == "") reader = read();
+    //else     TODO TEM QUE CRIAR CHARSET AQUI
+    //    reader = new InputStreamReader(read(), charset);
+    if(reader != NULL)
+    {
+        char buffer[257];
+        std::streampos  earlypos;
+        buffer[256] = '\0';
         while (true) {
-            int length = reader.read(buffer);
-            if (length == -1) break;
-            output.append(buffer, 0, length);
+                    earlypos = reader->tellg();
+                    if(!reader->read(buffer, 256)) break;
+                    output += std::string(buffer);
         }
-    } catch (IOException ex) {
-        throw new GdxRuntimeException("Error reading layout file: " + this, ex);
+        reader->clear();
+        reader->seekg (earlypos);
+        reader->seekg (0, std::ios::end);
+        buffer[((int) reader->tellg()-earlypos)] = '\0';
+        output += std::string(buffer);
     }
-    finally {
-        try {
-            if (reader != null) reader.close();
-        } catch (IOException ignored) {
-        }
+    else
+    {
+        gdx_cpp::Gdx::app.error("Error reading file: " + this->toString());
     }
-    return output.toString();
+    if (reader->is_open()) reader->close();
+    return output;
 }
 
-char* FileHandle::readBytes () {
-    int length = (int)length();
-    if (length == 0) length = 512;
-    byte[] buffer = new byte[length];
+int FileHandle::readBytes (char_ptr c) {
+    char p;
+    int Length = (int) length();
+    if (Length == 0) Length = 512;
+    int bufferlength = Length;
+    c = char_ptr (new char[bufferlength]);
     int position = 0;
-    InputStream input = read();
-    try {
-        while (true) {
-            int count = input.read(buffer, position, buffer.length - position);
-            if (count == -1) break;
-            position += count;
-            if (position == buffer.length) {
+    ifstream_ptr input = read();
+    while (true)
+    {
+        int count = 0;
+        input->read( c.get() + position, Length - position);
+        count = input->gcount();
+        position += count;
+        if(input->eof() || !count || input->peek() == EOF) break;
+
+        if (position == bufferlength) {
                 // Grow buffer.
-                byte[] newBuffer = new byte[buffer.length * 2];
-                System.arraycopy(buffer, 0, newBuffer, 0, position);
-                buffer = newBuffer;
-            }
+            char_ptr newBuffer = char_ptr (new char[bufferlength * 2]);
+            for(int i = 0; i< bufferlength; i++) newBuffer.get()[i] = c.get()[i];
+            c = newBuffer;
+            bufferlength *= 2;
         }
-    } catch (IOException ex) {
+    }
+    /*
+    } catch (IOException ex) { //TODO EXCEPTIONS
         throw new GdxRuntimeException("Error reading file: " + this, ex);
     }
     finally {
@@ -125,121 +187,116 @@ char* FileHandle::readBytes () {
         } catch (IOException ignored) {
         }
     }
-    if (position < buffer.length) {
+    */
+    if(input->is_open()) input->close();
+    if(position < bufferlength) {
         // Shrink buffer.
-        byte[] newBuffer = new byte[position];
-        System.arraycopy(buffer, 0, newBuffer, 0, position);
-        buffer = newBuffer;
+        char_ptr newBuffer = char_ptr (new char[position]);
+        for(int i = 0; i<position; i++) newBuffer.get()[i] = c.get()[i];
+        c = newBuffer;
     }
-    return buffer;
+    return position;
 }
 
-OutputStream& FileHandle::write (bool append) {
-    if (type == FileType.Classpath) throw new GdxRuntimeException("Cannot write to a classpath file: " + file);
-    if (type == FileType.Internal) throw new GdxRuntimeException("Cannot write to an internal file: " + file);
-    try {
-        return new FileOutputStream(file(), append);
-    } catch (FileNotFoundException ex) {
-        if (file().isDirectory())
-            throw new GdxRuntimeException("Cannot open a stream to a directory: " + file + " (" + type + ")", ex);
-        throw new GdxRuntimeException("Error writing file: " + file + " (" + type + ")", ex);
+FileHandle::ofstream_ptr FileHandle::write (bool append) {
+    if (type == gdx_cpp::Files::Internal) gdx_cpp::Gdx::app.error("Cannot write to an internal file: " + file.getPath());
+    ofstream_ptr output;
+    if(append) output = ofstream_ptr (new std::ofstream(file.getPath().c_str(), std::fstream::out | std::ios::app));
+    else output = ofstream_ptr (new std::ofstream(file.getPath().c_str(), std::ios::out | std::ios::trunc));
+    if(output == NULL)
+    {
+        if(getFile().isDirectory()) gdx_cpp::Gdx::app.error("Cannot open a stream to a directory: " + file.getPath() + " (" + typetoString() + ")");
+        else gdx_cpp::Gdx::app.error("Error writing file: " + file.getPath() + " (" + typetoString() + ")");
     }
+    return output;
 }
 
-FileHandle* FileHandle::list () {
-    if (type == FileType.Classpath) throw new GdxRuntimeException("Cannot list a classpath directory: " + file);
-    String[] relativePaths = file().list();
-    if (relativePaths == null) return new FileHandle[0];
-    FileHandle[] handles = new FileHandle[relativePaths.length];
-    for (int i = 0, n = relativePaths.length; i < n; i++)
+void FileHandle::list(std::vector<FileHandle> &handles) {
+    std::vector<std::string> relativePaths;
+    getFile().list(relativePaths);
+    handles.resize(relativePaths.size());
+    for (int i = 0, n = relativePaths.size(); i < n; i++)
         handles[i] = child(relativePaths[i]);
-    return handles;
+    return;
 }
 
-FileHandle* FileHandle::list (const std::string& suffix) {
-    if (type == FileType.Classpath) throw new GdxRuntimeException("Cannot list a classpath directory: " + file);
-    String[] relativePaths = file().list();
-    if (relativePaths == null) return new FileHandle[0];
-    FileHandle[] handles = new FileHandle[relativePaths.length];
-    int count = 0;
-    for (int i = 0, n = relativePaths.length; i < n; i++) {
-        String path = relativePaths[i];
-        if (!path.endsWith(suffix)) continue;
-        handles[count] = child(path);
-        count++;
+void FileHandle::list (const std::string& suffix, std::vector<FileHandle> &handles) {
+    std::vector<std::string> relativePaths;
+    getFile().list(relativePaths);
+    handles.resize(relativePaths.size());
+    int count = 0, found;
+    for (int i = 0, n = relativePaths.size(); i < n; i++) {
+        found = relativePaths[i].rfind(suffix);
+        if(found == (relativePaths[i].length() - suffix.length() ) ) continue;
+        handles[count++] = child(relativePaths[i]);
     }
-    if (count < relativePaths.length) {
-        FileHandle[] newHandles = new FileHandle[count];
-        System.arraycopy(handles, 0, newHandles, 0, count);
-        handles = newHandles;
-    }
-    return handles;
+    if (count < relativePaths.size()) handles.resize(count);
+    return;
 }
 
 bool FileHandle::isDirectory () {
-    if (type == FileType.Classpath) return false;
-    return file().isDirectory();
+    return getFile().isDirectory();
 
 }
 
-FileHandle& FileHandle::child (const std::string& name) {
-    if (file.getPath().length() == 0) return new FileHandle(new File(name), type);
-    return new FileHandle(new File(file, name), type);
+FileHandle FileHandle::child (const std::string &name) {
+    if (file.getPath().length() == 0) return FileHandle(File(name), type);
+    return FileHandle(File(file, name), type);
 }
 
-FileHandle& FileHandle::parent () {
-    File parent = file.getParentFile();
-    if (parent == null) {
-        if (type == FileType.Absolute)
-            parent = new File("/");
+FileHandle FileHandle::parent () {
+    
+    File parent;
+    if(file.gotParent()) parent = file.getParentFile();
+    else
+    {
+        if (type == gdx_cpp::Files::Absolute)
+            parent = File("/");
         else
-            parent = new File("");
+            parent = File("");
     }
-    return new FileHandle(parent, type);
+    return FileHandle(parent, type);
 }
 
 void FileHandle::mkdirs () {
-    if (type == FileType.Classpath) throw new GdxRuntimeException("Cannot mkdirs with a classpath file: " + file);
-    if (type == FileType.Internal) throw new GdxRuntimeException("Cannot mkdirs with an internal file: " + file);
-    file().mkdirs();
+    if (type == gdx_cpp::Files::Internal) gdx_cpp::Gdx::app.error("Cannot mkdirs with an internal file: " + file.getPath());
+    getFile().mkdirs();
 }
 
 bool FileHandle::exists () {
     switch (type) {
-    case Internal:
+    case gdx_cpp::Files::Internal:
         if (file.exists()) return true;
         // Fall through.
-    case Classpath:
-        return FileHandle.class.getResourceAsStream("/" + file.getPath().replace('\\', '/')) != null;
     }
-    return file().exists();
+    return getFile().exists();
 }
 
-bool FileHandle::delete () {
-    if (type == FileType.Classpath) throw new GdxRuntimeException("Cannot delete a classpath file: " + file);
-    if (type == FileType.Internal) throw new GdxRuntimeException("Cannot delete an internal file: " + file);
-    return file().delete();
+bool FileHandle::deleteFile ()
+{
+    if (type == gdx_cpp::Files::Internal) gdx_cpp::Gdx::app.error("Cannot delete an internal file: " + file.getPath());
+    return getFile().deleteFile();
 }
 
 bool FileHandle::deleteDirectory () {
-    if (type == FileType.Classpath) throw new GdxRuntimeException("Cannot delete a classpath file: " + file);
-    if (type == FileType.Internal) throw new GdxRuntimeException("Cannot delete an internal file: " + file);
-    return deleteDirectory(file());
+    if (type == gdx_cpp::Files::Internal) gdx_cpp::Gdx::app.error("Cannot delete an internal file: " + file.getPath());
+    File target = getFile();
+    return deleteDirectory(target);
 }
 
-void FileHandle::copyTo (const FileHandle& dest) {
-    InputStream input = null;
-    OutputStream output = null;
-    try {
+void FileHandle::copyTo (FileHandle& dest) { 
+    ifstream_ptr input;
+    ofstream_ptr output;
+    //try {
         input = read();
         output = dest.write(false);
-        byte[] buffer = new byte[4096];
+        char buffer[4096];
         while (true) {
-            int length = input.read(buffer);
-            if (length == -1) break;
-            output.write(buffer, 0, length);
+            input->read(buffer, 4096);
+            output->write(buffer, input->gcount());
+            if(input->eof() || input->peek() == EOF) break;
         }
-    } catch (Exception ex) {
+    /*} catch (Exception ex) {
         throw new GdxRuntimeException("Error copying source file: " + file + " (" + type + ")\n" //
                                       + "To destination: " + dest.file + " (" + dest.type + ")", ex);
     }
@@ -252,49 +309,56 @@ void FileHandle::copyTo (const FileHandle& dest) {
             if (output != null) output.close();
         } catch (Exception ignored) {
         }
-    }
+  }*/
+   if(input->is_open()) input->close();
+   if(output->is_open()) output->close();
 }
 
-void FileHandle::moveTo (const FileHandle& dest) {
-    if (type == FileType.Classpath) throw new GdxRuntimeException("Cannot move a classpath file: " + file);
-    if (type == FileType.Internal) throw new GdxRuntimeException("Cannot move an internal file: " + file);
+void FileHandle::moveTo (FileHandle& dest) {
+    if (type == gdx_cpp::Files::Internal) gdx_cpp::Gdx::app.error("Cannot move an internal file: " + file.getPath());
     copyTo(dest);
-    delete();
+    deleteFile();
 }
 
-long FileHandle::length () {
-    if (type == FileType.Classpath || (type == FileType.Internal && !file.exists())) {
-        InputStream input = read();
-        try {
-            return input.available();
-        } catch (Exception ignored) {
-        } finally {
-            try {
-                input.close();
-            } catch (IOException ignored) {
-            }
-        }
-        return 0;
+int64_t FileHandle::length () {  //DEVE SEMPRE SER CHAMADO ANTES DE ABRIR A STREAM
+    if ((type == gdx_cpp::Files::Internal && !file.exists())) {
+      int64_t length = 0;
+      ifstream_ptr input = read();
+      if(input != NULL)
+      {
+          input->seekg (0, std::ios::end);
+          length = (int64_t) input->tellg();
+          input->close();
+      }
+      //else NAO TA NA LIBGDX
+      //{
+      //    gdx_cpp::Gdx::app.error("Error trying to get length of file: " + file.getPath());
+      //}
+      return length;
     }
-    return file().length();
+   
+    return getFile().length();
 }
 
-std::string& FileHandle::toString () {
-    return file.getPath();
+std::string FileHandle::toString () {
+    return getFile().getPath();
 }
 
-bool FileHandle::deleteDirectory (const File& file) {
+bool FileHandle::deleteDirectory (File& file) {
+    //TODO SOH COM A CLASSE SYSTEM
     if (file.exists()) {
-        File[] files = file.listFiles();
-        if (files != null) {
-            for (int i = 0, n = files.length; i < n; i++) {
+        std::vector<File> files;
+        file.listFiles(files);
+        if (files.empty())
+        {
+            for (int i = 0, n = files.size(); i < n; i++) {
                 if (files[i].isDirectory())
                     deleteDirectory(files[i]);
                 else
-                    files[i].delete();
+                    files[i].deleteFile();
             }
         }
     }
-    return file.delete();
+    return file.deleteFile();
 }
 

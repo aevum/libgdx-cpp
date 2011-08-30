@@ -21,11 +21,17 @@
 #ifndef GDX_CPP_FILES_FILEHANDLESTREAM_HPP_
 #define GDX_CPP_FILES_FILEHANDLESTREAM_HPP_
 
+#include <cstdio>
+#include <string>
+#include "FileHandle.hpp"
+#include "File.hpp"
+
 namespace gdx_cpp {
 namespace files {
 
-class FileHandleStream {
+class FileHandleStream : public gdx_cpp::files::FileHandle{
 public:
+    FileHandleStream(std::string path);
     bool isDirectory ();
     long length ();
     bool exists ();

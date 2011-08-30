@@ -22,6 +22,11 @@
 
 using namespace gdx_cpp::files;
 
+FileHandleStream::FileHandleStream(std::string path) :
+  FileHandle(File(path), gdx_cpp::Files::Absolute)
+{
+}
+
 bool FileHandleStream::isDirectory () {
     return false;
 }

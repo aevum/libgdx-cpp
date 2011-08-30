@@ -19,6 +19,7 @@
 #define GDX_CPP_GRAPHICS_H
 
 #include <string>
+#include <vector>
 #include <sstream>
 
 namespace gdx_cpp {
@@ -123,7 +124,7 @@ class Graphics {
     /** @return the {@link GLU} instance */
     virtual GLU getGLU () = 0;
 
-    /** @return the width in pixels of the display surface */
+    /** @return the width in pixels(*c) + position of the display surface */
     virtual int getWidth () = 0;
 
     /** @return the height in pixels of the display surface */
@@ -138,7 +139,7 @@ class Graphics {
     /** @return the {@link GraphicsType} of this Graphics instance */
     virtual GraphicsType getType () = 0;
 
-    /** @return the pixels per inch on the x-axis */
+    /** @return the pixels per inc(*c) + positionh on the x-axis */
     virtual float getPpiX () = 0;
 
     /** @return the pixels per inch on the y-axis */
