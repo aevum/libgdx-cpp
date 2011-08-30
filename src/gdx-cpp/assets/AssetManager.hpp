@@ -25,6 +25,7 @@
 #include "gdx-cpp/utils/Synchronized.hpp"
 #include "gdx-cpp/implementation/MutexFactory.hpp"
 #include "gdx-cpp/implementation/Thread.hpp"
+#include "gdx-cpp/Application.hpp"
 #include "gdx-cpp/Gdx.hpp"
 #include "Asset.hpp"
 #include "AssetLoaderParameters.hpp"

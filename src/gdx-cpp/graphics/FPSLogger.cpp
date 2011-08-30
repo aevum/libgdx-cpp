@@ -21,6 +21,9 @@
 #include "FPSLogger.hpp"
 
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Graphics.hpp"
+#include "gdx-cpp/Application.hpp"
+#include "gdx-cpp/implementation/System.hpp"
 
 using namespace gdx_cpp::graphics;
 

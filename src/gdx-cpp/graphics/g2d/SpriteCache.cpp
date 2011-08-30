@@ -20,6 +20,8 @@
 
 #include "SpriteCache.hpp"
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Graphics.hpp"
+#include "gdx-cpp/graphics/GL20.hpp"
 #include "gdx-cpp/graphics/Color.hpp"
 #include "gdx-cpp/graphics/Mesh.hpp"
 #include "gdx-cpp/utils/NumberUtils.hpp"
@@ -32,6 +34,8 @@ using namespace gdx_cpp::graphics::glutils;
 using namespace gdx_cpp::graphics::g2d;
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
+
+float SpriteCache::tempVertices[Sprite::VERTEX_SIZE * 6];
 
 ShaderProgram* createDefaultShader () {
     if (!Gdx::graphics->isGL20Available()) return NULL;

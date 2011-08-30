@@ -24,6 +24,7 @@
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/math/MathUtils.hpp"
 #include <stdexcept>
+#include <sstream>
 
 using namespace gdx_cpp::audio::analysis;
 

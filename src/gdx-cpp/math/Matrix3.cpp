@@ -23,6 +23,7 @@
 #include <cassert>
 
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Application.hpp"
 #include "Vector3.hpp"
 
 using namespace gdx_cpp::math;

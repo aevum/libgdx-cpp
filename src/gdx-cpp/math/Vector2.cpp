@@ -26,6 +26,8 @@
 
 using namespace gdx_cpp::math;
 
+Vector2 Vector2::_tmp;
+
 Vector2::Vector2() : x(0.0), y(0.0)
 {
 }

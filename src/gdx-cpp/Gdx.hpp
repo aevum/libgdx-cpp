@@ -21,21 +21,27 @@
 #ifndef GDX_CPP__GDX_HPP_
 #define GDX_CPP__GDX_HPP_
 
-#include "Graphics.hpp"
-#include "Audio.hpp"
-#include "Files.hpp"
-#include "Input.hpp"
-#include "Application.hpp"
-#include "graphics/GL10.hpp"
-#include "graphics/GL11.hpp"
-#include "graphics/GL20.hpp"
-#include "graphics/GLCommon.hpp"
-#include "graphics/GLU.hpp"
-#include "implementation/MutexFactory.hpp"
-#include "implementation/ThreadFactory.hpp"
-#include "implementation/System.hpp"
-
 namespace gdx_cpp {
+
+class Application;
+class Graphics;
+class Audio;
+class Input;
+class Files;
+
+namespace graphics {
+    class GLCommon;
+    class GL10;
+    class GL11;
+    class GL20;
+    class GLU;
+}
+
+namespace implementation {
+    class System;
+    class ThreadFactory;
+    class MutexFactory;
+}
 
 class Gdx {
 public:

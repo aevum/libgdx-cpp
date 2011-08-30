@@ -70,6 +70,9 @@ Input.hpp
 # scenes/scene2d/actions/MoveTo.hpp
 # scenes/scene2d/actions/MoveBy.hpp
 ApplicationListener.hpp
+audio/analysis/kissfft/kiss_fft.h
+audio/analysis/kissfft/kiss_fftr.h
+audio/analysis/kissfft/_kiss_fft_guts.h
 audio/AudioDevice.hpp
 audio/analysis/NativeFFT.hpp
 audio/analysis/KissFFT.hpp
@@ -176,6 +179,8 @@ graphics/g3d/keyframed/KeyframedModel.hpp
 graphics/g3d/keyframed/KeyframeAnimation.hpp
 # graphics/g2d/BitmapFontCache.hpp
 graphics/g2d/Animation.hpp
+graphics/g2d/detail/gdx2d.h
+graphics/g2d/detail/stb_truetype.h
 # graphics/g2d/BitmapFont.hpp
 graphics/g2d/TextureRegion.hpp
 graphics/g2d/SpriteCache.hpp
@@ -373,6 +378,8 @@ Version.cpp
 # scenes/scene2d/actions/RotateBy.cpp
 # scenes/scene2d/Actor.cpp
 # scenes/scene2d/CompositeAction.cpp
+audio/analysis/kissfft/kiss_fft.c
+audio/analysis/kissfft/kiss_fftr.c
 audio/analysis/ThresholdFunction.cpp
 audio/analysis/NativeFFT.cpp
 audio/analysis/KissFFT.cpp
@@ -455,6 +462,8 @@ graphics/Pixmap.cpp
 # graphics/g3d/Animator.cpp
 # graphics/g2d/BitmapFont.cpp
 # # graphics/g2d/BitmapFontCache.cpp
+graphics/g2d/detail/gdx2d.c
+graphics/g2d/detail/stb_image.c
 graphics/g2d/EmptyNinePatch.cpp
 # graphics/g2d/ParticleEmitter.cpp
 graphics/g2d/SpriteBatch.cpp
@@ -474,6 +483,7 @@ graphics/g2d/TextureRegion.cpp
 # graphics/g2d/ParticleEffect.cpp
 graphics/g2d/Animation.cpp
 graphics/g2d/Sprite.cpp
+graphics/TextureData.cpp
 # graphics/g2d/TextureAtlas.cpp
 graphics/OrthographicCamera.cpp
 # graphics/TextureRef.cpp
@@ -554,3 +564,4 @@ install(DIRECTORY src DESTINATION include/gdx-cpp
           FILES_MATCHING PATTERN "*.hpp")
 
 add_library(gdx-cpp SHARED ${GDX_HEADERS} ${GDX_SRC})
+target_link_libraries(gdx-cpp mpg123 vorbis z vorbisfile)

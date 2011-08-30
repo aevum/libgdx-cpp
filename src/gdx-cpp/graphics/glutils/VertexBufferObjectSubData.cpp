@@ -21,6 +21,8 @@
 #include "VertexBufferObjectSubData.hpp"
 
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/graphics/GL11.hpp"
+#include "gdx-cpp/graphics/GL20.hpp"
 #include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
 
 using namespace gdx_cpp::graphics::glutils;

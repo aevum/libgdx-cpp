@@ -27,6 +27,7 @@
 #include <cstdlib>
 #include <string.h>
 #include <stdexcept>
+#include <sstream>
 
 using namespace gdx_cpp::graphics::g2d;
 using namespace gdx_cpp;

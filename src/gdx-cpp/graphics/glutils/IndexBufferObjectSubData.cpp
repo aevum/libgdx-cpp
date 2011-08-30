@@ -21,6 +21,9 @@
 #include "IndexBufferObjectSubData.hpp"
 
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/graphics/GL20.hpp"
+#include "gdx-cpp/graphics/GL11.hpp"
+#include "gdx-cpp/graphics/GL10.hpp"
 
 using namespace gdx_cpp;
 using namespace gdx_cpp::graphics;

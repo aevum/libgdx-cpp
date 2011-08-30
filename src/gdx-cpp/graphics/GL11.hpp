@@ -190,9 +190,9 @@ public:
     virtual void glGetTexEnviv (int env,int pname,const int* params) const = 0;
     virtual void glGetTexParameteriv (int target,int pname,int offset) const = 0;
     virtual void glGetTexParameteriv (int target,int pname,const int* params) const = 0;
-    virtual   bool glIsBuffer (int buffer) const = 0;
-    virtual   bool glIsEnabled (int cap) const = 0;
-    virtual   bool glIsTexture (int texture) const = 0;
+    virtual bool glIsBuffer (int buffer) const = 0;
+    virtual bool glIsEnabled (int cap) const = 0;
+    virtual bool glIsTexture (int texture) const = 0;
     virtual void glTexEnvi (int target,int pname,int param) const = 0;
     virtual void glTexEnviv (int target,int pname,int offset) const = 0;
     virtual void glTexEnviv (int target,int pname,const int* params) const = 0;

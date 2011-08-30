@@ -23,6 +23,7 @@
 using namespace gdx_cpp::graphics;
 
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Graphics.hpp"
 
 gdx_cpp::graphics::Camera::Camera()
 : direction(0, 0, -1)

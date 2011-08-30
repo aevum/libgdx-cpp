@@ -21,6 +21,7 @@
 #include "ShaderProgram.hpp"
 #include "gdx-cpp/graphics/GL20.hpp"
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Graphics.hpp"
 #include "gdx-cpp/Application.hpp"
 #include <tr1/unordered_map>
 #include <stdexcept>
@@ -40,7 +41,7 @@ const std::string ShaderProgram::TEXCOORD_ATTRIBUTE = "a_texCoord";
 const std::string ShaderProgram::TANGENT_ATTRIBUTE = "a_tangent";
 const std::string ShaderProgram::BINORMAL_ATTRIBUTE = "a_binormal";
 
-std::tr1::unordered_map <gdx_cpp::Application *, std::set<ShaderProgram *> * > shaders();
+std::tr1::unordered_map <gdx_cpp::Application *, std::set<ShaderProgram *> * > ShaderProgram::shaders;
 
 bool ShaderProgram::pedantic = true;
 int ShaderProgram::intbuf = 0;

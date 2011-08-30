@@ -26,7 +26,9 @@
 #include <string>
 
 using namespace gdx_cpp::math::collision;
+using namespace gdx_cpp::math;
 
+Vector3 Ray::tmp = Vector3();
 
 gdx_cpp::math::collision::Ray::Ray()
 {

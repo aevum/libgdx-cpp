@@ -10,6 +10,8 @@ option(BUILD_BACKEND_IOS "Builds the ios backend for gdx-cpp" FALSE)
 option(BUILD_BACKEND_ANDROID "Builds the android backend for gdx-cpp" FALSE)
 option(BUILD_BACKEND_WINDOWS "Builds the windows backend for gdx-cpp" ${WIN32})
 
+option(BUILD_TESTS "Builds(tries) all libgdx tests" TRUE)
+
 include_directories(src)
 add_subdirectory(src/gdx-cpp)
 
@@ -27,4 +29,8 @@ endif()
 
 if (BUILD_BACKEND_WINDOWS)
     add_subdirectory(src/backends/windows)
+endif()
+
+if (BUILD_TESTS)
+    add_subdirectory(src/tests)
 endif()

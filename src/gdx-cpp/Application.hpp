@@ -21,6 +21,7 @@
 #define GDXCPP_APPLICATION_H
 
 #include <string>
+#include <ostream>
 #include "gdx-cpp/utils/Runnable.hpp"
 
 class Runnable;

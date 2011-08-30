@@ -24,6 +24,7 @@
 #include "gdx-cpp/graphics/GL20.hpp"
 #include "gdx-cpp/graphics/GL10.hpp"
 #include "gdx-cpp/Application.hpp"
+#include "gdx-cpp/Graphics.hpp"
 #include "gdx-cpp/Gdx.hpp"
 #include <stdexcept>
 

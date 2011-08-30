@@ -26,6 +26,7 @@
 #include "gdx-cpp/graphics/Mesh.hpp"
 #include "gdx-cpp/graphics/VertexAttribute.hpp"
 #include "gdx-cpp/graphics/GL20.hpp"
+#include "gdx-cpp/Graphics.hpp"
 #include "gdx-cpp/Gdx.hpp"
 #include "Sprite.hpp"
 #include "gdx-cpp/utils/NumberUtils.hpp"

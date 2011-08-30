@@ -20,6 +20,10 @@
 
 #include "Mesh.hpp"
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Graphics.hpp"
+#include "gdx-cpp/graphics/GL10.hpp"
+#include "gdx-cpp/graphics/GL11.hpp"
+#include "gdx-cpp/graphics/GL20.hpp"
 #include "gdx-cpp/graphics/glutils/VertexData.hpp"
 #include "gdx-cpp/graphics/glutils/VertexArray.hpp"
 #include "gdx-cpp/graphics/glutils/IndexData.hpp"
@@ -37,6 +41,7 @@ using namespace gdx_cpp;
 using namespace gdx_cpp::graphics::glutils;
 
 bool Mesh::forceVBO = false;
+Mesh::MeshMap Mesh::meshes;
 
 Mesh::Mesh(bool isStatic, int maxVertices, int maxIndices, std::vector< gdx_cpp::graphics::VertexAttribute > attributes)
 : vertices(0)

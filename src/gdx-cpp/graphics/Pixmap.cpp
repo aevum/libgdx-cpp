@@ -27,6 +27,7 @@
 
 #include <cassert>
 #include <stdexcept>
+#include <sstream>
 
 using namespace gdx_cpp::graphics;
 

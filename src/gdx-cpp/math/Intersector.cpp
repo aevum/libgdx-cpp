@@ -29,6 +29,7 @@
 #include <limits>
 #include "collision/Ray.hpp"
 #include <cassert>
+#include "gdx-cpp/Application.hpp"
 #include "gdx-cpp/Gdx.hpp"
 #include "Circle.hpp"
 
@@ -433,11 +434,11 @@ bool Intersector::overlapCircles (const Circle& c1,const Circle& c2) {
     return distance <= radiusSum * radiusSum;
 }
 
-static float det (float a, float b, float c, float d) {
+float Intersector::det (float a, float b, float c, float d) {
     return a * d - b * c;
 }
 
-static double detd (double a, double b, double c, double d) {
+double Intersector::detd (double a, double b, double c, double d) {
     return a * d - b * c;
 }
 

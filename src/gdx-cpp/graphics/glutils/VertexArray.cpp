@@ -21,6 +21,8 @@
 #include "VertexArray.hpp"
 
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/graphics/GL10.hpp"
+#include "gdx-cpp/graphics/GL11.hpp"
 
 using namespace gdx_cpp::graphics::glutils;
 using namespace gdx_cpp::graphics;

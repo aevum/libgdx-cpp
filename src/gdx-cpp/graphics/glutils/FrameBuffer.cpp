@@ -19,11 +19,16 @@
 */
 
 #include "FrameBuffer.hpp"
+#include "gdx-cpp/Graphics.hpp"
+#include "gdx-cpp/graphics/GL20.hpp"
+
 #include <stdexcept>
 
 using namespace gdx_cpp::graphics::glutils;
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
+
+FrameBuffer::buffer_map FrameBuffer::buffers;
 
 void FrameBuffer::build () {
     colorTexture = Texture::ptr(new Texture(width, height, format));

@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Application.hpp"
 
 using namespace gdx_cpp::audio::io;
 

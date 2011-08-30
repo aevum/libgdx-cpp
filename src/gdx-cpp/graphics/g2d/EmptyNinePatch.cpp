@@ -26,6 +26,13 @@
 using namespace gdx_cpp::graphics::g2d;
 using namespace gdx_cpp::graphics;
 
+EmptyNinePatch* EmptyNinePatch::instance = 0;
+
+gdx_cpp::graphics::g2d::EmptyNinePatch::EmptyNinePatch() : NinePatch(emptyPatches)
+{
+}
+
+
 EmptyNinePatch::~EmptyNinePatch(){
   delete instance;
 }
