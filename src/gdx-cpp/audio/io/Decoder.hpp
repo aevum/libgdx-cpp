@@ -30,7 +30,7 @@ namespace io {
 
 class Decoder: public gdx_cpp::utils::Disposable {
 public:
-    virtual   int readSamples (std::vector< short >& samples);
+    virtual   int readSamples (std::vector< short >& samples) = 0;
     virtual   int skipSamples (int numSamples) = 0;
     virtual   int getNumChannels () = 0;
     virtual   int getRate () = 0;
