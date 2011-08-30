@@ -31,6 +31,7 @@ Vector3 Vector3::Z(0, 0, 1);
 
 Vector3 Vector3::_tmp;
 Vector3 Vector3::_tmp2;
+Vector3 Vector3::_tmp3;
 
 Vector3::Vector3() : x(0),y(0),z(0)
 {

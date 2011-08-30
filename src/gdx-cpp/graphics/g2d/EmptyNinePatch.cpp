@@ -27,6 +27,7 @@ using namespace gdx_cpp::graphics::g2d;
 using namespace gdx_cpp::graphics;
 
 EmptyNinePatch* EmptyNinePatch::instance = 0;
+TextureRegion::ptr EmptyNinePatch::region;
 
 gdx_cpp::graphics::g2d::EmptyNinePatch::EmptyNinePatch() : NinePatch(emptyPatches)
 {
