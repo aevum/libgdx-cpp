@@ -22,7 +22,6 @@
 #define GDX_CPP__INPUTADAPTER_HPP_
 
 namespace gdx_cpp {
-namespace  {
 
 class InputAdapter {
 public:
@@ -43,6 +42,5 @@ private:
 };
 
 } // namespace gdx_cpp
-} // namespace
 
 #endif // GDX_CPP__INPUTADAPTER_HPP_

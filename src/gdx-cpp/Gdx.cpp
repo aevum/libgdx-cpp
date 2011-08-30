@@ -34,3 +34,23 @@ graphics::GL20* Gdx::gl20 = 0;
 graphics::GLU* Gdx::glu = 0;
 implementation::ThreadFactory* threadFactory = 0;
 implementation::MutexFactory* mutexFactory = 0;
+
+void Gdx::initialize(Application* application,
+                     Graphics* graphics, Audio* audio, Input*  input , Files* files, implementation::System* system,
+                     implementation::ThreadFactory* threadFactory, implementation::MutexFactory* mutexFactory)
+{
+    Gdx::app = application;
+    Gdx::graphics = graphics;
+    Gdx::audio = audio;
+    Gdx::input = input;
+    Gdx::files = files;
+    Gdx::system  = system;
+    Gdx::threadFactory = threadFactory;
+    Gdx::mutexFactory = mutexFactory;
+    Gdx::gl = Gdx::graphics->getGLCommon();
+    Gdx::gl10 = Gdx::graphics->getGL10();
+    Gdx::gl20 = Gdx::graphics->getGL20();
+    Gdx::gl11 = Gdx::graphics->getGL11();
+    Gdx::glu = Gdx::graphics->getGLU();
+}
+

@@ -26,7 +26,6 @@ namespace gdx_cpp {
 
 class InputProcessor;
 
-namespace  {
 
 class InputMultiplexer {
 public:
@@ -50,6 +49,5 @@ private:
 };
 
 } // namespace gdx_cpp
-} // namespace
 
 #endif // GDX_CPP__INPUTMULTIPLEXER_HPP_

@@ -21,11 +21,11 @@
 #ifndef GDX_CPP__GDX_HPP_
 #define GDX_CPP__GDX_HPP_
 
-#include "Application.hpp"
 #include "Graphics.hpp"
 #include "Audio.hpp"
 #include "Files.hpp"
 #include "Input.hpp"
+#include "Application.hpp"
 #include "graphics/GL10.hpp"
 #include "graphics/GL11.hpp"
 #include "graphics/GL20.hpp"
@@ -50,9 +50,13 @@ public:
     static graphics::GL20* gl20;
     static graphics::GLU* glu;
 
+    static implementation::System* system;
     static implementation::ThreadFactory* threadFactory;
     static implementation::MutexFactory* mutexFactory;
-    static implementation::System* system;
+
+    static void initialize(Application* application, Graphics* graphics,
+                           Audio* audio, Input* input, Files* files, implementation::System* system,
+                           implementation::ThreadFactory* threadFactory, implementation::MutexFactory* mutexFactory);
 };
 
 } // namespace gdx_cpp
