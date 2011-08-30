@@ -17,5 +17,38 @@
 
 #include "LinuxGraphics.hpp"
 
+#include "LinuxGL10.hpp"
+#include "LinuxGL20.hpp"
+#include "LinuxGLU.hpp"
+
 using namespace gdx_cpp::backends::nix;
+
+gdx_cpp::backends::nix::LinuxGraphics::LinuxGraphics() :
+gl10(new LinuxGL10)
+,gl11(0)
+,gl20(new LinuxGL20)
+,glu(new LinuxGLU)
+{
+}
+
+gdx_cpp::graphics::GL10* gdx_cpp::backends::nix::LinuxGraphics::getGL10()
+{
+    return gl10;
+}
+
+gdx_cpp::graphics::GL11* gdx_cpp::backends::nix::LinuxGraphics::getGL11()
+{
+    return gl11;
+}
+
+gdx_cpp::graphics::GL20* gdx_cpp::backends::nix::LinuxGraphics::getGL20()
+{
+    return gl20;
+}
+
+gdx_cpp::graphics::GLU* gdx_cpp::backends::nix::LinuxGraphics::getGLU()
+{
+    return glu;
+}
+
 
