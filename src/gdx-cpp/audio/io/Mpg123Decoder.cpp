@@ -87,7 +87,7 @@ void cleanup( mpg123_handle *handle )
         mpg123_exit();
 }
 
-Mp3File* openFile(std::string file)
+Mp3File* Mpg123Decoder::openFile(std::string file)
 {
         mpg123_handle *mh = NULL;
         int  channels = 0, encoding = 0;
@@ -157,7 +157,7 @@ static inline int readBuffer( Mp3File* mp3 )
  * Method:    readSamples
  * Signature: (ILjava/nio/ShortBuffer;I)I
  */
-int readSamples(Mp3File* mp3, std::vector<short>& buffer, int numSamples)
+int Mpg123Decoder::readSamples(Mp3File* mp3, std::vector<short>& buffer, int numSamples)
 {
         short* target = (short*)&buffer[0];
 
@@ -187,7 +187,7 @@ int readSamples(Mp3File* mp3, std::vector<short>& buffer, int numSamples)
         return idx;
 }
 
-int skipSamples(Mp3File* mp3, int numSamples)
+int Mpg123Decoder::skipSamples(Mp3File* mp3, int numSamples)
 {
         int idx = 0;
         while( idx != numSamples )
@@ -216,7 +216,7 @@ int skipSamples(Mp3File* mp3, int numSamples)
  * Method:    getNumChannels
  * Signature: (J)I
  */
-int getNumChannels(Mp3File* mp3)
+int Mpg123Decoder::getNumChannels(Mp3File* mp3)
 {
         return mp3->channels;
 }
@@ -226,7 +226,7 @@ int getNumChannels(Mp3File* mp3)
  * Method:    getRate
  * Signature: (J)I
  */
-int getRate(Mp3File* mp3)
+int Mpg123Decoder::getRate(Mp3File* mp3)
 {
         return mp3->rate;
 }
@@ -236,13 +236,13 @@ int getRate(Mp3File* mp3)
  * Method:    closeFile
  * Signature: (J)V
  */
-void closeFile(Mp3File* mp3)
+void Mpg123Decoder::closeFile(Mp3File* mp3)
 {
         free(mp3->buffer);
         cleanup(mp3->handle);
 }
 
-float getLength(Mp3File* mp3)
+float Mpg123Decoder::getLength(Mp3File* mp3)
 {
         return mp3->length;
 }

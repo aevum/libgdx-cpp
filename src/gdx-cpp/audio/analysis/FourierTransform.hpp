@@ -51,8 +51,8 @@ public:
     float calcAvg (float lowFreq,float hiFreq);
     virtual void forward (std::vector< float >& buffer) = 0;
     void forward (std::vector< float >& buffer, int startAt);
-    virtual void inverse (std::vector< float >& freqReal, std::vector< float >& freqImag, std::vector< float >& buffer) = 0;
-    void inverse (std::vector< float >& buffer);
+    void inverse (std::vector< float >& freqReal, std::vector< float >& freqImag, std::vector< float >& buffer);
+    virtual void inverse (std::vector< float >& buffer) = 0;
     std::vector< float > getSpectrum ();
     std::vector< float > getRealPart ();
     std::vector< float > getImaginaryPart ();

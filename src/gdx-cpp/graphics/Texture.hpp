@@ -115,7 +115,7 @@ public:
     bool isManaged ();
     int getTextureObjectHandle ();
     void setWrap (const TextureWrap& u, const TextureWrap& v);
-    void setFilter (const TextureFilter& minFilter, const TextureFilter& magFilter);
+    void setFilter (const gdx_cpp::graphics::Texture::TextureFilter& minFilter, const gdx_cpp::graphics::Texture::TextureFilter& magFilter);
     void dispose ();
     void setEnforcePotImages (bool enforcePotImages);
     static void clearAllTextures (gdx_cpp::Application* app);
