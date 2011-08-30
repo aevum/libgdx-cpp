@@ -787,9 +787,9 @@ void SpriteCache::begin () {
         gl.glEnable(GL10::GL_TEXTURE_2D);
 
         gl.glMatrixMode(GL10::GL_PROJECTION);
-        gl.glLoadMatrixf(projectionMatrix.val, 0);
+        gl.glLoadMatrixf(projectionMatrix.val);
         gl.glMatrixMode(GL10::GL_MODELVIEW);
-        gl.glLoadMatrixf(transformMatrix.val, 0);
+        gl.glLoadMatrixf(transformMatrix.val);
 
         mesh->bind();
     } else {

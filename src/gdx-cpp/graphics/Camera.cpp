@@ -47,9 +47,9 @@ gdx_cpp::graphics::Camera::Camera(float viewportHeight, float viewportWidth, flo
 
 void Camera::apply (const gdx_cpp::graphics::GL10& gl) {
     gl.glMatrixMode(gdx_cpp::graphics::GL10::GL_PROJECTION);
-    gl.glLoadMatrixf(projection.val, 0);
+    gl.glLoadMatrixf(projection.val);
     gl.glMatrixMode(gdx_cpp::graphics::GL10::GL_MODELVIEW);
-    gl.glLoadMatrixf(view.val, 0);
+    gl.glLoadMatrixf(view.val);
 }
 
 void Camera::lookAt (float x,float y,float z) {

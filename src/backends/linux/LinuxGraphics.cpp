@@ -18,6 +18,7 @@
 #include "LinuxGraphics.hpp"
 
 #include "LinuxGL10.hpp"
+#include "LinuxGL11.hpp"
 #include "LinuxGL20.hpp"
 #include "LinuxGLU.hpp"
 
@@ -25,7 +26,7 @@ using namespace gdx_cpp::backends::nix;
 
 gdx_cpp::backends::nix::LinuxGraphics::LinuxGraphics() :
 gl10(new LinuxGL10)
-,gl11(0)
+,gl11(new LinuxGL11)
 ,gl20(new LinuxGL20)
 ,glu(new LinuxGLU)
 {

@@ -16,7 +16,7 @@ include_directories(src)
 add_subdirectory(src/gdx-cpp)
 
 if (BUILD_BACKEND_LINUX)
-    add_subdirectory(src/backends/linux)
+  add_subdirectory(src/backends/linux)
 endif()
 
 if (BUILD_BACKEND_IOS)
