@@ -30,23 +30,25 @@ namespace g2d {
 
 class EmptyNinePatch : public NinePatch {
 public:
+    typedef ref_ptr_maker<EmptyNinePatch>::type ptr;
+    
     EmptyNinePatch& getInstance ();
     int getRegionWidth ();
     int getRegionHeight ();
-    TextureRegion::ptrTexture getRegion ();
+    TextureRegion::ptr getRegion ();
     void draw (const SpriteBatch& batch,float x,float y,float width,float height);
-    EmptyNinePatch::~EmptyNinePatch();
+    ~EmptyNinePatch();
 
 protected:
 
 
 private:
   
-  static std::vector<TextureRegion::ptrTexture> emptyPatches;
+  static std::vector<TextureRegion::ptr> emptyPatches;
   static EmptyNinePatch * instance;
-  static TextureRegion::ptrTexture region;
+  static TextureRegion::ptr region;
 
-  EmptyNinePatch::EmptyNinePatch();
+  EmptyNinePatch();
   
 };
 

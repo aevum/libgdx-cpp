@@ -22,6 +22,7 @@
 #define GDX_CPP_GRAPHICS_G2D_NINEPATCH_HPP_
 
 #include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
+#include "gdx-cpp/graphics/Texture.hpp"
 
 #include<vector>
 
@@ -48,8 +49,8 @@ public:
     const static int BOTTOM_CENTER = 7;
     const static int BOTTOM_RIGHT = 8;
 
-    NinePatch (TextureRegion::ptrTexture texture, int left, int right, int top, int bottom);
-    NinePatch (TextureRegion::ptr region, int left, int right, int top, int bottom);
+    NinePatch (Texture::ptr texture, int left, int right, int top, int bottom);
+    NinePatch (TextureRegion::ptr texture, int left, int right, int top, int bottom);
     NinePatch (std::vector< TextureRegion::ptr >& _patches);
     
     void draw (gdx_cpp::graphics::g2d::SpriteBatch& batch, float x, float y, float width, float height);

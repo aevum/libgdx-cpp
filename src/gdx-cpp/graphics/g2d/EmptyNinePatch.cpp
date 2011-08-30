@@ -24,28 +24,30 @@
 #include "TextureRegion.hpp"
 
 using namespace gdx_cpp::graphics::g2d;
+using namespace gdx_cpp::graphics;
 
 EmptyNinePatch::~EmptyNinePatch(){
   delete instance;
-  delete emptyPatches;
 }
   
+class EmpytTextureRegion : public TextureRegion {
+public :
+    EmpytTextureRegion(Texture::ptr tex) : TextureRegion(tex) { }
 
+    int getRegionWidth () {
+        return 0;
+    }
+
+    int getRegionHeight () {
+        return 0;
+    }
+};
+  
 EmptyNinePatch& EmptyNinePatch::getInstance () {
     if (instance == NULL) {
         // This is kind of gross...
-        TextureRegion::ptrTexture texture(new gdx_cpp::graphics::Texture(2, 2, gdx_cpp::graphics::Pixmap::Format.RGBA8888));
-
-        class EmpytTextureRegion : public TextureRegion {
-        public :
-            int getRegionWidth () {
-                return 0;
-            }
-
-            int getRegionHeight () {
-                return 0;
-            }
-        };
+        Texture::ptr texture(new gdx_cpp::graphics::Texture(2, 2, gdx_cpp::graphics::Pixmap::Format::RGBA8888));
+ 
 
         region = TextureRegion::ptr(new EmpytTextureRegion(texture));
         emptyPatches.reserve(9);
@@ -72,7 +74,7 @@ int EmptyNinePatch::getRegionHeight () {
     return 0;
 }
 
-TextureRegion::ptrTexture EmptyNinePatch::getRegion () {
+TextureRegion::ptr EmptyNinePatch::getRegion () {
     getInstance();
     return region;
 }

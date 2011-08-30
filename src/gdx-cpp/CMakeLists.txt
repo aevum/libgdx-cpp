@@ -184,7 +184,7 @@ graphics/g2d/SpriteCache.hpp
 graphics/g2d/NinePatch.hpp
 # graphics/g2d/ParticleEmitter.hpp
 graphics/g2d/Sprite.hpp
-# graphics/g2d/EmptyNinePatch.hpp
+graphics/g2d/EmptyNinePatch.hpp
 graphics/g2d/SpriteBatch.hpp
 graphics/g2d/tiled/TiledLayer.hpp
 graphics/g2d/tiled/SimpleTileAtlas.hpp
@@ -455,7 +455,7 @@ graphics/Pixmap.cpp
 # graphics/g3d/Animator.cpp
 # graphics/g2d/BitmapFont.cpp
 # # graphics/g2d/BitmapFontCache.cpp
-# graphics/g2d/EmptyNinePatch.cpp
+graphics/g2d/EmptyNinePatch.cpp
 # graphics/g2d/ParticleEmitter.cpp
 graphics/g2d/SpriteBatch.cpp
 graphics/g2d/SpriteCache.cpp

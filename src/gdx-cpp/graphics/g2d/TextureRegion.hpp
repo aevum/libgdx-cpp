@@ -31,21 +31,20 @@ namespace g2d {
 class TextureRegion {
 public:
     typedef ref_ptr_maker<TextureRegion>::type ptr;
-    typedef ref_ptr_maker<gdx_cpp::graphics::Texture >::type ptrTexture;
 
     TextureRegion ();
-    TextureRegion (TextureRegion::ptrTexture _texture);
-    TextureRegion (TextureRegion::ptrTexture _texture, int x, int y, int width, int height);
-    TextureRegion (TextureRegion::ptrTexture _texture, float u, float v, float u2, float v2);
+    TextureRegion (Texture::ptr _texture);
+    TextureRegion (Texture::ptr _texture, int x, int y, int width, int height);
+    TextureRegion (Texture::ptr _texture, float u, float v, float u2, float v2);
     TextureRegion (gdx_cpp::graphics::g2d::TextureRegion& region);
     TextureRegion (gdx_cpp::graphics::g2d::TextureRegion& region, int x, int y, int width, int height);
-    void setRegion (gdx_cpp::graphics::g2d::TextureRegion::ptrTexture texture);
+    void setRegion (Texture::ptr texture);
     void setRegion (int x,int y,int width,int height);
     void setRegion (float u,float v,float u2,float v2);
     void setRegion (const TextureRegion& region);
     void setRegion (const gdx_cpp::graphics::g2d::TextureRegion& region, int x, int y, int width, int height);
-    ptrTexture getTexture () const;
-    void setTexture (gdx_cpp::graphics::g2d::TextureRegion::ptrTexture texture);
+    Texture::ptr getTexture () const;
+    void setTexture (Texture::ptr texture);
     float getU () const;
     void setU (float u);
     float getV () const;
@@ -71,7 +70,7 @@ public:
     float u2, v2;
 
 protected:
-    TextureRegion::ptrTexture texture;
+    Texture::ptr texture;
 
 private:
 

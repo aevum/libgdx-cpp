@@ -25,8 +25,9 @@
 #include "TextureRegion.hpp"
 
 using namespace gdx_cpp::graphics::g2d;
+using namespace gdx_cpp::graphics;
 
-NinePatch::NinePatch (TextureRegion::ptrTexture texture, int left, int right, int top, int bottom) {
+NinePatch::NinePatch (Texture::ptr texture, int left, int right, int top, int bottom) {
     TextureRegion::ptr t(new TextureRegion(texture));
     initialize(t, left, right, top, bottom);
 }
@@ -40,15 +41,15 @@ void NinePatch::initialize(TextureRegion::ptr region, int left, int right, int t
     int middleWidth = region->getRegionWidth() - left - right;
     int middleHeight = region->getRegionHeight() - top - bottom;
     patches.reserve(9);
-//     patches[0] = TextureRegion::ptr(new TextureRegion(region, 0, 0, left, top));
-//     patches[1] = TextureRegion::ptr(new TextureRegion(region, left, 0, middleWidth, top));
-//     patches[2] = TextureRegion::ptr(new TextureRegion(region, left + middleWidth, 0, right, top));
-//     patches[3] = TextureRegion::ptr(new TextureRegion(region, 0, top, left, middleHeight));
-//     patches[4] = TextureRegion::ptr(new TextureRegion(region, left, top, middleWidth, middleHeight));
-//     patches[5] = TextureRegion::ptr(new TextureRegion(region, left + middleWidth, top, right, middleHeight));
-//     patches[6] = TextureRegion::ptr(new TextureRegion(region, 0, top + middleHeight, left, bottom));
-//     patches[7] = TextureRegion::ptr(new TextureRegion(region, left, top + middleHeight, middleWidth, bottom));
-//     patches[8] = TextureRegion::ptr(new TextureRegion(region, left + middleWidth, top + middleHeight, right, bottom));
+    patches[0] = TextureRegion::ptr(new TextureRegion(*region, 0, 0, left, top));
+    patches[1] = TextureRegion::ptr(new TextureRegion(*region, left, 0, middleWidth, top));
+    patches[2] = TextureRegion::ptr(new TextureRegion(*region, left + middleWidth, 0, right, top));
+    patches[3] = TextureRegion::ptr(new TextureRegion(*region, 0, top, left, middleHeight));
+    patches[4] = TextureRegion::ptr(new TextureRegion(*region, left, top, middleWidth, middleHeight));
+    patches[5] = TextureRegion::ptr(new TextureRegion(*region, left + middleWidth, top, right, middleHeight));
+    patches[6] = TextureRegion::ptr(new TextureRegion(*region, 0, top + middleHeight, left, bottom));
+    patches[7] = TextureRegion::ptr(new TextureRegion(*region, left, top + middleHeight, middleWidth, bottom));
+    patches[8] = TextureRegion::ptr(new TextureRegion(*region, left + middleWidth, top + middleHeight, right, bottom));
 }
 
 NinePatch::NinePatch (std::vector< TextureRegion::ptr >& _patches): patches(_patches)

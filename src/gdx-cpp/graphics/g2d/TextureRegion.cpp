@@ -23,48 +23,48 @@
 #include <cmath>
 
 using namespace gdx_cpp::graphics::g2d;
+using namespace gdx_cpp::graphics;
+
+/** Constructs a region with no texture and no coordinates defined. */
+TextureRegion::TextureRegion ():  u(0.0), v(0.0), u2(0.0), v2(0.0)
+{
+}
+
+/** Constructs a region the size of the specified texture. */
+TextureRegion::TextureRegion (Texture::ptr _texture) : texture(_texture), u(0.0), v(0.0), u2(0.0), v2(0.0)
+{
+    setRegion(0, 0, _texture->getWidth(), _texture->getHeight());
+}
+
+/** @param width The width of the texture region. May be negative to flip the sprite when drawn.
+ * @param height The height of the texture region. May be negative to flip the sprite when drawn. */
+TextureRegion::TextureRegion (gdx_cpp::graphics::Texture::ptr _texture, int x, int y, int width, int height): texture(_texture), u(0.0), v(0.0), u2(0.0), v2(0.0)
+{
+    setRegion(x, y, width, height);
+}
+
+TextureRegion::TextureRegion (gdx_cpp::graphics::Texture::ptr _texture, float u, float v, float u2, float v2):texture(_texture), u(0.0), v(0.0), u2(0.0), v2(0.0)
+{
+    setRegion(u, v, u2, v2);
+}
+
+/** Constructs a region with the same texture and coordinates of the specified region. */
+TextureRegion::TextureRegion (TextureRegion& region):u(0.0), v(0.0), u2(0.0), v2(0.0)
+{
+    setRegion(region);
+}
+
+/** Constructs a region with the same texture as the specified region and sets the coordinates relative to the specified region.
+ * @param width The width of the texture region. May be negative to flip the sprite when drawn.
+ * @param height The height of the texture region. May be negative to flip the sprite when drawn. */
+TextureRegion::TextureRegion (TextureRegion& region, int x, int y, int width, int height):u(0.0), v(0.0), u2(0.0), v2(0.0)
+{
+    setRegion(region, x, y, width, height);
+}
 
 
-        /** Constructs a region with no texture and no coordinates defined. */
-        TextureRegion::TextureRegion ():  u(0.0), v(0.0), u2(0.0), v2(0.0)
-        {
-        }
 
-        /** Constructs a region the size of the specified texture. */
-        TextureRegion::TextureRegion (TextureRegion::ptrTexture _texture) : texture(_texture), u(0.0), v(0.0), u2(0.0), v2(0.0)
-        {
-                setRegion(0, 0, _texture->getWidth(), _texture->getHeight());
-        }
-
-        /** @param width The width of the texture region. May be negative to flip the sprite when drawn.
-         * @param height The height of the texture region. May be negative to flip the sprite when drawn. */
-        TextureRegion::TextureRegion (TextureRegion::ptrTexture _texture, int x, int y, int width, int height): texture(_texture), u(0.0), v(0.0), u2(0.0), v2(0.0)
-        {
-                setRegion(x, y, width, height);
-        }
-
-        TextureRegion::TextureRegion (TextureRegion::ptrTexture _texture, float u, float v, float u2, float v2):texture(_texture), u(0.0), v(0.0), u2(0.0), v2(0.0)
-        {
-                setRegion(u, v, u2, v2);
-        }
-
-        /** Constructs a region with the same texture and coordinates of the specified region. */
-        TextureRegion::TextureRegion (TextureRegion& region):u(0.0), v(0.0), u2(0.0), v2(0.0)
-        {
-                setRegion(region);
-        }
-
-        /** Constructs a region with the same texture as the specified region and sets the coordinates relative to the specified region.
-         * @param width The width of the texture region. May be negative to flip the sprite when drawn.
-         * @param height The height of the texture region. May be negative to flip the sprite when drawn. */
-        TextureRegion::TextureRegion (TextureRegion& region, int x, int y, int width, int height):u(0.0), v(0.0), u2(0.0), v2(0.0)
-        {
-                setRegion(region, x, y, width, height);
-        }
-
-       
-
-void TextureRegion::setRegion (TextureRegion::ptrTexture _texture) {
+void TextureRegion::setRegion (gdx_cpp::graphics::Texture::ptr _texture) {
     this->texture = _texture;
     setRegion(0, 0, _texture->getWidth(), _texture->getHeight());
 }
@@ -92,11 +92,11 @@ void TextureRegion::setRegion (const gdx_cpp::graphics::g2d::TextureRegion& regi
     setRegion(region.getRegionX() + x, region.getRegionY() + y, width, height);
 }
 
-TextureRegion::ptrTexture TextureRegion::getTexture () const {
+gdx_cpp::graphics::Texture::ptr TextureRegion::getTexture () const {
     return texture;
 }
 
-void TextureRegion::setTexture (TextureRegion::ptrTexture texture) {
+void TextureRegion::setTexture (gdx_cpp::graphics::Texture::ptr) {
     this->texture = texture;
 }
 
@@ -212,7 +212,7 @@ gdx_cpp::utils::MatrixBase<TextureRegion::ptr> TextureRegion::split (int tileWid
 
     int startX = x;
     gdx_cpp::utils::MatrixBase<TextureRegion::ptr> matrix(rows, cols);
-    
+
     for (int row = 0; row < rows; row++, y += tileHeight) {
         x = startX;
         for (int col = 0; col < cols; col++, x += tileWidth) {
