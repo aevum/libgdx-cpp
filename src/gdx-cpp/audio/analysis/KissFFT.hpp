@@ -21,23 +21,33 @@
 #ifndef GDX_CPP_AUDIO_ANALYSIS_KISSFFT_HPP_
 #define GDX_CPP_AUDIO_ANALYSIS_KISSFFT_HPP_
 
+#include "gdx-cpp/utils/Disposable.hpp"
+#include <vector>
+#include "kissfft/kiss_fftr.h"
+
+struct KissFFTO;
+
 namespace gdx_cpp {
 namespace audio {
 namespace analysis {
 
 class KissFFT: public gdx_cpp::utils::Disposable {
 public:
-    void spectrum (const ShortBuffer& samples,const FloatBuffer& spectrum);
+    void spectrum (std::vector<short>& samples, std::vector<float>& spectrum);
     void dispose ();
-    void getRealPart (const ShortBuffer& real);
-    void getImagPart (const ShortBuffer& imag);
-    static void main ();
+    void getRealPart (std::vector<short>& real);
+    void getImagPart (std::vector<short>& imag);
 
 protected:
 
 
 private:
-    long handle;
+    KissFFTO* handle;
+    KissFFTO* create  (int numSamples);
+    void destroy(KissFFTO* fft);
+    void getRealPart(KissFFTO* fft, std::vector<short>& target);
+    void getImagPart(KissFFTO* fft, std::vector<short>& target);
+    void spectrum(KissFFTO* fft, std::vector< short >& samples2, std::vector< float >& spectrum);
 };
 
 } // namespace gdx_cpp

@@ -21,12 +21,19 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_BITMAPFONT_HPP_
 #define GDX_CPP_GRAPHICS_G2D_BITMAPFONT_HPP_
 
+#include "gdx-cpp/utils/Disposable.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 namespace g2d {
 
 class BitmapFont: public gdx_cpp::utils::Disposable {
 public:
+    class Glyph {
+
+
+    };
+    
     Glyph& getGlyph (char ch);
     std::string& getImageFile ();
     TextBounds& draw (const SpriteBatch& spriteBatch,const CharSequence& str,float x,float y);

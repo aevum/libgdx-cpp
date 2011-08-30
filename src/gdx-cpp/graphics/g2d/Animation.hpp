@@ -20,6 +20,9 @@
 
 #ifndef GDX_CPP_GRAPHICS_G2D_ANIMATION_HPP_
 #define GDX_CPP_GRAPHICS_G2D_ANIMATION_HPP_
+#include <vector>
+
+#include "TextureRegion.hpp"
 
 namespace gdx_cpp {
 namespace graphics {
@@ -27,10 +30,14 @@ namespace g2d {
 
 class Animation {
 public:
-    TextureRegion& getKeyFrame (float stateTime,bool looping);
 
+    Animation (float frameDuration, const std::vector<TextureRegion::ptr>& keyFrames);
+    
+    TextureRegion::ptr getKeyFrame (float stateTime,bool looping);
+    
+    float frameDuration;
 protected:
-
+    std::vector<TextureRegion::ptr> keyFrames;
 
 private:
 

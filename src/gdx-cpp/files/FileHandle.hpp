@@ -29,7 +29,16 @@
 #include "gdx-cpp/files/File.hpp"
 #include "gdx-cpp/utils/Aliases.hpp"
 
+#include <iosfwd>
+#include <string>
+#include <vector>
+
+#include "gdx-cpp/Files.hpp"
+
 namespace gdx_cpp {
+
+class File;
+
 namespace files {
 
 class FileHandle {

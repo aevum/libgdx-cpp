@@ -19,60 +19,97 @@
 */
 
 #include "KissFFT.hpp"
+#include "kissfft/kiss_fftr.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <vector>
+
+#define MAX_SHORT 32767.0f //TODO check this
 
 using namespace gdx_cpp::audio::analysis;
 
-void KissFFT::spectrum (const ShortBuffer& samples,const FloatBuffer& spectrum) {
-    spectrum(handle, samples, spectrum);
+
+
+struct KissFFTO
+{
+        kiss_fftr_cfg config;
+        kiss_fft_cpx* spectrum;
+        int numSamples;
+};
+
+void KissFFT::spectrum (std::vector<short>& samples, std::vector<float>& spectrumP) {
+    spectrum(handle, samples, spectrumP);
 }
 
 void KissFFT::dispose () {
     destroy(handle);
 }
 
-void KissFFT::getRealPart (const ShortBuffer& real) {
+void KissFFT::getRealPart (std::vector<short>& real) {
     getRealPart(handle, real);
 }
 
-void KissFFT::getImagPart (const ShortBuffer& imag) {
+void KissFFT::getImagPart (std::vector<short>& imag) {
     getImagPart(handle, imag);
 }
 
-void KissFFT::main () {
-// final float frequency = 440;
-// float increment = (float)(2 * Math.PI) * frequency / 44100; // angular increment for each sample
-// float angle = 0;
-// short samples[] = new short[1024];
-//
-// for (int i = 0; i < samples.length; i++) {
-// float value = (float)Math.sin(angle);
-// samples[i] = (short)(value * 32767);
-// angle += increment;
-// }
-//
-// ShortBuffer samplesBuffer = AudioTools.allocateShortBuffer(1024, 1);
-// ShortBuffer realBuffer = AudioTools.allocateShortBuffer(512, 1);
-// ShortBuffer imagBuffer = AudioTools.allocateShortBuffer(512, 1);
-// samplesBuffer.put(samples);
-// FloatBuffer spectrum = AudioTools.allocateFloatBuffer(513, 1);
-// KissFFT fft = new KissFFT(1024);
-//
-// fft.spectrum(samplesBuffer, spectrum);
-//
-// fft.getRealPart(realBuffer);
-// fft.getImagPart(imagBuffer);
-// short[] re = new short[512];
-// short[] im = new short[512];
-// float[] sp = new float[513];
-// realBuffer.position(0);
-// realBuffer.get(re);
-// imagBuffer.position(0);
-// imagBuffer.get(im);
-// spectrum.position(0);
-// spectrum.get(sp);
-//
-// for (int i = 0; i < 30; i++) {
-// System.out.println(sp[i]);
-// }
-// }
+static inline float scale( kiss_fft_scalar val )
+{
+        if( val < 0 )
+                return val * ( 1 / 32768.0f );
+        else
+                return val * ( 1 / 32767.0f );
+}
+
+
+KissFFTO* KissFFT::create  (int numSamples)
+{
+        KissFFTO* fft = new KissFFTO();
+        fft->config = kiss_fftr_alloc(numSamples,0,NULL,NULL);
+        fft->spectrum = (kiss_fft_cpx*)malloc(sizeof(kiss_fft_cpx) * numSamples);
+        fft->numSamples = numSamples;
+        return fft;
+}
+
+void KissFFT::destroy(KissFFTO* fft)
+{
+        free(fft->config);
+        free(fft->spectrum);
+        free(fft);
+}
+
+void KissFFT::getRealPart(KissFFTO* fft, std::vector<short>& target)
+{
+        for( int i = 0; i < fft->numSamples / 2; i++ )
+                target[i] = fft->spectrum[i].r;
+}
+
+void KissFFT::getImagPart(KissFFTO* fft, std::vector<short>& target)
+{
+        for( int i = 0; i < fft->numSamples / 2; i++ )
+                target[i] = fft->spectrum[i].i;
+}
+
+
+void KissFFT::spectrum(KissFFTO* fft, std::vector< short >& samples2, std::vector< float >& spectrum)
+{
+        
+        kiss_fft_scalar* samples = (kiss_fft_scalar*) &samples[0];
+        kiss_fftr( fft->config, samples, fft->spectrum );
+
+        int len = fft->numSamples / 2 + 1;
+
+        for( int i = 0; i < len; i++ )
+        {
+                float re = scale(fft->spectrum[i].r) * fft->numSamples;
+                float im = scale(fft->spectrum[i].i) * fft->numSamples;
+
+                if( i > 0 )
+                        spectrum[i] = sqrtf(re*re + im*im) / (fft->numSamples / 2);
+                else
+                        spectrum[i] = sqrtf(re*re + im*im) / (fft->numSamples);
+        }
+}
+
 

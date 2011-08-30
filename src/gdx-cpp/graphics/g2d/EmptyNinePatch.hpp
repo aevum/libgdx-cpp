@@ -21,23 +21,35 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_EMPTYNINEPATCH_HPP_
 #define GDX_CPP_GRAPHICS_G2D_EMPTYNINEPATCH_HPP_
 
+#include "NinePatch.hpp"
+#include <vector>
+
 namespace gdx_cpp {
 namespace graphics {
 namespace g2d {
 
-class EmptyNinePatch {
+class EmptyNinePatch : public NinePatch {
 public:
+    typedef ref_ptr_maker<EmptyNinePatch>::type ptr;
+    
     EmptyNinePatch& getInstance ();
     int getRegionWidth ();
     int getRegionHeight ();
-    TextureRegion& getRegion ();
+    TextureRegion::ptr getRegion ();
     void draw (const SpriteBatch& batch,float x,float y,float width,float height);
+    ~EmptyNinePatch();
 
 protected:
 
 
 private:
+  
+  static std::vector<TextureRegion::ptr> emptyPatches;
+  static EmptyNinePatch * instance;
+  static TextureRegion::ptr region;
 
+  EmptyNinePatch();
+  
 };
 
 } // namespace gdx_cpp

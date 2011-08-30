@@ -20,98 +20,200 @@
 
 #include "Gdx2DPixmap.hpp"
 
+#include "gdx-cpp/graphics/GL10.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include <cassert>
+#include <fstream>
+#include <cstdlib>
+#include <string.h>
+#include <stdexcept>
+#include <sstream>
+
 using namespace gdx_cpp::graphics::g2d;
+using namespace gdx_cpp;
+
+
+//these were the private native Jni-wrapped methods
+
+gdx2d_pixmap* load (unsigned char* buffer, int offset, int len, int requestedFormat) {
+  unsigned char* p_buffer = buffer + offset;
+  gdx2d_pixmap* pixmap = gdx2d_load(p_buffer, len, requestedFormat);
+  return pixmap;
+}
+
+gdx2d_pixmap* newPixmap (int width, int height, int format) {
+  gdx2d_pixmap* pixmap = gdx2d_new(width, height, format);
+  return pixmap;
+}
+
+Gdx2DPixmap::Gdx2DPixmap (std::istream& in, int requestedFormat) {
+  
+  char buffer[1024];
+  char* nativeBuffer = (char*) malloc(1024);
+  int bufSize = 1024;
+  
+  int readBytes = 0;
+
+  while(!in.eof()) {
+     in.read(nativeBuffer, 1024);
+     readBytes += in.tellg();
+    while (readBytes >= bufSize) {
+      nativeBuffer = (char*) realloc(nativeBuffer, bufSize * 2);
+      bufSize *= 2;
+    }
+  }
+
+  pixData = load((unsigned char*)nativeBuffer, 0, readBytes, requestedFormat);
+
+  free(nativeBuffer);
+  
+  if (pixData == NULL) {
+     throw std::runtime_error("couldn't load pixmap");
+
+  }
+}
+
+Gdx2DPixmap::Gdx2DPixmap (int width, int height, int format) : pixData(0) {
+  pixData = ::newPixmap(width, height, format);
+  assert(pixData);
+}
+
+Gdx2DPixmap::Gdx2DPixmap (const Gdx2DPixmap& other) : pixData(0) {
+  this->pixData =  (gdx2d_pixmap*) malloc(sizeof(gdx2d_pixmap));
+  memcpy(this->pixData, other.pixData, sizeof(gdx2d_pixmap));
+}
+
+Gdx2DPixmap::Gdx2DPixmap (unsigned char* encodedData, int offset, int len, int requestedFormat)
+        : pixData(0)
+{
+  this->pixData = load(encodedData, offset, len, requestedFormat);
+    if (!pixData) {
+        throw std::runtime_error("Failed loading pixmap");
+    }
+}
+
+graphics::g2d::Gdx2DPixmap::~Gdx2DPixmap()
+{
+  dispose();
+}
+
+void graphics::g2d::Gdx2DPixmap::setBlend(int blend)
+{
+  gdx2d_set_blend(blend);
+}
+
+void graphics::g2d::Gdx2DPixmap::setScale(int scale)
+{
+  gdx2d_set_scale(scale);
+}
+
 
 void Gdx2DPixmap::dispose () {
-    free(basePtr);
+  if (pixData != NULL) {
+    gdx2d_free(pixData);
+    pixData = NULL;
+  }
 }
 
 void Gdx2DPixmap::clear (int color) {
-    clear(basePtr, color);
+    assert(pixData != NULL);
+    if (pixData != NULL) {
+        gdx2d_clear(pixData, color);
+    }
 }
 
 void Gdx2DPixmap::setPixel (int x,int y,int color) {
-    setPixel(basePtr, x, y, color);
+    assert(pixData != NULL);
+    gdx2d_set_pixel(pixData, x, y, color);
 }
 
 int Gdx2DPixmap::getPixel (int x,int y) {
-    return getPixel(basePtr, x, y);
+    assert(pixData != NULL);
+    return gdx2d_get_pixel(pixData, x, y);
 }
 
 void Gdx2DPixmap::drawLine (int x,int y,int x2,int y2,int color) {
-    drawLine(basePtr, x, y, x2, y2, color);
+    assert(pixData != NULL);
+    gdx2d_draw_line(pixData, x, y, x2, y2, color);
 }
 
 void Gdx2DPixmap::drawRect (int x,int y,int width,int height,int color) {
-    drawRect(basePtr, x, y, width, height, color);
+    assert(pixData != NULL);
+    gdx2d_draw_rect((gdx2d_pixmap*)pixData, x, y, width, height, color);
 }
 
 void Gdx2DPixmap::drawCircle (int x,int y,int radius,int color) {
-    drawCircle(basePtr, x, y, radius, color);
+  assert(pixData != NULL);
+  gdx2d_draw_circle((gdx2d_pixmap*)pixData, x, y, radius, color);
 }
 
 void Gdx2DPixmap::fillRect (int x,int y,int width,int height,int color) {
-    fillRect(basePtr, x, y, width, height, color);
+  assert(pixData != NULL);
+  gdx2d_fill_rect((gdx2d_pixmap*)pixData, x, y, width, height, color);
 }
 
 void Gdx2DPixmap::fillCircle (int x,int y,int radius,int color) {
-    fillCircle(basePtr, x, y, radius, color);
+  assert(pixData != NULL);
+  gdx2d_fill_circle((gdx2d_pixmap*)pixData, x, y, radius, color);
 }
 
-void Gdx2DPixmap::drawPixmap (const Gdx2DPixmap& src,int srcX,int srcY,int dstX,int dstY,int width,int height) {
-    drawPixmap(src.basePtr, basePtr, srcX, srcY, width, height, dstX, dstY, width, height);
+void Gdx2DPixmap::drawPixmap (const Gdx2DPixmap& src, int srcX, int srcY, int dstX, int dstY, int width, int height) {
+    drawPixmap(src, srcX, srcY, width, height, dstX, dstY, width, height);
 }
 
 void Gdx2DPixmap::drawPixmap (const Gdx2DPixmap& src,int srcX,int srcY,int srcWidth,int srcHeight,int dstX,int dstY,int dstWidth,int dstHeight) {
-    drawPixmap(src.basePtr, basePtr, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight);
+  assert(pixData != NULL);
+  gdx2d_draw_pixmap((gdx2d_pixmap*)src.pixData, (gdx2d_pixmap*)pixData, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight);
 }
 
-Gdx2DPixmap& Gdx2DPixmap::newPixmap (const InputStream& in,int requestedFormat) {
-    try {
-        return new Gdx2DPixmap(in, requestedFormat);
-    } catch (IOException e) {
-        return null;
-    }
+Gdx2DPixmap::ptr Gdx2DPixmap::newPixmap (std::istream& in,int requestedFormat) {
+    return Gdx2DPixmap::ptr(new Gdx2DPixmap(in, requestedFormat));
 }
 
-Gdx2DPixmap& Gdx2DPixmap::newPixmap (int width,int height,int format) {
-    try {
-        return new Gdx2DPixmap(width, height, format);
-    } catch (IllegalArgumentException e) {
-        return null;
-    }
+Gdx2DPixmap::ptr Gdx2DPixmap::newPixmap (int width,int height,int format) {
+    return Gdx2DPixmap::ptr(new Gdx2DPixmap(width, height, format));
 }
 
-ByteBuffer& Gdx2DPixmap::getPixels () {
-    return pixelPtr;
+const unsigned char* const Gdx2DPixmap::getPixels () {
+  assert(pixData != NULL);
+    return pixData->pixels;
 }
 
 int Gdx2DPixmap::getHeight () {
-    return height;
+  assert(pixData != NULL);
+  return pixData->height;
 }
 
 int Gdx2DPixmap::getWidth () {
-    return width;
+  assert(pixData != NULL);
+  return pixData->width;
 }
 
 int Gdx2DPixmap::getFormat () {
-    return format;
+  assert(pixData != NULL);
+  return pixData->format;
 }
 
 int Gdx2DPixmap::getGLInternalFormat () {
-    switch (format) {
+    using namespace gdx_cpp::graphics;
+
+    switch (pixData->format) {
     case GDX2D_FORMAT_ALPHA:
-        return GL10.GL_ALPHA;
+        return GL10::GL_ALPHA;
     case GDX2D_FORMAT_LUMINANCE_ALPHA:
-        return GL10.GL_LUMINANCE_ALPHA;
+        return GL10::GL_LUMINANCE_ALPHA;
     case GDX2D_FORMAT_RGB888:
     case GDX2D_FORMAT_RGB565:
-        return GL10.GL_RGB;
+        return GL10::GL_RGB;
     case GDX2D_FORMAT_RGBA8888:
     case GDX2D_FORMAT_RGBA4444:
-        return GL10.GL_RGBA;
+        return GL10::GL_RGBA;
     default:
-        throw new GdxRuntimeException("unknown format: " + format);
+    {
+        std::stringstream ss;
+        ss << "unknown format: " << pixData->format;
+      throw std::runtime_error(ss.str());
+    }
     }
 }
 
@@ -120,23 +222,28 @@ int Gdx2DPixmap::getGLFormat () {
 }
 
 int Gdx2DPixmap::getGLType () {
-    switch (format) {
+    using namespace gdx_cpp::graphics;
+    switch (pixData->format) {
     case GDX2D_FORMAT_ALPHA:
     case GDX2D_FORMAT_LUMINANCE_ALPHA:
     case GDX2D_FORMAT_RGB888:
     case GDX2D_FORMAT_RGBA8888:
-        return GL10.GL_UNSIGNED_BYTE;
+        return GL10::GL_UNSIGNED_BYTE;
     case GDX2D_FORMAT_RGB565:
-        return GL10.GL_UNSIGNED_SHORT_5_6_5;
+        return GL10::GL_UNSIGNED_SHORT_5_6_5;
     case GDX2D_FORMAT_RGBA4444:
-        return GL10.GL_UNSIGNED_SHORT_4_4_4_4;
+        return GL10::GL_UNSIGNED_SHORT_4_4_4_4;
     default:
-        throw new GdxRuntimeException("unknown format: " + format);
+    {
+        std::stringstream ss;
+        ss << "unknown format: " << pixData->format;
+        throw std::runtime_error(ss.str());
+    }
     }
 }
 
-std::string& Gdx2DPixmap::getFormatString () {
-    switch (format) {
+const std::string Gdx2DPixmap::getFormatString () {
+  switch (pixData->format) {
     case GDX2D_FORMAT_ALPHA:
         return "alpha";
     case GDX2D_FORMAT_LUMINANCE_ALPHA:

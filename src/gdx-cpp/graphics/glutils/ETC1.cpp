@@ -20,7 +20,11 @@
 
 #include "ETC1.hpp"
 
+#include "gdx-cpp/utils/gzstream.hpp"
+#include "gdx-cpp/graphics/Pixmap.hpp"
+
 using namespace gdx_cpp::graphics::glutils;
+using namespace gdx_cpp::graphics;
 
 bool ETC1::hasPKMHeader () {
     return dataOffset == 16;
@@ -69,8 +73,8 @@ std::string& ETC1::toString () {
 }
 
 int ETC1::getPixelSize (const gdx_cpp::graphics::Pixmap::Format& format) {
-    if (format == Format.RGB565) return 2;
-    if (format == Format.RGB888) return 3;
+    if (format == Pixmap::Format::RGB565) return 2;
+    if (format == Pixmap::Format::RGB888) return 3;
     throw new GdxRuntimeException("Can only handle RGB565 or RGB888 images");
 }
 
@@ -106,4 +110,84 @@ gdx_cpp::graphics::Pixmap& ETC1::decodeImage (const ETC1Data& etc1Data,const gdx
     decodeImage(etc1Data.compressedData, dataOffset, pixmap.getPixels(), 0, width, height, pixelSize);
     return pixmap;
 }
+
+
+ETC1::ETC1Data::ETC1Data(int width, int height, const char* compressedData, int dataOffset)
+    : width(width), height(height), compressedData(compressedData), dataOffset(dataOffset)
+{
+}
+
+ETC1::ETC1Data::ETC1Data(files::FileHandle& pkmFile) {
+    char* buffer = new char[1024 * 10];
+    
+    try {        
+        gz::igzstream iginput(pkmFile.read());       
+        int fileSize;
+        
+        fileSize << iginput;        
+        compressedData = new char[fileSize];
+        
+        int readBytes = 0;
+        while (!iginput.eof()) {
+            iginput.read(compressedData[readBytes], )
+            compressedData.put(buffer, 0, readBytes);
+        }
+        compressedData.position(0);
+        compressedData.limit(compressedData.capacity());
+    } catch (Exception e) {
+        throw new GdxRuntimeException("Couldn't load pkm file '" + pkmFile + "'", e);
+    } finally {
+        if (in != null) try {
+                in.close();
+            } catch (Exception e) {
+            }
+    }
+
+    width = getWidthPKM(compressedData, 0);
+    height = getHeightPKM(compressedData, 0);
+    dataOffset = PKM_HEADER_SIZE;
+    compressedData.position(dataOffset);
+}
+bool ETC1::ETC1Data::hasPKMHeader() {
+    return dataOffset == 16;
+}
+void ETC1::ETC1Data::write(FileHandle file) {
+    DataOutputStream write = null;
+    byte[] buffer = new byte[10 * 1024];
+    int writtenBytes = 0;
+    compressedData.position(0);
+    compressedData.limit(compressedData.capacity());
+    try {
+        write = new DataOutputStream(new GZIPOutputStream(file.write(false)));
+        write.writeInt(compressedData.capacity());
+        while (writtenBytes != compressedData.capacity()) {
+            int bytesToWrite = Math.min(compressedData.remaining(), buffer.length);
+            compressedData.get(buffer, 0, bytesToWrite);
+            write.write(buffer, 0, bytesToWrite);
+            writtenBytes += bytesToWrite;
+        }
+    } catch (Exception e) {
+        throw new GdxRuntimeException("Couldn't write PKM file to '" + file + "'", e);
+    } finally {
+        if (write != null) try {
+                write.close();
+            } catch (Exception e) {
+            }
+    }
+    compressedData.position(dataOffset);
+    compressedData.limit(compressedData.capacity());
+}
+void ETC1::ETC1Data::dispose() {
+    BufferUtils.freeMemory(compressedData);
+}
+String ETC1::ETC1Data::toString() {
+    if (hasPKMHeader()) {
+        return (ETC1.isValidPKM(compressedData, 0) ? "valid" : "invalid") + " pkm [" + ETC1.getWidthPKM(compressedData, 0)
+               + "x" + ETC1.getHeightPKM(compressedData, 0) + "], compressed: "
+               + (compressedData.capacity() - ETC1.PKM_HEADER_SIZE);
+    } else {
+        return "raw [" + width + "x" + height + "], compressed: " + (compressedData.capacity() - ETC1.PKM_HEADER_SIZE);
+    }
+}
+
 

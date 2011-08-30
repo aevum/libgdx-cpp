@@ -20,14 +20,31 @@
 
 #include "VertexAttributes.hpp"
 
+#include <sstream>
+#include <cassert>
+
+#include "gdx-cpp/Gdx.hpp"
+#include <stdexcept>
+
 using namespace gdx_cpp::graphics;
+
+VertexAttributes::VertexAttributes (const std::vector<VertexAttribute>& attributes)
+        : attributes(attributes)
+{
+    if (attributes.size() == 0) {
+        throw std::runtime_error("attributes must be >= 1");
+    }
+
+    checkValidity();
+    vertexSize = calculateOffsets();
+}
 
 int VertexAttributes::calculateOffsets () {
     int count = 0;
-    for (int i = 0; i < attributes.length; i++) {
-        VertexAttribute attribute = attributes[i];
+    for (int i = 0; i < attributes.size(); i++) {
+        VertexAttribute& attribute = attributes[i];
         attribute.offset = count;
-        if (attribute.usage == VertexAttributes.Usage.ColorPacked)
+        if (attribute.usage == VertexAttributes::Usage::ColorPacked)
             count += 4;
         else
             count += 4 * attribute.numComponents;
@@ -37,52 +54,60 @@ int VertexAttributes::calculateOffsets () {
 }
 
 void VertexAttributes::checkValidity () {
-    boolean pos = false;
-    boolean cols = false;
-    boolean nors = false;
+    bool pos = false;
+    bool cols = false;
+    bool nors = false;
 
-    for (int i = 0; i < attributes.length; i++) {
-        VertexAttribute attribute = attributes[i];
-        if (attribute.usage == Usage.Position) {
-            if (pos) throw new IllegalArgumentException("two position attributes were specified");
+    for (int i = 0; i < attributes.size(); i++) {
+        const VertexAttribute& attribute = attributes[i];
+        if (attribute.usage == Usage::Position) {
+            if (pos) {
+                throw std::runtime_error("two position attributes were specified");
+            }
+
             pos = true;
         }
 
-        if (attribute.usage == Usage.Normal) {
-            if (nors) throw new IllegalArgumentException("two normal attributes were specified");
+        if (attribute.usage == Usage::Normal) {
+            if (nors) {
+                throw std::runtime_error("two normal attributes were specified");
+            }
         }
 
-        if (attribute.usage == Usage.Color || attribute.usage == Usage.ColorPacked) {
-            if (attribute.numComponents != 4) throw new IllegalArgumentException("color attribute must have 4 components");
+        if (attribute.usage == Usage::Color || attribute.usage == Usage::ColorPacked) {
+            if (attribute.numComponents != 4) {
+                throw std::runtime_error("color attribute must have 4 components");
+            }
 
-            if (cols) throw new IllegalArgumentException("two color attributes were specified");
+            if (cols) {
+                throw std::runtime_error("two color attributes were specified");
+            }
+
             cols = true;
         }
     }
 
-    if (pos == false) throw new IllegalArgumentException("no position attribute was specified");
+    if (pos == false) {
+      throw std::runtime_error("no position attribute was specified");
+    }
 }
 
 int VertexAttributes::size () {
-    return attributes.length;
+    return attributes.size();
 }
 
 VertexAttribute& VertexAttributes::get (int index) {
     return attributes[index];
 }
 
-std::string& VertexAttributes::toString () {
-    StringBuilder builder = new StringBuilder();
-    for (int i = 0; i < attributes.length; i++) {
-        builder.append(attributes[i].alias);
-        builder.append(", ");
-        builder.append(attributes[i].usage);
-        builder.append(", ");
-        builder.append(attributes[i].numComponents);
-        builder.append(", ");
-        builder.append(attributes[i].offset);
-        builder.append("\n");
+std::string VertexAttributes::toString () {
+    std::stringstream builder;
+    for (int i = 0; i < attributes.size(); i++) {
+        builder << attributes[i].alias << ", " <<
+        attributes[i].usage << ", " <<
+        attributes[i].numComponents <<  ", " <<
+        attributes[i].offset <<  std::endl;
     }
-    return builder.toString();
+    return builder.str();
 }
 

@@ -26,7 +26,7 @@ using namespace gdx_cpp::utils;
 
 uint32_t NumberUtils::floatToIntBits (float value) {
     uint32_t y;
-    memcpy(&y, &value, sizeof(uint32_t);
+    memcpy(&y, &value, sizeof(uint32_t));
     return y;
 }
 
@@ -45,18 +45,18 @@ float NumberUtils::intBitsToFloat (int value) {
         int i;    // assuming 32-bit 2's complement int
     } u;
 
-    u.i = x;
+    u.i = value;
     return u.f;
 }
 
 long NumberUtils::doubleToLongBits (double value) {
-  const union { double f; uint64_t i; } u;
+  union { double f; uint64_t i; } u;
   u.f = value;
   return u.i;
 }
 
 double NumberUtils::longBitsToDouble (long value) {
-  const union { double f; uint64_t i; } u;
+  union { double f; uint64_t i; } u;
   u.i = value;
   return u.i;
 }

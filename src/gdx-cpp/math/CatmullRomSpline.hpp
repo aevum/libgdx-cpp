@@ -23,7 +23,7 @@
 
 #include <vector>
 #include "Vector3.hpp"
-#include "utils/Aliases.hpp"
+#include "gdx-cpp/utils/Aliases.hpp"
 
 namespace gdx_cpp {
 namespace math {
@@ -38,7 +38,7 @@ public:
     
     void add (const Vector3& point);
     std::vector<Vector3>& getControlPoints ();
-    vector3_vector_ptr getPath (int numPoints);   
+    vector3_vector_ptr getPath (int numPoints);
     void getPath (std::vector<Vector3>& points, int numPoints);
     
     vector3_vector_ptr getTangents (int numPoints);

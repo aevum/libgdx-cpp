@@ -20,7 +20,7 @@
 
 #include "Version.hpp"
 
-using namespace gdx_cpp::;
+using namespace gdx_cpp;
 
 
 

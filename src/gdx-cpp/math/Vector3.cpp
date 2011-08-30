@@ -21,11 +21,17 @@
 #include <sstream>
 #include <assert.h>
 
+#include "Matrix4.hpp"
+
 using namespace gdx_cpp::math;
 
 Vector3 Vector3::X(1, 0, 0);
 Vector3 Vector3::Y(0, 1, 0);
 Vector3 Vector3::Z(0, 0, 1);
+
+Vector3 Vector3::_tmp;
+Vector3 Vector3::_tmp2;
+Vector3 Vector3::_tmp3;
 
 Vector3::Vector3() : x(0),y(0),z(0)
 {
@@ -63,34 +69,34 @@ Vector3::Vector3(float* values) {
     this->set(values[0], values[1], values[2]);
 }
 
-Vector3& Vector3::set(float x, float y, float z) const {
+Vector3& Vector3::set(float x, float y, float z)  {
     this->x = x;
     this->y = y;
     this->z = z;
     return *this;
 }
 
-Vector3& Vector3::set(const Vector3& vector) const {
+Vector3& Vector3::set(const Vector3& vector) {
     return this->set(vector.x, vector.y, vector.z);
 }
 
-Vector3& Vector3::set(float* values) const {
+Vector3& Vector3::set(const float* values) {
     return this->set(values[0], values[1], values[2]);
 }
 
-Vector3& Vector3::cpy() {
+Vector3 Vector3::cpy() {
     return Vector3(*this);
 }
 
-Vector3& Vector3::tmp() {
+Vector3& Vector3::tmp() const {
     return _tmp.set(*this);
 }
 
-Vector3& Vector3::tmp2() {
+Vector3& Vector3::tmp2() const {
     return _tmp2.set(*this);
 }
 
-Vector3& Vector3::tmp3() {
+Vector3& Vector3::tmp3() const {
     return _tmp3.set(*this);
 }
 
@@ -127,7 +133,7 @@ Vector3& Vector3::div(float value) {
     return this->set(this->x * d, this->y * d, this->z * d);
 }
 
-float Vector3::len() {
+float Vector3::len() const {
     return (float)std::sqrt(x * x + y * y + z * z);
 }
 
@@ -160,7 +166,7 @@ Vector3& Vector3::nor() {
     }
 }
 
-float Vector3::dot(const Vector3& vector) const {
+float Vector3::dot(const Vector3& vector) const{
     return x * vector.x + y * vector.y + z * vector.z;
 }
 
@@ -173,27 +179,24 @@ Vector3 Vector3::crs(float x, float y, float z) {
 }
 
 Vector3& Vector3::mul(const Matrix4& matrix) {
-    float l_mat[] = matrix.val;
-    return this->set(x * l_mat[Matrix4.M00] + y * l_mat[Matrix4.M01] + z * l_mat[Matrix4.M02] + l_mat[Matrix4.M03], x
-                     * l_mat[Matrix4.M10] + y * l_mat[Matrix4.M11] + z * l_mat[Matrix4.M12] + l_mat[Matrix4.M13], x * l_mat[Matrix4.M20] + y
-                     * l_mat[Matrix4.M21] + z * l_mat[Matrix4.M22] + l_mat[Matrix4.M23]);
+    return this->set(x * matrix.val[Matrix4::M00] + y * matrix.val[Matrix4::M01] + z * matrix.val[Matrix4::M02] + matrix.val[Matrix4::M03], x
+                     * matrix.val[Matrix4::M10] + y * matrix.val[Matrix4::M11] + z * matrix.val[Matrix4::M12] + matrix.val[Matrix4::M13], x * matrix.val[Matrix4::M20] + y
+                     * matrix.val[Matrix4::M21] + z * matrix.val[Matrix4::M22] + matrix.val[Matrix4::M23]);
 }
 
 Vector3& Vector3::prj(const Matrix4& matrix) {
-    float l_mat[] = matrix.val;
-    float l_w = x * l_mat[Matrix4.M30] + y * l_mat[Matrix4.M31] + z * l_mat[Matrix4.M32] + l_mat[Matrix4.M33];
-    return this->set((x * l_mat[Matrix4.M00] + y * l_mat[Matrix4.M01] + z * l_mat[Matrix4.M02] + l_mat[Matrix4.M03]) / l_w, (x
-                     * l_mat[Matrix4.M10] + y * l_mat[Matrix4.M11] + z * l_mat[Matrix4.M12] + l_mat[Matrix4.M13])
-                     *               / l_w, (x * l_mat[Matrix4.M20] + y * l_mat[Matrix4.M21] + z * l_mat[Matrix4.M22] + l_mat[Matrix4.M23]) / l_w);
+    float l_w = x * matrix.val[Matrix4::M30] + y * matrix.val[Matrix4::M31] + z * matrix.val[Matrix4::M32] + matrix.val[Matrix4::M33];
+    return this->set((x * matrix.val[Matrix4::M00] + y * matrix.val[Matrix4::M01] + z * matrix.val[Matrix4::M02] + matrix.val[Matrix4::M03]) / l_w,
+                     (x * matrix.val[Matrix4::M10] + y * matrix.val[Matrix4::M11] + z * matrix.val[Matrix4::M12] + matrix.val[Matrix4::M13]) / l_w,
+                     (x * matrix.val[Matrix4::M20] + y * matrix.val[Matrix4::M21] + z * matrix.val[Matrix4::M22] + matrix.val[Matrix4::M23]) / l_w);
 }
 
 Vector3& Vector3::rot(const Matrix4& matrix) {
-    float l_mat[] = matrix.val;
-    return this->set(x * l_mat[Matrix4.M00] + y * l_mat[Matrix4.M01] + z * l_mat[Matrix4.M02], x * l_mat[Matrix4.M10] + y
-                     * l_mat[Matrix4.M11] + z * l_mat[Matrix4.M12], x * l_mat[Matrix4.M20] + y * l_mat[Matrix4.M21] + z * l_mat[Matrix4.M22]);
+    return this->set(x * matrix.val[Matrix4::M00] + y * matrix.val[Matrix4::M01] + z * matrix.val[Matrix4::M02], x * matrix.val[Matrix4::M10] + y
+                     * matrix.val[Matrix4::M11] + z * matrix.val[Matrix4::M12], x * matrix.val[Matrix4::M20] + y * matrix.val[Matrix4::M21] + z * matrix.val[Matrix4::M22]);
 }
 
-bool Vector3::isUnit() {
+bool Vector3::isUnit() const {
     return this->len() == 1;
 }
 
@@ -201,7 +204,7 @@ bool Vector3::isZero() {
     return x == 0 && y == 0 && z == 0;
 }
 
-Vector3& Vector3::lerp(Vector3& target, float alpha) {
+Vector3 Vector3::lerp(Vector3& target, float alpha) {
     Vector3 r = this->mul(1.0f - alpha);
     r.add(target.tmp().mul(alpha));
     return r;

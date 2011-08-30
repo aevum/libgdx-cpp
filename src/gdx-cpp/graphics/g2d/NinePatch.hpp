@@ -21,13 +21,39 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_NINEPATCH_HPP_
 #define GDX_CPP_GRAPHICS_G2D_NINEPATCH_HPP_
 
+#include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
+#include "gdx-cpp/graphics/Texture.hpp"
+
+#include<vector>
+
 namespace gdx_cpp {
 namespace graphics {
+  
+class Texture;
+
 namespace g2d {
+
+class SpriteBatch;
+class TextureRegion;
 
 class NinePatch {
 public:
-    void draw (const SpriteBatch& batch,float x,float y,float width,float height);
+
+    const static int TOP_LEFT = 0;
+    const static int TOP_CENTER = 1;
+    const static int TOP_RIGHT = 2;
+    const static int MIDDLE_LEFT = 3;
+    const static int MIDDLE_CENTER = 4;
+    const static int MIDDLE_RIGHT = 5;
+    const static int BOTTOM_LEFT = 6;
+    const static int BOTTOM_CENTER = 7;
+    const static int BOTTOM_RIGHT = 8;
+
+    NinePatch (Texture::ptr texture, int left, int right, int top, int bottom);
+    NinePatch (TextureRegion::ptr texture, int left, int right, int top, int bottom);
+    NinePatch (std::vector< TextureRegion::ptr >& _patches);
+    
+    void draw (gdx_cpp::graphics::g2d::SpriteBatch& batch, float x, float y, float width, float height);
     float getLeftWidth ();
     float getRightWidth ();
     float getTopHeight ();
@@ -36,9 +62,10 @@ public:
     float getTotalWidth ();
 
 protected:
-
-
+    std::vector<TextureRegion::ptr> patches;
+    
 private:
+    void initialize(TextureRegion::ptr region, int left, int right, int top, int bottom);
     void checkValidity ();
 };
 

@@ -19,30 +19,60 @@
 */
 
 #include "EmptyNinePatch.hpp"
+#include "gdx-cpp/graphics/Pixmap.hpp"
+#include "gdx-cpp/graphics/Texture.hpp"
+#include "TextureRegion.hpp"
 
 using namespace gdx_cpp::graphics::g2d;
+using namespace gdx_cpp::graphics;
 
+EmptyNinePatch* EmptyNinePatch::instance = 0;
+TextureRegion::ptr EmptyNinePatch::region;
+std::vector<TextureRegion::ptr> EmptyNinePatch::emptyPatches;
+
+gdx_cpp::graphics::g2d::EmptyNinePatch::EmptyNinePatch() : NinePatch(emptyPatches)
+{
+}
+
+
+EmptyNinePatch::~EmptyNinePatch(){
+  delete instance;
+}
+  
+class EmpytTextureRegion : public TextureRegion {
+public :
+    EmpytTextureRegion(Texture::ptr tex) : TextureRegion(tex) { }
+
+    int getRegionWidth () {
+        return 0;
+    }
+
+    int getRegionHeight () {
+        return 0;
+    }
+};
+  
 EmptyNinePatch& EmptyNinePatch::getInstance () {
-    if (instance == null) {
+    if (instance == NULL) {
         // This is kind of gross...
-        Texture texture = new Texture(2, 2, Format.RGBA8888);
-        region = new TextureRegion(texture) {
-            public int getRegionWidth () {
-                return 0;
-            }
+        Texture::ptr texture(new gdx_cpp::graphics::Texture(2, 2, gdx_cpp::graphics::Pixmap::Format::RGBA8888));
+ 
 
-            public int getRegionHeight () {
-                return 0;
-            }
-        };
-        emptyPatches = new TextureRegion[] { //
-            region, region, region, //
-            region, region, region, //
-            region, region, region //
-        };
+        region = TextureRegion::ptr(new EmpytTextureRegion(texture));
+        emptyPatches.reserve(9);
+        emptyPatches[0] = region;
+        emptyPatches[1] = region;
+        emptyPatches[2] = region;
+        emptyPatches[3] = region;
+        emptyPatches[4] = region;
+        emptyPatches[5] = region;
+        emptyPatches[6] = region;
+        emptyPatches[7] = region;
+        emptyPatches[8] = region;
+        
         instance = new EmptyNinePatch();
     }
-    return instance;
+    return *instance;
 }
 
 int EmptyNinePatch::getRegionWidth () {
@@ -53,7 +83,7 @@ int EmptyNinePatch::getRegionHeight () {
     return 0;
 }
 
-TextureRegion& EmptyNinePatch::getRegion () {
+TextureRegion::ptr EmptyNinePatch::getRegion () {
     getInstance();
     return region;
 }

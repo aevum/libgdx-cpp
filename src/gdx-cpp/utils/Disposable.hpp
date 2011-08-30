@@ -26,12 +26,7 @@ namespace utils {
 
 class Disposable {
 public:
-    virtual   void dispose () = 0;
-
-protected:
-
-
-private:
+    virtual void dispose () = 0;
 
 };
 

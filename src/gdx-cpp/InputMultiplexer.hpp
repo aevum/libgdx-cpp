@@ -20,14 +20,18 @@
 
 #ifndef GDX_CPP__INPUTMULTIPLEXER_HPP_
 #define GDX_CPP__INPUTMULTIPLEXER_HPP_
+#include <vector>
 
 namespace gdx_cpp {
-namespace  {
+
+class InputProcessor;
+
 
 class InputMultiplexer {
 public:
-    void addProcessor (const InputProcessor& processor);
-    void removeProcessor (const InputProcessor& processor);
+    InputMultiplexer();
+    void addProcessor ( gdx_cpp::InputProcessor* processor);
+    void removeProcessor (InputProcessor* processor);
     bool keyDown (int keycode);
     bool keyUp (int keycode);
     bool keyTyped (char character);
@@ -41,10 +45,9 @@ protected:
 
 
 private:
-
+    std::vector<InputProcessor*> processors;
 };
 
 } // namespace gdx_cpp
-} // namespace
 
 #endif // GDX_CPP__INPUTMULTIPLEXER_HPP_

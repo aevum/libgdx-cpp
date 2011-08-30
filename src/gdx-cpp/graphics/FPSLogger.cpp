@@ -20,12 +20,21 @@
 
 #include "FPSLogger.hpp"
 
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Graphics.hpp"
+#include "gdx-cpp/Application.hpp"
+#include "gdx-cpp/implementation/System.hpp"
+
 using namespace gdx_cpp::graphics;
 
 void FPSLogger::log () {
-    if (System.nanoTime() - startTime > 1000000000) {
-        Gdx.app.log("FPSLogger", "fps: " + Gdx.graphics.getFramesPerSecond());
-        startTime = System.nanoTime();
+    if (gdx_cpp::Gdx::system->nanoTime() - startTime > 1000000000) {
+        gdx_cpp::Gdx::app->log("FPSLogger") << "fps: " + gdx_cpp::Gdx::graphics->getFramesPerSecond();
+        startTime = gdx_cpp::Gdx::system->nanoTime();
     }
+}
+
+gdx_cpp::graphics::FPSLogger::FPSLogger() : startTime(gdx_cpp::Gdx::system->nanoTime())
+{
 }
 

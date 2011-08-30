@@ -20,13 +20,18 @@
 
 #include "VertexArray.hpp"
 
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/graphics/GL10.hpp"
+#include "gdx-cpp/graphics/GL11.hpp"
+
 using namespace gdx_cpp::graphics::glutils;
+using namespace gdx_cpp::graphics;
+using namespace gdx_cpp;
 
 void VertexArray::dispose () {
-
 }
 
-FloatBuffer& VertexArray::getBuffer () {
+utils::float_buffer& VertexArray::getBuffer () {
     return buffer;
 }
 
@@ -38,53 +43,55 @@ int VertexArray::getNumMaxVertices () {
     return byteBuffer.capacity() / attributes.vertexSize;
 }
 
-void VertexArray::setVertices (int offset,int count) {
-    BufferUtils.copy(vertices, byteBuffer, count, offset);
+void VertexArray::setVertices (const std::vector< float >& vertices, int offset, int count) {
+    byteBuffer.copy(vertices, count, offset);
     buffer.position(0);
     buffer.limit(count);
 }
 
 void VertexArray::bind () {
-    GL10 gl = Gdx.gl10;
+    GL10& gl = *Gdx::gl10;
     int textureUnit = 0;
     int numAttributes = attributes.size();
 
     byteBuffer.limit(buffer.limit() * 4);
 
     for (int i = 0; i < numAttributes; i++) {
-        VertexAttribute attribute = attributes.get(i);
+        VertexAttribute& attribute = attributes.get(i);
 
         switch (attribute.usage) {
-        case Usage.Position:
+        case VertexAttributes::Usage::Position:
             byteBuffer.position(attribute.offset);
-            gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-            gl.glVertexPointer(attribute.numComponents, GL10.GL_FLOAT, attributes.vertexSize, byteBuffer);
+            gl.glEnableClientState(GL11::GL_VERTEX_ARRAY);
+            gl.glVertexPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, byteBuffer);
             break;
 
-        case Usage.Color:
-        case Usage.ColorPacked:
-            int colorType = GL10.GL_FLOAT;
-            if (attribute.usage == Usage.ColorPacked) colorType = GL11.GL_UNSIGNED_BYTE;
+        case VertexAttributes::Usage::Color:
+        case VertexAttributes::Usage::ColorPacked:
+        {
+            int colorType = GL10::GL_FLOAT;
+            if (attribute.usage == VertexAttributes::Usage::ColorPacked) colorType = GL11::GL_UNSIGNED_BYTE;
             byteBuffer.position(attribute.offset);
-            gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+            gl.glEnableClientState(GL10::GL_COLOR_ARRAY);
             gl.glColorPointer(attribute.numComponents, colorType, attributes.vertexSize, byteBuffer);
             break;
-
-        case Usage.Normal:
+        }
+        case VertexAttributes::Usage::Normal:
             byteBuffer.position(attribute.offset);
-            gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
-            gl.glNormalPointer(GL10.GL_FLOAT, attributes.vertexSize, byteBuffer);
+            gl.glEnableClientState(GL10::GL_NORMAL_ARRAY);
+            gl.glNormalPointer(GL10::GL_FLOAT, attributes.vertexSize, byteBuffer);
             break;
 
-        case Usage.TextureCoordinates:
-            gl.glClientActiveTexture(GL10.GL_TEXTURE0 + textureUnit);
-            gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+        case VertexAttributes::Usage::TextureCoordinates:
+            gl.glClientActiveTexture(GL10::GL_TEXTURE0 + textureUnit);
+            gl.glEnableClientState(GL10::GL_TEXTURE_COORD_ARRAY);
             byteBuffer.position(attribute.offset);
-            gl.glTexCoordPointer(attribute.numComponents, GL10.GL_FLOAT, attributes.vertexSize, byteBuffer);
+            gl.glTexCoordPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, byteBuffer);
             textureUnit++;
             break;
 
         default:
+            break;
             // throw new GdxRuntimeException("unkown vertex attribute type: " + attribute.usage);
         }
     }
@@ -93,29 +100,30 @@ void VertexArray::bind () {
 }
 
 void VertexArray::unbind () {
-    GL10 gl = Gdx.gl10;
+    GL10& gl = *Gdx::gl10;
     int textureUnit = 0;
     int numAttributes = attributes.size();
 
     for (int i = 0; i < numAttributes; i++) {
 
-        VertexAttribute attribute = attributes.get(i);
+        VertexAttribute& attribute = attributes.get(i);
         switch (attribute.usage) {
-        case Usage.Position:
+        case VertexAttributes::Usage::Position:
             break; // no-op, we also need a position bound in gles
-        case Usage.Color:
-        case Usage.ColorPacked:
-            gl.glDisableClientState(GL11.GL_COLOR_ARRAY);
+        case VertexAttributes::Usage::Color:
+        case VertexAttributes::Usage::ColorPacked:
+            gl.glDisableClientState(GL11::GL_COLOR_ARRAY);
             break;
-        case Usage.Normal:
-            gl.glDisableClientState(GL11.GL_NORMAL_ARRAY);
+        case VertexAttributes::Usage::Normal:
+            gl.glDisableClientState(GL11::GL_NORMAL_ARRAY);
             break;
-        case Usage.TextureCoordinates:
-            gl.glClientActiveTexture(GL11.GL_TEXTURE0 + textureUnit);
-            gl.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+        case VertexAttributes::Usage::TextureCoordinates:
+            gl.glClientActiveTexture(GL11::GL_TEXTURE0 + textureUnit);
+            gl.glDisableClientState(GL11::GL_TEXTURE_COORD_ARRAY);
             textureUnit++;
             break;
         default:
+            break;
             // throw new GdxRuntimeException("unkown vertex attribute type: " + attribute.usage);
         }
     }
@@ -127,3 +135,13 @@ gdx_cpp::graphics::VertexAttributes& VertexArray::getAttributes () {
     return attributes;
 }
 
+VertexArray::VertexArray(int numVertices, const gdx_cpp::graphics::VertexAttributes& attributes)
+:
+isBound(false)
+, attributes(attributes)
+, byteBuffer(this->attributes.vertexSize * numVertices)
+, buffer(byteBuffer.convert<float>())
+{
+    buffer.flip();
+    byteBuffer.flip();
+}

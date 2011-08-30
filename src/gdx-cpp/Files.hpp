@@ -24,7 +24,7 @@ namespace gdx_cpp {
 class FileHandle;
 
 class Files {
-
+public:
 public:
   
     enum FileType {

@@ -21,13 +21,16 @@
 #ifndef GDX_CPP_AUDIO_IO_DECODER_HPP_
 #define GDX_CPP_AUDIO_IO_DECODER_HPP_
 
+#include "gdx-cpp/utils/Disposable.hpp"
+#include <vector>
+
 namespace gdx_cpp {
 namespace audio {
 namespace io {
 
 class Decoder: public gdx_cpp::utils::Disposable {
 public:
-    virtual   int readSamples (const ShortBuffer& samples) = 0;
+    virtual   int readSamples (std::vector< short >& samples) = 0;
     virtual   int skipSamples (int numSamples) = 0;
     virtual   int getNumChannels () = 0;
     virtual   int getRate () = 0;

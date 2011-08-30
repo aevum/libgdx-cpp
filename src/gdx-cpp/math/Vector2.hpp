@@ -38,13 +38,14 @@ public:
     virtual bool operator==(const Vector2& other) const;
 
     Vector2& set (const Vector2& v);
+    Vector2& set (float _x, float _y);
     Vector2& sub (const Vector2& v);
     Vector2& nor ();
     Vector2& add (const Vector2& v);
     Vector2& add (float x, float y);
     float dot (const Vector2& v);
     Vector2& mul (float scalar);
-    float dst (const Vector2& v);
+    float dst (const Vector2& v) const;
     float dst (float x, float y);
     float dst2 (const Vector2& v);
     std::string toString ();

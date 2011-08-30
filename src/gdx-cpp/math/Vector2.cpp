@@ -26,6 +26,8 @@
 
 using namespace gdx_cpp::math;
 
+Vector2 Vector2::_tmp;
+
 Vector2::Vector2() : x(0.0), y(0.0)
 {
 }
@@ -60,6 +62,12 @@ bool Vector2::operator==(const Vector2& other) const
 Vector2& Vector2::set (const Vector2& v) {
     x = v.x;
     y = v.y;
+    return *this;
+}
+
+Vector2& Vector2::set (float _x, float _y) {
+    x = _x;
+    y = _y;
     return *this;
 }
 
@@ -101,7 +109,7 @@ Vector2& Vector2::mul (float scalar) {
     return *this;
 }
 
-float Vector2::dst (const Vector2& v) {
+float Vector2::dst (const gdx_cpp::math::Vector2& v) const {
     float x_d = v.x - x;
     float y_d = v.y - y;
     return (float)std::sqrt(x_d * x_d + y_d * y_d);

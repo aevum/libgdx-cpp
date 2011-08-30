@@ -41,7 +41,7 @@ public:
     bool pointInFrustum (const Vector3& point);
     bool sphereInFrustum (const Vector3& center,float radius);
     bool sphereInFrustumWithoutNearFar (const Vector3& center,float radius);
-    bool boundsInFrustum (const gdx_cpp::math::collision::BoundingBox& bounds);
+    bool boundsInFrustum (gdx_cpp::math::collision::BoundingBox& bounds);
 //     collision::Ray& calculatePickRay (float screen_width,float screen_height,float mouse_x,float mouse_y,const Vector3& pos,const Vector3& dir,const Vector3& up);
     static void main ();
 

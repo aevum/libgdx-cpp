@@ -25,6 +25,7 @@
 
 #include "MathUtils.hpp"
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Application.hpp"
 
 using namespace gdx_cpp::math;
 
@@ -186,7 +187,7 @@ bool Polygon::contains (float x,float y) {
         float y1 = vertices[i + 1];
         float x2 = vertices[(i + 2) % numFloats];
         float y2 = vertices[(i + 3) % numFloats];
-        gdx_cpp::Gdx::app.log("Poly Test: ") << "Testing Point (" << x << ", " << y << ") against (" << x1 << ", " << y1 << ") and (" << x2 << ", "
+        gdx_cpp::Gdx::app->log("Poly Test: ") << "Testing Point (" << x << ", " << y << ") against (" << x1 << ", " << y1 << ") and (" << x2 << ", "
                     << y2 << ")";
         if (((y1 <= y && y < y2) || (y2 <= y && y < y1)) && x < ((x2 - x1) / (y2 - y1) * (y - y1) + x1)) intersects++;
     }

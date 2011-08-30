@@ -20,6 +20,7 @@
 
 #ifndef GDX_CPP_GRAPHICS_FPSLOGGER_HPP_
 #define GDX_CPP_GRAPHICS_FPSLOGGER_HPP_
+#include <stdint.h>
 
 namespace gdx_cpp {
 namespace graphics {
@@ -28,8 +29,11 @@ class FPSLogger {
 public:
     void log ();
 
-protected:
+    FPSLogger();
+    
 
+protected:
+    uint64_t startTime;
 
 private:
 

@@ -19,8 +19,27 @@
 */
 
 #include "AssetManager.hpp"
+#include "loaders/BitmapFontLoader.hpp"
+#include "loaders/MusicLoader.hpp"
+#include "loaders/PixmapLoader.hpp"
+#include "loaders/SoundLoader.hpp"
+#include "loaders/TextureAtlasLoader.hpp"
+#include "loaders/TextureLoader.hpp"
+#include "assets/AssetErrorListener.hpp"
+#include "ReferenceCountedAsset.hpp"
 
 using namespace gdx_cpp::assets;
+
+gdx_cpp::assets::AssetManager::AssetManager() : errorListener(0), toLoad(0), loaded(0)
+{
+    setLoader(AssetType::BitmapFont, new loaders::BitmapFontLoader(new files::InternalFileHandleResolver()));
+    setLoader(AssetType::Music, new loaders::MusicLoader(new files::InternalFileHandleResolver()));
+    setLoader(AssetType::Pixmap, new loaders::PixmapLoader(new files::InternalFileHandleResolver()));
+    setLoader(AssetType::Sound, new loaders::SoundLoader(new files::InternalFileHandleResolver()));
+    setLoader(AssetType::TextureAtlas, new loaders::TextureAtlasLoader(new files::InternalFileHandleResolver()));
+    setLoader(AssetType::Texture, new loaders::TextureLoader(new files::InternalFileHandleResolver()));
+}
+
 
 Thread& AssetManager::newThread (const Runnable& r) {
     Thread thread = new Thread(r, "AssetManager-Loader-Thread");
@@ -62,7 +81,7 @@ bool AssetManager::isLoaded (const std::string& fileName) {
 bool AssetManager::update () {
     try {
         if (tasks.size() == 0) {
-            if (preloadQueue.size == 0) return true;
+            if (preloadQueue.size() == 0) return true;
             nextTask();
         }
         return updateTask() && preloadQueue.size == 0;
@@ -73,12 +92,15 @@ bool AssetManager::update () {
 }
 
 void AssetManager::nextTask () {
-    AssetDescriptor assetDesc = preloadQueue.removeIndex(0);
-
-    if (isLoaded(assetDesc.fileName)) {
-        Class type = assetTypes.get(assetDesc.fileName);
-        Object asset = assets.get(type).get(assetDesc.fileName);
-        if (asset instanceof ReferenceCountedAsset) ((ReferenceCountedAsset)asset).incRefCount();
+    AssetDescriptor::ptr assetDesc = preloadQueue.front();
+    preloadQueue.pop_front();
+    
+    if (isLoaded(assetDesc->fileName)) {
+        int type = assetTypes[assetDesc->fileName];
+        Asset::ptr asset = assets[type][assetDesc->fileName];
+        if (asset->isRefCounted()) {
+            ((ReferenceCountedAsset*)asset)->incRefCount();
+        }
     } else {
         addTask(assetDesc);
     }
@@ -202,16 +224,18 @@ gdx_cpp::utils::Logger& AssetManager::getLogger () {
 }
 
 std::string& AssetManager::getDiagonistics () {
-    StringBuffer buffer = new StringBuffer();
-for (String fileName : assetTypes.keys()) {
-        buffer.append(fileName);
-        buffer.append(", ");
+    Synchronizable::lock_holder hnd(synchronize());
+     std::stringstream buffer;
+     AssetTypeMap::iterator it = assetTypes.begin();
+     AssetTypeMap::iterator end = assetTypes.end();
+     
+     for (; it != end; ++it)
+        buffer << it->first << ", ";
+        int type = assetTypes[it->first];
+        Asset::ptr asset = assets[type][it->first];
+        std::vector<std::string>& dependencies = assetDependencies[it->first];
 
-        Class type = assetTypes.get(fileName);
-        Object asset = assets.get(type).get(fileName);
-        Array<String> dependencies = assetDependencies.get(fileName);
-
-        buffer.append(type.getSimpleName());
+        buffer << type;
 
         if (asset instanceof ReferenceCountedAsset) {
             buffer.append(", refs: ");
@@ -231,3 +255,89 @@ for (String dep : dependencies) {
     return buffer.toString();
 }
 
+void AssetManager::injectDependency(const std::string& parentAssetFilename,
+                                    gdx_cpp::assets::AssetDescriptor::ptr dependendAssetDesc) {
+    // add the asset as a dependency of the parent asset
+
+    std::vector<std::string>& dependencies = assetDependencies[parentAssetFilename];
+
+    dependencies.push_back(dependendAssetDesc->fileName);
+
+    // if the asset is already loaded, increase its reference count if needed.
+    if (isLoaded(dependendAssetDesc->fileName)) {
+        int type = assetTypes[dependendAssetDesc->fileName];
+        Asset::ptr asset = assets[type][dependendAssetDesc->fileName];
+             if (asset->isRefCounted()) {
+                 ((ReferenceCountedAsset*)asset).incRefCount();
+             }
+    }
+    // else add a new task for the asset. if the asset is already on the preloading queue
+    else {
+        addTask(dependendAssetDesc);
+    }
+
+    gdx_cpp::Gdx::app->log("AssetManager.hpp") << "Injected dependency '" + dependendAssetDesc + "' for asset '" + parentAssetFilename + "'";
+}
+
+void AssetManager::setLoader(gdx_cpp::assets::AssetType& type, gdx_cpp::assets::loaders::AssetLoader* loader) {
+    Synchronizable::lock_holder hnd(synchronize());
+    loaders[type] = loader;
+}
+
+void AssetManager::preload(const std::string& fileName, AssetType& type) {
+    AssetLoaderParameters::ptr null(NULL);
+    preload(fileName, type, null);
+}
+
+void AssetManager::preload(const std::string& fileName, const gdx_cpp::assets::AssetType& type, gdx_cpp::assets::AssetLoaderParameters::ptr parameter) {
+    Synchronizable::lock_holder hnd(synchronize());
+
+    loaders::AssetLoader* loader = loaders[type];
+
+    if (loader == NULL) {
+        gdx_cpp::Gdx::app->error("AssetManager.hpp") << "No loader for type '" + type.getSimpleName() + "'";
+    }
+
+    if (isLoaded(fileName)) {
+        gdx_cpp::Gdx::app->error("AssetManager.hpp") << "Asset '" + fileName + "' already loaded";
+    }
+
+    PreloadQueueType::iterator it = preloadQueue.begin();
+    PreloadQueueType::iterator end = preloadQueue.end();
+
+    for (; it != end; ++it) {
+        if ((*it)->fileName == fileName) {
+            gdx_cpp::Gdx::app->error("AssetManager.hpp") << "Asset '" + fileName + "' already in preload queue";
+        }
+    }
+
+    if (preloadQueue.empty()) {
+        loaded = 0;
+        toLoad = 0;
+    }
+
+    toLoad++;
+
+    AssetDescriptor::ptr assetDesc = AssetDescriptor::ptr(new AssetDescriptor(fileName, type, parameter));
+    preloadQueue.push_back(assetDesc);
+
+    gdx_cpp::Gdx::app->log("AssetManager.hpp") << "Added asset '" + assetDesc->toString() + "' to preload queue";
+}
+
+bool AssetManager::getAssetFileName(const gdx_cpp::assets::Asset& asset, std::string& result) {
+    Synchronizable::lock_holder hnd(synchronize());
+
+    const AssetMap& typedAssets = assets[asset.getAssetType()];
+    AssetMap::const_iterator it = typedAssets.begin();
+    AssetMap::const_iterator end = typedAssets.end();
+
+    for (; it != end; ++it) {
+        Asset::ptr otherAsset = typedAssets[it->first];
+        if (*otherAsset == asset) {
+            result = *it;
+            return true;
+        }
+    }
+
+    return false;
+}

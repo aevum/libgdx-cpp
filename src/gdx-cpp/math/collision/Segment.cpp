@@ -21,14 +21,18 @@
 #include "Segment.hpp"
 
 using namespace gdx_cpp::math::collision;
+using namespace gdx_cpp::math;
 
 Segment::Segment (const Vector3& a, const Vector3& b)
-{  
-    this->a.set(a);
-    this->b.set(b);
+: a(a)
+, b(b)
+{
 }
 
 Segment::Segment (float aX, float aY, float aZ, float bX, float bY, float bZ)
+:
+a(aX, aY, aZ)
+,b(bX,bY,bZ)
 {
     this->a.set(aX, aY, aZ);
     this->b.set(bX, bY, bZ);

@@ -20,8 +20,7 @@
 
 #include <string>
 
-#include <tr1/memory>
-#include <tr1/shared_ptr.h>
+#include "gdx-cpp/utils/Aliases.hpp"
 
 namespace gdx_cpp {
 
@@ -51,7 +50,7 @@ public:
     static const int M32 = 11;
     static const int M33 = 15;
 
-    typedef std::tr1::shared_ptr<Matrix4> ptr;
+    typedef ref_ptr_maker<Matrix4>::type ptr;
 
     Matrix4(const Matrix4& other);
     ~Matrix4();
@@ -107,8 +106,9 @@ public:
     static void mulVec (float* mat, float* vecs, int offset, int numVecs, int stride);
     static void mulVec (float* mat, float* vec);
     static void mul (float* mata, float* matb);
-    
-    float val[16];
+
+    const static int length = 16;
+    float val[length];
 };
 
 }

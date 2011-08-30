@@ -19,14 +19,15 @@
 */
 
 #include "NativeFFT.hpp"
+#include <vector>
 
 using namespace gdx_cpp::audio::analysis;
 
-void NativeFFT::spectrum (const FloatBuffer& samples,const FloatBuffer& spectrum,int numSamples) {
-    nativeSpectrum(handle, samples, spectrum, numSamples);
+void NativeFFT::spectrum (std::vector< float >& samples, std::vector< float >& spectrum, int numSamples) {
+//nativeSpectrum(handle, samples, spectrum, numSamples);
 }
 
 void NativeFFT::dispose () {
-    destroyFFT(handle);
+//destroyFFT(handle);
 }
 

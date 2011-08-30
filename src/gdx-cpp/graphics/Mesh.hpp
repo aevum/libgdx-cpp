@@ -21,17 +21,52 @@
 #ifndef GDX_CPP_GRAPHICS_MESH_HPP_
 #define GDX_CPP_GRAPHICS_MESH_HPP_
 
+#include <tr1/unordered_map>
+#include <list>
+
+#include "gdx-cpp/utils/Disposable.hpp"
+#include "gdx-cpp/utils/Buffer.hpp"
+#include "gdx-cpp/Application.hpp"
+#include "VertexAttribute.hpp"
+#include "VertexAttributes.hpp"
+#include <set>
+
+
 namespace gdx_cpp {
+namespace math {
+namespace collision {
+
+class BoundingBox;
+class BoundingBox;
+}
+}
+
 namespace graphics {
+
+namespace glutils {
+    class VertexData;
+    class IndexData;
+    class ShaderProgram;
+}
 
 class Mesh: public gdx_cpp::utils::Disposable {
 public:
-    void setVertices ();
-    void setVertices (int offset,int count);
-    void getVertices ();
-    void setIndices ();
-    void setIndices (int offset,int count);
-    void getIndices ();
+
+    struct VertexDataType {
+        static const int VertexArray = 0;
+        static const int VertexBufferObject = 1;
+        static const int VertexBufferObjectSubData = 2;
+    };
+
+    Mesh (int type, bool isStatic, int maxVertices, int maxIndices, const std::vector< gdx_cpp::graphics::VertexAttribute >& attributes) ;
+    Mesh (bool isStatic, int maxVertices, int maxIndices, std::vector<VertexAttribute> attributes);
+    
+    void setVertices (const std::vector< float >& vertices);
+    void setVertices (const std::vector< float >& vertices, int offset, int count);
+    void getVertices (std::vector< float >& vertices);
+    void setIndices (std::vector< short int >& indices);
+    void setIndices (std::vector< short int >& indices, int offset, int count);
+    void getIndices (std::vector< short int >& indices);
     int getNumIndices ();
     int getNumVertices ();
     int getMaxVertices ();
@@ -40,29 +75,38 @@ public:
     void setAutoBind (bool autoBind);
     void bind ();
     void unbind ();
-    void bind (const gdx_cpp::graphics::glutils::ShaderProgram& shader);
-    void unbind (const gdx_cpp::graphics::glutils::ShaderProgram& shader);
+    void bind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
+    void unbind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
     void render (int primitiveType);
     void render (int primitiveType,int offset,int count);
-    void render (const gdx_cpp::graphics::glutils::ShaderProgram& shader,int primitiveType);
-    void render (const gdx_cpp::graphics::glutils::ShaderProgram& shader,int primitiveType,int offset,int count);
+    void render (gdx_cpp::graphics::glutils::ShaderProgram& shader, int primitiveType);
+    void render (gdx_cpp::graphics::glutils::ShaderProgram& shader, int primitiveType, int offset, int count);
     void dispose ();
     VertexAttribute& getVertexAttribute (int usage);
     VertexAttributes& getVertexAttributes ();
-    FloatBuffer& getVerticesBuffer ();
-    gdx_cpp::math::collision::BoundingBox& calculateBoundingBox ();
-    void calculateBoundingBox (const gdx_cpp::math::collision::BoundingBox& bbox);
-    ShortBuffer& getIndicesBuffer ();
-    static void invalidateAllMeshes (const gdx_cpp::Application& app);
-    static void clearAllMeshes (const gdx_cpp::Application& app);
-    static std::string& getManagedStatus ();
+    utils::float_buffer& getVerticesBuffer ();
+    void calculateBoundingBox (gdx_cpp::math::collision::BoundingBox& bbox);
+    utils::short_buffer& getIndicesBuffer ();
+    static void invalidateAllMeshes (gdx_cpp::Application* app);
+    static void clearAllMeshes (gdx_cpp::Application* app);
+    std::string getManagedStatus ();
     void scale (float scaleX,float scaleY,float scaleZ);
 
+    static bool forceVBO;
+    
 protected:
-
-
+    glutils::VertexData* vertices;
+    glutils::IndexData* indices;
+    bool autoBind;
+    bool isVertexArray;
+    
+    int refCount;
+    
 private:
-    static void addManagedMesh (const gdx_cpp::Application& app,const Mesh& mesh);
+    typedef std::tr1::unordered_map<gdx_cpp::Application*, std::set<Mesh*> > MeshMap;
+    static MeshMap meshes;
+    static void addManagedMesh (gdx_cpp::Application* app, gdx_cpp::graphics::Mesh* mesh);
+    
 };
 
 } // namespace gdx_cpp

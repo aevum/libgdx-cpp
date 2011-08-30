@@ -19,52 +19,59 @@
 */
 
 #include "Color.hpp"
+#include "gdx-cpp/utils/NumberUtils.hpp"
 
 using namespace gdx_cpp::graphics;
 
+const Color Color::WHITE = Color(1, 1, 1, 1);
+const Color Color::BLACK = Color(0, 0, 0, 1);
+const Color Color::RED = Color(1, 0, 0, 1);
+const Color Color::GREEN = Color(0, 1, 0, 1);
+const Color Color::BLUE = Color(0, 0, 1, 1);
+
 Color& Color::set (const Color& color) {
-    this.r = color.r;
-    this.g = color.g;
-    this.b = color.b;
-    this.a = color.a;
+    this->r = color.r;
+    this->g = color.g;
+    this->b = color.b;
+    this->a = color.a;
     clamp();
-    return this;
+    return *this;
 }
 
 Color& Color::mul (const Color& color) {
-    this.r *= color.r;
-    this.g *= color.g;
-    this.b *= color.b;
-    this.a *= color.a;
+    this->r *= color.r;
+    this->g *= color.g;
+    this->b *= color.b;
+    this->a *= color.a;
     clamp();
-    return this;
+    return *this;
 }
 
 Color& Color::mul (float value) {
-    this.r *= value;
-    this.g *= value;
-    this.b *= value;
-    this.a *= value;
+    this->r *= value;
+    this->g *= value;
+    this->b *= value;
+    this->a *= value;
     clamp();
-    return this;
+    return *this;
 }
 
 Color& Color::add (const Color& color) {
-    this.r += color.r;
-    this.g += color.g;
-    this.b += color.b;
-    this.a += color.a;
+    this->r += color.r;
+    this->g += color.g;
+    this->b += color.b;
+    this->a += color.a;
     clamp();
-    return this;
+    return *this;
 }
 
 Color& Color::sub (const Color& color) {
-    this.r -= color.r;
-    this.g -= color.g;
-    this.b -= color.b;
-    this.a -= color.a;
+    this->r -= color.r;
+    this->g -= color.g;
+    this->b -= color.b;
+    this->a -= color.a;
     clamp();
-    return this;
+    return *this;
 }
 
 void Color::clamp () {
@@ -86,41 +93,37 @@ void Color::clamp () {
 }
 
 void Color::set (float r,float g,float b,float a) {
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    this.a = a;
+    this->r = r;
+    this->g = g;
+    this->b = b;
+    this->a = a;
 }
 
-bool Color::equals (const Object& o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+bool Color::equals (const Color& o) {
+    if (this == &o) return true;
 
-    Color color = (Color)o;
-
-    if (Float.compare(color.a, a) != 0) return false;
-    if (Float.compare(color.b, b) != 0) return false;
-    if (Float.compare(color.g, g) != 0) return false;
-    if (Float.compare(color.r, r) != 0) return false;
-
-    return true;
+    return o.a == a &&
+           o.b == b &&
+           o.g == g &&
+           o.r == r;
 }
 
 int Color::hashCode () {
-    int result = (r != +0.0f ? NumberUtils.floatToIntBits(r) : 0);
-    result = 31 * result + (g != +0.0f ? NumberUtils.floatToIntBits(g) : 0);
-    result = 31 * result + (b != +0.0f ? NumberUtils.floatToIntBits(b) : 0);
-    result = 31 * result + (a != +0.0f ? NumberUtils.floatToIntBits(a) : 0);
+    int result = (r != +0.0f ? gdx_cpp::utils::NumberUtils::floatToIntBits(r) : 0);
+    result = 31 * result + (g != + 0.0f ? gdx_cpp::utils::NumberUtils::floatToIntBits(g) : 0);
+    result = 31 * result + (b != + 0.0f ? gdx_cpp::utils::NumberUtils::floatToIntBits(b) : 0);
+    result = 31 * result + (a != + 0.0f ? gdx_cpp::utils::NumberUtils::floatToIntBits(a) : 0);
     return result;
 }
 
-std::string& Color::toString () {
-    return Integer.toHexString(toIntBits());
+const std::string Color::toString () {
+       //TODO: fix it
+    return "FIXME";//;Integer.toHexString(toIntBits());
 }
 
 float Color::toFloatBits (int r,int g,int b,int a) {
     int color = (a << 24) | (b << 16) | (g << 8) | r;
-    float floatColor = NumberUtils.intBitsToFloat(color & 0xfeffffff);
+    float floatColor = gdx_cpp::utils::NumberUtils::intBitsToFloat(color & 0xfeffffff);
     return floatColor;
 }
 
@@ -128,19 +131,19 @@ int Color::toIntBits (int r,int g,int b,int a) {
     return (a << 24) | (b << 16) | (g << 8) | r;
 }
 
-float Color::toFloatBits () {
+float Color::toFloatBits () const {
     int color = ((int)(255 * a) << 24) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r));
-    return NumberUtils.intBitsToFloat(color & 0xfeffffff);
+    return gdx_cpp::utils::NumberUtils::intBitsToFloat(color & 0xfeffffff);
 }
 
-int Color::toIntBits () {
+int Color::toIntBits () const {
     int color = ((int)(255 * a) << 24) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r));
     return color;
 }
 
 float Color::toFloatBits (float r,float g,float b,float a) {
     int color = ((int)(255 * a) << 24) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r));
-    return NumberUtils.intBitsToFloat(color & 0xfeffffff);
+    return gdx_cpp::utils::NumberUtils::intBitsToFloat(color & 0xfeffffff);
 }
 
 int Color::alpha (float alpha) {
@@ -166,4 +169,18 @@ int Color::rgb888 (float r,float g,float b) {
 int Color::rgba8888 (float r,float g,float b,float a) {
     return ((int)(r * 255) << 24) | ((int)(g * 255) << 16) | ((int)(b * 255) << 8) | (int)(a * 255);
 }
+
+Color::Color(float r, float g, float b, float a)
+  : r(r)
+  , g(g)
+  , b(b)
+  , a(a)
+{
+    clamp();
+}
+
+Color::Color(const Color& color) {
+    set(color);
+}
+
 

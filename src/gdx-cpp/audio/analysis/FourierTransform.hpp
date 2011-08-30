@@ -21,12 +21,15 @@
 #ifndef GDX_CPP_AUDIO_ANALYSIS_FOURIERTRANSFORM_HPP_
 #define GDX_CPP_AUDIO_ANALYSIS_FOURIERTRANSFORM_HPP_
 
+#include <vector>
+
 namespace gdx_cpp {
 namespace audio {
 namespace analysis {
 
 class FourierTransform {
 public:
+    FourierTransform(int ts, float sr);
     void noAverages ();
     void linAverages (int numAvg);
     void logAverages (int minBandwidth,int bandsPerOctave);
@@ -46,20 +49,40 @@ public:
     int avgSize ();
     float getAvg (int i);
     float calcAvg (float lowFreq,float hiFreq);
-    virtual   void forward () = 0;
-    void forward (int startAt);
-    virtual   void inverse () = 0;
-    void inverse ();
-    float* getSpectrum ();
-    float* getRealPart ();
-    float* getImaginaryPart ();
+    virtual void forward (std::vector< float >& buffer) = 0;
+    void forward (std::vector< float >& buffer, int startAt);
+    void inverse (std::vector< float >& freqReal, std::vector< float >& freqImag, std::vector< float >& buffer);
+    virtual void inverse (std::vector< float >& buffer) = 0;
+    std::vector< float > getSpectrum ();
+    std::vector< float > getRealPart ();
+    std::vector< float > getImaginaryPart ();
 
 protected:
     virtual   void allocateArrays () = 0;
-    void setComplex ();
+    void setComplex (std::vector< float >& r, std::vector< float >& i);
     void fillSpectrum ();
-    void doWindow ();
-    void hamming ();
+    void doWindow (std::vector< float >& samples);
+    void hamming (std::vector< float >& samples);
+
+    const static int NONE;
+    /** A constant indicating a Hamming window should be used on sample buffers. */
+    const static int HAMMING;
+    const static int LINAVG;
+    const static int LOGAVG;
+    const static int NOAVG;
+    const static float TWO_PI;
+
+    int timeSizeVar;
+    int sampleRate;
+    float bandWidth;
+    int whichWindow;
+    std::vector<float> real;
+    std::vector<float> imag;
+    std::vector<float> spectrum;
+    std::vector<float> averages;
+    int whichAverage;
+    int octaves;
+    int avgPerOctave;
 
 private:
 

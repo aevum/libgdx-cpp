@@ -21,23 +21,36 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_INDEXBUFFEROBJECTSUBDATA_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_INDEXBUFFEROBJECTSUBDATA_HPP_
 
+#include "IndexData.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 namespace glutils {
 
-class IndexBufferObjectSubData {
+class IndexBufferObjectSubData : public IndexData {
 public:
+    IndexBufferObjectSubData (bool isStatic, int maxIndices) ;
+    IndexBufferObjectSubData (int maxIndices) ;
+    
     int getNumIndices ();
     int getNumMaxIndices ();
-    void setIndices (int offset,int count);
-    ShortBuffer& getBuffer ();
+    void setIndices (const std::vector< short int >& indices, int offset, int count);
+    utils::short_buffer& getBuffer ();
     void bind ();
     void unbind ();
     void invalidate ();
     void dispose ();
 
 protected:
-
+    int tmpHandle;
+    
+    utils::short_buffer buffer;
+    utils::byte_buffer byteBuffer;
+    int bufferHandle;
+    bool isDirect;
+    bool isDirty;
+    bool isBound;
+    int usage;
 
 private:
     int createBufferObject ();

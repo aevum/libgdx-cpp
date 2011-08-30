@@ -19,81 +19,120 @@
 */
 
 #include "ShaderProgram.hpp"
+#include "gdx-cpp/graphics/GL20.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Graphics.hpp"
+#include "gdx-cpp/Application.hpp"
+#include <tr1/unordered_map>
+#include <stdexcept>
+#include "gdx-cpp/math/Matrix3.hpp"
+#include "gdx-cpp/math/Matrix4.hpp"
+#include <set>
+#include <sstream>
 
+using namespace gdx_cpp::graphics;
 using namespace gdx_cpp::graphics::glutils;
+using namespace gdx_cpp;
+
+const std::string ShaderProgram::POSITION_ATTRIBUTE = "a_position";
+const std::string ShaderProgram::NORMAL_ATTRIBUTE = "a_normal";
+const std::string ShaderProgram::COLOR_ATTRIBUTE = "a_color";
+const std::string ShaderProgram::TEXCOORD_ATTRIBUTE = "a_texCoord";
+const std::string ShaderProgram::TANGENT_ATTRIBUTE = "a_tangent";
+const std::string ShaderProgram::BINORMAL_ATTRIBUTE = "a_binormal";
+
+std::tr1::unordered_map <gdx_cpp::Application *, std::set<ShaderProgram *> * > ShaderProgram::shaders;
+
+bool ShaderProgram::pedantic = true;
+int ShaderProgram::intbuf = 0;
+
+
+ShaderProgram::ShaderProgram(const std::string& vertexShader, const std::string& fragmentShader)
+: params(0), type (0),
+  isCompiledVar(false), program(0), vertexShaderHandle(0),
+  fragmentShaderHandle(0), invalidated(false), refCount(0), matrix(16)
+{
+    compileShaders(vertexShader, fragmentShader);
+    if (isCompiled()) {
+        fetchAttributes();
+        fetchUniforms();
+        addManagedShader(Gdx::app, this);
+    }
+}
 
 void ShaderProgram::compileShaders (const std::string& vertexShader,const std::string& fragmentShader) {
-    vertexShaderHandle = loadShader(GL20.GL_VERTEX_SHADER, vertexShader);
-    fragmentShaderHandle = loadShader(GL20.GL_FRAGMENT_SHADER, fragmentShader);
+    vertexShaderHandle = loadShader(GL20::GL_VERTEX_SHADER, vertexShader);
+    fragmentShaderHandle = loadShader(GL20::GL_FRAGMENT_SHADER, fragmentShader);
 
     if (vertexShaderHandle == -1 || fragmentShaderHandle == -1) {
-        isCompiled = false;
+        isCompiledVar = false;
         return;
     }
 
     program = linkProgram();
     if (program == -1) {
-        isCompiled = false;
+        isCompiledVar = false;
         return;
     }
 
-    isCompiled = true;
+    isCompiledVar = true;
 }
 
 int ShaderProgram::loadShader (int type,const std::string& source) {
-    GL20 gl = Gdx.graphics.getGL20();
-    ByteBuffer tmp = ByteBuffer.allocateDirect(4);
-    tmp.order(ByteOrder.nativeOrder());
-    IntBuffer intbuf = tmp.asIntBuffer();
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
+    //TODO BUFERRRRRRRRRRRRRrrs
+//     ByteBuffer tmp = ByteBuffer.allocateDirect(4);
+//     tmp.order(ByteOrder.nativeOrder());
+//     IntBuffer intbuf = tmp.asIntBuffer();
 
-    int shader = gl.glCreateShader(type);
+    int shader = gl->glCreateShader(type);
     if (shader == 0) return -1;
 
-    gl.glShaderSource(shader, source);
-    gl.glCompileShader(shader);
-    gl.glGetShaderiv(shader, GL20.GL_COMPILE_STATUS, intbuf);
-
-    int compiled = intbuf.get(0);
-    if (compiled == 0) {
-        gl.glGetShaderiv(shader, GL20.GL_INFO_LOG_LENGTH, intbuf);
-        int infoLogLength = intbuf.get(0);
-        if (infoLogLength > 1) {
-            String infoLog = gl.glGetShaderInfoLog(shader);
-            log += infoLog;
-        }
-        return -1;
-    }
+    gl->glShaderSource(shader, source);
+    gl->glCompileShader(shader);
+//     gl->glGetShaderiv(shader, gdx_cpp::graphics::GL20.GL_COMPILE_STATUS, intbuf);
+//
+//     int compiled = intbuf.get(0);
+//     if (compiled == 0) {
+//         gl->glGetShaderiv(shader, GL20.GL_INFO_LOG_LENGTH, intbuf);
+//         int infoLogLength = intbuf.get(0);
+//         if (infoLogLength > 1) {
+//             String infoLog = gl->glGetShaderInfoLog(shader);
+//             log += infoLog;
+//         }
+//         return -1;
+//     }
 
     return shader;
 }
 
 int ShaderProgram::linkProgram () {
-    GL20 gl = Gdx.graphics.getGL20();
-    int program = gl.glCreateProgram();
+    gdx_cpp::graphics::GL20 *gl = gdx_cpp::Gdx::graphics->getGL20();
+    int program = gl->glCreateProgram();
     if (program == 0) return -1;
 
-    gl.glAttachShader(program, vertexShaderHandle);
-    gl.glAttachShader(program, fragmentShaderHandle);
-    gl.glLinkProgram(program);
+    gl->glAttachShader(program, vertexShaderHandle);
+    gl->glAttachShader(program, fragmentShaderHandle);
+    gl->glLinkProgram(program);
 
-    ByteBuffer tmp = ByteBuffer.allocateDirect(4);
-    tmp.order(ByteOrder.nativeOrder());
-    IntBuffer intbuf = tmp.asIntBuffer();
-
-    gl.glGetProgramiv(program, GL20.GL_LINK_STATUS, intbuf);
-    int linked = intbuf.get(0);
-    if (linked == 0) {
-        return -1;
-    }
+//     ByteBuffer tmp = ByteBuffer.allocateDirect(4);
+//     tmp.order(ByteOrder.nativeOrder());
+//     IntBuffer intbuf = tmp.asIntBuffer();
+//
+//     gl->glGetProgramiv(program, gdx_cpp::graphics::GL20.GL_LINK_STATUS, intbuf);
+//     int linked = intbuf.get(0);
+//     if (linked == 0) {
+//         return -1;
+//     }
 
     return program;
 }
 
-std::string& ShaderProgram::getLog () {
-    if (isCompiled) {
-        Gdx.gl20.glGetProgramiv(program, GL20.GL_INFO_LOG_LENGTH, intbuf);
-        int infoLogLength = intbuf.get(0);
-        if (infoLogLength > 1) log = Gdx.gl20.glGetProgramInfoLog(program);
+std::string ShaderProgram::getLog () {
+    if (isCompiledVar) {
+        gdx_cpp::Gdx::gl20->glGetProgramiv(program, gdx_cpp::graphics::GL20::GL_INFO_LOG_LENGTH, &intbuf);
+        int infoLogLength = intbuf;//.get(0);
+        if (infoLogLength > 1) log = gdx_cpp::Gdx::gl20->glGetProgramInfoLog(program);
         return log;
     } else {
         return log;
@@ -101,202 +140,210 @@ std::string& ShaderProgram::getLog () {
 }
 
 bool ShaderProgram::isCompiled () {
-    return isCompiled;
+    return isCompiledVar;
 }
 
 int ShaderProgram::fetchAttributeLocation (const std::string& name) {
-    GL20 gl = Gdx.graphics.getGL20();
-    Integer location;
-    if ((location = attributes.get(name)) == null) {
-        location = gl.glGetAttribLocation(program, name);
-        if (location != -1) attributes.put(name, location);
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
+    int location;
+    if (attributes.count(name) == 0)
+    {
+        location = gl->glGetAttribLocation(program, name);
+        if (location != -1) attributes[name] = location;
+    } else
+    {
+        location = attributes[name];
     }
     return location;
 }
 
 int ShaderProgram::fetchUniformLocation (const std::string& name) {
-    GL20 gl = Gdx.graphics.getGL20();
-    Integer location;
-    if ((location = uniforms.get(name)) == null) {
-        location = gl.glGetUniformLocation(program, name);
-        if (location == -1 && pedantic) throw new IllegalArgumentException("no uniform with name '" + name + "' in shader");
-        uniforms.put(name, location);
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
+    int location;
+    if (uniforms.count(name) == 0) {
+        location = gl->glGetUniformLocation(program, name);
+        if (location == -1 && pedantic)throw std::runtime_error("no uniform with name '" + name + "' in shader");
+        uniforms[name] = location;
+    }else
+    {
+        location = uniforms[name];
     }
     return location;
 }
 
-void ShaderProgram::setUniformi (const std::string& name,int value) {
-    GL20 gl = Gdx.graphics.getGL20();
+void ShaderProgram::setUniformi (const std::string& name, int value) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchUniformLocation(name);
-    gl.glUniform1i(location, value);
+    gl->glUniform1i(location, value);
 }
 
-void ShaderProgram::setUniformi (const std::string& name,int value1,int value2) {
-    GL20 gl = Gdx.graphics.getGL20();
+void ShaderProgram::setUniformi (const std::string& name, int value1, int value2) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchUniformLocation(name);
-    gl.glUniform2i(location, value1, value2);
+    gl->glUniform2i(location, value1, value2);
 }
 
-void ShaderProgram::setUniformi (const std::string& name,int value1,int value2,int value3) {
-    GL20 gl = Gdx.graphics.getGL20();
+void ShaderProgram::setUniformi (const std::string& name, int value1, int value2, int value3) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchUniformLocation(name);
-    gl.glUniform3i(location, value1, value2, value3);
+    gl->glUniform3i(location, value1, value2, value3);
 }
 
-void ShaderProgram::setUniformi (const std::string& name,int value1,int value2,int value3,int value4) {
-    GL20 gl = Gdx.graphics.getGL20();
+void ShaderProgram::setUniformi (const std::string& name, int value1, int value2, int value3, int value4) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchUniformLocation(name);
-    gl.glUniform4i(location, value1, value2, value3, value4);
+    gl->glUniform4i(location, value1, value2, value3, value4);
 }
 
-void ShaderProgram::setUniformf (const std::string& name,float value) {
-    GL20 gl = Gdx.graphics.getGL20();
+void ShaderProgram::setUniformf (const std::string& name, float value) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchUniformLocation(name);
-    gl.glUniform1f(location, value);
+    gl->glUniform1f(location, value);
 }
 
-void ShaderProgram::setUniformf (const std::string& name,float value1,float value2) {
-    GL20 gl = Gdx.graphics.getGL20();
+void ShaderProgram::setUniformf (const std::string& name, float value1, float value2) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchUniformLocation(name);
-    gl.glUniform2f(location, value1, value2);
+    gl->glUniform2f(location, value1, value2);
 }
 
-void ShaderProgram::setUniformf (const std::string& name,float value1,float value2,float value3) {
-    GL20 gl = Gdx.graphics.getGL20();
+void ShaderProgram::setUniformf (const std::string& name, float value1, float value2, float value3) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchUniformLocation(name);
-    gl.glUniform3f(location, value1, value2, value3);
+    gl->glUniform3f(location, value1, value2, value3);
 }
 
-void ShaderProgram::setUniformf (const std::string& name,float value1,float value2,float value3,float value4) {
-    GL20 gl = Gdx.graphics.getGL20();
+void ShaderProgram::setUniformf (const std::string& name, float value1, float value2, float value3, float value4) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchUniformLocation(name);
-    gl.glUniform4f(location, value1, value2, value3, value4);
+    gl->glUniform4f(location, value1, value2, value3, value4);
 }
 
-void ShaderProgram::setUniform1fv (const std::string& name,int offset,int length) {
-    GL20 gl = Gdx.graphics.getGL20();
-    checkManaged();
-    int location = fetchUniformLocation(name);
-    ensureBufferCapacity(length << 2);
-    floatBuffer.clear();
-    BufferUtils.copy(values, floatBuffer, length, offset);
-    gl.glUniform1fv(location, length, floatBuffer);
-}
-
-void ShaderProgram::setUniform2fv (const std::string& name,int offset,int length) {
-    GL20 gl = Gdx.graphics.getGL20();
+void ShaderProgram::setUniform1fv (const std::string& name, float* values, int offset, int length) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchUniformLocation(name);
     ensureBufferCapacity(length << 2);
     floatBuffer.clear();
-    BufferUtils.copy(values, floatBuffer, length, offset);
-    gl.glUniform2fv(location, length / 2, floatBuffer);
+    floatBuffer.copy(values, length, offset);
+    gl->glUniform1fv(location, length, floatBuffer);
 }
 
-void ShaderProgram::setUniform3fv (const std::string& name,int offset,int length) {
-    GL20 gl = Gdx.graphics.getGL20();
+void ShaderProgram::setUniform2fv (const std::string& name, float* values, int offset, int length) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchUniformLocation(name);
     ensureBufferCapacity(length << 2);
     floatBuffer.clear();
-    BufferUtils.copy(values, floatBuffer, length, offset);
-    gl.glUniform3fv(location, length / 3, floatBuffer);
+    floatBuffer.copy(values, length, offset);
+    gl->glUniform2fv(location, length / 2, floatBuffer);
 }
 
-void ShaderProgram::setUniform4fv (const std::string& name,int offset,int length) {
-    GL20 gl = Gdx.graphics.getGL20();
+void ShaderProgram::setUniform3fv (const std::string& name, float* values, int offset, int length) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchUniformLocation(name);
     ensureBufferCapacity(length << 2);
     floatBuffer.clear();
-    BufferUtils.copy(values, floatBuffer, length, offset);
-    gl.glUniform4fv(location, length / 4, floatBuffer);
+    floatBuffer.copy(values, length, offset);
+    gl->glUniform3fv(location, length / 3, floatBuffer);
 }
 
-void ShaderProgram::setUniformMatrix (const std::string& name,const gdx_cpp::math::Matrix4& matrix) {
+void ShaderProgram::setUniform4fv (const std::string& name, float* values, int offset, int length) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
+    checkManaged();
+    int location = fetchUniformLocation(name);
+    ensureBufferCapacity(length << 2);
+    floatBuffer.clear();
+    floatBuffer.copy(values, length, offset);
+    gl->glUniform4fv(location, length / 4, floatBuffer);
+}
+
+void ShaderProgram::setUniformMatrix (const std::string& name, const gdx_cpp::math::Matrix4& matrix) {
     setUniformMatrix(name, matrix, false);
 }
 
-void ShaderProgram::setUniformMatrix (const std::string& name,const gdx_cpp::math::Matrix4& matrix,bool transpose) {
-    GL20 gl = Gdx.graphics.getGL20();
+void ShaderProgram::setUniformMatrix (const std::string& name, const gdx_cpp::math::Matrix4& matrix, bool transpose) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchUniformLocation(name);
-    this.matrix.clear();
-    BufferUtils.copy(matrix.val, this.matrix, matrix.val.length, 0);
-    gl.glUniformMatrix4fv(location, 1, transpose, this.matrix);
+    this->matrix.clear();
+
+    this->matrix.copy(matrix.val, matrix.length, 0);
+    gl->glUniformMatrix4fv(location, 1, transpose, this->matrix);
 }
 
-void ShaderProgram::setUniformMatrix (const std::string& name,const gdx_cpp::math::Matrix3& matrix) {
+void ShaderProgram::setUniformMatrix (const std::string& name, math::Matrix3& matrix) {
     setUniformMatrix(name, matrix, false);
 }
 
-void ShaderProgram::setUniformMatrix (const std::string& name,const gdx_cpp::math::Matrix3& matrix,bool transpose) {
-    GL20 gl = Gdx.graphics.getGL20();
+void ShaderProgram::setUniformMatrix (const std::string& name, math::Matrix3& matrix, bool transpose) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchUniformLocation(name);
-    float[] vals = matrix.getValues();
-    this.matrix.clear();
-    BufferUtils.copy(vals, this.matrix, vals.length, 0);
-    gl.glUniformMatrix3fv(location, 1, transpose, this.matrix);
+    float * vals = matrix.getValues();
+    this->matrix.clear();
+    this->matrix.copy(vals, matrix.length, 0);
+    gl->glUniformMatrix3fv(location, 1, transpose, this->matrix);
 }
 
-void ShaderProgram::setVertexAttribute (const std::string& name,int size,int type,bool normalize,int stride,const FloatBuffer& buffer) {
-    GL20 gl = Gdx.graphics.getGL20();
+void ShaderProgram::setVertexAttribute (const std::string& name, int size, int type, bool normalize, int stride, gdx_cpp::utils::buffer< float >* buffer) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchAttributeLocation(name);
-    gl.glVertexAttribPointer(location, size, type, normalize, stride, buffer);
+    gl->glVertexAttribPointer(location, size, type, normalize, stride, buffer);
 }
 
-void ShaderProgram::setVertexAttribute (const std::string& name,int size,int type,bool normalize,int stride,int offset) {
-    GL20 gl = Gdx.graphics.getGL20();
+void ShaderProgram::setVertexAttribute (const std::string& name, int size, int type, bool normalize, int stride, int offset) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchAttributeLocation(name);
     if (location == -1) return;
-    gl.glVertexAttribPointer(location, size, type, normalize, stride, offset);
+    gl->glVertexAttribPointer(location, size, type, normalize, stride, offset);
 }
 
 void ShaderProgram::begin () {
-    GL20 gl = Gdx.graphics.getGL20();
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
-    gl.glUseProgram(program);
+    gl->glUseProgram(program);
 }
 
 void ShaderProgram::end () {
-    GL20 gl = Gdx.graphics.getGL20();
-    gl.glUseProgram(0);
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
+    gl->glUseProgram(0);
 }
 
 void ShaderProgram::dispose () {
-    GL20 gl = Gdx.graphics.getGL20();
-    gl.glUseProgram(0);
-    gl.glDeleteShader(vertexShaderHandle);
-    gl.glDeleteShader(fragmentShaderHandle);
-    gl.glDeleteProgram(program);
-    if (shaders.get(Gdx.app) != null) shaders.get(Gdx.app).remove(this);
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
+    gl->glUseProgram(0);
+    gl->glDeleteShader(vertexShaderHandle);
+    gl->glDeleteShader(fragmentShaderHandle);
+    gl->glDeleteProgram(program);
+    if (shaders.count(Gdx::app) > 0) shaders[Gdx::app]->erase(this);
 }
 
 void ShaderProgram::disableVertexAttribute (const std::string& name) {
-    GL20 gl = Gdx.graphics.getGL20();
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchAttributeLocation(name);
     if (location == -1) return;
-    gl.glDisableVertexAttribArray(location);
+    gl->glDisableVertexAttribArray(location);
 }
 
 void ShaderProgram::enableVertexAttribute (const std::string& name) {
-    GL20 gl = Gdx.graphics.getGL20();
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     checkManaged();
     int location = fetchAttributeLocation(name);
     if (location == -1) return;
-    gl.glEnableVertexAttribArray(location);
+    gl->glEnableVertexAttribArray(location);
 }
 
 void ShaderProgram::checkManaged () {
@@ -306,138 +353,138 @@ void ShaderProgram::checkManaged () {
     }
 }
 
-void ShaderProgram::addManagedShader (const gdx_cpp::Application& app,const ShaderProgram& shaderProgram) {
-    List<ShaderProgram> managedResources = shaders.get(app);
-    if (managedResources == null) managedResources = new ArrayList<ShaderProgram>();
-    managedResources.add(shaderProgram);
-    shaders.put(app, managedResources);
+void ShaderProgram::addManagedShader (gdx_cpp::Application* app, ShaderProgram* shaderProgram) {
+    std::set<ShaderProgram *> *  managedResources;
+
+    if (shaders.count(app) > 0)
+    {
+      managedResources =  shaders[app];
+    }
+    else
+    {
+      managedResources =  new std::set<ShaderProgram *>;
+      shaders[app] = managedResources;
+    }
+    managedResources->insert(shaderProgram);
 }
 
-void ShaderProgram::invalidateAllShaderPrograms (const gdx_cpp::Application& app) {
-    if (Gdx.graphics.getGL20() == null) return;
+void ShaderProgram::invalidateAllShaderPrograms (gdx_cpp::Application* app) {
+    if (gdx_cpp::Gdx::graphics->getGL20() == NULL) return;
 
-    List<ShaderProgram> shaderList = shaders.get(app);
-    if (shaderList == null) return;
+    if (shaders.count(app) > 0) return;
 
-    for (int i = 0; i < shaderList.size(); i++) {
-        shaderList.get(i).invalidated = true;
-        shaderList.get(i).checkManaged();
+    std::set<ShaderProgram *> * shaderList = shaders[app];
+
+    std::set<ShaderProgram *>::iterator it;
+    for ( it=shaderList->begin() ; it != shaderList->end(); it++ )
+    {
+       (**it).invalidated = true;
+       (*it)->checkManaged();
     }
 }
 
-void ShaderProgram::clearAllShaderPrograms (const gdx_cpp::Application& app) {
-    shaders.remove(app);
+void ShaderProgram::clearAllShaderPrograms (gdx_cpp::Application* app) {
+    shaders.erase(app);
 }
 
-std::string& ShaderProgram::getManagedStatus () {
-    StringBuilder builder = new StringBuilder();
+std::string ShaderProgram::getManagedStatus () {
+    std::stringstream builder;
     int i = 0;
-    builder.append("Managed shaders/app: { ");
-for (Application app : shaders.keySet()) {
-        builder.append(shaders.get(app).size());
-        builder.append(" ");
+    builder << "Managed shaders/app: { ";
+    std::tr1::unordered_map<gdx_cpp::Application *, std::set<ShaderProgram *> * >::iterator it;
+    for (it = shaders.begin(); it != shaders.end(); ++it) {
+        builder << it->second->size();
+        builder << " ";
     }
-    builder.append("}");
-    return builder.toString();
+    builder << "}";
+    return builder.str();
 }
 
-void ShaderProgram::setAttributef (const std::string& name,float value1,float value2,float value3,float value4) {
-    GL20 gl = Gdx.graphics.getGL20();
+void ShaderProgram::setAttributef (std::string& name,float value1,float value2,float value3,float value4) {
+    gdx_cpp::graphics::GL20 * gl = gdx_cpp::Gdx::graphics->getGL20();
     int location = fetchAttributeLocation(name);
-    gl.glVertexAttrib4f(location, value1, value2, value3, value4);
+    gl->glVertexAttrib4f(location, value1, value2, value3, value4);
 }
 
 void ShaderProgram::ensureBufferCapacity (int numBytes) {
-    if (buffer == null || buffer.capacity() != numBytes) {
-        buffer = BufferUtils.newByteBuffer(numBytes);
-        floatBuffer = buffer.asFloatBuffer();
-        intBuffer = buffer.asIntBuffer();
+    if (buffer.capacity() != numBytes) {
+        buffer = gdx_cpp::utils::byte_buffer(numBytes);
+        floatBuffer = buffer.convert<float>();
+        intBuffer = buffer.convert<int>();
     }
 }
 
 void ShaderProgram::fetchUniforms () {
-    params.clear();
-    Gdx.gl20.glGetProgramiv(program, GL20.GL_ACTIVE_UNIFORMS, params);
-    int numUniforms = params.get(0);
+    params=0;
+    gdx_cpp::Gdx::gl20->glGetProgramiv(program, gdx_cpp::graphics::GL20::GL_ACTIVE_UNIFORMS, &params);
+    int numUniforms = params;
 
-    uniformNames = new String[numUniforms];
+    uniformNames.reserve(numUniforms);
 
     for (int i = 0; i < numUniforms; i++) {
-        params.clear();
-        params.put(0, 256);
-        type.clear();
-        String name = Gdx.gl20.glGetActiveUniform(program, i, params, type);
-        int location = Gdx.gl20.glGetUniformLocation(program, name);
-        uniforms.put(name, location);
-        uniformTypes.put(name, type.get(0));
+        params=256;
+        type=0;
+        std::string name =  Gdx::gl20->glGetActiveUniform(program, i, &params, (char *) &type);
+        int location = Gdx::gl20->glGetUniformLocation(program, name);
+        uniforms[name] =  location;
+        uniformTypes[name] = type;
         uniformNames[i] = name;
     }
 }
 
 void ShaderProgram::fetchAttributes () {
-    params.clear();
-    Gdx.gl20.glGetProgramiv(program, GL20.GL_ACTIVE_ATTRIBUTES, params);
-    int numAttributes = params.get(0);
+    params = 0;
+    Gdx::gl20->glGetProgramiv(program, GL20::GL_ACTIVE_ATTRIBUTES, &params);
+    int numAttributes = params;
 
-    attributeNames = new String[numAttributes];
+    attributeNames.reserve(numAttributes);
 
     for (int i = 0; i < numAttributes; i++) {
-        params.clear();
-        params.put(0, 256);
-        type.clear();
-        String name = Gdx.gl20.glGetActiveAttrib(program, i, params, type);
-        int location = Gdx.gl20.glGetAttribLocation(program, name);
-        attributes.put(name, location);
-        attributeTypes.put(name, type.get(0));
+        params = 256;
+        type = 0;
+        std::string name = Gdx::gl20->glGetActiveAttrib(program, i, &params, (char*) &type);
+        int location = Gdx::gl20->glGetAttribLocation(program, name);
+        attributes[name] = location;
+        attributeTypes[name] = type;
         attributeNames[i] = name;
     }
 }
 
 bool ShaderProgram::hasAttribute (const std::string& name) {
-    return attributes.containsKey(name);
+    return attributes.count(name) > 0;
 }
 
 int ShaderProgram::getAttributeType (const std::string& name) {
-    Integer type = attributes.get(name);
-    if (type == null)
-        return 0;
-    else
-        return type;
+    return attributes[name];
 }
 
 int ShaderProgram::getAttributeLocation (const std::string& name) {
-    Integer location = attributes.get(name);
-    if (location == null)
+    if (attributes.count(name) == 0)
         return -1;
     else
-        return location;
+        return attributes[name];
 }
 
 bool ShaderProgram::hasUniform (const std::string& name) {
-    return uniforms.containsKey(name);
+    return uniforms.count(name) > 0;
 }
 
 int ShaderProgram::getUniformType (const std::string& name) {
-    Integer type = attributes.get(name);
-    if (type == null)
-        return 0;
-    else
-        return type;
+    return attributes[name];
 }
 
 int ShaderProgram::getUniformLocation (const std::string& name) {
-    Integer location = uniforms.get(name);
-    if (location == null)
+    if (uniforms.count(name) == 0)
         return -1;
     else
-        return location;
+        return uniforms[name];
 }
 
-std::string* ShaderProgram::getAttributes () {
+std::vector<std::string>& ShaderProgram::getAttributes () {
     return attributeNames;
 }
 
-std::string* ShaderProgram::getUniforms () {
-    return uniformNames;
+std::vector<std::string>& ShaderProgram::getUniforms () {
+  return uniformNames;
 }
 

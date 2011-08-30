@@ -22,13 +22,19 @@
 
 using namespace gdx_cpp::graphics::g2d;
 
-TextureRegion& Animation::getKeyFrame (float stateTime,bool looping) {
+gdx_cpp::graphics::g2d::Animation::Animation(float frameDuration, const std::vector< TextureRegion::ptr >& keyFrames)
+ : keyFrames(keyFrames), frameDuration(frameDuration)
+{
+}
+
+
+TextureRegion::ptr Animation::getKeyFrame (float stateTime, bool looping) {
     int frameNumber = (int)(stateTime / frameDuration);
 
     if (!looping) {
-        frameNumber = Math.min(keyFrames.length - 1, frameNumber);
+        frameNumber = std::min((float) keyFrames.size() - 1, (float) frameNumber);
     } else {
-        frameNumber = frameNumber % keyFrames.length;
+        frameNumber = frameNumber % keyFrames.size();
     }
     return keyFrames[frameNumber];
 }

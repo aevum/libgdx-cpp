@@ -19,12 +19,25 @@
 */
 
 #include "Sprite.hpp"
+#include <cmath>
+#include <string.h>
+
+#include "gdx-cpp/utils/NumberUtils.hpp"
+#include "gdx-cpp/math/MathUtils.hpp"
+#include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
+#include <stdexcept>
 
 using namespace gdx_cpp::graphics::g2d;
+using namespace gdx_cpp::graphics;
+
+gdx_cpp::graphics::g2d::Sprite::Sprite()
+ : color(1,1,1,1)
+{
+    setColor(1, 1, 1, 1);
+}
 
 void Sprite::set (const Sprite& sprite) {
-    if (sprite == null) throw new IllegalArgumentException("sprite cannot be null.");
-    System.arraycopy(sprite.vertices, 0, vertices, 0, SPRITE_SIZE);
+    memcpy(vertices, sprite.vertices, SPRITE_SIZE * sizeof(float));
     texture = sprite.texture;
     x = sprite.x;
     y = sprite.y;
@@ -39,16 +52,16 @@ void Sprite::set (const Sprite& sprite) {
 }
 
 void Sprite::setBounds (float x,float y,float width,float height) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+    this->x = x;
+    this->y = y;
+    this->width = width;
+    this->height = height;
 
     if (dirty) return;
 
     float x2 = x + width;
     float y2 = y + height;
-    float[] vertices = this.vertices;
+
     vertices[X1] = x;
     vertices[Y1] = y;
 
@@ -65,14 +78,14 @@ void Sprite::setBounds (float x,float y,float width,float height) {
 }
 
 void Sprite::setSize (float width,float height) {
-    this.width = width;
-    this.height = height;
+    this->width = width;
+    this->height = height;
 
     if (dirty) return;
 
     float x2 = x + width;
     float y2 = y + height;
-    float[] vertices = this.vertices;
+    
     vertices[X1] = x;
     vertices[Y1] = y;
 
@@ -89,7 +102,7 @@ void Sprite::setSize (float width,float height) {
 }
 
 void Sprite::setPosition (float x,float y) {
-    translate(x - this.x, y - this.y);
+    translate(x - this->x, y - this->y);
 }
 
 void Sprite::translate (float xAmount,float yAmount) {
@@ -98,7 +111,6 @@ void Sprite::translate (float xAmount,float yAmount) {
 
     if (dirty) return;
 
-    float[] vertices = this.vertices;
     vertices[X1] += xAmount;
     vertices[Y1] += yAmount;
 
@@ -114,7 +126,6 @@ void Sprite::translate (float xAmount,float yAmount) {
 
 void Sprite::setColor (const gdx_cpp::graphics::Color& tint) {
     float color = tint.toFloatBits();
-    float[] vertices = this.vertices;
     vertices[C1] = color;
     vertices[C2] = color;
     vertices[C3] = color;
@@ -123,8 +134,9 @@ void Sprite::setColor (const gdx_cpp::graphics::Color& tint) {
 
 void Sprite::setColor (float r,float g,float b,float a) {
     int intBits = ((int)(255 * a) << 24) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r));
-    float color = NumberUtils.intBitsToFloat(intBits & 0xfeffffff);
-    float[] vertices = this.vertices;
+
+    float color =  gdx_cpp::utils::NumberUtils::intBitsToFloat(intBits & 0xfeffffff);
+
     vertices[C1] = color;
     vertices[C2] = color;
     vertices[C3] = color;
@@ -132,13 +144,13 @@ void Sprite::setColor (float r,float g,float b,float a) {
 }
 
 void Sprite::setOrigin (float originX,float originY) {
-    this.originX = originX;
-    this.originY = originY;
+    this->originX = originX;
+    this->originY = originY;
     dirty = true;
 }
 
 void Sprite::setRotation (float degrees) {
-    this.rotation = degrees;
+    this->rotation = degrees;
     dirty = true;
 }
 
@@ -148,8 +160,6 @@ void Sprite::rotate (float degrees) {
 }
 
 void Sprite::rotate90 (bool clockwise) {
-    float[] vertices = this.vertices;
-
     if (clockwise) {
         float temp = vertices[V1];
         vertices[V1] = vertices[V4];
@@ -178,34 +188,33 @@ void Sprite::rotate90 (bool clockwise) {
 }
 
 void Sprite::setScale (float scaleXY) {
-    this.scaleX = scaleXY;
-    this.scaleY = scaleXY;
+    this->scaleX = scaleXY;
+    this->scaleY = scaleXY;
     dirty = true;
 }
 
 void Sprite::setScale (float scaleX,float scaleY) {
-    this.scaleX = scaleX;
-    this.scaleY = scaleY;
+    this->scaleX = scaleX;
+    this->scaleY = scaleY;
     dirty = true;
 }
 
 void Sprite::scale (float amount) {
-    this.scaleX += amount;
-    this.scaleY += amount;
+    this->scaleX += amount;
+    this->scaleY += amount;
     dirty = true;
 }
 
-float* Sprite::getVertices () {
+float* const Sprite::getVertices () {
     if (dirty) {
         dirty = false;
 
-        float[] vertices = this.vertices;
         float localX = -originX;
         float localY = -originY;
         float localX2 = localX + width;
         float localY2 = localY + height;
-        float worldOriginX = this.x - localX;
-        float worldOriginY = this.y - localY;
+        float worldOriginX = this->x - localX;
+        float worldOriginY = this->y - localY;
         if (scaleX != 1 || scaleY != 1) {
             localX *= scaleX;
             localY *= scaleY;
@@ -213,39 +222,40 @@ float* Sprite::getVertices () {
             localY2 *= scaleY;
         }
         if (rotation != 0) {
-            final float cos = MathUtils.cosDeg(rotation);
-            final float sin = MathUtils.sinDeg(rotation);
-            final float localXCos = localX * cos;
-            final float localXSin = localX * sin;
-            final float localYCos = localY * cos;
-            final float localYSin = localY * sin;
-            final float localX2Cos = localX2 * cos;
-            final float localX2Sin = localX2 * sin;
-            final float localY2Cos = localY2 * cos;
-            final float localY2Sin = localY2 * sin;
+            float cos = gdx_cpp::math::utils::cosDeg(rotation);
+            float sin = gdx_cpp::math::utils::sinDeg(rotation);
+            float localXCos = localX * cos;
+            float localXSin = localX * sin;
+            float localYCos = localY * cos;
+            float localYSin = localY * sin;
+            float localX2Cos = localX2 * cos;
+            float localX2Sin = localX2 * sin;
+            float localY2Cos = localY2 * cos;
+            float localY2Sin = localY2 * sin;
 
-            final float x1 = localXCos - localYSin + worldOriginX;
-            final float y1 = localYCos + localXSin + worldOriginY;
+            float x1 = localXCos - localYSin + worldOriginX;
+            float y1 = localYCos + localXSin + worldOriginY;
+            
             vertices[X1] = x1;
             vertices[Y1] = y1;
 
-            final float x2 = localXCos - localY2Sin + worldOriginX;
-            final float y2 = localY2Cos + localXSin + worldOriginY;
+            float x2 = localXCos - localY2Sin + worldOriginX;
+            float y2 = localY2Cos + localXSin + worldOriginY;
             vertices[X2] = x2;
             vertices[Y2] = y2;
 
-            final float x3 = localX2Cos - localY2Sin + worldOriginX;
-            final float y3 = localY2Cos + localX2Sin + worldOriginY;
+            float x3 = localX2Cos - localY2Sin + worldOriginX;
+            float y3 = localY2Cos + localX2Sin + worldOriginY;
             vertices[X3] = x3;
             vertices[Y3] = y3;
 
             vertices[X4] = x1 + (x3 - x2);
             vertices[Y4] = y3 - (y2 - y1);
         } else {
-            final float x1 = localX + worldOriginX;
-            final float y1 = localY + worldOriginY;
-            final float x2 = localX2 + worldOriginX;
-            final float y2 = localY2 + worldOriginY;
+            float x1 = localX + worldOriginX;
+            float y1 = localY + worldOriginY;
+            float x2 = localX2 + worldOriginX;
+            float y2 = localY2 + worldOriginY;
 
             vertices[X1] = x1;
             vertices[Y1] = y1;
@@ -263,8 +273,8 @@ float* Sprite::getVertices () {
     return vertices;
 }
 
-gdx_cpp::math::Rectangle& Sprite::getBoundingRectangle () {
-    final float[] vertices = getVertices();
+const gdx_cpp::math::Rectangle& Sprite::getBoundingRectangle () {
+    getVertices();
 
     float minx = vertices[X1];
     float miny = vertices[Y1];
@@ -295,11 +305,11 @@ gdx_cpp::math::Rectangle& Sprite::getBoundingRectangle () {
     return bounds;
 }
 
-void Sprite::draw (const SpriteBatch& spriteBatch) {
-    spriteBatch.draw(texture, getVertices(), 0, SPRITE_SIZE);
+void Sprite::draw (SpriteBatch& spriteBatch) {
+    spriteBatch.draw(*texture, getVertices(), 20, 0, SPRITE_SIZE);
 }
 
-void Sprite::draw (const SpriteBatch& spriteBatch,float alphaModulation) {
+void Sprite::draw (SpriteBatch& spriteBatch,float alphaModulation) {
     Color color = getColor();
     float oldAlpha = color.a;
     color.a *= alphaModulation;
@@ -345,24 +355,22 @@ float Sprite::getScaleY () {
     return scaleY;
 }
 
-gdx_cpp::graphics::Color& Sprite::getColor () {
+const gdx_cpp::graphics::Color& Sprite::getColor () {
     float floatBits = vertices[C1];
-    int intBits = NumberUtils.floatToRawIntBits(vertices[C1]);
-    Color color = this.color;
-    color.r = (intBits & 0xff) / 255f;
-    color.g = ((intBits >>> 8) & 0xff) / 255f;
-    color.b = ((intBits >>> 16) & 0xff) / 255f;
-    color.a = ((intBits >>> 24) & 0xff) / 255f;
+    int intBits = gdx_cpp::utils::NumberUtils::floatToRawIntBits(vertices[C1]);
+    color.r = (intBits & 0xff) / 255.0f;
+    color.g = (((unsigned int )intBits >> 8) & 0xff) / 255.0f;
+    color.b = (((unsigned int )intBits >> 16) & 0xff) / 255.0f;
+    color.a = (((unsigned int)intBits >> 24) & 0xff) / 255.0f;
     return color;
 }
 
 void Sprite::setRegion (float u,float v,float u2,float v2) {
-    this.u = u;
-    this.v = v;
-    this.u2 = u2;
-    this.v2 = v2;
+    this->u = u;
+    this->v = v;
+    this->u2 = u2;
+    this->v2 = v2;
 
-    float[] vertices = Sprite.this.vertices;
     vertices[U1] = u;
     vertices[V1] = v2;
 
@@ -377,37 +385,36 @@ void Sprite::setRegion (float u,float v,float u2,float v2) {
 }
 
 void Sprite::setU (float u) {
-    this.u = u;
+    this->u = u;
     vertices[U1] = u;
     vertices[U2] = u;
 }
 
 void Sprite::setV (float v) {
-    this.v = v;
+    this->v = v;
     vertices[V2] = v;
     vertices[V3] = v;
 }
 
 void Sprite::setU2 (float u2) {
-    this.u2 = u2;
+    this->u2 = u2;
     vertices[U3] = u2;
     vertices[U4] = u2;
 }
 
 void Sprite::setV2 (float v2) {
-    this.v2 = v2;
+    this->v2 = v2;
     vertices[V1] = v2;
     vertices[V4] = v2;
 }
 
 void Sprite::flip (bool x,bool y) {
-    super.flip(x, y);
-    float[] vertices = Sprite.this.vertices;
+    TextureRegion::flip(x, y);
     if (x) {
         float u = vertices[U1];
         float u2 = vertices[U3];
-        this.u = u;
-        this.u2 = u2;
+        this->u = u;
+        this->u2 = u2;
         vertices[U1] = u2;
         vertices[U2] = u2;
         vertices[U3] = u;
@@ -416,8 +423,8 @@ void Sprite::flip (bool x,bool y) {
     if (y) {
         float v = vertices[V2];
         float v2 = vertices[V1];
-        this.v = v;
-        this.v2 = v2;
+        this->v = v;
+        this->v2 = v2;
         vertices[V1] = v;
         vertices[V2] = v2;
         vertices[V3] = v2;
@@ -426,26 +433,90 @@ void Sprite::flip (bool x,bool y) {
 }
 
 void Sprite::scroll (float xAmount,float yAmount) {
-    float[] vertices = Sprite.this.vertices;
     if (xAmount != 0) {
-        float u = (vertices[U1] + xAmount) % 1;
-        float u2 = u + width / texture.getWidth();
-        this.u = u;
-        this.u2 = u2;
+        float u = std::fmod ((vertices[U1] + xAmount), 1);
+        float u2 = u + width / texture->getWidth();
+        this->u = u;
+        this->u2 = u2;
         vertices[U1] = u;
         vertices[U2] = u;
         vertices[U3] = u2;
         vertices[U4] = u2;
     }
     if (yAmount != 0) {
-        float v = (vertices[V2] + yAmount) % 1;
-        float v2 = v + height / texture.getHeight();
-        this.v = v;
-        this.v2 = v2;
+        float v = std::fmod ((vertices[V2] + yAmount) , 1.0f);
+        float v2 = v + height / texture->getHeight();
+        this->v = v;
+        this->v2 = v2;
         vertices[V1] = v2;
         vertices[V2] = v;
         vertices[V3] = v;
         vertices[V4] = v2;
     }
 }
+
+Sprite::Sprite(Texture::ptr texture) :
+ color(1,1,1,1)
+{
+    initialize(texture, 0, 0, texture->getWidth(), texture->getHeight());
+}
+
+Sprite::Sprite(Texture::ptr texture, int srcWidth, int srcHeight) :
+    color(1,1,1,1)
+{
+    initialize(texture, 0, 0, srcWidth, srcHeight);
+}
+
+Sprite::Sprite(Texture::ptr texture, int srcX, int srcY, int srcWidth, int srcHeight) : color(1,1,1,1) {
+    initialize(texture, srcX, srcY, srcWidth, srcHeight);
+}
+
+void Sprite::initialize(graphics::Texture::ptr texture, int srcX, int srcY, int srcWidth, int srcHeight)
+{
+    if (texture == NULL)
+        throw std::runtime_error("texture cannot be null.");
+
+    this->scaleX = 1;
+    this->scaleY = 1;
+    this->dirty = true;
+    this->x = this->y = this->width = this->height = 0;
+    
+    this->rotation = 0;
+    
+    this->texture = texture;
+    
+    setRegion(srcX, srcY, srcWidth, srcHeight);
+    setColor(1, 1, 1, 1);
+    setSize(std::abs(srcWidth), std::abs(srcHeight));
+    setOrigin(width / 2, height / 2);
+}
+
+Sprite::Sprite(const TextureRegion& region) : color(1,1,1,1) {
+    this->scaleX = 1;
+    this->scaleY = 1;
+    this->dirty = true;
+    this->x = this->y = this->width = this->height = 0;
+    
+    this->rotation = 0;
+    
+    TextureRegion::setRegion(region);
+    setColor(1, 1, 1, 1);
+    setSize(std::abs(region.getRegionWidth()), std::abs(region.getRegionHeight()));
+    setOrigin(width / 2, height / 2);
+}
+
+Sprite::Sprite(const TextureRegion& region, int srcX, int srcY, int srcWidth, int srcHeight) : color(1,1,1,1) {
+    this->scaleX = 1;
+    this->scaleY = 1;
+    this->dirty = true;
+    this->x = this->y = this->width = this->height = 0;
+    
+    this->rotation = 0;
+    
+    TextureRegion::setRegion(region, srcX, srcY, srcWidth, srcHeight);
+    setColor(1, 1, 1, 1);
+    setSize(std::abs(srcWidth), std::abs(srcHeight));
+    setOrigin(width / 2, height / 2);
+}
+
 

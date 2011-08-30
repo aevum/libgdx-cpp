@@ -21,15 +21,27 @@
 #ifndef GDX_CPP_ASSETS_ASSETDESCRIPTOR_HPP_
 #define GDX_CPP_ASSETS_ASSETDESCRIPTOR_HPP_
 
+#include <string>
+#include "AssetLoaderParameters.hpp"
+#include "gdx-cpp/utils/Aliases.hpp"
+#include "AssetType.hpp"
+
 namespace gdx_cpp {
 namespace assets {
 
+    
 class AssetDescriptor {
 public:
-    std::string& toString ();
+    typedef ref_ptr_maker<AssetDescriptor>::type ptr;
+    
+    
+    AssetDescriptor(const std::string& filename, AssetType& type, AssetLoaderParameters::ptr params);
 
-protected:
-
+    const std::string& toString ();
+    
+    std::string fileName;
+    const AssetType& type;
+    AssetLoaderParameters::ptr params;
 
 private:
 

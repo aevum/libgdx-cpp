@@ -1,0 +1,324 @@
+/*
+    Copyright 2011 <copyright holder> <email>
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+
+#ifndef GDX_CPP_UTILS_BUFFER_HPP
+#define GDX_CPP_UTILS_BUFFER_HPP
+
+#include "Aliases.hpp"
+#include <stdexcept>
+#include <vector>
+#include <sstream>
+#include <string.h>
+
+namespace gdx_cpp {
+
+namespace utils {
+
+struct buffer_base {
+public:
+    typedef ref_ptr_maker<char>::type char_ptr;
+    buffer_base(char_ptr bf, int capacity, int position, int mark, int limit)
+            : bf(bf)
+            , _capacity(capacity)
+            , _position(position)
+            , _mark(mark)
+            , _limit(limit)
+    {
+    }
+
+    buffer_base() : _capacity(0)
+            , _position(0)
+            , _mark(-1)
+            , _limit(0) {
+    }
+
+    char_ptr bf;
+    int _capacity;
+    int _position;
+    int _mark;
+    int _limit;
+};
+
+template <typename T>
+struct buffer : public buffer_base {
+    buffer(int mark, int pos, int lim , int capacity)
+            : buffer_base(buffer_base::char_ptr(new char[capacity]), capacity, pos, mark, lim)
+    {
+        limit(lim);
+        position(pos);
+        if (mark >= 0) {
+            if (mark > pos) {
+                std::stringstream ss;
+                ss << " mark > position: (" << mark << " > " << pos + ")";
+                throw std::runtime_error(ss.str());
+            }
+        }
+    }
+
+    buffer() : buffer_base() {
+    }
+    
+    int capacity() {
+        return _capacity;
+    }
+
+    int position() {
+        return _position;
+    }
+
+    template <typename Other>
+    buffer<Other> convert() {
+        return buffer<Other>((buffer_base&) *this);
+    }
+
+    void put(const T& value) {
+        ((T*)bf.get())[nextPutIndex()] = value;
+    }
+
+    T& get() {
+        return ((T*)bf.get())[nextGetIndex()];
+    }
+
+    T& get(const int position) {
+        return ((T*)bf.get())[checkIndex(position)];
+    }
+
+    buffer<T>& get(T* dst, int dstSize, int offset, int length) {
+        checkBounds(offset, length, dstSize);
+        if (length > remaining())
+            throw std::runtime_error("buffer underflow");
+        int end = offset + length;
+        for (int i = offset; i < end; i++)
+            dst[i] = get();
+        return *this;
+    }
+
+    buffer<T>& get(std::vector<T>& dst, int offset, int length) {
+        return get(&dst[0], dst.size(), offset, length);
+    }
+
+    T& operator[](int position) {
+        return ((T*)bf.get())[checkIndex(position)];
+    }
+
+    buffer<T>& position(int newPosition) {
+        if ((newPosition > _limit) || (newPosition < 0))
+            throw std::runtime_error("");
+        _position = newPosition;
+        if (_mark > _position) clearMark();
+        return *this;
+    }
+
+    int limit() {
+        return _limit;
+    }
+
+    buffer<T>& limit(int newLimit)
+    {
+        if ((newLimit > _capacity) || (newLimit < 0))
+            throw std::runtime_error("");
+        _limit = newLimit;
+        if (_position > _limit) _position = _limit;
+        if (_mark > _position) clearMark();
+        return *this;
+    }
+
+    template <typename U>
+    void copy(const U* array, int count, int offset) {
+        T* casted_array = *this;
+        memcpy(casted_array + offset, array, sizeof(U) * count);
+    }
+
+    template <typename U>
+    void copy(const std::vector<U>& array, int count, int offset) {
+        T* casted_array = *this;
+        memcpy(casted_array, &array[0] + offset, sizeof(U) * count);
+    }
+
+    buffer<T>& compact() {
+        memcpy(bf.get(), bf.get() + position(), remaining());
+        position(remaining());
+        limit(capacity());
+        discardMark();
+        return *this;
+    }
+
+    buffer<T>& reset() {
+        int m = _mark;
+        if (m < 0)
+            throw std::runtime_error("buffer underflow");
+        _position = m;
+        return *this;
+    }
+
+
+    //SHIVER ME TIMBERS!!! YARRRR
+    template <typename U>
+    operator U*() {
+        return (U*) bf.get();
+    }
+
+    buffer<T>& mark() {
+        mark = _position;
+        return *this;
+    }
+
+    buffer<T>& clear() {
+        _position = 0;
+        _limit = _capacity;
+        clearMark();
+        return *this;
+    }
+
+    buffer<T>& flip() {
+        _limit = _position;
+        _position = 0;
+        clearMark();
+        return *this;
+    }
+
+    buffer<T>& rewind() {
+        _position = 0;
+        clearMark();
+        return *this;
+    }
+
+    int remaining() {
+        return _limit - _position;
+    }
+
+    bool hasRemaining() {
+        return _position < _limit;
+    }
+
+    buffer<T>& put(T* src, int size, int offset, int length) {
+        checkBounds(offset, length, size);
+        if (length > remaining())
+            throw std::runtime_error("buffer overflow");
+        int end = offset + length;
+        for (int i = offset; i < end; i++)
+            this->put(src[i]);
+
+        return *this;
+    }
+
+    buffer<T>& put(const T* src, int size) {
+        return put(src, size, 0, size);
+    }
+
+    buffer<T>& put(const std::vector<T>& src) {
+        return put(src, 0, src.size());
+    }
+
+    buffer<T>& put(const std::vector<T>& src, int offset, int length) {
+        checkBounds(offset, length, src.size());
+        if (length > remaining())
+            throw std::runtime_error("buffer overflow");
+        int end = offset + length;
+        for (int i = offset; i < end; i++)
+            this->put(src[i]);
+
+        return *this;
+    }
+
+    buffer(const buffer_base& other)
+            : buffer_base(other)
+    {
+    }
+    int nextGetIndex() {
+        if (_position >= _limit)
+            throw std::runtime_error("buffer underflow");
+        return _position++;
+    }
+
+    int nextGetIndex(int nb) {
+        if (_limit - _position < nb)
+            throw std::runtime_error("buffer underflow");
+        int p = _position;
+        _position += nb;
+        return p;
+    }
+
+    int nextPutIndex() {
+        if (_position >= _limit)
+            throw std::runtime_error("buffer overflow");
+        return _position++;
+    }
+
+    int nextPutIndex(int nb) {
+        if (_limit - _position < nb)
+            throw std::runtime_error("buffer overflow");
+        int p = _position;
+        _position += nb;
+        return p;
+    }
+
+    int checkIndex(int i) {
+        if ((i < 0) || (i >= _limit))
+            throw std::runtime_error("invalid index");
+        return i;
+    }
+
+    int checkIndex(int i, int nb) {
+        if ((i < 0) || (nb > _limit - i))
+            throw std::runtime_error();
+        return i;
+    }
+
+    void discardMark() {
+        _mark = -1;
+    }
+
+    static void checkBounds(int off, int len, int size) {
+        if ((off | len | (off + len) | (size - (off + len))) < 0)
+            throw std::runtime_error("index out of bounds");
+    }
+
+    int _markValue() {
+        return _mark;
+    }
+
+    void clearMark() {
+        _mark = -1;
+    }
+};
+
+template <typename T>
+struct default_buffer : public buffer<T> {
+    default_buffer(int capacity) :
+            buffer<T>(-1, 0, capacity, capacity)
+    {
+    }
+
+    default_buffer() : buffer<T>() {
+    }
+
+    default_buffer(const buffer_base& other) :
+            buffer<T>(other)
+    {
+    }
+};
+
+typedef default_buffer<char> byte_buffer;
+typedef default_buffer<short> short_buffer;
+typedef default_buffer<float> float_buffer;
+typedef default_buffer<int> int_buffer;
+
+}
+}
+
+#endif // GDX_CPP_UTILS_BUFFER_HPP

@@ -19,42 +19,55 @@
 */
 
 #include "PixmapTextureData.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Application.hpp"
 
 using namespace gdx_cpp::graphics::glutils;
 
 bool PixmapTextureData::disposePixmap () {
-    return disposePixmap;
+    return _disposePixmap;
 }
 
-gdx_cpp::graphics::Pixmap& PixmapTextureData::getPixmap () {
+gdx_cpp::graphics::Pixmap::ptr PixmapTextureData::getPixmap () {
     return pixmap;
 }
 
 int PixmapTextureData::getWidth () {
-    return pixmap.getWidth();
+    return pixmap->getWidth();
 }
 
 int PixmapTextureData::getHeight () {
-    return pixmap.getHeight();
+    return pixmap->getHeight();
 }
 
-gdx_cpp::graphics::Pixmap::Format& PixmapTextureData::getFormat () {
-    return format;
+const gdx_cpp::graphics::Pixmap::Format* PixmapTextureData::getFormat () {
+    return &format;
 }
 
 bool PixmapTextureData::useMipMaps () {
-    return useMipMaps;
+    return _useMipMaps;
 }
 
 bool PixmapTextureData::isManaged () {
     return false;
 }
 
-TextureDataType& PixmapTextureData::getType () {
-    return TextureDataType.Pixmap;
+const gdx_cpp::graphics::TextureData::TextureDataType& PixmapTextureData::getType () {
+    return TextureDataType::Pixmap;
 }
 
 void PixmapTextureData::uploadCompressedData () {
-    throw new GdxRuntimeException("This TextureData implementation does not upload data itself");
+    gdx_cpp::Gdx::app->error(__FILE__) << "This TextureData implementation does not upload data itself";
 }
+
+PixmapTextureData::PixmapTextureData(gdx_cpp::graphics::Pixmap::ptr pixmap,
+                                     gdx_cpp::graphics::Pixmap::Format* format,
+                                     bool useMipMaps, bool disposePixmap)
+: _useMipMaps(useMipMaps)
+, _disposePixmap(disposePixmap)
+, pixmap(pixmap)
+, format(format == NULL ? pixmap->getFormat() : *format)
+{
+}
+
 

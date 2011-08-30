@@ -20,6 +20,7 @@
 
 #ifndef GDX_CPP__GAME_HPP_
 #define GDX_CPP__GAME_HPP_
+#include "Screen.hpp"
 
 namespace gdx_cpp {
 namespace  {
@@ -31,14 +32,14 @@ public:
     void resume ();
     void render ();
     void resize (int width,int height);
-    void setScreen (const Screen& screen);
-    Screen& getScreen ();
+    void setScreen (Screen* screen);
+    Screen* getScreen ();
 
 protected:
 
 
 private:
-
+    Screen* screen;
 };
 
 } // namespace gdx_cpp

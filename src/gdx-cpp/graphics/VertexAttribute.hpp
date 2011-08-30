@@ -21,18 +21,19 @@
 #ifndef GDX_CPP_GRAPHICS_VERTEXATTRIBUTE_HPP_
 #define GDX_CPP_GRAPHICS_VERTEXATTRIBUTE_HPP_
 
+#include <string>
+
 namespace gdx_cpp {
 namespace graphics {
 
 class VertexAttribute {
 public:
-    int usage;
-    int numComponents;
-
-protected:
-
-
-private:
+  VertexAttribute(int usage, int numComponents, const std::string& alias);
+  
+  int usage;
+  int numComponents;
+  int offset;
+  std::string alias;
 
 };
 

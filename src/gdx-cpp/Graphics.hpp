@@ -21,18 +21,21 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <vector>
 
 namespace gdx_cpp {
 
+namespace graphics {
 class GLCommon;
 class GL10;
 class GL11;
 class GL20;
 class GLU;
-
+}
 class Pixmap;
 
 class Graphics {
+public:
     /** Enumeration describing different types of {@link Graphics} implementations.
      *
      * @author mzechner */
@@ -96,158 +99,59 @@ class Graphics {
         }
     };
 
-    /** Returns whether OpenGL ES 1.1 is available. If it is you can get an instance of {@link GL11} via {@link #getGL11()} to
-     * access OpenGL ES 1.1 functionality. This also implies that {@link #getGL10()} will return an instance.
-     *
-     * @return whether OpenGL ES 1.1 is available */
     virtual bool isGL11Available () = 0;
 
-    /** Returns whether OpenGL ES 2.0 is available. If it is you can get an instance of {@link GL20} via {@link #getGL20()} to
-     * access OpenGL ES 2.0 functionality. Note that this functionality will only be available if you instructed the
-     * {@link Application} instance to use OpenGL ES 2.0!
-     *
-     * @return whether OpenGL ES 2.0 is available */
     virtual bool isGL20Available () = 0;
 
-    /** @return a {@link GLCommon} instance */
-    virtual GLCommon getGLCommon () = 0;
+    virtual graphics::GLCommon* getGLCommon () = 0;
 
-    /** @return the {@link GL10} instance or null if not supported */
-    virtual GL10 getGL10 () = 0;
+    virtual graphics::GL10* getGL10 () = 0;
 
-    /** @return the {@link GL11} instance or null if not supported */
-    virtual GL11 getGL11 () = 0;
+    virtual graphics::GL11* getGL11 () = 0;
 
-    /** @return the {@link GL20} instance or null if not supported */
-    virtual GL20 getGL20 () = 0;
+    virtual graphics::GL20* getGL20 () = 0;
 
-    /** @return the {@link GLU} instance */
-    virtual GLU getGLU () = 0;
+    virtual graphics::GLU* getGLU () = 0;
 
-    /** @return the width in pixels(*c) + position of the display surface */
     virtual int getWidth () = 0;
 
-    /** @return the height in pixels of the display surface */
     virtual int getHeight () = 0;
 
-    /** @return the time span between the current frame and the last frame in seconds */
     virtual float getDeltaTime () = 0;
 
-    /** @return the average number of frames per second */
     virtual int getFramesPerSecond () = 0;
 
-    /** @return the {@link GraphicsType} of this Graphics instance */
     virtual GraphicsType getType () = 0;
 
-    /** @return the pixels per inc(*c) + positionh on the x-axis */
     virtual float getPpiX () = 0;
 
-    /** @return the pixels per inch on the y-axis */
     virtual float getPpiY () = 0;
 
-    /** @return the pixels per centimeter on the x-axis */
     virtual float getPpcX () = 0;
 
-    /** @return the pixels per centimeter on the y-axis. */
     virtual float getPpcY () = 0;
 
-    /** This is a scaling factor for the Density Independent Pixel unit, following the same conventions as
-     * android.util.DisplayMetrics#density, where one DIP is one pixel on an approximately 160 dpi screen. Thus on a 160dpi screen
-     * this density value will be 1; on a 120 dpi screen it would be .75; etc.
-     *
-     * @return the logical density of the Display. */
     virtual float getDensity () = 0;
 
-    /** Whether the given backend supports a display mode change via calling {@link Graphics#setDisplayMode(DisplayMode)}
-     *
-     * @return whether display mode changes are supported or not. */
     virtual bool supportsDisplayModeChange () = 0;
 
-    /** @return the supported fullscreen {@link DisplayMode}. */
     virtual std::vector<DisplayMode>& getDisplayModes () = 0;
 
-    /** @return the display mode of the primary graphics adapter. */
     virtual DisplayMode getDesktopDisplayMode () = 0;
 
-    /** Sets the current {@link DisplayMode}. Returns false in case the operation failed. Not all backends support this methods. See
-     * {@link Graphics#supportsDisplayModeChange()}.
-     *
-     * @param displayMode the display mode.
-     * @return whether the operation succeeded. */
     virtual bool setDisplayMode (DisplayMode displayMode) = 0;
 
-    /** Tries to set the display mode width the given width and height in pixels. Will always succeed if fullscreen is set to false,
-     * in which case the application will be run in windowed mode. Use {@link Graphics#getDisplayModes()} to get a list of
-     * supported fullscreen modes.
-     *
-     * @param width the width in pixels
-     * @param height the height in pixels
-     * @param fullscreen whether to use fullscreen rendering or not */
     virtual bool setDisplayMode (int width, int height, bool fullscreen) = 0;
 
-    /** Sets the title of the window. Ignored on Android.
-     *
-     * @param title the title. */
     virtual void setTitle (const std::string& title) = 0;
 
-    /** Sets the icon of the window. Ignored on Android.
-     *
-     * @param pixmap */
     virtual void setIcon (Pixmap& pixmap) = 0;
 
-    /** Enable/Disable vsynching. This is a best-effort attempt which might not work on all platforms.
-     *
-     * @param vsync vsync enabled or not. */
     virtual void setVSync (bool vsync) = 0;
 
-    /** @return the format of the color, depth and stencil buffer in a {@link BufferFormat} instance */
     virtual BufferFormat getBufferFormat () = 0;
 
-    /** @param extension the extension name
-     * @return whether the extension is supported */
     virtual bool supportsExtension (const std::string& extension) = 0;
-
-    // /**
-    // * Opens the first back facing video camera. Only one camera
-    // * can be opened at any given time.
-    // * @param width the width of the image to be taken in pixels.
-    // * @param height the height of the image to be taken in pixels.
-    // * @param portrait whether the camera should be opened in portrait mode or
-    // not (landscape otherwise)
-    // * @return true if this succeeded, false otherwise.
-    // */
-    // public bool openCamera(int width, int height, bool portrait);
-    //
-    // /**
-    // * @return true in case a new camera frame arrived since the last call to
-    // {@link #getCameraFrame()}.
-    // */
-    // public bool hasNewCameraFrame();
-    //
-    // /**
-    // * Returns a {@link TextureRegion} containing the latest frame of the
-    // currently opened camera. Will
-    // * throw a GdxRuntimeException in case the camera is not opened.
-    // * @return a TextureRegion containing the camera snapshot.
-    // */
-    // public TextureRegion getCameraFrame();
-    //
-    // /**
-    // * Saves the latest frame of the currently opened camera to the given
-    // {@link ByteBuffer}. The pixels are stored
-    // * in RGB565 format. The provided ByteBuffer must be able to store 2 *
-    // cameraWidth * cameraHeight bytes. The ByteBuffer <b>must</b>
-    // * be a direct ByteBuffer. The method will write pixels starting from the
-    // ByteBuffer's current position.
-    // * @param pixels the direct ByteBuffer to store the pixels in.
-    // */
-    // public void getCameraFrame(ByteBuffer pixels);
-    //
-    // /**
-    // * Closes the camera. Has no effect in case the camera has not been
-    // opened.
-    // */
-    // public void closeCamera();
 };
 
 }

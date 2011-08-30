@@ -53,23 +53,23 @@ bool Rectangle::operator==(const Rectangle& other) const
 ///TODO: return ...;
 }
 
-float Rectangle::getX ()
+float Rectangle::getX () const
 {
     return x;
 }
-float Rectangle::setX (float _x)
+float Rectangle::setX (float _x) 
 {
     x = _x;
 }
-float Rectangle::getY ()
+float Rectangle::getY () const
 {
     return y;
 }
-float Rectangle::setY (float _y)
+float Rectangle::setY (float _y) 
 {
     y = _y;
 }
-float Rectangle::getWidth ()
+float Rectangle::getWidth () const
 {
     return width;
 }
@@ -77,7 +77,7 @@ float Rectangle::setWidth (float _width)
 {
     width = _width;
 }
-float Rectangle::getHeight ()
+float Rectangle::getHeight () const
 {
     return height;
 }
@@ -126,20 +126,20 @@ void Rectangle::set (const Rectangle& rect) {
 
 void Rectangle::merge(const Rectangle& rect)
 {
-    float minX = stlp_std::min(x, rect.x);
-    float maxX = stlp_std::max(x + width, rect.x + rect.width);
+    float minX = std::min(x, rect.x);
+    float maxX = std::max(x + width, rect.x + rect.width);
     x = minX;
     width = maxX - minX;
 
-    float minY = stlp_std::min(y, rect.y);
-    float maxY = stlp_std::max(y + height, rect.y + rect.height);
+    float minY = std::min(y, rect.y);
+    float maxY = std::max(y + height, rect.y + rect.height);
     y = minY;
     height = maxY - minY;
 }
 
-stlport::string Rectangle::toString ()
+std::string Rectangle::toString ()
 {
-    stlport::stringstream ss;
+    std::stringstream ss;
     ss << x << "," << y << "," << width << "," << height;
     return ss.str();
 }

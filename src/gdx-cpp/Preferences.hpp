@@ -22,7 +22,6 @@
 #define GDX_CPP__PREFERENCES_HPP_
 
 namespace gdx_cpp {
-namespace  {
 
 class Preferences {
 public:
@@ -54,6 +53,5 @@ private:
 };
 
 } // namespace gdx_cpp
-} // namespace
 
 #endif // GDX_CPP__PREFERENCES_HPP_

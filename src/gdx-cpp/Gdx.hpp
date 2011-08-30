@@ -21,26 +21,48 @@
 #ifndef GDX_CPP__GDX_HPP_
 #define GDX_CPP__GDX_HPP_
 
-#include "Application.hpp"
-#include "Graphics.hpp"
-#include "Audio.hpp"
-#include "Files.hpp"
-#include "Input.hpp"
-
 namespace gdx_cpp {
+
+class Application;
+class Graphics;
+class Audio;
+class Input;
+class Files;
+
+namespace graphics {
+    class GLCommon;
+    class GL10;
+    class GL11;
+    class GL20;
+    class GLU;
+}
+
+namespace implementation {
+    class System;
+    class ThreadFactory;
+    class MutexFactory;
+}
 
 class Gdx {
 public:
-    static Application& app;
-    static Graphics& graphics;
-    static Audio& audio;
-    static Input& input;
-    static Files& files;
-    static GLCommon& gl;
-    static GL10& gl10;
-    static GL11& gl11;
-    static GL20& gl20;
-    static GLU& glu;
+    static Application* app;
+    static Graphics* graphics;
+    static Audio* audio;
+    static Input* input;
+    static Files* files;
+    static graphics::GLCommon* gl;
+    static graphics::GL10* gl10;
+    static graphics::GL11* gl11;
+    static graphics::GL20* gl20;
+    static graphics::GLU* glu;
+
+    static implementation::System* system;
+    static implementation::ThreadFactory* threadFactory;
+    static implementation::MutexFactory* mutexFactory;
+
+    static void initialize(Application* application, Graphics* graphics,
+                           Audio* audio, Input* input, Files* files, implementation::System* system,
+                           implementation::ThreadFactory* threadFactory, implementation::MutexFactory* mutexFactory);
 };
 
 } // namespace gdx_cpp

@@ -21,16 +21,20 @@
 #ifndef GDX_CPP_AUDIO_ANALYSIS_DFT_HPP_
 #define GDX_CPP_AUDIO_ANALYSIS_DFT_HPP_
 
+#include "FourierTransform.hpp"
+#include <vector>
+
 namespace gdx_cpp {
 namespace audio {
 namespace analysis {
 
-class DFT {
+class DFT : public FourierTransform{
 public:
+    DFT (int timeSize, float sampleRate);
     void scaleBand (int i,float s);
     void setBand (int i,float a);
-    void forward ();
-    void inverse ();
+    void forward (std::vector< float >& samples);
+    void inverse (std::vector< float >& buffer);
 
 protected:
     void allocateArrays ();
@@ -39,6 +43,8 @@ private:
     void buildTrigTables ();
     float sin (int i);
     float cos (int i);
+    std::vector<float> sinlookup;
+    std::vector<float> coslookup;
 };
 
 } // namespace gdx_cpp

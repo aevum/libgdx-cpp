@@ -91,7 +91,7 @@ bool Frustum::sphereInFrustumWithoutNearFar (const Vector3& center,float radius)
     return true;
 }
 
-bool Frustum::boundsInFrustum (const gdx_cpp::math::collision::BoundingBox& bounds) {
+bool Frustum::boundsInFrustum (gdx_cpp::math::collision::BoundingBox& bounds) {
     const std::vector<Vector3>& corners = bounds.getCorners();
     int len = corners.size();
 

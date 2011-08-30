@@ -1,3 +1,21 @@
+/*
+ *  Copyright 2011 Aevum Software aevum @ aevumlab.com
+ * 
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ * 
+ *  @author Victor Vicente de Carvalho victor.carvalho@aevumlab.com
+ *  @author Ozires Bortolon de Faria ozires@aevumlab.com
+ */
 
 #ifndef GDXCPP_INPUT_PROCESSOR_H
 #define GDXCPP_INPUT_PROCESSOR_H
@@ -5,65 +23,15 @@
 namespace gdx_cpp {
   
 class InputProcessor {
-
-  /** Called when a key was pressed
-   * 
-   * @param keycode one of the constants in {@link Input.Keys}
-   * @return whether the input was processed */
+public:
   virtual bool keyDown (int keycode) = 0;
-  
-  /** Called when a key was released
-   * 
-   * @param keycode one of the constants in {@link Input.Keys}
-   * @return whether the input was processed */
   virtual bool keyUp (int keycode) = 0;
-  
-  /** Called when a key was typed
-   * 
-   * @param character The character
-   * @return whether the input was processed */
   virtual bool keyTyped (char character) = 0;
-  
-  /** Called when the screen was touched or a mouse button was pressed. The button parameter will be {@link Buttons#LEFT} on
-   * Android.
-   *
-   * @param x The x coordinate, origin is in the upper left corner
-   * @param y The y coordinate, origin is in the upper left corner
-   * @param pointer the pointer for the event.
-   * @param button the button
-   * @return whether the input was processed */
   virtual bool touchDown (int x, int y, int pointer, int button) = 0;
-  
-  /** Called when a finger was lifted or a mouse button was released. The button parameter will be {@link Buttons#LEFT} on
-   * Android.
-   *
-   * @param x The x coordinate
-   * @param y The y coordinate
-   * @param pointer the pointer for the event.
-   * @param button the button
-   * @return whether the input was processed */
   virtual bool touchUp (int x, int y, int pointer, int button) = 0;
-  
-  /** Called when a finger or the mouse was dragged.
-   * 
-   * @param x The x coordinate
-   * @param y The y coordinate
-   * @param pointer the pointer for the event.
-   * @return whether the input was processed */
   virtual bool touchDragged (int x, int y, int pointer) = 0;
-  
-  /** Called when the mouse was moved without any buttons being pressed. Will not be called on Android.
-   * 
-   * @param x The x coordinate
-   * @param y The y coordinate
-   * @return whether the input was processed */
   virtual bool touchMoved (int x, int y) = 0;
-  
-  /** Called when the mouse wheel was scrolled. Will not be called on Android.
-   * @param amount the scroll amount, -1 or 1 depending on the direction the wheel was scrolled.
-   * @return whether the input was processed. */
   virtual bool scrolled (int amount) = 0;
-  
 };
 
 }

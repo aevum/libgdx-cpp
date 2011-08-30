@@ -21,11 +21,23 @@
 #ifndef GDX_CPP_GRAPHICS_COLOR_HPP_
 #define GDX_CPP_GRAPHICS_COLOR_HPP_
 
+#include <string>
+
 namespace gdx_cpp {
 namespace graphics {
 
 class Color {
 public:
+    static const Color WHITE;
+    static const Color BLACK;
+    static const Color RED;
+    static const Color GREEN;
+    static const Color BLUE;
+
+    float r, g, b, a;
+
+    Color (float r, float g, float b, float a) ;
+    Color (const gdx_cpp::graphics::Color& color) ;
     Color& set (const Color& color);
     Color& mul (const Color& color);
     Color& mul (float value);
@@ -33,13 +45,13 @@ public:
     Color& sub (const Color& color);
     void clamp ();
     void set (float r,float g,float b,float a);
-    bool equals (const Object& o);
+    bool equals (const gdx_cpp::graphics::Color& o);
     int hashCode ();
-    std::string& toString ();
+    const std::string toString ();
     static float toFloatBits (int r,int g,int b,int a);
     static int toIntBits (int r,int g,int b,int a);
-    float toFloatBits ();
-    int toIntBits ();
+    float toFloatBits () const;
+    int toIntBits () const;
     static float toFloatBits (float r,float g,float b,float a);
     static int alpha (float alpha);
     static int luminanceAlpha (float luminance,float alpha);

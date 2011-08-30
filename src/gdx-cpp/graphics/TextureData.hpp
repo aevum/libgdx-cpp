@@ -21,20 +21,38 @@
 #ifndef GDX_CPP_GRAPHICS_TEXTUREDATA_HPP_
 #define GDX_CPP_GRAPHICS_TEXTUREDATA_HPP_
 
+#include "gdx-cpp/utils/Aliases.hpp"
+#include "Pixmap.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 
 class TextureData {
 public:
-    virtual   TextureDataType& getType () = 0;
-    virtual   Pixmap& getPixmap () = 0;
-    virtual   bool disposePixmap () = 0;
-    virtual   void uploadCompressedData () = 0;
-    virtual   int getWidth () = 0;
-    virtual   int getHeight () = 0;
-    virtual   gdx_cpp::graphics::Pixmap::Format& getFormat () = 0;
-    virtual   bool useMipMaps () = 0;
-    virtual   bool isManaged () = 0;
+    typedef ref_ptr_maker< TextureData >::type ptr;
+
+    struct TextureDataType {
+        const static TextureDataType Pixmap;
+        const static TextureDataType Compressed;
+
+        bool operator == (const TextureDataType& other) const {
+            return this == &other;
+        }
+
+        bool operator != (const TextureDataType& other) const {
+            return !(*this == other);
+        }
+    };
+
+    virtual const TextureDataType& getType () = 0;
+    virtual graphics::Pixmap::ptr getPixmap () = 0;
+    virtual bool disposePixmap () = 0;
+    virtual void uploadCompressedData () = 0;
+    virtual int getWidth () = 0;
+    virtual int getHeight () = 0;
+    virtual const Pixmap::Format* getFormat () = 0;
+    virtual bool useMipMaps () = 0;
+    virtual bool isManaged () = 0;
 
 protected:
 

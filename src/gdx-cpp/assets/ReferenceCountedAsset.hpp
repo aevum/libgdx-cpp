@@ -21,13 +21,15 @@
 #ifndef GDX_CPP_ASSETS_REFERENCECOUNTEDASSET_HPP_
 #define GDX_CPP_ASSETS_REFERENCECOUNTEDASSET_HPP_
 
+#include "Asset.hpp"
+
 namespace gdx_cpp {
 namespace assets {
 
-class ReferenceCountedAsset {
+class ReferenceCountedAsset : public Asset {
 public:
-    virtual   void incRefCount () = 0;
-    virtual   int getRefCount () = 0;
+    virtual void incRefCount () = 0;
+    virtual int getRefCount () = 0;
 
 protected:
 

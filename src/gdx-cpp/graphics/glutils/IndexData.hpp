@@ -21,6 +21,11 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_INDEXDATA_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_INDEXDATA_HPP_
 
+#include <vector>
+
+#include "gdx-cpp/utils/Disposable.hpp"
+#include "gdx-cpp/utils/Buffer.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 namespace glutils {
@@ -29,18 +34,12 @@ class IndexData: public gdx_cpp::utils::Disposable {
 public:
     virtual   int getNumIndices () = 0;
     virtual   int getNumMaxIndices () = 0;
-    virtual   void setIndices (int offset,int count) = 0;
-    virtual   ShortBuffer& getBuffer () = 0;
+    virtual   void setIndices (const std::vector<short>& indices, int offset,int count) = 0;
+    virtual   utils::short_buffer& getBuffer () = 0;
     virtual   void bind () = 0;
     virtual   void unbind () = 0;
     virtual   void invalidate () = 0;
     virtual   void dispose () = 0;
-
-protected:
-
-
-private:
-
 };
 
 } // namespace gdx_cpp

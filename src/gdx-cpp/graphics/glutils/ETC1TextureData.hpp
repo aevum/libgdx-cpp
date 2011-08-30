@@ -21,27 +21,34 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_ETC1TEXTUREDATA_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_ETC1TEXTUREDATA_HPP_
 
+#include "gdx-cpp/graphics/TextureData.hpp"
+
 namespace gdx_cpp {
+namespace files {
+
+class FileHandle;
+}
+
 namespace graphics {
 namespace glutils {
 
 class ETC1TextureData: public gdx_cpp::graphics::TextureData {
 public:
-    TextureDataType& getType ();
-    gdx_cpp::graphics::Pixmap& getPixmap ();
+    const TextureData::TextureDataType& getType ();
+    gdx_cpp::graphics::Pixmap::ptr getPixmap ();
     bool disposePixmap ();
     void uploadCompressedData ();
     int getWidth ();
     int getHeight ();
-    gdx_cpp::graphics::Pixmap::Format& getFormat ();
+    const gdx_cpp::graphics::Pixmap::Format& getFormat ();
     bool useMipMaps ();
     bool isManaged ();
 
 protected:
-
-
-private:
-
+    files::FileHandle file;
+    bool useMipMaps;
+    int width = 0;
+    int height = 0;
 };
 
 } // namespace gdx_cpp

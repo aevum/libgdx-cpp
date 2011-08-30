@@ -21,28 +21,47 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_VERTEXBUFFEROBJECTSUBDATA_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_VERTEXBUFFEROBJECTSUBDATA_HPP_
 
+#include "VertexData.hpp"
+
+class tm;
 namespace gdx_cpp {
 namespace graphics {
 namespace glutils {
 
-class VertexBufferObjectSubData {
+class ShaderProgram;
+
+
+class VertexBufferObjectSubData : public VertexData {
 public:
+
+    VertexBufferObjectSubData (bool isStatic, int numVertices, const std::vector<VertexAttribute>& attributes) ;
+        
     gdx_cpp::graphics::VertexAttributes& getAttributes ();
     int getNumVertices ();
     int getNumMaxVertices ();
-    FloatBuffer& getBuffer ();
-    void setVertices (int offset,int count);
+    void setVertices(const std::vector<float>& vertices, int offset,int count);
+
+    utils::float_buffer& getBuffer();
     void bind ();
-    void bind (const ShaderProgram& shader);
+    void bind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
     void unbind ();
-    void unbind (const ShaderProgram& shader);
+    void unbind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
     void invalidate ();
     void dispose ();
     int getBufferHandle ();
 
 protected:
-
-
+    VertexAttributes attributes;
+    utils::float_buffer buffer;
+    utils::byte_buffer byteBuffer;
+    
+    int bufferHandle;
+    bool isDirect;
+    bool isStatic;
+    int usage;
+    bool isDirty;
+    bool isBound;
+    int tmpHandle;
 private:
     int createBufferObject ();
 };

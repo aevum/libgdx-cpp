@@ -21,6 +21,8 @@
 #ifndef GDX_CPP_INPUT_REMOTESENDER_HPP_
 #define GDX_CPP_INPUT_REMOTESENDER_HPP_
 
+#include "gdx-cpp/InputProcessor.hpp"
+
 namespace gdx_cpp {
 namespace input {
 

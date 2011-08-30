@@ -21,42 +21,56 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_TEXTUREREGION_HPP_
 #define GDX_CPP_GRAPHICS_G2D_TEXTUREREGION_HPP_
 
+#include "gdx-cpp/graphics/Texture.hpp"
+#include <gdx-cpp/utils/MatrixBase.hpp>//TODO check
+
 namespace gdx_cpp {
 namespace graphics {
 namespace g2d {
 
 class TextureRegion {
 public:
-    void setRegion (const gdx_cpp::graphics::Texture& texture);
+    typedef ref_ptr_maker<TextureRegion>::type ptr;
+
+    TextureRegion ();
+    TextureRegion (Texture::ptr _texture);
+    TextureRegion (Texture::ptr _texture, int x, int y, int width, int height);
+    TextureRegion (Texture::ptr _texture, float u, float v, float u2, float v2);
+    TextureRegion (gdx_cpp::graphics::g2d::TextureRegion& region);
+    TextureRegion (gdx_cpp::graphics::g2d::TextureRegion& region, int x, int y, int width, int height);
+    void setRegion (Texture::ptr texture);
     void setRegion (int x,int y,int width,int height);
     void setRegion (float u,float v,float u2,float v2);
     void setRegion (const TextureRegion& region);
-    void setRegion (const TextureRegion& region,int x,int y,int width,int height);
-    gdx_cpp::graphics::Texture& getTexture ();
-    void setTexture (const gdx_cpp::graphics::Texture& texture);
-    float getU ();
+    void setRegion (const gdx_cpp::graphics::g2d::TextureRegion& region, int x, int y, int width, int height);
+    Texture::ptr getTexture () const;
+    void setTexture (Texture::ptr texture);
+    float getU () const;
     void setU (float u);
-    float getV ();
+    float getV () const;
     void setV (float v);
-    float getU2 ();
+    float getU2 () const;
     void setU2 (float u2);
-    float getV2 ();
+    float getV2 () const;
     void setV2 (float v2);
-    int getRegionX ();
+    int getRegionX () const;
     void setRegionX (int x);
-    int getRegionY ();
+    int getRegionY () const;
     void setRegionY (int y);
-    int getRegionWidth ();
+    int getRegionWidth () const;
     void setRegionWidth (int width);
-    int getRegionHeight ();
+    int getRegionHeight () const;
     void setRegionHeight (int height);
     void flip (bool x,bool y);
     void scroll (float xAmount,float yAmount);
-    TextureRegion* split (int tileWidth,int tileHeight);
-    static TextureRegion* split (const gdx_cpp::graphics::Texture& texture,int tileWidth,int tileHeight);
+    utils::MatrixBase< gdx_cpp::graphics::g2d::TextureRegion::ptr > split (int tileWidth, int tileHeight);
+    utils::MatrixBase< gdx_cpp::graphics::g2d::TextureRegion::ptr > split (gdx_cpp::graphics::Texture::ptr texture, int tileWidth, int tileHeight);
+
+    float u, v;
+    float u2, v2;
 
 protected:
-
+    Texture::ptr texture;
 
 private:
 

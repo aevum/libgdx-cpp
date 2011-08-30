@@ -24,7 +24,6 @@
 #include <cstdlib>
 #include <cmath>
 
-#define PI 3.1415927
 #define SIN_BITS 13
 #define SIN_MASK ~(-1 << SIN_BITS)
 #define SIN_COUNT SIN_MASK + 1
@@ -35,7 +34,7 @@
 #define degToIndex SIN_COUNT / degFull
 
 #define radiansToDegrees 180.0 / 3.1415927
-#define degreesToRadians  PI / 180
+#define degreesToRadians  math::utils::PI / 180
 
 #include "gdx-cpp/utils/NumberUtils.hpp"
 
@@ -45,6 +44,7 @@ namespace math {
 
 namespace utils {
 
+const double PI = 4.0 * std::atan(1);
 static float _sin[SIN_COUNT];
 static float _cos[SIN_COUNT];
 static int BIG_ENOUGH_INT = 16 * 1024;
@@ -53,23 +53,32 @@ static double CEIL = 0.9999999;
 static double BIG_ENOUGH_CEIL = gdx_cpp::utils::NumberUtils::longBitsToDouble(gdx_cpp::utils::NumberUtils::doubleToLongBits(BIG_ENOUGH_INT + 1) - 1);
 static double BIG_ENOUGH_ROUND = BIG_ENOUGH_INT + 0.5f;
 
-float signum(float value) {
+inline float toDegrees(float radians) {
+    return radians * (180.0 / PI);
+}
+
+inline float toRadians(float degrees) {
+    return degrees * (PI / 180.0);
+}
+
+
+inline float signum(float value) {
     return value < 0 ? -1 : (value == 0 ? 0 : 1);
 }
 
-float sin (float rad) {
+inline float sin (float rad) {
     return utils::_sin[(int)(rad * radToIndex) & SIN_MASK];
 }
 
-float cos (float rad) {
+inline float cos (float rad) {
     return utils::_cos[(int)(rad * radToIndex) & SIN_MASK];
 }
 
-float sinDeg (float deg) {
+inline float sinDeg (float deg) {
     return utils::_sin[(int)(deg * degToIndex) & SIN_MASK];
 }
 
-float cosDeg (float deg) {
+inline float cosDeg (float deg) {
     return utils::_cos[(int)(deg * degToIndex) & SIN_MASK];
 }
 
@@ -85,7 +94,7 @@ namespace detail {
 static const int ATAN2_DIM ((int) std::sqrt((float)ATAN2_COUNT));
 static float _atan2[ATAN2_COUNT];
 
-struct calc_atan {
+static struct calc_atan {
     calc_atan() {
         for (int i = 0; i < ATAN2_DIM; i++) {
             for (int j = 0; j < ATAN2_DIM; j++) {
@@ -97,7 +106,7 @@ struct calc_atan {
     }
 } atan;
 
-struct calc_sin {
+static struct calc_sin {
     calc_sin() {
         for (int i = 0; i < SIN_COUNT; ++i) {
             float a = (i + 0.5f) / SIN_COUNT * radFull;
@@ -114,7 +123,7 @@ struct calc_sin {
 
 }
 
-float atan2 (float y, float x) {
+inline float atan2 (float y, float x) {
     float add = 0, mul = 0;
     if (x < 0) {
         if (y < 0) {
@@ -139,27 +148,27 @@ float atan2 (float y, float x) {
 }
 
 /** Returns a random number between 0 (inclusive) and the specified value (inclusive). */
-int random (int range) {
+inline int random (int range) {
     return std::rand() % range + 1;
 }
 
-int random (int start, int end) {
+inline int random (int start, int end) {
     return start + random(end - start + 1);
 }
 
-bool randomBoolean () {
+inline bool randomBoolean () {
     return std::rand() % 2;
 }
 
-float random () {
+inline float random () {
     return ( std::rand() / (static_cast<float>(RAND_MAX) + 1.0));
 }
 
-float random (float range) {
+inline float random (float range) {
     return utils::random() * range;
 }
 
-float random(float low, float high)
+inline float random(float low, float high)
 {
     double temp;
 
@@ -176,7 +185,7 @@ float random(float low, float high)
     return temp;
 }
 
-int nextPowerOfTwo (int value) {
+inline int nextPowerOfTwo (int value) {
     if (value == 0) return 1;
     value--;
     value |= value >> 1;
@@ -187,31 +196,31 @@ int nextPowerOfTwo (int value) {
     return value + 1;
 }
 
-bool isPowerOfTwo (int value) {
+inline bool isPowerOfTwo (int value) {
     return value != 0 && (value & value - 1) == 0;
 }
 
-int floor (float x) {
+inline int floor (float x) {
     return (int)(x + BIG_ENOUGH_FLOOR) - BIG_ENOUGH_INT;
 }
 
-int floorPositive (float x) {
+inline int floorPositive (float x) {
     return (int)x;
 }
 
-int ceil (float x) {
+inline int ceil (float x) {
     return (int)(x + BIG_ENOUGH_CEIL) - BIG_ENOUGH_INT;
 }
 
-int ceilPositive (float x) {
+inline int ceilPositive (float x) {
     return (int)(x + CEIL);
 }
 
-int round (float x) {
+inline int round (float x) {
     return (int)(x + BIG_ENOUGH_ROUND) - BIG_ENOUGH_INT;
 }
 
-int roundPositive (float x) {
+inline int roundPositive (float x) {
     return (int)(x + 0.5f);
 }
 

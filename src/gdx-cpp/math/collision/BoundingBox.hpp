@@ -38,7 +38,7 @@ public:
    BoundingBox (const BoundingBox& bounds);
    
     gdx_cpp::math::Vector3& getCenter ();
-    const std::vector< Vector3 >& getCorners () const;
+    const std::vector< Vector3 >& getCorners ();
     gdx_cpp::math::Vector3& getDimensions ();
     gdx_cpp::math::Vector3& getMin ();
     gdx_cpp::math::Vector3& getMax ();

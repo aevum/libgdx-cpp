@@ -21,23 +21,36 @@
 #ifndef GDX_CPP_GRAPHICS_VERTEXATTRIBUTES_HPP_
 #define GDX_CPP_GRAPHICS_VERTEXATTRIBUTES_HPP_
 
+#include <string>
+#include <vector>
+#include "VertexAttribute.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 
 class VertexAttributes {
 public:
+    class Usage {
+    public:
+        const static int Position = 0;
+        const static int Color = 1;
+        const static int ColorPacked = 5;
+        const static int Normal = 2;
+        const static int TextureCoordinates = 3;
+        const static int Generic = 4;
+    };
+
+    VertexAttributes (const std::vector<VertexAttribute>& attributes);
+    
     int size ();
     VertexAttribute& get (int index);
-    std::string& toString ();
+    std::string toString ();
     int vertexSize;
-
-protected:
-
 
 private:
     int calculateOffsets ();
     void checkValidity ();
-    VertexAttribute[] attributes;
+    std::vector<VertexAttribute> attributes;
 };
 
 } // namespace gdx_cpp
