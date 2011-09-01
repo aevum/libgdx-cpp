@@ -48,8 +48,7 @@ public:
     }
     void render() {
         renderCount++;
-        Gdx::app->log("RenderCountTest") << renderCount << std::flush;
-        Gdx::gl10->glClearColor(1, 1, 0.5, 1);
+        Gdx::app->log("RenderCountTest") << renderCount << std::endl;
         Gdx::gl10->glClear(GL10::GL_COLOR_BUFFER_BIT);
         mesh->render(GL10::GL_TRIANGLES, 0, 3);
         

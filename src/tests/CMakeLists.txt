@@ -3,6 +3,7 @@ project(gdx-cpp-tests)
 include_directories(${GDXCPP_INCLUDE_DIR})
 include_directories(${GDX_CPP_BACKEND_LINUX_INCLUDES})
 
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin/tests)
 
 set(APPLICATIONS SimpleTest SimpleGdxApp MyFirstTriangle)
 
