@@ -147,7 +147,6 @@ IndexBufferObject::IndexBufferObject(bool isStatic, int maxIndices)
 
 IndexBufferObject::IndexBufferObject(int maxIndices)
 : byteBuffer(maxIndices * 2)
-, buffer(byteBuffer.convert<short>())
 , isDirty(true)
 , isBound(false)
 , usage(0)
@@ -155,6 +154,7 @@ IndexBufferObject::IndexBufferObject(int maxIndices)
 , bufferHandle(0)
 , isDirect(true)
 {
+    buffer = byteBuffer.convert<short>();
     buffer.flip();
     byteBuffer.flip();
     bufferHandle = createBufferObject();

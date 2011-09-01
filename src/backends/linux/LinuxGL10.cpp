@@ -18,7 +18,6 @@
 #include "LinuxGL10.hpp"
 
 #include <GLES/gl.h>
-#include <GLES/glext.h>
 
 using namespace gdx_cpp::backends::nix;
 

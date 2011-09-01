@@ -19,6 +19,7 @@
 #define GDX_CPP_BACKENDS_NIX_LINUXGRAPHICS_HPP
 
 #include <gdx-cpp/Graphics.hpp>
+#include <SDL/SDL.h>
 
 namespace gdx_cpp {
 
@@ -30,6 +31,8 @@ class LinuxGraphics : public Graphics
 {
 public:
     LinuxGraphics();
+
+    void initialize();
     bool isGL11Available ();
     bool isGL20Available ();
     graphics::GLCommon* getGLCommon ();
@@ -57,8 +60,13 @@ public:
     void setVSync (bool vsync);
     BufferFormat getBufferFormat ();
     bool supportsExtension (const std::string& extension);
+    void update();
 
 protected:
+    
+    std::string title;
+    int window;
+    int width, height;
     graphics::GL10* gl10;
     graphics::GL11* gl11;
     graphics::GL20* gl20;

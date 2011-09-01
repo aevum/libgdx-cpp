@@ -66,10 +66,6 @@ public:
     
     virtual int getVersion () = 0;
     
-    virtual long getJavaHeap () = 0;
-    
-    virtual long getNativeHeap () = 0;
-    
     virtual Preferences& getPreferences (std::string& name) = 0;
     
     virtual void postRunnable (Runnable::ptr runnable) = 0;

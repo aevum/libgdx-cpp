@@ -24,6 +24,8 @@
 #include "gdx-cpp/graphics/GL10.hpp"
 #include "gdx-cpp/graphics/GL11.hpp"
 
+#include <iostream>
+
 using namespace gdx_cpp::graphics::glutils;
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
@@ -44,9 +46,12 @@ int VertexArray::getNumMaxVertices () {
 }
 
 void VertexArray::setVertices (const std::vector< float >& vertices, int offset, int count) {
-    byteBuffer.copy(vertices, count, offset);
+    buffer.copy(vertices, count, offset);
     buffer.position(0);
-    buffer.limit(count);
+    
+    for(int i = 0; i < buffer.limit(); ++i) {
+        std::cout << buffer.get(i) << std::endl;
+    }  
 }
 
 void VertexArray::bind () {
@@ -140,8 +145,8 @@ VertexArray::VertexArray(int numVertices, const gdx_cpp::graphics::VertexAttribu
 isBound(false)
 , attributes(attributes)
 , byteBuffer(this->attributes.vertexSize * numVertices)
-, buffer(byteBuffer.convert<float>())
 {
+    buffer = byteBuffer.convert<float>();
     buffer.flip();
     byteBuffer.flip();
 }

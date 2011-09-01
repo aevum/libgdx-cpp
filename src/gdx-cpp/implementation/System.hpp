@@ -17,7 +17,10 @@
 
 #ifndef GDX_CPP_IMPLEMENTATION_SYSTEM_HPP
 #define GDX_CPP_IMPLEMENTATION_SYSTEM_HPP
+
 #include <sys/types.h>
+#include "MutexFactory.hpp"
+#include "ThreadFactory.hpp"
 
 namespace gdx_cpp {
 
@@ -27,10 +30,11 @@ class System
 {
 public:
     virtual int64_t nanoTime() = 0;
+    virtual MutexFactory* getMutexFactory() = 0;
+    virtual ThreadFactory* getThreadFactory() = 0;
 };
 
 }
-
 }
 
 #endif // GDX_CPP_IMPLEMENTATION_SYSTEM_HPP

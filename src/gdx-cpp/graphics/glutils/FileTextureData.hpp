@@ -32,7 +32,7 @@ namespace glutils {
 
 class FileTextureData: public gdx_cpp::graphics::TextureData {
 public:
-    FileTextureData (gdx_cpp::FileHandle file, gdx_cpp::graphics::Pixmap::ptr preloadedPixmap, gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps) ;
+    FileTextureData (gdx_cpp::FileHandle* file, gdx_cpp::graphics::Pixmap::ptr preloadedPixmap, gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps) ;
     
     gdx_cpp::graphics::Pixmap::ptr getPixmap ();
     bool disposePixmap ();
@@ -46,7 +46,7 @@ public:
     void uploadCompressedData ();
 
 private:
-    FileHandle file;
+    FileHandle* file;
     int width;
     int height;
     Pixmap::Format* format;

@@ -184,11 +184,11 @@ public:
     virtual void glTexParameteri (int target,int pname,int param) const = 0;
     virtual void glTexParameteriv (int target,int pname,const int* params) const = 0;
     virtual void glPointSizePointerOES (int type,int stride,const char* pointer) const = 0;
-    virtual void glVertexPointer (int size,int type,int stride,int pointer) const = 0;
-    virtual void glColorPointer (int size,int type,int stride,int pointer) const = 0;
-    virtual void glNormalPointer (int type,int stride,int pointer) const = 0;
-    virtual void glTexCoordPointer (int size,int type,int stride,int pointer) const = 0;
-    virtual void glDrawElements (int mode,int count,int type,int indices) const = 0;
+    virtual void glVertexPointer (int size,int type,int stride, void* pointer) const = 0;
+    virtual void glColorPointer (int size,int type,int stride,void* pointer) const = 0;
+    virtual void glNormalPointer (int type,int stride,void* pointer) const = 0;
+    virtual void glTexCoordPointer (int size,int type,int stride,void* pointer) const = 0;
+    virtual void glDrawElements (int mode,int count,int type,void* indices) const = 0;
 
 protected:
 

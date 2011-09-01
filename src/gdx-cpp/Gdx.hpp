@@ -57,12 +57,10 @@ public:
     static graphics::GLU* glu;
 
     static implementation::System* system;
-    static implementation::ThreadFactory* threadFactory;
-    static implementation::MutexFactory* mutexFactory;
 
+    static void initializeSystem(implementation::System* system);
     static void initialize(Application* application, Graphics* graphics,
-                           Audio* audio, Input* input, Files* files, implementation::System* system,
-                           implementation::ThreadFactory* threadFactory, implementation::MutexFactory* mutexFactory);
+                           Audio* audio, Input* input, Files* files);
 };
 
 } // namespace gdx_cpp

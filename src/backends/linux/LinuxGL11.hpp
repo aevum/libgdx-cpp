@@ -27,7 +27,7 @@ namespace backends {
 
 namespace nix {
 
-class LinuxGL11 : public LinuxGL10
+class LinuxGL11 : public LinuxGL10, virtual public graphics::GL11
 {
 public:
      void glClipPlanef (int plane,const float* equation) const ;

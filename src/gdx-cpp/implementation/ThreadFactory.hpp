@@ -19,6 +19,7 @@
 #define GDX_CPP_IMPLEMENTATION_THREADFACTORY_HPP
 
 #include "Thread.hpp"
+#include "gdx-cpp/utils/Runnable.hpp"
 
 namespace gdx_cpp {
 
@@ -27,7 +28,7 @@ namespace implementation {
 class ThreadFactory
 {
 public:
-    virtual Thread::ptr createThread(Thread* t) = 0;
+    virtual Thread::ptr createThread(Runnable* t) = 0;
 };
 
 }

@@ -35,6 +35,7 @@
 #include "gdx-cpp/math/collision/BoundingBox.hpp"
 
 #include <stdexcept>
+#include <iostream>
 
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
@@ -43,7 +44,7 @@ using namespace gdx_cpp::graphics::glutils;
 bool Mesh::forceVBO = false;
 Mesh::MeshMap Mesh::meshes;
 
-Mesh::Mesh(bool isStatic, int maxVertices, int maxIndices, std::vector< gdx_cpp::graphics::VertexAttribute > attributes)
+Mesh::Mesh(bool isStatic, int maxVertices, int maxIndices, const std::vector< VertexAttribute >& attributes)
 : vertices(0)
 , autoBind(true)
 , refCount(0)
@@ -176,7 +177,7 @@ void Mesh::render (int primitiveType,int offset,int count) {
 
     if (isVertexArray) {
         if (indices->getNumIndices() > 0) {
-            utils::short_buffer buffer = indices->getBuffer();
+            utils::short_buffer& buffer = indices->getBuffer();
             int oldPosition = buffer.position();
             int oldLimit = buffer.limit();
             buffer.position(offset);
@@ -187,8 +188,10 @@ void Mesh::render (int primitiveType,int offset,int count) {
         } else
             Gdx::gl10->glDrawArrays(primitiveType, offset, count);
     } else {
-        if (indices->getNumIndices() > 0)
-            Gdx::gl11->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, offset * 2);
+        if (indices->getNumIndices() > 0) {
+            int newoffset = offset * 2;
+            Gdx::gl11->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, &newoffset );
+        }
         else
             Gdx::gl11->glDrawArrays(primitiveType, offset, count);
     }
@@ -287,7 +290,6 @@ void Mesh::addManagedMesh (gdx_cpp::Application* app, gdx_cpp::graphics::Mesh* m
 void Mesh::invalidateAllMeshes (gdx_cpp::Application* app) {
     MeshMap::value_type::second_type::iterator it = meshes[app].begin();
     MeshMap::value_type::second_type::iterator end = meshes[app].end();
-    
     
     for (; it != end; ++it) {
         if ((*it)->vertices->getKind() ==  VertexData::Kind::VertexBufferObject) {

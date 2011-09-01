@@ -30,8 +30,6 @@
 #include "graphics/GL20.hpp"
 #include "graphics/GLCommon.hpp"
 #include "graphics/GLU.hpp"
-#include "implementation/MutexFactory.hpp"
-#include "implementation/ThreadFactory.hpp"
 #include "implementation/System.hpp"
 
 using namespace gdx_cpp;
@@ -46,22 +44,16 @@ graphics::GL10* Gdx::gl10 = 0;
 graphics::GL11* Gdx::gl11 = 0;
 graphics::GL20* Gdx::gl20 = 0;
 graphics::GLU* Gdx::glu = 0;
-implementation::ThreadFactory* Gdx::threadFactory = 0;
-implementation::MutexFactory* Gdx::mutexFactory = 0;
 implementation::System* Gdx::system = 0;
 
 void Gdx::initialize(Application* application,
-                     Graphics* graphics, Audio* audio, Input*  input , Files* files, implementation::System* system,
-                     implementation::ThreadFactory* threadFactory, implementation::MutexFactory* mutexFactory)
+                     Graphics* graphics, Audio* audio, Input*  input , Files* files)
 {
     Gdx::app = application;
     Gdx::graphics = graphics;
     Gdx::audio = audio;
     Gdx::input = input;
     Gdx::files = files;
-    Gdx::system  = system;
-    Gdx::threadFactory = threadFactory;
-    Gdx::mutexFactory = mutexFactory;
     Gdx::gl = Gdx::graphics->getGLCommon();
     Gdx::gl10 = Gdx::graphics->getGL10();
     Gdx::gl20 = Gdx::graphics->getGL20();
@@ -69,3 +61,7 @@ void Gdx::initialize(Application* application,
     Gdx::glu = Gdx::graphics->getGLU();
 }
 
+void Gdx::initializeSystem(implementation::System* system)
+{
+    Gdx::system = system;
+}

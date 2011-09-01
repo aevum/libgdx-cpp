@@ -40,6 +40,12 @@ public:
     {
     }
 
+    buffer_base(const buffer_base& other)
+            : bf(other.bf), _capacity(other._capacity), _position(other._position),
+            _mark(other._mark), _limit(other._limit)
+    {
+    }
+
     buffer_base() : _capacity(0)
             , _position(0)
             , _mark(-1)
@@ -58,6 +64,27 @@ struct buffer : public buffer_base {
     buffer(int mark, int pos, int lim , int capacity)
             : buffer_base(buffer_base::char_ptr(new char[capacity]), capacity, pos, mark, lim)
     {
+#ifdef DEBUG
+        T* debug_buffer = (T*) bf.get();
+#endif
+        limit(lim);
+        position(pos);
+        if (mark >= 0) {
+            if (mark > pos) {
+                std::stringstream ss;
+                ss << " mark > position: (" << mark << " > " << pos + ")";
+                throw std::runtime_error(ss.str());
+            }
+        }
+    }
+
+    buffer(buffer_base::char_ptr bf, int mark, int pos, int lim, int capacity)
+            : buffer_base(bf , capacity, pos, mark, lim)
+    {
+#ifdef DEBUG
+        T* debug_buffer = (T*) bf.get();
+#endif
+
         limit(lim);
         position(pos);
         if (mark >= 0) {
@@ -71,7 +98,7 @@ struct buffer : public buffer_base {
 
     buffer() : buffer_base() {
     }
-    
+
     int capacity() {
         return _capacity;
     }
@@ -82,7 +109,8 @@ struct buffer : public buffer_base {
 
     template <typename Other>
     buffer<Other> convert() {
-        return buffer<Other>((buffer_base&) *this);
+        int new_cap = this->remaining() >> (sizeof(Other) > 4 ? 3 : sizeof(Other) <= 2 ? 1 : 2);
+        return buffer<Other>(this->bf, -1, 0, new_cap, new_cap);
     }
 
     void put(const T& value) {
@@ -139,14 +167,16 @@ struct buffer : public buffer_base {
 
     template <typename U>
     void copy(const U* array, int count, int offset) {
-        T* casted_array = *this;
-        memcpy(casted_array + offset, array, sizeof(U) * count);
+        T* casted_array = (T*) bf.get();
+        memcpy(casted_array, &array[offset], sizeof(U) * count);
+        limit((count * sizeof(U)) / sizeof(T));
     }
 
     template <typename U>
     void copy(const std::vector<U>& array, int count, int offset) {
-        T* casted_array = *this;
-        memcpy(casted_array, &array[0] + offset, sizeof(U) * count);
+        T* casted_array = (T*) bf.get();
+        memcpy(casted_array, &array[offset], sizeof(U) * count);
+        limit((count * sizeof(U)) / sizeof(T));
     }
 
     buffer<T>& compact() {
@@ -239,6 +269,7 @@ struct buffer : public buffer_base {
             : buffer_base(other)
     {
     }
+
     int nextGetIndex() {
         if (_position >= _limit)
             throw std::runtime_error("buffer underflow");
@@ -295,6 +326,11 @@ struct buffer : public buffer_base {
     void clearMark() {
         _mark = -1;
     }
+protected:
+
+#ifdef DEBUG
+    T* debug_buffer;
+#endif
 };
 
 template <typename T>

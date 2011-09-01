@@ -312,7 +312,7 @@ Version.cpp
 # assets/loaders/PixmapLoader.cpp
 # assets/loaders/SoundParameter.cpp
 # assets/loaders/TextureAtlasParameter.cpp
-# assets/AssetType.cpp
+assets/AssetType.cpp
 # assets/AssetDescriptor.cpp
 # scenes/scene2d/Stage.cpp
 # scenes/scene2d/Action.cpp
@@ -419,7 +419,7 @@ graphics/VertexAttribute.cpp
 graphics/GL10.cpp
 graphics/GL11.cpp
 graphics/GL20.cpp
-# graphics/Texture.cpp
+graphics/Texture.cpp
 graphics/glutils/MipMapGenerator.cpp
 # graphics/glutils/FileTextureData.cpp
 graphics/glutils/VertexBufferObject.cpp

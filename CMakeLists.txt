@@ -16,6 +16,7 @@ include_directories(src)
 add_subdirectory(src/gdx-cpp)
 
 if (BUILD_BACKEND_LINUX)
+  set(GDX_CPP_BACKEND_LINUX_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/backends)
   add_subdirectory(src/backends/linux)
 endif()
 

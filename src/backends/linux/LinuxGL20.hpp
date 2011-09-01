@@ -19,7 +19,12 @@
 #define GDX_CPP_BACKENDS_NIX_LINUXGL20_HPP
 
 #include <gdx-cpp/graphics/GL20.hpp>
-#include <GLES2/gl2.h>
+
+#define GL_GLEXT_PROTOTYPES
+
+#include <GL/gl.h>
+#include <GL/glext.h>
+
 
 namespace gdx_cpp {
 
