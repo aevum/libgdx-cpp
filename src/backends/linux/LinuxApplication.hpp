@@ -25,6 +25,7 @@
 #include <gdx-cpp/implementation/Thread.hpp>
 #include <gdx-cpp/implementation/Mutex.hpp>
 #include <gdx-cpp/utils/Synchronized.hpp>
+#include "LinuxInput.hpp"
 
 namespace gdx_cpp {
 
@@ -40,11 +41,11 @@ public:
     
     std::ostream& error(const std::string& tag);
     void exit();
-    Audio& getAudio();
-    Files& getFiles();
-    Graphics& getGraphics();
-    Input& getInput();
-    Preferences& getPreferences(std::string& name);
+    Audio* getAudio();
+    Files* getFiles();
+    Graphics* getGraphics();
+    Input* getInput();
+    Preferences* getPreferences(std::string& name);
     ApplicationType getType();
     int getVersion();
     std::ostream& log(const std::string& tag);
@@ -62,6 +63,7 @@ protected:
     int width;
     ApplicationListener* listener;
     LinuxGraphics* graphics;
+    LinuxInput* input;
     
     std::list< Runnable::ptr > runnables;
 

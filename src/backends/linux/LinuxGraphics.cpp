@@ -22,15 +22,28 @@
 #include "LinuxGL20.hpp"
 #include "LinuxGLU.hpp"
 #include <stdexcept>
+#include <gdx-cpp/Gdx.hpp>
+#include <gdx-cpp/Graphics.hpp>
+#include <gdx-cpp/implementation/System.hpp>
+
+#include <iostream>
 
 using namespace gdx_cpp::backends::nix;
 using namespace gdx_cpp::graphics;
+using namespace gdx_cpp;
 
 gdx_cpp::backends::nix::LinuxGraphics::LinuxGraphics() :
-gl10(new LinuxGL10)
-,gl11(new LinuxGL11)
+gl10(0)
+,gl11(0)
 ,gl20(0)
 ,glu(new LinuxGLU)
+,glCommon(0)
+,deltaTime(0)
+,lastTime(0)
+,frameStart(0)
+,frames(0)
+,vsync(false)
+,title("GDX-CPP")
 {
 }
 
@@ -61,7 +74,7 @@ gdx_cpp::Graphics::BufferFormat gdx_cpp::backends::nix::LinuxGraphics::getBuffer
 
 float gdx_cpp::backends::nix::LinuxGraphics::getDeltaTime()
 {
-
+    return deltaTime;
 }
 
 float gdx_cpp::backends::nix::LinuxGraphics::getDensity()
@@ -81,7 +94,7 @@ std::vector< gdx_cpp::Graphics::DisplayMode >& gdx_cpp::backends::nix::LinuxGrap
 
 int gdx_cpp::backends::nix::LinuxGraphics::getFramesPerSecond()
 {
-
+    return this->fps;
 }
 
 gdx_cpp::graphics::GLCommon* gdx_cpp::backends::nix::LinuxGraphics::getGLCommon()
@@ -91,7 +104,7 @@ gdx_cpp::graphics::GLCommon* gdx_cpp::backends::nix::LinuxGraphics::getGLCommon(
 
 int gdx_cpp::backends::nix::LinuxGraphics::getHeight()
 {
-
+    return this->height;
 }
 
 float gdx_cpp::backends::nix::LinuxGraphics::getPpcX()
@@ -114,14 +127,29 @@ float gdx_cpp::backends::nix::LinuxGraphics::getPpiY()
 
 }
 
+void gdx_cpp::backends::nix::LinuxGraphics::updateTime()
+{
+    uint64_t time = Gdx::system->nanoTime();
+
+    deltaTime = (time - lastTime) / 1000000000.0f;
+    lastTime = time;
+    
+    if (time - frameStart >= 1000000000) {
+        fps = frames;
+        frames = 0;
+        frameStart = time;
+    }
+    frames++;
+}
+
 gdx_cpp::Graphics::GraphicsType gdx_cpp::backends::nix::LinuxGraphics::getType()
 {
-
+    return gdx_cpp::Graphics::SdlGL;
 }
 
 int gdx_cpp::backends::nix::LinuxGraphics::getWidth()
 {
-
+    return this->width;
 }
 
 bool gdx_cpp::backends::nix::LinuxGraphics::isGL11Available()
@@ -140,9 +168,9 @@ bool gdx_cpp::backends::nix::LinuxGraphics::setDisplayMode(gdx_cpp::Graphics::Di
         return false;
 }
 
-void gdx_cpp::backends::nix::LinuxGraphics::setIcon(gdx_cpp::Pixmap& pixmap)
+void gdx_cpp::backends::nix::LinuxGraphics::setIcon(gdx_cpp::graphics::Pixmap::ptr pixmap)
 {
-
+    this->iconPixmap = pixmap;
 }
 
 void gdx_cpp::backends::nix::LinuxGraphics::setTitle(const std::string& title)
@@ -152,7 +180,7 @@ void gdx_cpp::backends::nix::LinuxGraphics::setTitle(const std::string& title)
 
 void gdx_cpp::backends::nix::LinuxGraphics::setVSync(bool vsync)
 {
-    
+    this->vsync = true;
 }
 
 bool gdx_cpp::backends::nix::LinuxGraphics::supportsDisplayModeChange()
@@ -166,7 +194,7 @@ bool gdx_cpp::backends::nix::LinuxGraphics::supportsExtension(const std::string&
 }
 
 void gdx_cpp::backends::nix::LinuxGraphics::initialize()
-{
+{   
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         throw std::runtime_error("Failed to initialize SDL video");
     }
@@ -174,6 +202,9 @@ void gdx_cpp::backends::nix::LinuxGraphics::initialize()
 
 bool gdx_cpp::backends::nix::LinuxGraphics::setDisplayMode(int width, int height, bool fullscreen)
 {
+    this->width = width;
+    this->height = height;
+    
     Uint32 flags = SDL_OPENGL;
     if (fullscreen)
         flags |= SDL_FULLSCREEN;
@@ -186,11 +217,27 @@ bool gdx_cpp::backends::nix::LinuxGraphics::setDisplayMode(int width, int height
     SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
     
-    if (!SDL_SetVideoMode(width, height, 32, SDL_OPENGL)) {
+    if (!SDL_SetVideoMode(width, height, info->vfmt->BitsPerPixel, SDL_OPENGL)) {
         throw std::runtime_error("Failed to initialize SDL video");
     }
 
-    gl10->glViewport(0, 0, width, height);
+    const GLubyte* version = glGetString(GL_VERSION);
+    int major = atoi((const char*) version);
+    int minor = atoi((const char*) &version[2]);
+    
+    if (false && major >= 2) {
+
+
+    } else {       
+        if (major == 1 && minor < 5) {
+            glCommon = gl10 = new LinuxGL10;
+        } else {
+            glCommon = gl10 = gl11 = new LinuxGL11;
+        }
+    }
+
+    SDL_WM_SetCaption(this->title.c_str(), NULL);
+    glCommon->glViewport(0, 0, width, height);
 }
 
 void gdx_cpp::backends::nix::LinuxGraphics::update()

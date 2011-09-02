@@ -20,6 +20,7 @@
 
 #include <gdx-cpp/Graphics.hpp>
 #include <SDL/SDL.h>
+#include <gdx-cpp/graphics/Pixmap.hpp>
 
 namespace gdx_cpp {
 
@@ -56,14 +57,16 @@ public:
     bool setDisplayMode (DisplayMode displayMode);
     bool setDisplayMode (int width, int height, bool fullscreen);
     void setTitle (const std::string& title);
-    void setIcon (Pixmap& pixmap);
+    void setIcon (gdx_cpp::graphics::Pixmap::ptr pixmap);
     void setVSync (bool vsync);
     BufferFormat getBufferFormat ();
     bool supportsExtension (const std::string& extension);
     void update();
+    void updateTime();
 
-protected:
     
+protected:
+    bool vsync;    
     std::string title;
     int window;
     int width, height;
@@ -71,6 +74,14 @@ protected:
     graphics::GL11* gl11;
     graphics::GL20* gl20;
     graphics::GLU* glu;
+    graphics::GLCommon* glCommon;
+    graphics::Pixmap::ptr iconPixmap;
+    
+    uint64_t lastTime;
+    uint64_t frames;
+    uint64_t frameStart;
+    uint32_t fps;
+    float deltaTime;
 };
 
 }

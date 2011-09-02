@@ -35,23 +35,27 @@ gdx_cpp::backends::nix::LinuxApplication::LinuxApplication(gdx_cpp::ApplicationL
     , useGL20iFAvailable(useGL20IfAvailable)
     , listener(listener)
     , graphics(0)
+    , input(0)
 {
     initialize();
 }
 
 void LinuxApplication::initialize() {
         graphics = new LinuxGraphics();
+        input = new LinuxInput();
+        
+        graphics->initialize();
+        graphics->setTitle(this->title);
+        graphics->setDisplayMode(width, height, false);
 
         Gdx::initialize(this, graphics, NULL, NULL, NULL);
         
-        graphics->initialize();
-        graphics->setDisplayMode(width, height, false);
-
         this->run();
 }
 
 void backends::nix::LinuxApplication::onRunnableStop()
 {
+    //DUMMY
 }
 
 void backends::nix::LinuxApplication::run()
@@ -60,6 +64,19 @@ void backends::nix::LinuxApplication::run()
     listener->resize(graphics->getWidth(), graphics->getHeight());
     
     while (true) {
+        graphics->updateTime();
+
+        SDL_Event event;
+
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                this->exit();
+                return;
+            } else {
+                this->input->processEvents(event);
+            }
+        }        
+        
         {
             lock_holder hnd = synchronize();
 
@@ -72,10 +89,8 @@ void backends::nix::LinuxApplication::run()
 
             runnables.clear();
         }
-
-
+        
         listener->render();
-
         graphics->update();
     }
 }
@@ -92,39 +107,39 @@ void gdx_cpp::backends::nix::LinuxApplication::exit()
     ::exit(0);
 }
 
-gdx_cpp::Audio& gdx_cpp::backends::nix::LinuxApplication::getAudio()
+Audio* gdx_cpp::backends::nix::LinuxApplication::getAudio()
 {
 
 }
 
-gdx_cpp::Files& gdx_cpp::backends::nix::LinuxApplication::getFiles()
+Files* gdx_cpp::backends::nix::LinuxApplication::getFiles()
 {
 
 }
 
-gdx_cpp::Graphics& gdx_cpp::backends::nix::LinuxApplication::getGraphics()
+Graphics* gdx_cpp::backends::nix::LinuxApplication::getGraphics()
 {
-    return *graphics;
+    return graphics;
 }
 
-gdx_cpp::Input& gdx_cpp::backends::nix::LinuxApplication::getInput()
+Input* gdx_cpp::backends::nix::LinuxApplication::getInput()
 {
 
 }
 
-gdx_cpp::Preferences& gdx_cpp::backends::nix::LinuxApplication::getPreferences(std::string& name)
+Preferences* gdx_cpp::backends::nix::LinuxApplication::getPreferences(std::string& name)
 {
 
 }
 
 gdx_cpp::Application::ApplicationType gdx_cpp::backends::nix::LinuxApplication::getType()
 {
-
+    return gdx_cpp::Application::Desktop;
 }
 
 std::ostream& gdx_cpp::backends::nix::LinuxApplication::log(const std::string& tag)
 {
-    std::cout << tag;
+    std::cout << tag << ": ";
 
     return std::cout;
 }
@@ -136,7 +151,7 @@ int gdx_cpp::backends::nix::LinuxApplication::getVersion()
 
 void gdx_cpp::backends::nix::LinuxApplication::postRunnable(Runnable::ptr runnable)
 {
-
+    
 }
 
 void gdx_cpp::backends::nix::LinuxApplication::setLogLevel(int logLevel)

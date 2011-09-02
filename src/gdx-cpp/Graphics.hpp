@@ -22,6 +22,8 @@
 #include <sstream>
 #include <vector>
 
+#include "graphics/Pixmap.hpp"
+
 namespace gdx_cpp {
 
 namespace graphics {
@@ -31,7 +33,6 @@ class GL11;
 class GL20;
 class GLU;
 }
-class Pixmap;
 
 class Graphics {
 public:
@@ -39,7 +40,7 @@ public:
      *
      * @author mzechner */
     enum GraphicsType {
-        AndroidGL, GtkGL, IOsGL
+        AndroidGL, SdlGL, IOsGL
     };
 
     /** Class describing a fullscreen display mode
@@ -144,7 +145,7 @@ public:
 
     virtual void setTitle (const std::string& title) = 0;
 
-    virtual void setIcon (Pixmap& pixmap) = 0;
+    virtual void setIcon (graphics::Pixmap::ptr pixmap) = 0;
 
     virtual void setVSync (bool vsync) = 0;
 

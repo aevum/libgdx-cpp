@@ -18,8 +18,8 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#ifndef GDX_CPP__GDX_HPP_
-#define GDX_CPP__GDX_HPP_
+#ifndef GDX_CPP_GDX_HPP_
+#define GDX_CPP_GDX_HPP_
 
 namespace gdx_cpp {
 
@@ -39,8 +39,6 @@ namespace graphics {
 
 namespace implementation {
     class System;
-    class ThreadFactory;
-    class MutexFactory;
 }
 
 class Gdx {
@@ -65,4 +63,4 @@ public:
 
 } // namespace gdx_cpp
 
-#endif // GDX_CPP__GDX_HPP_
+#endif // GDX_CPP_GDX_HPP_
