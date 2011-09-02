@@ -107,10 +107,10 @@ public:
     void draw (const Pixmap& pixmap,int x,int y);
     int getWidth () const;
     int getHeight () const;
-    TextureFilter& getMinFilter () const;
-    TextureFilter& getMagFilter () const;
-    TextureWrap& getUWrap () const;
-    TextureWrap& getVWrap () const;
+    const TextureFilter& getMinFilter () const;
+    const TextureFilter& getMagFilter () const;
+    const TextureWrap& getUWrap () const;
+    const TextureWrap& getVWrap () const;
     TextureData::ptr getTextureData ();
     bool isManaged ();
     int getTextureObjectHandle ();
@@ -139,7 +139,7 @@ private:
     
     static managedTextureMap managedTextures;
 
-    static int buffer[1];
+    static int buffer;
 
     TextureFilter minFilter;
     TextureFilter magFilter;

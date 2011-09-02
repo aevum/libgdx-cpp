@@ -370,3 +370,7 @@ bool FileHandle::deleteDirectory (File& file) {
     return file.deleteFile();
 }
 
+bool gdx_cpp::files::FileHandle::deleteFile()
+{
+    return true;
+}

@@ -61,7 +61,7 @@ void PixmapTextureData::uploadCompressedData () {
 }
 
 PixmapTextureData::PixmapTextureData(gdx_cpp::graphics::Pixmap::ptr pixmap,
-                                     gdx_cpp::graphics::Pixmap::Format* format,
+                                     const gdx_cpp::graphics::Pixmap::Format* format,
                                      bool useMipMaps, bool disposePixmap)
 : _useMipMaps(useMipMaps)
 , _disposePixmap(disposePixmap)

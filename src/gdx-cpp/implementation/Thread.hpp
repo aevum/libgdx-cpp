@@ -27,16 +27,17 @@ namespace gdx_cpp {
 
 namespace implementation {
 
-class Thread : public Runnable
+class Thread
 {
 public:
     typedef ref_ptr_maker<Thread>::type ptr;
     
-    virtual void run() = 0;
+    virtual void start() = 0;
     virtual void yield() = 0;
     virtual void sleep(long millis) = 0;
-
-    virtual std::string& getThreadName() = 0;
+    virtual void join() = 0;
+    
+    virtual const std::string getThreadName() = 0;
 };
 
 }

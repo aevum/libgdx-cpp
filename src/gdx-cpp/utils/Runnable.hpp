@@ -28,6 +28,7 @@ public:
     typedef ref_ptr_maker<Runnable>::type ptr;
     
     virtual void run() = 0;
+    virtual void onRunnableStop() = 0;
 };
 
 #endif // GDX_CPP_UTILS_RUNNABLE_HPP

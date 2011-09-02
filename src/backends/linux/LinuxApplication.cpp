@@ -16,30 +16,152 @@
 
 
 #include "LinuxApplication.hpp"
+#include <iostream>
+#include <cstdlib>
+#include <gdx-cpp/Graphics.hpp>
+#include <gdx-cpp/Gdx.hpp>
+#include <gdx-cpp/implementation/System.hpp>
 
 using namespace gdx_cpp::backends::nix;
+using namespace gdx_cpp;
 
 gdx_cpp::backends::nix::LinuxApplication::LinuxApplication(gdx_cpp::ApplicationListener* listener,
                                                            const std::string& title, int width, int height,
                                                            bool useGL20IfAvailable)
-:
-    width(width)
+:  Synchronizable(Gdx::system->getMutexFactory())
+    , width(width)
     , height(height)
     , title(title)
     , useGL20iFAvailable(useGL20IfAvailable)
     , listener(listener)
+    , graphics(0)
+    , input(0)
 {
     initialize();
 }
 
-
 void LinuxApplication::initialize() {
-    
+        graphics = new LinuxGraphics();
+        input = new LinuxInput();
+        
+        graphics->initialize();
+        graphics->setTitle(this->title);
+        graphics->setDisplayMode(width, height, false);
+
+        Gdx::initialize(this, graphics, NULL, NULL, NULL);
+        
+        this->run();
 }
+
+void backends::nix::LinuxApplication::onRunnableStop()
+{
+    //DUMMY
+}
+
+void backends::nix::LinuxApplication::run()
+{
+    listener->create();
+    listener->resize(graphics->getWidth(), graphics->getHeight());
+    
+    while (true) {
+        graphics->updateTime();
+
+        SDL_Event event;
+
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                this->exit();
+                return;
+            } else {
+                this->input->processEvents(event);
+            }
+        }        
+        
+        {
+            lock_holder hnd = synchronize();
+
+            std::list < Runnable::ptr >::iterator it = runnables.begin();
+            std::list < Runnable::ptr >::iterator end = runnables.end();
+
+            for(;it != end; ++it) {
+                (*it)->run();
+            }
+
+            runnables.clear();
+        }
+        
+        listener->render();
+        graphics->update();
+    }
+}
+
 
 std::ostream& LinuxApplication::error(const std::string& tag)
 {
+    std::cerr << "LIBGDX-CPP: " << tag;
+    return std::cerr;
+}
+
+void gdx_cpp::backends::nix::LinuxApplication::exit()
+{
+    ::exit(0);
+}
+
+Audio* gdx_cpp::backends::nix::LinuxApplication::getAudio()
+{
+
+}
+
+Files* gdx_cpp::backends::nix::LinuxApplication::getFiles()
+{
+
+}
+
+Graphics* gdx_cpp::backends::nix::LinuxApplication::getGraphics()
+{
+    return graphics;
+}
+
+Input* gdx_cpp::backends::nix::LinuxApplication::getInput()
+{
+
+}
+
+Preferences* gdx_cpp::backends::nix::LinuxApplication::getPreferences(std::string& name)
+{
+
+}
+
+gdx_cpp::Application::ApplicationType gdx_cpp::backends::nix::LinuxApplication::getType()
+{
+    return gdx_cpp::Application::Desktop;
+}
+
+std::ostream& gdx_cpp::backends::nix::LinuxApplication::log(const std::string& tag)
+{
+    std::cout << tag << ": ";
+
+    return std::cout;
+}
+
+int gdx_cpp::backends::nix::LinuxApplication::getVersion()
+{
+    return 0.1;
+}
+
+void gdx_cpp::backends::nix::LinuxApplication::postRunnable(Runnable::ptr runnable)
+{
     
 }
+
+void gdx_cpp::backends::nix::LinuxApplication::setLogLevel(int logLevel)
+{
+
+}
+
+
+
+
+
 
 

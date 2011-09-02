@@ -26,7 +26,7 @@
 namespace gdx_cpp {
 namespace graphics {
 
-class GL20 : public GLCommon {
+class GL20 : virtual public GLCommon {
 public:
   static const int GL_ES_VERSION_2_0;
   static const int GL_DEPTH_BUFFER_BIT;

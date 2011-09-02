@@ -62,7 +62,7 @@ public:
     virtual void glLineWidth (float width) const = 0;
     virtual void glPixelStorei (int pname,int param) const = 0;
     virtual void glPolygonOffset (float factor,float units) const = 0;
-    virtual void glReadPixels (int x,int y,int width,int height,int format,int type,const unsigned char* pixels) const = 0;
+    virtual void glReadPixels (int x,int y,int width,int height,int format,int type,const void* pixels) const = 0;
     virtual void glScissor (int x,int y,int width,int height) const = 0;
     virtual void glStencilFunc (int func,int ref,int mask) const = 0;
     virtual void glStencilMask (int mask) const = 0;
@@ -71,12 +71,6 @@ public:
     virtual void glTexParameterf (int target,int pname,float param) const = 0;
     virtual void glTexSubImage2D (int target,int level,int xoffset,int yoffset,int width,int height,int format,int type,const unsigned char* pixels) const = 0;
     virtual void glViewport (int x,int y,int width,int height) const = 0;
-
-protected:
-
-
-private:
-
 };
 
 } // namespace gdx_cpp

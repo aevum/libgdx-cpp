@@ -70,21 +70,21 @@ Input.hpp
 # scenes/scene2d/actions/MoveTo.hpp
 # scenes/scene2d/actions/MoveBy.hpp
 ApplicationListener.hpp
-audio/analysis/kissfft/kiss_fft.h
-audio/analysis/kissfft/kiss_fftr.h
-audio/analysis/kissfft/_kiss_fft_guts.h
+# audio/analysis/kissfft/kiss_fft.h
+# audio/analysis/kissfft/kiss_fftr.h
+# audio/analysis/kissfft/_kiss_fft_guts.h
 audio/AudioDevice.hpp
-audio/analysis/NativeFFT.hpp
-audio/analysis/KissFFT.hpp
-audio/analysis/ThresholdFunction.hpp
-audio/analysis/FourierTransform.hpp
-audio/analysis/DFT.hpp
-audio/analysis/FFT.hpp
+# audio/analysis/NativeFFT.hpp
+# audio/analysis/KissFFT.hpp
+# audio/analysis/ThresholdFunction.hpp
+# audio/analysis/FourierTransform.hpp
+# audio/analysis/DFT.hpp
+# audio/analysis/FFT.hpp
 audio/Music.hpp
 audio/Sound.hpp
-audio/io/Mpg123Decoder.hpp
-audio/io/Decoder.hpp
-audio/io/VorbisDecoder.hpp
+# audio/io/Mpg123Decoder.hpp
+# audio/io/Decoder.hpp
+# audio/io/VorbisDecoder.hpp
 audio/AudioRecorder.hpp
 # input/RemoteSender.hpp
 # input/RemoteInput.hpp
@@ -314,7 +314,7 @@ Version.cpp
 # assets/loaders/PixmapLoader.cpp
 # assets/loaders/SoundParameter.cpp
 # assets/loaders/TextureAtlasParameter.cpp
-# assets/AssetType.cpp
+assets/AssetType.cpp
 # assets/AssetDescriptor.cpp
 # scenes/scene2d/Stage.cpp
 # scenes/scene2d/Action.cpp
@@ -380,16 +380,16 @@ Version.cpp
 # scenes/scene2d/actions/RotateBy.cpp
 # scenes/scene2d/Actor.cpp
 # scenes/scene2d/CompositeAction.cpp
-audio/analysis/kissfft/kiss_fft.c
-audio/analysis/kissfft/kiss_fftr.c
-audio/analysis/ThresholdFunction.cpp
-audio/analysis/NativeFFT.cpp
-audio/analysis/KissFFT.cpp
-audio/analysis/DFT.cpp
-audio/analysis/FourierTransform.cpp
-audio/analysis/FFT.cpp
-audio/io/Mpg123Decoder.cpp
-audio/io/VorbisDecoder.cpp
+# audio/analysis/kissfft/kiss_fft.c
+# audio/analysis/kissfft/kiss_fftr.c
+# audio/analysis/ThresholdFunction.cpp
+# audio/analysis/NativeFFT.cpp
+# audio/analysis/KissFFT.cpp
+# audio/analysis/DFT.cpp
+# audio/analysis/FourierTransform.cpp
+# audio/analysis/FFT.cpp
+# audio/io/Mpg123Decoder.cpp
+# audio/io/VorbisDecoder.cpp
 InputMultiplexer.cpp
 # input/RemoteSender.cpp
 # input/RemoteInput.cpp
@@ -570,4 +570,4 @@ install(DIRECTORY src DESTINATION include/gdx-cpp
           FILES_MATCHING PATTERN "*.hpp")
 
 add_library(gdx-cpp SHARED ${GDX_HEADERS} ${GDX_SRC})
-target_link_libraries(gdx-cpp mpg123 vorbis z vorbisfile)
+target_link_libraries(gdx-cpp z)

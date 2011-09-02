@@ -26,7 +26,7 @@
 namespace gdx_cpp {
 namespace graphics {
 
-class GL10 : public GLCommon {
+class GL10 : virtual public GLCommon {
 public:
 
     static const int GL_OES_VERSION_1_0;
@@ -275,31 +275,22 @@ public:
     virtual void glClientActiveTexture (int texture) const = 0;
     virtual void glColor4f (float red,float green,float blue,float alpha) const = 0;
     virtual void glColorPointer (int size,int type,int stride,const char* pointer) const = 0;
-    virtual void glDeleteTextures (int n,int offset) const = 0;
     virtual void glDisableClientState (int array) const = 0;
     virtual void glEnableClientState (int array) const = 0;
     virtual void glFogf (int pname,float param) const = 0;
-    virtual void glFogfv (int pname,int offset) const = 0;
-    virtual void glFogfv (int pname,const float*& params) const = 0;
+    virtual void glFogfv (int pname,const float* params) const = 0;
     virtual void glFrustumf (float left,float right,float bottom,float top,float zNear,float zFar) const = 0;
-    virtual void glGenTextures (int n,int offset) const = 0;
-    virtual void glGetIntegerv (int pname,int offset) const = 0;
     virtual void glLightModelf (int pname,float param) const = 0;
-    virtual void glLightModelfv (int pname,int offset) const = 0;
-    virtual void glLightModelfv (int pname,const float*& params) const = 0;
+    virtual void glLightModelfv (int pname,const float* params) const = 0;
     virtual void glLightf (int light,int pname,float param) const = 0;
-    virtual void glLightfv (int light,int pname,int offset) const = 0;
-    virtual void glLightfv (int light,int pname,const float*& params) const = 0;
+    virtual void glLightfv (int light,int pname,const float* params) const = 0;
     virtual void glLoadIdentity () const = 0;
-    virtual void glLoadMatrixf (float* m, int offset) const = 0;
     virtual void glLoadMatrixf (const float* m) const = 0;
     virtual void glLogicOp (int opcode) const = 0;
     virtual void glMaterialf (int face,int pname,float param) const = 0;
-    virtual void glMaterialfv (int face,int pname,int offset) const = 0;
-    virtual void glMaterialfv (int face,int pname,const float*& params) const = 0;
+    virtual void glMaterialfv (int face,int pname,const float* params) const = 0;
     virtual void glMatrixMode (int mode) const = 0;
-    virtual void glMultMatrixf (int offset) const = 0;
-    virtual void glMultMatrixf (const float*& m) const = 0;
+    virtual void glMultMatrixf (const float* m) const = 0;
     virtual void glMultiTexCoord4f (int target,float s,float t,float r,float q) const = 0;
     virtual void glNormal3f (float nx,float ny,float nz) const = 0;
     virtual void glNormalPointer (int type,int stride,const char* pointer) const = 0;
@@ -313,8 +304,7 @@ public:
     virtual void glShadeModel (int mode) const = 0;
     virtual void glTexCoordPointer (int size,int type,int stride,const char* pointer) const = 0;
     virtual void glTexEnvf (int target,int pname,float param) const = 0;
-    virtual void glTexEnvfv (int target,int pname,int offset) const = 0;
-    virtual void glTexEnvfv (int target,int pname,const float*& params) const = 0;
+    virtual void glTexEnvfv (int target,int pname,const float* params) const = 0;
     virtual void glTranslatef (float x,float y,float z) const = 0;
     virtual void glVertexPointer (int size,int type,int stride,const char* pointer) const = 0;
     virtual void glPolygonMode (int face,int mode) const = 0;

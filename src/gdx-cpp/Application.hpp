@@ -48,13 +48,13 @@ public:
     static const int LOG_INFO = 1;
     static const int LOG_ERROR = 2;
     
-    virtual Graphics& getGraphics () = 0;
+    virtual Graphics* getGraphics () = 0;
     
-    virtual Audio& getAudio () = 0;
+    virtual Audio* getAudio () = 0;
     
-    virtual Input& getInput () = 0;
+    virtual Input* getInput () = 0;
     
-    virtual Files& getFiles () = 0;
+    virtual Files* getFiles () = 0;
     
     virtual std::ostream& log (const std::string& tag) = 0;
     
@@ -66,11 +66,7 @@ public:
     
     virtual int getVersion () = 0;
     
-    virtual long getJavaHeap () = 0;
-    
-    virtual long getNativeHeap () = 0;
-    
-    virtual Preferences& getPreferences (std::string& name) = 0;
+    virtual Preferences* getPreferences (std::string& name) = 0;
     
     virtual void postRunnable (Runnable::ptr runnable) = 0;
     

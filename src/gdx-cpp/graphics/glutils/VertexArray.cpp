@@ -44,9 +44,8 @@ int VertexArray::getNumMaxVertices () {
 }
 
 void VertexArray::setVertices (const std::vector< float >& vertices, int offset, int count) {
-    byteBuffer.copy(vertices, count, offset);
+    buffer.copy(vertices, count, offset);
     buffer.position(0);
-    buffer.limit(count);
 }
 
 void VertexArray::bind () {
@@ -140,8 +139,8 @@ VertexArray::VertexArray(int numVertices, const gdx_cpp::graphics::VertexAttribu
 isBound(false)
 , attributes(attributes)
 , byteBuffer(this->attributes.vertexSize * numVertices)
-, buffer(byteBuffer.convert<float>())
 {
+    buffer = byteBuffer.convert<float>();
     buffer.flip();
     byteBuffer.flip();
 }
