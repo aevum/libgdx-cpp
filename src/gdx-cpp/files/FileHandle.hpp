@@ -21,6 +21,7 @@
 #define GDX_CPP_FILES_FILEHANDLE_HPP_
 #include "gdx-cpp/Files.hpp"
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Application.hpp"
 #include <iostream>
 #include <fstream>
 #include <cstdio>
@@ -50,8 +51,8 @@ public:
     FileHandle ();
     FileHandle (const std::string &fileName);
     FileHandle (const gdx_cpp::files::File &file);
-    std::string& path ();
-    std::string name ();
+    const std::string &path ();
+    std::string name () const;
     std::string extension ();
     std::string nameWithoutExtension ();
     std::string typetoString ();

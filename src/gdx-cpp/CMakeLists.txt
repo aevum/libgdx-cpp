@@ -90,13 +90,15 @@ audio/AudioRecorder.hpp
 # input/RemoteInput.hpp
 Screen.hpp
 Graphics.hpp
-# files/FileHandle.hpp
-# files/FileHandleStream.hpp
+files/FileHandle.hpp
+files/FileHandleStream.hpp
+files/File.hpp
 Gdx.hpp
 implementation/MutexFactory.hpp
 implementation/Thread.hpp
 implementation/Mutex.hpp
 implementation/ThreadFactory.hpp
+implementation/System.hpp
 Audio.hpp
 Application.hpp
 math/MathUtils.hpp
@@ -391,8 +393,9 @@ audio/io/VorbisDecoder.cpp
 InputMultiplexer.cpp
 # input/RemoteSender.cpp
 # input/RemoteInput.cpp
-# files/FileHandle.cpp
-# files/FileHandleStream.cpp
+files/FileHandle.cpp
+files/FileHandleStream.cpp
+files/File.cpp
 math/Circle.cpp
 math/Matrix4.cpp
 math/WindowedMean.cpp
@@ -419,7 +422,7 @@ graphics/VertexAttribute.cpp
 graphics/GL10.cpp
 graphics/GL11.cpp
 graphics/GL20.cpp
-# graphics/Texture.cpp
+graphics/Texture.cpp
 graphics/glutils/MipMapGenerator.cpp
 # graphics/glutils/FileTextureData.cpp
 graphics/glutils/VertexBufferObject.cpp

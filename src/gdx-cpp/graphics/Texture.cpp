@@ -347,7 +347,7 @@ minFilter(TextureFilter::Nearest)
 ,uWrap(TextureWrap::ClampToEdge)
 ,vWrap(TextureWrap::ClampToEdge)
 {
-    Gdx::files::internal(internalPath);
+    Gdx::files->internal(internalPath);
 }
 
 void Texture::initialize(const gdx_cpp::files::FileHandle& file,const Pixmap::Format* format, bool useMipMaps)
@@ -356,8 +356,11 @@ void Texture::initialize(const gdx_cpp::files::FileHandle& file,const Pixmap::Fo
     this->enforcePotImages = true;
     this->useHWMipMap = true;
     this->assetManager = 0;
-    
-    if (file.name().endsWith(".etc1")) {
+
+    std::string s = file.name();
+    std::string suffix(".etc1");
+    int found = s.rfind(suffix);
+    if( found != s.npos && (found == (s.length() - suffix.length()) ) ){
 //         create(new ETC1TextureData(file, useMipMaps));
     } else {
         create(new glutils::FileTextureData(file, NULL, format, useMipMaps));

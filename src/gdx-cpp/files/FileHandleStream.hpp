@@ -31,20 +31,22 @@ namespace files {
 
 class FileHandleStream : public gdx_cpp::files::FileHandle{
 public:
+    typedef ref_ptr_maker< std::ifstream >::type ifstream_ptr;
+    typedef ref_ptr_maker< std::ofstream >::type ofstream_ptr;
     FileHandleStream(std::string path);
     bool isDirectory ();
-    long length ();
+    int64_t length ();
     bool exists ();
-    FileHandle& child (const std::string& name);
-    FileHandle& parent ();
-    InputStream& read ();
-    OutputStream& write (bool overwrite);
-    FileHandle* list ();
+    FileHandle child (const std::string& name);
+    FileHandle parent ();
+    ifstream_ptr read ();
+    ofstream_ptr write (bool overwrite);
+    void list (std::vector<FileHandle> &handles);
     void mkdirs ();
-    bool delete ();
+    bool deleteFile ();
     bool deleteDirectory ();
-    void copyTo (const FileHandle& dest);
-    void moveTo (const FileHandle& dest);
+    void copyTo (FileHandle& dest);
+    void moveTo (FileHandle& dest);
 
 protected:
 

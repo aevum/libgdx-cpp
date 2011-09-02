@@ -3,6 +3,7 @@
 
 #include <cstdio>
 #include <string>
+#include <vector>
 
 namespace gdx_cpp {
 namespace files {
@@ -11,35 +12,110 @@ class File
 {
 
 public:
+    int getPrefixLength();
+
+    static const char separatorChar;
+    static const std::string separator;
+    static const char pathSeparatorChar;
+    static const std::string pathSeparator;
+    
     File();
-    File(const std::string& fileName);
+    File(const std::string& pathname);
     File(const std::string& parent, const std::string& child);
     File(const File &parent, const std::string& child);
-    void set(const std::string& fileName);
-    void set(const std::string& parent, const std::string& child);
-    void set(const File& other);
-    virtual File& operator=(const File& other);
-    std::string &getPath();
-    std::string getName();
+    //File(URI uri);
+    
+
+    //virtual File& operator=(const File& other);
+    
+    std::string getName() const;
+    std::string getParent();
     File getParentFile();
-    void makePath();
+    const std::string &getPath();
+    bool isAbsolute();
+    std::string getAbsolutePath();
+    File getAbsoluteFile();
+    std::string getCanonicalPath(); //throws IOException
+    File getCanonicalFile(); //throws IOException
+    //public URL(); throw MalformedURLException
+    //URI toURI()
+    //bool canRead();
+    //bool canWrite();
     bool exists();
     bool isDirectory();
-    bool gotParent();
+    //bool gotParent();
+    bool isFile();
+    //bool isHidden();
+    //int64_t lastModified();
     int64_t length ();
-    void list(std::vector<std::string> &relativePath);
-    void listFiles(std::vector<File> &files);
-    void mkdirs();
+    //bool createNewFile();  //throw IOException()
     bool deleteFile();
-
+    //void deleteOnExit();
+    void list(std::vector<std::string> &relativePath);
+    //void list(std::vector<std::string> &relativePath, FilenameFilter filter);
+    void listFiles(std::vector< File > &fileList);
+    //void listFiles(std::vector<std::string> &relativePath, FilenameFilter filter);
+    //void listFiles(FileFilter filter);
+    bool mkdir();
+    bool mkdirs();
+    bool renameTo(const gdx_cpp::files::File& dest);
+    //bool setLastModified(int64_t &time);
+    //bool setReadOnly();
+    //bool setWritable(bool &writable, bool &ownerOnly);
+    //bool setWritable(bool &writable);
+    //bool setReadable(bool &readable, bool &ownerOnly);
+    //bool setReadable(bool &readable);
+    //bool setExecutable(bool &executable, bool &ownerOnly);
+    //bool setExecutable(bool &executable);
+    //bool canExecute();
+    //static void listRoots(std::vector<File> &list);
+    //int64_t getTotalSpace();
+    //int64_t getFreeSpace();
+    //int64_t getUsableSpace();
+    //static File createTempFile(const std::string &prefix, const std::string &suffix, const File &directory); //throws IOException
+    //static File createTempFile(const std::string &prefix, const std::string &suffix); //throws IOException
+    //int compareTo(const File &pathname);
+    //boolean equals(Object obj);
+    //int hashCode();
+    std::string toString();
+        
 private:
+
     std::string path;
-    std::string child;
-    std::string parent;
-    static std::string pathSeparator;   //The system-dependent path-separator character, represented as a string for convenience.
-    static char pathSeparatorChar;    //The system-dependent path-separator character.
-    static std::string separator;    //The system-dependent default name-separator character, represented as a string for convenience.
-    static char     separatorChar; //The system-dependent default name-separator character.
+    int prefixLength;
+
+    File(const std::string& pathname,const int &prefixLength);
+    File(const std::string& child, const File &parent);
+    //static std::string slashify(const std::string &path, const bool &isDirectory);
+    /*
+     * // lazy initialization of SecureRandom and temporary file directory
+    private static class LazyInitialization {
+        static final SecureRandom random = new SecureRandom();
+
+        static final String temporaryDirectory = temporaryDirectory();
+        static String temporaryDirectory() {
+            return fs.normalize(
+                AccessController.doPrivileged(
+                    new GetPropertyAction("java.io.tmpdir")));
+        }
+    }
+    */
+    //static File generateFile(const std::string &prefix, const std::string &suffix, const File &dir);
+    //static bool checkAndCreate(const std::string &filename, SecurityManager &sm);
+    //void writeObject(ObjectOutputStream s); //Throws IOException e syncronized
+   //void readObject(ObjectInputStream s); //Throws IOException e syncronized throws ClassNotFoundExceptionon
+    /* treta loca no final do codigo
+     *static {
+        sun.misc.SharedSecrets.setJavaIODeleteOnExitAccess(
+            new sun.misc.JavaIODeleteOnExitAccess() {
+                public void run() {
+                    DeleteOnExitHook.hook().run();
+                }
+            }
+        );
+    }
+    */
+  
 };
 
 }
