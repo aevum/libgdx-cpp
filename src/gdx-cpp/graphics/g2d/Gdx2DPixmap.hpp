@@ -44,8 +44,8 @@ public:
     Gdx2DPixmap (const Gdx2DPixmap& other);
     Gdx2DPixmap (unsigned char* encodedData, int offset, int len, int requestedFormat);
 
-    static Gdx2DPixmap::ptr newPixmap (int width,int height,int format);
-    static Gdx2DPixmap::ptr newPixmap (std::istream& in, int requestedFormat);
+    static Gdx2DPixmap* newPixmap (int width,int height,int format);
+    static Gdx2DPixmap* newPixmap (std::istream& in, int requestedFormat);
     
     void dispose ();
     void clear (int color);
@@ -83,6 +83,10 @@ public:
     virtual ~Gdx2DPixmap();
     
 protected:
+  int width;
+  int height;
+  int format;
+  
   gdx2d_pixmap* pixData;
 
 private:

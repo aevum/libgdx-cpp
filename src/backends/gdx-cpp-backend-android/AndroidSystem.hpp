@@ -32,14 +32,14 @@ namespace backends {
 
 namespace nix {
 
-class LinuxSystem  : public gdx_cpp::implementation::System
+class AndroidSystem  : public gdx_cpp::implementation::System
 {
-class LinuxThreadFactory : public gdx_cpp::implementation::ThreadFactory {
+class AndroidThreadFactory : public gdx_cpp::implementation::ThreadFactory {
 public: 
         implementation::Thread::ptr createThread(Runnable* t);
 };
 
-class LinuxMutexFactory : public gdx_cpp::implementation::MutexFactory {
+class AndroidMutexFactory : public gdx_cpp::implementation::MutexFactory {
 public:
         implementation::Mutex::ptr createMutex();
 };
@@ -47,17 +47,17 @@ public:
 public:
     int64_t nanoTime();
 
-    LinuxThreadFactory* getThreadFactory() {
+    AndroidThreadFactory* getThreadFactory() {
         return &threadFactory;
     }
 
-    LinuxMutexFactory* getMutexFactory() {
+    AndroidMutexFactory* getMutexFactory() {
         return &mutexFactory;
     }
     
 private:
-    LinuxThreadFactory threadFactory;
-    LinuxMutexFactory mutexFactory;
+    AndroidThreadFactory threadFactory;
+    AndroidMutexFactory mutexFactory;
 };
 
 }

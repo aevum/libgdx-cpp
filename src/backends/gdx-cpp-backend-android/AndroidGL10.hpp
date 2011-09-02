@@ -26,7 +26,7 @@ namespace backends {
 
 namespace nix {
 
-class LinuxGL10 : virtual public graphics::GL10
+class AndroidGL10 : virtual public graphics::GL10
 {
 public:
     virtual void glActiveTexture (int texture) const ;

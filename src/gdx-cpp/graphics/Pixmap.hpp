@@ -80,7 +80,7 @@ public:
     Pixmap (int width, int height, const Format& format) ;
     Pixmap (unsigned char* encodedData, int offset, int len) ;
     Pixmap (files::FileHandle& file) ;
-    Pixmap (gdx_cpp::graphics::g2d::Gdx2DPixmap::ptr pixmap) ;
+    Pixmap (gdx_cpp::graphics::g2d::Gdx2DPixmap* pixmap) ;
     
     static void setBlending (const Blending& blending);
     static void setFilter (const Filter& filter);
@@ -107,8 +107,11 @@ public:
     int getGLType () const;
     const unsigned char* getPixels () const;
     const Format& getFormat ();
+
+    virtual ~Pixmap();
+    
 protected:
-    g2d::Gdx2DPixmap::ptr pixmap;
+    g2d::Gdx2DPixmap* pixmap;
     int color;
 
 private:

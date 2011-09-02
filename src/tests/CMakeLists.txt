@@ -3,7 +3,7 @@ project(gdx-cpp-tests)
 include_directories(${GDXCPP_INCLUDE_DIR})
 include_directories(${GDX_CPP_BACKEND_LINUX_INCLUDES})
 
-set(APPLICATIONS SimpleTest SimpleGdxApp MyFirstTriangle)
+set(APPLICATIONS SimpleTest SimpleGdxApp MyFirstTriangle SpriteBatchTest PixmapTest)
 
 message("Active backends are: " ${ACTIVE_BACKENDS})
 

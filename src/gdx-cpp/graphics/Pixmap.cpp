@@ -28,6 +28,7 @@
 #include <cassert>
 #include <stdexcept>
 #include <sstream>
+#include <iostream>
 
 using namespace gdx_cpp::graphics;
 
@@ -70,11 +71,11 @@ void Pixmap::drawRectangle (int x,int y,int width,int height) {
 }
 
 void Pixmap::drawPixmap (const Pixmap& pixmap,int x,int y,int srcx,int srcy,int srcWidth,int srcHeight) {
-    this->pixmap->drawPixmap(*pixmap.pixmap.get(), srcx, srcy, x, y, srcWidth, srcHeight);
+    this->pixmap->drawPixmap(*pixmap.pixmap, srcx, srcy, x, y, srcWidth, srcHeight);
 }
 
 void Pixmap::drawPixmap (const Pixmap& pixmap,int srcx,int srcy,int srcWidth,int srcHeight,int dstx,int dsty,int dstWidth,int dstHeight) {
-    this->pixmap->drawPixmap(*pixmap.pixmap.get(), srcx, srcy, srcWidth, srcHeight, dstx, dsty, dstWidth, dstHeight);
+    this->pixmap->drawPixmap(*pixmap.pixmap, srcx, srcy, srcWidth, srcHeight, dstx, dsty, dstWidth, dstHeight);
 }
 
 void Pixmap::fillRectangle (int x,int y,int width,int height) {
@@ -102,6 +103,7 @@ int Pixmap::getHeight () const {
 }
 
 void Pixmap::dispose () {
+    std::cout << "called dispose" << std::endl;
     pixmap->dispose();
 }
 
@@ -163,25 +165,36 @@ Pixmap::Pixmap(int width, int height, const gdx_cpp::graphics::Pixmap::Format& f
         : color(0)
 {
     pixmap = g2d::Gdx2DPixmap::newPixmap(width, height, Format::toGdx2DPixmapFormat(format));
-    assert(pixmap.get());
+    assert(pixmap);
     setColor(0, 0, 0, 0);
     fill();
 }
 
 Pixmap::Pixmap(unsigned char* encodedData, int offset, int len) {
-    pixmap = g2d::Gdx2DPixmap::ptr(new g2d::Gdx2DPixmap(encodedData, offset, len, 0));
+    pixmap = new g2d::Gdx2DPixmap(encodedData, offset, len, 0);
 }
 
 Pixmap::Pixmap(gdx_cpp::files::FileHandle& file) {
     std::vector<char> bytes;
     //TODO: file.readBytes(bytes);
         
-    pixmap = g2d::Gdx2DPixmap::ptr(new g2d::Gdx2DPixmap((unsigned char*) &bytes[0], 0, bytes.size(), 0));
-    assert(pixmap.get());
+    pixmap = new g2d::Gdx2DPixmap((unsigned char*) &bytes[0], 0, bytes.size(), 0);
+    assert(pixmap);
 }
 
-Pixmap::Pixmap(g2d::Gdx2DPixmap::ptr pixmap)
+Pixmap::Pixmap(g2d::Gdx2DPixmap* pixmap)
  : color(0)
  {
     this->pixmap = pixmap;
 }
+
+void gdx_cpp::graphics::Pixmap::setStrokeWidth(int width)
+{
+}
+
+gdx_cpp::graphics::Pixmap::~Pixmap()
+{
+    delete this->pixmap;
+}
+
+

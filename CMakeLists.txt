@@ -31,7 +31,7 @@ include_directories(src)
 add_subdirectory(src/gdx-cpp)
 
 if (BUILD_BACKEND_LINUX)
-  list(APPEND ACTIVE_BACKENDS "LINUX")
+  list(APPEND ACTIVE_BACKENDS LINUX)
   set(BACKEND-LINUX-DEPENDENCIES SDL GLESv1_CM GLU)
   set(GDX_CPP_BACKEND_LINUX_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/backends)
   add_subdirectory(src/backends/gdx-cpp-backend-linux)
@@ -44,7 +44,8 @@ endif()
 
 if (BUILD_BACKEND_ANDROID)
     list(APPEND ACTIVE_BACKENDS ANDROID)
-    add_subdirectory(src/backends/android)
+    set(BACKEND-LINUX-DEPENDENCIES GLESv1_CM GLU)
+    add_subdirectory(src/backends/gdx-cpp-backend-android)
     set(GDX_CPP_BACKEND_ANDROID_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/backends)
 endif()
 

@@ -95,7 +95,7 @@ public:
     Texture (const files::FileHandle& file, bool useMipMaps) ;
     Texture (const gdx_cpp::files::FileHandle& file, const Pixmap::Format& format, bool useMipMaps) ;
     Texture (const gdx_cpp::files::FileHandle file) ;
-    Texture (const gdx_cpp::graphics::Pixmap& pixmap, bool useMipMaps) ;
+    Texture (const gdx_cpp::graphics::Pixmap::ptr pixmap, bool useMipMaps) ;
     Texture (int width, int height, const Pixmap::Format& format) ;
     Texture (const TextureData& data) ;
 
