@@ -1,9 +1,9 @@
-#include <backends/linux/init.hpp>
+#include "backends/current_backend.hpp"
+
 #include <gdx-cpp/Application.hpp>
 #include <gdx-cpp/ApplicationListener.hpp>
 #include <gdx-cpp/graphics/Mesh.hpp>
 #include <gdx-cpp/graphics/GL10.hpp>
-#include <linux/LinuxApplication.hpp>
 
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
@@ -66,8 +66,8 @@ private:
 };
 
 int main() {
-    gdx_cpp::backends::nix::initializeSystem();
-    gdx_cpp::backends::nix::LinuxApplication app(new MyFirstTriangleApplication, "My first Triangle", 640, 480, false);
+    gdx_cpp::backends::initializeSystem();
+    gdx_cpp::backends::Application app(new MyFirstTriangleApplication, "My first Triangle", 640, 480, false);
     
     return 0;
 }

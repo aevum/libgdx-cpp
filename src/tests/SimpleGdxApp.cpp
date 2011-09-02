@@ -1,6 +1,5 @@
 #include <iostream>
-#include <linux/init.hpp>
-#include <linux/LinuxApplication.hpp>
+#include "backends/current_backend.hpp"
 #include <gdx-cpp/ApplicationListener.hpp>
 
 class DullListener : public gdx_cpp::ApplicationListener {
@@ -28,8 +27,8 @@ public:
 };
 
 int main() {
-    gdx_cpp::backends::nix::initializeSystem();
-    gdx_cpp::backends::nix::LinuxApplication application(new DullListener, "GDX-TEST", 640, 480, false);
+    gdx_cpp::backends::initializeSystem();
+    gdx_cpp::backends::Application application(new DullListener, "GDX-TEST", 640, 480, false);
   
     return 0;
 }

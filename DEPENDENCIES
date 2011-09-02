@@ -1,0 +1,12 @@
+
+These are the current dependencies for each backend:
+
+For GNU/Linux:
+
+GLES1.0
+GLES2.0
+libSDL
+libmpg123
+libvorbis
+libz
+libvorbisfile
