@@ -325,7 +325,7 @@ void FileHandle::moveTo (FileHandle& dest) {
     deleteFile();
 }
 
-int64_t FileHandle::length () {  //DEVE SEMPRE SER CHAMADO ANTES DE ABRIR A STREAM //TODO
+int64_t FileHandle::length () {  
     if ((type == gdx_cpp::Files::Internal && !file.exists())) {
       int64_t length = 0;
       ifstream_ptr input = read();
@@ -368,9 +368,4 @@ bool FileHandle::deleteDirectory (File& file) {
         }
     }
     return file.deleteFile();
-}
-
-bool gdx_cpp::files::FileHandle::deleteFile()
-{
-    return true;
 }
