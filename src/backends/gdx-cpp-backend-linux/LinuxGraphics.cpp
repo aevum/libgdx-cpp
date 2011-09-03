@@ -203,6 +203,7 @@ void gdx_cpp::backends::nix::LinuxGraphics::initialize()
 
 bool gdx_cpp::backends::nix::LinuxGraphics::setDisplayMode(int width, int height, bool fullscreen)
 {
+    this->lastTime = Gdx::system->nanoTime();
     this->width = width;
     this->height = height;
     

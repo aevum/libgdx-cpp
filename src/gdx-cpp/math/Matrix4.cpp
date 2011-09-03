@@ -315,7 +315,7 @@ float Matrix4::det() {
 
 Matrix4& Matrix4::setToProjection(float near, float far, float fov, float aspectRatio) {
     this->idt();
-    float l_fd = (float)(1.0f / std::tan((fov * (math::utils::PI / 180.f)) / 2.0f));
+    float l_fd = (float)(1.0f / std::tan((fov * (math::utils::detail::PI / 180.f)) / 2.0f));
     float l_a1 = (far + near) / (near - far);
     float l_a2 = (2 * far * near) / (near - far);
     val[M00] = l_fd / aspectRatio;

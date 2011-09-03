@@ -164,13 +164,13 @@ float Vector2::crs (float x, float y) {
 }
 
 float Vector2::angle () {
-    float angle =  (float) std::atan2(y, x) *  radiansToDegrees;
+    float angle =  (float) std::atan2(y, x) *  math::utils::detail::radiansToDegrees;
     if (angle < 0) angle += 360;
     return angle;
 }
 
 Vector2 Vector2::rotate (float angle) {
-    float rad = angle * degreesToRadians;
+    float rad = angle * math::utils::detail::degreesToRadians;
     float cos = (float)std::cos(rad);
     float sin = (float)std::sin(rad);
 

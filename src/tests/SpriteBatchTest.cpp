@@ -10,6 +10,7 @@
 #include <gdx-cpp/math/MathUtils.hpp>
 
 #include <iostream>
+#include <gdx-cpp/graphics/FPSLogger.hpp>
 
 using namespace gdx_cpp;
 using namespace gdx_cpp::graphics;
@@ -28,7 +29,6 @@ public:
             ROTATION_SPEED(20),
             frames(0)
     {
-
     }
 
     void create() {
@@ -55,18 +55,18 @@ public:
             sprites2[i + 4] = 32;
             sprites2[i + 5] = 32;
         }
-
-        for (int i = 0; i < SPRITES * 2; i++) {
-            int x = (int)(math::utils::random() * (Gdx::graphics->getWidth() - 32));
-            int y = (int)(math::utils::random() * (Gdx::graphics->getHeight() - 32));
-
-//             if (i >= SPRITES)
-//                 sprites3[i] = new Sprite(texture2, 32, 32);
-//             else
-            sprites3[i] = new Sprite(texture, 32, 32);
-            sprites3[i]->setPosition(x, y);
-            sprites3[i]->setOrigin(16, 16);
-        }
+// 
+//         for (int i = 0; i < SPRITES * 2; i++) {
+//             int x = (int)(math::utils::random() * (Gdx::graphics->getWidth() - 32));
+//             int y = (int)(math::utils::random() * (Gdx::graphics->getHeight() - 32));
+// 
+// //             if (i >= SPRITES)
+// //                 sprites3[i] = new Sprite(texture2, 32, 32);
+// //             else
+//             sprites3[i] = new Sprite(texture, 32, 32);
+//             sprites3[i]->setPosition(x, y);
+//             sprites3[i]->setOrigin(16, 16);
+//         }
     }
 
     void dispose() {
@@ -76,7 +76,30 @@ public:
     }
 
     void render() {
-        renderNormal();
+        GL10& gl = *Gdx::gl10;
+        
+        gl.glClearColor(0.7f, 0.7f, 0.7f, 1);
+        gl.glClear(GL10::GL_COLOR_BUFFER_BIT);
+        
+        logger.log();
+
+        angle += ROTATION_SPEED * Gdx::graphics->getDeltaTime();
+        scale += SCALE_SPEED * Gdx::graphics->getDeltaTime();
+
+        if (scale < 0.5f) {
+            scale = 0.5f;
+            SCALE_SPEED = 1;
+        }
+        
+        if (scale > 1.0f) {
+            scale = 1.0f;
+            SCALE_SPEED = -1;
+        }
+        
+        spriteBatch->begin();
+        spriteBatch->draw(*texture, sprites[0], sprites[1], 16, 16, 32, 32, scale, scale, angle, 0, 0, 32, 32, false, false);
+        spriteBatch->end();
+//         renderNormal();
     }
 
     void resize(int width, int height) {
@@ -217,6 +240,7 @@ protected:
     float ROTATION_SPEED;
     uint64_t startTime;
     int frames;
+    FPSLogger logger;
 };
 
 int main() {

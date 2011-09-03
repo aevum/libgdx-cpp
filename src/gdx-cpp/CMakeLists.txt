@@ -393,6 +393,7 @@ InputMultiplexer.cpp
 # input/RemoteInput.cpp
 # files/FileHandle.cpp
 # files/FileHandleStream.cpp
+math/MathUtils.cpp
 math/Circle.cpp
 math/Matrix4.cpp
 math/WindowedMean.cpp

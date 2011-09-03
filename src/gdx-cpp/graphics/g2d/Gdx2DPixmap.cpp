@@ -32,7 +32,6 @@
 using namespace gdx_cpp::graphics::g2d;
 using namespace gdx_cpp;
 
-
 //these were the private native Jni-wrapped methods
 
 gdx2d_pixmap* load (unsigned char* buffer, int offset, int len, int requestedFormat) {
@@ -232,7 +231,7 @@ int Gdx2DPixmap::getGLInternalFormat () {
     default:
     {
         std::stringstream ss;
-        ss << "unknown format: " << pixData->format;
+//         ss << "unknown format: " << pixData->format;
         throw std::runtime_error(ss.str());
     }
     }

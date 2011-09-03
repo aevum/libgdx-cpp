@@ -23,19 +23,7 @@
 
 #include <cstdlib>
 #include <cmath>
-
-#define SIN_BITS 13
-#define SIN_MASK ~(-1 << SIN_BITS)
-#define SIN_COUNT SIN_MASK + 1
-
-#define radFull (PI * 2)
-#define degFull 360
-#define radToIndex SIN_COUNT / radFull
-#define degToIndex SIN_COUNT / degFull
-
-#define radiansToDegrees 180.0f / 3.1415927f
-#define degreesToRadians  math::utils::PI / 180.f
-
+#include <iostream>
 #include "gdx-cpp/utils/NumberUtils.hpp"
 
 namespace gdx_cpp {
@@ -44,83 +32,66 @@ namespace math {
 
 namespace utils {
 
-const float PI = 4.0 * std::atan(1);
-static float _sin[SIN_COUNT];
-static float _cos[SIN_COUNT];
-static int BIG_ENOUGH_INT = 16 * 1024;
-static float BIG_ENOUGH_FLOOR = BIG_ENOUGH_INT;
-static float CEIL = 0.9999999;
-static float BIG_ENOUGH_CEIL = gdx_cpp::utils::NumberUtils::longBitsToDouble(gdx_cpp::utils::NumberUtils::doubleToLongBits(BIG_ENOUGH_INT + 1) - 1);
-static float BIG_ENOUGH_ROUND = BIG_ENOUGH_INT + 0.5f;
+struct detail {
+    static const float PI;
+    static const int SIN_BITS;
+    static const int SIN_MASK;
+    static const int SIN_COUNT;
+    
+    static const float radFull;
+    static const float degFull;
+    static const float radToIndex;
+    static const float degToIndex;
+    
+    static const float radiansToDegrees;
+    static const float degreesToRadians;
+    
+    static const int ATAN2_BITS;
+    static const int ATAN2_BITS2;
+    static const int ATAN2_MASK;
+    static const int ATAN2_COUNT;
+    static const float INV_ATAN2_DIM_MINUS_1;
+    
+    static float _sin[];
+    static float _cos[];
+    static const int BIG_ENOUGH_INT;
+    static const float BIG_ENOUGH_FLOOR;
+    static const float CEIL;
+    static const float BIG_ENOUGH_CEIL;
+    static const float BIG_ENOUGH_ROUND;
+
+    static const int ATAN2_DIM;
+    static float _atan2[];
+
+    detail () ;
+};
 
 inline float toDegrees(float radians) {
-    return radians * (180.0f / PI);
+    return radians * (180.0f / detail::PI);
 }
 
 inline float toRadians(float degrees) {
-    return degrees * (PI / 180.0f);
+    return degrees * (detail::PI / 180.0f);
 }
-
 
 inline float signum(float value) {
     return value < 0.0f ? -1.0f : (value == 0.0f ? 0.0f : 1.0f);
 }
 
 inline float sin (float rad) {
-    return utils::_sin[(int)(rad * radToIndex) & SIN_MASK];
+    return detail::_sin[(int)(rad * detail::radToIndex) & detail::SIN_MASK];
 }
 
 inline float cos (float rad) {
-    return utils::_cos[(int)(rad * radToIndex) & SIN_MASK];
+    return detail::_cos[(int)(rad * detail::radToIndex) & detail::SIN_MASK];
 }
 
 inline float sinDeg (float deg) {
-    return utils::_sin[(int)(deg * degToIndex) & SIN_MASK];
+    return detail::_sin[(int)(deg * detail::degToIndex) & detail::SIN_MASK];
 }
 
 inline float cosDeg (float deg) {
-    return utils::_cos[(int)(deg * degToIndex) & SIN_MASK];
-}
-
-namespace detail {
-
-// Adjust for accuracy.
-#define ATAN2_BITS 7
-#define ATAN2_BITS2 ATAN2_BITS << 1
-#define ATAN2_MASK (~(-1 << ATAN2_BITS2))
-#define ATAN2_COUNT ATAN2_MASK + 1
-#define INV_ATAN2_DIM_MINUS_1 1.0f / (detail::ATAN2_DIM - 1)
-
-static const int ATAN2_DIM ((int) std::sqrt((float)ATAN2_COUNT));
-static float _atan2[ATAN2_COUNT];
-
-static struct calc_atan {
-    calc_atan() {
-        for (int i = 0; i < ATAN2_DIM; i++) {
-            for (int j = 0; j < ATAN2_DIM; j++) {
-                float x0 = (float)i / detail::ATAN2_DIM;
-                float y0 = (float)j / detail::ATAN2_DIM;
-                detail::_atan2[j * detail::ATAN2_DIM + i] = (float)std::atan2(y0, x0);
-            }
-        }
-    }
-} atan;
-
-static struct calc_sin {
-    calc_sin() {
-        for (int i = 0; i < SIN_COUNT; ++i) {
-            float a = (i + 0.5f) / SIN_COUNT * radFull;
-            utils::_sin[i] = (float) std::sin(a);
-            utils::_cos[i] = (float) std::cos(a);
-        }
-        for (int i = 0; i < 360; i += 90) {
-            utils::_sin[(int)(i * degToIndex) & SIN_MASK] = (float) std::sin(i * degreesToRadians);
-            utils::_cos[(int)(i * degToIndex) & SIN_MASK] = (float) std::cos(i * degreesToRadians);
-        }
-
-    }
-} calc;
-
+    return detail::_cos[(int)(deg * detail::degToIndex) & detail::SIN_MASK];
 }
 
 inline float atan2 (float y, float x) {
@@ -141,7 +112,7 @@ inline float atan2 (float y, float x) {
             mul = 1;
         add = 0;
     }
-    float invDiv = 1 / ((x < y ? y : x) * INV_ATAN2_DIM_MINUS_1);
+    float invDiv = 1 / ((x < y ? y : x) * detail::INV_ATAN2_DIM_MINUS_1);
     int xi = (int)(x * invDiv);
     int yi = (int)(y * invDiv);
     return (detail::_atan2[yi * detail::ATAN2_DIM + xi] + add) * mul;
@@ -201,7 +172,7 @@ inline bool isPowerOfTwo (int value) {
 }
 
 inline int floor (float x) {
-    return (int)(x + BIG_ENOUGH_FLOOR) - BIG_ENOUGH_INT;
+    return (int)(x + detail::BIG_ENOUGH_FLOOR) - detail::BIG_ENOUGH_INT;
 }
 
 inline int floorPositive (float x) {
@@ -209,15 +180,15 @@ inline int floorPositive (float x) {
 }
 
 inline int ceil (float x) {
-    return (int)(x + BIG_ENOUGH_CEIL) - BIG_ENOUGH_INT;
+    return (int)(x + detail::BIG_ENOUGH_CEIL) - detail::BIG_ENOUGH_INT;
 }
 
 inline int ceilPositive (float x) {
-    return (int)(x + CEIL);
+    return (int)(x + detail::CEIL);
 }
 
 inline int round (float x) {
-    return (int)(x + BIG_ENOUGH_ROUND) - BIG_ENOUGH_INT;
+    return (int)(x + detail::BIG_ENOUGH_ROUND) - detail::BIG_ENOUGH_INT;
 }
 
 inline int roundPositive (float x) {
