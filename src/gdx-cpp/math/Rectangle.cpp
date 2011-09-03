@@ -48,24 +48,22 @@ Rectangle& Rectangle::operator=(const Rectangle& other)
     return *this;
 }
 
-bool Rectangle::operator==(const Rectangle& other) const
-{
-///TODO: return ...;
-}
 
 float Rectangle::getX () const
 {
     return x;
 }
-float Rectangle::setX (float _x) 
+
+void Rectangle::setX (float _x)
 {
     x = _x;
 }
+
 float Rectangle::getY () const
 {
     return y;
 }
-float Rectangle::setY (float _y) 
+void Rectangle::setY (float _y)
 {
     y = _y;
 }
@@ -73,7 +71,7 @@ float Rectangle::getWidth () const
 {
     return width;
 }
-float Rectangle::setWidth (float _width)
+void Rectangle::setWidth (float _width)
 {
     width = _width;
 }
@@ -81,7 +79,7 @@ float Rectangle::getHeight () const
 {
     return height;
 }
-float Rectangle::setHeight (float _height)
+void Rectangle::setHeight (float _height)
 {
     height = _height;
 }

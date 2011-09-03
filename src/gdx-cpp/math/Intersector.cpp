@@ -103,7 +103,7 @@ bool Intersector::isPointInPolygon (std::vector<Vector2>& polygon,const Vector2&
 
     int j = polygon.size() - 1;
     bool oddNodes = false;
-    for (int i = 0; i < polygon.size(); i++) {
+    for (unsigned int i = 0; i < polygon.size(); i++) {
         if ((polygon.at(i).y < point.y && polygon.at(j).y >= point.y)
                 || (polygon.at(j).y < point.y && polygon.at(i).y >= point.y)) {
             if (polygon.at(i).x + (point.y - polygon.at(i).y) / (polygon.at(j).y - polygon.at(i).y)
@@ -300,7 +300,7 @@ bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ra
       assert(false);
     }
 
-    for (int i = 0; i < triangles.size() - 6; i += 9) {
+    for (unsigned int i = 0; i < triangles.size() - 6; i += 9) {
         bool result = intersectRayTriangle(ray, tmp1.set(triangles[i], triangles[i + 1], triangles[i + 2]),
                                               tmp2.set(triangles[i + 3], triangles[i + 4], triangles[i + 5]),
                                               tmp3.set(triangles[i + 6], triangles[i + 7], triangles[i + 8]), &tmp);
@@ -333,7 +333,7 @@ bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ra
       assert(false);
     } 
 
-    for (int i = 0; i < indices.size(); i += 3) {
+    for (unsigned int i = 0; i < indices.size(); i += 3) {
         int i1 = indices[i] * vertexSize;
         int i2 = indices[i + 1] * vertexSize;
         int i3 = indices[i + 2] * vertexSize;
@@ -369,7 +369,7 @@ bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ra
       assert(false);
     } 
 
-    for (int i = 0; i < triangles.size() - 2; i += 3) {
+    for (unsigned int i = 0; i < triangles.size() - 2; i += 3) {
         bool result = intersectRayTriangle(ray, triangles.at(i), triangles.at(i + 1), triangles.at(i + 2), &tmp);
 
         if (result == true) {

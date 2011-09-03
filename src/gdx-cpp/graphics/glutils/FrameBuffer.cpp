@@ -144,7 +144,6 @@ void FrameBuffer::clearAllFrameBuffers (Application* app) {
 
 std::string FrameBuffer::getManagedStatus () {
     std::stringstream builder;
-    int i = 0;
     builder << "Managed buffers/app: { ";
 
     buffer_map::iterator it = buffers.begin();

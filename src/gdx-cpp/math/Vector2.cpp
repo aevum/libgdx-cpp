@@ -56,7 +56,11 @@ Vector2& Vector2::operator=(const Vector2& other)
 
 bool Vector2::operator==(const Vector2& other) const
 {
+    if (this == &other) {
+        return true;
+    }
 
+    return this->x == other.x && this->x == other.y;
 }
 
 Vector2& Vector2::set (const Vector2& v) {

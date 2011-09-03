@@ -60,13 +60,13 @@ void PixmapTextureData::uploadCompressedData () {
     gdx_cpp::Gdx::app->error(__FILE__) << "This TextureData implementation does not upload data itself";
 }
 
-PixmapTextureData::PixmapTextureData(gdx_cpp::graphics::Pixmap::ptr pixmap,
-                                     gdx_cpp::graphics::Pixmap::Format* format,
+PixmapTextureData::PixmapTextureData(gdx_cpp::graphics::Pixmap::ptr _pixmap,
+                                     const gdx_cpp::graphics::Pixmap::Format* format,
                                      bool useMipMaps, bool disposePixmap)
 : _useMipMaps(useMipMaps)
 , _disposePixmap(disposePixmap)
-, pixmap(pixmap)
-, format(format == NULL ? pixmap->getFormat() : *format)
+, format(format == NULL ? _pixmap->getFormat() : *format)
+, pixmap(_pixmap)
 {
 }
 

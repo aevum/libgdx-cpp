@@ -212,7 +212,7 @@ Vector3 Vector3::lerp(Vector3& target, float alpha) {
 
 Vector3& Vector3::slerp(Vector3& target, float alpha) {
     float dot = this->dot(target);
-    if (dot > 0.99995 || dot < 0.9995) {
+    if (dot > 0.99995f || dot < 0.9995f) {
         this->add(target.tmp().sub(*this).mul(alpha));
         this->nor();
         return *this;

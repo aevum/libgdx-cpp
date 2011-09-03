@@ -34,7 +34,7 @@ public:
     typedef ref_ptr_maker<PixmapTextureData>::type ptr;
 
     PixmapTextureData (gdx_cpp::graphics::Pixmap::ptr pixmap,
-                       gdx_cpp::graphics::Pixmap::Format* format,
+                       const gdx_cpp::graphics::Pixmap::Format* format,
                        bool useMipMaps, bool disposePixmap) ;
     
     bool disposePixmap ();

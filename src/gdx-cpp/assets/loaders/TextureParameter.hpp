@@ -34,13 +34,13 @@ struct TextureParameter : public Parameter {
     typedef ref_ptr_maker<TextureParameter>::type ptr;
     
     /** the format of the final Texture. Uses the source images format if null **/
-    gdx_cpp::graphics::Pixmap::Format format;
+    gdx_cpp::graphics::Pixmap::Format* format;
     /** whether to generate mipmaps **/
     bool genMipMaps;
     /** The texture to put the {@link TextureData} in **/
     graphics::Texture::ptr texture;
 
-    TextureParameter() : genMipMaps(true) {
+    TextureParameter() : genMipMaps(true) , format(0) {
     }
 };
 

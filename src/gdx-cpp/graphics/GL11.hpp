@@ -26,7 +26,7 @@
 namespace gdx_cpp {
 namespace graphics {
 
-class GL11 : public GL10 {
+class GL11 : virtual public GL10 {
 public:
     static const int GL_OES_VERSION_1_0;
     static const int GL_MAX_ELEMENTS_VERTICES;
@@ -156,55 +156,39 @@ public:
     static const int GL_OES_point_size_array;
     static const int GL_OES_point_sprite;
     
-    virtual void glClipPlanef (int plane,int offset) const = 0;
     virtual void glClipPlanef (int plane,const float* equation) const = 0;
-    virtual void glGetClipPlanef (int pname,int offset) const = 0;
     virtual void glGetClipPlanef (int pname,const float* eqn) const = 0;
-    virtual void glGetFloatv (int pname,int offset) const = 0;
     virtual void glGetFloatv (int pname,const float* params) const = 0;
-    virtual void glGetLightfv (int light,int pname,int offset) const = 0;
     virtual void glGetLightfv (int light,int pname,const float* params) const = 0;
-    virtual void glGetMaterialfv (int face,int pname,int offset) const = 0;
     virtual void glGetMaterialfv (int face,int pname,const float* params) const = 0;
-    virtual void glGetTexParameterfv (int target,int pname,int offset) const = 0;
     virtual void glGetTexParameterfv (int target,int pname,const float* params) const = 0;
     virtual void glPointParameterf (int pname,float param) const = 0;
-    virtual void glPointParameterfv (int pname,int offset) const = 0;
     virtual void glPointParameterfv (int pname,const float* params) const = 0;
-    virtual void glTexParameterfv (int target,int pname,int offset) const = 0;
     virtual void glTexParameterfv (int target,int pname,const float* params) const = 0;
     virtual void glBindBuffer (int target,int buffer) const = 0;
     virtual void glBufferData (int target,int size,const char* data,int usage) const = 0;
-    virtual void glBufferSubData (int target,int offset,int size,const char* data) const = 0;
+    virtual void glBufferSubData (int target,int offset,int size,const void* data) const = 0;
     virtual void glColor4ub (char red,char green,char blue,char alpha) const = 0;
-    virtual void glDeleteBuffers (int n,int offset) const = 0;
     virtual void glDeleteBuffers (int n,const int* buffers) const = 0;
-    virtual void glGetBooleanv (int pname,int offset) const = 0;
     virtual void glGetBooleanv (int pname,const int* params) const = 0;
-    virtual void glGetBufferParameteriv (int target,int pname,int offset) const = 0;
     virtual void glGetBufferParameteriv (int target,int pname,const int* params) const = 0;
-    virtual void glGenBuffers (int n,int offset) const = 0;
     virtual void glGenBuffers (int n,const int* buffers) const = 0;
     virtual void glGetPointerv (int pname) const = 0;
-    virtual void glGetTexEnviv (int env,int pname,int offset) const = 0;
     virtual void glGetTexEnviv (int env,int pname,const int* params) const = 0;
-    virtual void glGetTexParameteriv (int target,int pname,int offset) const = 0;
     virtual void glGetTexParameteriv (int target,int pname,const int* params) const = 0;
     virtual bool glIsBuffer (int buffer) const = 0;
     virtual bool glIsEnabled (int cap) const = 0;
     virtual bool glIsTexture (int texture) const = 0;
     virtual void glTexEnvi (int target,int pname,int param) const = 0;
-    virtual void glTexEnviv (int target,int pname,int offset) const = 0;
     virtual void glTexEnviv (int target,int pname,const int* params) const = 0;
     virtual void glTexParameteri (int target,int pname,int param) const = 0;
-    virtual void glTexParameteriv (int target,int pname,int offset) const = 0;
     virtual void glTexParameteriv (int target,int pname,const int* params) const = 0;
     virtual void glPointSizePointerOES (int type,int stride,const char* pointer) const = 0;
-    virtual void glVertexPointer (int size,int type,int stride,int pointer) const = 0;
-    virtual void glColorPointer (int size,int type,int stride,int pointer) const = 0;
-    virtual void glNormalPointer (int type,int stride,int pointer) const = 0;
-    virtual void glTexCoordPointer (int size,int type,int stride,int pointer) const = 0;
-    virtual void glDrawElements (int mode,int count,int type,int indices) const = 0;
+    virtual void glVertexPointer (int size,int type,int stride, void* pointer) const = 0;
+    virtual void glColorPointer (int size,int type,int stride,void* pointer) const = 0;
+    virtual void glNormalPointer (int type,int stride,void* pointer) const = 0;
+    virtual void glTexCoordPointer (int size,int type,int stride,void* pointer) const = 0;
+    virtual void glDrawElements (int mode,int count,int type,void* indices) const = 0;
 
 protected:
 

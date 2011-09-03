@@ -42,7 +42,7 @@ CatmullRomSpline::vector3_vector_ptr CatmullRomSpline::getPath (int numPoints) {
     Vector3 T1;
     Vector3 T2;
 
-    for (int i = 1; i <= controlPoints.size() - 3; i++) {
+    for (unsigned int i = 1; i <= controlPoints.size() - 3; i++) {
         points->push_back(controlPoints[i]);
         float increment = 1.0f / (numPoints + 1);
         float t = increment;
@@ -78,7 +78,7 @@ void CatmullRomSpline::getPath (std::vector<Vector3>& points, int numPoints) {
     int idx = 0;
     if (controlPoints.size() < 4) return;
 
-    for (int i = 1; i <= controlPoints.size() - 3; i++) {
+    for (unsigned int i = 1; i <= controlPoints.size() - 3; i++) {
         points[idx++] = controlPoints[i];
         float increment = 1.0f / (numPoints + 1);
         float t = increment;
@@ -114,7 +114,7 @@ CatmullRomSpline::vector3_vector_ptr CatmullRomSpline::getTangents (int numPoint
     Vector3 T1;
     Vector3 T2;
 
-    for (int i = 1; i <= controlPoints.size() - 3; i++) {
+    for (unsigned int i = 1; i <= controlPoints.size() - 3; i++) {
         float increment = 1.0f / (numPoints + 1);
         float t = increment;
 
@@ -154,7 +154,7 @@ CatmullRomSpline::vector3_vector_ptr CatmullRomSpline::getTangentNormals2D (int 
     Vector3 T1;
     Vector3 T2;
 
-    for (int i = 1; i <= controlPoints.size() - 3; i++) {
+    for (unsigned int i = 1; i <= controlPoints.size() - 3; i++) {
         float increment = 1.0f / (numPoints + 1);
         float t = increment;
 

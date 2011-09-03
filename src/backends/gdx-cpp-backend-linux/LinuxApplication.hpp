@@ -21,6 +21,11 @@
 #include <gdx-cpp/Application.hpp>
 #include <list>
 #include <gdx-cpp/ApplicationListener.hpp>
+#include "LinuxGraphics.hpp"
+#include <gdx-cpp/implementation/Thread.hpp>
+#include <gdx-cpp/implementation/Mutex.hpp>
+#include <gdx-cpp/utils/Synchronized.hpp>
+#include "LinuxInput.hpp"
 
 namespace gdx_cpp {
 
@@ -28,39 +33,44 @@ namespace backends {
 
 namespace nix {
 
-class LinuxApplication : public Application
+class LinuxApplication : public Application, public Runnable, public Synchronizable
 {
 public:
     LinuxApplication(gdx_cpp::ApplicationListener* listener, const std::string& title,
                      int width, int height, bool useGL20IfAvailable);
     
-    virtual std::ostream& error(const std::string& tag);
-    virtual void exit();
-    virtual Audio& getAudio();
-    virtual Files& getFiles();
-    virtual Graphics& getGraphics();
-    virtual Input& getInput();
-    virtual long int getJavaHeap();
-    virtual long int getNativeHeap();
-    virtual Preferences& getPreferences(std::string& name);
-    virtual ApplicationType getType();
-    virtual int getVersion();
-    virtual std::ostream& log(const std::string& tag);
-    virtual void postRunnable(Runnable::ptr runnable);
-    virtual void setLogLevel(int logLevel);
+    std::ostream& error(const std::string& tag);
+    void exit();
+    Audio* getAudio();
+    Files* getFiles();
+    Graphics* getGraphics();
+    Input* getInput();
+    Preferences* getPreferences(std::string& name);
+    ApplicationType getType();
+    int getVersion();
+    std::ostream& log(const std::string& tag);
+    void postRunnable(Runnable::ptr runnable);
+    void setLogLevel(int logLevel);
 
-
+    void onRunnableStop();
 protected:
+    void run();
+    
     bool useGL20iFAvailable;
     std::string title;
     int height;
     int width;
     ApplicationListener* listener;
-
+    LinuxGraphics* graphics;
+    LinuxInput* input;
+    
     std::list< Runnable::ptr > runnables;
 
+    gdx_cpp::implementation::Thread::ptr mainLoopThread;
     
     void initialize();
+
+    int logLevel;
 };
 
 }

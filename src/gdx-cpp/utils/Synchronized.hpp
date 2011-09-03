@@ -27,6 +27,7 @@
 #include <tr1/shared_ptr.h>
 
 class Mutex;
+class Mutex;
 template <typename Object, typename MutexType>
 class synchronized {
     typedef lock_guard<MutexType> lock_type;
@@ -69,8 +70,8 @@ template <typename MutexFactory>
 struct Synchronizable {
     typedef lock_guard<typename MutexFactory::mutex_t> lock_holder;
     
-    Synchronizable() :
-        mutex(MutexFactory::createMutex())
+    Synchronizable(MutexFactory* fact) :
+        mutex(fact->createMutex())
     {        
     }
     

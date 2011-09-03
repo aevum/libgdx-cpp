@@ -59,7 +59,7 @@ public:
     };
 
     Mesh (int type, bool isStatic, int maxVertices, int maxIndices, const std::vector< gdx_cpp::graphics::VertexAttribute >& attributes) ;
-    Mesh (bool isStatic, int maxVertices, int maxIndices, std::vector<VertexAttribute> attributes);
+    Mesh (bool isStatic, int maxVertices, int maxIndices, const std::vector<VertexAttribute>& attributes);
     
     void setVertices (const std::vector< float >& vertices);
     void setVertices (const std::vector< float >& vertices, int offset, int count);
@@ -67,8 +67,8 @@ public:
     void setIndices (std::vector< short int >& indices);
     void setIndices (std::vector< short int >& indices, int offset, int count);
     void getIndices (std::vector< short int >& indices);
-    int getNumIndices ();
-    int getNumVertices ();
+    unsigned int getNumIndices ();
+    unsigned int getNumVertices ();
     int getMaxVertices ();
     int getMaxIndices ();
     int getVertexSize ();

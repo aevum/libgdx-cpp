@@ -18,8 +18,8 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#ifndef GDX_CPP__GDX_HPP_
-#define GDX_CPP__GDX_HPP_
+#ifndef GDX_CPP_GDX_HPP_
+#define GDX_CPP_GDX_HPP_
 
 namespace gdx_cpp {
 
@@ -39,8 +39,6 @@ namespace graphics {
 
 namespace implementation {
     class System;
-    class ThreadFactory;
-    class MutexFactory;
 }
 
 class Gdx {
@@ -57,14 +55,12 @@ public:
     static graphics::GLU* glu;
 
     static implementation::System* system;
-    static implementation::ThreadFactory* threadFactory;
-    static implementation::MutexFactory* mutexFactory;
 
+    static void initializeSystem(implementation::System* system);
     static void initialize(Application* application, Graphics* graphics,
-                           Audio* audio, Input* input, Files* files, implementation::System* system,
-                           implementation::ThreadFactory* threadFactory, implementation::MutexFactory* mutexFactory);
+                           Audio* audio, Input* input, Files* files);
 };
 
 } // namespace gdx_cpp
 
-#endif // GDX_CPP__GDX_HPP_
+#endif // GDX_CPP_GDX_HPP_

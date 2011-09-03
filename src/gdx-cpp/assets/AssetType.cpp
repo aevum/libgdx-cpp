@@ -19,9 +19,9 @@
 
 using namespace gdx_cpp::assets;
 
-AssetType AssetType::BitmapFont("BitmapFont");
-AssetType AssetType::Music("Music");
-AssetType AssetType::Pixmap("Pixmap");
-AssetType AssetType::Sound("Sound");
-AssetType AssetType::TextureAtlas("TextureAtlas");
-AssetType AssetType::Texture("Texture");
+const AssetType AssetType::BitmapFont("BitmapFont");
+const AssetType AssetType::Music("Music");
+const AssetType AssetType::Pixmap("Pixmap");
+const AssetType AssetType::Sound("Sound");
+const AssetType AssetType::TextureAtlas("TextureAtlas");
+const AssetType AssetType::Texture("Texture");

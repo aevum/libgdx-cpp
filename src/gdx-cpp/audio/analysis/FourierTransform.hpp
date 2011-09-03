@@ -58,7 +58,8 @@ public:
     std::vector< float > getImaginaryPart ();
 
 protected:
-    virtual   void allocateArrays () = 0;
+    virtual void allocateArrays () {
+    }
     void setComplex (std::vector< float >& r, std::vector< float >& i);
     void fillSpectrum ();
     void doWindow (std::vector< float >& samples);

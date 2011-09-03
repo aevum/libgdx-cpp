@@ -298,3 +298,7 @@ bool FileHandle::deleteDirectory (const File& file) {
     return file.delete();
 }
 
+bool gdx_cpp::files::FileHandle::deleteFile()
+{
+    return true;
+}

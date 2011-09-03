@@ -70,8 +70,8 @@ void TextureRegion::setRegion (gdx_cpp::graphics::Texture::ptr _texture) {
 }
 
 void TextureRegion::setRegion (int x,int y,int width,int height) {
-    float invTexWidth = 1 / texture->getWidth();
-    float invTexHeight = 1 / texture->getHeight();
+    float invTexWidth = 1.f / texture->getWidth();
+    float invTexHeight = 1.f / texture->getHeight();
     setRegion(x * invTexWidth, y * invTexHeight, (x + width) * invTexWidth, (y + height) * invTexHeight);
 }
 

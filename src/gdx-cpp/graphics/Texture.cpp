@@ -30,6 +30,7 @@
 #include "gdx-cpp/graphics/glutils/PixmapTextureData.hpp"
 
 #include <list>
+#include <sstream>
 #include "glutils/FileTextureData.hpp"
 
 using namespace gdx_cpp::graphics;
@@ -46,6 +47,10 @@ const Texture::TextureFilter Texture::TextureFilter::MipMapLinearNearest = Textu
 const Texture::TextureFilter Texture::TextureFilter::MipMapNearestLinear = Texture::TextureFilter(GL10::GL_NEAREST_MIPMAP_LINEAR);
 const Texture::TextureFilter Texture::TextureFilter::MipMapLinearLinear = Texture::TextureFilter(GL10::GL_LINEAR_MIPMAP_LINEAR);
 
+Texture::managedTextureMap Texture::managedTextures;
+int Texture::buffer = 0;
+assets::AssetManager* Texture::assetManager = 0;
+
 void Texture::create (TextureData::ptr data) {
     this->glHandle = 0;
     this->enforcePotImages = true;
@@ -58,8 +63,8 @@ void Texture::create (TextureData::ptr data) {
 }
 
 int Texture::createGLHandle () {
-    Gdx::gl->glGenTextures(1, buffer);
-    return buffer[0];
+    Gdx::gl->glGenTextures(1, &buffer);
+    return buffer;
 }
 
 void Texture::load (const TextureData::ptr& data) {
@@ -96,8 +101,8 @@ void Texture::uploadImageData (const gdx_cpp::graphics::Pixmap::ptr pixmap) {
 
     Pixmap::ptr tmp = pixmap;
     
-    if (data->getFormat() != pixmap->getFormat()) {
-        tmp = Pixmap::ptr(new Pixmap(pixmap->getWidth(), pixmap->getHeight(), data->getFormat()));
+    if (*data->getFormat() != pixmap->getFormat()) {
+        tmp = Pixmap::ptr(new Pixmap(pixmap->getWidth(), pixmap->getHeight(), *data->getFormat()));
         Pixmap::Blending blend = Pixmap::getBlending();
         Pixmap::setBlending(Pixmap::None);
         tmp->drawPixmap(*pixmap, 0, 0, 0, 0, pixmap->getWidth(), pixmap->getHeight());
@@ -151,19 +156,19 @@ int Texture::getHeight () const {
     return data->getHeight();
 }
 
-Texture::TextureFilter& Texture::getMinFilter () const {
+const gdx_cpp::graphics::Texture::TextureFilter& Texture::getMinFilter () const {
     return minFilter;
 }
 
-Texture::TextureFilter& Texture::getMagFilter () const {
+const gdx_cpp::graphics::Texture::TextureFilter& Texture::getMagFilter () const {
     return magFilter;
 }
 
-Texture::TextureWrap& Texture::getUWrap () const {
+const gdx_cpp::graphics::Texture::TextureWrap& Texture::getUWrap () const {
     return uWrap;
 }
 
-Texture::TextureWrap& Texture::getVWrap () const {
+const gdx_cpp::graphics::Texture::TextureWrap& Texture::getVWrap () const {
     return vWrap;
 }
 
@@ -196,8 +201,8 @@ void Texture::setFilter (const gdx_cpp::graphics::Texture::TextureFilter& minFil
 }
 
 void Texture::dispose () {
-    buffer[0] = glHandle;
-    Gdx::gl->glDeleteTextures(1, buffer);
+    buffer = glHandle;
+    Gdx::gl->glDeleteTextures(1, &buffer);
     
     if (data->isManaged()) {
         if (managedTextures.count(Gdx::app))
@@ -295,7 +300,7 @@ minFilter(TextureFilter::Nearest)
 ,uWrap(TextureWrap::ClampToEdge)
 ,vWrap(TextureWrap::ClampToEdge)
 {
-    Pixmap::ptr pixmap(new Pixmap(width, height, format));
+    Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(width, height, format));
     glutils::PixmapTextureData::ptr ptd(new glutils::PixmapTextureData(pixmap, NULL, false, true));
     create(ptd);
 }
@@ -340,14 +345,14 @@ minFilter(TextureFilter::Nearest)
     initialize(file, NULL, false);
 }
 
-Texture::Texture(const Pixmap& pixmap, bool useMipMaps)
+Texture::Texture(const Pixmap::ptr pixmap, bool useMipMaps)
 :
 minFilter(TextureFilter::Nearest)
 ,magFilter(TextureFilter::Nearest)
 ,uWrap(TextureWrap::ClampToEdge)
 ,vWrap(TextureWrap::ClampToEdge)
 {
-    Gdx::files::internal(internalPath);
+    create(glutils::PixmapTextureData::ptr(new glutils::PixmapTextureData(pixmap, NULL , useMipMaps, false)));
 }
 
 void Texture::initialize(const gdx_cpp::files::FileHandle& file,const Pixmap::Format* format, bool useMipMaps)
@@ -357,10 +362,10 @@ void Texture::initialize(const gdx_cpp::files::FileHandle& file,const Pixmap::Fo
     this->useHWMipMap = true;
     this->assetManager = 0;
     
-    if (file.name().endsWith(".etc1")) {
+//     if (file.name().endsWith(".etc1")) {
 //         create(new ETC1TextureData(file, useMipMaps));
-    } else {
-        create(new glutils::FileTextureData(file, NULL, format, useMipMaps));
-    }
+//     } else {
+//         create(new glutils::FileTextureData(file, NULL, format, useMipMaps));
+//     }
 }
 
