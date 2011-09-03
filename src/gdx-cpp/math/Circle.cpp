@@ -34,14 +34,18 @@ Circle::~Circle()
 
 }
 
-Circle& Circle::operator=(const Circle& other)
+Circle& Circle::operator=(const Circle&)
 {
     return *this;
 }
 
 bool Circle::operator==(const Circle& other) const
 {
-///TODO: return ...;
+    if (this == &other) {
+        return true;
+    }
+
+    return this->radius == other.radius && this->x == other.x && this->y == other.y;
 }
 
 

@@ -2,7 +2,7 @@
 /*
     Copyright 2011 <copyright holder> <email>
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0f(the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
@@ -252,35 +252,35 @@ Quaternion& Quaternion::setFromAxes (float xx, float xy, float xz, float yx, flo
     const float m10 = xy, m11 = yy, m12 = zy;
     const float m20 = xz, m21 = yz, m22 = zz;
     const float t = m00 + m11 + m22;
-    double x, y, z, w;
+    float x, y, z, w;
     if (t >= 0) { 
-        double s = std::sqrt(t + 1);
-        w = 0.5 * s;
-        s = 0.5 / s;
+        float s = std::sqrt(t + 1);
+        w = 0.5f* s;
+        s = 0.5f/ s;
         x = (m21 - m12) * s;
         y = (m02 - m20) * s;
         z = (m10 - m01) * s;
     }
     else if ((m00 > m11) && (m00 > m22)) {
-        double s = std::sqrt(1.0 + m00 - m11 - m22);
-        x = s * 0.5;
-        s = 0.5 / s;
+        float s = std::sqrt(1.0f+ m00 - m11 - m22);
+        x = s * 0.5f;
+        s = 0.5f/ s;
         y = (m10 + m01) * s;
         z = (m02 + m20) * s;
         w = (m21 - m12) * s;
     }
     else if (m11 > m22) {
-        double s = std::sqrt(1.0 + m11 - m00 - m22);
-        y = s * 0.5;
-        s = 0.5 / s;
+        float s = std::sqrt(1.0f + m11 - m00 - m22);
+        y = s * 0.5f;
+        s = 0.5f/ s;
         x = (m10 + m01) * s;
         z = (m21 + m12) * s;
         w = (m02 - m20) * s;
     }
     else {
-        double s = std::sqrt(1.0 + m22 - m00 - m11);
-        z = s * 0.5; 
-        s = 0.5 / s;
+        float s = std::sqrt(1.0f+ m22 - m00 - m11);
+        z = s * 0.5f;
+        s = 0.5f/ s;
         x = (m02 + m20) * s;
         y = (m21 + m12) * s;
         w = (m10 - m01) * s;
@@ -296,7 +296,7 @@ Quaternion& Quaternion::slerp (Quaternion& end, float alpha)
 
     float result = dot(end);
 
-    if (result < 0.0) {
+    if (result < 0.0f) {
         end.mul(-1);
         result = -result;
     }
@@ -304,9 +304,9 @@ Quaternion& Quaternion::slerp (Quaternion& end, float alpha)
     float scale0 = 1 - alpha;
     float scale1 = alpha;
 
-    if ((1 - result) > 0.1){
-        const double theta = std::acos(result);
-        const double invSinTheta = 1.0 / std::sin(theta);
+    if ((1 - result) > 0.1f){
+        const float theta = std::acos(result);
+        const float invSinTheta = 1.0f/ std::sin(theta);
         scale0 = (float)(std::sin((1 - alpha) * theta) * invSinTheta);
         scale1 = (float)(std::sin((alpha * theta)) * invSinTheta);
     }

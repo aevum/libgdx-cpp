@@ -22,10 +22,10 @@ public:
 
     SpriteBatchTest() :
             angle(0),
-            ROTATION_SPEED(20),
             scale(1),
             SCALE_SPEED(-1),
             renderMethod(0),
+            ROTATION_SPEED(20),
             frames(0)
     {
 

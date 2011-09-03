@@ -73,7 +73,7 @@ public:
         }
     private:
         std::string name;
-        Format(const std::string& name) : name(name) {
+        Format(const std::string& p_name) : name(p_name) {
         }
     };
 

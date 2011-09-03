@@ -33,8 +33,8 @@
 #define radToIndex SIN_COUNT / radFull
 #define degToIndex SIN_COUNT / degFull
 
-#define radiansToDegrees 180.0 / 3.1415927
-#define degreesToRadians  math::utils::PI / 180
+#define radiansToDegrees 180.0f / 3.1415927f
+#define degreesToRadians  math::utils::PI / 180.f
 
 #include "gdx-cpp/utils/NumberUtils.hpp"
 
@@ -44,26 +44,26 @@ namespace math {
 
 namespace utils {
 
-const double PI = 4.0 * std::atan(1);
+const float PI = 4.0 * std::atan(1);
 static float _sin[SIN_COUNT];
 static float _cos[SIN_COUNT];
 static int BIG_ENOUGH_INT = 16 * 1024;
-static double BIG_ENOUGH_FLOOR = BIG_ENOUGH_INT;
-static double CEIL = 0.9999999;
-static double BIG_ENOUGH_CEIL = gdx_cpp::utils::NumberUtils::longBitsToDouble(gdx_cpp::utils::NumberUtils::doubleToLongBits(BIG_ENOUGH_INT + 1) - 1);
-static double BIG_ENOUGH_ROUND = BIG_ENOUGH_INT + 0.5f;
+static float BIG_ENOUGH_FLOOR = BIG_ENOUGH_INT;
+static float CEIL = 0.9999999;
+static float BIG_ENOUGH_CEIL = gdx_cpp::utils::NumberUtils::longBitsToDouble(gdx_cpp::utils::NumberUtils::doubleToLongBits(BIG_ENOUGH_INT + 1) - 1);
+static float BIG_ENOUGH_ROUND = BIG_ENOUGH_INT + 0.5f;
 
 inline float toDegrees(float radians) {
-    return radians * (180.0 / PI);
+    return radians * (180.0f / PI);
 }
 
 inline float toRadians(float degrees) {
-    return degrees * (PI / 180.0);
+    return degrees * (PI / 180.0f);
 }
 
 
 inline float signum(float value) {
-    return value < 0 ? -1 : (value == 0 ? 0 : 1);
+    return value < 0.0f ? -1.0f : (value == 0.0f ? 0.0f : 1.0f);
 }
 
 inline float sin (float rad) {
@@ -89,7 +89,7 @@ namespace detail {
 #define ATAN2_BITS2 ATAN2_BITS << 1
 #define ATAN2_MASK (~(-1 << ATAN2_BITS2))
 #define ATAN2_COUNT ATAN2_MASK + 1
-#define INV_ATAN2_DIM_MINUS_1 1.0 / (detail::ATAN2_DIM - 1)
+#define INV_ATAN2_DIM_MINUS_1 1.0f / (detail::ATAN2_DIM - 1)
 
 static const int ATAN2_DIM ((int) std::sqrt((float)ATAN2_COUNT));
 static float _atan2[ATAN2_COUNT];
@@ -161,7 +161,7 @@ inline bool randomBoolean () {
 }
 
 inline float random () {
-    return ( std::rand() / (static_cast<float>(RAND_MAX) + 1.0));
+    return ( std::rand() / (static_cast<float>(RAND_MAX) + 1.0f));
 }
 
 inline float random (float range) {
@@ -197,7 +197,7 @@ inline int nextPowerOfTwo (int value) {
 }
 
 inline bool isPowerOfTwo (int value) {
-    return value != 0 && (value & value - 1) == 0;
+    return value != 0 && (value & (value - 1)) == 0;
 }
 
 inline int floor (float x) {

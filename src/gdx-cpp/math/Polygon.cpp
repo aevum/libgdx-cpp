@@ -31,13 +31,13 @@ using namespace gdx_cpp::math;
 
 Polygon::Polygon(const std::vector< float >& vertices)
   : vertices(vertices)
-  , scaleX(1)
-  , scaleY(1)
   , x(0)
   , y(0)
   , originX(0)
   , originY(0)
   , rotation(0)
+  , scaleX(1)
+  , scaleY(1)  
   , dirty(false)
 {
   if (vertices.size() < 6) {

@@ -59,7 +59,7 @@ public:
     void drawPixmap (const Gdx2DPixmap& src,int srcX,int srcY,int dstX,int dstY,int width,int height);
     void drawPixmap (const Gdx2DPixmap& src,int srcX,int srcY,int srcWidth,int srcHeight,int dstX,int dstY,int dstWidth,int dstHeight);
     
-    const unsigned char*const getPixels ();
+    const unsigned char* getPixels ();
     int getHeight ();
     int getWidth ();
     int getFormat ();

@@ -69,7 +69,7 @@ gdx_cpp::graphics::g2d::SpriteBatch::SpriteBatch(int size) :
                                      size * 6,
                                      attributes));
     
-    projectionMatrix.setToOrtho2D(0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getWidth());
+    projectionMatrix.setToOrtho2D(0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
     
     vertices.reserve(size * Sprite::SPRITE_SIZE);
     

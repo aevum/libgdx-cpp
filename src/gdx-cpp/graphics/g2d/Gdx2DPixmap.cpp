@@ -48,12 +48,12 @@ gdx2d_pixmap* newPixmap (int width, int height, int format) {
 
 Gdx2DPixmap::Gdx2DPixmap (std::istream& in, int requestedFormat)
         :
-        width(0)
+        pixData(0)
+        ,width(0)
         ,height(0)
         ,format(0)
 {
 
-    char buffer[1024];
     char* nativeBuffer = (char*) malloc(1024);
     int bufSize = 1024;
 
@@ -198,7 +198,7 @@ graphics::g2d::Gdx2DPixmap* Gdx2DPixmap::newPixmap (int width, int height, int f
     return new Gdx2DPixmap(width, height, format);
 }
 
-const unsigned char* const Gdx2DPixmap::getPixels () {
+const unsigned char* Gdx2DPixmap::getPixels () {
     assert(pixData != NULL);
     return pixData->pixels;
 }

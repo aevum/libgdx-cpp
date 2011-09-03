@@ -124,11 +124,11 @@ int EarClippingTriangulator::computeSpannedAreaSign (float pX1, float pY1, float
      * Espitz: using doubles corrects for very rare cases where we run into floating point imprecision in the area test, causing
      * the method to return a 0 when it should have returned -1 or 1.
      */
-    double area = 0;
+    float area = 0;
 
-    area += (double)pX1 * (pY3 - pY2);
-    area += (double)pX2 * (pY1 - pY3);
-    area += (double)pX3 * (pY2 - pY1);
+    area += pX1 * (pY3 - pY2);
+    area += pX2 * (pY1 - pY3);
+    area += pX3 * (pY2 - pY1);
 
     return (int) utils::signum(area);
 }
@@ -239,6 +239,6 @@ int EarClippingTriangulator::computePreviousIndex (const std::vector<Vector2>& p
 }
 
 int EarClippingTriangulator::computeNextIndex (const std::vector<Vector2>& pVertices, int pIndex) {
-    return pIndex == pVertices.size() - 1 ? 0 : pIndex + 1;
+    return pIndex == (pVertices.size() - 1) ? 0 : pIndex + 1;
 }
 

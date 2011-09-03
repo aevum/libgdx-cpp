@@ -8,6 +8,10 @@ set(GDX_BINARY_ROOT_DIR ${PROJECT_BINARY_DIR})
 LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/finders)
 set(GDXCPP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+if (UNIX)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wall -Wdouble-promotion")
+endif()
+
 option(BUILD_BACKEND_LINUX "Builds the linux backend for gdx-cpp" ${UNIX})
 option(BUILD_BACKEND_IOS "Builds the ios backend for gdx-cpp" FALSE)
 option(BUILD_BACKEND_ANDROID "Builds the android backend for gdx-cpp" FALSE)

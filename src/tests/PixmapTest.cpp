@@ -79,7 +79,7 @@ private:
 
 int main() {
     gdx_cpp::backends::initializeSystem();
-    gdx_cpp::backends::Application app(new PixmapTest, "PixmapTest", 640, 480, false);
+    gdx_cpp::backends::Application app(new PixmapTest, "PixmapTest", 480, 320, false);
 
     return 0;
 }

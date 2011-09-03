@@ -41,7 +41,7 @@ VertexAttributes::VertexAttributes (const std::vector<VertexAttribute>& attribut
 
 int VertexAttributes::calculateOffsets () {
     int count = 0;
-    for (int i = 0; i < attributes.size(); i++) {
+    for (unsigned int i = 0; i < attributes.size(); i++) {
         VertexAttribute& attribute = attributes[i];
         attribute.offset = count;
         if (attribute.usage == VertexAttributes::Usage::ColorPacked)
@@ -58,7 +58,7 @@ void VertexAttributes::checkValidity () {
     bool cols = false;
     bool nors = false;
 
-    for (int i = 0; i < attributes.size(); i++) {
+    for (unsigned int i = 0; i < attributes.size(); i++) {
         const VertexAttribute& attribute = attributes[i];
         if (attribute.usage == Usage::Position) {
             if (pos) {
@@ -102,7 +102,7 @@ VertexAttribute& VertexAttributes::get (int index) {
 
 std::string VertexAttributes::toString () {
     std::stringstream builder;
-    for (int i = 0; i < attributes.size(); i++) {
+    for (unsigned int i = 0; i < attributes.size(); i++) {
         builder << attributes[i].alias << ", " <<
         attributes[i].usage << ", " <<
         attributes[i].numComponents <<  ", " <<
