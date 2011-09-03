@@ -19,10 +19,21 @@
 */
 
 #include "Transform.hpp"
+#include <cmath>
 
 using namespace gdx_cpp::physics::box2d;
 
-gdx_cpp::math::Vector2& Transform::mul (const gdx_cpp::math::Vector2& v) {
+Transform::Transform ()
+{
+
+}
+
+Transform::Transform (gdx_cpp::math::Vector2& position, float angle) {
+    setPosition(position);
+    setRotation(angle);
+}
+
+gdx_cpp::math::Vector2& Transform::mul (gdx_cpp::math::Vector2& v) {
     float x = vals[POS_X] + vals[COL1_X] * v.x + vals[COL2_X] * v.y;
     float y = vals[POS_Y] + vals[COL1_Y] * v.x + vals[COL2_Y] * v.y;
 
@@ -36,7 +47,7 @@ gdx_cpp::math::Vector2& Transform::getPosition () {
 }
 
 void Transform::setRotation (float angle) {
-    float c = (float)Math.cos(angle), s = (float)Math.sin(angle);
+    float c = (float)std::cos(angle), s = (float)std::sin(angle);
     vals[COL1_X] = c;
     vals[COL2_X] = -s;
     vals[COL1_Y] = s;
@@ -44,7 +55,7 @@ void Transform::setRotation (float angle) {
 }
 
 void Transform::setPosition (const gdx_cpp::math::Vector2& pos) {
-    this.vals[POS_X] = pos.x;
-    this.vals[POS_Y] = pos.y;
+    vals[POS_X] = pos.x;
+    vals[POS_Y] = pos.y;
 }
 

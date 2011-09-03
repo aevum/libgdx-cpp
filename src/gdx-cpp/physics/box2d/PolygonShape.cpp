@@ -31,6 +31,11 @@ PolygonShape::PolygonShape () {
     addr = newPolygonShape();
 }
 
+PolygonShape::PolygonShape (b2PolygonShape * _addr)
+{
+  addr = _addr;
+}
+
 b2PolygonShape* PolygonShape::newPolygonShape()
 {
     b2PolygonShape* poly = new b2PolygonShape();

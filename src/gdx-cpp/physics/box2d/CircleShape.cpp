@@ -18,22 +18,35 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
+
+#include "Box2D.h"
 #include "CircleShape.hpp"
 
 using namespace gdx_cpp::physics::box2d;
 
-Type& CircleShape::getType () {
-    return Type.Circle;
+
+        CircleShape::CircleShape () {
+                addr = new b2CircleShape( );
+        }
+
+
+        CircleShape::CircleShape (b2CircleShape * _addr) {
+                this->addr = _addr;
+        }
+
+
+Shape::Type CircleShape::getType () {
+    return Shape::Circle;
 }
 
 gdx_cpp::math::Vector2& CircleShape::getPosition () {
-    jniGetPosition(addr, tmp);
-    position.x = tmp[0];
-    position.y = tmp[1];
+    position.x = static_cast<b2CircleShape*>(addr)->m_p.x;
+    position.y = static_cast<b2CircleShape*>(addr)->m_p.y;
     return position;
 }
 
 void CircleShape::setPosition (const gdx_cpp::math::Vector2& position) {
-    jniSetPosition(addr, position.x, position.y);
+    static_cast<b2CircleShape*>(addr)->m_p.x = position.x;
+    static_cast<b2CircleShape*>(addr)->m_p.y = position.y;
 }
 

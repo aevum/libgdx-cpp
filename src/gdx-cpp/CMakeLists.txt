@@ -224,7 +224,7 @@ InputProcessor.hpp
 # utils/Runnable.hpp
 # utils/MatrixBase.hpp
 # utils/Disposable.hpp
-# utils/Pool.hpp
+utils/Pool.hpp
 # utils/SerializationException.hpp
 # utils/LockGuard.hpp
 # utils/Array.hpp
@@ -472,7 +472,6 @@ utils/gzstream.cpp
 # utils/BufferUtils.cpp
 # utils/SerializationException.cpp
 # utils/GdxNativesLoader.cpp
-# utils/Pool.cpp
 utils/NumberUtils.cpp
 # utils/LittleEndianInputStream.cpp
 # utils/IntArray.cpp

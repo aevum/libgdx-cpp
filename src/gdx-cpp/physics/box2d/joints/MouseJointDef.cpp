@@ -24,3 +24,7 @@ using namespace gdx_cpp::physics::box2d::joints;
 
 
 
+MouseJointDef::MouseJointDef(): maxForce(0), frequencyHz(5.0), dampingRatio(0.7)
+{
+  type=JointDef::MouseJoint;
+}

@@ -21,6 +21,9 @@
 #ifndef GDX_CPP_PHYSICS_BOX2D_JOINTS_DISTANCEJOINT_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_JOINTS_DISTANCEJOINT_HPP_
 
+#include <gdx-cpp/physics/box2d/Joint.hpp>
+
+class b2DistanceJoint;
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
@@ -28,13 +31,14 @@ namespace joints {
 
 class DistanceJoint: public gdx_cpp::physics::box2d::Joint {
 public:
+    DistanceJoint(ref_ptr_maker< World >::type _world, b2DistanceJoint* joint);
     void setLength (float length);
     float getLength ();
     void setFrequency (float hz);
     float getFrequency ();
     void setDampingRatio (float ratio);
     float getDampingRatio ();
-
+    
 protected:
 
 

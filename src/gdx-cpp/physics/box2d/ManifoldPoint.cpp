@@ -1,6 +1,5 @@
-
 /*
-    Copyright 2011 Aevum Software aevum @ aevumlab.com
+    Copyright 2011 <copyright holder> <email>
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -13,19 +12,14 @@
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
-    @author Victor Vicente de Carvalho victor.carvalho@aevumlab.com
-    @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "JointEdge.hpp"
+
+#include "ManifoldPoint.hpp"
 
 using namespace gdx_cpp::physics::box2d;
 
-JointEdge::JointEdge (ref_ptr_maker< Body >::type _other, gdx_cpp::physics::box2d::Joint* _joint):other(_other), joint(_joint)
+ManifoldPoint::ManifoldPoint() : normalImpulse(0), tangentImpulse(0), contactID(0)
 {
   
 }
-
-
-

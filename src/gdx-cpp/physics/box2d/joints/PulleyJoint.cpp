@@ -19,30 +19,34 @@
 */
 
 #include "PulleyJoint.hpp"
+#include "Box2D.h"
 
 using namespace gdx_cpp::physics::box2d::joints;
 
+PulleyJoint::PulleyJoint(ref_ptr_maker< gdx_cpp::physics::box2d::World >::type _world, b2PulleyJoint* joint) : Joint(_world, joint)
+{
+
+}
+
 gdx_cpp::math::Vector2& PulleyJoint::getGroundAnchorA () {
-    jniGetGroundAnchorA(addr, tmp);
-    groundAnchorA.set(tmp[0], tmp[1]);
+    groundAnchorA.set(static_cast<b2PulleyJoint * >(addr)->GetAnchorA().x, static_cast<b2PulleyJoint * >(addr)->GetAnchorA().y);
     return groundAnchorA;
 }
 
 gdx_cpp::math::Vector2& PulleyJoint::getGroundAnchorB () {
-    jniGetGroundAnchorB(addr, tmp);
-    groundAnchorB.set(tmp[0], tmp[1]);
+    groundAnchorB.set(static_cast<b2PulleyJoint * >(addr)->GetAnchorB().x, static_cast<b2PulleyJoint * >(addr)->GetAnchorB().y);
     return groundAnchorB;
 }
 
 float PulleyJoint::getLength1 () {
-    return jniGetLength1(addr);
+    return static_cast<b2PulleyJoint * >(addr)->GetLength1();
 }
 
 float PulleyJoint::getLength2 () {
-    return jniGetLength2(addr);
+    return static_cast<b2PulleyJoint * >(addr)->GetLength2();
 }
 
 float PulleyJoint::getRatio () {
-    return jniGetRatio(addr);
+    return static_cast<b2PulleyJoint * >(addr)->GetRatio();
 }
 

@@ -21,19 +21,31 @@
 #ifndef GDX_CPP_PHYSICS_BOX2D_FIXTURE_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_FIXTURE_HPP_
 
+#include "Shape.hpp"
+#include "Filter.hpp"
+#include <gdx-cpp/utils/Aliases.hpp>
+#include "Body.hpp"
+
+class b2Fixture;
 namespace gdx_cpp {
+namespace math{
+  class Vector2;
+}
 namespace physics {
 namespace box2d {
+  
+class Body;
 
 class Fixture {
 public:
-    gdx_cpp::physics::box2d::Shape::Type& getType ();
-    Shape& getShape ();
+  
+    Shape::Type getType ();
+    Shape::ptr getShape ();
     void setSensor (bool sensor);
     bool isSensor ();
-    void setFilterData (const Filter& filter);
+    void setFilterData (const gdx_cpp::physics::box2d::Filter& filter);
     Filter& getFilterData ();
-    Body& getBody ();
+    Body::ptr getBody ();
     bool testPoint (const gdx_cpp::math::Vector2& p);
     bool testPoint (float x,float y);
     void setDensity (float density);
@@ -42,14 +54,21 @@ public:
     void setFriction (float friction);
     float getRestitution ();
     void setRestitution (float restitution);
-    void setUserData (const Object& userData);
-    Object& getUserData ();
+    void setUserData (void * userData);
+    void * getUserData ();
+    
+    b2Fixture* addr;
+    void reset (gdx_cpp::physics::box2d::Body::ptr body, b2Fixture* addr);
 
 protected:
-    void reset (const Body& body,long addr);
+
+    Shape::ptr shape;
+    void * userData;
 
 private:
-
+    Filter filter;
+    Body::ptr body;
+    
 };
 
 } // namespace gdx_cpp

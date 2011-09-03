@@ -24,3 +24,4 @@ using namespace gdx_cpp::physics::box2d;
 
 
 
+MassData::MassData(): mass(0), I(0) {}

@@ -20,6 +20,7 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_POLYGONSHAPE_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_POLYGONSHAPE_HPP_
+
 #include "Shape.hpp"
 #include <vector>
 
@@ -37,6 +38,7 @@ class PolygonShape : public Shape {
 public:
 
     PolygonShape ();
+    PolygonShape (b2PolygonShape * _addr);
     Shape::Type getType ();
     void set (std::vector< gdx_cpp::math::Vector2, std::allocator< gdx_cpp::math::Vector2 > >& vertices);
     void setAsBox (float hx,float hy);

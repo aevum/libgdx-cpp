@@ -20,6 +20,7 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_SHAPE_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_SHAPE_HPP_
+#include <gdx-cpp/utils/Aliases.hpp>
 
 class b2Shape;
 namespace gdx_cpp {
@@ -27,6 +28,7 @@ namespace physics {
 namespace box2d {
 class Shape {
 public:
+    typedef ref_ptr_maker<Shape>::type ptr;
     enum Type {
         Circle, Polygon,
     };
@@ -35,8 +37,8 @@ public:
     void setRadius (float radius);
     void dispose ();
 
-protected:
     b2Shape* addr;
+protected:
 
 private:
 

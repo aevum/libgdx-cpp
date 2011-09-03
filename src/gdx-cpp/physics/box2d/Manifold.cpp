@@ -19,49 +19,49 @@
 */
 
 #include "Manifold.hpp"
+#include "Box2D.h"
 
 using namespace gdx_cpp::physics::box2d;
 
-ManifoldType& Manifold::getType () {
-    int type = jniGetType(addr);
-    if (type == 0) return ManifoldType.Circle;
-    if (type == 1) return ManifoldType.FaceA;
-    if (type == 2) return ManifoldType.FaceB;
-    return ManifoldType.Circle;
+
+Manifold::Manifold(World::ptr _world, b2Manifold * mani): world(world), addr(mani)
+{
+  
+}
+
+Manifold::ManifoldType Manifold::getType () {
+    if (addr->type == 0) return Circle;
+    if (addr->type == 1) return FaceA;
+    if (addr->type == 2) return FaceB;
+    return Circle;
 }
 
 int Manifold::getPointCount () {
-    return jniGetPointCount(addr);
+    return addr->pointCount;
 }
 
 gdx_cpp::math::Vector2& Manifold::getLocalNormal () {
-    jniGetLocalNormal(addr, tmpFloat);
-    localNormal.set(tmpFloat[0], tmpFloat[1]);
+    localNormal.set(addr->localNormal.x, addr->localNormal.y);
     return localNormal;
 }
 
 gdx_cpp::math::Vector2& Manifold::getLocalPoint () {
-    jniGetLocalPoint(addr, tmpFloat);
-    localPoint.set(tmpFloat[0], tmpFloat[1]);
+    localPoint.set(addr->localPoint.x, localPoint.y);
     return localPoint;
 }
 
-ManifoldPoint* Manifold::getPoints () {
-    int count = jniGetPointCount(addr);
+gdx_cpp::physics::box2d::ManifoldPoint* Manifold::getPoints () {
+    int count = addr->pointCount;
 
     for (int i = 0; i < count; i++) {
-        int contactID = jniGetPoint(addr, tmpFloat, i);
+        int contactID = addr->points[i].id.key;
         ManifoldPoint point = points[i];
         point.contactID = contactID;
-        point.localPoint.set(tmpFloat[0], tmpFloat[1]);
-        point.normalImpulse = tmpFloat[2];
-        point.tangentImpulse = tmpFloat[3];
+        point.localPoint.set(addr->points[i].localPoint.x, addr->points[i].localPoint.y);
+        point.normalImpulse = addr->points[i].normalImpulse;
+        point.tangentImpulse = addr->points[i].tangentImpulse;
     }
 
     return points;
-}
-
-std::string& Manifold::toString () {
-    return "id: " + contactID + ", " + localPoint + ", " + normalImpulse + ", " + tangentImpulse;
 }
 

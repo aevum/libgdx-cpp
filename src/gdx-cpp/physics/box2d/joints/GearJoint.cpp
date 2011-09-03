@@ -19,14 +19,20 @@
 */
 
 #include "GearJoint.hpp"
+#include "Box2D.h"
 
 using namespace gdx_cpp::physics::box2d::joints;
 
+GearJoint::GearJoint(ref_ptr_maker< gdx_cpp::physics::box2d::World >::type _world, b2GearJoint* joint) : Joint(_world, joint)
+{
+
+}
+
 void GearJoint::setRatio (float ratio) {
-    jniSetRatio(addr, ratio);
+    static_cast<b2GearJoint *>(addr)->SetRatio(ratio);
 }
 
 float GearJoint::getRatio () {
-    return jniGetRatio(addr);
+    return static_cast<b2GearJoint *> (addr)->GetRatio();
 }
 
