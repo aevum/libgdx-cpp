@@ -215,7 +215,9 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
         lastTexture = const_cast<Texture*>(&texture);
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
-    } else if (idx == vertices.capacity()) renderMesh();
+    } else if (idx == 20000) {
+        renderMesh();
+    }
 
     // bottom left and top right corner points relative to origin
     float worldOriginX = x + originX;
@@ -308,29 +310,34 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
         v2 = tmp;
     }
 
-    vertices[idx++] = x1;
-    vertices[idx++] = y1;
-    vertices[idx++] = color;
-    vertices[idx++] = u;
-    vertices[idx++] = v;
+    utils::float_buffer& buffer = mesh->getVerticesBuffer();
+    buffer.limit(buffer.position() + 20);
+    
+    buffer.put(x1);
+    buffer.put(y1);
+    buffer.put(color);
+    buffer.put(u);
+    buffer.put(v);
 
-    vertices[idx++] = x2;
-    vertices[idx++] = y2;
-    vertices[idx++] = color;
-    vertices[idx++] = u;
-    vertices[idx++] = v2;
+    buffer.put(x2);
+    buffer.put(y2);
+    buffer.put(color);
+    buffer.put(u);
+    buffer.put(v2);
 
-    vertices[idx++] = x3;
-    vertices[idx++] = y3;
-    vertices[idx++] = color;
-    vertices[idx++] = u2;
-    vertices[idx++] = v2;
+    buffer.put(x3);
+    buffer.put(y3);
+    buffer.put(color);
+    buffer.put(u2);
+    buffer.put(v2);
 
-    vertices[idx++] = x4;
-    vertices[idx++] = y4;
-    vertices[idx++] = color;
-    vertices[idx++] = u2;
-    vertices[idx++] = v;
+    buffer.put(x4);
+    buffer.put(y4);
+    buffer.put(color);
+    buffer.put(u2);
+    buffer.put(v);
+
+    idx += 20;
 }
 
 void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float y,float width,float height,int srcX,int srcY,int srcWidth,int srcHeight,bool flipX,bool flipY) {
@@ -881,7 +888,7 @@ void SpriteBatch::renderMesh () {
     if (spritesInBatch > maxSpritesInBatch) maxSpritesInBatch = spritesInBatch;
 
     lastTexture->bind();
-    mesh->setVertices(vertices, 0, idx);
+//  mesh->setVertices(vertices, 0, idx);
 
     if (Gdx::graphics->isGL20Available()) {
         if (blendingDisabled) {
@@ -905,6 +912,7 @@ void SpriteBatch::renderMesh () {
             gl10.glBlendFunc(blendSrcFunc, blendDstFunc);
         }
         mesh->render(GL10::GL_TRIANGLES, 0, spritesInBatch * 6);
+        mesh->getVerticesBuffer().position(0);
     }
 
     idx = 0;

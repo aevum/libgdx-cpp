@@ -12,24 +12,45 @@ int File::getPrefixLength()
     return prefixLength;
 }
 
-const char separatorChar = gdx_cpp::Gdx::system->getSeparator();
-const std::string separator = std::string("") + separatorChar;
-const char pathSeparatorChar = gdx_cpp::Gdx::system->getPathSeparator();
-const std::string pathSeparator = std::string("") + pathSeparatorChar;
+static bool initialized = false;
+
+static void initializeFiles() {
+    File::separatorChar = gdx_cpp::Gdx::system->getSeparator();
+    File::separator = std::string("") + File::separatorChar;
+    File::pathSeparatorChar = gdx_cpp::Gdx::system->getPathSeparator();
+    File::pathSeparator = std::string("") + File::pathSeparatorChar;
+}
+
+char File::separatorChar;
+std::string File::separator;
+char File::pathSeparatorChar;
+std::string File::pathSeparator;
 
 File::File()  //USADO PARA FAZER COISA FEIA(GAMBS)
   : path("")
 {
+    if (!initialized) {
+        initializeFiles();
+        initialized = true;
+    }
 }
 
 File::File(const std::string& pathname, const int &prefixLength)
 {
+    if (!initialized) {
+        initializeFiles();
+        initialized = true;
+    }
     this->path = pathname;
     this->prefixLength = prefixLength;
 }
 
 File::File(const std::string& child, const File &parent)
 {
+    if (!initialized) {
+        initializeFiles();
+        initialized = true;
+    }
     //assert(parent.path != null);
     assert(parent.path != "");
     this->path = gdx_cpp::Gdx::system->resolve(parent.path, child);
@@ -39,12 +60,21 @@ File::File(const std::string& child, const File &parent)
 
 File::File(const std::string& pathname)
 {
+    if (!initialized) {
+        initializeFiles();
+        initialized = true;
+    }
     this->path = gdx_cpp::Gdx::system->normalize(pathname);
     this->prefixLength = gdx_cpp::Gdx::system->prefixLength(this->path);
 }
 
 File::File(const std::string& parent, const std::string& child)
 {
+    if (!initialized) {
+        initializeFiles();
+        initialized = true;
+    }
+    
     if(parent == "")
     {
         this->path = gdx_cpp::Gdx::system->resolve(gdx_cpp::Gdx::system->getDefaultParent(), gdx_cpp::Gdx::system->normalize(child));
@@ -58,6 +88,11 @@ File::File(const std::string& parent, const std::string& child)
 
 File::File(const File &parent, const std::string& child)
 {
+    if (!initialized) {
+        initializeFiles();
+        initialized = true;
+    }
+    
     if(parent.path == ""){
         this->path = gdx_cpp::Gdx::system->resolve(gdx_cpp::Gdx::system->getDefaultParent(), gdx_cpp::Gdx::system->normalize(child));
     }

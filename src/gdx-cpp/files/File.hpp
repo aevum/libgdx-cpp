@@ -14,10 +14,10 @@ class File
 public:
     int getPrefixLength();
 
-    static const char separatorChar;
-    static const std::string separator;
-    static const char pathSeparatorChar;
-    static const std::string pathSeparator;
+    static char separatorChar;
+    static std::string separator;
+    static char pathSeparatorChar;
+    static std::string pathSeparator;
     
     File();
     File(const std::string& pathname);

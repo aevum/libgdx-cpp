@@ -1,6 +1,8 @@
 #include "backends/current_backend.hpp"
 
 #include <gdx-cpp/Application.hpp>
+#include <gdx-cpp/Graphics.hpp>
+#include <gdx-cpp/implementation/System.hpp>
 #include <gdx-cpp/ApplicationListener.hpp>
 #include <gdx-cpp/graphics/Mesh.hpp>
 #include <gdx-cpp/graphics/GL10.hpp>
@@ -55,18 +57,18 @@ public:
             sprites2[i + 4] = 32;
             sprites2[i + 5] = 32;
         }
-// 
-//         for (int i = 0; i < SPRITES * 2; i++) {
-//             int x = (int)(math::utils::random() * (Gdx::graphics->getWidth() - 32));
-//             int y = (int)(math::utils::random() * (Gdx::graphics->getHeight() - 32));
-// 
-// //             if (i >= SPRITES)
-// //                 sprites3[i] = new Sprite(texture2, 32, 32);
-// //             else
-//             sprites3[i] = new Sprite(texture, 32, 32);
-//             sprites3[i]->setPosition(x, y);
-//             sprites3[i]->setOrigin(16, 16);
-//         }
+
+        for (int i = 0; i < SPRITES * 2; i++) {
+            int x = (int)(math::utils::random() * (Gdx::graphics->getWidth() - 32));
+            int y = (int)(math::utils::random() * (Gdx::graphics->getHeight() - 32));
+
+//             if (i >= SPRITES)
+//                 sprites3[i] = new Sprite(texture2, 32, 32);
+//             else
+            sprites3[i] = new Sprite(texture, 32, 32);
+            sprites3[i]->setPosition(x, y);
+            sprites3[i]->setOrigin(16, 16);
+        }
     }
 
     void dispose() {
@@ -76,30 +78,7 @@ public:
     }
 
     void render() {
-        GL10& gl = *Gdx::gl10;
-        
-        gl.glClearColor(0.7f, 0.7f, 0.7f, 1);
-        gl.glClear(GL10::GL_COLOR_BUFFER_BIT);
-        
-        logger.log();
-
-        angle += ROTATION_SPEED * Gdx::graphics->getDeltaTime();
-        scale += SCALE_SPEED * Gdx::graphics->getDeltaTime();
-
-        if (scale < 0.5f) {
-            scale = 0.5f;
-            SCALE_SPEED = 1;
-        }
-        
-        if (scale > 1.0f) {
-            scale = 1.0f;
-            SCALE_SPEED = -1;
-        }
-        
-        spriteBatch->begin();
-        spriteBatch->draw(*texture, sprites[0], sprites[1], 16, 16, 32, 32, scale, scale, angle, 0, 0, 32, 32, false, false);
-        spriteBatch->end();
-//         renderNormal();
+         renderNormal();
     }
 
     void resize(int width, int height) {
@@ -158,7 +137,7 @@ public:
 
         if (Gdx::system->nanoTime() - startTime > 1000000000) {
             Gdx::app->log("SpriteBatch") << "fps: " << frames << ", render calls: " << spriteBatch->renderCalls << ", "
-            << begin << ", " << draw1 << ", " << draw2 << ", " << drawText << ", " << end;
+            << begin << ", " << draw1 << ", " << draw2 << ", " << drawText << ", " << end << std::endl;
             frames = 0;
             startTime = Gdx::system->nanoTime();
         }
@@ -219,7 +198,7 @@ public:
 
         if (Gdx::system->nanoTime() - startTime > 1000000000) {
             std::cout <<  "fps: " << frames << ", render calls: " << spriteBatch->renderCalls << ", " << begin
-            << ", " << draw1 << ", " << draw2 << ", " << drawText << ", " << end << std::endl << std::endl;
+            << ", " << draw1 << ", " << draw2 << ", " << drawText << ", " << end << std::endl;
             frames = 0;
             startTime = Gdx::system->nanoTime();
         }
@@ -240,12 +219,8 @@ protected:
     float ROTATION_SPEED;
     uint64_t startTime;
     int frames;
-    FPSLogger logger;
 };
 
-int main() {
-    gdx_cpp::backends::initializeSystem();
-    gdx_cpp::backends::Application application(new SpriteBatchTest, "SpriteBatch Test", 640, 480, false);
-    
-    return 0;
+extern "C" void init() {
+    createApplication(new SpriteBatchTest, "SpriteBatch Test", 640, 480);
 }

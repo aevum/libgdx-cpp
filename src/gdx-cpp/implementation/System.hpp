@@ -77,7 +77,7 @@ public:
 
     virtual bool deleteFile(gdx_cpp::files::File &f) = 0;
 
-    virtual void checkWrite(const std::string &path);
+    virtual void checkWrite(const std::string &path) = 0;
 
     /* CHECK WRITE DEVE FAZER:
      *  SecurityManager security = System.getSecurityManager();

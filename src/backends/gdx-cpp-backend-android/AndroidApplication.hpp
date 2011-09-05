@@ -31,7 +31,7 @@ namespace gdx_cpp {
 
 namespace backends {
 
-namespace nix {
+namespace android {
 
 class AndroidApplication : public Application, public Runnable, public Synchronizable
 {

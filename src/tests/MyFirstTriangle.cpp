@@ -1,5 +1,6 @@
 #include "backends/current_backend.hpp"
 
+#include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/Application.hpp>
 #include <gdx-cpp/ApplicationListener.hpp>
 #include <gdx-cpp/graphics/Mesh.hpp>
@@ -7,6 +8,7 @@
 
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
+
 class MyFirstTriangleApplication : public gdx_cpp::ApplicationListener {
 public:
     MyFirstTriangleApplication() : mesh(0) , renderCount(0) {
@@ -65,9 +67,6 @@ private:
     int renderCount;
 };
 
-int main() {
-    gdx_cpp::backends::initializeSystem();
-    gdx_cpp::backends::Application app(new MyFirstTriangleApplication, "My first Triangle", 640, 480, false);
-    
-    return 0;
+extern "C" void init() {
+    createApplication(new MyFirstTriangleApplication, "My first triangle", 640, 480);
 }

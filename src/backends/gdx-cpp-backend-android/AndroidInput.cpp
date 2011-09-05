@@ -21,10 +21,10 @@
 #include "AndroidInput.hpp"
 #include <gdx-cpp/InputProcessor.hpp>
 
-using namespace gdx_cpp::backends::nix;
+using namespace gdx_cpp::backends::android;
 
 
-gdx_cpp::backends::nix::AndroidInput::AndroidInput()
+gdx_cpp::backends::android::AndroidInput::AndroidInput()
  :
  touching(false)
  ,touchX(0)
@@ -36,41 +36,41 @@ gdx_cpp::backends::nix::AndroidInput::AndroidInput()
 {
 }
 
-void gdx_cpp::backends::nix::AndroidInput::cancelVibrate()
+void gdx_cpp::backends::android::AndroidInput::cancelVibrate()
 {
 }
 
-float gdx_cpp::backends::nix::AndroidInput::getAccelerometerX()
-{
-    return 0;
-}
-
-float gdx_cpp::backends::nix::AndroidInput::getAccelerometerY()
+float gdx_cpp::backends::android::AndroidInput::getAccelerometerX()
 {
     return 0;
 }
 
-float gdx_cpp::backends::nix::AndroidInput::getAccelerometerZ()
+float gdx_cpp::backends::android::AndroidInput::getAccelerometerY()
 {
     return 0;
 }
 
-float gdx_cpp::backends::nix::AndroidInput::getAzimuth()
+float gdx_cpp::backends::android::AndroidInput::getAccelerometerZ()
 {
     return 0;
 }
 
-long int gdx_cpp::backends::nix::AndroidInput::getCurrentEventTime()
+float gdx_cpp::backends::android::AndroidInput::getAzimuth()
 {
     return 0;
 }
 
-int gdx_cpp::backends::nix::AndroidInput::getDeltaX()
+long int gdx_cpp::backends::android::AndroidInput::getCurrentEventTime()
+{
+    return 0;
+}
+
+int gdx_cpp::backends::android::AndroidInput::getDeltaX()
 {
     return deltaX;
 }
 
-int gdx_cpp::backends::nix::AndroidInput::getDeltaX(int pointer)
+int gdx_cpp::backends::android::AndroidInput::getDeltaX(int pointer)
 {       
     if (pointer == 0) {
         return deltaX;
@@ -78,12 +78,12 @@ int gdx_cpp::backends::nix::AndroidInput::getDeltaX(int pointer)
     return 0;
 }
 
-int gdx_cpp::backends::nix::AndroidInput::getDeltaY()
+int gdx_cpp::backends::android::AndroidInput::getDeltaY()
 {
     return deltaY;
 }
 
-int gdx_cpp::backends::nix::AndroidInput::getDeltaY(int pointer)
+int gdx_cpp::backends::android::AndroidInput::getDeltaY(int pointer)
 {
     if (pointer == 0) {
         return deltaY;
@@ -91,125 +91,125 @@ int gdx_cpp::backends::nix::AndroidInput::getDeltaY(int pointer)
     return 0;
 }
 
-gdx_cpp::Input::Orientation gdx_cpp::backends::nix::AndroidInput::getNativeOrientation()
+gdx_cpp::Input::Orientation gdx_cpp::backends::android::AndroidInput::getNativeOrientation()
 {
     return gdx_cpp::Input::Landscape;
 }
 
-float gdx_cpp::backends::nix::AndroidInput::getPitch()
+float gdx_cpp::backends::android::AndroidInput::getPitch()
 {
     0;
 }
 
-float gdx_cpp::backends::nix::AndroidInput::getRoll()
+float gdx_cpp::backends::android::AndroidInput::getRoll()
 {
     0;
 }
 
-int gdx_cpp::backends::nix::AndroidInput::getRotation()
+int gdx_cpp::backends::android::AndroidInput::getRotation()
 {
     0;
 }
 
-void gdx_cpp::backends::nix::AndroidInput::getTextInput(const gdx_cpp::Input::TextInputListener& listener,
+void gdx_cpp::backends::android::AndroidInput::getTextInput(const gdx_cpp::Input::TextInputListener& listener,
                                                       const std::string& title, const std::string& text)
 {
 
 }
 
-int gdx_cpp::backends::nix::AndroidInput::getX()
+int gdx_cpp::backends::android::AndroidInput::getX()
 {
     return touchX;
 }
 
-int gdx_cpp::backends::nix::AndroidInput::getX(int pointer)
+int gdx_cpp::backends::android::AndroidInput::getX(int pointer)
 {
 
 }
 
-int gdx_cpp::backends::nix::AndroidInput::getY()
+int gdx_cpp::backends::android::AndroidInput::getY()
 {
     return touchY;
 }
 
-int gdx_cpp::backends::nix::AndroidInput::getY(int pointer)
+int gdx_cpp::backends::android::AndroidInput::getY(int pointer)
 {
 
 }
 
-bool gdx_cpp::backends::nix::AndroidInput::isButtonPressed(int button)
+bool gdx_cpp::backends::android::AndroidInput::isButtonPressed(int button)
 {
 
 }
 
-bool gdx_cpp::backends::nix::AndroidInput::isCursorCatched()
+bool gdx_cpp::backends::android::AndroidInput::isCursorCatched()
 {
 
 }
 
-bool gdx_cpp::backends::nix::AndroidInput::isKeyPressed(int key)
+bool gdx_cpp::backends::android::AndroidInput::isKeyPressed(int key)
 {
 
 }
 
-bool gdx_cpp::backends::nix::AndroidInput::isPeripheralAvailable(int peripheral)
+bool gdx_cpp::backends::android::AndroidInput::isPeripheralAvailable(int peripheral)
 {
     return peripheral == Peripheral::HardwareKeyboard;
 }
 
-bool gdx_cpp::backends::nix::AndroidInput::isTouched()
+bool gdx_cpp::backends::android::AndroidInput::isTouched()
 {
     return touching;
 }
 
-bool gdx_cpp::backends::nix::AndroidInput::isTouched(int pointer)
+bool gdx_cpp::backends::android::AndroidInput::isTouched(int pointer)
 {
     return pointer == 0 && touching;
 }
 
-bool gdx_cpp::backends::nix::AndroidInput::justTouched()
+bool gdx_cpp::backends::android::AndroidInput::justTouched()
 {
     return _justTouched;
 }
 
-void gdx_cpp::backends::nix::AndroidInput::setCatchBackKey(bool catchBack)
+void gdx_cpp::backends::android::AndroidInput::setCatchBackKey(bool catchBack)
 {
 
 }
 
-void gdx_cpp::backends::nix::AndroidInput::setCatchMenuKey(bool catchMenu)
+void gdx_cpp::backends::android::AndroidInput::setCatchMenuKey(bool catchMenu)
 {
 
 }
 
-void gdx_cpp::backends::nix::AndroidInput::setCursorCatched(bool catched)
+void gdx_cpp::backends::android::AndroidInput::setCursorCatched(bool catched)
 {
 
 }
 
-void gdx_cpp::backends::nix::AndroidInput::setCursorPosition(int x, int y)
+void gdx_cpp::backends::android::AndroidInput::setCursorPosition(int x, int y)
 {
 
 }
 
-void gdx_cpp::backends::nix::AndroidInput::setInputProcessor(gdx_cpp::InputProcessor* processor)
+void gdx_cpp::backends::android::AndroidInput::setInputProcessor(gdx_cpp::InputProcessor* processor)
 {
     this->processor = processor;
 }
 
-void gdx_cpp::backends::nix::AndroidInput::setOnscreenKeyboardVisible(bool visible)
+void gdx_cpp::backends::android::AndroidInput::setOnscreenKeyboardVisible(bool visible)
 {
 }
 
-void gdx_cpp::backends::nix::AndroidInput::vibrate(int milliseconds)
+void gdx_cpp::backends::android::AndroidInput::vibrate(int milliseconds)
 {
 }
 
-void gdx_cpp::backends::nix::AndroidInput::vibrate(long int* pattern, int repeat)
+void gdx_cpp::backends::android::AndroidInput::vibrate(long int* pattern, int repeat)
 {
 }
 
-// void gdx_cpp::backends::nix::AndroidInput::processEvents(SDL_Event& evt)
+// void gdx_cpp::backends::android::AndroidInput::processEvents(SDL_Event& evt)
 // {
 //     if (evt.type == SDL_MOUSEMOTION) {
 //         if (processor) {
@@ -245,7 +245,7 @@ void gdx_cpp::backends::nix::AndroidInput::vibrate(long int* pattern, int repeat
 // 
 // }
 
-void gdx_cpp::backends::nix::AndroidInput::reset()
+void gdx_cpp::backends::android::AndroidInput::reset()
 {
     this->_justTouched = false;
 }

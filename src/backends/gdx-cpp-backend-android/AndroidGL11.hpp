@@ -25,7 +25,7 @@ namespace gdx_cpp {
 
 namespace backends {
 
-namespace nix {
+namespace android {
 
 class AndroidGL11 : public AndroidGL10, virtual public graphics::GL11
 {

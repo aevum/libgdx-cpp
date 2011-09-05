@@ -30,7 +30,7 @@ namespace gdx_cpp {
 
 namespace backends {
 
-namespace nix {
+namespace android {
 
 class AndroidSystem  : public gdx_cpp::implementation::System
 {

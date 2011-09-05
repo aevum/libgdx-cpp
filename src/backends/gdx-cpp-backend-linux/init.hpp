@@ -20,21 +20,10 @@
 #ifndef GDX_CPP_BACKENDS_LINUX_INIT_HPP
 #define GDX_CPP_BACKENDS_LINUX_INIT_HPP
 
-#include <gdx-cpp/Gdx.hpp>
-#include "LinuxSystem.hpp"
-#include "LinuxApplication.hpp"
+#include <gdx-cpp/ApplicationListener.hpp>
+#include <string>
 
-namespace gdx_cpp {
-namespace backends {
-
-static void initializeSystem() {
-    Gdx::initializeSystem(new nix::LinuxSystem);
-}
-
-typedef nix::LinuxApplication Application;
-
-}
-
-}
+extern "C" void init();
+void createApplication(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int width, int height);
 
 #endif

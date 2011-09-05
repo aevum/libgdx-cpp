@@ -26,7 +26,7 @@ namespace gdx_cpp {
 
 namespace backends {
 
-namespace nix {
+namespace android {
 
 class AndroidGraphics : public Graphics
 {
@@ -63,7 +63,6 @@ public:
     bool supportsExtension (const std::string& extension);
     void update();
     void updateTime();
-
     
 protected:
     bool vsync;    

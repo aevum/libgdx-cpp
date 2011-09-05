@@ -21,11 +21,12 @@
 #include <gdx-cpp/Graphics.hpp>
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/implementation/System.hpp>
+#include <android/log.h>
 
-using namespace gdx_cpp::backends::nix;
+using namespace gdx_cpp::backends::android;
 using namespace gdx_cpp;
 
-gdx_cpp::backends::nix::AndroidApplication::AndroidApplication(gdx_cpp::ApplicationListener* listener,
+gdx_cpp::backends::android::AndroidApplication::AndroidApplication(gdx_cpp::ApplicationListener* listener,
                                                            const std::string& title, int width, int height,
                                                            bool useGL20IfAvailable)
 :  Synchronizable(Gdx::system->getMutexFactory())
@@ -54,12 +55,12 @@ void AndroidApplication::initialize() {
         this->run();
 }
 
-void backends::nix::AndroidApplication::onRunnableStop()
+void backends::android::AndroidApplication::onRunnableStop()
 {
     //DUMMY
 }
 
-void backends::nix::AndroidApplication::run()
+void backends::android::AndroidApplication::run()
 {
     listener->create();
     listener->resize(graphics->getWidth(), graphics->getHeight());
@@ -67,17 +68,17 @@ void backends::nix::AndroidApplication::run()
     while (true) {
         graphics->updateTime();
 
-        SDL_Event event;
+//         SDL_Event event;
 
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                this->exit();
-                return;
-            } else {
-                this->input->processEvents(event);
-            }
-        }        
-        
+//         while (SDL_PollEvent(&event)) {
+//             if (event.type == SDL_QUIT) {
+//                 this->exit();
+//                 return;
+//             } else {
+//                 this->input->processEvents(event);
+//             }
+//         }        
+//         
         {
             lock_holder hnd = synchronize();
 
@@ -103,62 +104,69 @@ std::ostream& AndroidApplication::error(const std::string& tag)
     return std::cerr;
 }
 
-void gdx_cpp::backends::nix::AndroidApplication::exit()
+void gdx_cpp::backends::android::AndroidApplication::exit()
 {
     ::exit(0);
 }
 
-Audio* gdx_cpp::backends::nix::AndroidApplication::getAudio()
+Audio* gdx_cpp::backends::android::AndroidApplication::getAudio()
 {
 
 }
 
-Files* gdx_cpp::backends::nix::AndroidApplication::getFiles()
+Files* gdx_cpp::backends::android::AndroidApplication::getFiles()
 {
 
 }
 
-Graphics* gdx_cpp::backends::nix::AndroidApplication::getGraphics()
+Graphics* gdx_cpp::backends::android::AndroidApplication::getGraphics()
 {
     return graphics;
 }
 
-Input* gdx_cpp::backends::nix::AndroidApplication::getInput()
+Input* gdx_cpp::backends::android::AndroidApplication::getInput()
 {
     return input;
 }
 
-Preferences* gdx_cpp::backends::nix::AndroidApplication::getPreferences(std::string& name)
+Preferences* gdx_cpp::backends::android::AndroidApplication::getPreferences(std::string& name)
 {
 
 }
 
-gdx_cpp::Application::ApplicationType gdx_cpp::backends::nix::AndroidApplication::getType()
+gdx_cpp::Application::ApplicationType gdx_cpp::backends::android::AndroidApplication::getType()
 {
     return gdx_cpp::Application::Desktop;
 }
 
-std::ostream& gdx_cpp::backends::nix::AndroidApplication::log(const std::string& tag)
+class WrappedOstreamDecorator : public std::ostream {
+public:
+    virtual ~WrappedOstreamDecorator() {
+        
+    }
+};
+
+std::ostream& gdx_cpp::backends::android::AndroidApplication::log(const std::string& tag)
 {
     if (logLevel == gdx_cpp::Application::LOG_NONE)
         return std::cout;
     
-    std::cout << tag << ": ";
+//     __android_log_print(ANDROID_LOG_INFO, tag.c_str(), );
     return std::cout;
 }
 
-int gdx_cpp::backends::nix::AndroidApplication::getVersion()
+int gdx_cpp::backends::android::AndroidApplication::getVersion()
 {
     return 0.1;
 }
 
-void gdx_cpp::backends::nix::AndroidApplication::postRunnable(Runnable::ptr runnable)
+void gdx_cpp::backends::android::AndroidApplication::postRunnable(Runnable::ptr runnable)
 {
     lock_holder hnd = synchronize();
     runnables.push_back(runnable);
 }
 
-void gdx_cpp::backends::nix::AndroidApplication::setLogLevel(int logLevel)
+void gdx_cpp::backends::android::AndroidApplication::setLogLevel(int logLevel)
 {
     logLevel = logLevel;
 }
