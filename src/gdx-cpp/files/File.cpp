@@ -12,10 +12,10 @@ int File::getPrefixLength()
     return prefixLength;
 }
 
-const char separatorChar = gdx_cpp::Gdx::system->getSeparator();
-const std::string separator = std::string("") + separatorChar;
-const char pathSeparatorChar = gdx_cpp::Gdx::system->getPathSeparator();
-const std::string pathSeparator = std::string("") + pathSeparatorChar;
+const char File::separatorChar = gdx_cpp::Gdx::system->getSeparator();
+const std::string File::separator = std::string("") + separatorChar;
+const char File::pathSeparatorChar = gdx_cpp::Gdx::system->getPathSeparator();
+const std::string File::pathSeparator = std::string("") + pathSeparatorChar;
 
 File::File()  //USADO PARA FAZER COISA FEIA(GAMBS)
   : path("")
