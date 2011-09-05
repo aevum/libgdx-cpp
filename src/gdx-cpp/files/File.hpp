@@ -25,7 +25,6 @@ public:
     File(const File &parent, const std::string& child);
     //File(URI uri);
     
-
     //virtual File& operator=(const File& other);
     
     std::string getName() const;

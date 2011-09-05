@@ -22,7 +22,7 @@ Input.hpp
 # scenes/scene2d/interpolators/AccelerateInterpolator.hpp
 # scenes/scene2d/interpolators/LinearInterpolator.hpp
 # scenes/scene2d/Layout.hpp
-# scenes/scene2d/ui/ImageToggleButton.hpp
+# scenes/scene2d/ui/ImageToggleButton.hppMessage
 # scenes/scene2d/ui/ImageButton.hpp
 # scenes/scene2d/ui/Label.hpp
 # scenes/scene2d/ui/ScrollPane.hpp
@@ -46,7 +46,7 @@ Input.hpp
 # scenes/scene2d/ui/ToggleButton.hpp
 # scenes/scene2d/ui/Stack.hpp
 # scenes/scene2d/ui/SplitPane.hpp
-# scenes/scene2d/ui/utils/ScissorStack.hpp
+# scenes/scene2d/ui/utils/ScissorStack.hppMessage
 # scenes/scene2d/ui/utils/DesktopClipboard.hpp
 # scenes/scene2d/ui/utils/AndroidClipboard.hpp
 # scenes/scene2d/ui/utils/Clipboard.hpp
@@ -67,7 +67,7 @@ Input.hpp
 # scenes/scene2d/actions/RotateTo.hpp
 # scenes/scene2d/actions/ScaleTo.hpp
 # scenes/scene2d/actions/Repeat.hpp
-# scenes/scene2d/actions/MoveTo.hpp
+# scenes/scene2d/actions/MoveTo.hppMessage
 # scenes/scene2d/actions/MoveBy.hpp
 ApplicationListener.hpp
 # audio/analysis/kissfft/kiss_fft.h
@@ -79,10 +79,10 @@ audio/AudioDevice.hpp
 # audio/analysis/ThresholdFunction.hpp
 # audio/analysis/FourierTransform.hpp
 # audio/analysis/DFT.hpp
-# audio/analysis/FFT.hpp
+# audio/analysis/FFT.hppMessage
 audio/Music.hpp
 audio/Sound.hpp
-# audio/io/Mpg123Decoder.hpp
+# audio/io/Mpg123Decoder.hppMessage
 # audio/io/Decoder.hpp
 # audio/io/VorbisDecoder.hpp
 audio/AudioRecorder.hpp
@@ -124,7 +124,7 @@ graphics/Texture.hpp
 graphics/Pixmap.hpp
 graphics/VertexAttribute.hpp
 graphics/GL11.hpp
-# graphics/TextureDict.hpp
+# graphics/TextureDict.hppMessage
 graphics/Mesh.hpp
 graphics/Camera.hpp
 graphics/PerspectiveCamera.hpp
@@ -390,18 +390,14 @@ assets/AssetType.cpp
 # audio/analysis/FFT.cpp
 # audio/io/Mpg123Decoder.cpp
 # audio/io/VorbisDecoder.cpp
+implementation/System.cpp
 InputMultiplexer.cpp
 # input/RemoteSender.cpp
 # input/RemoteInput.cpp
-<<<<<<< HEAD
 files/FileHandle.cpp
 files/FileHandleStream.cpp
 files/File.cpp
-=======
-# files/FileHandle.cpp
-# files/FileHandleStream.cpp
 math/MathUtils.cpp
->>>>>>> 882a7330493e6e93e1aea69ca86bbf080d292efb
 math/Circle.cpp
 math/Matrix4.cpp
 math/WindowedMean.cpp

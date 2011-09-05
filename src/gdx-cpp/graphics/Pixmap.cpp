@@ -178,7 +178,7 @@ Pixmap::Pixmap(gdx_cpp::files::FileHandle& file) {
     gdx_cpp::files::FileHandle::char_ptr bytes;
     int size = file.readBytes(bytes);
         
-    pixmap = new g2d::Gdx2DPixmap((unsigned char*) &bytes[0], 0, bytes.size(), 0);
+    pixmap = new g2d::Gdx2DPixmap((unsigned char*) bytes.get(), 0, size, 0);
     assert(pixmap);
 }
 
