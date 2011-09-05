@@ -21,6 +21,8 @@
 #include "FileTextureData.hpp"
 
 #include "gdx-cpp/graphics/Pixmap.hpp"
+#include "gdx-cpp/files/FileHandle.hpp"
+
 #include <stdexcept>
 
 using namespace gdx_cpp;
@@ -65,7 +67,7 @@ bool FileTextureData::isManaged () {
     return true;
 }
 
-gdx_cpp::files::FileHandle& FileTextureData::getFileHandle () {
+gdx_cpp::files::FileHandle* FileTextureData::getFileHandle () {
     return file;
 }
 
@@ -77,7 +79,7 @@ void FileTextureData::uploadCompressedData () {
     throw std::runtime_error("This TextureData implementation does not upload data itself");
 }
 
-FileTextureData::FileTextureData(gdx_cpp::FileHandle file, gdx_cpp::graphics::Pixmap::ptr preloadedPixmap,
+FileTextureData::FileTextureData(gdx_cpp::FileHandle* file, gdx_cpp::graphics::Pixmap::ptr preloadedPixmap,
                                  Pixmap::Format* format, bool useMipMaps)
 :
 file(file)

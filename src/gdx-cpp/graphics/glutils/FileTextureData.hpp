@@ -41,7 +41,7 @@ public:
     Pixmap::Format* getFormat ();
     bool useMipMaps ();
     bool isManaged ();
-    gdx_cpp::files::FileHandle& getFileHandle ();
+    files::FileHandle* getFileHandle ();
     TextureDataType& getType ();
     void uploadCompressedData ();
 
