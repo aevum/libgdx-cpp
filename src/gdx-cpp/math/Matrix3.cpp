@@ -25,10 +25,11 @@
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/Application.hpp"
 #include "Vector3.hpp"
+#include <string.h>
 
 using namespace gdx_cpp::math;
 
-#define DEGREE_TO_RAD (float) math::utils::PI / 180
+#define DEGREE_TO_RAD (float) math::utils::detail::PI / 180
 
 Matrix3::Matrix3()
 {
@@ -50,6 +51,10 @@ Matrix3& Matrix3::operator=(const Matrix3& other)
 
 bool Matrix3::operator==(const Matrix3& other) const
 {
+    if (this == &other)
+        return true;
+
+    return memcmp(this->vals, other.vals, 9) == 0;
 }
 
 Matrix3& Matrix3::idt() {

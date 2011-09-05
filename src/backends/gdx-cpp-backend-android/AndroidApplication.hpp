@@ -15,17 +15,17 @@
 */
 
 
-#ifndef GDX_CPP_BACKENDS_LINUX_LINUXAPPLICATION_HPP
-#define GDX_CPP_BACKENDS_LINUX_LINUXAPPLICATION_HPP
+#ifndef GDX_CPP_BACKENDS_ANDROID_APPLICATION_HPP
+#define GDX_CPP_BACKENDS_ANDROID_APPLICATION_HPP
 
 #include <gdx-cpp/Application.hpp>
 #include <list>
 #include <gdx-cpp/ApplicationListener.hpp>
-#include "LinuxGraphics.hpp"
+#include "AndroidGraphics.hpp"
 #include <gdx-cpp/implementation/Thread.hpp>
 #include <gdx-cpp/implementation/Mutex.hpp>
 #include <gdx-cpp/utils/Synchronized.hpp>
-#include "LinuxInput.hpp"
+#include "AndroidInput.hpp"
 
 namespace gdx_cpp {
 
@@ -33,10 +33,10 @@ namespace backends {
 
 namespace nix {
 
-class LinuxApplication : public Application, public Runnable, public Synchronizable
+class AndroidApplication : public Application, public Runnable, public Synchronizable
 {
 public:
-    LinuxApplication(gdx_cpp::ApplicationListener* listener, const std::string& title,
+    AndroidApplication(gdx_cpp::ApplicationListener* listener, const std::string& title,
                      int width, int height, bool useGL20IfAvailable);
     
     std::ostream& error(const std::string& tag);
@@ -54,7 +54,6 @@ public:
 
     void onRunnableStop();
 protected:
-
     void run();
     
     bool useGL20iFAvailable;
@@ -62,14 +61,16 @@ protected:
     int height;
     int width;
     ApplicationListener* listener;
-    LinuxGraphics* graphics;
-    LinuxInput* input;
+    AndroidGraphics* graphics;
+    AndroidInput* input;
     
     std::list< Runnable::ptr > runnables;
 
     gdx_cpp::implementation::Thread::ptr mainLoopThread;
     
     void initialize();
+
+    int logLevel;
 };
 
 }
@@ -78,4 +79,4 @@ protected:
 
 }
 
-#endif // GDX_CPP_BACKENDS_LINUX_LINUXAPPLICATION_HPP
+#endif // GDX_CPP_BACKENDS_ANDROID_APPLICATION_HPP

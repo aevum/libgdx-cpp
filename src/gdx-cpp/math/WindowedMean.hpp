@@ -40,7 +40,7 @@ public:
 
 protected:
     std::vector<float> values;
-    int added_values;
+    unsigned int added_values;
     int last_value;
     float mean;
     bool dirty;

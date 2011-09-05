@@ -67,8 +67,8 @@ public:
     void setIndices (std::vector< short int >& indices);
     void setIndices (std::vector< short int >& indices, int offset, int count);
     void getIndices (std::vector< short int >& indices);
-    int getNumIndices ();
-    int getNumVertices ();
+    unsigned int getNumIndices ();
+    unsigned int getNumVertices ();
     int getMaxVertices ();
     int getMaxIndices ();
     int getVertexSize ();

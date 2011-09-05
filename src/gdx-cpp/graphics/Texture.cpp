@@ -300,7 +300,7 @@ minFilter(TextureFilter::Nearest)
 ,uWrap(TextureWrap::ClampToEdge)
 ,vWrap(TextureWrap::ClampToEdge)
 {
-    Pixmap::ptr pixmap(new Pixmap(width, height, format));
+    Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(width, height, format));
     glutils::PixmapTextureData::ptr ptd(new glutils::PixmapTextureData(pixmap, NULL, false, true));
     create(ptd);
 }
@@ -345,14 +345,14 @@ minFilter(TextureFilter::Nearest)
     initialize(file, NULL, false);
 }
 
-Texture::Texture(const Pixmap& pixmap, bool useMipMaps)
+Texture::Texture(const Pixmap::ptr pixmap, bool useMipMaps)
 :
 minFilter(TextureFilter::Nearest)
 ,magFilter(TextureFilter::Nearest)
 ,uWrap(TextureWrap::ClampToEdge)
 ,vWrap(TextureWrap::ClampToEdge)
 {
-    Gdx::files::internal(internalPath);
+    create(glutils::PixmapTextureData::ptr(new glutils::PixmapTextureData(pixmap, NULL , useMipMaps, false)));
 }
 
 void Texture::initialize(const gdx_cpp::files::FileHandle& file,const Pixmap::Format* format, bool useMipMaps)

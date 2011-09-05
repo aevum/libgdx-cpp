@@ -41,7 +41,7 @@ public:
         return resolver.resolve(fileName);
     }
     
-    AssetLoader(const FileHandleResolver& resolver) : resolver(resolver) {
+    AssetLoader(const FileHandleResolver& p_resolver) : resolver(p_resolver) {
     }
 
     virtual std::vector<AssetDescriptor> getDependencies (std::string fileName, const Parameter* parameter) = 0;

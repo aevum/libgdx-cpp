@@ -19,8 +19,8 @@
 #define GDX_CPP_BACKENDS_NIX_LINUXGRAPHICS_HPP
 
 #include <gdx-cpp/Graphics.hpp>
-#include <SDL/SDL.h>
 #include <gdx-cpp/graphics/Pixmap.hpp>
+#include <EGL/egl.h>
 
 namespace gdx_cpp {
 
@@ -28,10 +28,10 @@ namespace backends {
 
 namespace nix {
 
-class LinuxGraphics : public Graphics
+class AndroidGraphics : public Graphics
 {
 public:
-    LinuxGraphics();
+    AndroidGraphics();
 
     void initialize();
     bool isGL11Available ();

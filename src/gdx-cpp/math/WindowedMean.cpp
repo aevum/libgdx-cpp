@@ -39,7 +39,7 @@ bool WindowedMean::hasEnoughData () {
 void WindowedMean::clear () {
     added_values = 0;
     last_value = 0;
-    for (int i = 0; i < values.size(); i++)
+    for (unsigned int i = 0; i < values.size(); i++)
         values[i] = 0;
     dirty = true;
 }
@@ -47,7 +47,7 @@ void WindowedMean::clear () {
 void WindowedMean::addValue (float value) {
     added_values++;
     values[last_value++] = value;
-    if (last_value > values.size() - 1) last_value = 0;
+    if (last_value > (values.size() - 1)) last_value = 0;
     dirty = true;
 }
 
@@ -55,7 +55,7 @@ float WindowedMean::getMean () {
     if (hasEnoughData()) {
         if (dirty == true) {
             float mean = 0;
-            for (int i = 0; i < values.size(); i++)
+            for (unsigned int i = 0; i < values.size(); i++)
                 mean += values[i];
 
             this->mean = mean / values.size();
@@ -79,7 +79,7 @@ float WindowedMean::standardDeviation () {
 
     float mean = getMean();
     float sum = 0;
-    for (int i = 0; i < values.size(); i++) {
+    for (unsigned int i = 0; i < values.size(); i++) {
         sum += (values[i] - mean) * (values[i] - mean);
     }
 

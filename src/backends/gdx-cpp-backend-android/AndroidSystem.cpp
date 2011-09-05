@@ -18,7 +18,7 @@
  *  @author aevum team
  */
 
-#include "LinuxSystem.hpp"
+#include "AndroidSystem.hpp"
 #include "gdx-cpp/utils/Runnable.hpp"
 
 #include <time.h>
@@ -28,9 +28,9 @@
 
 using namespace gdx_cpp::backends::nix;
 
-class LinuxMutex : public gdx_cpp::implementation::Mutex {
+class AndroidMutex : public gdx_cpp::implementation::Mutex {
 public:
-    LinuxMutex()
+    AndroidMutex()
     {
         pthread_mutex_init(&mutex, NULL);
     }
@@ -54,9 +54,9 @@ void* run_runnable(void* runnable) {
     return NULL;
 }
 
-class LinuxThread : public gdx_cpp::implementation::Thread {
+class AndroidThread : public gdx_cpp::implementation::Thread {
 public:
-    LinuxThread(Runnable* theRunnable)
+    AndroidThread(Runnable* theRunnable)
         : runnable(theRunnable)
         , thread(0) {
     }
@@ -87,7 +87,7 @@ public:
         pthread_yield();
     }
 
-    virtual ~LinuxThread() {
+    virtual ~AndroidThread() {
         join();
         runnable->onRunnableStop();
     }    
@@ -97,17 +97,17 @@ private:
     pthread_t thread;
 };
 
-gdx_cpp::implementation::Thread::ptr gdx_cpp::backends::nix::LinuxSystem::LinuxThreadFactory::createThread(Runnable* t)
+gdx_cpp::implementation::Thread::ptr gdx_cpp::backends::nix::AndroidSystem::AndroidThreadFactory::createThread(Runnable* t)
 {
-    return gdx_cpp::implementation::Thread::ptr(new LinuxThread(t));
+    return gdx_cpp::implementation::Thread::ptr(new AndroidThread(t));
 }
 
-gdx_cpp::implementation::Mutex::ptr gdx_cpp::backends::nix::LinuxSystem::LinuxMutexFactory::createMutex()
+gdx_cpp::implementation::Mutex::ptr gdx_cpp::backends::nix::AndroidSystem::AndroidMutexFactory::createMutex()
 {
-    return gdx_cpp::implementation::Mutex::ptr(new LinuxMutex);
+    return gdx_cpp::implementation::Mutex::ptr(new AndroidMutex);
 }
 
-int64_t gdx_cpp::backends::nix::LinuxSystem::nanoTime()
+int64_t gdx_cpp::backends::nix::AndroidSystem::nanoTime()
 {
     timespec ts;
     ::clock_gettime(CLOCK_REALTIME, &ts);

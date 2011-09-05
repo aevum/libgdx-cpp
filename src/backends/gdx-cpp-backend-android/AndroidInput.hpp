@@ -22,7 +22,6 @@
 #define GDX_CPP_BACKENDS_LINUX_LINUXINPUT_HPP
 
 #include <gdx-cpp/Input.hpp>
-#include <SDL/SDL_events.h>
 
 namespace gdx_cpp {
 
@@ -30,10 +29,10 @@ namespace backends {
 
 namespace nix {
 
-class LinuxInput : public gdx_cpp::Input
+class AndroidInput : public gdx_cpp::Input
 {
 public:
-    LinuxInput();
+    AndroidInput();
     float getAccelerometerX ();
     float getAccelerometerY ();
     float getAccelerometerZ ();
@@ -99,7 +98,7 @@ public:
 
     void setCursorPosition (int x, int y) ;
 
-    void processEvents(SDL_Event& evt);
+//     void processEvents(SDL_Event& evt);
     void reset();
     
 protected:

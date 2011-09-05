@@ -51,16 +51,16 @@ public:
     int getKind();
     
 protected:
-    graphics::VertexAttributes attributes;
-    utils::float_buffer buffer;
-    utils::byte_buffer byteBuffer;
     int bufferHandle;
     int tmpHandle;
     bool isDirect;
-    bool isStatic;
     int usage;
     bool isDirty;
+    graphics::VertexAttributes attributes;
     bool isBound;
+    bool isStatic;
+    utils::byte_buffer byteBuffer;
+    utils::float_buffer buffer;
     
 private:
     int createBufferObject ();

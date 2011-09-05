@@ -113,11 +113,11 @@ void Mesh::getIndices (std::vector<short>& indices) {
     indices_buffer.position(pos);
 }
 
-int Mesh::getNumIndices () {
+unsigned int Mesh::getNumIndices () {
     return indices->getNumIndices();
 }
 
-int Mesh::getNumVertices () {
+unsigned int Mesh::getNumVertices () {
     return vertices->getNumVertices();
 }
 
@@ -305,7 +305,6 @@ void Mesh::clearAllMeshes (gdx_cpp::Application* app) {
 
 std::string Mesh::getManagedStatus () {
     std::stringstream  builder;
-    int i = 0;
     builder << "Managed meshes/app: { ";
 
     MeshMap::iterator it = meshes.begin();

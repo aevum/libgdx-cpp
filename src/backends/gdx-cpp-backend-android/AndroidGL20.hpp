@@ -22,8 +22,8 @@
 
 #define GL_GLEXT_PROTOTYPES
 
-#include <GL/gl.h>
-#include <GL/glext.h>
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
 
 
 namespace gdx_cpp {
@@ -32,7 +32,7 @@ namespace backends {
 
 namespace nix {
 
-class LinuxGL20 : public graphics::GL20
+class AndroidGL20 : public graphics::GL20
 {
 public:
     inline void glActiveTexture (int texture) const {

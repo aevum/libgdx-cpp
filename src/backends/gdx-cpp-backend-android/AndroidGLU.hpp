@@ -31,7 +31,7 @@ namespace backends {
 
 namespace nix {
 
-class LinuxGLU : public gdx_cpp::graphics::GLU
+class AndroidGLU : public gdx_cpp::graphics::GLU
 {
 public:
 

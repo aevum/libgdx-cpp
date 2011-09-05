@@ -15,7 +15,7 @@
 */
 
 
-#include "LinuxApplication.hpp"
+#include "AndroidApplication.hpp"
 #include <iostream>
 #include <cstdlib>
 #include <gdx-cpp/Graphics.hpp>
@@ -25,7 +25,7 @@
 using namespace gdx_cpp::backends::nix;
 using namespace gdx_cpp;
 
-gdx_cpp::backends::nix::LinuxApplication::LinuxApplication(gdx_cpp::ApplicationListener* listener,
+gdx_cpp::backends::nix::AndroidApplication::AndroidApplication(gdx_cpp::ApplicationListener* listener,
                                                            const std::string& title, int width, int height,
                                                            bool useGL20IfAvailable)
 :  Synchronizable(Gdx::system->getMutexFactory())
@@ -36,13 +36,14 @@ gdx_cpp::backends::nix::LinuxApplication::LinuxApplication(gdx_cpp::ApplicationL
     , listener(listener)
     , graphics(0)
     , input(0)
+    , logLevel(gdx_cpp::Application::LOG_INFO)
 {
     initialize();
 }
 
-void LinuxApplication::initialize() {
-        graphics = new LinuxGraphics();
-        input = new LinuxInput();
+void AndroidApplication::initialize() {
+        graphics = new AndroidGraphics();
+        input = new AndroidInput();
         
         graphics->initialize();
         graphics->setTitle(this->title);
@@ -53,12 +54,12 @@ void LinuxApplication::initialize() {
         this->run();
 }
 
-void backends::nix::LinuxApplication::onRunnableStop()
+void backends::nix::AndroidApplication::onRunnableStop()
 {
     //DUMMY
 }
 
-void backends::nix::LinuxApplication::run()
+void backends::nix::AndroidApplication::run()
 {
     listener->create();
     listener->resize(graphics->getWidth(), graphics->getHeight());
@@ -96,72 +97,68 @@ void backends::nix::LinuxApplication::run()
 }
 
 
-std::ostream& LinuxApplication::error(const std::string& tag)
+std::ostream& AndroidApplication::error(const std::string& tag)
 {
     std::cerr << "LIBGDX-CPP: " << tag;
     return std::cerr;
 }
 
-void gdx_cpp::backends::nix::LinuxApplication::exit()
+void gdx_cpp::backends::nix::AndroidApplication::exit()
 {
     ::exit(0);
 }
 
-Audio* gdx_cpp::backends::nix::LinuxApplication::getAudio()
+Audio* gdx_cpp::backends::nix::AndroidApplication::getAudio()
 {
 
 }
 
-Files* gdx_cpp::backends::nix::LinuxApplication::getFiles()
+Files* gdx_cpp::backends::nix::AndroidApplication::getFiles()
 {
 
 }
 
-Graphics* gdx_cpp::backends::nix::LinuxApplication::getGraphics()
+Graphics* gdx_cpp::backends::nix::AndroidApplication::getGraphics()
 {
     return graphics;
 }
 
-Input* gdx_cpp::backends::nix::LinuxApplication::getInput()
+Input* gdx_cpp::backends::nix::AndroidApplication::getInput()
+{
+    return input;
+}
+
+Preferences* gdx_cpp::backends::nix::AndroidApplication::getPreferences(std::string& name)
 {
 
 }
 
-Preferences* gdx_cpp::backends::nix::LinuxApplication::getPreferences(std::string& name)
-{
-
-}
-
-gdx_cpp::Application::ApplicationType gdx_cpp::backends::nix::LinuxApplication::getType()
+gdx_cpp::Application::ApplicationType gdx_cpp::backends::nix::AndroidApplication::getType()
 {
     return gdx_cpp::Application::Desktop;
 }
 
-std::ostream& gdx_cpp::backends::nix::LinuxApplication::log(const std::string& tag)
+std::ostream& gdx_cpp::backends::nix::AndroidApplication::log(const std::string& tag)
 {
+    if (logLevel == gdx_cpp::Application::LOG_NONE)
+        return std::cout;
+    
     std::cout << tag << ": ";
-
     return std::cout;
 }
 
-int gdx_cpp::backends::nix::LinuxApplication::getVersion()
+int gdx_cpp::backends::nix::AndroidApplication::getVersion()
 {
     return 0.1;
 }
 
-void gdx_cpp::backends::nix::LinuxApplication::postRunnable(Runnable::ptr runnable)
+void gdx_cpp::backends::nix::AndroidApplication::postRunnable(Runnable::ptr runnable)
 {
-    
+    lock_holder hnd = synchronize();
+    runnables.push_back(runnable);
 }
 
-void gdx_cpp::backends::nix::LinuxApplication::setLogLevel(int logLevel)
+void gdx_cpp::backends::nix::AndroidApplication::setLogLevel(int logLevel)
 {
-
+    logLevel = logLevel;
 }
-
-
-
-
-
-
-

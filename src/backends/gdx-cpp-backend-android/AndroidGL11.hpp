@@ -19,7 +19,7 @@
 #define GDX_CPP_BACKENDS_NIX_LINUXGL11_HPP
 
 #include <gdx-cpp/graphics/GL11.hpp>
-#include "LinuxGL10.hpp"
+#include "AndroidGL10.hpp"
 
 namespace gdx_cpp {
 
@@ -27,7 +27,7 @@ namespace backends {
 
 namespace nix {
 
-class LinuxGL11 : public LinuxGL10, virtual public graphics::GL11
+class AndroidGL11 : public AndroidGL10, virtual public graphics::GL11
 {
 public:
      void glClipPlanef (int plane,const float* equation) const ;

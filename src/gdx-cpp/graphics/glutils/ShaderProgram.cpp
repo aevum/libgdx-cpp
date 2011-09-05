@@ -389,7 +389,6 @@ void ShaderProgram::clearAllShaderPrograms (gdx_cpp::Application* app) {
 
 std::string ShaderProgram::getManagedStatus () {
     std::stringstream builder;
-    int i = 0;
     builder << "Managed shaders/app: { ";
     std::tr1::unordered_map<gdx_cpp::Application *, std::set<ShaderProgram *> * >::iterator it;
     for (it = shaders.begin(); it != shaders.end(); ++it) {

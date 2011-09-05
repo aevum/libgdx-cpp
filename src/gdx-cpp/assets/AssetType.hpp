@@ -46,7 +46,7 @@ public:
     }
 
 private:
-    AssetType(const std::string& simpleName) : simpleName(simpleName) {
+    AssetType(const std::string& p_simpleName) : simpleName(p_simpleName) {
     }
 
     std::string simpleName;

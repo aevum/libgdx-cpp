@@ -69,7 +69,7 @@ gdx_cpp::graphics::GLU* gdx_cpp::backends::nix::LinuxGraphics::getGLU()
 
 gdx_cpp::Graphics::BufferFormat gdx_cpp::backends::nix::LinuxGraphics::getBufferFormat()
 {
-
+    throw std::runtime_error("not implemented yet");
 }
 
 float gdx_cpp::backends::nix::LinuxGraphics::getDeltaTime()
@@ -79,17 +79,17 @@ float gdx_cpp::backends::nix::LinuxGraphics::getDeltaTime()
 
 float gdx_cpp::backends::nix::LinuxGraphics::getDensity()
 {
-
+    return 0;
 }
 
 gdx_cpp::Graphics::DisplayMode gdx_cpp::backends::nix::LinuxGraphics::getDesktopDisplayMode()
 {
-
+    throw std::runtime_error("not implemented yet");
 }
 
 std::vector< gdx_cpp::Graphics::DisplayMode >& gdx_cpp::backends::nix::LinuxGraphics::getDisplayModes()
 {
-
+    throw std::runtime_error("not implemented yet");
 }
 
 int gdx_cpp::backends::nix::LinuxGraphics::getFramesPerSecond()
@@ -109,22 +109,22 @@ int gdx_cpp::backends::nix::LinuxGraphics::getHeight()
 
 float gdx_cpp::backends::nix::LinuxGraphics::getPpcX()
 {
-
+    return 0;
 }
 
 float gdx_cpp::backends::nix::LinuxGraphics::getPpcY()
 {
-
+    return 0;
 }
 
 float gdx_cpp::backends::nix::LinuxGraphics::getPpiX()
 {
-
+    return 0;
 }
 
 float gdx_cpp::backends::nix::LinuxGraphics::getPpiY()
 {
-
+    return 0;
 }
 
 void gdx_cpp::backends::nix::LinuxGraphics::updateTime()
@@ -166,6 +166,7 @@ bool gdx_cpp::backends::nix::LinuxGraphics::setDisplayMode(gdx_cpp::Graphics::Di
 {
     if (!supportsDisplayModeChange())
         return false;
+    return true;
 }
 
 void gdx_cpp::backends::nix::LinuxGraphics::setIcon(gdx_cpp::graphics::Pixmap::ptr pixmap)
@@ -202,6 +203,7 @@ void gdx_cpp::backends::nix::LinuxGraphics::initialize()
 
 bool gdx_cpp::backends::nix::LinuxGraphics::setDisplayMode(int width, int height, bool fullscreen)
 {
+    this->lastTime = Gdx::system->nanoTime();
     this->width = width;
     this->height = height;
     
@@ -238,6 +240,8 @@ bool gdx_cpp::backends::nix::LinuxGraphics::setDisplayMode(int width, int height
 
     SDL_WM_SetCaption(this->title.c_str(), NULL);
     glCommon->glViewport(0, 0, width, height);
+
+    return true;
 }
 
 void gdx_cpp::backends::nix::LinuxGraphics::update()

@@ -393,9 +393,15 @@ assets/AssetType.cpp
 InputMultiplexer.cpp
 # input/RemoteSender.cpp
 # input/RemoteInput.cpp
+<<<<<<< HEAD
 files/FileHandle.cpp
 files/FileHandleStream.cpp
 files/File.cpp
+=======
+# files/FileHandle.cpp
+# files/FileHandleStream.cpp
+math/MathUtils.cpp
+>>>>>>> 882a7330493e6e93e1aea69ca86bbf080d292efb
 math/Circle.cpp
 math/Matrix4.cpp
 math/WindowedMean.cpp

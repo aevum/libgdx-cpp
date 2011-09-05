@@ -61,11 +61,11 @@ public:
         }
 
     protected:
-        DisplayMode (int width, int height, int refreshRate, int bitsPerPixel) {
-            this->width = width;
-            this->height = height;
-            this->refreshRate = refreshRate;
-            this->bitsPerPixel = bitsPerPixel;
+        DisplayMode (int p_width, int p_height, int p_refreshRate, int p_bitsPerPixel) {
+            this->width = p_width;
+            this->height = p_height;
+            this->refreshRate = p_refreshRate;
+            this->bitsPerPixel = p_bitsPerPixel;
         }
     };
 
