@@ -19,6 +19,7 @@
 #define GDX_CPP_GRAPHICS_H
 
 #include <string>
+#include <vector>
 #include <sstream>
 #include <vector>
 

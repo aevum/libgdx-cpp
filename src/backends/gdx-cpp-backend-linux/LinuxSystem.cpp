@@ -28,6 +28,96 @@
 
 using namespace gdx_cpp::backends::nix;
 
+std::string LinuxSystem::canonicalize(std::string& path)
+{
+
+}
+
+void LinuxSystem::checkDelete(const std::string& path)
+{
+
+}
+
+void LinuxSystem::checkRead(const std::string& path)
+{
+
+}
+
+bool LinuxSystem::createDirectory(const gdx_cpp::files::File& f)
+{
+
+}
+
+bool LinuxSystem::deleteFile(gdx_cpp::files::File& f)
+{
+
+}
+
+int LinuxSystem::getBooleanAttributes(const gdx_cpp::files::File& f)
+{
+
+}
+
+std::string LinuxSystem::getDefaultParent()
+{
+
+}
+
+int64_t LinuxSystem::getLength(gdx_cpp::files::File f)
+{
+
+}
+
+char LinuxSystem::getPathSeparator()
+{
+
+}
+
+char LinuxSystem::getSeparator()
+{
+
+}
+
+bool LinuxSystem::isAbsolute(const gdx_cpp::files::File& f)
+{
+
+}
+
+void LinuxSystem::list(const gdx_cpp::files::File& f, const std::vector< std::string > paths)
+{
+
+}
+
+std::string LinuxSystem::normalize(const std::string& path)
+{
+
+}
+
+int LinuxSystem::prefixLength(const std::string& path)
+{
+
+}
+
+bool LinuxSystem::rename(gdx_cpp::files::File& f1, const gdx_cpp::files::File& f2)
+{
+
+}
+
+std::string LinuxSystem::resolve(const gdx_cpp::files::File& f)
+{
+
+}
+
+std::string LinuxSystem::resolve(const std::string& parent, const std::string& child)
+{
+
+}
+
+void LinuxSystem::checkWrite(const std::string& path)
+{
+
+}
+
 class LinuxMutex : public gdx_cpp::implementation::Mutex {
 public:
     LinuxMutex()

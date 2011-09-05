@@ -175,10 +175,10 @@ Pixmap::Pixmap(unsigned char* encodedData, int offset, int len) {
 }
 
 Pixmap::Pixmap(gdx_cpp::files::FileHandle& file) {
-    std::vector<char> bytes;
-    //TODO: file.readBytes(bytes);
+    gdx_cpp::files::FileHandle::char_ptr bytes;
+    int size = file.readBytes(bytes);
         
-    pixmap = new g2d::Gdx2DPixmap((unsigned char*) &bytes[0], 0, bytes.size(), 0);
+    pixmap = new g2d::Gdx2DPixmap((unsigned char*) bytes.get(), 0, size, 0);
     assert(pixmap);
 }
 
