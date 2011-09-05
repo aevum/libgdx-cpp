@@ -27,7 +27,7 @@ namespace gdx_cpp {
 
 namespace backends {
 
-namespace nix {
+namespace android {
 
 class AndroidInput : public gdx_cpp::Input
 {
