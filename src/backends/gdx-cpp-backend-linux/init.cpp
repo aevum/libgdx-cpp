@@ -1,10 +1,10 @@
 #include "init.hpp"
 
-#include "LinuxSystem.hpp"
 #include <cassert>
-
+#include <gdx-cpp/ApplicationListener.hpp>
 #include <gdx-cpp/Gdx.hpp>
 #include "LinuxApplication.hpp"
+#include "LinuxSystem.hpp"
 
 using namespace gdx_cpp;
 using namespace gdx_cpp::backends::nix;

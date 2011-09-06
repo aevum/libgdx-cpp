@@ -18,6 +18,8 @@ option(BUILD_BACKEND_ANDROID "Builds the android backend for gdx-cpp" FALSE)
 option(BUILD_BACKEND_WINDOWS "Builds the windows backend for gdx-cpp" FALSE)
 
 option(BUILD_GDX_TESTS "Builds(tries) all libgdx tests" TRUE)
+set(GENERATED_APPLICATION_TYPE "EXECUTABLE")
+
 # option(BUILD_GDX_DEPENDENCIES "Builds  the required dependencies for LibGDX-CPP" TRUE)
 
 
@@ -48,12 +50,13 @@ if (BUILD_BACKEND_IOS)
 endif()
 
 if (BUILD_BACKEND_ANDROID)
+    set(GENERATED_APPLICATION_TYPE "SHARED_LIB")
     SET(ANDROID_NDK "" CACHE PATH "Were the android NDK is located")
 #     include(cmake/android.toolchain.cmake)
     list(APPEND ACTIVE_BACKENDS ANDROID)
-    set(BACKEND-LINUX-DEPENDENCIES GLESv1_CM GLU)
-    add_subdirectory(src/backends/gdx-cpp-backend-android)
+    set(BACKEND-ANDROID-DEPENDENCIES dl log GLESv1_CM GLESv2)
     set(GDX_CPP_BACKEND_ANDROID_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/backends)
+    add_subdirectory(src/backends/gdx-cpp-backend-android)    
 endif()
 
 if (BUILD_BACKEND_WINDOWS)

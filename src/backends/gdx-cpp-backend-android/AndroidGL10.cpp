@@ -102,8 +102,9 @@ int AndroidGL10::glGetError() const {
 void AndroidGL10::glGetIntegerv(int pname, const int* params) const {
     ::glGetIntegerv ( pname, (GLint*) params);
 }
-std::string& AndroidGL10::glGetString(int name) const {
-    ::glGetString(name);
+std::string AndroidGL10::glGetString(int name) const {
+    const GLubyte* str = ::glGetString(name);
+    return std::string((char*)str);
 }
 void AndroidGL10::glHint(int target, int mode) const {
     ::glHint ( target, mode);

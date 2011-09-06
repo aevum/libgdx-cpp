@@ -56,9 +56,9 @@ public:
     
     virtual Files* getFiles () = 0;
     
-    virtual std::ostream& log (const std::string& tag) = 0;
+    virtual void log (const std::string& tag, const char* format, ...) = 0;
     
-    virtual std::ostream& error (const std::string& tag) = 0;
+    virtual void error (const std::string& tag, const char* format, ...) = 0;
     
     virtual void setLogLevel (int logLevel) = 0;
     

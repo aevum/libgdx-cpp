@@ -63,6 +63,8 @@ public:
     bool supportsExtension (const std::string& extension);
     void update();
     void updateTime();
+
+    void resize(int width, int height);
     
 protected:
     bool vsync;    

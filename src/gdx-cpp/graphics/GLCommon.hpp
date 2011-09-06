@@ -55,9 +55,9 @@ public:
     virtual void glFlush () const = 0;
     virtual void glFrontFace (int mode) const = 0;
     virtual void glGenTextures (int n,int* textures) const = 0;
-    virtual   int glGetError () const = 0;
+    virtual int glGetError () const = 0;
     virtual void glGetIntegerv (int pname,const int* params) const = 0;
-    virtual   std::string& glGetString (int name) const = 0;
+    virtual std::string glGetString (int name) const = 0;
     virtual void glHint (int target,int mode) const = 0;
     virtual void glLineWidth (float width) const = 0;
     virtual void glPixelStorei (int pname,int param) const = 0;

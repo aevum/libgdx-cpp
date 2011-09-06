@@ -97,7 +97,7 @@ void backends::nix::LinuxApplication::run()
 }
 
 
-std::ostream& LinuxApplication::error(const std::string& tag)
+void LinuxApplication::error(const std::string& tag, const char* format, ...)
 {
     std::cerr << "LIBGDX-CPP: " << tag;
     return std::cerr;
@@ -138,7 +138,7 @@ gdx_cpp::Application::ApplicationType gdx_cpp::backends::nix::LinuxApplication::
     return gdx_cpp::Application::Desktop;
 }
 
-std::ostream& gdx_cpp::backends::nix::LinuxApplication::log(const std::string& tag)
+void LinuxApplication::error(const std::string& tag, const char* format, ...)
 {
     if (logLevel == gdx_cpp::Application::LOG_NONE)
         return std::cout;

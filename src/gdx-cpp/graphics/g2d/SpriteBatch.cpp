@@ -600,29 +600,34 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float width,
     float u2 = region.u2;
     float v2 = region.v;
 
-    vertices[idx++] = x;
-    vertices[idx++] = y;
-    vertices[idx++] = color;
-    vertices[idx++] = u;
-    vertices[idx++] = v;
+    utils::float_buffer& buffer = mesh->getVerticesBuffer();
+    buffer.limit(buffer.position() + 20);
 
-    vertices[idx++] = x;
-    vertices[idx++] = fy2;
-    vertices[idx++] = color;
-    vertices[idx++] = u;
-    vertices[idx++] = v2;
+    buffer.put(x);
+    buffer.put(y);
+    buffer.put(color);
+    buffer.put(u);
+    buffer.put(v);
 
-    vertices[idx++] = fx2;
-    vertices[idx++] = fy2;
-    vertices[idx++] = color;
-    vertices[idx++] = u2;
-    vertices[idx++] = v2;
+    buffer.put(x);
+    buffer.put(fy2);
+    buffer.put(color);
+    buffer.put(u);
+    buffer.put(v2);
 
-    vertices[idx++] = fx2;
-    vertices[idx++] = y;
-    vertices[idx++] = color;
-    vertices[idx++] = u2;
-    vertices[idx++] = v;
+    buffer.put(fx2);
+    buffer.put(fy2);
+    buffer.put(color);
+    buffer.put(u2);
+    buffer.put(v2);
+
+    buffer.put(fx2);
+    buffer.put(y);
+    buffer.put(color);
+    buffer.put(u2);
+    buffer.put(v);
+
+    idx += 20;
 }
 
 void SpriteBatch::draw (const TextureRegion& region,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation) {

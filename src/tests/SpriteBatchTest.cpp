@@ -35,14 +35,14 @@ public:
 
     void create() {
         spriteBatch = new SpriteBatch(1000);
-        
+
         Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(2, 2, Pixmap::Format::RGBA8888));
         pixmap->setColor(1,1,1,1);
         pixmap->fill();
 
         texture = Texture::ptr(new Texture(pixmap, false));
         texture->setFilter(Texture::TextureFilter::Linear, Texture::TextureFilter::Linear);
-
+        
         for (int i = 0; i < SPRITES * 6; i += 6) {
             sprites[i] = (int)(math::utils::random() * (Gdx::graphics->getWidth() - 32));
             sprites[i + 1] = (int)(math::utils::random() * (Gdx::graphics->getHeight() - 32));
@@ -136,8 +136,8 @@ public:
         end = (Gdx::system->nanoTime() - start) / 1000000000.0f;
 
         if (Gdx::system->nanoTime() - startTime > 1000000000) {
-            Gdx::app->log("SpriteBatch") << "fps: " << frames << ", render calls: " << spriteBatch->renderCalls << ", "
-            << begin << ", " << draw1 << ", " << draw2 << ", " << drawText << ", " << end << std::endl;
+            Gdx::app->log("SpriteBatch", "fps: %l , render calls: %d, %d, %d ,%d, %d", frames, spriteBatch->renderCalls, begin,
+            draw1, draw2, drawText, end);
             frames = 0;
             startTime = Gdx::system->nanoTime();
         }
@@ -221,6 +221,6 @@ protected:
     int frames;
 };
 
-extern "C" void init() {
+void init() {
     createApplication(new SpriteBatchTest, "SpriteBatch Test", 640, 480);
 }

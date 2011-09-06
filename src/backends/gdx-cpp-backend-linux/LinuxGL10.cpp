@@ -102,8 +102,9 @@ int LinuxGL10::glGetError() const {
 void LinuxGL10::glGetIntegerv(int pname, const int* params) const {
     ::glGetIntegerv ( pname, (GLint*) params);
 }
-std::string& LinuxGL10::glGetString(int name) const {
-    ::glGetString(name);
+std::string LinuxGL10::glGetString(int name) const {
+    const GLubyte* str = ::glGetString(name);
+    return std::string((char*) str);
 }
 void LinuxGL10::glHint(int target, int mode) const {
     ::glHint ( target, mode);

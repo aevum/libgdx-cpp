@@ -29,7 +29,7 @@ using namespace gdx_cpp::graphics;
 
 void FPSLogger::log () {
     if (gdx_cpp::Gdx::system->nanoTime() - startTime > 1000000000) {
-        gdx_cpp::Gdx::app->log("FPSLogger") << "fps: " << gdx_cpp::Gdx::graphics->getFramesPerSecond() << std::endl;
+        gdx_cpp::Gdx::app->log("FPSLogger", "fps: %l", gdx_cpp::Gdx::graphics->getFramesPerSecond());
         startTime = gdx_cpp::Gdx::system->nanoTime();
     }
 }
