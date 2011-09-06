@@ -18,7 +18,7 @@ using namespace gdx_cpp;
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp::graphics::g2d;
 
-#define SPRITES 50000 / 2
+#define SPRITES 1000
 
 class SpriteBatchTest : public gdx_cpp::ApplicationListener {
 public:
@@ -36,8 +36,8 @@ public:
     void create() {
         spriteBatch = new SpriteBatch(1000);
 
-        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(2, 2, Pixmap::Format::RGBA8888));
-        pixmap->setColor(1,1,1,1);
+        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(32, 32, Pixmap::Format::RGBA8888));
+        pixmap->setColor(1 ,1 ,0 ,0.5f);
         pixmap->fill();
 
         texture = Texture::ptr(new Texture(pixmap, false));
@@ -115,7 +115,7 @@ public:
         begin = (Gdx::system->nanoTime() - start) / 1000000000.0f;
 
         start = Gdx::system->nanoTime();
-        for (int i = 0; i < 150000; i += 6)
+        for (int i = 0; i < SPRITES * 6; i += 6)
             spriteBatch->draw(*texture, sprites[i], sprites[i + 1], 16, 16, 32, 32, scale, scale, angle, 0, 0, 32, 32, false, false);
         draw1 = (Gdx::system->nanoTime() - start) / 1000000000.0f;
 
@@ -136,7 +136,7 @@ public:
         end = (Gdx::system->nanoTime() - start) / 1000000000.0f;
 
         if (Gdx::system->nanoTime() - startTime > 1000000000) {
-            Gdx::app->log("SpriteBatch", "fps: %l , render calls: %d, %d, %d ,%d, %d", frames, spriteBatch->renderCalls, begin,
+            Gdx::app->log("SpriteBatch", "fps: %d , render calls: %d, %f, %f ,%f, %f, %f", frames, spriteBatch->renderCalls,  begin,
             draw1, draw2, drawText, end);
             frames = 0;
             startTime = Gdx::system->nanoTime();
@@ -197,8 +197,8 @@ public:
         end = (Gdx::system->nanoTime() - start) / 1000000000.0f;
 
         if (Gdx::system->nanoTime() - startTime > 1000000000) {
-            std::cout <<  "fps: " << frames << ", render calls: " << spriteBatch->renderCalls << ", " << begin
-            << ", " << draw1 << ", " << draw2 << ", " << drawText << ", " << end << std::endl;
+            Gdx::app->log("SpriteBatch", "fps: %d , render calls: %d, %f, %f ,%f, %f, %f", frames, spriteBatch->renderCalls, frames,  begin,
+            draw1, draw2, drawText, end);
             frames = 0;
             startTime = Gdx::system->nanoTime();
         }

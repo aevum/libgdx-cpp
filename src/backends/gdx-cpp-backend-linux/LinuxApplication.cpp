@@ -99,8 +99,14 @@ void backends::nix::LinuxApplication::run()
 
 void LinuxApplication::error(const std::string& tag, const char* format, ...)
 {
-    std::cerr << "LIBGDX-CPP: " << tag;
-    return std::cerr;
+    va_list list;
+    va_start(list, format);
+    std::string newTag = tag + ":" + format;
+    
+    vfprintf(stderr, newTag.c_str(), list);
+#if DEBUG
+    assert(false);
+#endif
 }
 
 void gdx_cpp::backends::nix::LinuxApplication::exit()
@@ -138,13 +144,16 @@ gdx_cpp::Application::ApplicationType gdx_cpp::backends::nix::LinuxApplication::
     return gdx_cpp::Application::Desktop;
 }
 
-void LinuxApplication::error(const std::string& tag, const char* format, ...)
+void LinuxApplication::log(const std::string& tag, const char* format, ...)
 {
     if (logLevel == gdx_cpp::Application::LOG_NONE)
-        return std::cout;
+        return;
+
+    va_list list;
+    va_start(list, format);
+    std::string newTag = tag + ":" + format;
     
-    std::cout << tag << ": ";
-    return std::cout;
+    vfprintf(stdout, newTag.c_str(), list);
 }
 
 int gdx_cpp::backends::nix::LinuxApplication::getVersion()
