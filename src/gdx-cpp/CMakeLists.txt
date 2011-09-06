@@ -187,7 +187,7 @@ graphics/g2d/SpriteCache.hpp
 # graphics/g2d/ParticleEffect.hpp
 # graphics/g2d/TextureAtlas.hpp
 graphics/g2d/NinePatch.hpp
-# graphics/g2d/ParticleEmitter.hpp
+graphics/g2d/ParticleEmitter.hpp
 graphics/g2d/Sprite.hpp
 graphics/g2d/EmptyNinePatch.hpp
 graphics/g2d/SpriteBatch.hpp
@@ -426,7 +426,7 @@ graphics/Pixmap.cpp
 graphics/g2d/detail/gdx2d.c
 graphics/g2d/detail/stb_image.c
 graphics/g2d/EmptyNinePatch.cpp
-# graphics/g2d/ParticleEmitter.cpp
+graphics/g2d/ParticleEmitter.cpp
 graphics/g2d/SpriteBatch.cpp
 graphics/g2d/SpriteCache.cpp
 graphics/g2d/NinePatch.cpp

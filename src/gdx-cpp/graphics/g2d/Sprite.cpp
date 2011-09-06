@@ -455,6 +455,11 @@ void Sprite::scroll (float xAmount,float yAmount) {
     }
 }
 
+Sprite::Sprite(ptr _sprite) :
+ color(1,1,1,1)
+{
+    set(_sprite);
+}
 Sprite::Sprite(Texture::ptr texture) :
  color(1,1,1,1)
 {
