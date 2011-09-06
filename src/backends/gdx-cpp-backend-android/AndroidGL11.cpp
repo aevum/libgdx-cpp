@@ -2,7 +2,7 @@
 #include "AndroidGL11.hpp"
 #include <GLES/gl.h>
 
-using namespace gdx_cpp::backends::nix;
+using namespace gdx_cpp::backends::android;
 
 void AndroidGL11::glClipPlanef(int plane, const float* equation) const {
     ::glClipPlanef (plane, equation);

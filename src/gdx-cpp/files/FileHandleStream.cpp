@@ -22,6 +22,11 @@
 
 using namespace gdx_cpp::files;
 
+FileHandleStream::FileHandleStream(std::string path) :
+  FileHandle(File(path), gdx_cpp::Files::Absolute)
+{
+}
+
 bool FileHandleStream::isDirectory () {
     return false;
 }
@@ -34,43 +39,43 @@ bool FileHandleStream::exists () {
     return true;
 }
 
-FileHandle& FileHandleStream::child (const std::string& name) {
-    throw new UnsupportedOperationException();
+FileHandle FileHandleStream::child (const std::string& name) {
+    gdx_cpp::Gdx::app->error("FileHandleStream UnsupportedOperationException()");
 }
 
-FileHandle& FileHandleStream::parent () {
-    throw new UnsupportedOperationException();
+FileHandle FileHandleStream::parent () {
+    gdx_cpp::Gdx::app->error("FileHandleStream UnsupportedOperationException()");
 }
 
-InputStream& FileHandleStream::read () {
-    throw new UnsupportedOperationException();
+FileHandleStream::ifstream_ptr FileHandleStream::read () {
+    gdx_cpp::Gdx::app->error("FileHandleStream UnsupportedOperationException()");
 }
 
-OutputStream& FileHandleStream::write (bool overwrite) {
-    throw new UnsupportedOperationException();
+FileHandleStream::ofstream_ptr FileHandleStream::write (bool overwrite) {
+    gdx_cpp::Gdx::app->error("FileHandleStream UnsupportedOperationException()");
 }
 
-FileHandle* FileHandleStream::list () {
-    throw new UnsupportedOperationException();
+void FileHandleStream::list (std::vector<FileHandle> &handles) {
+    gdx_cpp::Gdx::app->error("FileHandleStream UnsupportedOperationException()");
 }
 
 void FileHandleStream::mkdirs () {
-    throw new UnsupportedOperationException();
+    gdx_cpp::Gdx::app->error("FileHandleStream UnsupportedOperationException()");
 }
 
-bool FileHandleStream::delete () {
-    throw new UnsupportedOperationException();
+bool FileHandleStream::deleteFile () {
+    gdx_cpp::Gdx::app->error("FileHandleStream UnsupportedOperationException()");
 }
 
 bool FileHandleStream::deleteDirectory () {
-    throw new UnsupportedOperationException();
+    gdx_cpp::Gdx::app->error("FileHandleStream UnsupportedOperationException()");
 }
 
-void FileHandleStream::copyTo (const FileHandle& dest) {
-    throw new UnsupportedOperationException();
+void FileHandleStream::copyTo (FileHandle& dest) {
+    gdx_cpp::Gdx::app->error("FileHandleStream UnsupportedOperationException()");
 }
 
-void FileHandleStream::moveTo (const FileHandle& dest) {
-    throw new UnsupportedOperationException();
+void FileHandleStream::moveTo (FileHandle& dest) {
+    gdx_cpp::Gdx::app->error("FileHandleStream UnsupportedOperationException()");
 }
 

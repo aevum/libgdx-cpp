@@ -10,13 +10,13 @@ set(GDXCPP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(GDXCPP_BOX2D_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/Box2D)
 
 if (UNIX)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wall -Wdouble-promotion")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wall")
 endif()
 
-option(BUILD_BACKEND_LINUX "Builds the linux backend for gdx-cpp" ${UNIX})
+option(BUILD_BACKEND_LINUX "Builds the linux backend for gdx-cpp" FALSE)
 option(BUILD_BACKEND_IOS "Builds the ios backend for gdx-cpp" FALSE)
 option(BUILD_BACKEND_ANDROID "Builds the android backend for gdx-cpp" FALSE)
-option(BUILD_BACKEND_WINDOWS "Builds the windows backend for gdx-cpp" ${WIN32})
+option(BUILD_BACKEND_WINDOWS "Builds the windows backend for gdx-cpp" FALSE)
 
 option(BUILD_BOX2D "Builds Box2D" TRUE)
 
@@ -38,6 +38,7 @@ include_directories(src)
 add_subdirectory(src/gdx-cpp)
 
 if (BUILD_BACKEND_LINUX)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wdouble-promotion")
   list(APPEND ACTIVE_BACKENDS LINUX)
   set(BACKEND-LINUX-DEPENDENCIES SDL GLESv1_CM GLU)
   set(GDX_CPP_BACKEND_LINUX_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/backends)
@@ -54,6 +55,8 @@ if (BUILD_BACKEND_IOS)
 endif()
 
 if (BUILD_BACKEND_ANDROID)
+    SET(ANDROID_NDK "" CACHE PATH "Were the android NDK is located")
+#     include(cmake/android.toolchain.cmake)
     list(APPEND ACTIVE_BACKENDS ANDROID)
     set(BACKEND-LINUX-DEPENDENCIES GLESv1_CM GLU)
     add_subdirectory(src/backends/gdx-cpp-backend-android)

@@ -1,4 +1,3 @@
-
 /*
     Copyright 2011 Aevum Software aevum @ aevumlab.com
 
@@ -20,6 +19,16 @@
 
 #ifndef GDX_CPP_FILES_FILEHANDLE_HPP_
 #define GDX_CPP_FILES_FILEHANDLE_HPP_
+#include "gdx-cpp/Files.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Application.hpp"
+#include <iostream>
+#include <fstream>
+#include <cstdio>
+#include <string>
+#include <sys/types.h>
+#include "gdx-cpp/files/File.hpp"
+#include "gdx-cpp/utils/Aliases.hpp"
 
 #include <iosfwd>
 #include <string>
@@ -35,36 +44,48 @@ namespace files {
 
 class FileHandle {
 public:
-    std::string& path ();
-    std::string& name ();
-    std::string& extension ();
-    std::string& nameWithoutExtension ();
-    gdx_cpp::Files::FileType& type ();
-    std::istream& read ();
-    std::string& readString ();
-    std::string& readString (const std::string& charset);
-    void readBytes (std::vector<char>& buffer);
-    std::ostream& write (bool append);
-    FileHandle* list ();
-    FileHandle* list (const std::string& suffix);
+    
+    typedef ref_ptr_maker< std::ifstream >::type ifstream_ptr;
+    typedef ref_ptr_maker< std::ofstream >::type ofstream_ptr;
+    typedef ref_ptr_maker< char >::type char_ptr;
+    FileHandle ();
+    FileHandle (const std::string &fileName);
+    FileHandle (const gdx_cpp::files::File &file);
+    const std::string &path ();
+    std::string name () const;
+    std::string extension ();
+    std::string nameWithoutExtension ();
+    std::string typetoString ();
+    gdx_cpp::Files::FileType& getType ();
+    ifstream_ptr read ();
+    std::string readString ();
+    std::string readString (const std::string& charset);
+    int readBytes (char_ptr c);
+    ofstream_ptr write (bool append);
+    void list (std::vector<FileHandle> &handles);
+    void list (const std::string& suffix, std::vector<FileHandle> &handles);
     bool isDirectory ();
-    FileHandle& child (const std::string& name);
-    FileHandle& parent ();
+    FileHandle child (const std::string &name);
+    FileHandle parent ();
     void mkdirs ();
     bool exists ();
     bool deleteFile ();
     bool deleteDirectory ();
-    void copyTo (const FileHandle& dest);
-    void moveTo (const FileHandle& dest);
-    long length ();
-    std::string& toString ();
+    void copyTo (FileHandle& dest);
+    void moveTo (FileHandle& dest);
+    int64_t length ();
+    std::string toString ();
+    
 
 protected:
-
+    gdx_cpp::files::File file;
+    gdx_cpp::Files::FileType type;
+    FileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
+    FileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type);
 
 private:
-    File& file ();
-    bool deleteDirectory (const File& file);
+    gdx_cpp::files::File getFile();
+    static bool deleteDirectory (File &file);
 };
 
 } // namespace gdx_cpp

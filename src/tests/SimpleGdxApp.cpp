@@ -26,14 +26,6 @@ public:
     }
 };
 
-int main() {
-    gdx_cpp::backends::initializeSystem();
-    gdx_cpp::backends::Application application(new DullListener, "GDX-TEST", 640, 480, false);
-  
-    return 0;
+extern "C" void init() {
+    createApplication(new DullListener, "Dull Listener", 640, 480);
 }
-
-
-
-
-

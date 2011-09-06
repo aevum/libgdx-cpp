@@ -1,6 +1,8 @@
 #include "backends/current_backend.hpp"
 
 #include <gdx-cpp/Application.hpp>
+#include <gdx-cpp/Graphics.hpp>
+#include <gdx-cpp/implementation/System.hpp>
 #include <gdx-cpp/ApplicationListener.hpp>
 #include <gdx-cpp/graphics/Mesh.hpp>
 #include <gdx-cpp/graphics/GL10.hpp>
@@ -10,6 +12,7 @@
 #include <gdx-cpp/math/MathUtils.hpp>
 
 #include <iostream>
+#include <gdx-cpp/graphics/FPSLogger.hpp>
 
 using namespace gdx_cpp;
 using namespace gdx_cpp::graphics;
@@ -28,7 +31,6 @@ public:
             ROTATION_SPEED(20),
             frames(0)
     {
-
     }
 
     void create() {
@@ -76,7 +78,7 @@ public:
     }
 
     void render() {
-        renderNormal();
+         renderNormal();
     }
 
     void resize(int width, int height) {
@@ -135,7 +137,7 @@ public:
 
         if (Gdx::system->nanoTime() - startTime > 1000000000) {
             Gdx::app->log("SpriteBatch") << "fps: " << frames << ", render calls: " << spriteBatch->renderCalls << ", "
-            << begin << ", " << draw1 << ", " << draw2 << ", " << drawText << ", " << end;
+            << begin << ", " << draw1 << ", " << draw2 << ", " << drawText << ", " << end << std::endl;
             frames = 0;
             startTime = Gdx::system->nanoTime();
         }
@@ -196,7 +198,7 @@ public:
 
         if (Gdx::system->nanoTime() - startTime > 1000000000) {
             std::cout <<  "fps: " << frames << ", render calls: " << spriteBatch->renderCalls << ", " << begin
-            << ", " << draw1 << ", " << draw2 << ", " << drawText << ", " << end << std::endl << std::endl;
+            << ", " << draw1 << ", " << draw2 << ", " << drawText << ", " << end << std::endl;
             frames = 0;
             startTime = Gdx::system->nanoTime();
         }
@@ -219,9 +221,6 @@ protected:
     int frames;
 };
 
-int main() {
-    gdx_cpp::backends::initializeSystem();
-    gdx_cpp::backends::Application application(new SpriteBatchTest, "SpriteBatch Test", 640, 480, false);
-    
-    return 0;
+extern "C" void init() {
+    createApplication(new SpriteBatchTest, "SpriteBatch Test", 640, 480);
 }

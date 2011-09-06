@@ -17,24 +17,12 @@
  *  @author Ozires Bortolon de Faria ozires@aevumlab.com
  *  @author aevum team
  */
-#ifndef GDX_CPP_BACKENDS_LINUX_INIT_HPP
-#define GDX_CPP_BACKENDS_LINUX_INIT_HPP
+#ifndef GDX_CPP_BACKENDS_ANDROID_INIT_HPP
+#define GDX_CPP_BACKENDS_ANDROID_INIT_HPP
 
-#include <gdx-cpp/Gdx.hpp>
-#include "AndroidSystem.hpp"
-#include "AndroidApplication.hpp"
+#include <gdx-cpp/ApplicationListener.hpp>
 
-namespace gdx_cpp {
-namespace backends {
-
-static void initializeSystem() {
-    Gdx::initializeSystem(new nix::AndroidSystem);
-}
-
-typedef nix::AndroidApplication Application;
-
-}
-
-}
+void init();
+void setApplicationListener(gdx_cpp::ApplicationListener* listener);
 
 #endif

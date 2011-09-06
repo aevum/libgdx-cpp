@@ -26,7 +26,7 @@
 #include <stdexcept>
 #include <iostream>
 
-using namespace gdx_cpp::backends::nix;
+using namespace gdx_cpp::backends::android;
 
 class AndroidMutex : public gdx_cpp::implementation::Mutex {
 public:
@@ -84,7 +84,7 @@ public:
     }
 
     void yield() {
-        pthread_yield();
+        sleep(0);
     }
 
     virtual ~AndroidThread() {
@@ -97,17 +97,17 @@ private:
     pthread_t thread;
 };
 
-gdx_cpp::implementation::Thread::ptr gdx_cpp::backends::nix::AndroidSystem::AndroidThreadFactory::createThread(Runnable* t)
+gdx_cpp::implementation::Thread::ptr gdx_cpp::backends::android::AndroidSystem::AndroidThreadFactory::createThread(Runnable* t)
 {
     return gdx_cpp::implementation::Thread::ptr(new AndroidThread(t));
 }
 
-gdx_cpp::implementation::Mutex::ptr gdx_cpp::backends::nix::AndroidSystem::AndroidMutexFactory::createMutex()
+gdx_cpp::implementation::Mutex::ptr gdx_cpp::backends::android::AndroidSystem::AndroidMutexFactory::createMutex()
 {
     return gdx_cpp::implementation::Mutex::ptr(new AndroidMutex);
 }
 
-int64_t gdx_cpp::backends::nix::AndroidSystem::nanoTime()
+int64_t gdx_cpp::backends::android::AndroidSystem::nanoTime()
 {
     timespec ts;
     ::clock_gettime(CLOCK_REALTIME, &ts);

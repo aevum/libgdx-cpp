@@ -5,7 +5,7 @@ include_directories(${GDX_CPP_BACKEND_LINUX_INCLUDES})
 
 set(APPLICATIONS SimpleTest SimpleGdxApp MyFirstTriangle SpriteBatchTest PixmapTest)
 
-message("Active backends are: " ${ACTIVE_BACKENDS})
+message("Active backend is: " ${ACTIVE_BACKENDS})
 
 foreach(BACKEND ${ACTIVE_BACKENDS})
     string(TOLOWER ${BACKEND} backend)

@@ -19,7 +19,7 @@
 
 #include <GLES2/gl2.h>
 
-using namespace gdx_cpp::backends::nix;
+using namespace gdx_cpp::backends::android;
 
 void AndroidGL20::glAttachShader (int program,int shader) const {
     glAttachShader (program,shader);

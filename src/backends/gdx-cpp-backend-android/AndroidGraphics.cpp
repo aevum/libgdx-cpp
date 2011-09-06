@@ -15,119 +15,118 @@
 */
 
 
-#include "LinuxGraphics.hpp"
+#include "AndroidGraphics.hpp"
 
-#include "LinuxGL10.hpp"
-#include "LinuxGL11.hpp"
-#include "LinuxGL20.hpp"
-#include "LinuxGLU.hpp"
+#include "AndroidGL10.hpp"
+#include "AndroidGL11.hpp"
+#include "AndroidGL20.hpp"
+#include "AndroidGLU.hpp"
 #include <stdexcept>
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/Graphics.hpp>
 #include <gdx-cpp/implementation/System.hpp>
-
 #include <iostream>
 
-using namespace gdx_cpp::backends::nix;
+using namespace gdx_cpp::backends::android;
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
 
-gdx_cpp::backends::nix::LinuxGraphics::LinuxGraphics() :
+gdx_cpp::backends::android::AndroidGraphics::AndroidGraphics() :
 gl10(0)
 ,gl11(0)
 ,gl20(0)
-,glu(new LinuxGLU)
+,glu(new AndroidGLU)
 ,glCommon(0)
 ,deltaTime(0)
 ,lastTime(0)
 ,frameStart(0)
 ,frames(0)
 ,vsync(false)
-,title("GDX-CPP")
+,title("GDX-ANDROID")
 {
 }
 
-gdx_cpp::graphics::GL10* gdx_cpp::backends::nix::LinuxGraphics::getGL10()
+gdx_cpp::graphics::GL10* gdx_cpp::backends::android::AndroidGraphics::getGL10()
 {
     return gl10;
 }
 
-gdx_cpp::graphics::GL11* gdx_cpp::backends::nix::LinuxGraphics::getGL11()
+gdx_cpp::graphics::GL11* gdx_cpp::backends::android::AndroidGraphics::getGL11()
 {
     return gl11;
 }
 
-gdx_cpp::graphics::GL20* gdx_cpp::backends::nix::LinuxGraphics::getGL20()
+gdx_cpp::graphics::GL20* gdx_cpp::backends::android::AndroidGraphics::getGL20()
 {
     return gl20;
 }
 
-gdx_cpp::graphics::GLU* gdx_cpp::backends::nix::LinuxGraphics::getGLU()
+gdx_cpp::graphics::GLU* gdx_cpp::backends::android::AndroidGraphics::getGLU()
 {
     return glu;
 }
 
-gdx_cpp::Graphics::BufferFormat gdx_cpp::backends::nix::LinuxGraphics::getBufferFormat()
+gdx_cpp::Graphics::BufferFormat gdx_cpp::backends::android::AndroidGraphics::getBufferFormat()
 {
 
 }
 
-float gdx_cpp::backends::nix::LinuxGraphics::getDeltaTime()
+float gdx_cpp::backends::android::AndroidGraphics::getDeltaTime()
 {
     return deltaTime;
 }
 
-float gdx_cpp::backends::nix::LinuxGraphics::getDensity()
+float gdx_cpp::backends::android::AndroidGraphics::getDensity()
 {
 
 }
 
-gdx_cpp::Graphics::DisplayMode gdx_cpp::backends::nix::LinuxGraphics::getDesktopDisplayMode()
+gdx_cpp::Graphics::DisplayMode gdx_cpp::backends::android::AndroidGraphics::getDesktopDisplayMode()
 {
 
 }
 
-std::vector< gdx_cpp::Graphics::DisplayMode >& gdx_cpp::backends::nix::LinuxGraphics::getDisplayModes()
+std::vector< gdx_cpp::Graphics::DisplayMode >& gdx_cpp::backends::android::AndroidGraphics::getDisplayModes()
 {
 
 }
 
-int gdx_cpp::backends::nix::LinuxGraphics::getFramesPerSecond()
+int gdx_cpp::backends::android::AndroidGraphics::getFramesPerSecond()
 {
     return this->fps;
 }
 
-gdx_cpp::graphics::GLCommon* gdx_cpp::backends::nix::LinuxGraphics::getGLCommon()
+gdx_cpp::graphics::GLCommon* gdx_cpp::backends::android::AndroidGraphics::getGLCommon()
 {
     return gl10;
 }
 
-int gdx_cpp::backends::nix::LinuxGraphics::getHeight()
+int gdx_cpp::backends::android::AndroidGraphics::getHeight()
 {
     return this->height;
 }
 
-float gdx_cpp::backends::nix::LinuxGraphics::getPpcX()
+float gdx_cpp::backends::android::AndroidGraphics::getPpcX()
 {
 
 }
 
-float gdx_cpp::backends::nix::LinuxGraphics::getPpcY()
+float gdx_cpp::backends::android::AndroidGraphics::getPpcY()
 {
 
 }
 
-float gdx_cpp::backends::nix::LinuxGraphics::getPpiX()
+float gdx_cpp::backends::android::AndroidGraphics::getPpiX()
 {
 
 }
 
-float gdx_cpp::backends::nix::LinuxGraphics::getPpiY()
+float gdx_cpp::backends::android::AndroidGraphics::getPpiY()
 {
 
 }
 
-void gdx_cpp::backends::nix::LinuxGraphics::updateTime()
+void gdx_cpp::backends::android::AndroidGraphics::updateTime()
 {
     uint64_t time = Gdx::system->nanoTime();
 
@@ -142,106 +141,66 @@ void gdx_cpp::backends::nix::LinuxGraphics::updateTime()
     frames++;
 }
 
-gdx_cpp::Graphics::GraphicsType gdx_cpp::backends::nix::LinuxGraphics::getType()
+gdx_cpp::Graphics::GraphicsType gdx_cpp::backends::android::AndroidGraphics::getType()
 {
-    return gdx_cpp::Graphics::SdlGL;
+    return gdx_cpp::Graphics::AndroidGL;
 }
 
-int gdx_cpp::backends::nix::LinuxGraphics::getWidth()
+int gdx_cpp::backends::android::AndroidGraphics::getWidth()
 {
     return this->width;
 }
 
-bool gdx_cpp::backends::nix::LinuxGraphics::isGL11Available()
+bool gdx_cpp::backends::android::AndroidGraphics::isGL11Available()
 {
     return gl11 != NULL;
 }
 
-bool gdx_cpp::backends::nix::LinuxGraphics::isGL20Available()
+bool gdx_cpp::backends::android::AndroidGraphics::isGL20Available()
 {
     return gl20 != NULL;
 }
 
-bool gdx_cpp::backends::nix::LinuxGraphics::setDisplayMode(gdx_cpp::Graphics::DisplayMode displayMode)
+bool gdx_cpp::backends::android::AndroidGraphics::setDisplayMode(gdx_cpp::Graphics::DisplayMode displayMode)
 {
     if (!supportsDisplayModeChange())
         return false;
 }
 
-void gdx_cpp::backends::nix::LinuxGraphics::setIcon(gdx_cpp::graphics::Pixmap::ptr pixmap)
+void gdx_cpp::backends::android::AndroidGraphics::setIcon(gdx_cpp::graphics::Pixmap::ptr pixmap)
 {
     this->iconPixmap = pixmap;
 }
 
-void gdx_cpp::backends::nix::LinuxGraphics::setTitle(const std::string& title)
+void gdx_cpp::backends::android::AndroidGraphics::setTitle(const std::string& title)
 {
     this->title = title;
 }
 
-void gdx_cpp::backends::nix::LinuxGraphics::setVSync(bool vsync)
+void gdx_cpp::backends::android::AndroidGraphics::setVSync(bool vsync)
 {
     this->vsync = true;
 }
 
-bool gdx_cpp::backends::nix::LinuxGraphics::supportsDisplayModeChange()
+bool gdx_cpp::backends::android::AndroidGraphics::supportsDisplayModeChange()
 {
     return false;
 }
 
-bool gdx_cpp::backends::nix::LinuxGraphics::supportsExtension(const std::string& extension)
+bool gdx_cpp::backends::android::AndroidGraphics::supportsExtension(const std::string& extension)
 {
     return false;
 }
 
-void gdx_cpp::backends::nix::LinuxGraphics::initialize()
-{   
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        throw std::runtime_error("Failed to initialize SDL video");
-    }
+void gdx_cpp::backends::android::AndroidGraphics::initialize()
+{
 }
 
-bool gdx_cpp::backends::nix::LinuxGraphics::setDisplayMode(int width, int height, bool fullscreen)
+bool gdx_cpp::backends::android::AndroidGraphics::setDisplayMode(int width, int height, bool fullscreen)
 {
-    this->width = width;
-    this->height = height;
-    
-    Uint32 flags = SDL_OPENGL;
-    if (fullscreen)
-        flags |= SDL_FULLSCREEN;
-
-    const SDL_VideoInfo* info = SDL_GetVideoInfo();
-
-    SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
-    SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 5 );
-    SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
-    SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
-    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-    
-    if (!SDL_SetVideoMode(width, height, info->vfmt->BitsPerPixel, SDL_OPENGL)) {
-        throw std::runtime_error("Failed to initialize SDL video");
-    }
-
-    const GLubyte* version = glGetString(GL_VERSION);
-    int major = atoi((const char*) version);
-    int minor = atoi((const char*) &version[2]);
-    
-    if (false && major >= 2) {
-
-
-    } else {       
-        if (major == 1 && minor < 5) {
-            glCommon = gl10 = new LinuxGL10;
-        } else {
-            glCommon = gl10 = gl11 = new LinuxGL11;
-        }
-    }
-
-    SDL_WM_SetCaption(this->title.c_str(), NULL);
-    glCommon->glViewport(0, 0, width, height);
 }
 
-void gdx_cpp::backends::nix::LinuxGraphics::update()
+void gdx_cpp::backends::android::AndroidGraphics::update()
 {
-    SDL_GL_SwapBuffers();
 }
 
