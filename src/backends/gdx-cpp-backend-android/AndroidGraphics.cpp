@@ -165,7 +165,7 @@ bool gdx_cpp::backends::android::AndroidGraphics::isGL20Available()
 }
 
 bool gdx_cpp::backends::android::AndroidGraphics::setDisplayMode(gdx_cpp::Graphics::DisplayMode displayMode)
-{
+{    
     if (!supportsDisplayModeChange())
         return false;
 }
@@ -219,7 +219,8 @@ bool gdx_cpp::backends::android::AndroidGraphics::setDisplayMode(int width, int 
 {
     this->width = width;
     this->height = height;
-    
+
+    this->lastTime = Gdx::system->nanoTime();
     glCommon->glViewport(0, 0, width, height);
 }
 
@@ -231,6 +232,7 @@ void backends::android::AndroidGraphics::resize(int width, int height)
 {
     this->width = width;
     this->height = height;
+    this->lastTime = Gdx::system->nanoTime();
     glCommon->glViewport(0, 0, width, height);
 }
 

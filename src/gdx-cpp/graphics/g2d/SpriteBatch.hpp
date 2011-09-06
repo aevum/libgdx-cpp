@@ -83,8 +83,9 @@ protected:
 private:
     void createShader ();
     void renderMesh ();
-    std::vector<float> vertices;
-
+    float* vertices;
+    int verticesSize;
+    
     Mesh* mesh;
     std::vector<Mesh*> buffers;
     

@@ -101,9 +101,10 @@ void LinuxApplication::error(const std::string& tag, const char* format, ...)
 {
     va_list list;
     va_start(list, format);
-    std::string newTag = tag + ":" + format;
+    std::string newTag = tag + ":" + format + "\n";
     
     vfprintf(stderr, newTag.c_str(), list);
+    fflush(stderr);
 #if DEBUG
     assert(false);
 #endif
@@ -151,9 +152,10 @@ void LinuxApplication::log(const std::string& tag, const char* format, ...)
 
     va_list list;
     va_start(list, format);
-    std::string newTag = tag + ":" + format;
+    std::string newTag = tag + ":" + format + "\n"; 
     
     vfprintf(stdout, newTag.c_str(), list);
+    fflush(stdout);
 }
 
 int gdx_cpp::backends::nix::LinuxApplication::getVersion()

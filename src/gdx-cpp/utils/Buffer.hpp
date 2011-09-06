@@ -235,7 +235,7 @@ struct buffer : public buffer_base {
         return _position < _limit;
     }
 
-    buffer<T>& put(T* src, int size, int offset, int length) {
+    buffer<T>& put(const T* src, int size, int offset, int length) {
         checkBounds(offset, length, size);
         if (length > remaining())
             throw std::runtime_error("buffer overflow");

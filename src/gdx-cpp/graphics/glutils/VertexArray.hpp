@@ -36,7 +36,7 @@ public:
     utils::float_buffer& getBuffer ();
     int getNumVertices ();
     int getNumMaxVertices ();
-    void setVertices (const std::vector<float>& vertices, int offset, int count);
+    void setVertices (const float* vertices, int offset, int count);
     void bind ();
     void unbind ();
     gdx_cpp::graphics::VertexAttributes& getAttributes ();

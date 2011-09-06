@@ -43,7 +43,7 @@ int VertexArray::getNumMaxVertices () {
     return byteBuffer.capacity() / attributes.vertexSize;
 }
 
-void VertexArray::setVertices (const std::vector< float >& vertices, int offset, int count) {
+void VertexArray::setVertices (const float* vertices, int offset, int count) {
     buffer.copy(vertices, count, offset);
     buffer.position(0);
 }

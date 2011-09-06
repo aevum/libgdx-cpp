@@ -61,7 +61,7 @@ utils::float_buffer& VertexBufferObjectSubData::getBuffer () {
     return buffer;
 }
 
-void VertexBufferObjectSubData::setVertices (const std::vector< float >& vertices, int offset, int count) {
+void VertexBufferObjectSubData::setVertices (const float* vertices, int offset, int count) {
     isDirty = true;
     if (isDirect) {
         byteBuffer.copy(vertices , count , offset);
@@ -69,7 +69,7 @@ void VertexBufferObjectSubData::setVertices (const std::vector< float >& vertice
         buffer.limit(count);
     } else {
         buffer.clear();
-        buffer.put(vertices, offset, count);
+        buffer.put(vertices, count, offset, count);
         buffer.flip();
         byteBuffer.position(0);
         byteBuffer.limit(buffer.limit() << 2);

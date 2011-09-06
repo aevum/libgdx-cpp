@@ -40,7 +40,7 @@ public:
     int getNumVertices ();
     int getNumMaxVertices ();
     utils::float_buffer& getBuffer ();
-    void setVertices (const std::vector< float >& vertices, int offset, int count);
+    void setVertices (const float* vertices, int offset, int count);
     void bind ();
     void bind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
     void unbind ();

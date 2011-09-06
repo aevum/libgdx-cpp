@@ -64,11 +64,11 @@ Mesh::Mesh(bool isStatic, int maxVertices, int maxIndices, const std::vector< Ve
 
 
 void Mesh::setVertices (const std::vector<float>& vertices) {
-    this->vertices->setVertices(vertices, 0, vertices.size());
+    this->vertices->setVertices(&vertices[0], 0, vertices.size());
 }
 
 void Mesh::setVertices (const std::vector<float>& vertices, int offset,int count) {
-    this->vertices->setVertices(vertices, offset, count);
+    this->vertices->setVertices(&vertices[0], offset, count);
 }
 
 void Mesh::getVertices (std::vector<float>& vertices) {
@@ -378,3 +378,8 @@ Mesh::Mesh(int type, bool isStatic, int maxVertices, int maxIndices, const std::
     }
     addManagedMesh(Gdx::app, this);
 }
+
+void Mesh::setVertices(const float* vertices, int size) {
+    this->vertices->setVertices(vertices, 0, size);
+}
+
