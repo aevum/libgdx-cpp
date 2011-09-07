@@ -107,7 +107,8 @@ public:
         effect.getEmitters().clear();
         effect.getEmitters().push_back(emitters[0]);
 
-//         Gdx::input->setInputProcessor(inputProcessor);
+        inputProcessor = new InputProcessorTest(this);
+        Gdx::input->setInputProcessor(inputProcessor);
     }
 
     void dispose() {
@@ -128,7 +129,7 @@ public:
         if (fpsCounter > 3) {
             fpsCounter = 0;
             int activeCount = emitters[emitterIndex]->getActiveCount();
-//             System.out.println(activeCount + "/" + particleCount + " particles, FPS: " + Gdx.graphics.getFramesPerSecond());
+            Gdx::app->log("ParticleEmmiterTest", "%d / %d particles, FPS: %lu", particleCount, activeCount, Gdx::graphics->getFramesPerSecond());
         }
     }
 

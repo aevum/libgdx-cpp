@@ -49,7 +49,7 @@ void LinuxApplication::initialize() {
         graphics->setTitle(this->title);
         graphics->setDisplayMode(width, height, false);
 
-        Gdx::initialize(this, graphics, NULL, NULL, NULL);
+        Gdx::initialize(this, graphics, NULL, input, NULL);
         
         this->run();
 }
