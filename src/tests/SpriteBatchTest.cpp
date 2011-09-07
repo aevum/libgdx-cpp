@@ -18,7 +18,7 @@ using namespace gdx_cpp;
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp::graphics::g2d;
 
-#define SPRITES 1000
+#define SPRITES 25000
 
 class SpriteBatchTest : public gdx_cpp::ApplicationListener {
 public:
@@ -48,14 +48,14 @@ public:
             sprites[i + 1] = (int)(math::utils::random() * (Gdx::graphics->getHeight() - 32));
             sprites[i + 2] = 0;
             sprites[i + 3] = 0;
-            sprites[i + 4] = 32;
-            sprites[i + 5] = 32;
+            sprites[i + 4] = 2;
+            sprites[i + 5] = 2;
             sprites2[i] = (int)(math::utils::random() * (Gdx::graphics->getWidth() - 32));
             sprites2[i + 1] = (int)(math::utils::random() * (Gdx::graphics->getHeight() - 32));
             sprites2[i + 2] = 0;
             sprites2[i + 3] = 0;
-            sprites2[i + 4] = 32;
-            sprites2[i + 5] = 32;
+            sprites2[i + 4] = 2;
+            sprites2[i + 5] = 2;
         }
 
         for (int i = 0; i < SPRITES * 2; i++) {
@@ -78,7 +78,7 @@ public:
     }
 
     void render() {
-         renderNormal();
+         renderSprites();
     }
 
     void resize(int width, int height) {
@@ -165,7 +165,7 @@ public:
 
         float angleInc = ROTATION_SPEED * Gdx::graphics->getDeltaTime();
         scale += SCALE_SPEED * Gdx::graphics->getDeltaTime();
-
+        
         if (scale < 0.5f) {
             scale = 0.5f;
             SCALE_SPEED = 1;
@@ -176,22 +176,22 @@ public:
         }
 
         start = Gdx::system->nanoTime();
-        for (int i = 0; i < SPRITES; i++) {
-            if (angleInc != 0) sprites3[i]->rotate(angleInc); // this is aids
-            if (scale != 1) sprites3[i]->setScale(scale); // this is aids
+        for (int i = 0; i < SPRITES * 2; i++) {
+             if (angleInc != 0) sprites3[i]->rotate(angleInc); // this is aids
+             if (scale != 1) sprites3[i]->setScale(scale); // this is aids
             sprites3[i]->draw(*spriteBatch);
         }
         draw1 = (Gdx::system->nanoTime() - start) / 1000000000.0f;
 
-        start = Gdx::system->nanoTime();
-        for (int i = SPRITES; i < SPRITES << 1; i++) {
-            if (angleInc != 0)
-                sprites3[i]->rotate(angleInc); // this is aids
-            if (scale != 1)
-                sprites3[i]->setScale(scale); // this is aids
-            sprites3[i]->draw(*spriteBatch);
-        }
-        draw2 = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+//         start = Gdx::system->nanoTime();
+//         for (int i = SPRITES; i < SPRITES << 1; i++) {
+//             if (angleInc != 0)
+//                 sprites3[i]->rotate(angleInc); // this is aids
+//             if (scale != 1)
+//                 sprites3[i]->setScale(scale); // this is aids
+//             sprites3[i]->draw(*spriteBatch);
+//         }
+//         draw2 = (Gdx::system->nanoTime() - start) / 1000000000.0f;
 
         start = Gdx::system->nanoTime();
         drawText = (Gdx::system->nanoTime() - start) / 1000000000.0f;
