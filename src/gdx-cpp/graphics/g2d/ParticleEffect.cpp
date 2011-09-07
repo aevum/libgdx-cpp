@@ -19,95 +19,114 @@
 */
 
 #include "ParticleEffect.hpp"
+#include "ParticleEmitter.hpp"
 
 using namespace gdx_cpp::graphics::g2d;
 
+ParticleEffect::ParticleEffect () {
+    emitters.resize(8);
+}
+
+ParticleEffect::ParticleEffect (ParticleEffect& effect) {
+    emitters.resize(effect.emitters.size());
+    for (unsigned int i = 0, n = effect.emitters.size(); i < n; i++)
+        emitters[i] = new ParticleEmitter(*effect.emitters[i]);
+}
+
+ParticleEffect::~ParticleEffect () {
+    for (unsigned int i = 0, n = emitters.size(); i < n; i++)
+    {
+      if (emitters[i] != NULL) {
+        delete emitters[i];
+      }
+    }
+}
+
 void ParticleEffect::start () {
-    for (int i = 0, n = emitters.size; i < n; i++)
-        emitters.get(i).start();
+    for (unsigned int i = 0, n = emitters.size(); i < n; i++)
+        emitters[i]->start();
 }
 
 void ParticleEffect::update (float delta) {
-    for (int i = 0, n = emitters.size; i < n; i++)
-        emitters.get(i).update(delta);
+    for (unsigned int i = 0, n = emitters.size(); i < n; i++)
+        emitters[i]->update(delta);
 }
 
-void ParticleEffect::draw (const SpriteBatch& spriteBatch) {
-    for (int i = 0, n = emitters.size; i < n; i++)
-        emitters.get(i).draw(spriteBatch);
+void ParticleEffect::draw (SpriteBatch& spriteBatch) {
+    for (unsigned int i = 0, n = emitters.size(); i < n; i++)
+        emitters[i]->draw(spriteBatch);
 }
 
-void ParticleEffect::draw (const SpriteBatch& spriteBatch,float delta) {
-    for (int i = 0, n = emitters.size; i < n; i++)
-        emitters.get(i).draw(spriteBatch, delta);
+void ParticleEffect::draw (SpriteBatch& spriteBatch, float delta) {
+    for (unsigned int i = 0, n = emitters.size(); i < n; i++)
+        emitters[i]->draw(spriteBatch, delta);
 }
 
 void ParticleEffect::allowCompletion () {
-    for (int i = 0, n = emitters.size; i < n; i++)
-        emitters.get(i).allowCompletion();
+    for (unsigned int i = 0, n = emitters.size(); i < n; i++)
+        emitters[i]->allowCompletion();
 }
 
 bool ParticleEffect::isComplete () {
-    for (int i = 0, n = emitters.size; i < n; i++) {
-        ParticleEmitter emitter = emitters.get(i);
-        if (emitter.isContinuous()) return false;
-        if (!emitter.isComplete()) return false;
+    for (unsigned int i = 0, n = emitters.size(); i < n; i++) {
+        ParticleEmitter * emitter = emitters[i];
+        if (emitter->isContinuous()) return false;
+        if (!emitter->isComplete()) return false;
     }
     return true;
 }
 
 void ParticleEffect::setDuration (int duration) {
-    for (int i = 0, n = emitters.size; i < n; i++) {
-        ParticleEmitter emitter = emitters.get(i);
-        emitter.setContinuous(false);
-        emitter.duration = duration;
-        emitter.durationTimer = 0;
+    for (unsigned int i = 0, n = emitters.size(); i < n; i++) {
+        ParticleEmitter * emitter = emitters[i];
+        emitter->setContinuous(false);
+        emitter->duration = duration;
+        emitter->durationTimer = 0;
     }
 }
 
 void ParticleEffect::setPosition (float x,float y) {
-    for (int i = 0, n = emitters.size; i < n; i++)
-        emitters.get(i).setPosition(x, y);
+    for (unsigned int i = 0, n = emitters.size(); i < n; i++)
+        emitters[i]->setPosition(x, y);
 }
 
 void ParticleEffect::setFlip (bool flipX,bool flipY) {
-    for (int i = 0, n = emitters.size; i < n; i++)
-        emitters.get(i).setFlip(flipX, flipY);
+    for (unsigned int i = 0, n = emitters.size(); i < n; i++)
+        emitters[i]->setFlip(flipX, flipY);
 }
 
-gdx_cpp::utils::ArrayParticleEmitter>& ParticleEffect::getEmitters () {
+std::vector< ParticleEmitter * >& ParticleEffect::getEmitters () {
     return emitters;
 }
 
-ParticleEmitter& ParticleEffect::findEmitter (const std::string& name) {
-    for (int i = 0, n = emitters.size; i < n; i++) {
-        ParticleEmitter emitter = emitters.get(i);
-        if (emitter.getName().equals(name)) return emitter;
+ParticleEmitter* ParticleEffect::findEmitter (const std::string& name) {
+    for (unsigned int i = 0, n = emitters.size(); i < n; i++) {
+        if (emitters[i]->getName() == name) return emitters[i];
     }
-    return null;
+    return NULL;
 }
 
 void ParticleEffect::save (const File& file) {
-    Writer output = null;
-    try {
-        output = new FileWriter(file);
-        int index = 0;
-        for (int i = 0, n = emitters.size; i < n; i++) {
-            ParticleEmitter emitter = emitters.get(i);
-            if (index++ > 0) output.write("\n\n");
-            emitter.save(output);
-            output.write("- Image Path -\n");
-            output.write(emitter.getImagePath() + "\n");
-        }
-    } catch (IOException ex) {
-        throw new GdxRuntimeException("Error saving effect: " + file, ex);
-    }
-    finally {
-        try {
-            if (output != null) output.close();
-        } catch (IOException ex) {
-        }
-    }
+//     Writer output = NULL;
+//     try {
+//         output = new FileWriter(file);
+//         int index = 0;
+//         for (unsigned int i = 0, n = emitters.size(); i < n; i++) {
+//             ParticleEmitter  * emitter = emitters[i];
+//             if (index++ > 0) output.write("\n\n");
+//             emitter.save(output);
+//             output.write("- Image Path -\n");
+//             output.write(emitter.getImagePath() + "\n");
+//         }
+//     } catch (IOException ex) {
+//         throw new GdxRuntimeException("Error saving effect: " + file, ex);
+//     }
+//     finally {
+//         try {
+//             if (output != null) output.close();
+//         } catch (IOException ex) {
+//         }
+//     }
 }
 
 void ParticleEffect::load (const gdx_cpp::files::FileHandle& effectFile,const gdx_cpp::files::FileHandle& imagesDir) {
@@ -121,62 +140,62 @@ void ParticleEffect::load (const gdx_cpp::files::FileHandle& effectFile,const Te
 }
 
 void ParticleEffect::loadEmitters (const gdx_cpp::files::FileHandle& effectFile) {
-    InputStream input = effectFile.read();
-    emitters.clear();
-    BufferedReader reader = null;
-    try {
-        reader = new BufferedReader(new InputStreamReader(input), 512);
-        while (true) {
-            ParticleEmitter emitter = new ParticleEmitter(reader);
-            reader.readLine();
-            emitter.setImagePath(reader.readLine());
-            emitters.add(emitter);
-            if (reader.readLine() == null) break;
-            if (reader.readLine() == null) break;
-        }
-    } catch (IOException ex) {
-        throw new GdxRuntimeException("Error loading effect: " + effectFile, ex);
-    }
-    finally {
-        try {
-            if (reader != null) reader.close();
-        } catch (IOException ex) {
-        }
-    }
+//     InputStream input = effectFile.read();
+//     emitters.clear();
+//     BufferedReader reader = null;
+//     try {
+//         reader = new BufferedReader(new InputStreamReader(input), 512);
+//         while (true) {
+//             ParticleEmitter emitter = new ParticleEmitter(reader);
+//             reader.readLine();
+//             emitter.setImagePath(reader.readLine());
+//             emitters.add(emitter);
+//             if (reader.readLine() == null) break;
+//             if (reader.readLine() == null) break;
+//         }
+//     } catch (IOException ex) {
+//         throw new GdxRuntimeException("Error loading effect: " + effectFile, ex);
+//     }
+//     finally {
+//         try {
+//             if (reader != null) reader.close();
+//         } catch (IOException ex) {
+//         }
+//     }
 }
 
 void ParticleEffect::loadEmitterImages (const TextureAtlas& atlas) {
-    for (int i = 0, n = emitters.size; i < n; i++) {
-        ParticleEmitter emitter = emitters.get(i);
-        String imagePath = emitter.getImagePath();
-        if (imagePath == null) continue;
-        String imageName = new File(imagePath.replace('\\', '/')).getName();
-        int lastDotIndex = imageName.lastIndexOf('.');
-        if (lastDotIndex != -1) imageName = imageName.substring(0, lastDotIndex);
-        Sprite sprite = atlas.createSprite(imageName);
-        if (sprite == null) throw new IllegalArgumentException("SpriteSheet missing image: " + imageName);
-        emitter.setSprite(sprite);
-    }
+//     for (unsigned int i = 0, n = emitters.size; i < n; i++) {
+//         ParticleEmitter emitter = emitters.get(i);
+//         String imagePath = emitter.getImagePath();
+//         if (imagePath == null) continue;
+//         String imageName = new File(imagePath.replace('\\', '/')).getName();
+//         int lastDotIndex = imageName.lastIndexOf('.');
+//         if (lastDotIndex != -1) imageName = imageName.substring(0, lastDotIndex);
+//         Sprite sprite = atlas.createSprite(imageName);
+//         if (sprite == null) throw new IllegalArgumentException("SpriteSheet missing image: " + imageName);
+//         emitter.setSprite(sprite);
+//     }
 }
 
 void ParticleEffect::loadEmitterImages (const gdx_cpp::files::FileHandle& imagesDir) {
-    for (int i = 0, n = emitters.size; i < n; i++) {
-        ParticleEmitter emitter = emitters.get(i);
-        String imagePath = emitter.getImagePath();
-        if (imagePath == null) continue;
-        String imageName = new File(imagePath.replace('\\', '/')).getName();
-        emitter.setSprite(new Sprite(loadTexture(imagesDir.child(imageName))));
-    }
+//     for (unsigned int i = 0, n = emitters.size; i < n; i++) {
+//         ParticleEmitter emitter = emitters.get(i);
+//         String imagePath = emitter.getImagePath();
+//         if (imagePath == null) continue;
+//         String imageName = new File(imagePath.replace('\\', '/')).getName();
+//         emitter.setSprite(new Sprite(loadTexture(imagesDir.child(imageName))));
+//     }
 }
 
-gdx_cpp::graphics::Texture& ParticleEffect::loadTexture (const gdx_cpp::files::FileHandle& file) {
-    return new Texture(file, false);
+gdx_cpp::graphics::Texture::ptr ParticleEffect::loadTexture (const gdx_cpp::files::FileHandle& file) {
+    return gdx_cpp::graphics::Texture::ptr(new Texture(file, false));
 }
 
 void ParticleEffect::dispose () {
-    for (int i = 0, n = emitters.size; i < n; i++) {
-        ParticleEmitter emitter = emitters.get(i);
-        emitter.getSprite().getTexture().dispose();
+    for (unsigned int i = 0, n = emitters.size(); i < n; i++) {
+        ParticleEmitter * emitter = emitters[i];
+        emitter->getSprite()->getTexture()->dispose();
     }
 }
 

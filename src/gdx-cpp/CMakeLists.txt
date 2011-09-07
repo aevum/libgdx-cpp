@@ -186,7 +186,7 @@ graphics/g2d/detail/stb_truetype.h
 # graphics/g2d/BitmapFont.hpp
 graphics/g2d/TextureRegion.hpp
 graphics/g2d/SpriteCache.hpp
-# graphics/g2d/ParticleEffect.hpp
+graphics/g2d/ParticleEffect.hpp
 # graphics/g2d/TextureAtlas.hpp
 graphics/g2d/NinePatch.hpp
 graphics/g2d/ParticleEmitter.hpp
@@ -446,7 +446,7 @@ graphics/g2d/Gdx2DPixmap.cpp
 # graphics/g2d/tiled/TiledObjectGroup.cpp
 # graphics/g2d/tiled/TiledLayer.cpp
 graphics/g2d/TextureRegion.cpp
-# graphics/g2d/ParticleEffect.cpp
+graphics/g2d/ParticleEffect.cpp
 graphics/g2d/Animation.cpp
 graphics/g2d/Sprite.cpp
 graphics/TextureData.cpp

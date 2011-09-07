@@ -168,6 +168,7 @@ public:
 
     };
 
+    ~ParticleEmitter();
     ParticleEmitter();
     ParticleEmitter(std::istream& emitter);
     ParticleEmitter(ParticleEmitter& emitter);
@@ -222,7 +223,7 @@ public:
     float getY ();
     int getActiveCount ();
     int getDrawCount ();
-    std::string& getImagePath ();
+    std::string getImagePath ();
     void setImagePath (const std::string& imagePath);
     void setFlip (bool flipX,bool flipY);
     void save (std::ostream& output);

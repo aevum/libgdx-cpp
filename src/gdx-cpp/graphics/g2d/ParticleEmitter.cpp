@@ -90,6 +90,18 @@ ParticleEmitter::ParticleEmitter(ParticleEmitter& emitter): accumulator(0), minP
 }
 
 
+
+ParticleEmitter::~ParticleEmitter()
+{
+    for (unsigned int i = 0; i < particles.size(); i ++)
+    {
+        if (particles[i] != NULL)
+        {
+          delete particles[i];
+        }
+    }
+}
+
 void ParticleEmitter::initialize () {
     durationValue.setAlwaysActive(true);
     emissionValue.setAlwaysActive(true);
@@ -141,7 +153,7 @@ void ParticleEmitter::addParticle () {
 void ParticleEmitter::addParticles (int count) {
     count = std::min(count, maxParticleCount - activeCount);
     if (count == 0) return;
-    for (int i = 0; i < count; i++) {
+    for (unsigned int i = 0; i < count; i++) {
         int index = nextClearBit();
         activateParticle(index);
         this->active[index] = true;
@@ -223,7 +235,7 @@ void ParticleEmitter::draw (SpriteBatch& spriteBatch,float delta) {
 
     if (additive) spriteBatch.setBlendFunction(gdx_cpp::graphics::GL10::GL_SRC_ALPHA, gdx_cpp::graphics::GL10::GL_ONE);
 
-    for (int index = 0; index < active.size(); index++) {
+    for (unsigned int index = 0; index < active.size(); index++) {
         if (active[index])
         {
             if (updateParticle(index, delta, deltaMillis))
@@ -537,7 +549,7 @@ void ParticleEmitter::setSprite (gdx_cpp::graphics::g2d::Sprite::ptr sprite) {
     float originX = sprite->getOriginX();
     float originY = sprite->getOriginY();
     Texture::ptr texture = sprite->getTexture();
-    for (int i = 0, n = particles.size(); i < n; i++) {
+    for (unsigned int i = 0, n = particles.size(); i < n; i++) {
         Particle * particle = particles[i];
         if (particle == NULL) break;
         particle->setTexture(texture);
@@ -710,7 +722,7 @@ int ParticleEmitter::getActiveCount () {
 
 int ParticleEmitter::getDrawCount () {
     int result = 0;
-    for (int i = 0; i < active.size(); i++)
+    for (unsigned int i = 0; i < active.size(); i++)
     {
         if (active[i])
         {
@@ -720,7 +732,7 @@ int ParticleEmitter::getDrawCount () {
     return result;
 }
 
-std::string& ParticleEmitter::getImagePath () {
+std::string ParticleEmitter::getImagePath () {
     return imagePath;
 }
 
@@ -732,7 +744,7 @@ void ParticleEmitter::setFlip (bool flipX,bool flipY) {
     this->flipX = flipX;
     this->flipY = flipY;
     if (particles.size() == 0) return;
-    for (int i = 0, n = particles.size(); i < n; i++) {
+    for (unsigned int i = 0, n = particles.size(); i < n; i++) {
         Particle * particle = particles[i];
         if (particle != NULL) particle->flip(flipX, flipY);
     }
@@ -1087,7 +1099,7 @@ void ParticleEmitter::ScaledNumericValue::setRelative (bool relative) {
 float ParticleEmitter::ScaledNumericValue::getScale (float percent) {
     int endIndex = -1;
     int n = timeline.size();
-    for (int i = 1; i < n; i++) {
+    for (unsigned int i = 1; i < n; i++) {
         float t = timeline[i];
         if (t > percent) {
             endIndex = i;
@@ -1108,10 +1120,10 @@ void ParticleEmitter::ScaledNumericValue::save (std::ostream& output) {
     output << "highMax: " << highMax << std::endl;
     output << "relative: " << relative << std::endl;
     output << "scalingCount: " << scaling.size() << std::endl;
-    for (int i = 0; i < scaling.size(); i++)
+    for (unsigned int i = 0; i < scaling.size(); i++)
         output << "scaling" << i << ": " << scaling[i] << std::endl;
     output << "timelineCount: " << timeline.size() << std::endl;
-    for (int i = 0; i < timeline.size(); i++)
+    for (unsigned int i = 0; i < timeline.size(); i++)
         output << "timeline" << i << ": " << timeline[i] << std::endl;
 }
 
@@ -1123,11 +1135,11 @@ void ParticleEmitter::ScaledNumericValue::load (std::istream& reader) {
     relative = readBoolean(reader, "relative");
     scaling.clear();
     scaling.resize(readInt(reader, "scalingCount"));
-    for (int i = 0; i < scaling.size(); i++)
+    for (unsigned int i = 0; i < scaling.size(); i++)
         scaling[i] = readFloat(reader, "scaling" + i);
     timeline.clear();
     timeline.resize(readInt(reader, "timelineCount"));
-    for (int i = 0; i < timeline.size(); i++)
+    for (unsigned int i = 0; i < timeline.size(); i++)
         timeline[i] = readFloat(reader, "timeline" + i);
 }
 
@@ -1169,7 +1181,7 @@ void ParticleEmitter::GradientColorValue::setColors (std::vector<float>& _colors
 std::vector<float>& ParticleEmitter::GradientColorValue::getColor (float percent) {
     int startIndex = 0, endIndex = -1;
     int n = timeline.size();
-    for (int i = 1; i < n; i++) {
+    for (unsigned int i = 1; i < n; i++) {
         float t = timeline[i];
         if (t > percent) {
             endIndex = i;
@@ -1200,10 +1212,10 @@ void ParticleEmitter::GradientColorValue::save (std::ostream& output) {
     ParticleEmitter::ParticleValue::save(output);
     if (!active) return;
     output << "colorsCount: " + colors.size() << std::endl;
-    for (int i = 0; i < colors.size(); i++)
+    for (unsigned int i = 0; i < colors.size(); i++)
         output << "colors" << i << ": " << colors[i] << std::endl;
     output << "timelineCount: " + timeline.size() << std::endl;
-    for (int i = 0; i < timeline.size(); i++)
+    for (unsigned int i = 0; i < timeline.size(); i++)
         output << "timeline" << i << ": " << timeline[i] << std::endl;
 }
 
@@ -1212,11 +1224,11 @@ void ParticleEmitter::GradientColorValue::load (std::istream& reader) {
     if (!active) return;
     colors.clear();
     colors.resize(readInt(reader, "colorsCount"));
-    for (int i = 0; i < colors.size(); i++)
+    for (unsigned int i = 0; i < colors.size(); i++)
         colors[i] = readFloat(reader, "colors" + i);
     timeline.clear();
     timeline.resize(readInt(reader, "timelineCount"));
-    for (int i = 0; i < timeline.size(); i++)
+    for (unsigned int i = 0; i < timeline.size(); i++)
         timeline[i] = readFloat(reader, "timeline" + i);
 }
 
