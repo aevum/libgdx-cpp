@@ -56,9 +56,10 @@ void Texture::create (TextureData::ptr data) {
     this->enforcePotImages = true;
     this->useHWMipMap = true;
     this->assetManager = 0;
-    
+
     glHandle = createGLHandle();
     load(data);
+
     if (data->isManaged()) addManagedTexture(gdx_cpp::Gdx::app, shared_from_this());
 }
 
@@ -69,7 +70,7 @@ int Texture::createGLHandle () {
 
 void Texture::load (const TextureData::ptr& data) {
     if (this->data != NULL && data->isManaged() != this->data->isManaged()) {
-        Gdx::app->error("Texture.cpp") << "New data must have the same managed status as the old data";
+        Gdx::app->error("Texture.cpp", "New data must have the same managed status as the old data");
     }
 
     this->data = data;
@@ -94,7 +95,7 @@ void Texture::uploadImageData (const gdx_cpp::graphics::Pixmap::ptr pixmap) {
     if (enforcePotImages && Gdx::gl20 == NULL
             && (! gdx_cpp::math::utils::isPowerOfTwo(data->getWidth()) || !gdx_cpp::math::utils::isPowerOfTwo(data->getHeight())))
     {
-        Gdx::app->error("Texture.cpp") << "texture width and height must be powers of two";
+        Gdx::app->error("Texture.cpp", "texture width and height must be powers of two");
     }
 
     bool disposePixmap = false;
@@ -122,7 +123,7 @@ void Texture::uploadImageData (const gdx_cpp::graphics::Pixmap::ptr pixmap) {
 
 void Texture::reload () {
     if (!data->isManaged()) {
-        gdx_cpp::Gdx::app->error(__FILE__) << "Tried to reload unmanaged Texture";
+        gdx_cpp::Gdx::app->error(__FILE__, "Tried to reload unmanaged Texture");
     }
     
     createGLHandle();
@@ -140,7 +141,7 @@ void Texture::bind (int unit) {
 
 void Texture::draw (const Pixmap& pixmap,int x,int y) {
     if (data->isManaged()){
-        gdx_cpp::Gdx::app->error(__FILE__) << "can't draw to a managed texture";
+        gdx_cpp::Gdx::app->error(__FILE__ , "can't draw to a managed texture");
     }
 
     Gdx::gl->glBindTexture(GL10::GL_TEXTURE_2D, glHandle);

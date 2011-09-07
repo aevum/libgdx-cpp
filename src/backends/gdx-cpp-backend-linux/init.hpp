@@ -23,7 +23,7 @@
 #include <gdx-cpp/ApplicationListener.hpp>
 #include <string>
 
-extern "C" void init();
+void init();
 void createApplication(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int width, int height);
 
 #endif

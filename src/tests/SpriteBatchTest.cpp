@@ -18,7 +18,7 @@ using namespace gdx_cpp;
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp::graphics::g2d;
 
-#define SPRITES 50000 / 2
+#define SPRITES 1000
 
 class SpriteBatchTest : public gdx_cpp::ApplicationListener {
 public:
@@ -35,14 +35,14 @@ public:
 
     void create() {
         spriteBatch = new SpriteBatch(1000);
-        
-        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(2, 2, Pixmap::Format::RGBA8888));
-        pixmap->setColor(1,1,1,1);
+
+        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(32, 32, Pixmap::Format::RGBA8888));
+        pixmap->setColor(1 ,1 ,0 ,0.5f);
         pixmap->fill();
 
         texture = Texture::ptr(new Texture(pixmap, false));
         texture->setFilter(Texture::TextureFilter::Linear, Texture::TextureFilter::Linear);
-
+        
         for (int i = 0; i < SPRITES * 6; i += 6) {
             sprites[i] = (int)(math::utils::random() * (Gdx::graphics->getWidth() - 32));
             sprites[i + 1] = (int)(math::utils::random() * (Gdx::graphics->getHeight() - 32));
@@ -93,14 +93,17 @@ public:
         gl.glClearColor(0.7f, 0.7f, 0.7f, 1);
         gl.glClear(GL10::GL_COLOR_BUFFER_BIT);
 
-        float begin = 0;
-        float end = 0;
-        float draw1 = 0;
-        float draw2 = 0;
-        float drawText = 0;
+        long begin = 0;
+        long end = 0;
+        long draw1 = 0;
+        long draw2 = 0;
+        long drawText = 0;
 
-        angle += ROTATION_SPEED * Gdx::graphics->getDeltaTime();
-        scale += SCALE_SPEED * Gdx::graphics->getDeltaTime();
+        float deltaTime = Gdx::graphics->getDeltaTime();
+    
+        angle += ROTATION_SPEED * deltaTime;
+        scale += SCALE_SPEED * deltaTime;
+
         if (scale < 0.5f) {
             scale = 0.5f;
             SCALE_SPEED = 1;
@@ -112,32 +115,33 @@ public:
 
         long start = Gdx::system->nanoTime();
         spriteBatch->begin();
-        begin = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        begin = (Gdx::system->nanoTime() - start) / 1000;
 
         start = Gdx::system->nanoTime();
-        for (int i = 0; i < 150000; i += 6)
+        for (int i = 0; i < SPRITES * 6; i += 6)
             spriteBatch->draw(*texture, sprites[i], sprites[i + 1], 16, 16, 32, 32, scale, scale, angle, 0, 0, 32, 32, false, false);
-        draw1 = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        draw1 = (Gdx::system->nanoTime() - start) / 1000;
 
         start = Gdx::system->nanoTime();
         for (int i = 0; i < SPRITES * 6; i += 6)
             spriteBatch->draw(*texture, sprites2[i], sprites2[i + 1], 16, 16, 32, 32, scale, scale, angle, 0, 0, 32, 32, false, false);
-        draw2 = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        draw2 = (Gdx::system->nanoTime() - start) / 1000;
 
         start = Gdx::system->nanoTime();
         // spriteBatch->drawText(font, "Question?", 100, 300, Color.RED);
         // spriteBatch->drawText(font, "and another this is a test", 200, 100, Color.WHITE);
         // spriteBatch->drawText(font, "all hail and another this is a test", 200, 200, Color.WHITE);
         // spriteBatch->drawText(font, "normal fps: " + Gdx::graphics->getFramesPerSecond(), 10, 30, Color.RED);
-        drawText = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        drawText = (Gdx::system->nanoTime() - start) / 1000;
 
         start = Gdx::system->nanoTime();
         spriteBatch->end();
-        end = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        end = (Gdx::system->nanoTime() - start) / 1000;
 
         if (Gdx::system->nanoTime() - startTime > 1000000000) {
-            Gdx::app->log("SpriteBatch") << "fps: " << frames << ", render calls: " << spriteBatch->renderCalls << ", "
-            << begin << ", " << draw1 << ", " << draw2 << ", " << drawText << ", " << end << std::endl;
+            Gdx::app->log("SpriteBatch", "fps: %d , render calls: %d, begin: %d us,"
+            "draw1: %d us ,draw2: %d us,drawText: %d us,end: %d us", frames, spriteBatch->renderCalls,  begin,
+            draw1, draw2, drawText, end);
             frames = 0;
             startTime = Gdx::system->nanoTime();
         }
@@ -197,8 +201,8 @@ public:
         end = (Gdx::system->nanoTime() - start) / 1000000000.0f;
 
         if (Gdx::system->nanoTime() - startTime > 1000000000) {
-            std::cout <<  "fps: " << frames << ", render calls: " << spriteBatch->renderCalls << ", " << begin
-            << ", " << draw1 << ", " << draw2 << ", " << drawText << ", " << end << std::endl;
+            Gdx::app->log("SpriteBatch", "fps: %d , render calls: %d, %f, %f ,%f, %f, %f", frames, spriteBatch->renderCalls, frames,  begin,
+            draw1, draw2, drawText, end);
             frames = 0;
             startTime = Gdx::system->nanoTime();
         }
@@ -221,6 +225,6 @@ protected:
     int frames;
 };
 
-extern "C" void init() {
+void init() {
     createApplication(new SpriteBatchTest, "SpriteBatch Test", 640, 480);
 }

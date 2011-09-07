@@ -57,7 +57,7 @@ public:
     void glGenTextures (int n,int* textures) const ;
     int glGetError () const ;
     void glGetIntegerv (int pname,const int* params) const ;
-    std::string& glGetString (int name) const ;
+    std::string glGetString (int name) const ;
     void glHint (int target,int mode) const ;
     void glLineWidth (float width) const ;
     void glPixelStorei (int pname,int param) const ;

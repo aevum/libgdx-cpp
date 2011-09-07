@@ -117,8 +117,9 @@ public:
     inline void glGetIntegerv (int pname,const int* params) const {
         ::glGetIntegerv ( pname, (GLint*) params);
     }
-    std::string& glGetString (int name) const {
-        ::glGetString(name);
+    std::string glGetString (int name) const {
+        const GLubyte* str = ::glGetString(name);
+        return std::string((char*)str);
     }
     inline void glHint (int target,int mode) const {
         ::glHint ( target, mode);
