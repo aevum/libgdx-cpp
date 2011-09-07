@@ -20,11 +20,12 @@
 
 #include "ParticleEffect.hpp"
 #include "ParticleEmitter.hpp"
+#include <iostream>
 
 using namespace gdx_cpp::graphics::g2d;
 
 ParticleEffect::ParticleEffect () {
-    emitters.resize(8);
+    emitters.reserve(8);
 }
 
 ParticleEffect::ParticleEffect (ParticleEffect& effect) {
@@ -36,9 +37,9 @@ ParticleEffect::ParticleEffect (ParticleEffect& effect) {
 ParticleEffect::~ParticleEffect () {
     for (unsigned int i = 0, n = emitters.size(); i < n; i++)
     {
-      if (emitters[i] != NULL) {
-        delete emitters[i];
-      }
+        if (emitters[i] != NULL) {
+            delete emitters[i];
+        }
     }
 }
 
@@ -128,7 +129,11 @@ void ParticleEffect::save (const File& file) {
 //         }
 //     }
 }
-
+void ParticleEffect::load (std::string file)
+{
+    loadEmittersTest(file);
+    loadEmitterImagesTest();
+}
 void ParticleEffect::load (const gdx_cpp::files::FileHandle& effectFile,const gdx_cpp::files::FileHandle& imagesDir) {
     loadEmitters(effectFile);
     loadEmitterImages(imagesDir);
@@ -186,6 +191,39 @@ void ParticleEffect::loadEmitterImages (const gdx_cpp::files::FileHandle& images
 //         String imageName = new File(imagePath.replace('\\', '/')).getName();
 //         emitter.setSprite(new Sprite(loadTexture(imagesDir.child(imageName))));
 //     }
+}
+
+void ParticleEffect::loadEmittersTest (std::string file) {
+    emitters.clear();
+        std::istream * reader = new std::ifstream(file.c_str());
+        std::string by;
+        while (true) {
+            ParticleEmitter * emitter = new ParticleEmitter(*reader);
+            std::getline(*reader, by);
+            std::getline(*reader, by);
+            emitter->setImagePath("");
+            emitters.push_back(emitter);
+            std::getline(*reader, by);
+            std::getline(*reader, by);
+            if (reader->eof()) break;
+        }
+}
+
+
+void ParticleEffect::loadEmitterImagesTest () {
+    for (unsigned int i = 0, n = emitters.size(); i < n; i++) {
+        ParticleEmitter * emitter = emitters[i];
+
+        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(16, 16, Pixmap::Format::RGBA8888));
+        pixmap->setColor(1 ,1 ,1 ,0.5f);
+        pixmap->fill();
+
+        Texture::ptr texture = Texture::ptr(new Texture(pixmap, false));
+        texture->setFilter(Texture::TextureFilter::Linear, Texture::TextureFilter::Linear);
+
+        Sprite::ptr sprite =  Sprite::ptr(new Sprite(texture, 16, 16));
+        emitter->setSprite(sprite);
+    }
 }
 
 gdx_cpp::graphics::Texture::ptr ParticleEffect::loadTexture (const gdx_cpp::files::FileHandle& file) {

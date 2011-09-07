@@ -56,11 +56,14 @@ public:
     std::vector< ParticleEmitter* >& getEmitters ();
     ParticleEmitter* findEmitter (const std::string& name);
     void save (const File& file);
+    void load (std::string file);
     void load (const gdx_cpp::files::FileHandle& effectFile,const gdx_cpp::files::FileHandle& imagesDir);
     void load (const gdx_cpp::files::FileHandle& effectFile,const TextureAtlas& atlas);
     void loadEmitters (const gdx_cpp::files::FileHandle& effectFile);
+    void loadEmittersTest (std::string file);
     void loadEmitterImages (const TextureAtlas& atlas);
     void loadEmitterImages (const gdx_cpp::files::FileHandle& imagesDir);
+    void loadEmitterImagesTest ();
     void dispose ();
 
 protected:

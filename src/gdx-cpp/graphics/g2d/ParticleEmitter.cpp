@@ -771,7 +771,11 @@ std::string readString (std::istream& reader, const std::string& name) {
     std::string line;
     std::getline(reader, line);
     std::size_t found;
-    if (line.length() == 0 || (found = line.find(":", 0)) == std::string::npos) throw std::runtime_error("Missing value: " + name);
+    std::cout << line << std::endl;
+    if (line.length() == 0 ) throw std::runtime_error("Missing value: " + name);
+    found = line.find(":", 0);
+    if (found == std::string::npos)
+        found = -1;
     std::string result = line.substr(int(found) + 1);
     return trim(result);
 }

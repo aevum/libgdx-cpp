@@ -46,7 +46,7 @@ public:
     Sprite (const TextureRegion& region) ;
     Sprite (const TextureRegion& region, int srcX, int srcY, int srcWidth, int srcHeight) ;
     
-    void set (const Sprite& sprite);
+    void set (ptr sprite);
     void setBounds (float x,float y,float width,float height);
     void setSize (float width,float height);
     void setPosition (float x,float y);

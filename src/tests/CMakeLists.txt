@@ -2,7 +2,7 @@ project(gdx-cpp-tests)
 
 include_directories(${GDXCPP_INCLUDE_DIR})
 
-set(APPLICATIONS SimpleTest SimpleGdxApp MyFirstTriangle SpriteBatchTest PixmapTest)
+set(APPLICATIONS SimpleTest SimpleGdxApp MyFirstTriangle SpriteBatchTest PixmapTest ParticleEmitterTest)
 
 message("Active backend is: " ${ACTIVE_BACKENDS})
 
