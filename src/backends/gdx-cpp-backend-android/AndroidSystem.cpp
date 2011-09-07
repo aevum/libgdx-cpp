@@ -48,7 +48,6 @@ protected:
 };
 
 void* run_runnable(void* runnable) {
-    std::cout << "chamou runnable" << std::endl;
     ((Runnable*)runnable)->run();
 
     return NULL;
@@ -110,7 +109,7 @@ gdx_cpp::implementation::Mutex::ptr gdx_cpp::backends::android::AndroidSystem::A
 int64_t gdx_cpp::backends::android::AndroidSystem::nanoTime()
 {
     timespec ts;
-    ::clock_gettime(CLOCK_REALTIME, &ts);
+    ::clock_gettime(CLOCK_MONOTONIC, &ts);
 
     return ts.tv_sec * 1000000000 + ts.tv_nsec;
 }

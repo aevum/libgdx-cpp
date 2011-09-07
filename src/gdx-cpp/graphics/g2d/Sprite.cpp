@@ -224,6 +224,7 @@ float* const Sprite::getVertices () {
         if (rotation != 0) {
             float cos = gdx_cpp::math::utils::cosDeg(rotation);
             float sin = gdx_cpp::math::utils::sinDeg(rotation);
+            
             float localXCos = localX * cos;
             float localXSin = localX * sin;
             float localYCos = localY * cos;
@@ -490,7 +491,7 @@ void Sprite::initialize(graphics::Texture::ptr texture, int srcX, int srcY, int 
     
     this->texture = texture;
     
-    setRegion(srcX, srcY, srcWidth, srcHeight);
+    TextureRegion::setRegion(srcX, srcY, srcWidth, srcHeight);
     setColor(1, 1, 1, 1);
     setSize(std::abs(srcWidth), std::abs(srcHeight));
     setOrigin(width / 2, height / 2);

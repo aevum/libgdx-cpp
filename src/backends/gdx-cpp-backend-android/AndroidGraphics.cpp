@@ -29,6 +29,7 @@
 #include <stdlib.h>
 
 #include <cassert>
+#include <gdx-cpp/Application.hpp>
 
 using namespace gdx_cpp::backends::android;
 using namespace gdx_cpp::graphics;
@@ -133,6 +134,13 @@ void gdx_cpp::backends::android::AndroidGraphics::updateTime()
 {
     uint64_t time = Gdx::system->nanoTime();
 
+    //This is to fix a nasty bug on HTC devices. Somehow sometimes the nanotime returns
+    //with a very big value, this making the delta time go kucko :(
+    if (time - lastTime > 10000000000) {
+        lastTime = Gdx::system->nanoTime();        
+        return;
+    }
+    
     deltaTime = (time - lastTime) / 1000000000.0f;
     lastTime = time;
     

@@ -887,6 +887,7 @@ void SpriteBatch::renderMesh () {
     if (spritesInBatch > maxSpritesInBatch) maxSpritesInBatch = spritesInBatch;
 
     lastTexture->bind();
+    
     mesh->setVertices(vertices, idx);
 
     if (Gdx::graphics->isGL20Available()) {
@@ -1059,8 +1060,9 @@ void SpriteBatch::draw(const Texture& texture, float* const spriteVertices, int 
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
     } else if (idx + length >= verticesSize ) renderMesh();
-
-    memcpy(&vertices[idx], &spriteVertices[offset], length);
+       
+    memcpy(&vertices[idx], &spriteVertices[offset], sizeof(float) * length);
+    
     idx += length;
 }
 
