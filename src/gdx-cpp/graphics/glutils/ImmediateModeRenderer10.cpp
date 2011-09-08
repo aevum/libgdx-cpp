@@ -19,26 +19,52 @@
 */
 
 #include "ImmediateModeRenderer10.hpp"
+#include "gdx-cpp/graphics/GL10.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/math/Matrix4.hpp"
+#include "gdx-cpp/math/Vector3.hpp"
 
 using namespace gdx_cpp::graphics::glutils;
 
-FloatBuffer& ImmediateModeRenderer10::allocateBuffer (int numFloats) {
-    ByteBuffer buffer = ByteBuffer.allocateDirect(numFloats * 4);
-    buffer.order(ByteOrder.nativeOrder());
-    return buffer.asFloatBuffer();
+
+ImmediateModeRenderer10::ImmediateModeRenderer10 (int maxVertices) : primitiveType(false), idxPos(0), idxCols(0), idxNors(0), idxTexCoords(0),
+                                                                            hasCols(false), hasNors(false), hasTexCoords(false)
+{
+    this->positions = new float[3 * maxVertices];
+    this->positionsBuffer = allocateBuffer(3 * maxVertices);
+    this->colors = new float[4 * maxVertices];
+    this->colorsBuffer = allocateBuffer(4 * maxVertices);
+    this->normals = new float[3 * maxVertices];
+    this->normalsBuffer = allocateBuffer(3 * maxVertices);
+    this->texCoords = new float[2 * maxVertices];
+    this->texCoordsBuffer = allocateBuffer(2 * maxVertices);
 }
 
-void ImmediateModeRenderer10::begin (const gdx_cpp::math::Matrix4& projModelView,int primitiveType) {
-    GL10 gl = Gdx.gl10;
-    gl.glMatrixMode(GL10.GL_PROJECTION);
-    gl.glLoadMatrixf(projModelView.val, 0);
-    gl.glMatrixMode(GL10.GL_MODELVIEW);
-    gl.glLoadIdentity();
+ImmediateModeRenderer10::~ImmediateModeRenderer10 ()
+{
+    delete [] this->positions;
+    delete [] this->colors;
+    delete [] this->normals;
+    delete [] this->texCoords;
+}
+
+gdx_cpp::utils::float_buffer ImmediateModeRenderer10::allocateBuffer (int numFloats) {
+    gdx_cpp::utils::byte_buffer buffer(numFloats * 4);
+//     buffer->order(ByteOrder.nativeOrder());
+    return buffer.convert<float>();
+}
+
+void ImmediateModeRenderer10::begin (gdx_cpp::math::Matrix4& projModelView,int primitiveType) {
+    gdx_cpp::graphics::GL10 * gl = gdx_cpp::Gdx::gl10;
+    gl->glMatrixMode(gdx_cpp::graphics::GL10::GL_PROJECTION);
+    gl->glLoadMatrixf(projModelView.val);
+    gl->glMatrixMode(gdx_cpp::graphics::GL10::GL_MODELVIEW);
+    gl->glLoadIdentity();
     begin(primitiveType);
 }
 
 void ImmediateModeRenderer10::begin (int primitiveType) {
-    this.primitiveType = primitiveType;
+    this->primitiveType = primitiveType;
     idxPos = 0;
     idxCols = 0;
     idxNors = 0;
@@ -86,39 +112,39 @@ int ImmediateModeRenderer10::getNumVertices () {
 void ImmediateModeRenderer10::end () {
     if (idxPos == 0) return;
 
-    GL10 gl = Gdx.gl10;
-    gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+    gdx_cpp::graphics::GL10 * gl = gdx_cpp::Gdx::gl10;
+    gl->glEnableClientState(gdx_cpp::graphics::GL10::GL_VERTEX_ARRAY);
     positionsBuffer.clear();
-    BufferUtils.copy(positions, positionsBuffer, idxPos, 0);
-    gl.glVertexPointer(3, GL10.GL_FLOAT, 0, positionsBuffer);
+    positionsBuffer.copy<float>(positions, idxPos, 0);
+    gl->glVertexPointer(3, gdx_cpp::graphics::GL10::GL_FLOAT, 0, positionsBuffer);
 
     if (hasCols) {
-        gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+        gl->glEnableClientState(gdx_cpp::graphics::GL10::GL_COLOR_ARRAY);
         colorsBuffer.clear();
-        BufferUtils.copy(colors, colorsBuffer, idxCols, 0);
-        gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorsBuffer);
+        colorsBuffer.copy<float>(colors, idxCols, 0);
+        gl->glColorPointer(4, gdx_cpp::graphics::GL10::GL_FLOAT, 0, colorsBuffer);
     }
 
     if (hasNors) {
-        gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
+        gl->glEnableClientState(gdx_cpp::graphics::GL10::GL_NORMAL_ARRAY);
         normalsBuffer.clear();
-        BufferUtils.copy(normals, normalsBuffer, idxNors, 0);
-        gl.glNormalPointer(GL10.GL_FLOAT, 0, normalsBuffer);
+        normalsBuffer.copy<float>(normals, idxNors, 0);
+        gl->glNormalPointer(gdx_cpp::graphics::GL10::GL_FLOAT, 0, normalsBuffer);
     }
 
     if (hasTexCoords) {
-        gl.glClientActiveTexture(GL10.GL_TEXTURE0);
-        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+        gl->glClientActiveTexture(gdx_cpp::graphics::GL10::GL_TEXTURE0);
+        gl->glEnableClientState(gdx_cpp::graphics::GL10::GL_TEXTURE_COORD_ARRAY);
         texCoordsBuffer.clear();
-        BufferUtils.copy(texCoords, texCoordsBuffer, idxTexCoords, 0);
-        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordsBuffer);
+        texCoordsBuffer.copy<float>(texCoords, idxTexCoords, 0);
+        gl->glTexCoordPointer(2, gdx_cpp::graphics::GL10::GL_FLOAT, 0, texCoordsBuffer);
     }
 
-    gl.glDrawArrays(primitiveType, 0, idxPos / 3);
+    gl->glDrawArrays(primitiveType, 0, idxPos / 3);
 
-    if (hasCols) gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
-    if (hasNors) gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
-    if (hasTexCoords) gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+    if (hasCols) gl->glDisableClientState(gdx_cpp::graphics::GL10::GL_COLOR_ARRAY);
+    if (hasNors) gl->glDisableClientState(gdx_cpp::graphics::GL10::GL_NORMAL_ARRAY);
+    if (hasTexCoords) gl->glDisableClientState(gdx_cpp::graphics::GL10::GL_TEXTURE_COORD_ARRAY);
 }
 
 void ImmediateModeRenderer10::vertex (const gdx_cpp::math::Vector3& point) {

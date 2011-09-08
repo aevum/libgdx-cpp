@@ -386,7 +386,7 @@ graphics/Texture.cpp
 graphics/glutils/MipMapGenerator.cpp
 # graphics/glutils/FileTextureData.cpp
 graphics/glutils/VertexBufferObject.cpp
-# graphics/glutils/ImmediateModeRenderer10.cpp
+graphics/glutils/ImmediateModeRenderer10.cpp
 graphics/glutils/IndexBufferObjectSubData.cpp
 graphics/glutils/FrameBuffer.cpp
 graphics/glutils/PixmapTextureData.cpp

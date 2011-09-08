@@ -31,7 +31,7 @@ namespace graphics {
 class Mesh;
 
 namespace glutils {
-    class ShaderProgram;
+class ShaderProgram;
 }
 
 namespace g2d {
@@ -43,22 +43,23 @@ class SpriteCache: public gdx_cpp::utils::Disposable {
         int maxCount;
         std::vector<Texture::ptr> textures;
         std::vector<int> counts;
-        
+
         Cache (int id, int offset) {
             this->id = id;
             this->offset = offset;
         }
     };
-    
+
+    static glutils::ShaderProgram* createDefaultShader ();
 public:
-    SpriteCache(int size, glutils::ShaderProgram* shader, bool useIndices);
-    
+    SpriteCache(int size = 1000, bool useIndices = false, gdx_cpp::graphics::glutils::ShaderProgram* shader = createDefaultShader());
+
     void setColor (const gdx_cpp::graphics::Color& tint);
     void setColor (float r,float g,float b,float a);
     void setColor (float color);
     gdx_cpp::graphics::Color& getColor ();
     void beginCache ();
-    void beginCache (int cacheID);
+    void beginCache (unsigned int cacheID);
     int endCache ();
     void clear ();
 
@@ -87,23 +88,23 @@ public:
 
 private:
     static float tempVertices[Sprite::VERTEX_SIZE * 6];
-    
+
     Mesh* mesh;
     bool drawing;
     math::Matrix4 transformMatrix;
     math::Matrix4 projectionMatrix;
     std::vector<Cache*> caches;
-    
+
     math::Matrix4 combinedMatrix;
     glutils::ShaderProgram* shader;
-    
+
     Cache* currentCache;
     std::vector<Texture::ptr> textures;
     std::vector<int> counts;
-    
+
     float color;
     Color tempColor;
-    
+
     glutils::ShaderProgram* customShader;
 };
 

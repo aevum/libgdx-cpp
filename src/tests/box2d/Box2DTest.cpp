@@ -5,8 +5,11 @@
 #include <gdx-cpp/ApplicationListener.hpp>
 #include "Box2D/Box2D.h"
 #include <gdx-cpp/graphics/g2d/SpriteBatch.hpp>
-#include <gdx-cpp/graphics/g2d/BitmapFont.hpp>
+// #include <gdx-cpp/graphics/g2d/BitmapFont.hpp>
 #include <gdx-cpp/graphics/OrthographicCamera.hpp>
+#include "gdx-cpp/physics/box2d/Box2DDebugRenderer.hpp"
+#include <gdx-cpp/implementation/System.hpp>
+#include <gdx-cpp/Graphics.hpp>
 
 using namespace gdx_cpp;
 using namespace gdx_cpp::graphics;
@@ -17,43 +20,49 @@ class Box2DTest : public ApplicationListener, InputProcessor {
 public:
 
     class QueryCallbackTest : public b2QueryCallback {
+    public:
         Box2DTest * box2d;
 
         QueryCallbackTest(Box2DTest * _box2d) {
             box2d = _box2d;
         }
 
-        bool reportFixture (b2Fixture * fixture) {
+        bool ReportFixture (b2Fixture * fixture) {
             // if the hit point is inside the fixture of the body
             // we report it
-            if (fixture->testPoint(box2d->testPoint.x, box2d->testPoint.y)) {
-                box2d->hitBody = fixture->getBody();
+            if (fixture->TestPoint(b2Vec2(box2d->testPoint.x, box2d->testPoint.y))) {
+                box2d->hitBody = fixture->GetBody();
                 return false;
             } else
                 return true;
         }
     };
 
+  Box2DTest()
+  {
+    callback = new QueryCallbackTest(this);
+  }
+    
     void render () {
         // update the world with a fixed time step
-        long startTime = System.nanoTime();
-        world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
-        float updateTime = (System.nanoTime() - startTime) / 1000000000.0f;
+        long startTime = gdx_cpp::Gdx::system->nanoTime();
+        world->Step(gdx_cpp::Gdx::app->getGraphics()->getDeltaTime(), 3, 3);
+        float updateTime = (gdx_cpp::Gdx::system->nanoTime() - startTime) / 1000000000.0f;
 
-        startTime = System.nanoTime();
+        startTime = gdx_cpp::Gdx::system->nanoTime();
         // clear the screen and setup the projection matrix
-        GL10 gl = Gdx::app->getGraphics()->getGL10();
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-        camera.update();
-        camera.apply(gl);
+        gdx_cpp::graphics::GL10 * gl = Gdx::app->getGraphics()->getGL10();
+        gl->glClear(gdx_cpp::graphics::GL10::GL_COLOR_BUFFER_BIT);
+        camera->update();
+        camera->apply(*gl);
 
         // render the world using the debug renderer
-        renderer.render(world);
-        float renderTime = (System.nanoTime() - startTime) / 1000000000.0f;
+        renderer->render(*world);
+        float renderTime = (gdx_cpp::Gdx::system->nanoTime() - startTime) / 1000000000.0f;
 
-        batch.begin();
-        font.draw(batch, "fps:" + Gdx.graphics.getFramesPerSecond() + ", update: " + updateTime + ", render: " + renderTime, 0, 20);
-        batch.end();
+        batch->begin();
+//         font.draw(batch, "fps:" + Gdx.graphics.getFramesPerSecond() + ", update: " + updateTime + ", render: " + renderTime, 0, 20);
+        batch->end();
     }
 
 
@@ -66,35 +75,38 @@ public:
         // looks at (0,16) (that's where the middle of the
         // screen will be located).
         camera = new OrthographicCamera(48, 32);
-        camera.position.set(0, 15, 0);
+        camera->position.set(0, 15, 0);
 
         // create the debug renderer
-        renderer = new Box2DDebugRenderer();
+        renderer = new gdx_cpp::physics::box2d::Box2DDebugRenderer();
 
         // create the world
-        world = new World(new Vector2(0, -10), true);
+        world = new b2World(b2Vec2(0, -10), true);
 
         // we also need an invisible zero size ground body
         // to which we can connect the mouse joint
-        BodyDef bodyDef = new BodyDef();
-        groundBody = world.createBody(bodyDef);
+        b2BodyDef bodyDef;
+        groundBody = world->CreateBody(&bodyDef);
 
         // call abstract method to populate the world
-        createWorld(world);
+        createWorld(*world);
 
         batch = new SpriteBatch();
-        font = new BitmapFont();
+//         font = new BitmapFont();
     }
 
 
     void dispose () {
-        renderer.dispose();
-        world.dispose();
-
-        renderer = null;
-        world = null;
-        mouseJoint = null;
-        hitBody = null;
+        renderer->dispose();
+        delete world;
+        delete renderer;
+        renderer = NULL;
+        delete world;
+        world = NULL;
+        delete mouseJoint;
+        mouseJoint = NULL;
+//         delete hitBody;
+        hitBody = NULL;
     }
 
 
@@ -114,29 +126,34 @@ public:
 
     bool touchDown (int x, int y, int pointer, int button) {
         // translate the mouse coordinates to world coordinates
-        camera.unproject(testPoint.set(x, y, 0));
+        testPoint.set(x, y, 0);
+        camera->unproject(testPoint);
         // ask the world which bodies are within the given
         // bounding box around the mouse pointer
-        hitBody = null;
-        world.QueryAABB(callback, testPoint.x - 0.0001f, testPoint.y - 0.0001f, testPoint.x + 0.0001f, testPoint.y + 0.0001f);
+        hitBody = NULL;
+        b2AABB aabb;
+        aabb.lowerBound = b2Vec2( testPoint.x - 0.0001f, testPoint.y - 0.0001f );
+        aabb.upperBound = b2Vec2( testPoint.x + 0.0001f, testPoint.y + 0.0001f );
+        world->QueryAABB(callback, aabb);
 
-        if (hitBody == groundBody) hitBody = null;
+        if (hitBody == groundBody) hitBody = NULL;
 
         // ignore kinematic bodies, they don't work with the mouse joint
-        if (hitBody != null && hitBody.getType() == BodyType.KinematicBody) return false;
+        if (hitBody != NULL && hitBody->GetType() == b2_kinematicBody) return false;
 
         // if we hit something we create a new mouse joint
         // and attach it to the hit body.
-        if (hitBody != null) {
-            MouseJointDef def = new MouseJointDef();
+        if (hitBody != NULL) {
+            b2MouseJointDef def;
             def.bodyA = groundBody;
             def.bodyB = hitBody;
             def.collideConnected = true;
-            def.target.set(testPoint.x, testPoint.y);
-            def.maxForce = 1000.0f * hitBody.getMass();
+            def.target.Set(testPoint.x, testPoint.y);
+            def.maxForce = 1000.0f * hitBody->GetMass();
 
-            mouseJoint = (MouseJoint)world.createJoint(def);
-            hitBody.setAwake(true);
+            mouseJoint = (b2MouseJoint *)world->CreateJoint(&def);
+            
+            hitBody->SetAwake(true);
         }
 
         return false;
@@ -147,9 +164,10 @@ public:
         // if a mouse joint exists we simply update
         // the target of the joint based on the new
         // mouse coordinates
-        if (mouseJoint != null) {
-            camera.unproject(testPoint.set(x, y, 0));
-            mouseJoint.setTarget(target.set(testPoint.x, testPoint.y));
+        if (mouseJoint != NULL) {
+            camera->unproject(testPoint.set(x, y, 0));
+            target.Set(testPoint.x, testPoint.y);
+            mouseJoint->SetTarget(target);
         }
         return false;
     }
@@ -157,9 +175,9 @@ public:
 
     bool touchUp (int x, int y, int pointer, int button) {
         // if a mouse joint exists we simply destroy it
-        if (mouseJoint != null) {
-            world.destroyJoint(mouseJoint);
-            mouseJoint = null;
+        if (mouseJoint != NULL) {
+            world->DestroyJoint(mouseJoint);
+            mouseJoint = NULL;
         }
         return false;
     }
@@ -187,16 +205,17 @@ public:
     }
 
     SpriteBatch * batch;
-    BitmapFont * font;
+//     BitmapFont * font;
     b2Vec2 target;
-    b2Vec3 testPoint;
+    gdx_cpp::math::Vector3 testPoint;
 
-    QueryCallbackTest * callback = new QueryCallbackTest;
+    QueryCallbackTest * callback;
+        
 protected:
-    virtual void createWorld (World world) = 0;
+    virtual void createWorld (b2World& world) = 0;
 
     OrthographicCamera * camera;
-    Box2DDebugRenderer * renderer;
+    gdx_cpp::physics::box2d::Box2DDebugRenderer * renderer;
     b2World * world;
     b2Body  * groundBody;
     b2MouseJoint * mouseJoint;
@@ -206,4 +225,3 @@ protected:
 private:
   
 };
-

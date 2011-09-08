@@ -20,7 +20,7 @@ file(GLOB GDX_CPP_BOX2D_LAYER_SRC ManifoldPoint.cpp
 #      Body.cpp
 #      World.cpp
 # joints/*.cpp
-*.cpp
+Box2DDebugRenderer.cpp
 )
 file(GLOB GDX_CPP_BOX2D_LAYER_HEADERS
 #     Shape.hpp
@@ -40,7 +40,7 @@ file(GLOB GDX_CPP_BOX2D_LAYER_HEADERS
 #     Body.hpp
 #       World.hpp
 # joints/*.hpp
-*.hpp
+Box2DDebugRenderer.hpp
 )
 
 

@@ -2,7 +2,7 @@ project(gdx-cpp-tests)
 
 include_directories(${GDXCPP_INCLUDE_DIR})
 
-set(APPLICATIONS SimpleTest SimpleGdxApp MyFirstTriangle SpriteBatchTest PixmapTest ParticleEmitterTest box2d/Box2DTest)
+set(APPLICATIONS SimpleTest SimpleGdxApp MyFirstTriangle SpriteBatchTest PixmapTest SpriteCacheTest ParticleEmitterTest box2d/Chain)
 
 message("Active backend is: " ${ACTIVE_BACKENDS})
 
@@ -17,7 +17,7 @@ foreach(BACKEND ${ACTIVE_BACKENDS})
         elseif (${GENERATED_APPLICATION_TYPE} STREQUAL "SHARED_LIB")
             add_library(${APP} SHARED ${APP}.cpp)
         endif()        
-        target_link_libraries(${APP} gdx-cpp gdx-cpp-backend-${backend} ${BACKEND-${BACKEND}-DEPENDENCIES})
+        target_link_libraries(${APP} gdx-cpp gdx-cpp-backend-${backend} ${BACKEND-${BACKEND}-DEPENDENCIES} gdx-cpp-box2d gdx-cpp-box2d-layer)
         add_definitions(-DCURRENT_BACKEND_${BACKEND})
         add_dependencies(${APP} gdx-cpp gdx-cpp-backend-${backend})
     endforeach()
