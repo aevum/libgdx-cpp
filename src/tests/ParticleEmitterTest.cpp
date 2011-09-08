@@ -24,7 +24,7 @@ using namespace gdx_cpp;
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp::graphics::g2d;
 
-class ParticleEmitterTest : public gdx_cpp::ApplicationListener {
+class ParticleEmitterTest : public ApplicationListener {
 public:
 
     class InputProcessorTest : public InputProcessor {
