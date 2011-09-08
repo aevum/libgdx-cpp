@@ -190,7 +190,7 @@ void Mesh::render (int primitiveType,int offset,int count) {
     } else {
         if (indices->getNumIndices() > 0) {
             int newoffset = offset * 2;
-            Gdx::gl11->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, &newoffset );
+            Gdx::gl11->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, (void *) newoffset );
         }
         else
             Gdx::gl11->glDrawArrays(primitiveType, offset, count);

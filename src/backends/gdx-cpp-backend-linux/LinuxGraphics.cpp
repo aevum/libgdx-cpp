@@ -22,11 +22,16 @@
 #include "LinuxGL20.hpp"
 #include "LinuxGLU.hpp"
 #include <stdexcept>
+
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/Graphics.hpp>
 #include <gdx-cpp/implementation/System.hpp>
 
 #include <iostream>
+#include <gdx-cpp/Application.hpp>
+
+#define GL_GLEXT_PROTOTYPES
+#include <GLES/gl.h>
 
 using namespace gdx_cpp::backends::nix;
 using namespace gdx_cpp::graphics;
@@ -224,24 +229,31 @@ bool gdx_cpp::backends::nix::LinuxGraphics::setDisplayMode(int width, int height
     }
 
     const GLubyte* version = glGetString(GL_VERSION);
-    int major = atoi((const char*) version);
-    int minor = atoi((const char*) &version[2]);
-    
-    if (false && major >= 2) {
+
+    if (version) {
+        
+        int major = atoi((const char*) version);
+        int minor = atoi((const char*) &version[2]);
+
+        if (false && major >= 2) {
 
 
-    } else {       
-        if (major == 1 && minor < 5) {
-            glCommon = gl10 = new LinuxGL10;
         } else {
-            glCommon = gl10 = gl11 = new LinuxGL11;
+            if (major == 1 && minor < 5) {
+                glCommon = gl10 = new LinuxGL10;
+            } else {
+                glCommon = gl10 = gl11 = new LinuxGL11;
+            }
         }
-    }
 
-    SDL_WM_SetCaption(this->title.c_str(), NULL);
-    glCommon->glViewport(0, 0, width, height);
+        SDL_WM_SetCaption(this->title.c_str(), NULL);
+        glCommon->glViewport(0, 0, width, height);
 
-    return true;
+        return true;
+    } else {
+        Gdx::app->error("LinuxGraphics", "Failed to recover the GL_VERSION, aborting");
+        return false;
+    } 
 }
 
 void gdx_cpp::backends::nix::LinuxGraphics::update()
