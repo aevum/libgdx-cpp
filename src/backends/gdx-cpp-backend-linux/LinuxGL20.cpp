@@ -17,7 +17,15 @@
 
 #include "LinuxGL20.hpp"
 
+#ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
+
+#define GL_GLEXT_PROTOTYPES
+#include <GL/gl.h>
+#include <GL/glext.h>
+
+#else
 #include <GLES2/gl2.h>
+#endif
 
 using namespace gdx_cpp::backends::nix;
 
@@ -334,3 +342,128 @@ void LinuxGL20::glVertexAttribPointer (int indx,int size,int type,bool normalize
     glVertexAttribPointer (indx,size,type,normalized,stride,ptr);
 }
 
+void LinuxGL20::glActiveTexture (int texture) const {
+    ::glActiveTexture ( texture);
+}
+void LinuxGL20::glBindTexture (int target,int texture) const {
+    ::glBindTexture ( target, texture);
+}
+void LinuxGL20::glBlendFunc (int sfactor,int dfactor) const {
+    ::glBlendFunc ( sfactor, dfactor);
+}
+void LinuxGL20::glClear (int mask) const {
+    ::glClear ( mask);
+}
+void LinuxGL20::glClearColor (float red,float green,float blue,float alpha) const {
+    ::glClearColor ( red, green, blue, alpha);
+}
+void LinuxGL20::glClearDepthf (float depth) const {
+    ::glClearDepthf ( depth);
+}
+void LinuxGL20::glClearStencil (int s) const {
+    ::glClearStencil ( s);
+}
+void LinuxGL20::glColorMask (bool red,bool green,bool blue,bool alpha) const {
+    ::glColorMask ( red, green, blue, alpha);
+}
+void LinuxGL20::glCompressedTexImage2D (int target,int level,int internalformat,int width,int height,int border,int imageSize,const unsigned char* data) const {
+    ::glCompressedTexImage2D ( target, level, internalformat, width, height, border, imageSize, data);
+}
+void LinuxGL20::glCompressedTexSubImage2D (int target,int level,int xoffset,int yoffset,int width,int height,int format,int imageSize,const unsigned char* data) const {
+    ::glCompressedTexSubImage2D ( target, level, xoffset, yoffset, width, height, format, imageSize, data);
+}
+void LinuxGL20::glCopyTexImage2D (int target,int level,int internalformat,int x,int y,int width,int height,int border) const {
+    ::glCopyTexImage2D ( target, level, internalformat, x, y, width, height, border);
+}
+void LinuxGL20::glCopyTexSubImage2D (int target,int level,int xoffset,int yoffset,int x,int y,int width,int height) const {
+    ::glCopyTexSubImage2D ( target, level, xoffset, yoffset, x, y, width, height);
+}
+void LinuxGL20::glCullFace (int mode) const {
+    ::glCullFace ( mode);
+}
+void LinuxGL20::glDeleteTextures (int n, const int* textures) const {
+    ::glDeleteTextures ( n, (GLuint*) textures);
+}
+void LinuxGL20::glDepthFunc (int func) const {
+    ::glDepthFunc ( func);
+}
+void LinuxGL20::glDepthMask (bool flag) const {
+    ::glDepthMask ( flag);
+}
+void LinuxGL20::glDepthRangef (float zNear,float zFar) const {
+    ::glDepthRangef ( zNear, zFar);
+}
+void LinuxGL20::glDisable (int cap) const {
+    ::glDisable ( cap);
+}
+void LinuxGL20::glDrawArrays (int mode,int first,int count) const {
+    ::glDrawArrays ( mode, first, count);
+}
+void LinuxGL20::glDrawElements (int mode,int count,int type, const void* indices) const {
+    ::glDrawElements ( mode, count, type, indices);
+}
+void LinuxGL20::glEnable (int cap) const {
+    ::glEnable ( cap);
+}
+void LinuxGL20::glFinish () const {
+    ::glFinish();
+}
+void LinuxGL20::glFlush () const {
+    ::glFlush();
+}
+
+void LinuxGL20::glFrontFace (int mode) const {
+    ::glFrontFace ( mode);
+}
+void LinuxGL20::glGenTextures (int n,int* textures) const {
+    ::glGenTextures ( n, (GLuint*) textures);
+}
+int LinuxGL20::glGetError () const {
+    return ::glGetError();
+}
+void LinuxGL20::glGetIntegerv (int pname,const int* params) const {
+    ::glGetIntegerv ( pname, (GLint*) params);
+}
+std::string LinuxGL20::glGetString (int name) const {
+    const GLubyte* str = ::glGetString(name);
+    return std::string((char*)str);
+}
+void LinuxGL20::glHint (int target,int mode) const {
+    ::glHint ( target, mode);
+}
+void LinuxGL20::glLineWidth (float width) const {
+    ::glLineWidth ( width);
+}
+void LinuxGL20::glPixelStorei (int pname,int param) const {
+    ::glPixelStorei ( pname, param);
+}
+void LinuxGL20::glPolygonOffset (float factor,float units) const {
+    ::glPolygonOffset ( factor, units);
+}
+void LinuxGL20::glReadPixels (int x,int y,int width,int height,int format,int type,const void* pixels) const {
+    ::glReadPixels ( x, y, width, height, format, type, (GLvoid*) pixels);
+}
+void LinuxGL20::glScissor (int x,int y,int width,int height) const {
+    ::glScissor ( x, y, width, height);
+}
+void LinuxGL20::glStencilFunc (int func,int ref,int mask) const {
+    ::glStencilFunc ( func, ref, mask);
+}
+void LinuxGL20::glStencilMask (int mask) const {
+    ::glStencilMask ( mask);
+}
+void LinuxGL20::glStencilOp (int fail,int zfail,int zpass) const {
+    ::glStencilOp ( fail, zfail, zpass);
+}
+void LinuxGL20::glTexImage2D (int target,int level,int internalformat,int width,int height,int border,int format,int type,const unsigned char* pixels) const {
+    ::glTexImage2D ( target, level, internalformat, width, height, border, format, type, pixels);
+}
+void LinuxGL20::glTexParameterf (int target,int pname,float param) const {
+    ::glTexParameterf ( target, pname, param);
+}
+void LinuxGL20::glTexSubImage2D (int target,int level,int xoffset,int yoffset,int width,int height,int format,int type,const unsigned char* pixels) const {
+    ::glTexSubImage2D ( target, level, xoffset, yoffset, width, height, format, type, pixels);
+}
+void LinuxGL20::glViewport (int x,int y,int width,int height) const {
+    ::glViewport ( x, y, width, height);
+}

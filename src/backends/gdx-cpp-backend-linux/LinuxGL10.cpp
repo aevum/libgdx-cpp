@@ -17,7 +17,17 @@
 
 #include "LinuxGL10.hpp"
 
+#ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
+
+#define GL_GLEXT_PROTOTYPES
+#include <GL/gl.h>
+#include <GL/glext.h>
+
+#else
+
 #include <GLES/gl.h>
+
+#endif
 
 using namespace gdx_cpp::backends::nix;
 
@@ -37,7 +47,12 @@ void LinuxGL10::glClearColor(float red, float green, float blue, float alpha) co
     ::glClearColor ( red, green, blue, alpha);
 }
 void LinuxGL10::glClearDepthf(float depth) const {
+
+#ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
+    ::glClearDepth ( depth);
+#else
     ::glClearDepthf ( depth);
+#endif
 }
 void LinuxGL10::glClearStencil(int s) const {
     ::glClearStencil ( s);
@@ -70,7 +85,12 @@ void LinuxGL10::glDepthMask(bool flag) const {
     ::glDepthMask ( flag);
 }
 void LinuxGL10::glDepthRangef(float zNear, float zFar) const {
+#ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
+    ::glDepthRange ( zNear, zFar);
+#else
     ::glDepthRangef ( zNear, zFar);
+#endif
+
 }
 void LinuxGL10::glDisable(int cap) const {
     ::glDisable ( cap);
@@ -179,7 +199,11 @@ void LinuxGL10::glFogf(int pname, float param) const {
 }
 
 void LinuxGL10::glFrustumf(float left, float right, float bottom, float top, float zNear, float zFar) const {
+#ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
+    ::glFrustum(left, right,bottom,top, zNear, zFar);
+#else
     ::glFrustumf(left, right,bottom,top, zNear, zFar);
+#endif
 }
 
 void LinuxGL10::glGenTextures(int n, unsigned int* textures) const {
@@ -237,7 +261,11 @@ void LinuxGL10::glNormalPointer(int type, int stride, const char* pointer) const
     ::glNormalPointer(type, stride, pointer);
 }
 void LinuxGL10::glOrthof(float left, float right, float bottom, float top, float zNear, float zFar) const {
+#ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
+    ::glOrtho(left,right,bottom,top,zNear,zFar);
+#else
     ::glOrthof(left,right,bottom,top,zNear,zFar);
+#endif
 }
 
 void LinuxGL10::glPointSize(float size) const {

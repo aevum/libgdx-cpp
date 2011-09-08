@@ -33,7 +33,6 @@ int IndexBufferObject::createBufferObject () {
         Gdx::gl20->glGenBuffers(1, &tmpHandle);
         return tmpHandle;
     } else if (Gdx::gl11 != NULL) {
-        tmpHandle = 12345;
         Gdx::gl11->glGenBuffers(1, &tmpHandle);
         return tmpHandle;
     }
@@ -76,7 +75,7 @@ utils::short_buffer& IndexBufferObject::getBuffer () {
 
 void IndexBufferObject::bind () {
     if (bufferHandle == 0)
-        throw std::runtime_error("Buffer handler is not initialized?");
+        throw std::runtime_error(__FILE__ ": Buffer handler is not initialized?");
 
     if (Gdx::gl11 != NULL) {
         GL11& gl = *Gdx::gl11;
