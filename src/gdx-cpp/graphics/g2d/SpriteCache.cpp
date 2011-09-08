@@ -37,7 +37,7 @@ using namespace gdx_cpp;
 
 float SpriteCache::tempVertices[Sprite::VERTEX_SIZE * 6];
 
-ShaderProgram* createDefaultShader () {
+ShaderProgram* SpriteCache::createDefaultShader () {
     if (!Gdx::graphics->isGL20Available()) return NULL;
     std::string vertexShader = "attribute vec4 " + ShaderProgram::POSITION_ATTRIBUTE + ";\n" //
      "attribute vec4 " + ShaderProgram::COLOR_ATTRIBUTE + ";\n" //
@@ -69,7 +69,7 @@ ShaderProgram* createDefaultShader () {
     return shader;
 }
 
-gdx_cpp::graphics::g2d::SpriteCache::SpriteCache(int size = 1000, ShaderProgram* shader = createDefaultShader(), bool useIndices = false) :
+gdx_cpp::graphics::g2d::SpriteCache::SpriteCache(int size, bool useIndices, ShaderProgram* shader) :
  color(Color::WHITE.toFloatBits())
  , tempColor(1,1,1,1)
  , customShader(0)
@@ -141,7 +141,7 @@ void SpriteCache::beginCache () {
     mesh->getVerticesBuffer().compact();
 }
 
-void SpriteCache::beginCache (int cacheID) {
+void SpriteCache::beginCache (unsigned int cacheID) {
     if (currentCache != NULL)
         throw std::runtime_error("endCache must be called before begin.");
     
@@ -175,13 +175,13 @@ int SpriteCache::endCache () {
         }
 
         if (currentCache->textures.size() < textures.size()) {
-            currentCache->textures.reserve(textures.size());
+            currentCache->textures.resize(textures.size());
         }
         
         for (int i = 0, n = textures.size(); i < n; i++)
             currentCache->textures[i] = textures[i];
 
-        if (currentCache->counts.size() < counts.size()) currentCache->counts.reserve(counts.size());
+        if (currentCache->counts.size() < counts.size()) currentCache->counts.resize(counts.size());
         for (int i = 0, n = counts.size(); i < n; i++)
             currentCache->counts[i] = counts[i];
 

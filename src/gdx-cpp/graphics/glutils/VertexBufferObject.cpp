@@ -243,10 +243,12 @@ VertexBufferObject::VertexBufferObject(bool isStatic, int numVertices, const gdx
 , isBound(false)
 , isStatic(isStatic)
 , byteBuffer(attributes.vertexSize * numVertices)
-, buffer(byteBuffer.convert<float>())
 {
 //TODO:     byteBuffer.order(ByteOrder.nativeOrder());
     byteBuffer.flip();
+    buffer = byteBuffer.convert<float>();
+    buffer.flip();
+    
     bufferHandle = createBufferObject();
     usage = isStatic ? GL11::GL_STATIC_DRAW : GL11::GL_DYNAMIC_DRAW;
 }
@@ -263,9 +265,12 @@ bufferHandle(0)
 , isBound(false)
 , isStatic(isStatic)
 , byteBuffer(this->attributes.vertexSize * numVertices)
-, buffer(byteBuffer.convert<float>())
 {
+    buffer = byteBuffer.convert<float>();
+    
     byteBuffer.flip();
+    buffer.flip();
+    
     bufferHandle = createBufferObject();
     usage = isStatic ? GL11::GL_STATIC_DRAW : GL11::GL_DYNAMIC_DRAW;
 }

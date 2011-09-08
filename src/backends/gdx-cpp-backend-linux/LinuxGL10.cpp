@@ -104,7 +104,9 @@ void LinuxGL10::glGetIntegerv(int pname, const int* params) const {
 }
 std::string LinuxGL10::glGetString(int name) const {
     const GLubyte* str = ::glGetString(name);
-    return std::string((char*) str);
+    if (str)
+        return std::string((char*) str);
+    return "";
 }
 void LinuxGL10::glHint(int target, int mode) const {
     ::glHint ( target, mode);

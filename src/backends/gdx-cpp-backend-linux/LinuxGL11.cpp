@@ -1,5 +1,6 @@
 
 #include "LinuxGL11.hpp"
+
 #include <GLES/gl.h>
 
 using namespace gdx_cpp::backends::nix;
@@ -53,8 +54,8 @@ void LinuxGL11::glGetBooleanv (int pname,const int* params) const {
 void LinuxGL11::glGetBufferParameteriv (int target,int pname,const int* params) const {
     ::glGetBufferParameteriv (target, pname, (GLint*)params);
 }
-void LinuxGL11::glGenBuffers (int n,const int* buffers) const {
-    ::glGenBuffers (n,(GLuint*) buffers);
+void LinuxGL11::glGenBuffers (int n, const int* buffers) const {
+    ::glGenBuffers (n, (GLuint*) buffers);
 }
 void LinuxGL11::glGetPointerv (int pname) const {
 //     ::glGetPointerv (pname);
