@@ -49,7 +49,7 @@ void AndroidApplication::initialize() {
     graphics->setTitle(this->title);
     graphics->setDisplayMode(width, height, false);
 
-    Gdx::initialize(this, graphics, NULL, NULL, NULL);
+    Gdx::initialize(this, graphics, NULL, input, NULL);
 }
 
 void backends::android::AndroidApplication::onRunnableStop()
@@ -61,17 +61,6 @@ void backends::android::AndroidApplication::run()
 {
     graphics->updateTime();
 
-//         SDL_Event event;
-
-//         while (SDL_PollEvent(&event)) {
-//             if (event.type == SDL_QUIT) {
-//                 this->exit();
-//                 return;
-//             } else {
-//                 this->input->processEvents(event);
-//             }
-//         }
-//
     {
         lock_holder hnd = synchronize();
 

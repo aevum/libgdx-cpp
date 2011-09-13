@@ -844,6 +844,7 @@ void SpriteCache::draw (int cacheID) {
     int offset = cache->offset;
     std::vector<Texture::ptr>& textures = cache->textures;
     std::vector<int>& counts = cache->counts;
+
     if (Gdx::graphics->isGL20Available()) {
         for (int i = 0, n = textures.size(); i < n; i++) {
             int count = counts[i];
@@ -858,6 +859,7 @@ void SpriteCache::draw (int cacheID) {
         for (int i = 0, n = textures.size(); i < n; i++) {
             int count = counts[i];
             textures[i]->bind();
+
             mesh->render(GL10::GL_TRIANGLES, offset, count);
             offset += count;
         }

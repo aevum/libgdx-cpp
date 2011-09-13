@@ -33,14 +33,19 @@ public:
     }
 
     void create() {
+        Gdx::app->log("SpriteCacheTest", "create");
         spriteCache = new SpriteCache(1000, true);
 
         Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(32, 32, Pixmap::Format::RGBA8888));
         pixmap->setColor(1 ,1 ,0 ,0.5f);
         pixmap->fill();
 
+        Gdx::app->log("SpriteCacheTest", "create1");
+        
         texture = Texture::ptr(new Texture(pixmap, false));
         texture->setFilter(Texture::TextureFilter::Linear, Texture::TextureFilter::Linear);
+
+        Gdx::app->log("SpriteCacheTest", "create2");
 
         for (int i = 0; i < SPRITES * 6; i += 6) {
             sprites[i] = (int)(math::utils::random() * (Gdx::graphics->getWidth() - 32));
@@ -57,6 +62,8 @@ public:
             sprites2[i + 5] = 2;
         }
 
+        Gdx::app->log("SpriteCacheTest", "create3");
+
         for (int i = 0; i < SPRITES * 2; i++) {
             int x = (int)(math::utils::random() * (Gdx::graphics->getWidth() - 32));
             int y = (int)(math::utils::random() * (Gdx::graphics->getHeight() - 32));
@@ -72,6 +79,7 @@ public:
         float scale = 1;
         float angle = 15;
 
+        Gdx::app->log("SpriteCacheTest", "create4");
         spriteCache->beginCache();
         for (int i = 0; i < SPRITES * 6; i += 6)
             spriteCache->add(texture, sprites2[i], sprites2[i + 1], 16, 16, 32, 32, scale, scale, angle, 0, 0, 32, 32, false, false);
@@ -81,6 +89,7 @@ public:
 
         angle = -15;
 
+        Gdx::app->log("SpriteCacheTest", "create5");
         spriteCache->beginCache();
         for (int i = SPRITES; i < SPRITES << 1; i++) {
             sprites3[i]->setRotation(angle);
@@ -94,7 +103,10 @@ public:
         }
         spriteCacheID = spriteCache->endCache();
 
+        Gdx::app->log("SpriteCacheTest", "create6");
+        
         Gdx::input->setInputProcessor(this);
+        Gdx::app->log("SpriteCacheTest", "create7");
     }
 
     void dispose() {
@@ -119,25 +131,27 @@ public:
         gl.glClearColor(0.7f, 0.7f, 0.7f, 1);
         gl.glClear(GL10::GL_COLOR_BUFFER_BIT);
         
-        float begin = 0;
-        float end = 0;
-        float draw1 = 0;
+        uint64_t begin = 0;
+        uint64_t end = 0;
+        uint64_t draw1 = 0;
         
-        long start = Gdx::system->nanoTime();
+        uint64_t start = Gdx::system->nanoTime();
         spriteCache->begin();
-        begin = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        begin = (Gdx::system->nanoTime() - start) / 1000LL;
         
         start = Gdx::system->nanoTime();
         spriteCache->draw(normalCacheID);
-        draw1 = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        draw1 = (Gdx::system->nanoTime() - start) / 1000LL;
         
         start = Gdx::system->nanoTime();
         spriteCache->end();
-        end = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        end = Gdx::system->nanoTime();
+        end = (end - start) / 1000;
         
         if (Gdx::system->nanoTime() - startTime > 1000000000) {
-            // Gdx.app.log( "SpriteBatch", "fps: " + frames + ", render calls: " + spriteBatch.renderCalls + ", " + begin + ", " + draw1 +
-            // ", " + draw2 + ", " + drawText + ", " + end );
+            Gdx::app->log("SpriteCache",
+                          "fps: %d , begin: %llu us, draw1: %llu us ,end: %llu us,",
+                          frames,  begin, draw1, end);
             frames = 0;
             startTime = Gdx::system->nanoTime();
         }
@@ -150,27 +164,24 @@ public:
         gl.glClearColor(0.7f, 0.7f, 0.7f, 1);
         gl.glClear(GL10::GL_COLOR_BUFFER_BIT);
         
-        float begin = 0;
-        float end = 0;
-        float draw1 = 0;
-        float draw2 = 0;
-        float drawText = 0;
+        uint64_t begin = 0;
+        uint64_t end = 0;
+        uint64_t draw1 = 0;
         
         long start = Gdx::system->nanoTime();
         spriteCache->begin();
-        begin = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        begin = (Gdx::system->nanoTime() - start) / 1000;
         
         start = Gdx::system->nanoTime();
         spriteCache->draw(spriteCacheID);
-        draw1 = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        draw1 = (Gdx::system->nanoTime() - start) / 1000;
         
         start = Gdx::system->nanoTime();
         spriteCache->end();
-        end = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        end = (Gdx::system->nanoTime() - start) / 1000;
         
         if (Gdx::system->nanoTime() - startTime > 1000000000) {
-            // Gdx.app.log( "SpriteBatch", "fps: " + frames + ", render calls: " + spriteBatch.renderCalls + ", " + begin + ", " + draw1 +
-            // ", " + draw2 + ", " + drawText + ", " + end );
+            Gdx::app->log("SpriteCache", "fps: %llu , begin: %llu us, draw1: %llu us ,end: %llu us", frames,  begin, draw1, end);
             frames = 0;
             startTime = Gdx::system->nanoTime();
         }

@@ -197,11 +197,11 @@ gdx_cpp::implementation::Mutex::ptr gdx_cpp::backends::nix::LinuxSystem::LinuxMu
     return gdx_cpp::implementation::Mutex::ptr(new LinuxMutex);
 }
 
-int64_t gdx_cpp::backends::nix::LinuxSystem::nanoTime()
+uint64_t gdx_cpp::backends::nix::LinuxSystem::nanoTime()
 {
-    timespec ts;
-    ::clock_gettime(CLOCK_REALTIME, &ts);
+    static timespec ts;
+    ::clock_gettime(CLOCK_MONOTONIC, &ts);
 
-    return ts.tv_sec * 1000000000 + ts.tv_nsec;
+    return (uint64_t)ts.tv_sec * 1000000000LL + (uint64_t)ts.tv_nsec;
 }
 

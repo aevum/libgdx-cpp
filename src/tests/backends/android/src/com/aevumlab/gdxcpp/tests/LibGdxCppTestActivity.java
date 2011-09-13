@@ -22,7 +22,7 @@ public class LibGdxCppTestActivity extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         manager = new ApplicationManager();
         manager.initialize(this);
-        manager.initializeWithSharedLib("SpriteBatchTest");
+        manager.initializeWithSharedLib("SpriteCacheTest");
         setContentView(manager.createView(this));
     }
     

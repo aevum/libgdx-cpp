@@ -45,7 +45,7 @@ public:
 };
 
 public:
-    int64_t nanoTime();
+    uint64_t nanoTime();
 
     AndroidThreadFactory* getThreadFactory() {
         return &threadFactory;
