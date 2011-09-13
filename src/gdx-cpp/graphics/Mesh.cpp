@@ -182,7 +182,7 @@ void Mesh::render (int primitiveType,int offset,int count) {
             int oldLimit = buffer.limit();
             buffer.position(offset);
             buffer.limit(offset + count);
-            Gdx::gl10->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, (void *) buffer);
+            Gdx::gl10->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, (void *) ((char*)buffer + offset));
             buffer.position(oldPosition);
             buffer.limit(oldLimit);
         } else

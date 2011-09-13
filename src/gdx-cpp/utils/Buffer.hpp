@@ -250,7 +250,7 @@ struct buffer : public buffer_base {
             throw std::runtime_error("buffer overflow");
 
         T* casted_array = (T*) bf.get();
-        memcpy(casted_array, &src[offset], sizeof(T) * length);
+        memcpy(&casted_array[_position], &src[offset], sizeof(T) * length);
         
         _position += length;
         
@@ -271,7 +271,7 @@ struct buffer : public buffer_base {
             throw std::runtime_error("buffer overflow");
 
         T* casted_array = (T*) bf.get();
-        memcpy(casted_array, &src[offset], sizeof(T) * length);
+        memcpy(&casted_array[_position], &src[offset], sizeof(T) * length);
         
         _position += length;
         

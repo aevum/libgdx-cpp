@@ -178,33 +178,36 @@ public:
     }
 
     bool keyDown(int keycode) {
+        return false;
     }
 
     bool keyTyped(char character) {
-
+        return false;
     }
 
     bool keyUp(int keycode) {
-
+        return false;
     }
 
     bool scrolled(int amount) {
+        return false;
     }
 
     bool touchDown(int x, int y, int pointer, int button) {
-
+        ++renderMethod %= 2;
+        return false;
     }
 
     bool touchDragged(int x, int y, int pointer) {
-        
+        return false;
     }
 
     bool touchMoved(int x, int y) {
-
+        return false;
     }
 
     bool touchUp(int x, int y, int pointer, int button) {
-
+        return false;
     }
 
 protected:
