@@ -146,6 +146,7 @@ void VertexBufferObject::bind (ShaderProgram& shader) {
 
     gl.glBindBuffer(GL20::GL_ARRAY_BUFFER, bufferHandle);
     if (isDirty) {
+        Gdx::app->log("VertexBufferObject", "********************** limit %d", buffer.limit() * 4);
         byteBuffer.limit(buffer.limit() * 4);
         gl.glBufferData(GL20::GL_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
         isDirty = false;

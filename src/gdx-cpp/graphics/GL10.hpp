@@ -274,7 +274,7 @@ public:
     virtual void glAlphaFunc (int func,float ref) const = 0;
     virtual void glClientActiveTexture (int texture) const = 0;
     virtual void glColor4f (float red,float green,float blue,float alpha) const = 0;
-    virtual void glColorPointer (int size,int type,int stride,const char* pointer) const = 0;
+    virtual void glColorPointer (int size,int type,int stride,const void* pointer) const = 0;
     virtual void glDisableClientState (int array) const = 0;
     virtual void glEnableClientState (int array) const = 0;
     virtual void glFogf (int pname,float param) const = 0;
@@ -293,7 +293,7 @@ public:
     virtual void glMultMatrixf (const float* m) const = 0;
     virtual void glMultiTexCoord4f (int target,float s,float t,float r,float q) const = 0;
     virtual void glNormal3f (float nx,float ny,float nz) const = 0;
-    virtual void glNormalPointer (int type,int stride,const char* pointer) const = 0;
+    virtual void glNormalPointer (int type,int stride,const void* pointer) const = 0;
     virtual void glOrthof (float left,float right,float bottom,float top,float zNear,float zFar) const = 0;
     virtual void glPointSize (float size) const = 0;
     virtual void glPopMatrix () const = 0;
@@ -302,11 +302,11 @@ public:
     virtual void glSampleCoverage (float value,bool invert) const = 0;
     virtual void glScalef (float x,float y,float z) const = 0;
     virtual void glShadeModel (int mode) const = 0;
-    virtual void glTexCoordPointer (int size,int type,int stride,const char* pointer) const = 0;
+    virtual void glTexCoordPointer (int size,int type,int stride,const void * pointer) const = 0;
     virtual void glTexEnvf (int target,int pname,float param) const = 0;
     virtual void glTexEnvfv (int target,int pname,const float* params) const = 0;
     virtual void glTranslatef (float x,float y,float z) const = 0;
-    virtual void glVertexPointer (int size,int type,int stride,const char* pointer) const = 0;
+    virtual void glVertexPointer (int size,int type,int stride,const void* pointer) const = 0;
     virtual void glPolygonMode (int face,int mode) const = 0;
 };
 

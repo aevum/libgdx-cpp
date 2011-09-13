@@ -46,6 +46,7 @@ Matrix4& Matrix4::operator=(const Matrix4& other)
 }
 
 Matrix4::Matrix4 () {
+    memset(val, 0, sizeof(float) * 16);
     val[M00] = 1;
     val[M11] = 1;
     val[M22] = 1;

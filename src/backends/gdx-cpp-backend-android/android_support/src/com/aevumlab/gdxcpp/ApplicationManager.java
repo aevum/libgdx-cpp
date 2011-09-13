@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.Display;
+import android.view.View;
 
 public class ApplicationManager {
 	static native void nativeInitSystem();
@@ -58,14 +59,13 @@ public class ApplicationManager {
 			setRenderer(new NativeSurfaceRenderer());
 		}
 
-		// @Override
-		// protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-		// {
-		// final int width = View.MeasureSpec.getSize(widthMeasureSpec);
-		// final int height = View.MeasureSpec.getSize(heightMeasureSpec);
-		//
-		// setMeasuredDimension( width, height);
-		// }
+		@Override
+		protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+			final int width = View.MeasureSpec.getSize(widthMeasureSpec);
+			final int height = View.MeasureSpec.getSize(heightMeasureSpec);
+
+			setMeasuredDimension(width, height);
+		}
 	}
 
 	public GLSurfaceView createView(Context context) {

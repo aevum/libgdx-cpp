@@ -23,6 +23,7 @@
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/graphics/GL10.hpp"
 #include "gdx-cpp/graphics/GL11.hpp"
+#include "gdx-cpp/Application.hpp"
 
 using namespace gdx_cpp::graphics::glutils;
 using namespace gdx_cpp::graphics;
@@ -55,6 +56,10 @@ void VertexArray::bind () {
 
     byteBuffer.limit(buffer.limit() * 4);
 
+    for (int i = 0; i < buffer.limit(); i++) {
+        Gdx::app->log("VertexArray", "buffer (%d): %f", i, buffer[i]);
+    }
+    
     for (int i = 0; i < numAttributes; i++) {
         VertexAttribute& attribute = attributes.get(i);
 
@@ -62,7 +67,7 @@ void VertexArray::bind () {
         case VertexAttributes::Usage::Position:
             byteBuffer.position(attribute.offset);
             gl.glEnableClientState(GL11::GL_VERTEX_ARRAY);
-            gl.glVertexPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, (const char*) byteBuffer + attribute.offset);
+            gl.glVertexPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, ((float*) buffer) + attribute.offset);
             break;
 
         case VertexAttributes::Usage::Color:
@@ -72,20 +77,20 @@ void VertexArray::bind () {
             if (attribute.usage == VertexAttributes::Usage::ColorPacked) colorType = GL11::GL_UNSIGNED_BYTE;
             byteBuffer.position(attribute.offset);
             gl.glEnableClientState(GL10::GL_COLOR_ARRAY);
-            gl.glColorPointer(attribute.numComponents, colorType, attributes.vertexSize, (const char*) byteBuffer + attribute.offset);
+            gl.glColorPointer(attribute.numComponents, colorType, attributes.vertexSize, ((float*) buffer) + attribute.offset);
             break;
         }
         case VertexAttributes::Usage::Normal:
             byteBuffer.position(attribute.offset);
             gl.glEnableClientState(GL10::GL_NORMAL_ARRAY);
-            gl.glNormalPointer(GL10::GL_FLOAT, attributes.vertexSize, (const char*) byteBuffer + attribute.offset);
+            gl.glNormalPointer(GL10::GL_FLOAT, attributes.vertexSize, ((float*) buffer) + attribute.offset);
             break;
 
         case VertexAttributes::Usage::TextureCoordinates:
             gl.glClientActiveTexture(GL10::GL_TEXTURE0 + textureUnit);
             gl.glEnableClientState(GL10::GL_TEXTURE_COORD_ARRAY);
             byteBuffer.position(attribute.offset);
-            gl.glTexCoordPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, (const char*) byteBuffer + attribute.offset);
+            gl.glTexCoordPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, ((float*) buffer) + attribute.offset);
             textureUnit++;
             break;
 

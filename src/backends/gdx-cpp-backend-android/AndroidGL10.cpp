@@ -160,7 +160,7 @@ void AndroidGL10::glClientActiveTexture(int texture) const {
 void AndroidGL10::glColor4f(float red, float green, float blue, float alpha) const {
     ::glColor4f(red, green, blue, alpha);
 }
-void AndroidGL10::glColorPointer(int size, int type, int stride, const char* pointer) const {
+void AndroidGL10::glColorPointer(int size, int type, int stride, const void* pointer) const {
     ::glColorPointer(size, type, stride, pointer);
 }
 void AndroidGL10::glDeleteTextures(int n, unsigned int* textures) const {
@@ -231,7 +231,7 @@ void AndroidGL10::glMultMatrixf(const float* m) const {
 void AndroidGL10::glNormal3f(float nx, float ny, float nz) const {
     ::glNormal3f(nx,ny,nz);
 }
-void AndroidGL10::glNormalPointer(int type, int stride, const char* pointer) const {
+void AndroidGL10::glNormalPointer(int type, int stride, const void* pointer) const {
     ::glNormalPointer(type, stride, pointer);
 }
 void AndroidGL10::glOrthof(float left, float right, float bottom, float top, float zNear, float zFar) const {
@@ -265,7 +265,7 @@ void AndroidGL10::glScalef(float x, float y, float z) const {
 void AndroidGL10::glShadeModel(int mode) const {
     ::glShadeModel(mode);
 }
-void AndroidGL10::glTexCoordPointer(int size, int type, int stride, const char* pointer) const {
+void AndroidGL10::glTexCoordPointer(int size, int type, int stride, const void* pointer) const {
     ::glTexCoordPointer(size, type, stride, pointer);
 }
 void AndroidGL10::glTexEnvf(int target, int pname, float param) const {
@@ -277,6 +277,6 @@ void AndroidGL10::glTexEnvfv(int target, int pname, const float* params) const {
 void AndroidGL10::glTranslatef(float x, float y, float z) const {
     ::glTranslatef(x,y , z);
 }
-void AndroidGL10::glVertexPointer(int size, int type, int stride, const char* pointer) const {
+void AndroidGL10::glVertexPointer(int size, int type, int stride, const void* pointer) const {
     ::glVertexPointer(size, type, stride,  pointer);
 }
