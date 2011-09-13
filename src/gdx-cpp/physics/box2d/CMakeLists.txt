@@ -47,3 +47,4 @@ Box2DDebugRenderer.hpp
 include_directories(${GDXCPP_BOX2D_INCLUDE_DIR})
 
 add_library(gdx-cpp-box2d-layer SHARED ${GDX_CPP_BOX2D_LAYER_SRC} ${GDX_CPP_BOX2D_LAYER_H})
+target_link_libraries(gdx-cpp-box2d-layer gdx-cpp gdx-cpp-box2d)

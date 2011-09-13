@@ -21,8 +21,13 @@ public class LibGdxCppTestActivity extends Activity {
         
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         manager = new ApplicationManager();
+                
         manager.initialize(this);
-        manager.initializeWithSharedLib("SpriteCacheTest");
+        
+        System.loadLibrary("gdx-cpp-box2d");
+        System.loadLibrary("gdx-cpp-box2d-layer");
+        
+        manager.initializeWithSharedLib("Bridge");
         setContentView(manager.createView(this));
     }
     

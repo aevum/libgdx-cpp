@@ -492,6 +492,6 @@ install(DIRECTORY src DESTINATION include/gdx-cpp
           FILES_MATCHING PATTERN "*.hpp")
 
 add_library(gdx-cpp SHARED ${GDX_HEADERS} ${GDX_SRC})
-target_link_libraries(gdx-cpp mpg123 vorbis z vorbisfile)
 add_subdirectory(physics/box2d)
+
 target_link_libraries(gdx-cpp z)
