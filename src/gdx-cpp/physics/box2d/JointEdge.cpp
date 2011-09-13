@@ -22,5 +22,10 @@
 
 using namespace gdx_cpp::physics::box2d;
 
+JointEdge::JointEdge (ref_ptr_maker< Body >::type _other, gdx_cpp::physics::box2d::Joint* _joint):other(_other), joint(_joint)
+{
+  
+}
+
 
 

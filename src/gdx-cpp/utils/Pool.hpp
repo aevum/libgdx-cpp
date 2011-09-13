@@ -18,25 +18,73 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#ifndef GDX_CPP_UTILS_POOL<T>_HPP_
-#define GDX_CPP_UTILS_POOL<T>_HPP_
+#ifndef GDX_CPP_UTILS_POOL_HPP_
+#define GDX_CPP_UTILS_POOL_HPP_
+
+#include <vector>
+#include <cmath>
+#include <limits>
+#include <stdexcept>
 
 namespace gdx_cpp {
 namespace utils {
-
+template < class T >
 class Pool {
 public:
-    T& obtain ();
-    void free (const T& object);
-    void free (const Array<T>& objects);
-    void clear ();
     int max;
 
+    Pool (int initialCapacity=16, int _max=std::numeric_limits<int>::max(), bool alocate = false) : max(max)
+    {
+        create(initialCapacity, max, alocate);
+    }
+
+    T& obtain () {
+      if (freeObjects.size() == 0)
+      {
+        return *newObject();
+      } else {
+        T * ret = freeObjects.back();
+        freeObjects.pop_back();
+        return *ret;
+      }
+        
+    }
+
+    void free (T* object) {
+        if (object == NULL) throw std::runtime_error("object cannot be null.");
+        if (freeObjects.size() < max)
+        {
+            freeObjects.push_back(object);
+        } else
+        {
+            delete object;
+        }
+    }
+    void freeVector (std::vector< T* >& objects) {
+        for (int i = 0; i < objects.size(); i++)
+            free(objects[i]);
+    }
+    void clear () {
+        freeObjects.clear();
+    }
+
 protected:
-    T& newObject ();
 
 private:
-    Array<T> freeObjects;
+    std::vector<T*> freeObjects;
+
+    void create(int initialCapacity, int max, bool alocate) {
+        freeObjects.reserve(initialCapacity);
+        if (alocate) {
+            for (int i = 0; i<initialCapacity; i++)
+            {
+                freeObjects.push_back(new T());
+            }
+        }
+    }
+    T* newObject () {
+        return new T();
+    }
 };
 
 } // namespace gdx_cpp

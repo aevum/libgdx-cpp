@@ -19,62 +19,68 @@
 */
 
 #include "LineJoint.hpp"
+#include "Box2D.h"
 
 using namespace gdx_cpp::physics::box2d::joints;
 
+LineJoint::LineJoint(ref_ptr_maker< gdx_cpp::physics::box2d::World >::type _world, b2LineJoint* joint) : Joint(_world, joint)
+{
+
+}
+
 float LineJoint::getJointTranslation () {
-    return jniGetJointTranslation(addr);
+    return static_cast<b2LineJoint * >(addr)->GetJointTranslation();
 }
 
 float LineJoint::getJointSpeed () {
-    return jniGetJointSpeed(addr);
+    return static_cast<b2LineJoint * >(addr)->GetJointSpeed();
 }
 
 bool LineJoint::isLimitEnabled () {
-    return jniIsLimitEnabled(addr);
+    return static_cast<b2LineJoint * >(addr)->IsLimitEnabled();
 }
 
 void LineJoint::enableLimit (bool flag) {
-    jniEnableLimit(addr, flag);
+    static_cast<b2LineJoint * >(addr)->EnableLimit(flag);
 }
 
 float LineJoint::getLowerLimit () {
-    return jniGetLowerLimit(addr);
+    return static_cast<b2LineJoint * >(addr)->GetLowerLimit();
 }
 
 float LineJoint::getUpperLimit () {
-    return jniGetUpperLimit(addr);
+    return static_cast<b2LineJoint * >(addr)->GetUpperLimit();
 }
 
 void LineJoint::setLimits (float lower,float upper) {
-    jniSetLimits(addr, lower, upper);
+    static_cast<b2LineJoint * >(addr)->SetLimits(lower, upper);
 }
 
 bool LineJoint::isMotorEnabled () {
-    return jniIsMotorEnabled(addr);
+    return static_cast<b2LineJoint * >(addr)->IsMotorEnabled();
 }
 
 void LineJoint::enableMotor (bool flag) {
-    jniEnableMotor(addr, flag);
+    static_cast<b2LineJoint * >(addr)->EnableMotor(flag);
 }
 
 void LineJoint::setMotorSpeed (float speed) {
-    jniSetMotorSpeed(addr, speed);
+    static_cast<b2LineJoint * >(addr)->SetMotorSpeed(speed);
 }
 
 float LineJoint::getMotorSpeed () {
-    return jniGetMotorSpeed(addr);
+    return static_cast<b2LineJoint * >(addr)->GetMotorSpeed();
 }
 
 void LineJoint::setMaxMotorForce (float force) {
-    jniSetMaxMotorForce(addr, force);
+    static_cast<b2LineJoint * >(addr)->SetMaxMotorForce(force);
 }
 
 float LineJoint::getMaxMotorForce () {
-    return jniGetMaxMotorForce(addr);
+    return static_cast<b2LineJoint * >(addr)->GetMaxMotorForce();
 }
 
 float LineJoint::getMotorForce () {
-    return jniGetMotorForce(addr);
+    return static_cast<b2LineJoint * >(addr)->GetMotorForce();
 }
 

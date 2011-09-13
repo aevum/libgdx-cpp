@@ -20,6 +20,7 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_MASSDATA_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_MASSDATA_HPP_
+#include <gdx/math/Vector2.hpp>
 
 namespace gdx_cpp {
 namespace physics {
@@ -27,6 +28,16 @@ namespace box2d {
 
 class MassData {
 public:
+
+    MassData();
+    /** The mass of the shape, usually in kilograms. **/
+    float mass;
+
+    /** The position of the shape's centroid relative to the shape's origin. **/
+    gdx_cpp::math::Vector2  center;
+
+    /** The rotational inertia of the shape about the local origin. **/
+    float I;
 
 
 protected:

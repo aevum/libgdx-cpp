@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/265/trunk/gdx/jni/Box2D/Collision/Shapes
+END
+b2PolygonShape.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/265/trunk/gdx/jni/Box2D/Collision/Shapes/b2PolygonShape.h
+END
+b2CircleShape.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/265/trunk/gdx/jni/Box2D/Collision/Shapes/b2CircleShape.cpp
+END
+b2Shape.h
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/265/trunk/gdx/jni/Box2D/Collision/Shapes/b2Shape.h
+END
+b2CircleShape.h
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/265/trunk/gdx/jni/Box2D/Collision/Shapes/b2CircleShape.h
+END
+b2PolygonShape.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/265/trunk/gdx/jni/Box2D/Collision/Shapes/b2PolygonShape.cpp
+END

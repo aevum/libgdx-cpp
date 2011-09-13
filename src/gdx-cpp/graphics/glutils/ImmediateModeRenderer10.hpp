@@ -21,13 +21,21 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_IMMEDIATEMODERENDERER10_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_IMMEDIATEMODERENDERER10_HPP_
 
+#include "gdx-cpp/utils/Buffer.hpp"
+
 namespace gdx_cpp {
+namespace math {
+class Matrix4;
+class Vector3;
+}
 namespace graphics {
 namespace glutils {
 
 class ImmediateModeRenderer10 {
 public:
-    void begin (const gdx_cpp::math::Matrix4& projModelView,int primitiveType);
+    ImmediateModeRenderer10(int maxVertices = 2000);
+    ~ImmediateModeRenderer10();
+    void begin (gdx_cpp::math::Matrix4& projModelView, int primitiveType);
     void begin (int primitiveType);
     void color (float r,float g,float b,float a);
     void normal (float x,float y,float z);
@@ -41,7 +49,27 @@ protected:
 
 
 private:
-    FloatBuffer& allocateBuffer (int numFloats);
+    utils::float_buffer allocateBuffer (int numFloats);
+
+    float* positions;
+    gdx_cpp::utils::float_buffer  positionsBuffer;
+    float* colors;
+    gdx_cpp::utils::float_buffer  colorsBuffer;
+    float* normals;
+    gdx_cpp::utils::float_buffer  normalsBuffer;
+    float* texCoords;
+    gdx_cpp::utils::float_buffer  texCoordsBuffer;
+
+
+    int primitiveType;
+    int idxPos;
+    int idxCols;
+    int idxNors;
+    int idxTexCoords;
+
+    bool hasCols;
+    bool hasNors;
+    bool hasTexCoords;
 };
 
 } // namespace gdx_cpp

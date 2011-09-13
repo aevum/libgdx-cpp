@@ -21,6 +21,9 @@
 #ifndef GDX_CPP_PHYSICS_BOX2D_JOINTS_LINEJOINT_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_JOINTS_LINEJOINT_HPP_
 
+#include <gdx-cpp/physics/box2d/Joint.hpp>
+
+class b2LineJoint;
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
@@ -28,6 +31,7 @@ namespace joints {
 
 class LineJoint: public gdx_cpp::physics::box2d::Joint {
 public:
+    LineJoint(ref_ptr_maker< gdx_cpp::physics::box2d::World >::type _world, b2LineJoint* joint);
     float getJointTranslation ();
     float getJointSpeed ();
     bool isLimitEnabled ();

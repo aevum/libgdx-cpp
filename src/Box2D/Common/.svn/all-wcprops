@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/2235/trunk/gdx/jni/Box2D/Common
+END
+b2StackAllocator.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/265/trunk/gdx/jni/Box2D/Common/b2StackAllocator.h
+END
+b2BlockAllocator.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/265/trunk/gdx/jni/Box2D/Common/b2BlockAllocator.cpp
+END
+b2Math.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/265/trunk/gdx/jni/Box2D/Common/b2Math.h
+END
+b2BlockAllocator.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/265/trunk/gdx/jni/Box2D/Common/b2BlockAllocator.h
+END
+b2Settings.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/265/trunk/gdx/jni/Box2D/Common/b2Settings.cpp
+END
+b2Settings.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/2235/trunk/gdx/jni/Box2D/Common/b2Settings.h
+END
+b2StackAllocator.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/265/trunk/gdx/jni/Box2D/Common/b2StackAllocator.cpp
+END
+b2Math.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/265/trunk/gdx/jni/Box2D/Common/b2Math.cpp
+END

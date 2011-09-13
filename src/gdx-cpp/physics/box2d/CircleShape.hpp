@@ -21,13 +21,19 @@
 #ifndef GDX_CPP_PHYSICS_BOX2D_CIRCLESHAPE_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_CIRCLESHAPE_HPP_
 
+#include "Shape.hpp"
+#include <vector>
+#include <gdx-cpp/math/Vector2.hpp>
+
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
 
-class CircleShape {
+class CircleShape : public Shape {
 public:
-    Type& getType ();
+    CircleShape();
+    CircleShape (b2CircleShape * addr);
+    Shape::Type getType ();
     gdx_cpp::math::Vector2& getPosition ();
     void setPosition (const gdx_cpp::math::Vector2& position);
 
@@ -35,7 +41,7 @@ protected:
 
 
 private:
-
+    gdx_cpp::math::Vector2 position;
 };
 
 } // namespace gdx_cpp

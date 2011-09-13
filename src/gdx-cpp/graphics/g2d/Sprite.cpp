@@ -36,19 +36,19 @@ gdx_cpp::graphics::g2d::Sprite::Sprite()
     setColor(1, 1, 1, 1);
 }
 
-void Sprite::set (const Sprite& sprite) {
-    memcpy(vertices, sprite.vertices, SPRITE_SIZE * sizeof(float));
-    texture = sprite.texture;
-    x = sprite.x;
-    y = sprite.y;
-    width = sprite.width;
-    height = sprite.height;
-    originX = sprite.originX;
-    originY = sprite.originY;
-    rotation = sprite.rotation;
-    scaleX = sprite.scaleX;
-    scaleY = sprite.scaleY;
-    dirty = sprite.dirty;
+void Sprite::set (ptr sprite) {
+    memcpy(vertices, sprite->vertices, SPRITE_SIZE * sizeof(float));
+    texture = sprite->texture;
+    x = sprite->x;
+    y = sprite->y;
+    width = sprite->width;
+    height = sprite->height;
+    originX = sprite->originX;
+    originY = sprite->originY;
+    rotation = sprite->rotation;
+    scaleX = sprite->scaleX;
+    scaleY = sprite->scaleY;
+    dirty = sprite->dirty;
 }
 
 void Sprite::setBounds (float x,float y,float width,float height) {
@@ -456,6 +456,11 @@ void Sprite::scroll (float xAmount,float yAmount) {
     }
 }
 
+Sprite::Sprite(ptr _sprite) :
+ color(1,1,1,1)
+{
+    this->set(_sprite);
+}
 Sprite::Sprite(Texture::ptr texture) :
  color(1,1,1,1)
 {

@@ -21,26 +21,51 @@
 #ifndef GDX_CPP_PHYSICS_BOX2D_JOINT_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_JOINT_HPP_
 
+#include <gdx-cpp/utils/Aliases.hpp>
+#include "JointDef.hpp"
+#include "JointEdge.hpp"
+#include "gdx-cpp/math/Vector2.hpp"
+#include "gdx-cpp/math/Vector2.hpp"
+
+
+
+class b2Joint;
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
 
+class World;
+class Body;
+
 class Joint {
 public:
-    gdx_cpp::physics::box2d::JointDef::JointType& getType ();
-    Body& getBodyA ();
-    Body& getBodyB ();
+    typedef ref_ptr_maker<Joint>::type ptr;
+
+    Joint(ref_ptr_maker<World>::type _world, b2Joint* joint);
+    JointDef::JointType getType ();
+    Body* getBodyA ();
+    Body* getBodyB ();
     gdx_cpp::math::Vector2& getAnchorA ();
     gdx_cpp::math::Vector2& getAnchorB ();
     gdx_cpp::math::Vector2& getReactionForce (float inv_dt);
     float getReactionTorque (float inv_dt);
     bool isActive ();
 
+    b2Joint* addr;
+
+
+    JointEdge * jointEdgeA;
+
+    JointEdge * jointEdgeB;
 protected:
 
+    
 
 private:
-    World world;
+    ref_ptr_maker<World>::type world;
+    gdx_cpp::math::Vector2 anchorA;
+    gdx_cpp::math::Vector2 anchorB;
+    gdx_cpp::math::Vector2 reactionForce;
 };
 
 } // namespace gdx_cpp

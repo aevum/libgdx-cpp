@@ -20,6 +20,7 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_JOINTS_MOUSEJOINTDEF_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_JOINTS_MOUSEJOINTDEF_HPP_
+#include "gdx-cpp/physics/box2d/JointDef.hpp"
 
 namespace gdx_cpp {
 namespace physics {
@@ -28,8 +29,11 @@ namespace joints {
 
 class MouseJointDef: public gdx_cpp::physics::box2d::JointDef {
 public:
-
-
+    MouseJointDef();
+    gdx_cpp::math::Vector2 target;
+    float maxForce;
+    float frequencyHz;
+    float dampingRatio;
 protected:
 
 

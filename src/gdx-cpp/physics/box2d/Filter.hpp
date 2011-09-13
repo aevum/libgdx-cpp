@@ -27,7 +27,10 @@ namespace box2d {
 
 class Filter {
 public:
-
+      Filter();
+      short categoryBits;
+      short maskBits;
+      short groupIndex;
 
 protected:
 

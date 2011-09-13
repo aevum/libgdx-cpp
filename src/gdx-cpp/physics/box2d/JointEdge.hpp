@@ -20,18 +20,22 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_JOINTEDGE_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_JOINTEDGE_HPP_
+#include <gdx-cpp/utils/Aliases.hpp>
 
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
 
+class Joint;
+class Body;
+  
 class JointEdge {
 public:
-    Body other;
-    Joint joint;
+    ref_ptr_maker<Body>::type other;
+    Joint * joint;
+    JointEdge (ref_ptr_maker<Body>::type other, Joint * joint);
 
 protected:
-
 
 private:
 

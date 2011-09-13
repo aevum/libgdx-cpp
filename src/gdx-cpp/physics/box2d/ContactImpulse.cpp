@@ -19,16 +19,24 @@
 */
 
 #include "ContactImpulse.hpp"
+#include "Box2D.h"
 
 using namespace gdx_cpp::physics::box2d;
 
+ContactImpulse::ContactImpulse (World::ptr _world, b2ContactImpulse * _addr) : world(_world), addr(_addr)
+{
+  
+}
+
 float* ContactImpulse::getNormalImpulses () {
-    jniGetNormalImpulses(addr, normalImpulses);
+    normalImpulses[0] = addr->normalImpulses[0];
+    normalImpulses[1] = addr->normalImpulses[1];
     return normalImpulses;
 }
 
 float* ContactImpulse::getTangentImpulses () {
-    jniGetTangentImpulses(addr, tangentImpulses);
+    tangentImpulses[0] = addr->tangentImpulses[0];
+    tangentImpulses[1] = addr->tangentImpulses[1];
     return tangentImpulses;
 }
 

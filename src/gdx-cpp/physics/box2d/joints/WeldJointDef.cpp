@@ -22,11 +22,11 @@
 
 using namespace gdx_cpp::physics::box2d::joints;
 
-void WeldJointDef::initialize (const gdx_cpp::physics::box2d::Body& body1,const gdx_cpp::physics::box2d::Body& body2,const gdx_cpp::math::Vector2& anchor) {
-    this.bodyA = body1;
-    this.bodyB = body2;
-    this.localAnchorA.set(body1.getLocalPoint(anchor));
-    this.localAnchorB.set(body2.getLocalPoint(anchor));
-    referenceAngle = body2.getAngle() - body1.getAngle();
+void WeldJointDef::initialize (gdx_cpp::physics::box2d::Body::ptr body1,gdx_cpp::physics::box2d::Body::ptr body2, gdx_cpp::math::Vector2& anchor) {
+    this->bodyA = body1;
+    this->bodyB = body2;
+    this->localAnchorA.set(body1->getLocalPoint(anchor));
+    this->localAnchorB.set(body2->getLocalPoint(anchor));
+    referenceAngle = body2->getAngle() - body1->getAngle();
 }
 

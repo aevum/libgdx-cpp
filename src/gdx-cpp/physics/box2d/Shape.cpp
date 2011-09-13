@@ -19,18 +19,29 @@
 */
 
 #include "Shape.hpp"
+#include "Box2D/Box2D.h"
 
 using namespace gdx_cpp::physics::box2d;
 
+
+//TODO Remove daqui depois
+inline int jniGetType(b2Shape* shape)
+{
+        if( shape->m_type == b2Shape::e_circle )
+                return 0;
+        else
+                return 1;
+}
+
+
 float Shape::getRadius () {
-    return jniGetRadius(addr);
+    return addr->m_radius;
 }
 
 void Shape::setRadius (float radius) {
-    jniSetRadius(addr, radius);
+    addr->m_radius = radius;
 }
 
 void Shape::dispose () {
-    jniDispose(addr);
+    delete addr;
 }
-
