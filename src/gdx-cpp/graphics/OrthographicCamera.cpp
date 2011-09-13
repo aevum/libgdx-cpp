@@ -33,12 +33,12 @@ gdx_cpp::graphics::OrthographicCamera::OrthographicCamera()
 }
 
 gdx_cpp::graphics::OrthographicCamera::OrthographicCamera(float viewportWidth, float viewportHeight)
-: Camera(viewportHeight, viewportWidth, 0, 100)
+: Camera(viewportHeight, viewportWidth, 0, 100), zoom(1)
 {
 }
 
 gdx_cpp::graphics::OrthographicCamera::OrthographicCamera(float viewportWidth, float viewportHeight, float diamondAngle)
-: Camera(viewportHeight, viewportWidth, 0, 100)
+: Camera(viewportHeight, viewportWidth, 0, 100), zoom(1)
 {
     findDirectionForIsoView(diamondAngle, 0.00000001f, 20);
 }

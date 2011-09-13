@@ -25,26 +25,27 @@ public:
             b2PolygonShape * shape = new b2PolygonShape;
             shape->SetAsBox(0.6f, 0.125f);
 
-            b2FixtureDef * fd = new b2FixtureDef;
-            fd->shape = shape;
-            fd->density = 20.0f;
-            fd->friction = 0.2f;
+            b2FixtureDef fd;
+            fd.shape = shape;
+            fd.density = 20.0f;
+            fd.friction = 0.2f;
 
-            b2RevoluteJointDef * jd = new b2RevoluteJointDef;
-            jd->collideConnected = false;
+            b2RevoluteJointDef jd;
+            jd.collideConnected = false;
 
             float y = 25.0f;
-
+            b2Body * prevBody = ground;
             for (int i = 0; i < 30; i++) {
-                b2BodyDef * bd = new b2BodyDef;
-                bd->type = b2_dynamicBody;
-                bd->position.Set(0.5f + i, y);
-                b2Body * body = world.CreateBody(bd);
-                body->CreateFixture(fd);
+                b2BodyDef bd;
+                bd.type = b2_dynamicBody;
+                bd.position.Set(0.5f + i, y);
+                b2Body * body = world.CreateBody(&bd);
+                body->CreateFixture(&fd);
 
-                b2Vec2 anchor(i, y);
-                jd->Initialize(ground, body, anchor);
-                world.CreateJoint(jd);
+                b2Vec2 * anchor = new b2Vec2(i, y);
+                jd.Initialize(prevBody, body, *anchor);
+                world.CreateJoint(&jd);
+                prevBody = body;
             }
             delete shape;
         }

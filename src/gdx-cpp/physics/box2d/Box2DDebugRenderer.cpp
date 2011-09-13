@@ -36,19 +36,17 @@ void Box2DDebugRenderer::render (b2World& world) {
 }
 
 void Box2DDebugRenderer::renderBodies (b2World& world) {
-    b2Body * blist = world.GetBodyList();
-    for (int i = 0; i < world.GetBodyCount(); i++) {
-        b2Body& body = blist[i];
-        const b2Transform& transform = body.GetTransform();
-        for (b2Fixture* fixture = body.GetFixtureList(); fixture; fixture = fixture->GetNext())
+    for (b2Body * body = world.GetBodyList(); body; body = body->GetNext()) {
+        const b2Transform& transform = body->GetTransform();
+        for (b2Fixture* fixture = body->GetFixtureList(); fixture; fixture = fixture->GetNext())
         {
-            if (body.IsActive() == false)
+            if (body->IsActive() == false)
                 drawShape(*fixture, transform, SHAPE_NOT_ACTIVE);
-            else if (body.GetType() == b2_staticBody)
+            else if (body->GetType() == b2_staticBody)
                 drawShape(*fixture, transform, SHAPE_STATIC);
-            else if (body.GetType() == b2_kinematicBody)
+            else if (body->GetType() == b2_kinematicBody)
                 drawShape(*fixture, transform, SHAPE_KINEMATIC);
-            else if (body.IsAwake() == false)
+            else if (body->IsAwake() == false)
                 drawShape(*fixture, transform, SHAPE_NOT_AWAKE);
             else
                 drawShape(*fixture, transform, SHAPE_AWAKE);

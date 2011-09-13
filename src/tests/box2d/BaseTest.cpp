@@ -1,40 +1,20 @@
 #include "backends/current_backend.hpp"
 
 #include <gdx-cpp/Gdx.hpp>
-#include <gdx-cpp/Application.hpp>
-#include <gdx-cpp/ApplicationListener.hpp>
-#include <gdx-cpp/graphics/Mesh.hpp>
-#include <gdx-cpp/graphics/GL10.hpp>
+#include "Box2DTest.cpp"
+#include "Box2D/Box2D.h"
 
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
 
-class BaseApplication : public gdx_cpp::ApplicationListener {
+class BaseApplication : public Box2DTest {
 public:
-    BaseApplication() {
-
-    }
-    
-    void create() {
-    }
-    
-    void dispose() {
-    }
-    
-    void pause() {
-    }
-    
-    void render() {
-    }
-
-    void resize(int width, int height) {
-    }
-    
-    void resume() {
+    void createWorld (b2World& world) {
+       
     }
 private:
 };
 
 void init() {
-    createApplication(new BaseApplication, "Base App", 640, 480);
+    createApplication(new BaseApplication, "BaseApplication test", 640, 480);
 }

@@ -10,12 +10,13 @@
 #include "gdx-cpp/physics/box2d/Box2DDebugRenderer.hpp"
 #include <gdx-cpp/implementation/System.hpp>
 #include <gdx-cpp/Graphics.hpp>
+#include <iostream>
 
 using namespace gdx_cpp;
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp::graphics::g2d;
 
-class Box2DTest : public ApplicationListener, InputProcessor {
+class Box2DTest : public ApplicationListener, public InputProcessor {
 
 public:
 
@@ -110,7 +111,8 @@ public:
     }
 
 
-    bool keyDown (int keycode) {
+    virtual bool keyDown (int keycode) {
+        std::cout << "apertou: " << keycode << std::endl;
         return false;
     }
 
