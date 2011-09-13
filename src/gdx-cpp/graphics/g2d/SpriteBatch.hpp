@@ -66,7 +66,7 @@ public:
     void enableBlending ();
     void setBlendFunction (int srcFunc,int dstFunc);
     void dispose ();
-    const gdx_cpp::math::Matrix4& getProjectionMatrix ();
+    gdx_cpp::math::Matrix4& getProjectionMatrix ();
     const gdx_cpp::math::Matrix4& getTransformMatrix ();
     void setProjectionMatrix (const gdx_cpp::math::Matrix4& projection);
     void setTransformMatrix (const gdx_cpp::math::Matrix4& transform);

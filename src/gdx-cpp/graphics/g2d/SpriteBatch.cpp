@@ -944,7 +944,7 @@ void SpriteBatch::dispose () {
         shader->dispose();
 }
 
-const gdx_cpp::math::Matrix4& SpriteBatch::getProjectionMatrix () {
+math::Matrix4& SpriteBatch::getProjectionMatrix () {
     return projectionMatrix;
 }
 

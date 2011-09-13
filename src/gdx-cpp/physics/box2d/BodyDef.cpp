@@ -22,7 +22,10 @@
 
 using namespace gdx_cpp::physics::box2d;
 
-int BodyDef::getValue () {
-    return value;
+
+BodyDef::BodyDef(): type(StaticBody), angle(0), angularVelocity(0), linearDamping(0), angularDamping(0), allowSleep(true),
+        awake(true), fixedRotation(false), bullet(false), active(true), inertiaScale(1)
+{
 }
+
 

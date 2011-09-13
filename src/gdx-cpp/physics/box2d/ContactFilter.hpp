@@ -20,6 +20,7 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_CONTACTFILTER_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_CONTACTFILTER_HPP_
+#include <gdx-cpp/utils/Aliases.hpp>
 
 namespace gdx_cpp {
 namespace physics {
@@ -27,7 +28,8 @@ namespace box2d {
 
 class ContactFilter {
 public:
-
+    typedef ref_ptr_maker<ContactFilter>::type ptr;
+    virtual bool shouldCollide (Fixture * fixtureA, Fixture * fixtureB) =0;
 
 protected:
 

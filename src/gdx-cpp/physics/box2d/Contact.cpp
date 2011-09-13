@@ -19,16 +19,40 @@
 */
 
 #include "Contact.hpp"
+#include "Box2D.h"
+#include "gdx-cpp/math/Vector2.hpp"
+#include "World.hpp"
 
 using namespace gdx_cpp::physics::box2d;
 
+Contact::Contact (World::ptr _world, b2Contact* _addr): world(_world), contact(_addr)
+{
+  
+}
+
+
+
 WorldManifold& Contact::getWorldManifold () {
-    int numContactPoints = jniGetWorldManifold(addr, tmp);
+    b2WorldManifold manifold;
+    contact->GetWorldManifold(&manifold);
+    int numContactPoints = contact->GetManifold()->pointCount;
+
+    float tmp[2];
+    tmp[0] = manifold.normal.x;
+    tmp[1] = manifold.normal.y;
+
+    for ( int i = 0; i < numContactPoints; i++ )
+    {
+        tmp[2 + i*2] = manifold.points[i].x;
+        tmp[2 + i*2+1] = manifold.points[i].y;
+    }
+
+
 
     worldManifold.numContactPoints = numContactPoints;
     worldManifold.normal.set(tmp[0], tmp[1]);
     for (int i = 0; i < numContactPoints; i++) {
-        Vector2 point = worldManifold.points[i];
+        gdx_cpp::math::Vector2 point = worldManifold.points[i];//TODO ver se ñ esta fazendo copia
         point.x = tmp[2 + i * 2];
         point.y = tmp[2 + i * 2 + 1];
     }
@@ -37,22 +61,22 @@ WorldManifold& Contact::getWorldManifold () {
 }
 
 bool Contact::isTouching () {
-    return jniIsTouching(addr);
+    return contact->IsTouching();
 }
 
 void Contact::setEnabled (bool flag) {
-    jniSetEnabled(addr, flag);
+    contact->SetEnabled(flag);
 }
 
 bool Contact::isEnabled () {
-    return jniIsEnabled(addr);
+    return contact->IsEnabled();
 }
 
 Fixture& Contact::getFixtureA () {
-    return world.fixtures.get(jniGetFixtureA(addr));
+    return *world->fixtures[contact->GetFixtureA()];
 }
 
 Fixture& Contact::getFixtureB () {
-    return world.fixtures.get(jniGetFixtureB(addr));
+    return *world->fixtures[contact->GetFixtureB()];
 }
 

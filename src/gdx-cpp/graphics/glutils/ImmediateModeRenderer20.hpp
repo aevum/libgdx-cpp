@@ -50,3 +50,4 @@ private:
 } // namespace glutils
 
 #endif // GDX_CPP_GRAPHICS_GLUTILS_IMMEDIATEMODERENDERER20_HPP_
+

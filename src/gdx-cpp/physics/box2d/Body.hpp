@@ -21,15 +21,35 @@
 #ifndef GDX_CPP_PHYSICS_BOX2D_BODY_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_BODY_HPP_
 
+#include "gdx-cpp/math/Vector2.hpp"
+#include <gdx-cpp/utils/Aliases.hpp>
+#include <set>
+#include "BodyDef.hpp"
+#include <Dynamics/b2Body.h>
+#include "Transform.hpp"
+#include "MassData.hpp"
+
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
 
-class Body {
+class FixtureDef;
+class Fixture;
+class Shape;
+class Transform;
+class MassData;
+class BodyType;
+class World;
+class JointEdge;
+  
+class Body : public std::tr1::enable_shared_from_this< Body > {
 public:
+
+    typedef ref_ptr_maker<Body>::type ptr;
+    
     Fixture& createFixture (const FixtureDef& def);
     Fixture& createFixture (const Shape& shape,float density);
-    void destroyFixture (const Fixture& fixture);
+    void destroyFixture (gdx_cpp::physics::box2d::Fixture& fixture);
     void setTransform (const gdx_cpp::math::Vector2& position,float angle);
     void setTransform (float x,float y,float angle);
     Transform& getTransform ();
@@ -63,8 +83,8 @@ public:
     void setLinearDamping (float linearDamping);
     float getAngularDamping ();
     void setAngularDamping (float angularDamping);
-    void setType (const gdx_cpp::physics::box2d::BodyDef::BodyType& type);
-    gdx_cpp::physics::box2d::BodyDef::BodyType& getType ();
+    void setType (const gdx_cpp::physics::box2d::BodyDef::BodyType type);
+    gdx_cpp::physics::box2d::BodyDef::BodyType getType ();
     void setBullet (bool flag);
     bool isBullet ();
     void setSleepingAllowed (bool flag);
@@ -75,17 +95,34 @@ public:
     bool isActive ();
     void setFixedRotation (bool flag);
     bool isFixedRotation ();
-    ArrayList<Fixture>& getFixtureList ();
-    ArrayList<JointEdge>& getJointList ();
+    std::set< Fixture* >& getFixtureList ();
+    std::set< JointEdge* >& getJointList ();
     World& getWorld ();
-    Object& getUserData ();
-    void setUserData (const Object& userData);
+    void * getUserData ();
+    void setUserData (void * userData);
 
+    void reset (b2Body* addr);
+    b2Body* body;
+    std::set<JointEdge * > joints;
 protected:
-    void reset (long addr);
+
 
 private:
-    World world;
+    World * world;
+    std::set<Fixture * > fixtures;
+    void * userData;
+    Transform transform;
+    gdx_cpp::math::Vector2 position;
+    gdx_cpp::math::Vector2 worldCenter;
+    gdx_cpp::math::Vector2 localCenter;
+    gdx_cpp::math::Vector2 linearVelocity;
+    MassData massData;
+    gdx_cpp::math::Vector2 localPoint;
+    gdx_cpp::math::Vector2 worldVector;
+    gdx_cpp::math::Vector2 localPoint2;
+    gdx_cpp::math::Vector2 localVector;
+    gdx_cpp::math::Vector2 linVelWorld;
+    gdx_cpp::math::Vector2 linVelLoc;
 };
 
 } // namespace gdx_cpp

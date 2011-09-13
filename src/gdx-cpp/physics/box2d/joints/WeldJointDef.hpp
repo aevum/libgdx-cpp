@@ -20,6 +20,7 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_JOINTS_WELDJOINTDEF_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_JOINTS_WELDJOINTDEF_HPP_
+#include "gdx-cpp/physics/box2d/JointDef.hpp"
 
 namespace gdx_cpp {
 namespace physics {
@@ -28,8 +29,10 @@ namespace joints {
 
 class WeldJointDef: public gdx_cpp::physics::box2d::JointDef {
 public:
-    void initialize (const gdx_cpp::physics::box2d::Body& body1,const gdx_cpp::physics::box2d::Body& body2,const gdx_cpp::math::Vector2& anchor);
-
+    void initialize (gdx_cpp::physics::box2d::Body::ptr body1, gdx_cpp::physics::box2d::Body::ptr body2, gdx_cpp::math::Vector2& anchor);
+    gdx_cpp::math::Vector2 localAnchorA;
+    gdx_cpp::math::Vector2 localAnchorB;
+    float referenceAngle;
 protected:
 
 

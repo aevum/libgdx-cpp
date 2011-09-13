@@ -21,12 +21,21 @@
 #ifndef GDX_CPP_PHYSICS_BOX2D_CONTACT_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_CONTACT_HPP_
 
+#include "WorldManifold.hpp"
+#include <Dynamics/Contacts/b2Contact.h>
+#include <gdx-cpp/utils/Aliases.hpp>
+
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
 
+class World;
+class Fixture;
+
+
 class Contact {
 public:
+    Contact (ref_ptr_maker<World>::type world, b2Contact* addr);
     WorldManifold& getWorldManifold ();
     bool isTouching ();
     void setEnabled (bool flag);
@@ -34,8 +43,18 @@ public:
     Fixture& getFixtureA ();
     Fixture& getFixtureB ();
 
+    /** the address **/
+    b2Contact* contact;
+
 protected:
 
+
+
+    /** the world **/
+    ref_ptr_maker<World>::type world;
+
+    /** the world manifold **/
+    WorldManifold worldManifold;
 
 private:
 

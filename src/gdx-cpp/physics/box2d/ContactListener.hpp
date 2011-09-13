@@ -20,13 +20,20 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_CONTACTLISTENER_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_CONTACTLISTENER_HPP_
+#include <gdx-cpp/utils/Aliases.hpp>
 
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
 
+class ContactImpulse;
+class Manifold;
+class Contact;
+
 class ContactListener {
 public:
+    typedef ref_ptr_maker<ContactListener>::type ptr;
+    
     virtual   void beginContact (const Contact& contact) = 0;
     virtual   void endContact (const Contact& contact) = 0;
     virtual   void preSolve (const Contact& contact,const Manifold& oldManifold) = 0;

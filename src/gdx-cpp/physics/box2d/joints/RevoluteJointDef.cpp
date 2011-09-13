@@ -21,12 +21,16 @@
 #include "RevoluteJointDef.hpp"
 
 using namespace gdx_cpp::physics::box2d::joints;
+RevoluteJointDef::RevoluteJointDef(): referenceAngle(0), enableLimit(0),lowerAngle(0),upperAngle(0),enableMotor(false),motorSpeed(0),maxMotorTorque(0)
+{
+    type=JointDef::RevoluteJoint;
+}
 
-void RevoluteJointDef::initialize (const gdx_cpp::physics::box2d::Body& bodyA,const gdx_cpp::physics::box2d::Body& bodyB,const gdx_cpp::math::Vector2& anchor) {
-    this.bodyA = bodyA;
-    this.bodyB = bodyB;
-    localAnchorA.set(bodyA.getLocalPoint(anchor));
-    localAnchorB.set(bodyB.getLocalPoint(anchor));
-    referenceAngle = bodyB.getAngle() - bodyA.getAngle();
+void RevoluteJointDef::initialize (gdx_cpp::physics::box2d::Body::ptr bodyA,gdx_cpp::physics::box2d::Body::ptr bodyB, gdx_cpp::math::Vector2& anchor) {
+    this->bodyA = bodyA;
+    this->bodyB = bodyB;
+    localAnchorA.set(bodyA->getLocalPoint(anchor));
+    localAnchorB.set(bodyB->getLocalPoint(anchor));
+    referenceAngle = bodyB->getAngle() - bodyA->getAngle();
 }
 

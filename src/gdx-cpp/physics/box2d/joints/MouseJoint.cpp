@@ -19,41 +19,46 @@
 */
 
 #include "MouseJoint.hpp"
+#include "Box2D.h"
 
 using namespace gdx_cpp::physics::box2d::joints;
 
+MouseJoint::MouseJoint(ref_ptr_maker< gdx_cpp::physics::box2d::World >::type _world, b2MouseJoint* joint) : Joint(_world, joint)
+{
+
+}
+
 void MouseJoint::setTarget (const gdx_cpp::math::Vector2& target) {
-    jniSetTarget(addr, target.x, target.y);
+    static_cast<b2MouseJoint * >(addr)->SetTarget( b2Vec2(target.x, target.y));
 }
 
 gdx_cpp::math::Vector2& MouseJoint::getTarget () {
-    jniGetTarget(addr, tmp);
-    target.x = tmp[0];
-    target.y = tmp[1];
+    target.x = static_cast<b2MouseJoint * >(addr)->GetTarget().x;
+    target.y = static_cast<b2MouseJoint * >(addr)->GetTarget().y;
     return target;
 }
 
 void MouseJoint::setMaxForce (float force) {
-    jniSetMaxForce(addr, force);
+    static_cast<b2MouseJoint * >(addr)->SetMaxForce(force);
 }
 
 float MouseJoint::getMaxForce () {
-    return jniGetMaxForce(addr);
+    return static_cast<b2MouseJoint * >(addr)->GetMaxForce();
 }
 
 void MouseJoint::setFrequency (float hz) {
-    jniSetFrequency(addr, hz);
+    static_cast<b2MouseJoint * >(addr)->SetFrequency(hz);
 }
 
 float MouseJoint::getFrequency () {
-    return jniGetFrequency(addr);
+    return static_cast<b2MouseJoint * >(addr)->GetFrequency();
 }
 
 void MouseJoint::setDampingRatio (float ratio) {
-    jniSetDampingRatio(addr, ratio);
+    static_cast<b2MouseJoint * >(addr)->SetDampingRatio(ratio);
 }
 
 float MouseJoint::getDampingRatio () {
-    return jniGetDampingRatio(addr);
+    return static_cast<b2MouseJoint * >(addr)->GetDampingRatio();
 }
 

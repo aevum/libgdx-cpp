@@ -18,29 +18,68 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "Pool<T>.hpp"
+#include "Pool.hpp"
+#include <cmath>
+#include <limits>
+#include <stdexcept>
 
 using namespace gdx_cpp::utils;
 
-T& Pool<T>::newObject ();
+template <class T>
+Pool<T>::Pool (): max(std::numeric_limits<int>::max())
+{
+    create(16, max);
+}
 
-/** Returns an object from this pool. The object may be new (from {@link #newObject()}
+template <class T>
+Pool<T>::Pool (int initialCapacity): max(std::numeric_limits<int>::max())
+{
+    create(initialCapacity, max);
+}
 
+template <class T>
+Pool<T>::Pool (int initialCapacity, int _max) : max(max)
+{
+    create(initialCapacity, max);
+}
+
+template <class T>
+void Pool<T>::create(int initialCapacity, int max)
+{
+    freeObjects.reserve(initialCapacity);
+}
+
+template <class T>
+T& Pool<T>::newObject () {
+    return new T();
+}
+
+template <class T>
 T& Pool<T>::obtain () {
-	return freeObjects.size == 0 ? newObject() : freeObjects.pop();
+    return *(freeObjects.size() == 0 ? newObject() : freeObjects.pop_back());
 }
 
-void Pool<T>::free (const T& object) {
-	if (object == null) throw new IllegalArgumentException("object cannot be null.");
-	if (freeObjects.size < max) freeObjects.add(object);
+template <class T>
+void Pool<T>::free (T& object) {
+    if (object == NULL) throw std::runtime_error("object cannot be null.");
+    if (freeObjects.size < max)
+    {
+      freeObjects.push_back(object);
+    } else
+    {
+      delete object;
+    }
+    
 }
 
-void Pool<T>::free (const Array<T>& objects) {
-	for (int i = 0, n = Math.min(objects.size, max - freeObjects.size); i < n; i++)
-		freeObjects.add(objects.get(i));
+template <class T>
+void Pool<T>::free (std::vector<T*>& objects) {
+    for (int i = 0; i < objects.size(); i++)
+        free(objects[i]);
 }
 
+template <class T>
 void Pool<T>::clear () {
-	freeObjects.clear();
+    freeObjects.clear();
 }
 

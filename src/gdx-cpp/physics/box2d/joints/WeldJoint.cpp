@@ -19,8 +19,14 @@
 */
 
 #include "WeldJoint.hpp"
+#include "Box2D.h"
 
 using namespace gdx_cpp::physics::box2d::joints;
 
+
+WeldJoint::WeldJoint(ref_ptr_maker< gdx_cpp::physics::box2d::World >::type _world, b2WeldJoint * joint) : Joint(_world, joint)
+{
+
+}
 
 

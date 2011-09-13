@@ -20,6 +20,7 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_JOINTDEF_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_JOINTDEF_HPP_
+#include "Body.hpp"
 
 namespace gdx_cpp {
 namespace physics {
@@ -27,7 +28,32 @@ namespace box2d {
 
 class JointDef {
 public:
-    int getValue ();
+    enum JointType {
+        Unknown = 0,
+        RevoluteJoint,
+        PrismaticJoint,
+        DistanceJoint,
+        PulleyJoint,
+        MouseJoint,
+        GearJoint,
+        LineJoint,
+        WeldJoint,
+        FrictionJoint
+    };
+    const static int joint_type_size = 10;
+    JointDef();
+
+    /** The joint type is set automatically for concrete joint types. **/
+    JointType type;
+
+    /** The first attached body. **/
+    Body::ptr bodyA;
+
+    /** The second attached body **/
+    Body::ptr bodyB;
+
+    /** Set this flag to true if the attached bodies should collide. **/
+    bool collideConnected;
 
 protected:
 

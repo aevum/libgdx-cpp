@@ -21,6 +21,9 @@
 #ifndef GDX_CPP_PHYSICS_BOX2D_JOINTS_MOUSEJOINT_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_JOINTS_MOUSEJOINT_HPP_
 
+#include <gdx-cpp/physics/box2d/Joint.hpp>
+
+class b2MouseJoint;
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
@@ -28,6 +31,7 @@ namespace joints {
 
 class MouseJoint: public gdx_cpp::physics::box2d::Joint {
 public:
+    MouseJoint(ref_ptr_maker< gdx_cpp::physics::box2d::World >::type _world, b2MouseJoint* joint);
     void setTarget (const gdx_cpp::math::Vector2& target);
     gdx_cpp::math::Vector2& getTarget ();
     void setMaxForce (float force);
@@ -37,10 +41,12 @@ public:
     void setDampingRatio (float ratio);
     float getDampingRatio ();
 
+
 protected:
 
 
 private:
+    gdx_cpp::math::Vector2 target;
 
 };
 

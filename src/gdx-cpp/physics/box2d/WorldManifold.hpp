@@ -21,6 +21,8 @@
 #ifndef GDX_CPP_PHYSICS_BOX2D_WORLDMANIFOLD_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_WORLDMANIFOLD_HPP_
 
+#include "gdx-cpp/math/Vector2.hpp"
+
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
@@ -31,8 +33,10 @@ public:
     gdx_cpp::math::Vector2* getPoints ();
     int getNumberOfContactPoints ();
 
+    gdx_cpp::math::Vector2 normal;
+    gdx_cpp::math::Vector2 points[2];
+    int numContactPoints;
 protected:
-
 
 private:
 

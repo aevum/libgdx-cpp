@@ -20,16 +20,23 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_CONTACTIMPULSE_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_CONTACTIMPULSE_HPP_
+#include "World.hpp"
 
+class b2ContactImpulse;
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
 
 class ContactImpulse {
 public:
+    ContactImpulse (World::ptr _world, b2ContactImpulse * _addr);
     float* getNormalImpulses ();
     float* getTangentImpulses ();
 
+    World::ptr world;
+    b2ContactImpulse * addr;
+    float normalImpulses[2];
+    float tangentImpulses[2];
 protected:
 
 

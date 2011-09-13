@@ -7,6 +7,7 @@ set(GDX_BINARY_ROOT_DIR ${PROJECT_BINARY_DIR})
 
 LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/finders)
 set(GDXCPP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(GDXCPP_BOX2D_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/Box2D)
 
 if (UNIX)
     SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wall")
@@ -16,6 +17,8 @@ option(BUILD_BACKEND_LINUX "Builds the linux backend for gdx-cpp" FALSE)
 option(BUILD_BACKEND_IOS "Builds the ios backend for gdx-cpp" FALSE)
 option(BUILD_BACKEND_ANDROID "Builds the android backend for gdx-cpp" FALSE)
 option(BUILD_BACKEND_WINDOWS "Builds the windows backend for gdx-cpp" FALSE)
+
+option(BUILD_BOX2D "Builds Box2D" TRUE)
 
 option(BUILD_GDX_TESTS "Builds(tries) all libgdx tests" TRUE)
 set(GENERATED_APPLICATION_TYPE "EXECUTABLE")
@@ -52,6 +55,10 @@ if (BUILD_BACKEND_LINUX)
   set(BACKEND-LINUX-DEPENDENCIES SDL ${GL_DEPENDENCIES} GLU)
   set(GDX_CPP_BACKEND_LINUX_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/backends)
   add_subdirectory(src/backends/gdx-cpp-backend-linux)
+endif()
+
+if (BUILD_BOX2D)
+    add_subdirectory(src/Box2D)
 endif()
 
 if (BUILD_BACKEND_IOS)

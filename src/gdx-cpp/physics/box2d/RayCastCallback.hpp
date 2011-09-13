@@ -20,10 +20,13 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_RAYCASTCALLBACK_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_RAYCASTCALLBACK_HPP_
-
 namespace gdx_cpp {
+namespace math {
+  class Vector2;
+}
 namespace physics {
 namespace box2d {
+class Fixture;
 
 class RayCastCallback {
 public:

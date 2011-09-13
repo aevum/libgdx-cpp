@@ -21,21 +21,37 @@
 #ifndef GDX_CPP_PHYSICS_BOX2D_TRANSFORM_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_TRANSFORM_HPP_
 
+#include <gdx/math/Vector2.hpp>
+
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
 
 class Transform {
 public:
-    gdx_cpp::math::Vector2& mul (const gdx_cpp::math::Vector2& v);
+
+    Transform () ;
+    Transform (gdx_cpp::math::Vector2& position, float angle);
+    gdx_cpp::math::Vector2& mul (gdx_cpp::math::Vector2& v);
     gdx_cpp::math::Vector2& getPosition ();
     void setRotation (float angle);
     void setPosition (const gdx_cpp::math::Vector2& pos);
+
+    const static int POS_X = 0;
+    const static int POS_Y = 1;
+    const static int COL1_X = 2;
+    const static int COL1_Y = 3;
+    const static int COL2_X = 4;
+    const static int COL2_Y = 5;
+    const static int vals_sise = 6;
+    
+    float vals [vals_sise];
 
 protected:
 
 
 private:
+    gdx_cpp::math::Vector2 position;
 
 };
 
