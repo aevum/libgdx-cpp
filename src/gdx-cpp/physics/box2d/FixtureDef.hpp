@@ -20,6 +20,8 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_FIXTUREDEF_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_FIXTUREDEF_HPP_
+#include "Shape.hpp"
+#include "Filter.hpp"
 
 namespace gdx_cpp {
 namespace physics {
@@ -27,6 +29,26 @@ namespace box2d {
 
 class FixtureDef {
 public:
+
+    FixtureDef();
+
+    /** The shape, this must be set. The shape will be cloned, so you can create the shape on the stack. */
+    Shape::ptr shape;
+
+    /** The friction coefficient, usually in the range [0,1]. **/
+    float friction;
+
+    /** The restitution (elasticity) usually in the range [0,1]. **/
+    float restitution;
+
+    /** The density, usually in kg/m^2. **/
+    float density;
+
+    /** A sensor shape collects contact information but never generates a collision response. */
+    bool isSensor;
+
+    /** Contact filtering data. **/
+    Filter filter;
 
 
 protected:

@@ -22,13 +22,20 @@
 
 using namespace gdx_cpp::physics::box2d::joints;
 
-void PrismaticJointDef::initialize (const gdx_cpp::physics::box2d::Body& bodyA,const gdx_cpp::physics::box2d::Body& bodyB,const gdx_cpp::math::Vector2& anchor,const gdx_cpp::math::Vector2& axis) {
-    this.bodyA = bodyA;
-    this.bodyB = bodyB;
-    localAnchorA.set(bodyA.getLocalPoint(anchor));
-    localAnchorB.set(bodyB.getLocalPoint(anchor));
-    localAxis1.set(bodyA.getLocalVector(axis));
-    referenceAngle = bodyB.getAngle() - bodyA.getAngle();
+PrismaticJointDef::PrismaticJointDef(): localAxis1(1,0), referenceAngle(0), enableLimit(false), lowerTranslation(0),
+                                        upperTranslation(0), enableMotor(false),maxMotorForce(0), motorSpeed(0)
+{
+    type=JointDef::PrismaticJoint;
+}
+
+
+void PrismaticJointDef::initialize (gdx_cpp::physics::box2d::Body::ptr bodyA,gdx_cpp::physics::box2d::Body::ptr bodyB,gdx_cpp::math::Vector2& anchor,gdx_cpp::math::Vector2& axis) {
+    this->bodyA = bodyA;
+    this->bodyB = bodyB;
+    localAnchorA.set(bodyA->getLocalPoint(anchor));
+    localAnchorB.set(bodyB->getLocalPoint(anchor));
+    localAxis1.set(bodyA->getLocalVector(axis));
+    referenceAngle = bodyB->getAngle() - bodyA->getAngle();
 
 }
 

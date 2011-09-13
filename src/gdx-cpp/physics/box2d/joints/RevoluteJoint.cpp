@@ -19,58 +19,64 @@
 */
 
 #include "RevoluteJoint.hpp"
+#include "Box2D.h"
 
 using namespace gdx_cpp::physics::box2d::joints;
 
+RevoluteJoint::RevoluteJoint(ref_ptr_maker< gdx_cpp::physics::box2d::World >::type _world, b2RevoluteJoint* joint) : Joint(_world, joint)
+{
+
+}
+
 float RevoluteJoint::getJointAngle () {
-    return jniGetJointAngle(addr);
+    return static_cast<b2RevoluteJoint * >(addr)->GetJointAngle();
 }
 
 float RevoluteJoint::getJointSpeed () {
-    return jniGetJointSpeed(addr);
+    return static_cast<b2RevoluteJoint * >(addr)->GetJointSpeed();
 }
 
 bool RevoluteJoint::isLimitEnabled () {
-    return jniIsLimitEnabled(addr);
+    return static_cast<b2RevoluteJoint * >(addr)->IsLimitEnabled();
 }
 
 void RevoluteJoint::enableLimit (bool flag) {
-    jniEnableLimit(addr, flag);
+    static_cast<b2RevoluteJoint * >(addr)->EnableLimit(flag);
 }
 
 float RevoluteJoint::getLowerLimit () {
-    return jniGetLowerLimit(addr);
+    return static_cast<b2RevoluteJoint * >(addr)->GetLowerLimit();
 }
 
 float RevoluteJoint::getUpperLimit () {
-    return jniGetUpperLimit(addr);
+    return static_cast<b2RevoluteJoint * >(addr)->GetUpperLimit();
 }
 
 void RevoluteJoint::setLimits (float lower,float upper) {
-    jniSetLimits(addr, lower, upper);
+    static_cast<b2RevoluteJoint * >(addr)->SetLimits(lower, upper);
 }
 
 bool RevoluteJoint::isMotorEnabled () {
-    return jniIsMotorEnabled(addr);
+    return static_cast<b2RevoluteJoint * >(addr)->IsMotorEnabled();
 }
 
 void RevoluteJoint::enableMotor (bool flag) {
-    jniEnableMotor(addr, flag);
+    static_cast<b2RevoluteJoint * >(addr)->EnableMotor(flag);
 }
 
 void RevoluteJoint::setMotorSpeed (float speed) {
-    jniSetMotorSpeed(addr, speed);
+    static_cast<b2RevoluteJoint * >(addr)->SetMotorSpeed(speed);
 }
 
 float RevoluteJoint::getMotorSpeed () {
-    return jniGetMotorSpeed(addr);
+    return static_cast<b2RevoluteJoint * >(addr)->GetMotorSpeed();
 }
 
 void RevoluteJoint::setMaxMotorTorque (float torque) {
-    jniSetMaxMotorTorque(addr, torque);
+    static_cast<b2RevoluteJoint * >(addr)->SetMaxMotorTorque(torque);
 }
 
 float RevoluteJoint::getMotorTorque () {
-    return jniGetMotorTorque(addr);
+    return static_cast<b2RevoluteJoint * >(addr)->GetMotorTorque();
 }
 

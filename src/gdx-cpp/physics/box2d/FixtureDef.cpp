@@ -19,8 +19,10 @@
 */
 
 #include "FixtureDef.hpp"
+#include "Shape.hpp"
 
 using namespace gdx_cpp::physics::box2d;
 
-
-
+FixtureDef::FixtureDef():friction (0.2), restitution(0), density(0), isSensor(false)
+{
+}

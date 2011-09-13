@@ -1,0 +1,233 @@
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/2235/trunk/gdx/jni/Box2D
+END
+DistanceJoint.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/1049/trunk/gdx/jni/Box2D/DistanceJoint.cpp
+END
+LineJoint.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/422/trunk/gdx/jni/Box2D/LineJoint.h
+END
+PrismaticJoint.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/381/trunk/gdx/jni/Box2D/PrismaticJoint.h
+END
+Shape.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/401/trunk/gdx/jni/Box2D/Shape.h
+END
+PolygonShape.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/401/trunk/gdx/jni/Box2D/PolygonShape.h
+END
+RevoluteJoint.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/381/trunk/gdx/jni/Box2D/RevoluteJoint.h
+END
+PulleyJoint.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/1049/trunk/gdx/jni/Box2D/PulleyJoint.cpp
+END
+FrictionJoint.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/1049/trunk/gdx/jni/Box2D/FrictionJoint.cpp
+END
+CircleShape.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/1049/trunk/gdx/jni/Box2D/CircleShape.cpp
+END
+Joint.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/1049/trunk/gdx/jni/Box2D/Joint.cpp
+END
+Box2D.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/265/trunk/gdx/jni/Box2D/Box2D.h
+END
+GearJoint.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/381/trunk/gdx/jni/Box2D/GearJoint.h
+END
+World.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/2235/trunk/gdx/jni/Box2D/World.cpp
+END
+LineJoint.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/1049/trunk/gdx/jni/Box2D/LineJoint.cpp
+END
+Fixture.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/401/trunk/gdx/jni/Box2D/Fixture.h
+END
+Manifold.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/2215/trunk/gdx/jni/Box2D/Manifold.h
+END
+ContactImpulse.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/2215/trunk/gdx/jni/Box2D/ContactImpulse.h
+END
+PrismaticJoint.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/1049/trunk/gdx/jni/Box2D/PrismaticJoint.cpp
+END
+Shape.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/1049/trunk/gdx/jni/Box2D/Shape.cpp
+END
+Contact.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/381/trunk/gdx/jni/Box2D/Contact.h
+END
+MouseJoint.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/381/trunk/gdx/jni/Box2D/MouseJoint.h
+END
+Body.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/410/trunk/gdx/jni/Box2D/Body.h
+END
+DistanceJoint.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/381/trunk/gdx/jni/Box2D/DistanceJoint.h
+END
+Android.mk
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/2215/trunk/gdx/jni/Box2D/Android.mk
+END
+PolygonShape.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/1049/trunk/gdx/jni/Box2D/PolygonShape.cpp
+END
+RevoluteJoint.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/1049/trunk/gdx/jni/Box2D/RevoluteJoint.cpp
+END
+GearJoint.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/1049/trunk/gdx/jni/Box2D/GearJoint.cpp
+END
+PulleyJoint.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/381/trunk/gdx/jni/Box2D/PulleyJoint.h
+END
+FrictionJoint.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/381/trunk/gdx/jni/Box2D/FrictionJoint.h
+END
+Fixture.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/1049/trunk/gdx/jni/Box2D/Fixture.cpp
+END
+CircleShape.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/381/trunk/gdx/jni/Box2D/CircleShape.h
+END
+Joint.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/381/trunk/gdx/jni/Box2D/Joint.h
+END
+Manifold.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/2215/trunk/gdx/jni/Box2D/Manifold.cpp
+END
+ContactImpulse.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/2215/trunk/gdx/jni/Box2D/ContactImpulse.cpp
+END
+Contact.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/1049/trunk/gdx/jni/Box2D/Contact.cpp
+END
+MouseJoint.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/1049/trunk/gdx/jni/Box2D/MouseJoint.cpp
+END
+World.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/2235/trunk/gdx/jni/Box2D/World.h
+END
+Body.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/1049/trunk/gdx/jni/Box2D/Body.cpp
+END

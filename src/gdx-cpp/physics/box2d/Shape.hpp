@@ -20,20 +20,25 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_SHAPE_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_SHAPE_HPP_
+#include <gdx-cpp/utils/Aliases.hpp>
 
+class b2Shape;
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
-
 class Shape {
 public:
-    virtual   Type& getType () = 0;
+    typedef ref_ptr_maker<Shape>::type ptr;
+    enum Type {
+        Circle, Polygon,
+    };
+    virtual   Type getType () = 0;
     float getRadius ();
     void setRadius (float radius);
     void dispose ();
 
+    b2Shape* addr;
 protected:
-
 
 private:
 

@@ -19,30 +19,37 @@
 */
 
 #include "DistanceJoint.hpp"
+#include "Box2D.h"
+#include "gdx-cpp/utils/Aliases.hpp"
 
 using namespace gdx_cpp::physics::box2d::joints;
 
+DistanceJoint::DistanceJoint(ref_ptr_maker< gdx_cpp::physics::box2d::World >::type _world, b2DistanceJoint* joint) : Joint(_world, joint)
+{
+  
+}
+
 void DistanceJoint::setLength (float length) {
-    jniSetLength(addr, length);
+    static_cast<b2DistanceJoint * >(addr)->SetLength(length);
 }
 
 float DistanceJoint::getLength () {
-    return jniGetLength(addr);
+    return static_cast<b2DistanceJoint * >(addr)->GetLength();
 }
 
 void DistanceJoint::setFrequency (float hz) {
-    jniSetFrequency(addr, hz);
+    static_cast<b2DistanceJoint * >(addr)->SetFrequency(hz);
 }
 
 float DistanceJoint::getFrequency () {
-    return jniGetFrequency(addr);
+    return static_cast<b2DistanceJoint * >(addr)->GetFrequency();
 }
 
 void DistanceJoint::setDampingRatio (float ratio) {
-    jniSetDampingRatio(addr, ratio);
+    static_cast<b2DistanceJoint * >(addr)->SetDampingRatio(ratio);
 }
 
 float DistanceJoint::getDampingRatio () {
-    return jniGetDampingRatio(addr);
+    return static_cast<b2DistanceJoint * >(addr)->GetDampingRatio();
 }
 

@@ -21,26 +21,49 @@
 #ifndef GDX_CPP_PHYSICS_BOX2D_BOX2DDEBUGRENDERER_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_BOX2DDEBUGRENDERER_HPP_
 
+#include "Box2D/Box2D.h"
+#include "gdx-cpp/graphics/Color.hpp"
+#include "gdx-cpp/math/Vector2.hpp"
+#include "gdx-cpp/graphics/glutils/ImmediateModeRenderer10.hpp"
+#include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
+
+
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
 
 class Box2DDebugRenderer {
 public:
-    void render (const World& world);
+    Box2DDebugRenderer();
+    void render (b2World& world);
     void dispose ();
 
-protected:
+    gdx_cpp::graphics::g2d::SpriteBatch batch;
 
+protected:
+    gdx_cpp::graphics::glutils::ImmediateModeRenderer10 renderer;
 
 private:
-    void renderBodies (const World& world);
-    void drawShape (const Fixture& fixture,const Transform& transform,const gdx_cpp::graphics::Color& color);
-    void drawSolidCircle (const gdx_cpp::math::Vector2& center,float radius,const gdx_cpp::math::Vector2& axis,const gdx_cpp::graphics::Color& color);
-    void drawSolidPolygon (int vertexCount,const gdx_cpp::graphics::Color& color);
-    void drawJoint (const Joint& joint);
-    void drawSegment (const gdx_cpp::math::Vector2& x1,const gdx_cpp::math::Vector2& x2,const gdx_cpp::graphics::Color& color);
-    void drawContact (const Contact& contact);
+    void renderBodies (b2World& world);
+    void drawShape (b2Fixture& fixture, const b2Transform& transform, gdx_cpp::graphics::Color& color);
+    void drawSolidCircle (const b2Vec2& center, float radius, const b2Vec2& axis, const gdx_cpp::graphics::Color& color);
+    void drawSolidPolygon (b2Vec2* vertices, int vertexCount, const gdx_cpp::graphics::Color& color);
+    void drawJoint (b2Joint& joint);
+    void drawSegment (const b2Vec2& x1, const b2Vec2& x2, const gdx_cpp::graphics::Color& color);
+    void drawContact (b2Contact& contact);
+
+
+    gdx_cpp::graphics::Color SHAPE_NOT_ACTIVE;
+    gdx_cpp::graphics::Color SHAPE_STATIC;
+    gdx_cpp::graphics::Color SHAPE_KINEMATIC;
+    gdx_cpp::graphics::Color SHAPE_NOT_AWAKE;
+    gdx_cpp::graphics::Color SHAPE_AWAKE;
+    gdx_cpp::graphics::Color JOINT_COLOR;
+    
+    b2Vec2 t;
+    b2Vec2 axis;
+    b2Vec2 vertices[100];
+    b2Vec2 v;
 };
 
 } // namespace gdx_cpp

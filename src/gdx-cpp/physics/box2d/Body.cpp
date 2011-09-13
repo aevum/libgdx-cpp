@@ -19,281 +19,324 @@
 */
 
 #include "Body.hpp"
+#include "FixtureDef.hpp"
+#include "Box2D.h"
+#include "Fixture.hpp"
+#include "World.hpp"
 
 using namespace gdx_cpp::physics::box2d;
 
-void Body::reset (long addr) {
-    this.addr = addr;
-    this.userData = null;
-    for (int i = 0; i < fixtures.size(); i++)
-        this.world.freeFixtures.free(fixtures.get(i));
+void Body::reset (b2Body* addr) {
+    this->body = addr;
+    this->userData = NULL;
+    std::set<Fixture *>::iterator it = fixtures.begin();
+    for (; it != fixtures.end(); ++it)
+         this->world->freeFixtures.free(*it);
     fixtures.clear();
-    this.joints.clear();
+    this->joints.clear();
 }
 
 Fixture& Body::createFixture (const FixtureDef& def) {
-    long fixtureAddr = jniCreateFixture(addr, def.shape.addr, def.friction, def.restitution, def.density, def.isSensor,
-                                        def.filter.categoryBits, def.filter.maskBits, def.filter.groupIndex);
-    Fixture fixture = this.world.freeFixtures.obtain();
-    fixture.reset(this, fixtureAddr);
-    this.world.fixtures.put(fixture.addr, fixture);
-    this.fixtures.add(fixture);
-    return fixture;
+    b2Shape* shape = def.shape->addr;
+    b2FixtureDef fixtureDef;
+
+#ifdef ANDROID
+    //__android_log_print( ANDROID_LOG_INFO, "Box2DTest", "body: %d, shape: %d", body, shape );
+#endif
+
+    fixtureDef.shape = shape;
+    fixtureDef.friction = def.friction;
+    fixtureDef.restitution = def.restitution;
+    fixtureDef.density = def.density;
+    fixtureDef.isSensor = def.isSensor;
+    fixtureDef.filter.maskBits = def.filter.maskBits;
+    fixtureDef.filter.categoryBits = def.filter.categoryBits;
+    fixtureDef.filter.groupIndex = def.filter.groupIndex;
+    b2Fixture* fixtureAddr =    body->CreateFixture( &fixtureDef );
+
+    Fixture* fixture = &this->world->freeFixtures.obtain();
+    fixture->reset(shared_from_this(), fixtureAddr);
+    this->world->fixtures[fixture->addr] = fixture;
+    this->fixtures.insert(fixture);
+    return *fixture;
 }
 
-Fixture& Body::createFixture (const Shape& shape,float density) {
-    long fixtureAddr = jniCreateFixture(addr, shape.addr, density);
-    Fixture fixture = this.world.freeFixtures.obtain();
-    fixture.reset(this, fixtureAddr);
-    this.world.fixtures.put(fixture.addr, fixture);
-    this.fixtures.add(fixture);
-    return fixture;
+Fixture& Body::createFixture (const Shape& _shape,float density) {
+    b2Fixture* fixtureAddr =  body->CreateFixture( _shape.addr, density );
+    Fixture* fixture = &this->world->freeFixtures.obtain();
+    fixture->reset(shared_from_this(), fixtureAddr);
+    this->world->fixtures[fixture->addr] = fixture;
+    this->fixtures.insert(fixture);
+    return *fixture;
 }
 
-void Body::destroyFixture (const Fixture& fixture) {
-    jniDestroyFixture(addr, fixture.addr);
-    this.world.fixtures.remove(fixture.addr);
-    this.fixtures.remove(fixture);
-    this.world.freeFixtures.free(fixture);
+void Body::destroyFixture (Fixture& fixture) {
+    body->DestroyFixture(fixture.addr);
+    this->world->fixtures.erase(fixture.addr);
+    this->fixtures.erase(&fixture);
+    this->world->freeFixtures.free(&fixture);
 }
 
 void Body::setTransform (const gdx_cpp::math::Vector2& position,float angle) {
-    jniSetTransform(addr, position.x, position.y, angle);
+    body->SetTransform(b2Vec2(position.x, position.y), angle);
 }
 
 void Body::setTransform (float x,float y,float angle) {
-    jniSetTransform(addr, x, y, angle);
+    body->SetTransform(b2Vec2(x, y), angle);
 }
 
 Transform& Body::getTransform () {
-    jniGetTransform(addr, transform.vals);
+    float* valOut = transform.vals;
+    b2Transform t = body->GetTransform();
+
+    valOut[0] = t.position.x;
+    valOut[1] = t.position.y;
+    valOut[2] = t.R.col1.x;
+    valOut[3] = t.R.col1.y;
+    valOut[4] = t.R.col2.x;
+    valOut[5] = t.R.col2.y;
     return transform;
 }
 
 gdx_cpp::math::Vector2& Body::getPosition () {
-    jniGetPosition(addr, tmp);
-    position.x = tmp[0];
-    position.y = tmp[1];
+    b2Vec2 p = body->GetPosition();
+    position.x = p.x;
+    position.y = p.y;
     return position;
 }
 
 float Body::getAngle () {
-    return jniGetAngle(addr);
+    return body->GetAngle();
 }
 
 gdx_cpp::math::Vector2& Body::getWorldCenter () {
-    jniGetWorldCenter(addr, tmp);
-    worldCenter.x = tmp[0];
-    worldCenter.y = tmp[1];
+    b2Vec2 w = body->GetWorldCenter();
+    worldCenter.x = w.x;
+    worldCenter.y = w.y;
     return worldCenter;
 }
 
 gdx_cpp::math::Vector2& Body::getLocalCenter () {
-    jniGetLocalCenter(addr, tmp);
-    localCenter.x = tmp[0];
-    localCenter.y = tmp[1];
+    b2Vec2 w = body->GetLocalCenter();
+    localCenter.x = w.x;
+    localCenter.y = w.y;
     return localCenter;
 }
 
 void Body::setLinearVelocity (const gdx_cpp::math::Vector2& v) {
-    jniSetLinearVelocity(addr, v.x, v.y);
+    body->SetLinearVelocity(b2Vec2(v.x, v.y) );
 }
 
 void Body::setLinearVelocity (float vX,float vY) {
-    jniSetLinearVelocity(addr, vX, vY);
+    body->SetLinearVelocity(b2Vec2(vX, vY) );
 }
 
 gdx_cpp::math::Vector2& Body::getLinearVelocity () {
-    jniGetLinearVelocity(addr, tmp);
-    linearVelocity.x = tmp[0];
-    linearVelocity.y = tmp[1];
+    b2Vec2 l = body->GetLinearVelocity();
+    linearVelocity.x = l.x;
+    linearVelocity.y = l.y;
     return linearVelocity;
 }
 
 void Body::setAngularVelocity (float omega) {
-    jniSetAngularVelocity(addr, omega);
+    body->SetAngularVelocity(omega);
 }
 
 float Body::getAngularVelocity () {
-    return jniGetAngularVelocity(addr);
+    return body->GetAngularVelocity();
 }
 
 void Body::applyForce (const gdx_cpp::math::Vector2& force,const gdx_cpp::math::Vector2& point) {
-    jniApplyForce(addr, force.x, force.y, point.x, point.y);
+    body->ApplyForce( b2Vec2( force.x, force.y), b2Vec2(point.x, point.y) );
 }
 
 void Body::applyForce (float forceX,float forceY,float pointX,float pointY) {
-    jniApplyForce(addr, forceX, forceY, pointX, pointY);
+    body->ApplyForce( b2Vec2( forceX, forceY), b2Vec2(pointX, pointY) );
 }
 
 void Body::applyTorque (float torque) {
-    jniApplyTorque(addr, torque);
+    body->ApplyTorque(torque);
 }
 
 void Body::applyLinearImpulse (const gdx_cpp::math::Vector2& impulse,const gdx_cpp::math::Vector2& point) {
-    jniApplyLinearImpulse(addr, impulse.x, impulse.y, point.x, point.y);
+    body->ApplyLinearImpulse( b2Vec2( impulse.x, impulse.y), b2Vec2( point.x, point.y) );
 }
 
 void Body::applyLinearImpulse (float impulseX,float impulseY,float pointX,float pointY) {
-    jniApplyLinearImpulse(addr, impulseX, impulseY, pointX, pointY);
+    body->ApplyLinearImpulse( b2Vec2( impulseX, impulseY), b2Vec2( pointX, pointY) );
 }
 
 void Body::applyAngularImpulse (float impulse) {
-    jniApplyAngularImpulse(addr, impulse);
+    body->ApplyAngularImpulse(impulse);
 }
 
 float Body::getMass () {
-    return jniGetMass(addr);
+    return body->GetMass();
 }
 
 float Body::getInertia () {
-    return jniGetInertia(addr);
+    return body->GetInertia();
 }
 
 MassData& Body::getMassData () {
-    jniGetMassData(addr, tmp);
-    massData.mass = tmp[0];
-    massData.center.x = tmp[1];
-    massData.center.y = tmp[2];
-    massData.I = tmp[3];
+    b2MassData m;
+    body->GetMassData(&m);
+    massData.mass = m.mass;
+    massData.center.x = m.center.x;
+    massData.center.y = m.center.y;
+    massData.I = m.I;
     return massData;
 }
 
 void Body::setMassData (const MassData& data) {
-    jniSetMassData(addr, data.mass, data.center.x, data.center.y, data.I);
+    b2MassData m;
+    m.mass = data.mass;
+    m.center.x = data.center.x;
+    m.center.y = data.center.y;
+    m.I = data.I;
+    body->SetMassData(&m);
 }
 
 void Body::resetMassData () {
-    jniResetMassData(addr);
+    body->ResetMassData();
 }
 
 gdx_cpp::math::Vector2& Body::getWorldPoint (const gdx_cpp::math::Vector2& localPoint) {
-    jniGetWorldPoint(addr, localPoint.x, localPoint.y, tmp);
-    this.localPoint.x = tmp[0];
-    this.localPoint.y = tmp[1];
-    return this.localPoint;
+    b2Vec2 w = body->GetWorldPoint( b2Vec2(localPoint.x, localPoint.y) );
+    this->localPoint.x = w.x;
+    this->localPoint.y = w.y;
+    return this->localPoint;
 }
 
 gdx_cpp::math::Vector2& Body::getWorldVector (const gdx_cpp::math::Vector2& localVector) {
-    jniGetWorldVector(addr, localVector.x, localVector.y, tmp);
-    worldVector.x = tmp[0];
-    worldVector.y = tmp[1];
+    b2Vec2 w = body->GetWorldVector( b2Vec2( localVector.x, localVector.y ) );
+    worldVector.x = w.x;
+    worldVector.y = w.x;
     return worldVector;
 }
 
 gdx_cpp::math::Vector2& Body::getLocalPoint (const gdx_cpp::math::Vector2& worldPoint) {
-    jniGetLocalPoint(addr, worldPoint.x, worldPoint.y, tmp);
-    localPoint2.x = tmp[0];
-    localPoint2.y = tmp[1];
+    b2Vec2 w = body->GetLocalPoint( b2Vec2(worldPoint.x, worldPoint.y) );
+    this->localPoint2.x = w.x;
+    this->localPoint2.y = w.y;
     return localPoint2;
 }
 
 gdx_cpp::math::Vector2& Body::getLocalVector (const gdx_cpp::math::Vector2& worldVector) {
-    jniGetLocalVector(addr, worldVector.x, worldVector.y, tmp);
-    localVector.x = tmp[0];
-    localVector.y = tmp[1];
+    b2Vec2 w = body->GetLocalVector( b2Vec2(worldVector.x, worldVector.y) );
+    this->localVector.x = w.x;
+    this->localVector.y = w.y;
     return localVector;
 }
 
 gdx_cpp::math::Vector2& Body::getLinearVelocityFromWorldPoint (const gdx_cpp::math::Vector2& worldPoint) {
-    jniGetLinearVelocityFromWorldPoint(addr, worldPoint.x, worldPoint.y, tmp);
-    linVelWorld.x = tmp[0];
-    linVelWorld.y = tmp[1];
+    b2Vec2 w = body->GetLinearVelocityFromWorldPoint( b2Vec2( worldPoint.x, worldPoint.y ) );
+    linVelWorld.x = w.x;
+    linVelWorld.y = w.y;
     return linVelWorld;
 }
 
 gdx_cpp::math::Vector2& Body::getLinearVelocityFromLocalPoint (const gdx_cpp::math::Vector2& localPoint) {
-    jniGetLinearVelocityFromLocalPoint(addr, localPoint.x, localPoint.y, tmp);
-    linVelLoc.x = tmp[0];
-    linVelLoc.y = tmp[1];
+    b2Vec2 w = body->GetLinearVelocityFromLocalPoint( b2Vec2( localPoint.x, localPoint.y ) );
+    linVelLoc.x = w.x;
+    linVelLoc.y = w.y;
     return linVelLoc;
 }
 
 float Body::getLinearDamping () {
-    return jniGetLinearDamping(addr);
+    return body->GetLinearDamping();
 }
 
 void Body::setLinearDamping (float linearDamping) {
-    jniSetLinearDamping(addr, linearDamping);
+    body->SetLinearDamping(linearDamping);
 }
 
 float Body::getAngularDamping () {
-    return jniGetAngularDamping(addr);
+    return body->GetAngularDamping();
 }
 
 void Body::setAngularDamping (float angularDamping) {
-    jniSetAngularDamping(addr, angularDamping);
+    body->SetAngularDamping(angularDamping);
 }
 
-void Body::setType (const gdx_cpp::physics::box2d::BodyDef::BodyType& type) {
-    jniSetType(addr, type.getValue());
+void Body::setType (const gdx_cpp::physics::box2d::BodyDef::BodyType _type) {
+    b2BodyType type;
+      switch( _type )
+    {
+    case 0: type = b2_staticBody;
+    case 1: type = b2_kinematicBody;
+    case 2: type = b2_dynamicBody;
+    default:
+            type = b2_staticBody;
+    }
+    body->SetType(type);
 }
 
-gdx_cpp::physics::box2d::BodyDef::BodyType& Body::getType () {
-    int type = jniGetType(addr);
-    if (type == 0) return BodyType.StaticBody;
-    if (type == 1) return BodyType.KinematicBody;
-    if (type == 2) return BodyType.DynamicBody;
-    return BodyType.StaticBody;
+gdx_cpp::physics::box2d::BodyDef::BodyType Body::getType () {
+    int type = body->GetType();
+    if (type == 0) return BodyDef::StaticBody;
+    if (type == 1) return BodyDef::KinematicBody;
+    if (type == 2) return BodyDef::DynamicBody;
+    return BodyDef::StaticBody;
 }
 
 void Body::setBullet (bool flag) {
-    jniSetBullet(addr, flag);
+    body->SetBullet(flag);
 }
 
 bool Body::isBullet () {
-    return jniIsBullet(addr);
+    return body->IsBullet();
 }
 
 void Body::setSleepingAllowed (bool flag) {
-    jniSetSleepingAllowed(addr, flag);
+    body->SetSleepingAllowed(flag);
 }
 
 bool Body::isSleepingAllowed () {
-    return jniIsSleepingAllowed(addr);
+    return body->IsSleepingAllowed();
 }
 
 void Body::setAwake (bool flag) {
-    jniSetAwake(addr, flag);
+    body->SetAwake(flag);
 }
 
 bool Body::isAwake () {
-    return jniIsAwake(addr);
+    return body->IsAwake();
 }
 
 void Body::setActive (bool flag) {
-    jniSetActive(addr, flag);
+    body->SetActive(flag);
 }
 
 bool Body::isActive () {
-    return jniIsActive(addr);
+    return body->IsActive();
 }
 
 void Body::setFixedRotation (bool flag) {
-    jniSetFixedRotation(addr, flag);
+    body->SetFixedRotation(flag);
 }
 
 bool Body::isFixedRotation () {
-    return jniIsFixedRotation(addr);
+    return body->IsFixedRotation();
 }
 
-ArrayList<Fixture>& Body::getFixtureList () {
+std::set< Fixture* >& Body::getFixtureList () {
     return fixtures;
 }
 
-ArrayList<JointEdge>& Body::getJointList () {
+std::set<JointEdge *>& Body::getJointList () {
     return joints;
 }
 
 World& Body::getWorld () {
-    return world;
+    return *world;
 }
 
-Object& Body::getUserData () {
+void* Body::getUserData () {
     return userData;
 }
 
-void Body::setUserData (const Object& userData) {
-    this.userData = userData;
+void Body::setUserData (void * userData) {
+    this->userData = userData;
 }
 

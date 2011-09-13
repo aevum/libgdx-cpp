@@ -19,8 +19,12 @@
 */
 
 #include "GearJointDef.hpp"
+#include "gdx-cpp/physics/box2d/Joint.hpp"
 
 using namespace gdx_cpp::physics::box2d::joints;
 
-
+GearJointDef::GearJointDef():ratio(1), joint1(NULL), joint2(NULL)
+{
+  type = JointDef::GearJoint;
+}
 

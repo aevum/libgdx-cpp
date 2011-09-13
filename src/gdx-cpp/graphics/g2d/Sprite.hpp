@@ -25,6 +25,7 @@
 #include "gdx-cpp/graphics/Texture.hpp"
 #include "gdx-cpp/math/Rectangle.hpp"
 #include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
+#include "gdx-cpp/utils/Aliases.hpp"
 
 namespace gdx_cpp {
 namespace graphics {
@@ -34,14 +35,18 @@ class SpriteBatch;
 
 class Sprite : public TextureRegion {
 public:
+
+    typedef ref_ptr_maker<Sprite>::type ptr;
+  
     Sprite();
+    Sprite(ptr);
     Sprite (graphics::Texture::ptr texture) ;
     Sprite (Texture::ptr texture, int srcWidth, int srcHeight) ;
     Sprite (Texture::ptr texture, int srcX, int srcY, int srcWidth, int srcHeight) ;
     Sprite (const TextureRegion& region) ;
     Sprite (const TextureRegion& region, int srcX, int srcY, int srcWidth, int srcHeight) ;
     
-    void set (const Sprite& sprite);
+    void set (ptr sprite);
     void setBounds (float x,float y,float width,float height);
     void setSize (float width,float height);
     void setPosition (float x,float y);

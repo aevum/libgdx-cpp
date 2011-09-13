@@ -22,11 +22,16 @@
 
 using namespace gdx_cpp::physics::box2d::joints;
 
-void DistanceJointDef::initialize (const gdx_cpp::physics::box2d::Body& bodyA,const gdx_cpp::physics::box2d::Body& bodyB,const gdx_cpp::math::Vector2& anchorA,const gdx_cpp::math::Vector2& anchorB) {
-    this.bodyA = bodyA;
-    this.bodyB = bodyB;
-    this.localAnchorA.set(bodyA.getLocalPoint(anchorA));
-    this.localAnchorB.set(bodyB.getLocalPoint(anchorB));
-    this.length = anchorA.dst(anchorB);
+DistanceJointDef::DistanceJointDef(): length(1), dampingRatio(0), frequencyHz(0)
+{
+  type=JointDef::DistanceJoint;
+}
+
+void DistanceJointDef::initialize (gdx_cpp::physics::box2d::Body::ptr bodyA, gdx_cpp::physics::box2d::Body::ptr bodyB, gdx_cpp::math::Vector2& anchorA, gdx_cpp::math::Vector2& anchorB) {
+    this->bodyA = bodyA;
+    this->bodyB = bodyB;
+    this->localAnchorA.set(bodyA->getLocalPoint(anchorA));
+    this->localAnchorB.set(bodyB->getLocalPoint(anchorB));
+    this->length = anchorA.dst(anchorB);
 }
 

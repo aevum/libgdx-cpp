@@ -19,58 +19,64 @@
 */
 
 #include "PrismaticJoint.hpp"
+#include "Box2D.h"
 
 using namespace gdx_cpp::physics::box2d::joints;
 
+PrismaticJoint::PrismaticJoint(ref_ptr_maker< gdx_cpp::physics::box2d::World >::type _world, b2PrismaticJoint* joint) : Joint(_world, joint)
+{
+
+}
+
 float PrismaticJoint::getJointTranslation () {
-    return jniGetJointTranslation(addr);
+    return static_cast<b2PrismaticJoint * >(addr)->GetJointTranslation();
 }
 
 float PrismaticJoint::getJointSpeed () {
-    return jniGetJointSpeed(addr);
+    return static_cast<b2PrismaticJoint * >(addr)->GetJointSpeed();
 }
 
 bool PrismaticJoint::isLimitEnabled () {
-    return jniIsLimitEnabled(addr);
+    return static_cast<b2PrismaticJoint * >(addr)->IsLimitEnabled();
 }
 
 void PrismaticJoint::enableLimit (bool flag) {
-    jniEnableLimit(addr, flag);
+    static_cast<b2PrismaticJoint * >(addr)->EnableLimit(flag);
 }
 
 float PrismaticJoint::getLowerLimit () {
-    return jniGetLowerLimit(addr);
+    return static_cast<b2PrismaticJoint * >(addr)->GetLowerLimit();
 }
 
 float PrismaticJoint::getUpperLimit () {
-    return jniGetUpperLimit(addr);
+    return static_cast<b2PrismaticJoint * >(addr)->GetUpperLimit();
 }
 
 void PrismaticJoint::setLimits (float lower,float upper) {
-    jniSetLimits(addr, lower, upper);
+    static_cast<b2PrismaticJoint * >(addr)->SetLimits(lower, upper);
 }
 
 bool PrismaticJoint::isMotorEnabled () {
-    return jniIsMotorEnabled(addr);
+    return static_cast<b2PrismaticJoint * >(addr)->IsMotorEnabled();
 }
 
 void PrismaticJoint::enableMotor (bool flag) {
-    jniEnableMotor(addr, flag);
+    static_cast<b2PrismaticJoint * >(addr)->EnableMotor(flag);
 }
 
 void PrismaticJoint::setMotorSpeed (float speed) {
-    jniSetMotorSpeed(addr, speed);
+    static_cast<b2PrismaticJoint * >(addr)->SetMotorSpeed(speed);
 }
 
 float PrismaticJoint::getMotorSpeed () {
-    return jniGetMotorSpeed(addr);
+    return static_cast<b2PrismaticJoint * >(addr)->GetMotorSpeed();
 }
 
 void PrismaticJoint::setMaxMotorForce (float force) {
-    jniSetMaxMotorForce(addr, force);
+    static_cast<b2PrismaticJoint * >(addr)->SetMaxMotorForce(force);
 }
 
 float PrismaticJoint::getMotorForce () {
-    return jniGetMotorForce(addr);
+    return static_cast<b2PrismaticJoint * >(addr)->GetMotorForce();
 }
 
