@@ -21,13 +21,14 @@
 #ifndef GDX_CPP_GDX_HPP_
 #define GDX_CPP_GDX_HPP_
 
-namespace gdx_cpp {
+#include "Application.hpp"
+#include "Graphics.hpp"
+#include "Audio.hpp"
+#include "Input.hpp"
+#include "Files.hpp"
+#include "implementation/System.hpp"
 
-class Application;
-class Graphics;
-class Audio;
-class Input;
-class Files;
+namespace gdx_cpp {
 
 namespace graphics {
     class GLCommon;
