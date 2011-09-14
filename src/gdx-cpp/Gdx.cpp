@@ -20,17 +20,11 @@
 
 #include "Gdx.hpp"
 
-#include "Graphics.hpp"
-#include "Audio.hpp"
-#include "Files.hpp"
-#include "Input.hpp"
-#include "Application.hpp"
 #include "graphics/GL10.hpp"
 #include "graphics/GL11.hpp"
 #include "graphics/GL20.hpp"
 #include "graphics/GLCommon.hpp"
 #include "graphics/GLU.hpp"
-#include "implementation/System.hpp"
 
 using namespace gdx_cpp;
 

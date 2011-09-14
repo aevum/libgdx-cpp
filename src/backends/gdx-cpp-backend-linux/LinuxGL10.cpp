@@ -182,7 +182,7 @@ void LinuxGL10::glClientActiveTexture(int texture) const {
 void LinuxGL10::glColor4f(float red, float green, float blue, float alpha) const {
     ::glColor4f(red, green, blue, alpha);
 }
-void LinuxGL10::glColorPointer(int size, int type, int stride, const char* pointer) const {
+void LinuxGL10::glColorPointer(int size, int type, int stride, const void* pointer) const {
     ::glColorPointer(size, type, stride, pointer);
 }
 void LinuxGL10::glDeleteTextures(int n, unsigned int* textures) const {
@@ -257,7 +257,7 @@ void LinuxGL10::glMultMatrixf(const float* m) const {
 void LinuxGL10::glNormal3f(float nx, float ny, float nz) const {
     ::glNormal3f(nx,ny,nz);
 }
-void LinuxGL10::glNormalPointer(int type, int stride, const char* pointer) const {
+void LinuxGL10::glNormalPointer(int type, int stride, const void* pointer) const {
     ::glNormalPointer(type, stride, pointer);
 }
 void LinuxGL10::glOrthof(float left, float right, float bottom, float top, float zNear, float zFar) const {
@@ -295,7 +295,7 @@ void LinuxGL10::glScalef(float x, float y, float z) const {
 void LinuxGL10::glShadeModel(int mode) const {
     ::glShadeModel(mode);
 }
-void LinuxGL10::glTexCoordPointer(int size, int type, int stride, const char* pointer) const {
+void LinuxGL10::glTexCoordPointer(int size, int type, int stride, const void* pointer) const {
     ::glTexCoordPointer(size, type, stride, pointer);
 }
 void LinuxGL10::glTexEnvf(int target, int pname, float param) const {
@@ -307,6 +307,6 @@ void LinuxGL10::glTexEnvfv(int target, int pname, const float* params) const {
 void LinuxGL10::glTranslatef(float x, float y, float z) const {
     ::glTranslatef(x,y , z);
 }
-void LinuxGL10::glVertexPointer(int size, int type, int stride, const char* pointer) const {
+void LinuxGL10::glVertexPointer(int size, int type, int stride, const void* pointer) const {
     ::glVertexPointer(size, type, stride,  pointer);
 }

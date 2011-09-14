@@ -25,6 +25,11 @@
 #include <pthread.h>
 #include <stdexcept>
 #include <iostream>
+#include <stdint.h>
+#include <gdx-cpp/Gdx.hpp>
+#include <gdx-cpp/Application.hpp>
+
+#include <android/log.h>
 
 using namespace gdx_cpp::backends::android;
 
@@ -106,12 +111,14 @@ gdx_cpp::implementation::Mutex::ptr gdx_cpp::backends::android::AndroidSystem::A
     return gdx_cpp::implementation::Mutex::ptr(new AndroidMutex);
 }
 
-int64_t gdx_cpp::backends::android::AndroidSystem::nanoTime()
+uint64_t gdx_cpp::backends::android::AndroidSystem::nanoTime()
 {
-    timespec ts;
+    static timespec ts;
     ::clock_gettime(CLOCK_MONOTONIC, &ts);
 
-    return ts.tv_sec * 1000000000 + ts.tv_nsec;
+//     __android_log_print(ANDROID_LOG_DEBUG, "nanoTime", "tv_sec: %llu, tv_usec: %llu, %llu", ts.tv_sec, ts.tv_nsec, (uint64_t)ts.tv_sec * 1000000000LL + (uint64_t)ts.tv_nsec);
+    
+    return ts.tv_sec * 1000000000LL + ts.tv_nsec;
 }
 
 std::string gdx_cpp::backends::android::AndroidSystem::canonicalize(std::string& path)

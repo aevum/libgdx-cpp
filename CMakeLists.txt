@@ -69,6 +69,8 @@ endif()
 if (BUILD_BACKEND_ANDROID)
     set(GENERATED_APPLICATION_TYPE "SHARED_LIB")
     SET(ANDROID_NDK "" CACHE PATH "Were the android NDK is located")
+    set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-gc-sections")
+
 #     include(cmake/android.toolchain.cmake)
     list(APPEND ACTIVE_BACKENDS ANDROID)
     set(BACKEND-ANDROID-DEPENDENCIES dl log GLESv1_CM GLESv2)

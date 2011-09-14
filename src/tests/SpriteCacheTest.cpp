@@ -119,25 +119,26 @@ public:
         gl.glClearColor(0.7f, 0.7f, 0.7f, 1);
         gl.glClear(GL10::GL_COLOR_BUFFER_BIT);
         
-        float begin = 0;
-        float end = 0;
-        float draw1 = 0;
+        uint64_t begin = 0;
+        uint64_t end = 0;
+        uint64_t draw1 = 0;
         
-        long start = Gdx::system->nanoTime();
+        uint64_t start = Gdx::system->nanoTime();
         spriteCache->begin();
-        begin = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        begin = (Gdx::system->nanoTime() - start) / 1000LL;
         
         start = Gdx::system->nanoTime();
         spriteCache->draw(normalCacheID);
-        draw1 = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        draw1 = (Gdx::system->nanoTime() - start) / 1000LL;
         
         start = Gdx::system->nanoTime();
         spriteCache->end();
-        end = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        end = (Gdx::system->nanoTime() - start) / 1000LL;
         
         if (Gdx::system->nanoTime() - startTime > 1000000000) {
-            // Gdx.app.log( "SpriteBatch", "fps: " + frames + ", render calls: " + spriteBatch.renderCalls + ", " + begin + ", " + draw1 +
-            // ", " + draw2 + ", " + drawText + ", " + end );
+            Gdx::app->log("SpriteCache",
+                          "fps: %d , begin: %llu us, draw1: %llu us ,end: %llu us,",
+                          frames,  begin, draw1, end);
             frames = 0;
             startTime = Gdx::system->nanoTime();
         }
@@ -150,27 +151,26 @@ public:
         gl.glClearColor(0.7f, 0.7f, 0.7f, 1);
         gl.glClear(GL10::GL_COLOR_BUFFER_BIT);
         
-        float begin = 0;
-        float end = 0;
-        float draw1 = 0;
-        float draw2 = 0;
-        float drawText = 0;
+        uint64_t begin = 0;
+        uint64_t end = 0;
+        uint64_t draw1 = 0;
         
-        long start = Gdx::system->nanoTime();
+        uint64_t start = Gdx::system->nanoTime();
         spriteCache->begin();
-        begin = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        begin = (Gdx::system->nanoTime() - start) / 1000;
         
         start = Gdx::system->nanoTime();
         spriteCache->draw(spriteCacheID);
-        draw1 = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        draw1 = (Gdx::system->nanoTime() - start) / 1000;
         
         start = Gdx::system->nanoTime();
         spriteCache->end();
-        end = (Gdx::system->nanoTime() - start) / 1000000000.0f;
+        end = (Gdx::system->nanoTime() - start) / 1000;
         
         if (Gdx::system->nanoTime() - startTime > 1000000000) {
-            // Gdx.app.log( "SpriteBatch", "fps: " + frames + ", render calls: " + spriteBatch.renderCalls + ", " + begin + ", " + draw1 +
-            // ", " + draw2 + ", " + drawText + ", " + end );
+            Gdx::app->log("SpriteCache",
+                          "fps: %d , begin: %llu us, draw1: %llu us ,end: %llu us,",
+                          frames,  begin, draw1, end);
             frames = 0;
             startTime = Gdx::system->nanoTime();
         }
@@ -178,33 +178,36 @@ public:
     }
 
     bool keyDown(int keycode) {
+        return false;
     }
 
     bool keyTyped(char character) {
-
+        return false;
     }
 
     bool keyUp(int keycode) {
-
+        return false;
     }
 
     bool scrolled(int amount) {
+        return false;
     }
 
     bool touchDown(int x, int y, int pointer, int button) {
-
+        ++renderMethod %= 2;
+        return false;
     }
 
     bool touchDragged(int x, int y, int pointer) {
-        
+        return false;
     }
 
     bool touchMoved(int x, int y) {
-
+        return false;
     }
 
     bool touchUp(int x, int y, int pointer, int button) {
-
+        return false;
     }
 
 protected:
@@ -222,5 +225,5 @@ protected:
 };
 
 void init() {
-    createApplication(new SpriteCacheTest, "SpriteCache Test", 640, 480);
+    createApplication(new SpriteCacheTest, "SpriteCache Test", 800, 480);
 }
