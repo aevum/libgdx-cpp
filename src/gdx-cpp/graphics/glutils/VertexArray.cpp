@@ -55,10 +55,6 @@ void VertexArray::bind () {
     int numAttributes = attributes.size();
 
     byteBuffer.limit(buffer.limit() * 4);
-
-    for (int i = 0; i < buffer.limit(); i++) {
-        Gdx::app->log("VertexArray", "buffer (%d): %f", i, buffer[i]);
-    }
     
     for (int i = 0; i < numAttributes; i++) {
         VertexAttribute& attribute = attributes.get(i);

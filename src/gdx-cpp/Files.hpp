@@ -21,12 +21,14 @@
 
 namespace gdx_cpp {
 
+namespace files {
 class FileHandle;
+}
 
 class Files {
 public:
 public:
-  
+
     enum FileType {
         /** Path relative to the asset directory on Android and to the application's root directory on the desktop. On the desktop,
          * if the file is not found, then the classpath is checked. This enables files to be found when using JWS or applets.
@@ -41,15 +43,15 @@ public:
         Absolute
     };
 
-    virtual FileHandle& getFileHandle (std::string& path, FileType type) = 0;
+    virtual files::FileHandle& getFileHandle (std::string& path, FileType type) = 0;
 
-    virtual FileHandle& classpath (std::string& path) = 0;
+    virtual files::FileHandle& classpath (std::string& path) = 0;
 
-    virtual FileHandle& internal (std::string& path) = 0;
+    virtual files::FileHandle& internal (std::string& path) = 0;
 
-    virtual FileHandle& external (std::string& path) = 0;
+    virtual files::FileHandle& external (std::string& path) = 0;
 
-    virtual FileHandle& absolute (std::string& path) = 0;
+    virtual files::FileHandle& absolute (std::string& path) = 0;
 
     virtual std::string& getExternalStoragePath () = 0;
 
