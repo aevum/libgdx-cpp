@@ -11,6 +11,7 @@
 #include <gdx-cpp/implementation/System.hpp>
 #include <gdx-cpp/Graphics.hpp>
 #include <iostream>
+#include "gdx-cpp/Input.hpp"
 
 using namespace gdx_cpp;
 using namespace gdx_cpp::graphics;
@@ -91,6 +92,7 @@ public:
 
         // call abstract method to populate the world
         createWorld(*world);
+        gdx_cpp::Gdx::input->setInputProcessor(this);
 
         batch = new SpriteBatch();
 //         font = new BitmapFont();

@@ -5,8 +5,6 @@
 #include "Box2D/Box2D.h"
 #include "gdx-cpp/math/MathUtils.hpp"
 #include <cmath>
-#include "gdx-cpp/Input.hpp"
-#include "gdx-cpp/InputProcessor.hpp"
 
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
@@ -130,7 +128,6 @@ public:
 
             delete shape;
         }
-        gdx_cpp::Gdx::input->setInputProcessor(this);
     }
 
 
