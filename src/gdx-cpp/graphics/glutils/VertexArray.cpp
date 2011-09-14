@@ -63,7 +63,7 @@ void VertexArray::bind () {
         case VertexAttributes::Usage::Position:
             byteBuffer.position(attribute.offset);
             gl.glEnableClientState(GL11::GL_VERTEX_ARRAY);
-            gl.glVertexPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, ((float*) buffer) + attribute.offset);
+            gl.glVertexPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, (unsigned char*) byteBuffer + attribute.offset);
             break;
 
         case VertexAttributes::Usage::Color:
@@ -73,20 +73,20 @@ void VertexArray::bind () {
             if (attribute.usage == VertexAttributes::Usage::ColorPacked) colorType = GL11::GL_UNSIGNED_BYTE;
             byteBuffer.position(attribute.offset);
             gl.glEnableClientState(GL10::GL_COLOR_ARRAY);
-            gl.glColorPointer(attribute.numComponents, colorType, attributes.vertexSize, ((float*) buffer) + attribute.offset);
+            gl.glColorPointer(attribute.numComponents, colorType, attributes.vertexSize, (unsigned char*) byteBuffer + attribute.offset);
             break;
         }
         case VertexAttributes::Usage::Normal:
             byteBuffer.position(attribute.offset);
             gl.glEnableClientState(GL10::GL_NORMAL_ARRAY);
-            gl.glNormalPointer(GL10::GL_FLOAT, attributes.vertexSize, ((float*) buffer) + attribute.offset);
+            gl.glNormalPointer(GL10::GL_FLOAT, attributes.vertexSize, (unsigned char*) byteBuffer + attribute.offset);
             break;
 
         case VertexAttributes::Usage::TextureCoordinates:
             gl.glClientActiveTexture(GL10::GL_TEXTURE0 + textureUnit);
             gl.glEnableClientState(GL10::GL_TEXTURE_COORD_ARRAY);
             byteBuffer.position(attribute.offset);
-            gl.glTexCoordPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, ((float*) buffer) + attribute.offset);
+            gl.glTexCoordPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, (unsigned char*) byteBuffer + attribute.offset);
             textureUnit++;
             break;
 
