@@ -15,6 +15,11 @@ public class InputHandler implements  OnKeyListener, OnTouchListener, SensorEven
 
 	public void setup(NativeSurfaceView view) {
 		view.setOnKeyListener(this);
+		view.setOnTouchListener(this);
+		view.setFocusable(true);
+		view.setFocusableInTouchMode(true);
+		view.requestFocus();
+		view.requestFocusFromTouch();		
 	}
 
 	@Override

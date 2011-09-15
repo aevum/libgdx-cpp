@@ -121,7 +121,7 @@ uint64_t gdx_cpp::backends::android::AndroidSystem::nanoTime()
     return ts.tv_sec * 1000000000LL + ts.tv_nsec;
 }
 
-std::string gdx_cpp::backends::android::AndroidSystem::canonicalize(std::string& path)
+std::string gdx_cpp::backends::android::AndroidSystem::canonicalize(const std::string& path)
 {
 
 }
@@ -181,7 +181,7 @@ bool gdx_cpp::backends::android::AndroidSystem::isAbsolute(const gdx_cpp::files:
 
 }
 
-void gdx_cpp::backends::android::AndroidSystem::list(const gdx_cpp::files::File& f, const std::vector< std::string > paths)
+bool gdx_cpp::backends::android::AndroidSystem::list(const gdx_cpp::files::File& f, std::vector< std::string >& paths)
 {
 
 }
@@ -196,7 +196,7 @@ int gdx_cpp::backends::android::AndroidSystem::prefixLength(const std::string& p
 
 }
 
-bool gdx_cpp::backends::android::AndroidSystem::rename(gdx_cpp::files::File& f1, const gdx_cpp::files::File& f2)
+bool gdx_cpp::backends::android::AndroidSystem::renameFile(gdx_cpp::files::File& f1, const gdx_cpp::files::File& f2)
 {
 
 }
