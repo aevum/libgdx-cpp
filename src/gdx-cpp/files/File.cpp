@@ -7,7 +7,7 @@
 
 using namespace gdx_cpp::files;
 
-int File::getPrefixLength()
+int File::getPrefixLength() const
 {
     return prefixLength;
 }
@@ -112,7 +112,7 @@ std::string File::getName() const
     return path.substr(index + 1);
 }
 
-std::string File::getParent()
+std::string File::getParent() const
 {
     int index = path.rfind(separatorChar);
     if(index == path.npos) return "";   //O RETORNO EH GAMBS
@@ -123,41 +123,41 @@ std::string File::getParent()
     return path.substr(0, index);
 }
 
-File File::getParentFile()
+File File::getParentFile() const
 {
     std::string p = this->getParent();
     if(p == "") return File();            //GAMBS
     return File(p, this->prefixLength);
 }
 
-const std::string &File::getPath()
+const std::string &File::getPath() const
 {
     return path;
 }
 
-bool File::isAbsolute()
+bool File::isAbsolute() const
 {
     return gdx_cpp::Gdx::system->isAbsolute(*this);
 }
 
-std::string File::getAbsolutePath()
+std::string File::getAbsolutePath() const
 {
     return gdx_cpp::Gdx::system->resolve(*this);
 }
 
-File File::getAbsoluteFile()
+File File::getAbsoluteFile() const
 {
     std::string absPath = getAbsolutePath();
     return File(absPath, gdx_cpp::Gdx::system->prefixLength(absPath));
 }
 
-std::string File::getCanonicalPath() //throws IOException
+std::string File::getCanonicalPath() const //throws IOException convertido pra Runtime-Error
 {
     std::string p = gdx_cpp::Gdx::system->resolve(*this);
     return gdx_cpp::Gdx::system->canonicalize(p);
 }
 
-File File::getCanonicalFile() //throws IOException
+File File::getCanonicalFile() const //throws IOException
 {
     std::string canonPath = getCanonicalPath();
     int prefix = gdx_cpp::Gdx::system->prefixLength(canonPath);
@@ -168,13 +168,13 @@ File File::getCanonicalFile() //throws IOException
 //bool canRead();
 //bool canWrite();
 
-bool File::exists()
+bool File::exists() const
 {
     gdx_cpp::Gdx::system->checkRead(path);
-    return ((gdx_cpp::Gdx::system->getBooleanAttributes(*this) & gdx_cpp::Gdx::system->BA_DIRECTORY) != 0);
+    return ((gdx_cpp::Gdx::system->getBooleanAttributes(*this) & gdx_cpp::Gdx::system->BA_EXISTS) != 0);
 }
 
-bool File::isDirectory()
+bool File::isDirectory() const
 {
     gdx_cpp::Gdx::system->checkRead(path);
     return ((gdx_cpp::Gdx::system->getBooleanAttributes(*this) & gdx_cpp::Gdx::system->BA_DIRECTORY) != 0);
@@ -182,7 +182,7 @@ bool File::isDirectory()
 
 //bool gotParent();
 
-bool File::isFile()
+bool File::isFile() const
 {
     gdx_cpp::Gdx::system->checkRead(path);
     return ((gdx_cpp::Gdx::system->getBooleanAttributes(*this) & gdx_cpp::Gdx::system->BA_REGULAR) != 0);
@@ -191,7 +191,7 @@ bool File::isFile()
 //bool isHidden();
 //int64_t lastModified();
 
-int64_t File::length ()
+int64_t File::length () const
 {
     gdx_cpp::Gdx::system->checkRead(path);
     return gdx_cpp::Gdx::system->getLength(*this);
@@ -254,15 +254,21 @@ bool File::mkdirs()
         return false;
     }
     File parent = canonFile.getParentFile();
-    return (parent.getPath() != "" && (parent.mkdirs() || parent.exists()) && canonFile.mkdir()); //GAMBS NAO SABIA O QUE FAZER
+    return (parent.getPath() != "" && (parent.mkdirs() || parent.exists()) && canonFile.mkdir());
 
 }
 
-bool File::renameTo(const File &dest)
+bool File::renameTo(const File &dest)    //realizei mudanca das variaveis internas do file senao ficaria inconsistente
 {
     gdx_cpp::Gdx::system->checkWrite(path);
     gdx_cpp::Gdx::system->checkWrite(dest.path);
-    return gdx_cpp::Gdx::system->rename(*this, dest);
+    if(gdx_cpp::Gdx::system->renameFile(*this, dest))
+    {
+        this->path = dest.getPath();
+        this->prefixLength = dest.prefixLength;
+        return true;
+    }
+    return false;
 }
 
 //bool setLastModified(int64_t &time);

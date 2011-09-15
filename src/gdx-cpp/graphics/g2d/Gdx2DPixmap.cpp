@@ -28,6 +28,8 @@
 #include <string.h>
 #include <stdexcept>
 #include <sstream>
+#include <iostream>
+#include <cstdio>
 
 using namespace gdx_cpp::graphics::g2d;
 using namespace gdx_cpp;
@@ -35,8 +37,11 @@ using namespace gdx_cpp;
 //these were the private native Jni-wrapped methods
 
 gdx2d_pixmap* load (unsigned char* buffer, int offset, int len, int requestedFormat) {
+    
+    std::cout << "INICIO DO gdx2d_pixmap.load " << std::endl;
     unsigned char* p_buffer = buffer + offset;
     gdx2d_pixmap* pixmap = gdx2d_load(p_buffer, len, requestedFormat);
+    std::cout << "FIM DO gdx2d_pixmap.load " << std::endl;
     return pixmap;
 }
 
@@ -105,7 +110,9 @@ Gdx2DPixmap::Gdx2DPixmap (const Gdx2DPixmap& other)
 Gdx2DPixmap::Gdx2DPixmap (unsigned char* encodedData, int offset, int len, int requestedFormat)
         : pixData(0)
 {
+    std::cout << "TO NO INICIO DO CONSTRUTOR Gdx2DPixmap" << std::endl;
     this->pixData = load(encodedData, offset, len, requestedFormat);
+    std::cout << "TO NO Gdx2DPixmap E A TRETA NAO VINHA ATE AKI" << std::endl;
     this->width = pixData->width;
     this->height = pixData->height;
     this->format = pixData->format;

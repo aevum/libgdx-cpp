@@ -12,7 +12,7 @@ class File
 {
 
 public:
-    int getPrefixLength();
+    int getPrefixLength() const;
 
     static char separatorChar;
     static std::string separator;
@@ -28,25 +28,25 @@ public:
     //virtual File& operator=(const File& other);
     
     std::string getName() const;
-    std::string getParent();
-    File getParentFile();
-    const std::string &getPath();
-    bool isAbsolute();
-    std::string getAbsolutePath();
-    File getAbsoluteFile();
-    std::string getCanonicalPath(); //throws IOException
-    File getCanonicalFile(); //throws IOException
+    std::string getParent() const;
+    File getParentFile() const;
+    const std::string &getPath() const;
+    bool isAbsolute() const;
+    std::string getAbsolutePath() const;
+    File getAbsoluteFile() const;
+    std::string getCanonicalPath() const; //throws IOException
+    File getCanonicalFile() const; //throws IOException
     //public URL(); throw MalformedURLException
     //URI toURI()
     //bool canRead();
     //bool canWrite();
-    bool exists();
-    bool isDirectory();
+    bool exists() const;
+    bool isDirectory() const;
     //bool gotParent();
-    bool isFile();
+    bool isFile() const; 
     //bool isHidden();
     //int64_t lastModified();
-    int64_t length ();
+    int64_t length () const;
     //bool createNewFile();  //throw IOException()
     bool deleteFile();
     //void deleteOnExit();

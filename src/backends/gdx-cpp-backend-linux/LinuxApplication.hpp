@@ -26,6 +26,7 @@
 #include <gdx-cpp/implementation/Mutex.hpp>
 #include <gdx-cpp/utils/Synchronized.hpp>
 #include "LinuxInput.hpp"
+#include "LinuxFiles.hpp"
 
 namespace gdx_cpp {
 
@@ -63,6 +64,7 @@ protected:
     ApplicationListener* listener;
     LinuxGraphics* graphics;
     LinuxInput* input;
+    LinuxFiles* files;
     
     std::list< Runnable::ptr > runnables;
 

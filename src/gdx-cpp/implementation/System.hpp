@@ -53,42 +53,15 @@ public:
     virtual std::string getDefaultParent() = 0;
     virtual bool isAbsolute(const gdx_cpp::files::File &f) = 0;
     virtual std::string resolve(const gdx_cpp::files::File &f) = 0;
-    virtual std::string canonicalize(std::string &path) = 0; //throws IOException;
+    virtual std::string canonicalize(const std::string &path) = 0; //throws IOException;
     virtual void checkRead(const std::string &path) = 0;
-
-    /* CHECK READ DEVE FAZER:
-     *  SecurityManager security = System.getSecurityManager();
-        if (security != null) {
-            security.checkRead(path);
-        }
-     */
-
-    virtual void list(const gdx_cpp::files::File &f, const std::vector<std::string> paths) = 0;
+    virtual bool list(const gdx_cpp::files::File &f, std::vector<std::string> &paths) = 0;
     virtual int64_t getLength(gdx_cpp::files::File f) = 0;
-
     virtual void checkDelete(const std::string &path) = 0;
-
-     /* CHECK DELETE DEVE FAZER:
-      SecurityManager security = System.getSecurityManager();
-        if (security != null) {
-            security.checkDelete(path);
-        }
-        */
-
     virtual bool deleteFile(gdx_cpp::files::File &f) = 0;
-
-    virtual void checkWrite(const std::string &path) = 0;
-
-    /* CHECK WRITE DEVE FAZER:
-     *  SecurityManager security = System.getSecurityManager();
-        if (security != null) {
-            security.checkWrite(path);
-        }
-        */
-
-    
+    virtual void checkWrite(const std::string &path) = 0;   
     virtual bool createDirectory(const gdx_cpp::files::File &f) = 0;
-    virtual bool rename(gdx_cpp::files::File &f1, const gdx_cpp::files::File &f2) = 0;
+    virtual bool renameFile(gdx_cpp::files::File &f1, const gdx_cpp::files::File &f2) = 0;
     virtual int64_t nanoTime() = 0;
     virtual MutexFactory* getMutexFactory() = 0;
     virtual ThreadFactory* getThreadFactory() = 0;

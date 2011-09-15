@@ -54,7 +54,7 @@ public:
     LinuxMutexFactory* getMutexFactory() {
         return &mutexFactory;
     }
-    std::string canonicalize(std::string& path);
+    std::string canonicalize(const std::string& path);
     void checkDelete(const std::string& path);
     void checkRead(const std::string& path);
     bool createDirectory(const gdx_cpp::files::File& f);
@@ -65,10 +65,11 @@ public:
     char getPathSeparator();
     char getSeparator();
     bool isAbsolute(const gdx_cpp::files::File& f);
-    void list(const gdx_cpp::files::File& f, const std::vector< std::string > paths);
-    std::string normalize(const std::string& path);
+    bool list(const gdx_cpp::files::File& f, std::vector< std::string > &paths);
+    std::string normalize(const std::string &pathname, const int &len, const int &off);
+    std::string normalize(const std::string &path);
     int prefixLength(const std::string& path);
-    bool rename(files::File& f1, const gdx_cpp::files::File& f2);
+    bool renameFile(files::File& f1, const gdx_cpp::files::File& f2);
     std::string resolve(const gdx_cpp::files::File& f);
     std::string resolve(const std::string& parent, const std::string& child);
     void checkWrite(const std::string& path);
