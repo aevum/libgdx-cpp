@@ -19,6 +19,7 @@
 */
 
 #include "FileHandle.hpp"
+#include <iostream>
 #include <stdexcept>
 
 using namespace gdx_cpp::files;
@@ -26,30 +27,30 @@ using namespace gdx_cpp::files;
 FileHandle::FileHandle (){}
 
 FileHandle::FileHandle (const std::string &fileName)
+  :   file(File(fileName)),
+      type(gdx_cpp::Files::Absolute)
 {
-    this->file = File(fileName);
-    type = gdx_cpp::Files::Absolute;
 }
 
 FileHandle::FileHandle (File const& file)
+  : file(file),
+    type(gdx_cpp::Files::Absolute)
 {
-    this->file = file;
-    this->type = gdx_cpp::Files::Absolute;
 }
 
 FileHandle::FileHandle (const std::string &fileName, gdx_cpp::Files::FileType type)
+  : type(type),
+    file(File(fileName))
 {
-    this->type = type;
-    this->file = File(fileName);
 }
 
 FileHandle::FileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type)
+  : file(file),
+    type(type)
 {
-    this->file = file;
-    this->type = type;
 }
 
-const std::string& FileHandle::path () {
+const std::string& FileHandle::path () const {
     return file.getPath();
 }
 
@@ -57,14 +58,14 @@ std::string FileHandle::name () const {
     return file.getName();
 }
 
-std::string FileHandle::extension () {
+std::string FileHandle::extension () const {
     std::string name = file.getName();
     int dotIndex = name.rfind('.');
     if (dotIndex == std::string::npos) return "";
     return name.substr(dotIndex + 1);
 }
 
-std::string FileHandle::nameWithoutExtension () {
+std::string FileHandle::nameWithoutExtension () const {
     std::string name = file.getName();
     int dotIndex = name.rfind('.');
     if (dotIndex == std::string::npos) return name;
@@ -92,24 +93,16 @@ FileHandle::ifstream_ptr FileHandle::read ()
     ifstream_ptr input;
     
     if (type == gdx_cpp::Files::Internal && !file.exists()) {
-        //Original InputStream input = FileHandle.class.getResourceAsStream("/" + file.getPath().replace('\\', '/'));
-        //FAZENDO COM ISTREAM
-        //filebuf fb;
-        //fb.open ("/" + file.getPath().replace('\\', '/'), std::ios::in);
-        //if(fb.is_open())
-        //{
-            //input = istream_ptr (new std::istream(&fb);
-        //}
         int found;
         std::string s = "/" + file.getPath();
         while((found = s.find("//")) != s.npos) s.replace(found, 2, "/");
-        input = ifstream_ptr (new std::ifstream( s.c_str(), std::ios::in));
+        input = ifstream_ptr (new std::ifstream( s.c_str(), std::ios::in | std::ios::binary));
         if(!input->is_open()) throw std::runtime_error("File not found: " + file.getPath() + " (" + typetoString() + ")");
         
         return input;
     }
 
-    input = ifstream_ptr (new std::ifstream(file.getPath().c_str(), std::ios::in));
+    input = ifstream_ptr (new std::ifstream(file.getPath().c_str(), std::ios::in | std::ios::binary));
 
     if(!input->is_open())
     {
@@ -155,7 +148,7 @@ std::string FileHandle::readString (const std::string& charset) {
     return output;
 }
 
-int FileHandle::readBytes (char_ptr c) {
+int FileHandle::readBytes (char_ptr &c) {
     char p;
     int Length = (int) length();
     if (Length == 0) Length = 512;
@@ -171,13 +164,16 @@ int FileHandle::readBytes (char_ptr c) {
             input->read( c.get() + position, Length - position);
             count = input->gcount();
             position += count;
-            if(input->eof() || !count || input->peek() == EOF) break;
+            if(input->eof() || !count || input->peek() == EOF)
+            {
+              break;
+            }
 
             if (position == bufferlength) {
                 // Grow buffer.
             char_ptr newBuffer = char_ptr (new char[bufferlength * 2]);
             for(int i = 0; i< bufferlength; i++) newBuffer.get()[i] = c.get()[i];
-            c = newBuffer;
+            c.swap(newBuffer);
             bufferlength *= 2;
             }
         }
@@ -187,24 +183,13 @@ int FileHandle::readBytes (char_ptr c) {
         if(input->is_open()) input->close();
         throw std::runtime_error("Error reading file: " + this->toString());
     }
-    /*
-    } catch (IOException ex) { //TODO EXCEPTIONS
-        throw new GdxRuntimeException("Error reading file: " + this, ex);
-    }
-    finally {
-        try {
-            if (input != null) input.close();
-        } catch (IOException ignored) {
-        }
-    }
-    */
     if(input->is_open()) input->close();
     if(position < bufferlength)
     {
         // Shrink buffer.
         char_ptr newBuffer = char_ptr (new char[position]);
         for(int i = 0; i<position; i++) newBuffer.get()[i] = c.get()[i];
-        c = newBuffer;
+        c.swap(newBuffer);
     }
     return position;
 }
@@ -325,7 +310,7 @@ void FileHandle::moveTo (FileHandle& dest) {
     deleteFile();
 }
 
-int64_t FileHandle::length () {  
+int64_t FileHandle::length () {
     if ((type == gdx_cpp::Files::Internal && !file.exists())) {
       int64_t length = 0;
       ifstream_ptr input = read();

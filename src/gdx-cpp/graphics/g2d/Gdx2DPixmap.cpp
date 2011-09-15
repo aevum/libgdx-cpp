@@ -28,6 +28,8 @@
 #include <string.h>
 #include <stdexcept>
 #include <sstream>
+#include <iostream>
+#include <cstdio>
 
 using namespace gdx_cpp::graphics::g2d;
 using namespace gdx_cpp;
@@ -35,6 +37,7 @@ using namespace gdx_cpp;
 //these were the private native Jni-wrapped methods
 
 gdx2d_pixmap* load (unsigned char* buffer, int offset, int len, int requestedFormat) {
+    
     unsigned char* p_buffer = buffer + offset;
     gdx2d_pixmap* pixmap = gdx2d_load(p_buffer, len, requestedFormat);
     return pixmap;

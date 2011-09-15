@@ -31,8 +31,6 @@ namespace files {
 
 class FileHandleStream : public gdx_cpp::files::FileHandle{
 public:
-    typedef ref_ptr_maker< std::ifstream >::type ifstream_ptr;
-    typedef ref_ptr_maker< std::ofstream >::type ofstream_ptr;
     FileHandleStream(std::string path);
     bool isDirectory ();
     int64_t length ();

@@ -2,6 +2,7 @@
 
 #include <gdx-cpp/Application.hpp>
 #include <gdx-cpp/Graphics.hpp>
+#include <gdx-cpp/Files.hpp>
 #include <gdx-cpp/implementation/System.hpp>
 #include <gdx-cpp/ApplicationListener.hpp>
 #include <gdx-cpp/graphics/Mesh.hpp>
@@ -34,14 +35,24 @@ public:
     }
 
     void create() {
+        
         spriteBatch = new SpriteBatch(1000);
+        std::string path = "data/badlogicsmall.jpg";
 
-        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(32, 32, Pixmap::Format::RGBA8888));
-        pixmap->setColor(1 ,1 ,0 ,0.5f);
+        gdx_cpp::Files::fhandle_ptr file = gdx_cpp::Gdx::files->internal(path);
+        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(*file));
+
+        texture = Texture::ptr(new Texture(32, 32, gdx_cpp::graphics::Pixmap::Format::RGB565));
+        texture->setFilter(Texture::TextureFilter::Linear, Texture::TextureFilter::Linear);
+        texture->draw(*pixmap, 0, 0);
+        pixmap->dispose();
+        
+        pixmap = Pixmap::ptr(new Pixmap(2, 2, Pixmap::Format::RGBA8888));
+        pixmap->setColor(1,1,1,1);
         pixmap->fill();
 
-        texture = Texture::ptr(new Texture(pixmap, false));
-        texture->setFilter(Texture::TextureFilter::Linear, Texture::TextureFilter::Linear);
+        texture2 = Texture::ptr(new Texture(pixmap, false));
+        texture2->setFilter(Texture::TextureFilter::Linear, Texture::TextureFilter::Linear);
         
         for (int i = 0; i < SPRITES * 6; i += 6) {
             sprites[i] = (int)(math::utils::random() * (Gdx::graphics->getWidth() - 32));
@@ -62,10 +73,10 @@ public:
             int x = (int)(math::utils::random() * (Gdx::graphics->getWidth() - 32));
             int y = (int)(math::utils::random() * (Gdx::graphics->getHeight() - 32));
 
-//             if (i >= SPRITES)
-//                 sprites3[i] = new Sprite(texture2, 32, 32);
-//             else
-            sprites3[i] = new Sprite(texture, 32, 32);
+            if (i >= SPRITES)
+                sprites3[i] = new Sprite(texture2, 32, 32);
+            else
+                sprites3[i] = new Sprite(texture, 32, 32);
             sprites3[i]->setPosition(x, y);
             sprites3[i]->setOrigin(16, 16);
         }
@@ -78,7 +89,7 @@ public:
     }
 
     void render() {
-         renderSprites();
+         renderNormal();
     }
 
     void resize(int width, int height) {
@@ -210,7 +221,7 @@ public:
     }
 
 protected:
-    Texture::ptr texture;
+    Texture::ptr texture, texture2;
     SpriteBatch* spriteBatch;
     Sprite* sprites3[SPRITES *2];
     float sprites[SPRITES * 6];

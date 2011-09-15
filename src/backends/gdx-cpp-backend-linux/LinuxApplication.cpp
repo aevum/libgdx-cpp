@@ -44,12 +44,13 @@ gdx_cpp::backends::nix::LinuxApplication::LinuxApplication(gdx_cpp::ApplicationL
 void LinuxApplication::initialize() {
         graphics = new LinuxGraphics();
         input = new LinuxInput();
+        files = new LinuxFiles();
         
         graphics->initialize();
         graphics->setTitle(this->title);
         graphics->setDisplayMode(width, height, false);
-
-        Gdx::initialize(this, graphics, NULL, input, NULL);
+        
+        Gdx::initialize(this, graphics, NULL, NULL, files);
         
         this->run();
 }
@@ -122,7 +123,7 @@ Audio* gdx_cpp::backends::nix::LinuxApplication::getAudio()
 
 Files* gdx_cpp::backends::nix::LinuxApplication::getFiles()
 {
-
+    return files;
 }
 
 Graphics* gdx_cpp::backends::nix::LinuxApplication::getGraphics()
