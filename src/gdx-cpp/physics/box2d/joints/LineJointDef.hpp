@@ -20,6 +20,7 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_JOINTS_LINEJOINTDEF_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_JOINTS_LINEJOINTDEF_HPP_
+#include "gdx-cpp/physics/box2d/JointDef.hpp"
 
 namespace gdx_cpp {
 namespace physics {
@@ -28,7 +29,18 @@ namespace joints {
 
 class LineJointDef: public gdx_cpp::physics::box2d::JointDef {
 public:
-    void initialize (const gdx_cpp::physics::box2d::Body& bodyA,const gdx_cpp::physics::box2d::Body& bodyB,const gdx_cpp::math::Vector2& anchor,const gdx_cpp::math::Vector2& axis);
+    LineJointDef();
+    void initialize (gdx_cpp::physics::box2d::Body::ptr bodyA, gdx_cpp::physics::box2d::Body::ptr bodyB, gdx_cpp::math::Vector2& anchor, gdx_cpp::math::Vector2& axis);
+
+    gdx_cpp::math::Vector2 localAnchorA;
+    gdx_cpp::math::Vector2 localAnchorB;
+    gdx_cpp::math::Vector2 localAxisA;
+    bool enableLimit;
+    float lowerTranslation;
+    float upperTranslation;
+    bool enableMotor;
+    float maxMotorForce;
+    float motorSpeed;
 
 protected:
 

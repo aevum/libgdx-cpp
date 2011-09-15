@@ -22,7 +22,8 @@
 
 using namespace gdx_cpp::physics::box2d;
 
-int JointDef::getValue () {
-    return value;
-}
 
+JointDef::JointDef() :type(Unknown), collideConnected(false)
+{
+  
+}

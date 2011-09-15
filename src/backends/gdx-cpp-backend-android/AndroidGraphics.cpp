@@ -26,6 +26,10 @@
 #include <gdx-cpp/Graphics.hpp>
 #include <gdx-cpp/implementation/System.hpp>
 #include <iostream>
+#include <stdlib.h>
+
+#include <cassert>
+#include <gdx-cpp/Application.hpp>
 
 using namespace gdx_cpp::backends::android;
 using namespace gdx_cpp::graphics;
@@ -130,6 +134,13 @@ void gdx_cpp::backends::android::AndroidGraphics::updateTime()
 {
     uint64_t time = Gdx::system->nanoTime();
 
+    //This is to fix a nasty bug on HTC devices. Somehow sometimes the nanotime returns
+    //with a very big value, this making the delta time go kucko :(
+    if (time - lastTime > 10000000000) {
+        lastTime = Gdx::system->nanoTime();        
+        return;
+    }
+    
     deltaTime = (time - lastTime) / 1000000000.0f;
     lastTime = time;
     
@@ -162,7 +173,7 @@ bool gdx_cpp::backends::android::AndroidGraphics::isGL20Available()
 }
 
 bool gdx_cpp::backends::android::AndroidGraphics::setDisplayMode(gdx_cpp::Graphics::DisplayMode displayMode)
-{
+{    
     if (!supportsDisplayModeChange())
         return false;
 }
@@ -194,13 +205,42 @@ bool gdx_cpp::backends::android::AndroidGraphics::supportsExtension(const std::s
 
 void gdx_cpp::backends::android::AndroidGraphics::initialize()
 {
+    const GLubyte* version = glGetString(GL_VERSION);
+    int major = atoi((const char*) version);
+    int minor = atoi((const char*) &version[2]);
+    
+    if (false && major >= 2) {
+        
+        
+    } else {
+        if (major == 1 && minor < 5) {
+            glCommon = gl10 = new AndroidGL10;
+        } else {
+            glCommon = gl10 = gl11 = new AndroidGL11;
+        }
+    }
+
+    assert(glCommon);    
 }
 
 bool gdx_cpp::backends::android::AndroidGraphics::setDisplayMode(int width, int height, bool fullscreen)
 {
+    this->width = width;
+    this->height = height;
+
+    this->lastTime = Gdx::system->nanoTime();
+    glCommon->glViewport(0, 0, width, height);
 }
 
 void gdx_cpp::backends::android::AndroidGraphics::update()
 {
+}
+
+void backends::android::AndroidGraphics::resize(int width, int height)
+{
+    this->width = width;
+    this->height = height;
+    this->lastTime = Gdx::system->nanoTime();
+    glCommon->glViewport(0, 0, width, height);
 }
 

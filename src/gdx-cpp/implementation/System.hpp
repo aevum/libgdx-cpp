@@ -22,6 +22,7 @@
 #include <gdx-cpp/files/File.hpp>
 #include "MutexFactory.hpp"
 #include "ThreadFactory.hpp"
+#include <stdint.h>
 
 namespace gdx_cpp {
 
@@ -62,7 +63,7 @@ public:
     virtual void checkWrite(const std::string &path) = 0;   
     virtual bool createDirectory(const gdx_cpp::files::File &f) = 0;
     virtual bool renameFile(gdx_cpp::files::File &f1, const gdx_cpp::files::File &f2) = 0;
-    virtual int64_t nanoTime() = 0;
+    virtual uint64_t nanoTime() = 0;
     virtual MutexFactory* getMutexFactory() = 0;
     virtual ThreadFactory* getThreadFactory() = 0;
 };

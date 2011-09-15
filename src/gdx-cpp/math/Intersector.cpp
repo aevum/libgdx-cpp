@@ -296,7 +296,7 @@ bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ra
 
     if ((triangles.size() / 3) % 3 != 0)
     {
-      gdx_cpp::Gdx::app->error("GDX-CPP Intersector.cpp") << "triangle list size is not a multiple of 3";
+      gdx_cpp::Gdx::app->error("GDX-CPP Intersector.cpp","triangle list size is not a multiple of 3");
       assert(false);
     }
 
@@ -329,7 +329,7 @@ bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ra
 
     if ((indices.size() % 3) != 0)
     {
-      gdx_cpp::Gdx::app->error("GDX-CPP Intersector.cpp") << "triangle list size is not a multiple of 3";
+      gdx_cpp::Gdx::app->error("GDX-CPP Intersector.cpp", "triangle list size is not a multiple of 3");
       assert(false);
     } 
 
@@ -365,7 +365,7 @@ bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ra
 
     if (triangles.size() % 3 != 0)
     {
-      gdx_cpp::Gdx::app->error("GDX-CPP Intersector.cpp") << "triangle list size is not a multiple of 3";
+      gdx_cpp::Gdx::app->error("GDX-CPP Intersector.cpp", "triangle list size is not a multiple of 3");
       assert(false);
     } 
 

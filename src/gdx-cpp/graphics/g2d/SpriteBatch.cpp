@@ -71,7 +71,8 @@ gdx_cpp::graphics::g2d::SpriteBatch::SpriteBatch(int size) :
     
     projectionMatrix.setToOrtho2D(0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
     
-    vertices.reserve(size * Sprite::SPRITE_SIZE);
+    vertices = new float[size * Sprite::SPRITE_SIZE];
+    verticesSize  = size * Sprite::SPRITE_SIZE;
     
     int len = size * 6;
     std::vector<short> indices(len);
@@ -310,34 +311,29 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
         v2 = tmp;
     }
 
-    utils::float_buffer& buffer = mesh->getVerticesBuffer();
-    buffer.limit(buffer.position() + 20);
-    
-    buffer.put(x1);
-    buffer.put(y1);
-    buffer.put(color);
-    buffer.put(u);
-    buffer.put(v);
+    vertices[idx++] = x1;
+    vertices[idx++] = y1;
+    vertices[idx++] = color;
+    vertices[idx++] = u;
+    vertices[idx++] = v;
 
-    buffer.put(x2);
-    buffer.put(y2);
-    buffer.put(color);
-    buffer.put(u);
-    buffer.put(v2);
+    vertices[idx++] = x2;
+    vertices[idx++] = y2;
+    vertices[idx++] = color;
+    vertices[idx++] = u;
+    vertices[idx++] = v2;
 
-    buffer.put(x3);
-    buffer.put(y3);
-    buffer.put(color);
-    buffer.put(u2);
-    buffer.put(v2);
+    vertices[idx++] = x3;
+    vertices[idx++] = y3;
+    vertices[idx++] = color;
+    vertices[idx++] = u2;
+    vertices[idx++] = v2;
 
-    buffer.put(x4);
-    buffer.put(y4);
-    buffer.put(color);
-    buffer.put(u2);
-    buffer.put(v);
-
-    idx += 20;
+    vertices[idx++] = x4;
+    vertices[idx++] = y4;
+    vertices[idx++] = color;
+    vertices[idx++] = u2;
+    vertices[idx++] = v;
 }
 
 void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float y,float width,float height,int srcX,int srcY,int srcWidth,int srcHeight,bool flipX,bool flipY) {
@@ -349,7 +345,7 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
         lastTexture = const_cast<Texture*>(&texture);
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
-    } else if (idx == vertices.capacity()) renderMesh();
+    } else if (idx == verticesSize) renderMesh();
 
     float u = srcX * invTexWidth;
     float v = (srcY + srcHeight) * invTexHeight;
@@ -404,7 +400,7 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
         lastTexture = const_cast<Texture*>(&texture);
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
-    } else if (idx == vertices.capacity()) renderMesh();
+    } else if (idx == verticesSize) renderMesh();
 
     float u = srcX * invTexWidth;
     float v = (srcY + srcHeight) * invTexHeight;
@@ -447,7 +443,7 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
         lastTexture = const_cast<Texture*>(&texture);
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
-    } else if (idx == vertices.capacity()) renderMesh();
+    } else if (idx == verticesSize) renderMesh();
 
     float fx2 = x + width;
     float fy2 = y + height;
@@ -486,7 +482,7 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
         lastTexture = const_cast<Texture*>(&texture);
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
-    } else if (idx == vertices.capacity()) renderMesh();
+    } else if (idx == verticesSize) renderMesh();
 
     float fx2 = x + texture.getWidth();
     float fy2 = y + texture.getHeight();
@@ -525,7 +521,7 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
         lastTexture = const_cast<Texture*>(&texture);
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
-    } else if (idx == vertices.capacity()) //
+    } else if (idx == verticesSize) //
         renderMesh();
 
     float fx2 = x + width;
@@ -569,7 +565,7 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,const std::vec
         lastTexture = const_cast<Texture*>(&texture);
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
-    } else if (idx + length >= vertices.capacity()) renderMesh();
+    } else if (idx + length >= verticesSize) renderMesh();
 
 
     memcpy(&vertices[idx], &spriteVertices[offset], sizeof(float) * length);
@@ -590,7 +586,7 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float width,
         lastTexture = texture.get();
         invTexWidth = 1.0f / texture->getWidth();
         invTexHeight = 1.0f / texture->getHeight();
-    } else if (idx == vertices.capacity()) //
+    } else if (idx == verticesSize) //
         renderMesh();
 
     float fx2 = x + width;
@@ -599,6 +595,9 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float width,
     float v = region.v2;
     float u2 = region.u2;
     float v2 = region.v;
+
+    utils::float_buffer& buffer = mesh->getVerticesBuffer();
+    buffer.limit(buffer.position() + 20);
 
     vertices[idx++] = x;
     vertices[idx++] = y;
@@ -635,7 +634,7 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float origin
         lastTexture = texture.get();
         invTexWidth = 1.0f / texture->getWidth();
         invTexHeight = 1.0f / texture->getHeight();
-    } else if (idx == vertices.capacity()) //
+    } else if (idx == verticesSize) //
         renderMesh();
 
     // bottom left and top right corner points relative to origin
@@ -752,7 +751,7 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float origin
         lastTexture = texture.get();
         invTexWidth = 1.0f / texture->getWidth();
         invTexHeight = 1.0f / texture->getHeight();
-    } else if (idx == vertices.capacity()) {
+    } else if (idx == verticesSize) {
         renderMesh();
     }
 
@@ -888,7 +887,8 @@ void SpriteBatch::renderMesh () {
     if (spritesInBatch > maxSpritesInBatch) maxSpritesInBatch = spritesInBatch;
 
     lastTexture->bind();
-//  mesh->setVertices(vertices, 0, idx);
+    
+    mesh->setVertices(vertices, idx);
 
     if (Gdx::graphics->isGL20Available()) {
         if (blendingDisabled) {
@@ -912,7 +912,6 @@ void SpriteBatch::renderMesh () {
             gl10.glBlendFunc(blendSrcFunc, blendDstFunc);
         }
         mesh->render(GL10::GL_TRIANGLES, 0, spritesInBatch * 6);
-        mesh->getVerticesBuffer().position(0);
     }
 
     idx = 0;
@@ -945,7 +944,7 @@ void SpriteBatch::dispose () {
         shader->dispose();
 }
 
-const gdx_cpp::math::Matrix4& SpriteBatch::getProjectionMatrix () {
+math::Matrix4& SpriteBatch::getProjectionMatrix () {
     return projectionMatrix;
 }
 
@@ -1005,7 +1004,8 @@ color(Color::WHITE.toFloatBits())
 
     projectionMatrix.setToOrtho2D(0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
 
-    vertices.reserve(size * Sprite::SPRITE_SIZE);
+    vertices = new float[size * Sprite::SPRITE_SIZE];
+    verticesSize  = size * Sprite::SPRITE_SIZE;
 
     int len = size * 6;
     std::vector<short> indices(len);
@@ -1046,6 +1046,8 @@ SpriteBatch::~SpriteBatch()
     for (int i = 0; i < buffers.size(); ++i) {
         delete buffers[i];
     }
+
+    delete [] vertices;
 }
 
 void SpriteBatch::draw(const Texture& texture, float* const spriteVertices, int size, int offset, int length) {
@@ -1057,9 +1059,10 @@ void SpriteBatch::draw(const Texture& texture, float* const spriteVertices, int 
         lastTexture = const_cast<Texture*>(&texture);
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
-    } else if (idx + length >= vertices.size() ) renderMesh();
-
-    memcpy(&vertices[idx], &spriteVertices[offset], length);
+    } else if (idx + length >= verticesSize ) renderMesh();
+       
+    memcpy(&vertices[idx], &spriteVertices[offset], sizeof(float) * length);
+    
     idx += length;
 }
 

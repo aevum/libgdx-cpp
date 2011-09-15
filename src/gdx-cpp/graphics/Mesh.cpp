@@ -64,11 +64,11 @@ Mesh::Mesh(bool isStatic, int maxVertices, int maxIndices, const std::vector< Ve
 
 
 void Mesh::setVertices (const std::vector<float>& vertices) {
-    this->vertices->setVertices(vertices, 0, vertices.size());
+    this->vertices->setVertices(&vertices[0], 0, vertices.size());
 }
 
 void Mesh::setVertices (const std::vector<float>& vertices, int offset,int count) {
-    this->vertices->setVertices(vertices, offset, count);
+    this->vertices->setVertices(&vertices[0], offset, count);
 }
 
 void Mesh::getVertices (std::vector<float>& vertices) {
@@ -182,7 +182,7 @@ void Mesh::render (int primitiveType,int offset,int count) {
             int oldLimit = buffer.limit();
             buffer.position(offset);
             buffer.limit(offset + count);
-            Gdx::gl10->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, (void *) buffer);
+            Gdx::gl10->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, (void *) ((char*)buffer + offset));
             buffer.position(oldPosition);
             buffer.limit(oldLimit);
         } else
@@ -190,7 +190,7 @@ void Mesh::render (int primitiveType,int offset,int count) {
     } else {
         if (indices->getNumIndices() > 0) {
             int newoffset = offset * 2;
-            Gdx::gl11->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, &newoffset );
+            Gdx::gl11->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, (void *) newoffset );
         }
         else
             Gdx::gl11->glDrawArrays(primitiveType, offset, count);
@@ -378,3 +378,8 @@ Mesh::Mesh(int type, bool isStatic, int maxVertices, int maxIndices, const std::
     }
     addManagedMesh(Gdx::app, this);
 }
+
+void Mesh::setVertices(const float* vertices, int size) {
+    this->vertices->setVertices(vertices, 0, size);
+}
+

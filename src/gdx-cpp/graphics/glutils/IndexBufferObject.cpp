@@ -75,7 +75,7 @@ utils::short_buffer& IndexBufferObject::getBuffer () {
 
 void IndexBufferObject::bind () {
     if (bufferHandle == 0)
-        throw std::runtime_error("buuh");
+        throw std::runtime_error(__FILE__ ": Buffer handler is not initialized?");
 
     if (Gdx::gl11 != NULL) {
         GL11& gl = *Gdx::gl11;
@@ -128,8 +128,7 @@ void IndexBufferObject::dispose () {
 }
 
 IndexBufferObject::IndexBufferObject(bool isStatic, int maxIndices)
-    : byteBuffer(maxIndices * 2)
-    , buffer(byteBuffer.convert<short>())
+    : byteBuffer(maxIndices * 2)   
     , isDirty(true)
     , isBound(false)
     , usage(0)
@@ -139,6 +138,7 @@ IndexBufferObject::IndexBufferObject(bool isStatic, int maxIndices)
 {
     isDirect = true;
 
+    buffer = byteBuffer.convert<short>();
     buffer.flip();
     byteBuffer.flip();
     bufferHandle = createBufferObject();

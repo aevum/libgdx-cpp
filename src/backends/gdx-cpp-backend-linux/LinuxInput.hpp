@@ -101,6 +101,9 @@ public:
 
     void processEvents(SDL_Event& evt);
     void reset();
+
+    int getGdxEventKey(int eventkey);
+    
     
 protected:
     gdx_cpp::InputProcessor* processor;

@@ -22,5 +22,8 @@
 
 using namespace gdx_cpp::physics::box2d;
 
-
+Filter::Filter(): categoryBits(0x0001), maskBits(-1), groupIndex(0)
+{
+  
+}
 

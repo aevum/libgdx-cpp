@@ -23,6 +23,7 @@
 #include <vector>
 #include <sstream>
 #include <string.h>
+#include <cassert>
 
 namespace gdx_cpp {
 
@@ -180,10 +181,18 @@ struct buffer : public buffer_base {
     }
 
     buffer<T>& compact() {
-        memcpy(bf.get(), bf.get() + position(), remaining());
-        position(remaining());
+        int pos = position();
+        int lim = limit();
+        assert (pos <= lim);
+        int rem = (pos <= lim ? lim - pos : 0);
+
+        //rem << 2? wtf?
+        memcpy(bf.get(), bf.get() + position(), rem << 2);
+
+        position(rem);
         limit(capacity());
         discardMark();
+        
         return *this;
     }
 
@@ -235,14 +244,16 @@ struct buffer : public buffer_base {
         return _position < _limit;
     }
 
-    buffer<T>& put(T* src, int size, int offset, int length) {
+    buffer<T>& put(const T* src, int size, int offset, int length) {
         checkBounds(offset, length, size);
         if (length > remaining())
             throw std::runtime_error("buffer overflow");
-        int end = offset + length;
-        for (int i = offset; i < end; i++)
-            this->put(src[i]);
 
+        T* casted_array = (T*) bf.get();
+        memcpy(&casted_array[_position], &src[offset], sizeof(T) * length);
+        
+        _position += length;
+        
         return *this;
     }
 
@@ -258,10 +269,12 @@ struct buffer : public buffer_base {
         checkBounds(offset, length, src.size());
         if (length > remaining())
             throw std::runtime_error("buffer overflow");
-        int end = offset + length;
-        for (int i = offset; i < end; i++)
-            this->put(src[i]);
 
+        T* casted_array = (T*) bf.get();
+        memcpy(&casted_array[_position], &src[offset], sizeof(T) * length);
+        
+        _position += length;
+        
         return *this;
     }
 

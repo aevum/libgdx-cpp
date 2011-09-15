@@ -22,10 +22,15 @@
 
 using namespace gdx_cpp::physics::box2d::joints;
 
-void FrictionJointDef::initialize (const gdx_cpp::physics::box2d::Body& bodyA,const gdx_cpp::physics::box2d::Body& bodyB,const gdx_cpp::math::Vector2& anchor) {
-    this.bodyA = bodyA;
-    this.bodyB = bodyB;
-    localAnchorA.set(bodyA.getLocalPoint(anchor));
-    localAnchorB.set(bodyB.getLocalPoint(anchor));
+FrictionJointDef::FrictionJointDef():maxForce(0), maxTorque(0)
+{
+  
+}
+
+void FrictionJointDef::initialize (Body::ptr bodyA, Body::ptr bodyB, gdx_cpp::math::Vector2& anchor) {
+    this->bodyA = bodyA;
+    this->bodyB = bodyB;
+    localAnchorA.set(bodyA->getLocalPoint(anchor));
+    localAnchorB.set(bodyB->getLocalPoint(anchor));
 }
 

@@ -26,6 +26,6 @@ public:
     }
 };
 
-extern "C" void init() {
+void init() {
     createApplication(new DullListener, "Dull Listener", 640, 480);
 }

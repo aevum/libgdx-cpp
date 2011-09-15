@@ -22,19 +22,23 @@
 
 using namespace gdx_cpp::physics::box2d::joints;
 
-void PulleyJointDef::initialize (const gdx_cpp::physics::box2d::Body& bodyA,const gdx_cpp::physics::box2d::Body& bodyB,const gdx_cpp::math::Vector2& groundAnchorA,const gdx_cpp::math::Vector2& groundAnchorB,const gdx_cpp::math::Vector2& anchorA,const gdx_cpp::math::Vector2& anchorB,float ratio) {
-    this.bodyA = bodyA;
-    this.bodyB = bodyB;
-    this.groundAnchorA.set(groundAnchorA);
-    this.groundAnchorB.set(groundAnchorB);
-    this.localAnchorA.set(bodyA.getLocalPoint(anchorA));
-    this.localAnchorB.set(bodyB.getLocalPoint(anchorB));
+PulleyJointDef::PulleyJointDef(): groundAnchorA(-1, 1), groundAnchorB(1,1), localAnchorA(-1,0), localAnchorB(1,0),
+                                  lengthA(0), maxLengthA(0), lengthB(0), maxLengthB(0), ratio(1)
+{
+  type=JointDef::PulleyJoint;
+}
+void PulleyJointDef::initialize (gdx_cpp::physics::box2d::Body::ptr bodyA,gdx_cpp::physics::box2d::Body::ptr bodyB,const gdx_cpp::math::Vector2& groundAnchorA, gdx_cpp::math::Vector2& groundAnchorB, gdx_cpp::math::Vector2& anchorA, gdx_cpp::math::Vector2& anchorB,float ratio) {
+    this->bodyA = bodyA;
+    this->bodyB = bodyB;
+    this->groundAnchorA.set(groundAnchorA);
+    this->groundAnchorB.set(groundAnchorB);
+    this->localAnchorA.set(bodyA->getLocalPoint(anchorA));
+    this->localAnchorB.set(bodyB->getLocalPoint(anchorB));
     lengthA = anchorA.dst(groundAnchorA);
     lengthB = anchorB.dst(groundAnchorB);
-    this.ratio = ratio;
+    this->ratio = ratio;
     float C = lengthA + ratio * lengthB;
     maxLengthA = C - ratio * minPulleyLength;
     maxLengthB = (C - minPulleyLength) / ratio;
 
 }
-

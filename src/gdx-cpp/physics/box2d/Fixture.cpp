@@ -19,99 +19,110 @@
 */
 
 #include "Fixture.hpp"
+#include "Box2D.h"
+#include "Shape.hpp"
+#include "PolygonShape.hpp"
+#include "CircleShape.hpp"
 
 using namespace gdx_cpp::physics::box2d;
 
-void Fixture::reset (const Body& body,long addr) {
-    this.body = body;
-    this.addr = addr;
-    this.shape = null;
-    this.userData = null;
+void Fixture::reset (Body::ptr body, b2Fixture * addr) {
+    this->body = body;
+    this->addr = addr;
+    this->shape = Shape::ptr();
+    this->userData = NULL;
 }
 
-gdx_cpp::physics::box2d::Shape::Type& Fixture::getType () {
-    int type = jniGetType(addr);
-    if (type == 0)
-        return Type.Circle;
-    else
-        return Type.Polygon;
+Shape::Type Fixture::getType () {
+    b2Shape::Type type = addr->GetType();
+    if ( type == b2Shape::e_circle )
+    {
+        return Shape::Circle;
+    }
+
+    return Shape::Polygon;
+
 }
 
-Shape& Fixture::getShape () {
-    if (shape == null) {
-        long shapeAddr = jniGetShape(addr);
-        int type = Shape.jniGetType(shapeAddr);
+Shape::ptr Fixture::getShape () {
+    if (shape == NULL) {
+        b2Shape * shapeAddr = addr->GetShape();
+        int type = shapeAddr->GetType();
 
         if (type == 0)
-            shape = new CircleShape(shapeAddr);
+            shape = Shape::ptr(new CircleShape(static_cast<b2CircleShape*>(shapeAddr)));
         else
-            shape = new PolygonShape(shapeAddr);
+            shape = Shape::ptr(new PolygonShape(static_cast<b2PolygonShape*>(shapeAddr)));
     }
 
     return shape;
 }
 
 void Fixture::setSensor (bool sensor) {
-    jniSetSensor(addr, sensor);
+    addr->SetSensor(sensor);
 }
 
 bool Fixture::isSensor () {
-    return jniIsSensor(addr);
+    return addr->IsSensor();;
 }
 
-void Fixture::setFilterData (const Filter& filter) {
-    jniSetFilterData(addr, filter.categoryBits, filter.maskBits, filter.groupIndex);
+void Fixture::setFilterData (const Filter& _filter) {
+    b2Filter filter;
+    filter.categoryBits = _filter.categoryBits;
+    filter.maskBits = _filter.maskBits;
+    filter.groupIndex = _filter.groupIndex;
+    addr->SetFilterData(filter);
 }
 
 Filter& Fixture::getFilterData () {
-    jniGetFilterData(addr, tmp);
-    filter.maskBits = tmp[0];
-    filter.categoryBits = tmp[1];
-    filter.groupIndex = tmp[2];
+    b2Filter f = addr->GetFilterData();
+    filter.maskBits = f.maskBits;
+    filter.categoryBits = f.categoryBits;
+    filter.groupIndex = f.groupIndex;
     return filter;
 }
 
-Body& Fixture::getBody () {
+Body::ptr Fixture::getBody () {
     return body;
 }
 
 bool Fixture::testPoint (const gdx_cpp::math::Vector2& p) {
-    return jniTestPoint(addr, p.x, p.y);
+    addr->TestPoint( b2Vec2( p.x, p.y ) );
 }
 
 bool Fixture::testPoint (float x,float y) {
-    return jniTestPoint(addr, x, y);
+    addr->TestPoint( b2Vec2( x, y ) );
 }
 
 void Fixture::setDensity (float density) {
-    jniSetDensity(addr, density);
+    addr->SetDensity(density);
 }
 
 float Fixture::getDensity () {
-    return jniGetDensity(addr);
+    return addr->GetDensity();
 }
 
 float Fixture::getFriction () {
-    return jniGetFriction(addr);
+    return addr->GetFriction();
 }
 
 void Fixture::setFriction (float friction) {
-    jniSetFriction(addr, friction);
+    addr->SetFriction(friction);
 }
 
 float Fixture::getRestitution () {
-    return jniGetRestitution(addr);
+    return addr->GetRestitution();
 }
 
 void Fixture::setRestitution (float restitution) {
-    jniSetRestitution(addr, restitution);
+    addr->SetRestitution(restitution);
 }
 
-void Fixture::setUserData (const Object& userData) {
-    this.userData = userData;
+void Fixture::setUserData (void* userData) {
+    this->userData = userData;
 }
 
-Object& Fixture::getUserData () {
+void* Fixture::getUserData () {
     return userData;
 }
 

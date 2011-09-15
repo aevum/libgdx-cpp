@@ -31,7 +31,7 @@ class Files {
 public:
 
   typedef ref_ptr_maker< files::FileHandle >::type fhandle_ptr;
-  
+
     enum FileType {
         /** Path relative to the asset directory on Android and to the application's root directory on the desktop. On the desktop,
          * if the file is not found, then the classpath is checked. This enables files to be found when using JWS or applets.

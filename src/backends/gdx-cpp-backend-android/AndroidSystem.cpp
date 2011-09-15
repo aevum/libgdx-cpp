@@ -25,6 +25,11 @@
 #include <pthread.h>
 #include <stdexcept>
 #include <iostream>
+#include <stdint.h>
+#include <gdx-cpp/Gdx.hpp>
+#include <gdx-cpp/Application.hpp>
+
+#include <android/log.h>
 
 using namespace gdx_cpp::backends::android;
 
@@ -48,7 +53,6 @@ protected:
 };
 
 void* run_runnable(void* runnable) {
-    std::cout << "chamou runnable" << std::endl;
     ((Runnable*)runnable)->run();
 
     return NULL;
@@ -107,11 +111,102 @@ gdx_cpp::implementation::Mutex::ptr gdx_cpp::backends::android::AndroidSystem::A
     return gdx_cpp::implementation::Mutex::ptr(new AndroidMutex);
 }
 
-int64_t gdx_cpp::backends::android::AndroidSystem::nanoTime()
+uint64_t gdx_cpp::backends::android::AndroidSystem::nanoTime()
 {
-    timespec ts;
-    ::clock_gettime(CLOCK_REALTIME, &ts);
+    static timespec ts;
+    ::clock_gettime(CLOCK_MONOTONIC, &ts);
 
-    return ts.tv_sec * 1000000000 + ts.tv_nsec;
+//     __android_log_print(ANDROID_LOG_DEBUG, "nanoTime", "tv_sec: %llu, tv_usec: %llu, %llu", ts.tv_sec, ts.tv_nsec, (uint64_t)ts.tv_sec * 1000000000LL + (uint64_t)ts.tv_nsec);
+    
+    return ts.tv_sec * 1000000000LL + ts.tv_nsec;
 }
 
+std::string gdx_cpp::backends::android::AndroidSystem::canonicalize(std::string& path)
+{
+
+}
+
+void gdx_cpp::backends::android::AndroidSystem::checkDelete(const std::string& path)
+{
+
+}
+
+void gdx_cpp::backends::android::AndroidSystem::checkRead(const std::string& path)
+{
+
+}
+
+void gdx_cpp::backends::android::AndroidSystem::checkWrite(const std::string& path)
+{
+
+}
+
+bool gdx_cpp::backends::android::AndroidSystem::createDirectory(const gdx_cpp::files::File& f)
+{
+
+}
+
+bool gdx_cpp::backends::android::AndroidSystem::deleteFile(gdx_cpp::files::File& f)
+{
+
+}
+
+int gdx_cpp::backends::android::AndroidSystem::getBooleanAttributes(const gdx_cpp::files::File& f)
+{
+
+}
+
+std::string gdx_cpp::backends::android::AndroidSystem::getDefaultParent()
+{
+
+}
+
+int64_t gdx_cpp::backends::android::AndroidSystem::getLength(gdx_cpp::files::File f)
+{
+
+}
+
+char gdx_cpp::backends::android::AndroidSystem::getPathSeparator()
+{
+
+}
+
+char gdx_cpp::backends::android::AndroidSystem::getSeparator()
+{
+
+}
+
+bool gdx_cpp::backends::android::AndroidSystem::isAbsolute(const gdx_cpp::files::File& f)
+{
+
+}
+
+void gdx_cpp::backends::android::AndroidSystem::list(const gdx_cpp::files::File& f, const std::vector< std::string > paths)
+{
+
+}
+
+std::string gdx_cpp::backends::android::AndroidSystem::normalize(const std::string& path)
+{
+
+}
+
+int gdx_cpp::backends::android::AndroidSystem::prefixLength(const std::string& path)
+{
+
+}
+
+bool gdx_cpp::backends::android::AndroidSystem::rename(gdx_cpp::files::File& f1, const gdx_cpp::files::File& f2)
+{
+
+}
+
+std::string gdx_cpp::backends::android::AndroidSystem::resolve(const std::string& parent, const std::string& child)
+{
+
+}
+
+std::string gdx_cpp::backends::android::AndroidSystem::resolve(const gdx_cpp::files::File& f)
+{
+
+}

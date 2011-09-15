@@ -19,22 +19,28 @@
 */
 
 #include "FrictionJoint.hpp"
+#include <Box2D.h>
 
 using namespace gdx_cpp::physics::box2d::joints;
 
+FrictionJoint::FrictionJoint(ref_ptr_maker< gdx_cpp::physics::box2d::World >::type _world, b2FrictionJoint* joint) : Joint(_world, joint)
+{
+
+}
+
 void FrictionJoint::setMaxForce (float force) {
-    jniSetMaxForce(addr, force);
+    static_cast<b2FrictionJoint *>(addr)->SetMaxForce(force);
 }
 
 float FrictionJoint::getMaxForce () {
-    return jniGetMaxForce(addr);
+    return static_cast<b2FrictionJoint *>(addr)->GetMaxForce();
 }
 
 void FrictionJoint::setMaxTorque (float torque) {
-    jniSetMaxTorque(addr, torque);
+    static_cast<b2FrictionJoint *>(addr)->SetMaxTorque(torque);
 }
 
 float FrictionJoint::getMaxTorque () {
-    return jniGetMaxTorque(addr);
+    return static_cast<b2FrictionJoint *>(addr)->GetMaxTorque();
 }
 

@@ -17,7 +17,7 @@ detail::detail() {
         _sin[i] = (float) std::sin(a);
         _cos[i] = (float) std::cos(a);
     }
-    std::cout << &_cos<<std::endl;
+    
     for (int i = 0; i < 360; i += 90) {
         _sin[(int)(i * degToIndex) & SIN_MASK] = (float) std::sin(i * degreesToRadians);
         _cos[(int)(i * degToIndex) & SIN_MASK] = (float) std::cos(i * degreesToRadians);

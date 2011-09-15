@@ -20,14 +20,24 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_JOINTS_GEARJOINTDEF_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_JOINTS_GEARJOINTDEF_HPP_
+#include "gdx-cpp/physics/box2d/JointDef.hpp"
+
 
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
+
+class Joint;
+
 namespace joints {
 
 class GearJointDef: public gdx_cpp::physics::box2d::JointDef {
 public:
+
+    GearJointDef();
+    Joint * joint1;
+    Joint * joint2;
+    float ratio;
 
 
 protected:

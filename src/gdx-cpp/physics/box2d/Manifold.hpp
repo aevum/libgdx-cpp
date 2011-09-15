@@ -20,19 +20,34 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_MANIFOLD_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_MANIFOLD_HPP_
+#include "World.hpp"
+#include "gdx-cpp/math/Vector2.hpp"
+#include "ManifoldPoint.hpp"
 
+class b2Manifold;
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
 
 class Manifold {
 public:
-    ManifoldType& getType ();
+    enum ManifoldType {
+        Circle, FaceA, FaceB
+    };
+
+    Manifold(gdx_cpp::physics::box2d::World::ptr _world, b2Manifold* mani);
+
+    ManifoldType getType ();
     int getPointCount ();
     gdx_cpp::math::Vector2& getLocalNormal ();
     gdx_cpp::math::Vector2& getLocalPoint ();
     ManifoldPoint* getPoints ();
-    std::string& toString ();
+
+    World::ptr world;
+    b2Manifold * addr;
+    ManifoldPoint points[2];
+    gdx_cpp::math::Vector2 localNormal;
+    gdx_cpp::math::Vector2 localPoint;
 
 protected:
 

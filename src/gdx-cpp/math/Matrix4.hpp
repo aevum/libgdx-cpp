@@ -96,7 +96,6 @@ public:
     void getRotation(gdx_cpp::math::Quaternion& rotation);
     Matrix4& toNormalMatrix();
 
-
     static bool inv (float* val);
     static float det (float* val);
     static void rot (float* mat, float* vecs, int offset, int numVecs, int stride) ;

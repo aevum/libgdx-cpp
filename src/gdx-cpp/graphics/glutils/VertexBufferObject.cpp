@@ -61,7 +61,7 @@ utils::float_buffer& VertexBufferObject::getBuffer () {
     return buffer;
 }
 
-void VertexBufferObject::setVertices (const std::vector<float>& vertices, int offset, int count) {
+void VertexBufferObject::setVertices (const float* vertices, int offset, int count) {
     isDirty = true;
     if (isDirect) {
         byteBuffer.copy(vertices, count, offset);
@@ -69,7 +69,7 @@ void VertexBufferObject::setVertices (const std::vector<float>& vertices, int of
         buffer.limit(count);
     } else {
         buffer.clear();
-        buffer.put(vertices, offset, count);
+        buffer.put(vertices, count, offset, count);
         buffer.flip();
         byteBuffer.position(0);
         byteBuffer.limit(buffer.limit() << 2);
@@ -106,7 +106,7 @@ void VertexBufferObject::bind () {
         switch (attribute.usage) {
         case VertexAttributes::Usage::Position:
             gl.glEnableClientState(GL11::GL_VERTEX_ARRAY);
-            gl.glVertexPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, &attribute.offset);
+            gl.glVertexPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, (void *) attribute.offset);
             break;
 
         case VertexAttributes::Usage::Color:
@@ -116,19 +116,19 @@ void VertexBufferObject::bind () {
             if (attribute.usage == VertexAttributes::Usage::ColorPacked) colorType = GL11::GL_UNSIGNED_BYTE;
 
             gl.glEnableClientState(GL10::GL_COLOR_ARRAY);
-            gl.glColorPointer(attribute.numComponents, colorType, attributes.vertexSize, &attribute.offset);
+            gl.glColorPointer(attribute.numComponents, colorType, attributes.vertexSize, (void *) attribute.offset);
         }
             break;
 
         case VertexAttributes::Usage::Normal:
             gl.glEnableClientState(GL10::GL_NORMAL_ARRAY);
-            gl.glNormalPointer(GL10::GL_FLOAT, attributes.vertexSize, &attribute.offset);
+            gl.glNormalPointer(GL10::GL_FLOAT, attributes.vertexSize, (void *) attribute.offset);
             break;
 
         case VertexAttributes::Usage::TextureCoordinates:
             gl.glClientActiveTexture(GL10::GL_TEXTURE0 + textureUnit);
             gl.glEnableClientState(GL10::GL_TEXTURE_COORD_ARRAY);
-            gl.glTexCoordPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, &attribute.offset);
+            gl.glTexCoordPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, (void *) attribute.offset);
             textureUnit++;
             break;
 
@@ -146,6 +146,7 @@ void VertexBufferObject::bind (ShaderProgram& shader) {
 
     gl.glBindBuffer(GL20::GL_ARRAY_BUFFER, bufferHandle);
     if (isDirty) {
+        Gdx::app->log("VertexBufferObject", "********************** limit %d", buffer.limit() * 4);
         byteBuffer.limit(buffer.limit() * 4);
         gl.glBufferData(GL20::GL_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
         isDirty = false;
@@ -243,10 +244,12 @@ VertexBufferObject::VertexBufferObject(bool isStatic, int numVertices, const gdx
 , isBound(false)
 , isStatic(isStatic)
 , byteBuffer(attributes.vertexSize * numVertices)
-, buffer(byteBuffer.convert<float>())
 {
 //TODO:     byteBuffer.order(ByteOrder.nativeOrder());
     byteBuffer.flip();
+    buffer = byteBuffer.convert<float>();
+    buffer.flip();
+    
     bufferHandle = createBufferObject();
     usage = isStatic ? GL11::GL_STATIC_DRAW : GL11::GL_DYNAMIC_DRAW;
 }
@@ -263,9 +266,12 @@ bufferHandle(0)
 , isBound(false)
 , isStatic(isStatic)
 , byteBuffer(this->attributes.vertexSize * numVertices)
-, buffer(byteBuffer.convert<float>())
 {
+    buffer = byteBuffer.convert<float>();
+    
     byteBuffer.flip();
+    buffer.flip();
+    
     bufferHandle = createBufferObject();
     usage = isStatic ? GL11::GL_STATIC_DRAW : GL11::GL_DYNAMIC_DRAW;
 }

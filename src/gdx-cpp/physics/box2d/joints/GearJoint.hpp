@@ -21,13 +21,17 @@
 #ifndef GDX_CPP_PHYSICS_BOX2D_JOINTS_GEARJOINT_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_JOINTS_GEARJOINT_HPP_
 
+#include <gdx-cpp/physics/box2d/Joint.hpp>
+
+class b2GearJoint;
+
 namespace gdx_cpp {
 namespace physics {
 namespace box2d {
 namespace joints {
-
 class GearJoint: public gdx_cpp::physics::box2d::Joint {
 public:
+    GearJoint(ref_ptr_maker< gdx_cpp::physics::box2d::World >::type _world, b2GearJoint* joint);
     void setRatio (float ratio);
     float getRatio ();
 

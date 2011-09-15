@@ -32,23 +32,33 @@ using namespace gdx_cpp::graphics;
 
 gdx_cpp::graphics::g2d::Sprite::Sprite()
  : color(1,1,1,1)
+ , scaleX(1)
+ , scaleY(1)
+ , x(0)
+ , y(0)
+ , originX(0)
+ , originY(0)
+ , width(0)
+ , height(0)
+ , rotation(0)
+ , dirty(true)
 {
     setColor(1, 1, 1, 1);
 }
 
-void Sprite::set (const Sprite& sprite) {
-    memcpy(vertices, sprite.vertices, SPRITE_SIZE * sizeof(float));
-    texture = sprite.texture;
-    x = sprite.x;
-    y = sprite.y;
-    width = sprite.width;
-    height = sprite.height;
-    originX = sprite.originX;
-    originY = sprite.originY;
-    rotation = sprite.rotation;
-    scaleX = sprite.scaleX;
-    scaleY = sprite.scaleY;
-    dirty = sprite.dirty;
+void Sprite::set (ptr sprite) {
+    memcpy(vertices, sprite->vertices, SPRITE_SIZE * sizeof(float));
+    texture = sprite->texture;
+    x = sprite->x;
+    y = sprite->y;
+    width = sprite->width;
+    height = sprite->height;
+    originX = sprite->originX;
+    originY = sprite->originY;
+    rotation = sprite->rotation;
+    scaleX = sprite->scaleX;
+    scaleY = sprite->scaleY;
+    dirty = sprite->dirty;
 }
 
 void Sprite::setBounds (float x,float y,float width,float height) {
@@ -224,6 +234,7 @@ float* const Sprite::getVertices () {
         if (rotation != 0) {
             float cos = gdx_cpp::math::utils::cosDeg(rotation);
             float sin = gdx_cpp::math::utils::sinDeg(rotation);
+            
             float localXCos = localX * cos;
             float localXSin = localX * sin;
             float localYCos = localY * cos;
@@ -455,6 +466,11 @@ void Sprite::scroll (float xAmount,float yAmount) {
     }
 }
 
+Sprite::Sprite(ptr _sprite) :
+ color(1,1,1,1)
+{
+    this->set(_sprite);
+}
 Sprite::Sprite(Texture::ptr texture) :
  color(1,1,1,1)
 {
@@ -485,7 +501,7 @@ void Sprite::initialize(graphics::Texture::ptr texture, int srcX, int srcY, int 
     
     this->texture = texture;
     
-    setRegion(srcX, srcY, srcWidth, srcHeight);
+    TextureRegion::setRegion(srcX, srcY, srcWidth, srcHeight);
     setColor(1, 1, 1, 1);
     setSize(std::abs(srcWidth), std::abs(srcHeight));
     setOrigin(width / 2, height / 2);

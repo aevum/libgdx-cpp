@@ -17,7 +17,17 @@
 
 #include "LinuxGL10.hpp"
 
+#ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
+
+#define GL_GLEXT_PROTOTYPES
+#include <GL/gl.h>
+#include <GL/glext.h>
+
+#else
+
 #include <GLES/gl.h>
+
+#endif
 
 using namespace gdx_cpp::backends::nix;
 
@@ -37,7 +47,12 @@ void LinuxGL10::glClearColor(float red, float green, float blue, float alpha) co
     ::glClearColor ( red, green, blue, alpha);
 }
 void LinuxGL10::glClearDepthf(float depth) const {
+
+#ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
+    ::glClearDepth ( depth);
+#else
     ::glClearDepthf ( depth);
+#endif
 }
 void LinuxGL10::glClearStencil(int s) const {
     ::glClearStencil ( s);
@@ -70,7 +85,12 @@ void LinuxGL10::glDepthMask(bool flag) const {
     ::glDepthMask ( flag);
 }
 void LinuxGL10::glDepthRangef(float zNear, float zFar) const {
+#ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
+    ::glDepthRange ( zNear, zFar);
+#else
     ::glDepthRangef ( zNear, zFar);
+#endif
+
 }
 void LinuxGL10::glDisable(int cap) const {
     ::glDisable ( cap);
@@ -102,8 +122,11 @@ int LinuxGL10::glGetError() const {
 void LinuxGL10::glGetIntegerv(int pname, const int* params) const {
     ::glGetIntegerv ( pname, (GLint*) params);
 }
-std::string& LinuxGL10::glGetString(int name) const {
-    ::glGetString(name);
+std::string LinuxGL10::glGetString(int name) const {
+    const GLubyte* str = ::glGetString(name);
+    if (str)
+        return std::string((char*) str);
+    return "";
 }
 void LinuxGL10::glHint(int target, int mode) const {
     ::glHint ( target, mode);
@@ -159,7 +182,7 @@ void LinuxGL10::glClientActiveTexture(int texture) const {
 void LinuxGL10::glColor4f(float red, float green, float blue, float alpha) const {
     ::glColor4f(red, green, blue, alpha);
 }
-void LinuxGL10::glColorPointer(int size, int type, int stride, const char* pointer) const {
+void LinuxGL10::glColorPointer(int size, int type, int stride, const void* pointer) const {
     ::glColorPointer(size, type, stride, pointer);
 }
 void LinuxGL10::glDeleteTextures(int n, unsigned int* textures) const {
@@ -176,7 +199,11 @@ void LinuxGL10::glFogf(int pname, float param) const {
 }
 
 void LinuxGL10::glFrustumf(float left, float right, float bottom, float top, float zNear, float zFar) const {
+#ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
+    ::glFrustum(left, right,bottom,top, zNear, zFar);
+#else
     ::glFrustumf(left, right,bottom,top, zNear, zFar);
+#endif
 }
 
 void LinuxGL10::glGenTextures(int n, unsigned int* textures) const {
@@ -230,11 +257,15 @@ void LinuxGL10::glMultMatrixf(const float* m) const {
 void LinuxGL10::glNormal3f(float nx, float ny, float nz) const {
     ::glNormal3f(nx,ny,nz);
 }
-void LinuxGL10::glNormalPointer(int type, int stride, const char* pointer) const {
+void LinuxGL10::glNormalPointer(int type, int stride, const void* pointer) const {
     ::glNormalPointer(type, stride, pointer);
 }
 void LinuxGL10::glOrthof(float left, float right, float bottom, float top, float zNear, float zFar) const {
+#ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
+    ::glOrtho(left,right,bottom,top,zNear,zFar);
+#else
     ::glOrthof(left,right,bottom,top,zNear,zFar);
+#endif
 }
 
 void LinuxGL10::glPointSize(float size) const {
@@ -264,7 +295,7 @@ void LinuxGL10::glScalef(float x, float y, float z) const {
 void LinuxGL10::glShadeModel(int mode) const {
     ::glShadeModel(mode);
 }
-void LinuxGL10::glTexCoordPointer(int size, int type, int stride, const char* pointer) const {
+void LinuxGL10::glTexCoordPointer(int size, int type, int stride, const void* pointer) const {
     ::glTexCoordPointer(size, type, stride, pointer);
 }
 void LinuxGL10::glTexEnvf(int target, int pname, float param) const {
@@ -276,6 +307,6 @@ void LinuxGL10::glTexEnvfv(int target, int pname, const float* params) const {
 void LinuxGL10::glTranslatef(float x, float y, float z) const {
     ::glTranslatef(x,y , z);
 }
-void LinuxGL10::glVertexPointer(int size, int type, int stride, const char* pointer) const {
+void LinuxGL10::glVertexPointer(int size, int type, int stride, const void* pointer) const {
     ::glVertexPointer(size, type, stride,  pointer);
 }

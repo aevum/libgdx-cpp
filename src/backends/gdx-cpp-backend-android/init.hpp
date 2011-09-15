@@ -20,9 +20,10 @@
 #ifndef GDX_CPP_BACKENDS_ANDROID_INIT_HPP
 #define GDX_CPP_BACKENDS_ANDROID_INIT_HPP
 
+#include <string>
 #include <gdx-cpp/ApplicationListener.hpp>
 
 void init();
-void setApplicationListener(gdx_cpp::ApplicationListener* listener);
+void createApplication(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int width, int height);
 
 #endif

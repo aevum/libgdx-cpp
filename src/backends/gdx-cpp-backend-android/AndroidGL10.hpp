@@ -57,7 +57,7 @@ public:
     void glGenTextures (int n,int* textures) const ;
     int glGetError () const ;
     void glGetIntegerv (int pname,const int* params) const ;
-    std::string& glGetString (int name) const ;
+    std::string glGetString (int name) const ;
     void glHint (int target,int mode) const ;
     void glLineWidth (float width) const ;
     void glPixelStorei (int pname,int param) const ;
@@ -74,7 +74,7 @@ public:
     void glAlphaFunc(int func, float ref) const;
     void glClientActiveTexture(int texture) const;
     void glColor4f(float red, float green, float blue, float alpha) const;
-    void glColorPointer(int size, int type, int stride, const char* pointer) const;
+    void glColorPointer(int size, int type, int stride, const void* pointer) const;
     void glDeleteTextures(int n, unsigned int* textures) const;
     void glDisableClientState(int array) const;
     void glEnableClientState(int array) const;
@@ -98,7 +98,7 @@ public:
     void glMultiTexCoord4f(int target, float s, float t, float r, float q) const;
     void glMultMatrixf(const float* m) const;
     void glNormal3f(float nx, float ny, float nz) const;
-    void glNormalPointer(int type, int stride, const char* pointer) const;
+    void glNormalPointer(int type, int stride, const void* pointer) const;
     void glOrthof(float left, float right, float bottom, float top, float zNear, float zFar) const;
 
     void glPointSize(float size) const;
@@ -112,11 +112,11 @@ public:
     void glSampleCoverage(float value, bool invert) const;
     void glScalef(float x, float y, float z) const;
     void glShadeModel(int mode) const;
-    void glTexCoordPointer(int size, int type, int stride, const char* pointer) const;
+    void glTexCoordPointer(int size, int type, int stride, const void* pointer) const;
     void glTexEnvf(int target, int pname, float param) const;
     void glTexEnvfv(int target, int pname, const float* params) const;
     void glTranslatef(float x, float y, float z) const;
-    void glVertexPointer(int size, int type, int stride, const char* pointer) const;
+    void glVertexPointer(int size, int type, int stride, const void* pointer) const;
 };
 
 }

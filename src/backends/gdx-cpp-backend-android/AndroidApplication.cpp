@@ -27,32 +27,29 @@ using namespace gdx_cpp::backends::android;
 using namespace gdx_cpp;
 
 gdx_cpp::backends::android::AndroidApplication::AndroidApplication(gdx_cpp::ApplicationListener* listener,
-                                                           const std::string& title, int width, int height,
-                                                           bool useGL20IfAvailable)
-:  Synchronizable(Gdx::system->getMutexFactory())
-    , width(width)
-    , height(height)
-    , title(title)
-    , useGL20iFAvailable(useGL20IfAvailable)
-    , listener(listener)
-    , graphics(0)
-    , input(0)
-    , logLevel(gdx_cpp::Application::LOG_INFO)
+        const std::string& title, int width, int height, bool useGL20IfAvailable)
+        :  Synchronizable(Gdx::system->getMutexFactory())
+        , title(title)
+        , useGL20iFAvailable(useGL20IfAvailable)
+        , width(width)
+        , height(height)
+        , listener(listener)
+        , graphics(0)
+        , input(0)
+        , logLevel(gdx_cpp::Application::LOG_INFO)
 {
     initialize();
 }
 
 void AndroidApplication::initialize() {
-        graphics = new AndroidGraphics();
-        input = new AndroidInput();
-        
-        graphics->initialize();
-        graphics->setTitle(this->title);
-        graphics->setDisplayMode(width, height, false);
+    graphics = new AndroidGraphics();
+    input = new AndroidInput();
 
-        Gdx::initialize(this, graphics, NULL, NULL, NULL);
-        
-        this->run();
+    graphics->initialize();
+    graphics->setTitle(this->title);
+    graphics->setDisplayMode(width, height, false);
+
+    Gdx::initialize(this, graphics, NULL, input, NULL);
 }
 
 void backends::android::AndroidApplication::onRunnableStop()
@@ -62,46 +59,34 @@ void backends::android::AndroidApplication::onRunnableStop()
 
 void backends::android::AndroidApplication::run()
 {
-    listener->create();
-    listener->resize(graphics->getWidth(), graphics->getHeight());
-    
-    while (true) {
-        graphics->updateTime();
+    graphics->updateTime();
 
-//         SDL_Event event;
+    {
+        lock_holder hnd = synchronize();
 
-//         while (SDL_PollEvent(&event)) {
-//             if (event.type == SDL_QUIT) {
-//                 this->exit();
-//                 return;
-//             } else {
-//                 this->input->processEvents(event);
-//             }
-//         }        
-//         
-        {
-            lock_holder hnd = synchronize();
+        std::list < Runnable::ptr >::iterator it = runnables.begin();
+        std::list < Runnable::ptr >::iterator end = runnables.end();
 
-            std::list < Runnable::ptr >::iterator it = runnables.begin();
-            std::list < Runnable::ptr >::iterator end = runnables.end();
-
-            for(;it != end; ++it) {
-                (*it)->run();
-            }
-
-            runnables.clear();
+        for (;it != end; ++it) {
+            (*it)->run();
         }
-        
-        listener->render();
-        graphics->update();
+
+        runnables.clear();
     }
+
+    listener->render();
+    graphics->update();
 }
 
-
-std::ostream& AndroidApplication::error(const std::string& tag)
+void AndroidApplication::error(const std::string& tag, const char* format, ...)
 {
-    std::cerr << "LIBGDX-CPP: " << tag;
-    return std::cerr;
+    va_list list;
+    va_start(list, format);
+    __android_log_vprint(ANDROID_LOG_ERROR, tag.c_str(),format, list);
+
+#if DEBUG
+    assert(false);
+#endif
 }
 
 void gdx_cpp::backends::android::AndroidApplication::exit()
@@ -121,6 +106,7 @@ Files* gdx_cpp::backends::android::AndroidApplication::getFiles()
 
 Graphics* gdx_cpp::backends::android::AndroidApplication::getGraphics()
 {
+    
     return graphics;
 }
 
@@ -139,20 +125,31 @@ gdx_cpp::Application::ApplicationType gdx_cpp::backends::android::AndroidApplica
     return gdx_cpp::Application::Desktop;
 }
 
-class WrappedOstreamDecorator : public std::ostream {
-public:
-    virtual ~WrappedOstreamDecorator() {
-        
-    }
-};
+void backends::android::AndroidApplication::pause()
+{
 
-std::ostream& gdx_cpp::backends::android::AndroidApplication::log(const std::string& tag)
+}
+
+void backends::android::AndroidApplication::update()
+{
+    run();
+}
+
+void backends::android::AndroidApplication::create()
+{
+    listener->create();
+    listener->resize(graphics->getWidth(), graphics->getHeight());
+}
+
+
+void gdx_cpp::backends::android::AndroidApplication::log(const std::string& tag, const char* format, ...)
 {
     if (logLevel == gdx_cpp::Application::LOG_NONE)
-        return std::cout;
+        return;
     
-//     __android_log_print(ANDROID_LOG_INFO, tag.c_str(), );
-    return std::cout;
+    va_list list;
+    va_start(list, format);
+    __android_log_vprint(ANDROID_LOG_INFO, tag.c_str(),format, list);
 }
 
 int gdx_cpp::backends::android::AndroidApplication::getVersion()

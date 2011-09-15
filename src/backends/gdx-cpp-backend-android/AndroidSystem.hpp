@@ -45,7 +45,7 @@ public:
 };
 
 public:
-    int64_t nanoTime();
+    uint64_t nanoTime();
 
     AndroidThreadFactory* getThreadFactory() {
         return &threadFactory;
@@ -54,6 +54,25 @@ public:
     AndroidMutexFactory* getMutexFactory() {
         return &mutexFactory;
     }
+
+    std::string canonicalize(std::string& path);
+    void checkDelete(const std::string& path);
+    void checkRead(const std::string& path);
+    void checkWrite(const std::string& path);
+    bool createDirectory(const gdx_cpp::files::File& f);
+    bool deleteFile(files::File& f);
+    int getBooleanAttributes(const gdx_cpp::files::File& f);
+    std::string getDefaultParent();
+    int64_t getLength(files::File f);
+    char getPathSeparator();
+    char getSeparator();
+    bool isAbsolute(const gdx_cpp::files::File& f);
+    void list(const gdx_cpp::files::File& f, const std::vector< std::string > paths);
+    std::string normalize(const std::string& path);
+    int prefixLength(const std::string& path);
+    bool rename(files::File& f1, const gdx_cpp::files::File& f2);
+    std::string resolve(const std::string& parent, const std::string& child);
+    std::string resolve(const gdx_cpp::files::File& f);
     
 private:
     AndroidThreadFactory threadFactory;

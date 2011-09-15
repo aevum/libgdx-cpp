@@ -48,9 +48,10 @@ public:
     
     void pause() {
     }
+    
     void render() {
         renderCount++;
-        Gdx::app->log("RenderCountTest") << renderCount << std::endl;
+        Gdx::app->log("RenderCountTest","%d", renderCount);
         Gdx::gl10->glClear(GL10::GL_COLOR_BUFFER_BIT);
         mesh->render(GL10::GL_TRIANGLES, 0, 3);
         
@@ -67,6 +68,6 @@ private:
     int renderCount;
 };
 
-extern "C" void init() {
+void init() {
     createApplication(new MyFirstTriangleApplication, "My first triangle", 640, 480);
 }

@@ -20,6 +20,7 @@
 
 #ifndef GDX_CPP_PHYSICS_BOX2D_JOINTS_PULLEYJOINTDEF_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_JOINTS_PULLEYJOINTDEF_HPP_
+#include "gdx-cpp/physics/box2d/JointDef.hpp"
 
 namespace gdx_cpp {
 namespace physics {
@@ -28,13 +29,24 @@ namespace joints {
 
 class PulleyJointDef: public gdx_cpp::physics::box2d::JointDef {
 public:
-    void initialize (const gdx_cpp::physics::box2d::Body& bodyA,const gdx_cpp::physics::box2d::Body& bodyB,const gdx_cpp::math::Vector2& groundAnchorA,const gdx_cpp::math::Vector2& groundAnchorB,const gdx_cpp::math::Vector2& anchorA,const gdx_cpp::math::Vector2& anchorB,float ratio);
 
+    PulleyJointDef();
+    void initialize (gdx_cpp::physics::box2d::Body::ptr bodyA, gdx_cpp::physics::box2d::Body::ptr bodyB, const gdx_cpp::math::Vector2& groundAnchorA, gdx_cpp::math::Vector2& groundAnchorB, gdx_cpp::math::Vector2& anchorA, gdx_cpp::math::Vector2& anchorB, float ratio);
+
+    gdx_cpp::math::Vector2 groundAnchorA;
+    gdx_cpp::math::Vector2 groundAnchorB;
+    gdx_cpp::math::Vector2 localAnchorA;
+    gdx_cpp::math::Vector2 localAnchorB;
+    float lengthA;
+    float maxLengthA;
+    float lengthB;
+    float maxLengthB;
+    float ratio;
 protected:
 
 
 private:
-
+    const static float minPulleyLength = 2.0;
 };
 
 } // namespace gdx_cpp

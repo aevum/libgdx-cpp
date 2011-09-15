@@ -38,11 +38,11 @@ public:
     TextureRegion (Texture::ptr _texture, float u, float v, float u2, float v2);
     TextureRegion (gdx_cpp::graphics::g2d::TextureRegion& region);
     TextureRegion (gdx_cpp::graphics::g2d::TextureRegion& region, int x, int y, int width, int height);
-    void setRegion (Texture::ptr texture);
-    void setRegion (int x,int y,int width,int height);
-    void setRegion (float u,float v,float u2,float v2);
-    void setRegion (const TextureRegion& region);
-    void setRegion (const gdx_cpp::graphics::g2d::TextureRegion& region, int x, int y, int width, int height);
+    virtual void setRegion (Texture::ptr texture);
+    virtual void setRegion (int x,int y,int width,int height);
+    virtual void setRegion (float u,float v,float u2,float v2);
+    virtual void setRegion (const TextureRegion& region);
+    virtual void setRegion (const gdx_cpp::graphics::g2d::TextureRegion& region, int x, int y, int width, int height);
     Texture::ptr getTexture () const;
     void setTexture (Texture::ptr texture);
     float getU () const;

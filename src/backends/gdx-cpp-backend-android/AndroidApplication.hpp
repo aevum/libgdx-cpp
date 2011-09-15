@@ -36,10 +36,9 @@ namespace android {
 class AndroidApplication : public Application, public Runnable, public Synchronizable
 {
 public:
-    AndroidApplication(gdx_cpp::ApplicationListener* listener, const std::string& title,
-                     int width, int height, bool useGL20IfAvailable);
+    AndroidApplication(gdx_cpp::ApplicationListener* listener, const std::string& title, int width, int height, bool useGL20IfAvailable);
     
-    std::ostream& error(const std::string& tag);
+    void error(const std::string& tag, const char* format, ...);
     void exit();
     Audio* getAudio();
     Files* getFiles();
@@ -48,11 +47,16 @@ public:
     Preferences* getPreferences(std::string& name);
     ApplicationType getType();
     int getVersion();
-    std::ostream& log(const std::string& tag);
+    void log(const std::string& tag, const char* format, ...);
     void postRunnable(Runnable::ptr runnable);
     void setLogLevel(int logLevel);
 
     void onRunnableStop();
+
+    void update();
+    void pause();
+    void create();
+    
 protected:
     void run();
     

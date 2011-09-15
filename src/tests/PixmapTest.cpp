@@ -15,16 +15,18 @@ using namespace gdx_cpp;
 
 class PixmapTest : public gdx_cpp::ApplicationListener {
 public:
-    PixmapTest() {
+    PixmapTest() :
+    width(0)
+    ,height(0)
+    {
     }
 
     void create() {
         Texture::ptr texture = Texture::ptr(new Texture(1024,1024, Pixmap::Format::RGBA8888));
 
-        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(800, 480, Pixmap::Format::RGBA8888));
+        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(840, 480, Pixmap::Format::RGBA8888));
         texture->setFilter(Texture::TextureFilter::Nearest, Texture::TextureFilter::Linear);
         texture->setWrap(Texture::TextureWrap::ClampToEdge, Texture::TextureWrap::ClampToEdge);
-
         pixmap->setColor(1.0f, 0.0f, 0.0f, 1.0f); // Red
         pixmap->drawLine(0, 0, 100, 100);
         
@@ -40,7 +42,7 @@ public:
         texture->draw(*pixmap, 0, 0);
         region = new TextureRegion(texture, 0, 0, 800, 480);
         batch = new SpriteBatch();
-        
+
         Pixmap* px = new Pixmap(512, 1024, Pixmap::Format::RGBA8888);
         for (int y = 0; y < pixmap->getHeight(); y++) { // 1024
             for (int x = 0; x < pixmap->getWidth(); x++) { // 512
@@ -64,19 +66,23 @@ public:
         batch->end();
     }
 
-    void resize(int width, int height) {
-
+    void resize(int p_width, int p_height) {
+        width = p_width;
+        height = p_height;
     }
 
     void resume() {
     }
+    
 private:
     Pixmap::ptr pixmap;
     Texture::ptr texture;
     SpriteBatch* batch;
     TextureRegion* region;
+    int width;
+    int height;
 };
 
-extern "C" void init() {
+void init() {
     createApplication(new PixmapTest, "Pixmap test", 640, 480);
 }
