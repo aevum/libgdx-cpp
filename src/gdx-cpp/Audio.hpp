@@ -19,21 +19,22 @@
 #define GDX_CPP_AUDIO_H
 
 namespace gdx_cpp {
-
+namespace audio{
 class AudioDevice;
 class AudioRecorder;
 class Sound;
 class Music;
+}
 
 class FileHandle;
 
 class Audio {
 public:
-    virtual AudioDevice& newAudioDevice (int samplingRate, bool isMono) = 0;
-    virtual AudioRecorder& newAudioRecoder (int samplingRate, bool isMono) = 0;
+    virtual gdx_cpp::audio::AudioDevice * newAudioDevice (int samplingRate, bool isMono) = 0;
+    virtual gdx_cpp::audio::AudioRecorder * newAudioRecoder (int samplingRate, bool isMono) = 0;
 
-    virtual Sound& newSound (const FileHandle& fileHandle) = 0;
-    virtual Music& newMusic (const FileHandle& file) = 0;
+    virtual gdx_cpp::audio::Sound * newSound (const FileHandle& fileHandle) = 0;
+    virtual gdx_cpp::audio::Music * newMusic (const FileHandle& file) = 0;
 };
 }
 
