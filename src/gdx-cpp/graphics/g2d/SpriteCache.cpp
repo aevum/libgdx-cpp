@@ -770,11 +770,11 @@ void SpriteCache::add (Sprite& sprite) {
     float* const spriteVertices = sprite.getVertices();
 
     memcpy(tempVertices, spriteVertices, sizeof(float) * 3 * Sprite::VERTEX_SIZE);
-    memcpy(tempVertices, &spriteVertices[2 * Sprite::VERTEX_SIZE], sizeof(float) * 3 * Sprite::VERTEX_SIZE);
-    memcpy(tempVertices, &spriteVertices[3 * Sprite::VERTEX_SIZE], sizeof(float) * 4 * Sprite::VERTEX_SIZE);
-    memcpy(tempVertices, spriteVertices, sizeof(float) * 5 * Sprite::VERTEX_SIZE);
+    memcpy(&tempVertices[3 * Sprite::VERTEX_SIZE], &spriteVertices[2 * Sprite::VERTEX_SIZE], sizeof(float) * Sprite::VERTEX_SIZE);
+    memcpy(&tempVertices[4 * Sprite::VERTEX_SIZE], &spriteVertices[3 * Sprite::VERTEX_SIZE],  sizeof(float) * Sprite::VERTEX_SIZE);
+    memcpy(&tempVertices[5 * Sprite::VERTEX_SIZE], spriteVertices, sizeof(float) * Sprite::VERTEX_SIZE);
     
-    add(sprite.getTexture(), tempVertices, Sprite::SPRITE_SIZE, 0, 30);
+    add(sprite.getTexture(), tempVertices, 30, 0, 30);
 }
 
 void SpriteCache::begin () {
