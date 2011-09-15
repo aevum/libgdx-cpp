@@ -18,16 +18,19 @@
 #define GDX_CPP_FILES_H
 
 #include <string>
+#include "gdx-cpp/utils/Aliases.hpp"
 
 namespace gdx_cpp {
 
-namespace files {
-class FileHandle;
+namespace files
+{
+  class FileHandle;
 }
-
+  
 class Files {
 public:
-public:
+
+  typedef ref_ptr_maker< files::FileHandle >::type fhandle_ptr;
 
     enum FileType {
         /** Path relative to the asset directory on Android and to the application's root directory on the desktop. On the desktop,
@@ -43,15 +46,13 @@ public:
         Absolute
     };
 
-    virtual files::FileHandle& getFileHandle (std::string& path, FileType type) = 0;
+    virtual fhandle_ptr getFileHandle (const std::string& path, FileType type) = 0;
 
-    virtual files::FileHandle& classpath (std::string& path) = 0;
+    virtual fhandle_ptr internal (const std::string& path) = 0;
 
-    virtual files::FileHandle& internal (std::string& path) = 0;
+    virtual fhandle_ptr external (const std::string& path) = 0;
 
-    virtual files::FileHandle& external (std::string& path) = 0;
-
-    virtual files::FileHandle& absolute (std::string& path) = 0;
+    virtual fhandle_ptr absolute (const std::string& path) = 0;
 
     virtual std::string& getExternalStoragePath () = 0;
 
