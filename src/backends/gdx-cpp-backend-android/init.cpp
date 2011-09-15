@@ -19,43 +19,57 @@ void createApplication(gdx_cpp::ApplicationListener* listener, const std::string
     applicationListener = listener;
 }
 
-extern "C" void
-Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitSystem(JNIEnv* env) {
+extern "C" {
+
+void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitSystem(JNIEnv* env) {
     __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativeInit");
     Gdx::initializeSystem(new AndroidSystem);
     init();
 }
 
-extern "C" void
-Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitialize(JNIEnv* env, jobject object, int width, int height) {
+void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitialize(JNIEnv* env, jobject object, int width, int height) {
     __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativeInitialize");
     assert(applicationListener);
     new AndroidApplication(applicationListener, "test", width, height, false);
 }
 
-extern "C" void
-Java_com_aevumlab_gdxcpp_ApplicationManager_nativeCreate(JNIEnv* env) {
+void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeCreate(JNIEnv* env) {
     __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativeCreate");
-    assert(applicationListener);    
+    assert(applicationListener);
     applicationListener->create();
 }
 
-extern "C" void
-Java_com_aevumlab_gdxcpp_ApplicationManager_nativeUpdate(JNIEnv* env) {
+void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeUpdate(JNIEnv* env) {
     assert(applicationListener);
     static_cast<AndroidApplication*>(Gdx::app)->update();
 }
 
-extern "C" void
-Java_com_aevumlab_gdxcpp_ApplicationManager_nativePause(JNIEnv* env) {
+void Java_com_aevumlab_gdxcpp_ApplicationManager_nativePause(JNIEnv* env) {
     __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativePause foi!");
     assert(applicationListener);
     static_cast<AndroidApplication*>(Gdx::app)->pause();
 }
 
-extern "C" void
-Java_com_aevumlab_gdxcpp_ApplicationManager_nativeResize(JNIEnv* env, jobject object, jint width, jint height) {
+void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeResize(JNIEnv* env, jobject object, jint width, jint height) {
     __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativeResize: width %d height %d", width, height);
     assert(applicationListener);
     static_cast<AndroidGraphics*>(Gdx::app->getGraphics())->resize(width, height);
 }
+
+void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeTouchDownEvent(JNIEnv* env, jobject object, jfloat x, jfloat y, int button ) {
+    assert(applicationListener);
+    static_cast<AndroidInput*>(Gdx::app->getInput())->handleTouchDown(x, y, button);    
+}
+
+void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeTouchUpEvent(JNIEnv* env, jobject object, jfloat x, jfloat y, int button ) {
+    assert(applicationListener);
+    static_cast<AndroidInput*>(Gdx::app->getInput())->handleTouchUp(x, y, button);
+}
+
+void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeToucDragEvent(JNIEnv* env, jobject object, jfloat x, jfloat y, int button ) {
+    assert(applicationListener);
+    static_cast<AndroidInput*>(Gdx::app->getInput())->handleTouchDrag(x, y, button);
+}
+
+}
+

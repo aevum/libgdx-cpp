@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class ApplicationManager {
@@ -23,7 +24,12 @@ public class ApplicationManager {
 	static native void nativeResume();
 
 	static native void nativeResize(int widht, int height);
-
+	
+	static native void nativeTouchDownEvent(float x, float y, int button);
+	static native void nativeTouchUpEvent(float x, float y, int button);
+	static native void nativeTouchDragEvent(float x, float y, int button);
+	
+	InputHandler handler = new InputHandler();	
 	Activity activity;
 
 	class NativeSurfaceRenderer implements GLSurfaceView.Renderer {
@@ -54,6 +60,7 @@ public class ApplicationManager {
 
 		public NativeSurfaceView(Context context) {
 			super(context);
+			handler.setup(this);
 			setFocusable(true);
 			setFocusableInTouchMode(true);
 			setRenderer(new NativeSurfaceRenderer());
@@ -65,7 +72,7 @@ public class ApplicationManager {
 			final int height = View.MeasureSpec.getSize(heightMeasureSpec);
 
 			setMeasuredDimension(width, height);
-		}
+		}		
 	}
 
 	public GLSurfaceView createView(Context context) {
@@ -95,5 +102,19 @@ public class ApplicationManager {
 
 	public void unload() {
 
+	}
+
+	public static void onTouchEvent(MotionEvent evt) {
+		switch(evt.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			nativeTouchDownEvent(evt.getX(), evt.getY(), evt.getAction() & MotionEvent.ACTION_POINTER_ID_MASK >> MotionEvent.ACTION_POINTER_ID_SHIFT);
+			break;
+		case MotionEvent.ACTION_UP:
+			nativeTouchUpEvent(evt.getX(), evt.getY(), evt.getAction() & MotionEvent.ACTION_POINTER_ID_MASK >> MotionEvent.ACTION_POINTER_ID_SHIFT);
+			break;
+		case MotionEvent.ACTION_MOVE:
+			nativeTouchUpEvent(evt.getX(), evt.getY(), evt.getAction() & MotionEvent.ACTION_POINTER_ID_MASK >> MotionEvent.ACTION_POINTER_ID_SHIFT);
+			break;
+		}		
 	}
 }
