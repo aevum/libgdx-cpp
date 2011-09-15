@@ -11,6 +11,7 @@
  * governing permissions and limitations under the License.
  */
 #include "gdx2d.h"
+#include "stdio.h"
 #define STB_TRUETYPE_IMPLEMENTATION
 #define STBI_HEADER_FILE_ONLY
 #define STBI_NO_FAILURE_STRINGS
@@ -225,10 +226,11 @@ gdx2d_pixmap* gdx2d_load(const unsigned char *buffer, uint32_t len, uint32_t req
 	// TODO fix this! Add conversion to requested format
 	if(req_format > GDX2D_FORMAT_RGBA8888) 
 		req_format = GDX2D_FORMAT_RGBA8888;
+        
 	const unsigned char* pixels = stbi_load_from_memory(buffer, len, &width, &height, &format, req_format);
 	if(pixels == NULL)
-		return NULL;
-
+          return NULL;
+      
 	gdx2d_pixmap* pixmap = (gdx2d_pixmap*)malloc(sizeof(gdx2d_pixmap));
 	pixmap->width = (uint32_t)width;
 	pixmap->height = (uint32_t)height;
