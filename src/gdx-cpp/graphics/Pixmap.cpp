@@ -177,12 +177,9 @@ Pixmap::Pixmap(unsigned char* encodedData, int offset, int len) {
 
 Pixmap::Pixmap(gdx_cpp::files::FileHandle& file) {
 
-    std::cout << "CRIANDO PIXMAP" << std::endl;
     gdx_cpp::files::FileHandle::char_ptr bytes;
     int size = file.readBytes(bytes);
-    std::cout << "TERMINOU DE LER OS BYTES FORAM LIDOS" << size << std::endl;
     pixmap = new g2d::Gdx2DPixmap((unsigned char*) bytes.get(), 0, size, 0);
-    std::cout << "TERMINOU DE CRIAR O Gdx2DPixmap" << std::endl;
     assert(pixmap);
 }
 

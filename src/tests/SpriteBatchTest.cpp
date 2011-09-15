@@ -89,7 +89,7 @@ public:
     }
 
     void render() {
-         renderSprites();
+         renderNormal();
     }
 
     void resize(int width, int height) {

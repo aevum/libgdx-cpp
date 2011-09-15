@@ -223,7 +223,6 @@ inline get_pixel_func get_pixel_func_ptr(uint32_t format) {
 
 gdx2d_pixmap* gdx2d_load(const unsigned char *buffer, uint32_t len, uint32_t req_format) {
 	int32_t width, height, format;
-        printf("ATE AKI CHEGA NO GDX2D_LOAD\n");
 	// TODO fix this! Add conversion to requested format
 	if(req_format > GDX2D_FORMAT_RGBA8888) 
 		req_format = GDX2D_FORMAT_RGBA8888;
