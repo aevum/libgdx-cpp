@@ -34,14 +34,14 @@
 #include <string>
 #include <vector>
 
-#include "gdx-cpp/Files.hpp"
-
 namespace gdx_cpp {
 
-class File;
+class Files;
 
 namespace files {
 
+class File;
+  
 class FileHandle {
 public:
     
@@ -51,16 +51,16 @@ public:
     FileHandle ();
     FileHandle (const std::string &fileName);
     FileHandle (const gdx_cpp::files::File &file);
-    const std::string &path ();
+    const std::string &path () const;
     std::string name () const;
-    std::string extension ();
-    std::string nameWithoutExtension ();
+    std::string extension () const;
+    std::string nameWithoutExtension () const;
     std::string typetoString ();
     gdx_cpp::Files::FileType& getType ();
     ifstream_ptr read ();
     std::string readString ();
     std::string readString (const std::string& charset);
-    int readBytes (char_ptr c);
+    int readBytes (char_ptr &c);
     ofstream_ptr write (bool append);
     void list (std::vector<FileHandle> &handles);
     void list (const std::string& suffix, std::vector<FileHandle> &handles);
@@ -75,13 +75,14 @@ public:
     void moveTo (FileHandle& dest);
     int64_t length ();
     std::string toString ();
-    
+    FileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
+    FileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type);
 
 protected:
     gdx_cpp::files::File file;
     gdx_cpp::Files::FileType type;
-    FileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
-    FileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type);
+    
+    
 
 private:
     gdx_cpp::files::File getFile();

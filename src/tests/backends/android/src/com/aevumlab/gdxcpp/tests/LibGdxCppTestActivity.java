@@ -31,7 +31,7 @@ public class LibGdxCppTestActivity extends Activity {
         System.loadLibrary("gdx-cpp-box2d");
         System.loadLibrary("gdx-cpp-box2d-layer");
         
-        manager.initializeWithSharedLib("Bridge");
+        manager.initializeWithSharedLib("Pyramid");
         setContentView(manager.createView(this));
     }
     

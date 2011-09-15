@@ -14,7 +14,7 @@ using namespace gdx_cpp;
 
 class AplhaTest : public gdx_cpp::ApplicationListener {
 public:
-    AplhaTest() {        
+    AplhaTest() {
     }
     
     void create() {
@@ -46,6 +46,7 @@ public:
     
     void resume() {
     }
+    
 private:
     SpriteBatch* spriteBatch;
     Texture::ptr texture;

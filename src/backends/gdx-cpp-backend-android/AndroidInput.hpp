@@ -100,6 +100,9 @@ public:
 
 //     void processEvents(SDL_Event& evt);
     void reset();
+    void handleTouchDrag(float x, float y, int button);
+    void handleTouchDown(float arg1, float arg2, int button);
+    void handleTouchUp(float arg1, float arg2, int button);
     
 protected:
     gdx_cpp::InputProcessor* processor;

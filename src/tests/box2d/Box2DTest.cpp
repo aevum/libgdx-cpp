@@ -12,6 +12,7 @@
 #include <gdx-cpp/Graphics.hpp>
 #include <iostream>
 #include "gdx-cpp/Input.hpp"
+#include <gdx-cpp/graphics/FPSLogger.hpp>
 
 using namespace gdx_cpp;
 using namespace gdx_cpp::graphics;
@@ -46,6 +47,7 @@ public:
   }
     
     void render () {
+        logger.log();
         // update the world with a fixed time step
         long startTime = gdx_cpp::Gdx::system->nanoTime();
         world->Step(gdx_cpp::Gdx::app->getGraphics()->getDeltaTime(), 3, 3);
@@ -129,9 +131,13 @@ public:
     }
 
     bool touchDown (int x, int y, int pointer, int button) {
+        Gdx::app->log("Box2DTest", "touchdown x: %d, y: %d, button %d", x, y, button);
         // translate the mouse coordinates to world coordinates
         testPoint.set(x, y, 0);
         camera->unproject(testPoint);
+
+        Gdx::app->log("Box2DTest", "unprojected x: %f y: %f", testPoint.x, testPoint.y);
+        
         // ask the world which bodies are within the given
         // bounding box around the mouse pointer
         hitBody = NULL;
@@ -217,7 +223,7 @@ public:
         
 protected:
     virtual void createWorld (b2World& world) = 0;
-
+    FPSLogger logger;
     OrthographicCamera * camera;
     gdx_cpp::physics::box2d::Box2DDebugRenderer * renderer;
     b2World * world;
