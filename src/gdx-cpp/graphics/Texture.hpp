@@ -92,13 +92,9 @@ public:
 
     Texture (const gdx_cpp::graphics::TextureData::ptr data) ;
     Texture (gdx_cpp::graphics::Pixmap::ptr pixmap, const gdx_cpp::graphics::Pixmap::Format& format, bool useMipMaps) ;
-    Texture (const files::FileHandle& file, bool useMipMaps) ;
-    Texture (const gdx_cpp::files::FileHandle& file, const Pixmap::Format& format, bool useMipMaps) ;
-    Texture (const gdx_cpp::files::FileHandle file) ;
     Texture (const gdx_cpp::graphics::Pixmap::ptr pixmap, bool useMipMaps) ;
     Texture (int width, int height, const Pixmap::Format& format) ;
     Texture (const TextureData& data) ;
-
 
     const gdx_cpp::assets::AssetType& getAssetType();
     void load (const gdx_cpp::graphics::TextureData::ptr& data);
@@ -123,10 +119,14 @@ public:
     static void setAssetManager (gdx_cpp::assets::AssetManager* manager);
     std::string getManagedStatus ();
     static int createGLHandle ();
-    
-protected:
-    void initialize(const gdx_cpp::files::FileHandle& file, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps);
 
+    static ptr fromFile(const gdx_cpp::files::FileHandle::ptr file,
+                        const gdx_cpp::graphics::Pixmap::Format* format = NULL,
+                        bool useMipMaps = false);
+protected:
+    void initialize(const gdx_cpp::files::FileHandle::ptr file, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps);
+    Texture ();
+    
 private:
     void create (gdx_cpp::graphics::TextureData::ptr data);
     void uploadImageData (const Pixmap::ptr pixmap);
