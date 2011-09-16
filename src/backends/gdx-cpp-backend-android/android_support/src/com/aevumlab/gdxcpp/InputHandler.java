@@ -35,7 +35,7 @@ public class InputHandler implements  OnKeyListener, OnTouchListener, SensorEven
 	@Override
 	public boolean onTouch(View arg0, MotionEvent arg1) {
 		ApplicationManager.onTouchEvent(arg1);
-		return false;
+		return true;
 	}
 
 	@Override

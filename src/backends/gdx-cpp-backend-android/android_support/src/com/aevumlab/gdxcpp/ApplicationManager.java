@@ -113,7 +113,7 @@ public class ApplicationManager {
 			nativeTouchUpEvent(evt.getX(), evt.getY(), evt.getAction() & MotionEvent.ACTION_POINTER_ID_MASK >> MotionEvent.ACTION_POINTER_ID_SHIFT);
 			break;
 		case MotionEvent.ACTION_MOVE:
-			nativeTouchUpEvent(evt.getX(), evt.getY(), evt.getAction() & MotionEvent.ACTION_POINTER_ID_MASK >> MotionEvent.ACTION_POINTER_ID_SHIFT);
+			nativeTouchDragEvent(evt.getX(), evt.getY(), evt.getAction() & MotionEvent.ACTION_POINTER_ID_MASK >> MotionEvent.ACTION_POINTER_ID_SHIFT);
 			break;
 		}		
 	}
