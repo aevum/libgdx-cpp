@@ -38,7 +38,7 @@ Requirements:
 #### Step-by-step guide
 
 1. create a build dir somewhere on your home partition
-2. cmake -DCMAKE_TOOLCHAIN_FILE=PATH-TO-CHECKED-OUT-LIBGDXCPP/cmake/android.toolchain.cmake PATH-TO-CHECKED-OUT-LIBGDXCPP
+2. cmake -DCMAKE_TOOLCHAIN_FILE=PATH-TO-CLONED-LIBGDXCPP/cmake/android.toolchain.cmake PATH-TO-CLONED-LIBGDXCPP
 3. ccmake .
 4. Edit your configuration as needed
 5. make
@@ -47,8 +47,8 @@ Libraries will be generated under the lib folder, binaries under the bin folder
 
 #### Running the tests
 
-1. Import the Eclipse project under PATH-TO-CHECKED-OUT-LIBGDXCPP/src/backends/gdx-cpp-backend-android/android-support
-2. Import the Eclipse project under PATH-TO-CHECKED-OUT-LIBGDXCPP/src/test/backend/android (I'll call it test-project from now)
+1. Import the Eclipse project under PATH-TO-CLONED-LIBGDXCPP/src/backends/gdx-cpp-backend-android/android-support
+2. Import the Eclipse project under PATH-TO-CLONED-LIBGDXCPP/src/test/backend/android (I'll call it test-project from now)
 3. Under Eclipse, edit the test project to point to the android support library (witch you imported on step 1)
 4. Under the test-project/libs you'll have to symlink the required shared libraries to make the test run.If you compiled
     the backend to armeabi it will be test-project/libs/armeabi. If armeabi-v7a it will be under test-project/libs/armeabi-v7a. Make sure
@@ -57,7 +57,7 @@ Libraries will be generated under the lib folder, binaries under the bin folder
 6. Run the project and pray for the Android gods
 
         
-## Differences from libGdx
+## Differences from libgdx
 
 The texture class constructors that received an managed texture data had to be changed to static constructors.
 This is because C++ contruction blocks us to use shared_pointers, so we had to make it two-phase-like. So instead of calling the constructor,
@@ -67,5 +67,13 @@ you'll have to call, for example:
 
 whith the same parameters that you would expect on the constructor.
 
+## What's working
 
+* The linux backend has file and input working
+* The android backend has input working
 
+## What has to be done
+
+* Backend polishing. Seriously, it's working, but there is a lot of stuff that is ugly and were fast-made.
+* iOs support
+* etc
