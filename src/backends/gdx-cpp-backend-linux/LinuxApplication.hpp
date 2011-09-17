@@ -27,6 +27,7 @@
 #include <gdx-cpp/utils/Synchronized.hpp>
 #include "LinuxInput.hpp"
 #include "LinuxFiles.hpp"
+#include "LinuxOpenALAudio.hpp"
 
 namespace gdx_cpp {
 
@@ -65,6 +66,7 @@ protected:
     LinuxGraphics* graphics;
     LinuxInput* input;
     LinuxFiles* files;
+    LinuxOpenALAudio* audio;
     
     std::list< Runnable::ptr > runnables;
 

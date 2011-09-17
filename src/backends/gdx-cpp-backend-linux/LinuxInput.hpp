@@ -102,7 +102,7 @@ public:
     void processEvents(SDL_Event& evt);
     void reset();
 
-    int getGdxEventKey(int eventkey);
+    int getGdxEventKey(SDL_Event& eventkey);
     
     
 protected:
