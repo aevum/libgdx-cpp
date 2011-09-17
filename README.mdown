@@ -9,6 +9,7 @@ These are the requirements to compile libgdx-cpp over linux(ubuntu):
 * libsdl
 * libgles1-mesa-dev
 * libgles2-mesa-dev
+* libopenal-dev
 
 #### Step-by-step (Ohhh baby)
 

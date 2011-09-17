@@ -86,8 +86,9 @@ public:
         const AssetMap& assetsByType = assets[type];
         assert(assetsByType.count(filename));
 
-        T& asset = (T&) *assetsByType[filename];
-        return asset;
+//         assetsByType[filename];
+//         T& asset = (T&) *();
+//         return asset;
     }
 
     bool getAssetFileName (const Asset& asset, std::string& result) ;
