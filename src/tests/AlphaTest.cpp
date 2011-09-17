@@ -7,14 +7,15 @@
 #include <gdx-cpp/graphics/GL10.hpp>
 #include <gdx-cpp/graphics/Texture.hpp>
 #include <gdx-cpp/graphics/g2d/SpriteBatch.hpp>
+#include <gdx-cpp/utils/ApplicationListenerDecorator.hpp>
 
 using namespace gdx_cpp::graphics::g2d;
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
 
-class AplhaTest : public gdx_cpp::ApplicationListener {
+class AlphaTest : public gdx_cpp::ApplicationListener {
 public:
-    AplhaTest() {
+    AlphaTest() {
     }
     
     void create() {
@@ -53,5 +54,5 @@ private:
 };
 
 void init() {
-    createApplication(new AplhaTest, "Alpha Test", 640, 480);
+    createApplication(new utils::ApplicationListenerDecorator<AlphaTest>(), "Alpha Test", 640, 480);
 }

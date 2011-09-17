@@ -21,6 +21,8 @@
 #include "FileHandle.hpp"
 #include <iostream>
 #include <stdexcept>
+#include <stdlib.h>
+#include <cassert>
 
 using namespace gdx_cpp::files;
 
@@ -149,11 +151,12 @@ std::string FileHandle::readString (const std::string& charset) {
 }
 
 int FileHandle::readBytes (char_ptr &c) {
-    char p;
     int Length = (int) length();
     if (Length == 0) Length = 512;
     int bufferlength = Length;
-    c = char_ptr (new char[bufferlength]);
+    
+    char* buf = (char*) malloc(bufferlength);
+    
     int position = 0;
     ifstream_ptr input = read();
     try
@@ -161,7 +164,7 @@ int FileHandle::readBytes (char_ptr &c) {
         while (true)
         {
             int count = 0;
-            input->read( c.get() + position, Length - position);
+            input->read( buf + position, Length - position);
             count = input->gcount();
             position += count;
             if(input->eof() || !count || input->peek() == EOF)
@@ -171,10 +174,9 @@ int FileHandle::readBytes (char_ptr &c) {
 
             if (position == bufferlength) {
                 // Grow buffer.
-            char_ptr newBuffer = char_ptr (new char[bufferlength * 2]);
-            for(int i = 0; i< bufferlength; i++) newBuffer.get()[i] = c.get()[i];
-            c.swap(newBuffer);
-            bufferlength *= 2;
+                buf = (char * ) realloc(buf, bufferlength * 2);
+                assert(buf);
+                bufferlength *= 2;
             }
         }
     }
@@ -183,14 +185,19 @@ int FileHandle::readBytes (char_ptr &c) {
         if(input->is_open()) input->close();
         throw std::runtime_error("Error reading file: " + this->toString());
     }
-    if(input->is_open()) input->close();
+    
+    if(input->is_open()) {
+        input->close();
+    }
+    
     if(position < bufferlength)
     {
-        // Shrink buffer.
-        char_ptr newBuffer = char_ptr (new char[position]);
-        for(int i = 0; i<position; i++) newBuffer.get()[i] = c.get()[i];
-        c.swap(newBuffer);
+        buf = (char *) realloc(buf, position);
+        assert(buf);
     }
+
+    char_ptr new_ptr = char_ptr(buf, shared_ptr_free_deleter());
+    c.swap(new_ptr);
     return position;
 }
 

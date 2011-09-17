@@ -37,9 +37,7 @@ public:
     void create() {
         
         spriteBatch = new SpriteBatch(1000);
-        std::string path = "data/badlogicsmall.jpg";
-
-        gdx_cpp::Files::fhandle_ptr file = gdx_cpp::Gdx::files->internal(path);
+        gdx_cpp::Files::fhandle_ptr file = gdx_cpp::Gdx::files->internal("data/badlogicsmall.jpg");
         Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(*file));
 
         texture = Texture::ptr(new Texture(32, 32, gdx_cpp::graphics::Pixmap::Format::RGB565));
@@ -48,7 +46,7 @@ public:
         pixmap->dispose();
         
         pixmap = Pixmap::ptr(new Pixmap(2, 2, Pixmap::Format::RGBA8888));
-        pixmap->setColor(1,1,1,1);
+        pixmap->setColor(1,1,0 , 0.5f);
         pixmap->fill();
 
         texture2 = Texture::ptr(new Texture(pixmap, false));
@@ -135,7 +133,7 @@ public:
 
         start = Gdx::system->nanoTime();
         for (int i = 0; i < SPRITES * 6; i += 6)
-            spriteBatch->draw(*texture, sprites2[i], sprites2[i + 1], 16, 16, 32, 32, scale, scale, angle, 0, 0, 32, 32, false, false);
+            spriteBatch->draw(*texture2, sprites2[i], sprites2[i + 1], 16, 16, 32, 32, scale, scale, angle, 0, 0, 32, 32, false, false);
         draw2 = (Gdx::system->nanoTime() - start) / 1000;
 
         start = Gdx::system->nanoTime();

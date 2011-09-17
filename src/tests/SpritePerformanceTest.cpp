@@ -35,12 +35,9 @@ public:
     }
 
     void create() {
-        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(32, 32, Pixmap::Format::RGBA8888));
-        pixmap->setColor(0, 1, 0, 0.7f);
-        pixmap->fill();
-
-        texture = Texture::ptr(new Texture(pixmap, false));
+        texture = Texture::fromFile(Gdx::files->internal("data/badlogicsmall.jpg"));
         texture->setFilter(Texture::TextureFilter::Linear, Texture::TextureFilter::Linear);
+
         vaBatch = new SpriteBatch();
         Mesh::forceVBO = true;
         vboBatch = new SpriteBatch(1000, 1);

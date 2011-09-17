@@ -384,7 +384,7 @@ graphics/GL11.cpp
 graphics/GL20.cpp
 graphics/Texture.cpp
 graphics/glutils/MipMapGenerator.cpp
-# graphics/glutils/FileTextureData.cpp
+graphics/glutils/FileTextureData.cpp
 graphics/glutils/VertexBufferObject.cpp
 graphics/glutils/ImmediateModeRenderer10.cpp
 graphics/glutils/IndexBufferObjectSubData.cpp

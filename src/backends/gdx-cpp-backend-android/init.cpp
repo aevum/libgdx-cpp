@@ -68,7 +68,7 @@ void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeTouchUpEvent(JNIEnv* env,
     static_cast<AndroidInput*>(Gdx::app->getInput())->handleTouchUp(x, y, button);
 }
 
-void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeToucDragEvent(JNIEnv* env, jobject object, jfloat x, jfloat y, int button ) {
+void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeTouchDragEvent(JNIEnv* env, jobject object, jfloat x, jfloat y, int button ) {
     assert(applicationListener);
     __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativeTouchDrag: x %f y %f button %d", x, y, button);
     static_cast<AndroidInput*>(Gdx::app->getInput())->handleTouchDrag(x, y, button);

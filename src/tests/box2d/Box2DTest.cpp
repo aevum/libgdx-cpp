@@ -64,9 +64,9 @@ public:
         renderer->render(*world);
         float renderTime = (gdx_cpp::Gdx::system->nanoTime() - startTime) / 1000000000.0f;
 
-        batch->begin();
+//         batch->begin();
 //         font.draw(batch, "fps:" + Gdx.graphics.getFramesPerSecond() + ", update: " + updateTime + ", render: " + renderTime, 0, 20);
-        batch->end();
+//         batch->end();
     }
 
 

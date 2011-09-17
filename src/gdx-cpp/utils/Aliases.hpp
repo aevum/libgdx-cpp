@@ -23,6 +23,21 @@
 
 #include <tr1/memory>
 #include <tr1/shared_ptr.h>
+#include <cstdlib>
+
+struct shared_ptr_array_deleter {
+    template <typename T>
+    void operator ()(T* array) {
+        delete [] array;
+    }
+};
+
+struct shared_ptr_free_deleter {
+    template <typename T>
+    void operator ()(T* array) {
+        free(array);
+    }
+};
 
 /** This template is responsible to encapsulate the use shared pointer use, in case we cant use std's one
 *
@@ -33,5 +48,17 @@ struct ref_ptr_maker
 public:
   typedef std::tr1::shared_ptr< T > type;
 };
+
+/** A simple template class to create a Null Pointer to any sharedPtr
+ * 
+ */
+struct null_shared_ptr {
+public:
+    template<typename T>
+    operator std::tr1::shared_ptr<T>() {
+        return std::tr1::shared_ptr<T>();
+    }
+};
+
 
 #endif // GDX_CPP_UTILS_ALIASES_HPP
