@@ -245,18 +245,15 @@ void gdx_cpp::backends::nix::LinuxInput::processEvents(SDL_Event& evt)
         }
     }
     else if (evt.type == SDL_KEYDOWN) {
-
-        std::cout << "which: " << (int)evt.key.which << std::endl;
-        std::cout << "state: " << (int)evt.key.state << std::endl;
-        std::cout << "type: " << (int)evt.key.type << std::endl;
-        std::cout << "mod: " << (int)evt.key.keysym.mod << std::endl;
-        std::cout << "sym: " << (int)evt.key.keysym.sym << std::endl;
-        std::cout << "unicode: " << (int)evt.key.keysym.unicode << std::endl;
-        std::cout << "scancode: " << (int)evt.key.keysym.scancode << std::endl;
         if (this->processor) {
-            this->processor->keyDown(getGdxEventKey(evt.key.keysym.sym));
+            this->processor->keyDown(getGdxEventKey(evt));
+        }
+    } else if (evt.type == SDL_KEYUP) {
+        if (this->processor) {
+            this->processor->keyUp(getGdxEventKey(evt));
         }
     }
+    
 
 }
 
@@ -265,8 +262,8 @@ void gdx_cpp::backends::nix::LinuxInput::reset()
     this->_justTouched = false;
 }
 
-int gdx_cpp::backends::nix::LinuxInput::getGdxEventKey(int eventkey) {
-    switch ( eventkey )
+int gdx_cpp::backends::nix::LinuxInput::getGdxEventKey(SDL_Event& eventkey) {
+    switch ( eventkey.key.keysym.sym )
     {
     case SDLK_UNKNOWN:
         return gdx_cpp::Input::Keys::UNKNOWN;

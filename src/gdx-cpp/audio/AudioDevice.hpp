@@ -29,8 +29,8 @@ namespace audio {
 class AudioDevice: public gdx_cpp::utils::Disposable {
 public:
     virtual   bool isMono () = 0;
-    virtual   void writeSamples (int offset,int numSamples) = 0;
-    virtual   void writeSamples (int offset,int numSamples) = 0;
+    virtual   void writeSamples (short * samples, int offset,int numSamples) = 0;
+    virtual   void writeSamples (float * samples, int offset,int numSamples) = 0;
     virtual   int getLatency () = 0;
     virtual   void dispose () = 0;
 

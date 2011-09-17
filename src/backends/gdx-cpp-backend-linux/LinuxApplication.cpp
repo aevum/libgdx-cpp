@@ -45,12 +45,13 @@ void LinuxApplication::initialize() {
         graphics = new LinuxGraphics();
         input = new LinuxInput();
         files = new LinuxFiles();
+        audio = new LinuxOpenALAudio();
         
         graphics->initialize();
         graphics->setTitle(this->title);
         graphics->setDisplayMode(width, height, false);
         
-        Gdx::initialize(this, graphics, NULL, NULL, files);
+        Gdx::initialize(this, graphics, audio, input, files);
         
         this->run();
 }
@@ -94,6 +95,7 @@ void backends::nix::LinuxApplication::run()
         
         listener->render();
         graphics->update();
+        audio->update();
     }
 }
 
