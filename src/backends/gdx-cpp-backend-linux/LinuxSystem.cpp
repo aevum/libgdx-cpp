@@ -37,11 +37,7 @@ using namespace gdx_cpp::backends::nix;
 std::string LinuxSystem::canonicalize(const std::string& path)    
 {
     char buffer[32768];
-    if(realpath(path.c_str(), buffer) == NULL)
-    {
-      std::cout << "buffer: " << buffer << std::endl;
-      throw std::runtime_error("Error trying to canonicalize path: " + path);
-    }
+    if(realpath(path.c_str(), buffer) == NULL) throw std::runtime_error("Error trying to canonicalize path: " + path);
     return std::string(buffer);
 }
 
