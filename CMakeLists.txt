@@ -75,7 +75,7 @@ if (BUILD_BACKEND_ANDROID)
 
 #     include(cmake/android.toolchain.cmake)
     list(APPEND ACTIVE_BACKENDS ANDROID)
-    set(BACKEND-ANDROID-DEPENDENCIES dl log GLESv1_CM GLESv2)
+    set(BACKEND-ANDROID-DEPENDENCIES dl log GLESv1_CM GLESv2 android)
     set(GDX_CPP_BACKEND_ANDROID_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/backends)
     add_subdirectory(src/backends/gdx-cpp-backend-android)    
 endif()
