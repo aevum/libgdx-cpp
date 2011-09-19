@@ -5,13 +5,14 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 
 public class ApplicationManager {
-	static native void nativeInitSystem();
+	static native void nativeInitSystem(AssetManager assetManager);
 
 	static native void nativeInitialize(int width, int height);
 
@@ -79,9 +80,9 @@ public class ApplicationManager {
 		return new NativeSurfaceView(context);
 	}
 
-	public void initializeWithSharedLib(String library) {
+	public void initializeWithSharedLib(String library, AssetManager assetManager) {
 		System.loadLibrary(library);
-		nativeInitSystem();
+		nativeInitSystem(assetManager);
 	}
 
 	public void initialize(Activity activity) {

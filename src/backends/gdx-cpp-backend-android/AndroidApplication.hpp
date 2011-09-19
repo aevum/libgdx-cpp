@@ -26,6 +26,7 @@
 #include <gdx-cpp/implementation/Mutex.hpp>
 #include <gdx-cpp/utils/Synchronized.hpp>
 #include "AndroidInput.hpp"
+#include "AndroidFiles.hpp"
 
 namespace gdx_cpp {
 
@@ -67,7 +68,7 @@ protected:
     ApplicationListener* listener;
     AndroidGraphics* graphics;
     AndroidInput* input;
-    
+    AndroidFiles* files;
     std::list< Runnable::ptr > runnables;
 
     gdx_cpp::implementation::Thread::ptr mainLoopThread;

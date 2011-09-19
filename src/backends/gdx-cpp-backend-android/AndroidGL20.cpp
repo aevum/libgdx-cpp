@@ -140,7 +140,7 @@ void AndroidGL20::glGetFramebufferAttachmentParameteriv (int target,int attachme
 void AndroidGL20::glGetProgramiv (int program,int pname,const int* params) const {
     glGetProgramiv (program,pname,params);
 }
-std::string& AndroidGL20::glGetProgramInfoLog (int program) const {
+std::string AndroidGL20::glGetProgramInfoLog (int program) const {
     glGetProgramInfoLog (program);
 }
 void AndroidGL20::glGetRenderbufferParameteriv (int target,int pname,const int* params) const {
@@ -149,7 +149,7 @@ void AndroidGL20::glGetRenderbufferParameteriv (int target,int pname,const int* 
 void AndroidGL20::glGetShaderiv (int shader,int pname,const int* params) const {
     glGetShaderiv (shader,pname, params);
 }
-std::string& AndroidGL20::glGetShaderInfoLog (int shader) const {
+std::string AndroidGL20::glGetShaderInfoLog (int shader) const {
     glGetShaderInfoLog (shader);
 }
 void AndroidGL20::glGetShaderPrecisionFormat (int shadertype,int precisiontype,const int* range,const int* precision) const {

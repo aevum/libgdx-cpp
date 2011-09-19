@@ -29,7 +29,7 @@ using namespace gdx_cpp::files;
 FileHandle::FileHandle (){}
 
 FileHandle::FileHandle (const std::string &fileName)
-  :   file(File(fileName)),
+  :   file(fileName),
       type(gdx_cpp::Files::Absolute)
 {
 }
@@ -42,7 +42,7 @@ FileHandle::FileHandle (File const& file)
 
 FileHandle::FileHandle (const std::string &fileName, gdx_cpp::Files::FileType type)
   : type(type),
-    file(File(fileName))
+    file(fileName)
 {
 }
 

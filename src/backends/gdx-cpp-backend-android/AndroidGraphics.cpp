@@ -136,7 +136,7 @@ void gdx_cpp::backends::android::AndroidGraphics::updateTime()
 
     //This is to fix a nasty bug on HTC devices. Somehow sometimes the nanotime returns
     //with a very big value, this making the delta time go kucko :(
-    if (time - lastTime > 10000000000) {
+    if (time - lastTime > 10000000000LL) {
         lastTime = Gdx::system->nanoTime();        
         return;
     }

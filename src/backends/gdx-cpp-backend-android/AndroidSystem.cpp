@@ -168,12 +168,12 @@ int64_t gdx_cpp::backends::android::AndroidSystem::getLength(gdx_cpp::files::Fil
 
 char gdx_cpp::backends::android::AndroidSystem::getPathSeparator()
 {
-
+    return ':';
 }
 
 char gdx_cpp::backends::android::AndroidSystem::getSeparator()
 {
-
+    return '/';
 }
 
 bool gdx_cpp::backends::android::AndroidSystem::isAbsolute(const gdx_cpp::files::File& f)

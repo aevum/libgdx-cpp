@@ -51,7 +51,7 @@ public:
     FileHandle ();
     FileHandle (const std::string &fileName);
     FileHandle (const gdx_cpp::files::File &file);
-    const std::string &path () const;
+    const std::string& path () const;
     std::string name () const;
     std::string extension () const;
     std::string nameWithoutExtension () const;
@@ -60,7 +60,7 @@ public:
     ifstream_ptr read ();
     std::string readString ();
     std::string readString (const std::string& charset);
-    int readBytes (char_ptr &c);
+    virtual int readBytes (char_ptr &c);
     ofstream_ptr write (bool append);
     void list (std::vector<FileHandle> &handles);
     void list (const std::string& suffix, std::vector<FileHandle> &handles);

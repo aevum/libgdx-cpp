@@ -18,52 +18,49 @@
  *  @author aevum team
  */
 
-#ifndef GDX_CPP_BACKENDS_LINUX_LINUXFILES_HPP
-#define GDX_CPP_BACKENDS_LINUX_LINUXFILES_HPP
+#ifndef GDX_CPP_BACKENDS_ANDROID_FILES_H
+#define GDX_CPP_BACKENDS_ANDROID_FILES_H
 
 #include <gdx-cpp/Files.hpp>
-#include <gdx-cpp/files/FileHandle.hpp>
+
+#include <sys/types.h>
+#include <android/asset_manager.h>
 
 namespace gdx_cpp {
 
-class Files;
+namespace files {
+class FileHandle;
+}
 
 namespace backends {
 
-namespace nix {
+namespace android {
 
-  class LinuxFiles : public gdx_cpp::Files
-  {
-    public:
-        //Override
-        gdx_cpp::Files::fhandle_ptr getFileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
-
-        //Override
-        gdx_cpp::Files::fhandle_ptr internal (const std::string &path);
-
-        //Override
-        gdx_cpp::Files::fhandle_ptr external (const std::string &path);
-
-        //Override
-        gdx_cpp::Files::fhandle_ptr absolute (const std::string &path);
-
-        //Override
-        std::string& getExternalStoragePath ();
-
-        //Override
-        bool isExternalStorageAvailable ();
-
+class AndroidFiles : public gdx_cpp::Files
+{
+public:
+    fhandle_ptr getFileHandle (const std::string& path, gdx_cpp::Files::FileType type);
         
-        
-    private:
-        std::string externalPath;
-        
-  };
+    fhandle_ptr internal (const std::string& path);
     
-}
+    fhandle_ptr external (const std::string& path);
+    
+    fhandle_ptr absolute (const std::string& path);
+    
+    std::string& getExternalStoragePath ();
+    
+    bool isExternalStorageAvailable ();
+
+    void setAndroidAssetManager(AAssetManager * mngr);
+protected:
+    AAssetManager* mngr;
+    std::string externalPath;
+};
 
 }
 
 }
 
-#endif // GDX_CPP_BACKENDS_LINUX_LINUXFILES_HPP
+}
+
+#endif // GDX_CPP_BACKENDS_ANDROID_FILES_H

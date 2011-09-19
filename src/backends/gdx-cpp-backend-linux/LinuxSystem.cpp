@@ -238,7 +238,6 @@ protected:
 };
 
 void* run_runnable(void* runnable) {
-    std::cout << "chamou runnable" << std::endl;
     ((Runnable*)runnable)->run();
 
     return NULL;

@@ -11,13 +11,11 @@ import com.aevumlab.gdxcpp.ApplicationManager;
 
 public class LibGdxCppTestActivity extends Activity {
     ApplicationManager manager;
-    AssetManager assetManager;
+    static AssetManager assetManager;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        assetManager = getAssets();
         
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -30,8 +28,8 @@ public class LibGdxCppTestActivity extends Activity {
         
         System.loadLibrary("gdx-cpp-box2d");
         System.loadLibrary("gdx-cpp-box2d-layer");
-        
-        manager.initializeWithSharedLib("Pyramid");
+        assetManager = getAssets();
+        manager.initializeWithSharedLib("SpriteBatchTest", assetManager);
         setContentView(manager.createView(this));
     }
     
