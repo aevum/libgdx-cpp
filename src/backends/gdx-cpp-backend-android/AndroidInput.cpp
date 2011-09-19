@@ -20,9 +20,9 @@
 
 #include "AndroidInput.hpp"
 #include <gdx-cpp/InputProcessor.hpp>
+#include <cassert>
 
 using namespace gdx_cpp::backends::android;
-
 
 gdx_cpp::backends::android::AndroidInput::AndroidInput()
  :
@@ -98,23 +98,22 @@ gdx_cpp::Input::Orientation gdx_cpp::backends::android::AndroidInput::getNativeO
 
 float gdx_cpp::backends::android::AndroidInput::getPitch()
 {
-    0;
+    return 0;
 }
 
 float gdx_cpp::backends::android::AndroidInput::getRoll()
 {
-    0;
+    return 0;
 }
 
 int gdx_cpp::backends::android::AndroidInput::getRotation()
 {
-    0;
+    return 0;
 }
 
 void gdx_cpp::backends::android::AndroidInput::getTextInput(const gdx_cpp::Input::TextInputListener& listener,
                                                       const std::string& title, const std::string& text)
 {
-
 }
 
 int gdx_cpp::backends::android::AndroidInput::getX()
@@ -124,7 +123,7 @@ int gdx_cpp::backends::android::AndroidInput::getX()
 
 int gdx_cpp::backends::android::AndroidInput::getX(int pointer)
 {
-
+    return 0;
 }
 
 int gdx_cpp::backends::android::AndroidInput::getY()
@@ -134,22 +133,22 @@ int gdx_cpp::backends::android::AndroidInput::getY()
 
 int gdx_cpp::backends::android::AndroidInput::getY(int pointer)
 {
-
+    return 0;
 }
 
 bool gdx_cpp::backends::android::AndroidInput::isButtonPressed(int button)
 {
-
+    return false;
 }
 
 bool gdx_cpp::backends::android::AndroidInput::isCursorCatched()
 {
-
+    return false;
 }
 
 bool gdx_cpp::backends::android::AndroidInput::isKeyPressed(int key)
 {
-
+    return false;
 }
 
 bool gdx_cpp::backends::android::AndroidInput::isPeripheralAvailable(int peripheral)
@@ -174,22 +173,18 @@ bool gdx_cpp::backends::android::AndroidInput::justTouched()
 
 void gdx_cpp::backends::android::AndroidInput::setCatchBackKey(bool catchBack)
 {
-
 }
 
 void gdx_cpp::backends::android::AndroidInput::setCatchMenuKey(bool catchMenu)
 {
-
 }
 
 void gdx_cpp::backends::android::AndroidInput::setCursorCatched(bool catched)
 {
-
 }
 
 void gdx_cpp::backends::android::AndroidInput::setCursorPosition(int x, int y)
 {
-
 }
 
 void gdx_cpp::backends::android::AndroidInput::setInputProcessor(gdx_cpp::InputProcessor* processor)
@@ -209,45 +204,28 @@ void gdx_cpp::backends::android::AndroidInput::vibrate(long int* pattern, int re
 {
 }
 
-// void gdx_cpp::backends::android::AndroidInput::processEvents(SDL_Event& evt)
-// {
-//     if (evt.type == SDL_MOUSEMOTION) {
-//         if (processor) {
-//             deltaX = evt.motion.xrel;
-//             deltaY = evt.motion.yrel;
-//             
-//             if (this->touching) {
-//                 this->processor->touchDragged(evt.motion.x, evt.motion.y, evt.button.button);
-//             } else {
-//                 this->processor->touchMoved(evt.motion.x, evt.motion.y);
-//             }
-//         }
-//     } else if (evt.type == SDL_MOUSEBUTTONDOWN) {
-//         this->touching = true;
-//         touchX = evt.motion.x;
-//         touchY = evt.motion.y;
-//         deltaX = evt.motion.xrel;
-//         deltaY = evt.motion.yrel;
-//         this->_justTouched = true;
-//         
-//         if (this->processor) {
-//             this->processor->touchDown(evt.motion.x, evt.motion.y, 0, evt.button.button);
-//         }
-//         
-//     } else if (evt.type == SDL_MOUSEBUTTONUP) {
-//         this->touching = false;
-//         touchY =touchX = 0;
-//         
-//         if (this->processor) {
-//             this->processor->touchUp(evt.motion.x, evt.motion.y, 0, evt.button.button);
-//         }
-//     }   
-// 
-// }
-
 void gdx_cpp::backends::android::AndroidInput::reset()
 {
     this->_justTouched = false;
 }
 
+void gdx_cpp::backends::android::AndroidInput::handleTouchDrag(float x, float y, int button)
+{
+    assert(this->processor);
+    this->processor->touchDragged(x, y, 0);
+}
 
+void gdx_cpp::backends::android::AndroidInput::handleTouchDown(float x, float y, int button)
+{
+    assert(this->processor);
+    touchX = x;
+    touchY = y;
+    touching = true;
+    this->processor->touchDown(x, y, 0, button);
+}
+
+void gdx_cpp::backends::android::AndroidInput::handleTouchUp(float x, float y, int button)
+{
+    touching = false;
+    this->processor->touchUp(x, y, 0 , button);
+}

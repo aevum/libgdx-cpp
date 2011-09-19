@@ -44,7 +44,7 @@ class File;
   
 class FileHandle {
 public:
-    
+    typedef ref_ptr_maker<FileHandle>::type ptr;
     typedef ref_ptr_maker< std::ifstream >::type ifstream_ptr;
     typedef ref_ptr_maker< std::ofstream >::type ofstream_ptr;
     typedef ref_ptr_maker< char >::type char_ptr;

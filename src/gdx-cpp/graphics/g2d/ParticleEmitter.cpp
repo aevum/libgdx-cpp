@@ -463,6 +463,9 @@ void ParticleEmitter::activateParticle (int index) {
             y += height * gdx_cpp::math::utils::random();
         break;
     }
+    case point:
+    default:
+        break;
     }
 
     float spriteHeight = sprite->getHeight();

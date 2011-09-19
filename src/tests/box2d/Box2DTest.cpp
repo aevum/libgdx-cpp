@@ -11,6 +11,8 @@
 #include <gdx-cpp/implementation/System.hpp>
 #include <gdx-cpp/Graphics.hpp>
 #include <iostream>
+#include "gdx-cpp/Input.hpp"
+#include <gdx-cpp/graphics/FPSLogger.hpp>
 
 using namespace gdx_cpp;
 using namespace gdx_cpp::graphics;
@@ -45,6 +47,7 @@ public:
   }
     
     void render () {
+        logger.log();
         // update the world with a fixed time step
         long startTime = gdx_cpp::Gdx::system->nanoTime();
         world->Step(gdx_cpp::Gdx::app->getGraphics()->getDeltaTime(), 3, 3);
@@ -61,9 +64,9 @@ public:
         renderer->render(*world);
         float renderTime = (gdx_cpp::Gdx::system->nanoTime() - startTime) / 1000000000.0f;
 
-        batch->begin();
+//         batch->begin();
 //         font.draw(batch, "fps:" + Gdx.graphics.getFramesPerSecond() + ", update: " + updateTime + ", render: " + renderTime, 0, 20);
-        batch->end();
+//         batch->end();
     }
 
 
@@ -91,6 +94,7 @@ public:
 
         // call abstract method to populate the world
         createWorld(*world);
+        gdx_cpp::Gdx::input->setInputProcessor(this);
 
         batch = new SpriteBatch();
 //         font = new BitmapFont();
@@ -127,9 +131,13 @@ public:
     }
 
     bool touchDown (int x, int y, int pointer, int button) {
+        Gdx::app->log("Box2DTest", "touchdown x: %d, y: %d, button %d", x, y, button);
         // translate the mouse coordinates to world coordinates
         testPoint.set(x, y, 0);
         camera->unproject(testPoint);
+
+        Gdx::app->log("Box2DTest", "unprojected x: %f y: %f", testPoint.x, testPoint.y);
+        
         // ask the world which bodies are within the given
         // bounding box around the mouse pointer
         hitBody = NULL;
@@ -215,7 +223,7 @@ public:
         
 protected:
     virtual void createWorld (b2World& world) = 0;
-
+    FPSLogger logger;
     OrthographicCamera * camera;
     gdx_cpp::physics::box2d::Box2DDebugRenderer * renderer;
     b2World * world;

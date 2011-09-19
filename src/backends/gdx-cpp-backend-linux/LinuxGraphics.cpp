@@ -224,7 +224,7 @@ bool gdx_cpp::backends::nix::LinuxGraphics::setDisplayMode(int width, int height
     SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
     
-    if (!SDL_SetVideoMode(width, height, info->vfmt->BitsPerPixel, SDL_OPENGL)) {
+    if (!SDL_SetVideoMode(width, height, info->vfmt->BitsPerPixel, flags)) {
         throw std::runtime_error("Failed to initialize SDL video");
     }
 

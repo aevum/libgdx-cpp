@@ -54,6 +54,7 @@ public:
     virtual bool useMipMaps () = 0;
     virtual bool isManaged () = 0;
 
+    virtual ~TextureData() { }
 protected:
 
 

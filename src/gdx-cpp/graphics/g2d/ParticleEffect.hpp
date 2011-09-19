@@ -23,14 +23,15 @@
 #include "gdx-cpp/utils/Disposable.hpp"
 #include <vector>
 #include <string>
-#include <gdx-cpp/utils/Aliases.hpp>
+#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/graphics/Texture.hpp"
 
 namespace gdx_cpp {
 namespace files{
 class FileHandle;
 }
 namespace graphics {
-  class Texture;
+  
 namespace g2d {
 
 class TextureAtlas;
@@ -67,7 +68,7 @@ public:
     void dispose ();
 
 protected:
-    ref_ptr_maker<Texture>::type loadTexture (const gdx_cpp::files::FileHandle& file);
+    gdx_cpp::graphics::Texture::ptr loadTexture (const gdx_cpp::files::FileHandle::ptr file);
 
 private:
     std::vector<ParticleEmitter *> emitters;

@@ -51,6 +51,16 @@ Texture::managedTextureMap Texture::managedTextures;
 int Texture::buffer = 0;
 assets::AssetManager* Texture::assetManager = 0;
 
+Texture::ptr Texture::fromFile(const gdx_cpp::files::FileHandle::ptr file,
+                               const gdx_cpp::graphics::Pixmap::Format* format,
+                               bool useMipMaps)
+{
+    ptr newTex = ptr(new Texture);
+    newTex->initialize(file, format, useMipMaps);
+
+    return newTex;
+}
+
 void Texture::create (TextureData::ptr data) {
     this->glHandle = 0;
     this->enforcePotImages = true;
@@ -60,7 +70,9 @@ void Texture::create (TextureData::ptr data) {
     glHandle = createGLHandle();
     load(data);
 
-    if (data->isManaged()) addManagedTexture(gdx_cpp::Gdx::app, shared_from_this());
+    if (data->isManaged()) {
+        addManagedTexture(gdx_cpp::Gdx::app, shared_from_this());
+    }
 }
 
 int Texture::createGLHandle () {
@@ -316,34 +328,13 @@ minFilter(TextureFilter::Nearest)
     create(glutils::PixmapTextureData::ptr(new glutils::PixmapTextureData(pixmap, &format, useMipMaps, false)));
 }
 
-Texture::Texture(const gdx_cpp::files::FileHandle& file, bool useMipMaps)
+Texture::Texture()
 :
 minFilter(TextureFilter::Nearest)
 ,magFilter(TextureFilter::Nearest)
 ,uWrap(TextureWrap::ClampToEdge)
 ,vWrap(TextureWrap::ClampToEdge)
-{
-    initialize(file, NULL, useMipMaps);
-}
-
-Texture::Texture(const gdx_cpp::files::FileHandle& file,const Pixmap::Format& format, bool useMipMaps)
-:
-minFilter(TextureFilter::Nearest)
-,magFilter(TextureFilter::Nearest)
-,uWrap(TextureWrap::ClampToEdge)
-,vWrap(TextureWrap::ClampToEdge)
-{
-   initialize(file, &format, useMipMaps);
-}
-
-Texture::Texture(const gdx_cpp::files::FileHandle file)
-:
-minFilter(TextureFilter::Nearest)
-,magFilter(TextureFilter::Nearest)
-,uWrap(TextureWrap::ClampToEdge)
-,vWrap(TextureWrap::ClampToEdge)
-{
-    initialize(file, NULL, false);
+{   
 }
 
 Texture::Texture(const Pixmap::ptr pixmap, bool useMipMaps)
@@ -356,20 +347,22 @@ minFilter(TextureFilter::Nearest)
     create(glutils::PixmapTextureData::ptr(new glutils::PixmapTextureData(pixmap, NULL , useMipMaps, false)));
 }
 
-void Texture::initialize(const gdx_cpp::files::FileHandle& file,const Pixmap::Format* format, bool useMipMaps)
+void Texture::initialize(const gdx_cpp::files::FileHandle::ptr file, const Pixmap::Format* format, bool useMipMaps)
 {
     this->glHandle = 0;
     this->enforcePotImages = true;
     this->useHWMipMap = true;
     this->assetManager = 0;
 
-    std::string s = file.name();
+    std::string s = file->name();
     std::string suffix(".etc1");
     int found = s.rfind(suffix);
+    
     if( found != s.npos && (found == (s.length() - suffix.length()) ) ){
         // create(new ETC1TextureData(file, useMipMaps));
      } else {
-         //create(new glutils::FileTextureData(file, NULL, format, useMipMaps));
+         TextureData::ptr tex = TextureData::ptr(new glutils::FileTextureData(file, null_shared_ptr() , format, useMipMaps));
+         create(tex);
      }
 }
 

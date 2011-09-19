@@ -35,17 +35,14 @@ public:
     }
 
     void create() {
-        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(32, 32, Pixmap::Format::RGBA8888));
-        pixmap->setColor(0, 1, 0, 0.7f);
-        pixmap->fill();
-
-        texture = Texture::ptr(new Texture(pixmap, false));
+        texture = Texture::fromFile(Gdx::files->internal("data/badlogicsmall.jpg"));
         texture->setFilter(Texture::TextureFilter::Linear, Texture::TextureFilter::Linear);
-        vaBatch = new SpriteBatch(3000);
+
+        vaBatch = new SpriteBatch();
         Mesh::forceVBO = true;
-        vboBatch = new SpriteBatch(3000, 1);
+        vboBatch = new SpriteBatch(1000, 1);
         Mesh::forceVBO = false;
-        cache = new SpriteCache(3000, 1);
+        cache = new SpriteCache;
 
         for (int i = 0; i < SPRITES; i++) {
             int x = (int)(math::utils::random() * (Gdx::graphics->getWidth() - 32));
@@ -130,7 +127,6 @@ public:
 
     void resume() {
     }
-
 
     void renderSpriteBatch () {
         vaBatch->enableBlending();
@@ -229,7 +225,7 @@ public:
 private:
     int mode;
     std::stringstream log;
-    static const int SPRITES = 1500;
+    static const int SPRITES = 500;
     Sprite* sprites[SPRITES];
     Texture::ptr texture;
     SpriteBatch* vaBatch;

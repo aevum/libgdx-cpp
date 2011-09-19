@@ -31,7 +31,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/dir.h>
-#include <sys/param.h>
 
 using namespace gdx_cpp::backends::nix;
 
