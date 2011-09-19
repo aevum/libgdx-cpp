@@ -38,28 +38,45 @@ using namespace gdx_cpp::backends::nix;
 std::string LinuxSystem::canonicalize(const std::string& path)    
 {
     char buffer[32768];
-    if(realpath(path.c_str(), buffer) == NULL) throw std::runtime_error("Error trying to canonicalize path: " + path);
+    if(realpath(path.c_str(), buffer) == NULL)
+    {
+      std::cout << "buffer: " << buffer << std::endl;
+      throw std::runtime_error("Error trying to canonicalize path: " + path);
+    }
     return std::string(buffer);
 }
 
 void LinuxSystem::checkDelete(const std::string& path)
 {
-    if (access(path.c_str(), R_OK) == 0) return;
+    int found;
+    std::string testPath = path;
+    while(testPath != "")
+    {
+       if (access(testPath.c_str(), W_OK) == 0) return;
+       found = testPath.rfind(getSeparator());
+       if(found == testPath.npos) break;
+       else testPath = testPath.substr(0, found);
+    }
     throw std::runtime_error("Delete permission denied on file: " + path);
 }
 
 void LinuxSystem::checkRead(const std::string& path)
 {
-    if (access(path.c_str(), W_OK) == 0) return;
+    int found;
+    std::string testPath = path;
+    while(testPath != "")
+    {
+       if (access(testPath.c_str(), W_OK) == 0) return;
+       found = testPath.rfind(getSeparator());
+       if(found == testPath.npos) break;
+       else testPath = testPath.substr(0, found);
+    }
     throw std::runtime_error("Read permission denied on file: " + path);
 }
 
 bool LinuxSystem::createDirectory(const gdx_cpp::files::File& f)
 {
-    std::string cmd = "mkdir \"";
-    if(f.isDirectory() && !f.exists()) cmd += f.getCanonicalPath();
-    cmd += "\"";
-    if(system(cmd.c_str()) == -1) return false;
+    if(mkdir(f.getAbsolutePath().c_str(), S_IWUSR | S_IRUSR) == -1) return false;
     return true;
 }
 
@@ -74,9 +91,9 @@ int LinuxSystem::getBooleanAttributes(const gdx_cpp::files::File& f)
 {
     int attribs = 0;
     struct stat fileStat;
-    std::string canonPath = f.getCanonicalPath();
+    std::string absPath = f.getAbsolutePath();
     
-    if(stat(canonPath.c_str(), &fileStat) == -1)
+    if(stat(absPath.c_str(), &fileStat) == -1)
     {
         return attribs;
     }
@@ -92,9 +109,9 @@ int LinuxSystem::getBooleanAttributes(const gdx_cpp::files::File& f)
         attribs = attribs | this->BA_DIRECTORY;
     }
     int pos = 0;
-    while(pos < canonPath.length()-1)
+    while(pos < absPath.length()-1)
     {
-        if(canonPath[pos] == '/' && canonPath[pos+1] == '.')
+        if(absPath[pos] == '/' && absPath[pos+1] == '.')
         {
           attribs = attribs | this->BA_HIDDEN;
           break;
@@ -133,15 +150,22 @@ bool LinuxSystem::isAbsolute(const gdx_cpp::files::File& f)
     return (f.getPrefixLength() != 0);
 }
 
-bool LinuxSystem::list(const gdx_cpp::files::File& f, std::vector< std::string > &paths)
+void LinuxSystem::list(const gdx_cpp::files::File& f, std::vector< std::string > &paths)
 {
-    if(!f.isDirectory()) return false;
+    paths.resize(0);
+    if(!f.isDirectory()) return;
     int count;
+    std::string fname;
     struct direct **files;
     count = scandir(f.getCanonicalPath().c_str(), &files, NULL, NULL);
-    paths.resize(count);
-    for (int i=0;i<count; ++i) paths[i] = std::string(files[i]->d_name);
-    return true;
+    if(count == -1) throw std::runtime_error("Cannot retrieve fileList in directory " + f.getCanonicalPath());
+    for(int i=0;i<count; ++i)
+    {
+        fname = std::string(files[i]->d_name);
+        if(fname != "." && fname != "..") paths.push_back(fname);
+        free(files[i]);
+    }
+    free(files);
 }
 
     /* A normal Unix pathname contains no duplicate slashes and does not end
@@ -193,7 +217,10 @@ int LinuxSystem::prefixLength(const std::string& path)
 
 bool LinuxSystem::renameFile(gdx_cpp::files::File& f1, const gdx_cpp::files::File& f2)
 {
-    if(rename(f1.getCanonicalPath().c_str(), f2.getCanonicalPath().c_str()) == -1) return false;
+    std::string to;
+    if(f2.exists()) to = f2.getCanonicalPath();
+    else to = f2.getAbsolutePath();
+    if(rename(f1.getCanonicalPath().c_str(), to.c_str()) == -1) return false;
     return true;
 }
 
@@ -215,7 +242,15 @@ std::string LinuxSystem::resolve(const std::string& parent, const std::string& c
 
 void LinuxSystem::checkWrite(const std::string& path)
 {
-     if (access(path.c_str(), W_OK) == 0) return;                                       
+     int found;
+     std::string testPath = path;
+     while(testPath != "")
+     {
+        if (access(testPath.c_str(), W_OK) == 0) return;
+        found = testPath.rfind(getSeparator());
+        if(found == testPath.npos) break;
+        else testPath = testPath.substr(0, found);
+     }
      throw std::runtime_error("Write permission denied on file: " + path);
 }
 
