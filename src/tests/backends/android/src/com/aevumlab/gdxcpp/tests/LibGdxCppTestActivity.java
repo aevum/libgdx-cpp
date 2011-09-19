@@ -11,7 +11,6 @@ import com.aevumlab.gdxcpp.ApplicationManager;
 
 public class LibGdxCppTestActivity extends Activity {
     ApplicationManager manager;
-    static AssetManager assetManager;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,16 +19,14 @@ public class LibGdxCppTestActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-        
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+              
         manager = new ApplicationManager();
                 
         manager.initialize(this);
         
         System.loadLibrary("gdx-cpp-box2d");
         System.loadLibrary("gdx-cpp-box2d-layer");
-        assetManager = getAssets();
-        manager.initializeWithSharedLib("SpriteBatchTest", assetManager);
+        manager.initializeWithSharedLib("SpritePerformanceTest", getAssets());
         setContentView(manager.createView(this));
     }
     

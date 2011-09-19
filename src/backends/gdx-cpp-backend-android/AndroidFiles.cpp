@@ -31,13 +31,17 @@ using namespace gdx_cpp::backends::android;
 Files::fhandle_ptr gdx_cpp::backends::android::AndroidFiles::absolute(const std::string& path)
 {
     assert(mngr);
-    return gdx_cpp::Files::fhandle_ptr(new AndroidFileHandle(mngr, path, gdx_cpp::Files::Absolute));
+    AAssetManager* manager = AAssetManager_fromJava(env, mngr);
+    assert(manager);
+    return gdx_cpp::Files::fhandle_ptr(new AndroidFileHandle(manager, path, gdx_cpp::Files::Absolute));
 }
 
 Files::fhandle_ptr gdx_cpp::backends::android::AndroidFiles::external(const std::string& path)
 {
     assert(mngr);
-    return gdx_cpp::Files::fhandle_ptr(new AndroidFileHandle(mngr, path, gdx_cpp::Files::External));
+    AAssetManager* manager = AAssetManager_fromJava(env, mngr);
+    assert(manager);
+    return gdx_cpp::Files::fhandle_ptr(new AndroidFileHandle(manager, path, gdx_cpp::Files::External));
 }
 
 std::string& gdx_cpp::backends::android::AndroidFiles::getExternalStoragePath()
@@ -48,14 +52,18 @@ std::string& gdx_cpp::backends::android::AndroidFiles::getExternalStoragePath()
 Files::fhandle_ptr gdx_cpp::backends::android::AndroidFiles::getFileHandle(const std::string& path, gdx_cpp::Files::FileType type)
 {
     assert(mngr);
-    return gdx_cpp::Files::fhandle_ptr(new AndroidFileHandle(mngr,path, type));
+    AAssetManager* manager = AAssetManager_fromJava(env, mngr);
+    assert(manager);
+    return gdx_cpp::Files::fhandle_ptr(new AndroidFileHandle(manager,path, type));
 }
 
 Files::fhandle_ptr gdx_cpp::backends::android::AndroidFiles::internal(const std::string& path)
 {
-    Gdx::app->log("AndroidFiles", "manager is %p, path is %s", mngr, path.c_str());
-    assert(mngr);
-    return gdx_cpp::Files::fhandle_ptr(new AndroidFileHandle(mngr, path, gdx_cpp::Files::Internal));
+    AAssetManager* manager = AAssetManager_fromJava(env, mngr);
+    assert(manager);
+
+    new AndroidFileHandle(manager, path, gdx_cpp::Files::Internal);
+    return gdx_cpp::Files::fhandle_ptr(new AndroidFileHandle(manager, path, gdx_cpp::Files::Internal));
 }
 
 bool gdx_cpp::backends::android::AndroidFiles::isExternalStorageAvailable()
@@ -64,8 +72,9 @@ bool gdx_cpp::backends::android::AndroidFiles::isExternalStorageAvailable()
     return false;
 }
 
-void backends::android::AndroidFiles::setAndroidAssetManager(AAssetManager* mngr)
+void backends::android::AndroidFiles::setAndroidAssetManager(JNIEnv* env, jobject mngr)
 {
     this->mngr = mngr;
+    this->env = env;
 }
 

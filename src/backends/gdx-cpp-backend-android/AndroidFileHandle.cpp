@@ -31,16 +31,12 @@ AndroidFileHandle::AndroidFileHandle(AAssetManager* mngr, const std::string& fil
 
 int gdx_cpp::backends::android::AndroidFileHandle::readBytes(gdx_cpp::files::FileHandle::char_ptr& c)
 {
-    Gdx::app->log("AndroidFileHandle", "ReadBytes: manager is: %p, filename is %s", this->manager, this->file.getName().c_str());
-    AAsset* asset = AAssetManager_open(this->manager, this->file.getName().c_str(), AASSET_MODE_UNKNOWN);
+    AAsset* asset = AAssetManager_open(this->manager, this->file.getPath().c_str(), AASSET_MODE_UNKNOWN);
 
-    Gdx::app->log("AndroidFileHandle", "asset is %p", asset);
     assert(asset);
 
     off_t start, length;
     int fd = AAsset_openFileDescriptor(asset, &start, &length);
-
-    Gdx::app->log("AndroidFileHandle", "fd is %d", fd);
     
     assert(0 <= fd);
     

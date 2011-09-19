@@ -69,6 +69,7 @@ public:
     bool isAbsolute(const gdx_cpp::files::File& f);
     bool list(const gdx_cpp::files::File& f, std::vector< std::string >& paths);
     std::string normalize(const std::string& path);
+    std::string normalize(const std::string &pathname, const int &len, const int &off);
     int prefixLength(const std::string& path);
     bool renameFile(files::File& f1, const gdx_cpp::files::File& f2);
     std::string resolve(const std::string& parent, const std::string& child);

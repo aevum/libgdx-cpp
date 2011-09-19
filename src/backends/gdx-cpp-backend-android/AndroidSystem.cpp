@@ -188,12 +188,41 @@ bool gdx_cpp::backends::android::AndroidSystem::list(const gdx_cpp::files::File&
 
 std::string gdx_cpp::backends::android::AndroidSystem::normalize(const std::string& path)
 {
+    int n = path.length();
+    std::string pathname = path;
+    char prevChar = 0;
+    for (int i = 0; i < n; i++) {
+        char c = pathname[i];
+        if ((prevChar == '/') && (c == '/'))
+            return normalize(pathname, n, i - 1);
+        prevChar = c;
+    }
+    if (prevChar == '/') return normalize(pathname, n, n - 1);
+             return pathname;
+}
 
+std::string gdx_cpp::backends::android::AndroidSystem::normalize(const std::string& pathname, const int& len, const int& off)
+{
+    if (len == 0) return pathname;
+    int n = len;
+    while ((n > 0) && (pathname[n - 1] == '/')) n--;
+           if (n == 0) return "/";
+           std::string sb = "";
+    if (off > 0) sb.append(pathname.substr(0, off));
+           char prevChar = 0;
+    for (int i = off; i < n; i++) {
+        char c = pathname[i];
+        if ((prevChar == '/') && (c == '/')) continue;
+           sb.append(1, c);
+        prevChar = c;
+    }
+    return sb;
 }
 
 int gdx_cpp::backends::android::AndroidSystem::prefixLength(const std::string& path)
 {
-
+    if(path.length() == 0) return 0;
+    return (path[0] == '/') ? 1 : 0;
 }
 
 bool gdx_cpp::backends::android::AndroidSystem::renameFile(gdx_cpp::files::File& f1, const gdx_cpp::files::File& f2)

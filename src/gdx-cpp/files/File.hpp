@@ -81,7 +81,7 @@ public:
 private:
 
     std::string path;
-    int prefixLength;
+    unsigned int prefixLength;
 
     File(const std::string& pathname,const int &prefixLength);
     File(const std::string& child, const File &parent);

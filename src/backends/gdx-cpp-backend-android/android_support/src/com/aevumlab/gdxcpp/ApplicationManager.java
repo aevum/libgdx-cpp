@@ -12,9 +12,9 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class ApplicationManager {
-	static native void nativeInitSystem(AssetManager assetManager);
+	static native void nativeInitSystem();
 
-	static native void nativeInitialize(int width, int height);
+	static native void nativeInitialize(AssetManager manager, int width, int height);
 
 	static native void nativeCreate();
 
@@ -32,9 +32,11 @@ public class ApplicationManager {
 	
 	InputHandler handler = new InputHandler();	
 	Activity activity;
+	private AssetManager assets;
 
 	class NativeSurfaceRenderer implements GLSurfaceView.Renderer {
-
+		boolean created;
+		
 		@Override
 		public void onDrawFrame(GL10 gl) {
 			ApplicationManager.nativeUpdate();
@@ -43,7 +45,10 @@ public class ApplicationManager {
 		@Override
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
 			ApplicationManager.nativeResize(width, height);
-			ApplicationManager.nativeCreate();
+			if (!created) {
+				ApplicationManager.nativeCreate();
+				created = true;
+			}
 		}
 
 		@Override
@@ -53,7 +58,7 @@ public class ApplicationManager {
 			int width = display.getWidth();
 			int height = display.getHeight();
 
-			ApplicationManager.nativeInitialize(width, height);
+			ApplicationManager.nativeInitialize(assets, width, height);
 		}
 	}
 
@@ -81,8 +86,9 @@ public class ApplicationManager {
 	}
 
 	public void initializeWithSharedLib(String library, AssetManager assetManager) {
+		this.assets = assetManager;
 		System.loadLibrary(library);
-		nativeInitSystem(assetManager);
+		nativeInitSystem();
 	}
 
 	public void initialize(Activity activity) {

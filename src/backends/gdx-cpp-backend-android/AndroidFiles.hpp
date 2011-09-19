@@ -25,7 +25,7 @@
 
 #include <sys/types.h>
 #include <android/asset_manager.h>
-
+#include <android/asset_manager_jni.h>
 namespace gdx_cpp {
 
 namespace files {
@@ -51,9 +51,10 @@ public:
     
     bool isExternalStorageAvailable ();
 
-    void setAndroidAssetManager(AAssetManager * mngr);
+    void setAndroidAssetManager(JNIEnv* env, jobject  mngr);
 protected:
-    AAssetManager* mngr;
+    jobject mngr;
+    JNIEnv* env;
     std::string externalPath;
 };
 

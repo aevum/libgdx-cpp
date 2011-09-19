@@ -35,7 +35,7 @@ File::File()  //USADO PARA FAZER COISA FEIA(GAMBS)
     }
 }
 
-File::File(const std::string& pathname, const int &prefixLength)
+File::File(const std::string& pathname, const int& prefixLength)
 {
     if (!initialized) {
         initializeFiles();
@@ -107,14 +107,14 @@ File::File(const File &parent, const std::string& child)
 
 std::string File::getName() const
 {
-    int index = path.rfind(separatorChar);
+    unsigned int index = path.rfind(separatorChar);
     if(index == path.npos || index < prefixLength) return path.substr(prefixLength);
     return path.substr(index + 1);
 }
 
 std::string File::getParent() const
 {
-    int index = path.rfind(separatorChar);
+    unsigned int index = path.rfind(separatorChar);
     if(index == path.npos) return "";   //O RETORNO EH GAMBS
     if (index < prefixLength){
         if ((prefixLength > 0) && (path.length() > prefixLength))

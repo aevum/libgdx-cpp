@@ -44,6 +44,7 @@ FileHandle::FileHandle (const std::string &fileName, gdx_cpp::Files::FileType ty
   : type(type),
     file(fileName)
 {
+    Gdx::app->log("FileHandle", "cagá");
 }
 
 FileHandle::FileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type)
