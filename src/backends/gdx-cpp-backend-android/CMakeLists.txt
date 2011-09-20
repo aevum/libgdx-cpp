@@ -7,3 +7,5 @@ add_library(gdx-cpp-backend-android ${ANDROID_SOURCES})
 add_dependencies(gdx-cpp-backend-android gdx-cpp)
 
 
+
+add_subdirectory(openal)

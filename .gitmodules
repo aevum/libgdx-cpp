@@ -1,0 +1,3 @@
+[submodule "depends/openal-android"]
+	path = depends/openal-android
+	url = git://repo.or.cz/openal-soft/android.git
