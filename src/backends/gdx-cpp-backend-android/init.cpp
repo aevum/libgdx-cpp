@@ -35,7 +35,11 @@ extern "C" {
 
         assert(applicationListener);
         new AndroidApplication(applicationListener, "test", width, height, false);
-        static_cast<AndroidFiles*>(Gdx::files)->setAndroidAssetManager(env, assetManager);
+        AAssetManager* manager = AAssetManager_fromJava(env, assetManager);
+
+        assert(manager);
+        
+        static_cast<AndroidFiles*>(Gdx::files)->setAndroidAssetManager(manager);
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeCreate(JNIEnv* env) {

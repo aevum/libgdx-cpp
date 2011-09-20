@@ -51,10 +51,9 @@ public:
     
     bool isExternalStorageAvailable ();
 
-    void setAndroidAssetManager(JNIEnv* env, jobject  mngr);
+    void setAndroidAssetManager(AAssetManager* mngr);
 protected:
-    jobject mngr;
-    JNIEnv* env;
+    AAssetManager* mngr;
     std::string externalPath;
 };
 
