@@ -488,10 +488,13 @@ Game.cpp
 InputAdapter.cpp
 Gdx.cpp)
 
-install(DIRECTORY src DESTINATION include/gdx-cpp
+install(DIRECTORY . DESTINATION include/gdx-cpp
           FILES_MATCHING PATTERN "*.hpp")
 
 add_library(gdx-cpp SHARED ${GDX_HEADERS} ${GDX_SRC})
 add_subdirectory(physics/box2d)
 
 target_link_libraries(gdx-cpp z)
+
+install(TARGETS gdx-cpp
+    LIBRARY DESTINATION lib)
