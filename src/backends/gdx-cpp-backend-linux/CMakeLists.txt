@@ -15,3 +15,7 @@ add_library(gdx-cpp-backend-linux SHARED ${GDX_CPP_BACKEND_LINUX_SRC} ${GDX_CPP_
 add_dependencies(gdx-cpp-backend-linux gdx-cpp)
 
 target_link_libraries(gdx-cpp-backend-linux openal vorbis ogg vorbisfile alut)
+
+install(DIRECTORY . DESTINATION include/gdx-cpp/backends/linux
+          FILES_MATCHING PATTERN "*.hpp")
+
