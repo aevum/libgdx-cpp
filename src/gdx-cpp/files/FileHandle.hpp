@@ -77,7 +77,7 @@ public:
     std::string toString ();
     FileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
     FileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type);
-
+    
 protected:
     gdx_cpp::files::File file;
     gdx_cpp::Files::FileType type;
