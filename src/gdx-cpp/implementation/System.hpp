@@ -56,7 +56,7 @@ public:
     virtual std::string resolve(const gdx_cpp::files::File &f) = 0;
     virtual std::string canonicalize(const std::string &path) = 0; //throws IOException;
     virtual void checkRead(const std::string &path) = 0;
-    virtual bool list(const gdx_cpp::files::File &f, std::vector<std::string> &paths) = 0;
+    virtual void list(const gdx_cpp::files::File &f, std::vector<std::string> &paths) = 0;
     virtual int64_t getLength(gdx_cpp::files::File f) = 0;
     virtual void checkDelete(const std::string &path) = 0;
     virtual bool deleteFile(gdx_cpp::files::File &f) = 0;

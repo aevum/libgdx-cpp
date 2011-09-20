@@ -26,7 +26,7 @@ std::string File::separator;
 char File::pathSeparatorChar;
 std::string File::pathSeparator;
 
-File::File()  //USADO PARA FAZER COISA FEIA(GAMBS)
+File::File() 
   : path("")
 {
     if (!initialized) {
@@ -51,7 +51,6 @@ File::File(const std::string& child, const File &parent)
         initializeFiles();
         initialized = true;
     }
-    //assert(parent.path != null);
     assert(parent.path != "");
     this->path = gdx_cpp::Gdx::system->resolve(parent.path, child);
     this->prefixLength = parent.prefixLength;
@@ -115,7 +114,7 @@ std::string File::getName() const
 std::string File::getParent() const
 {
     int index = path.rfind(separatorChar);
-    if(index == path.npos) return "";   //O RETORNO EH GAMBS
+    if(index == path.npos) return "";   //THERE IS NO PARENT
     if (index < prefixLength){
         if ((prefixLength > 0) && (path.length() > prefixLength))
             return path.substr(0, prefixLength);
@@ -126,7 +125,7 @@ std::string File::getParent() const
 File File::getParentFile() const
 {
     std::string p = this->getParent();
-    if(p == "") return File();            //GAMBS
+    if(p == "") return File();
     return File(p, this->prefixLength);
 }
 
@@ -151,13 +150,13 @@ File File::getAbsoluteFile() const
     return File(absPath, gdx_cpp::Gdx::system->prefixLength(absPath));
 }
 
-std::string File::getCanonicalPath() const //throws IOException convertido pra Runtime-Error
+std::string File::getCanonicalPath() const //throws Runtime-Error
 {
     std::string p = gdx_cpp::Gdx::system->resolve(*this);
     return gdx_cpp::Gdx::system->canonicalize(p);
 }
 
-File File::getCanonicalFile() const //throws IOException
+File File::getCanonicalFile() const //throws Runtime-Error
 {
     std::string canonPath = getCanonicalPath();
     int prefix = gdx_cpp::Gdx::system->prefixLength(canonPath);
@@ -170,13 +169,13 @@ File File::getCanonicalFile() const //throws IOException
 
 bool File::exists() const
 {
-    gdx_cpp::Gdx::system->checkRead(path);
+    gdx_cpp::Gdx::system->checkRead(getAbsolutePath());
     return ((gdx_cpp::Gdx::system->getBooleanAttributes(*this) & gdx_cpp::Gdx::system->BA_EXISTS) != 0);
 }
 
 bool File::isDirectory() const
 {
-    gdx_cpp::Gdx::system->checkRead(path);
+    gdx_cpp::Gdx::system->checkRead(getAbsolutePath());
     return ((gdx_cpp::Gdx::system->getBooleanAttributes(*this) & gdx_cpp::Gdx::system->BA_DIRECTORY) != 0);
 }
 
@@ -184,7 +183,7 @@ bool File::isDirectory() const
 
 bool File::isFile() const
 {
-    gdx_cpp::Gdx::system->checkRead(path);
+    gdx_cpp::Gdx::system->checkRead(getAbsolutePath());
     return ((gdx_cpp::Gdx::system->getBooleanAttributes(*this) & gdx_cpp::Gdx::system->BA_REGULAR) != 0);
 }
 
@@ -193,7 +192,7 @@ bool File::isFile() const
 
 int64_t File::length () const
 {
-    gdx_cpp::Gdx::system->checkRead(path);
+    gdx_cpp::Gdx::system->checkRead(getCanonicalPath());  
     return gdx_cpp::Gdx::system->getLength(*this);
 }
 
@@ -201,7 +200,7 @@ int64_t File::length () const
 
 bool File::deleteFile()
 {
-    gdx_cpp::Gdx::system->checkDelete(path);
+    gdx_cpp::Gdx::system->checkDelete(getCanonicalPath());
     return gdx_cpp::Gdx::system->deleteFile(*this);
 }
 
@@ -209,7 +208,7 @@ bool File::deleteFile()
 
 void File::list(std::vector<std::string> &relativePaths)
 {
-    gdx_cpp::Gdx::system->checkRead(path);
+    gdx_cpp::Gdx::system->checkRead(getCanonicalPath());
     gdx_cpp::Gdx::system->list(*this, relativePaths);
 }
 
@@ -219,11 +218,6 @@ void File::listFiles(std::vector<File> &fileList)
 {
     std::vector<std::string> ss;
     list(ss);
-    if(ss.empty())
-    {
-        fileList.resize(0);
-        return;
-    }
     int n = ss.size();
     fileList.resize(n);
     for(int i = 0; i<n; i++){
@@ -237,7 +231,7 @@ void File::listFiles(std::vector<File> &fileList)
 
 bool File::mkdir()
 {
-    gdx_cpp::Gdx::system->checkWrite(path);
+    gdx_cpp::Gdx::system->checkWrite(getAbsolutePath());
     return gdx_cpp::Gdx::system->createDirectory(*this);
 }
 
@@ -255,13 +249,12 @@ bool File::mkdirs()
     }
     File parent = canonFile.getParentFile();
     return (parent.getPath() != "" && (parent.mkdirs() || parent.exists()) && canonFile.mkdir());
-
 }
 
-bool File::renameTo(const File &dest)    //realizei mudanca das variaveis internas do file senao ficaria inconsistente
+bool File::renameTo(const File &dest)   
 {
-    gdx_cpp::Gdx::system->checkWrite(path);
-    gdx_cpp::Gdx::system->checkWrite(dest.path);
+    gdx_cpp::Gdx::system->checkWrite(getCanonicalPath());
+    gdx_cpp::Gdx::system->checkWrite(dest.getAbsolutePath());
     if(gdx_cpp::Gdx::system->renameFile(*this, dest))
     {
         this->path = dest.getPath();
