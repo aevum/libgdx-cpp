@@ -29,7 +29,7 @@ using namespace gdx_cpp::files;
 FileHandle::FileHandle (){}
 
 FileHandle::FileHandle (const std::string &fileName)
-  :   file(File(fileName)),
+  :   file(fileName),
       type(gdx_cpp::Files::Absolute)
 {
 }
@@ -42,8 +42,9 @@ FileHandle::FileHandle (File const& file)
 
 FileHandle::FileHandle (const std::string &fileName, gdx_cpp::Files::FileType type)
   : type(type),
-    file(File(fileName))
+    file(fileName)
 {
+    Gdx::app->log("FileHandle", "cagá");
 }
 
 FileHandle::FileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type)
@@ -233,7 +234,7 @@ void FileHandle::list (const std::string& suffix, std::vector<FileHandle> &handl
     int count = 0, found;
     for (int i = 0, n = relativePaths.size(); i < n; i++) {
         found = relativePaths[i].rfind(suffix);
-        if(found != relativePaths[i].npos && found == (relativePaths[i].length() - suffix.length() ) ) continue;
+        if(found == relativePaths[i].npos || found != (relativePaths[i].length() - suffix.length() ) ) continue;
         handles[count++] = child(relativePaths[i]);
     }
     if (count < relativePaths.size()) handles.resize(count);
@@ -349,14 +350,11 @@ bool FileHandle::deleteDirectory (File& file) {
     {
         std::vector<File> files;
         file.listFiles(files);
-        if (files.empty())
-        {
-            for (int i = 0, n = files.size(); i < n; i++) {
+        for (int i = 0, n = files.size(); i < n; i++) {
                 if (files[i].isDirectory())
                     deleteDirectory(files[i]);
                 else
                     files[i].deleteFile();
-            }
         }
     }
     return file.deleteFile();

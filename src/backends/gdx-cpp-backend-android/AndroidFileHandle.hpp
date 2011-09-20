@@ -18,43 +18,33 @@
  *  @author aevum team
  */
 
-#include "Files.hpp"
+#ifndef GDX_CPP_BACKENDS_ANDROID_ANDROIDFILEHANDLE_HPP
+#define GDX_CPP_BACKENDS_ANDROID_ANDROIDFILEHANDLE_HPP
 
 #include <gdx-cpp/files/FileHandle.hpp>
+#include <sys/types.h>
+#include <android/asset_manager.h>
 
-using namespace gdx_cpp::backends::android;
+namespace gdx_cpp {
 
-gdx_cpp::files::FileHandle& gdx_cpp::backends::android::AndroidFiles::absolute(std::string& path)
+namespace backends {
+
+namespace android {
+
+class AndroidFileHandle : public gdx_cpp::files::FileHandle
 {
+public:
+    AndroidFileHandle(AAssetManager* manager, const std::string& fileName, gdx_cpp::Files::FileType type);
+
+    virtual int readBytes(char_ptr& c);
+protected:
+    AAssetManager* manager;
+};
 
 }
 
-gdx_cpp::files::FileHandle& gdx_cpp::backends::android::AndroidFiles::classpath(std::string& path)
-{
+}
 
 }
 
-gdx_cpp::files::FileHandle& gdx_cpp::backends::android::AndroidFiles::external(std::string& path)
-{
-
-}
-
-std::string& gdx_cpp::backends::android::AndroidFiles::getExternalStoragePath()
-{
-
-}
-
-gdx_cpp::files::FileHandle& gdx_cpp::backends::android::AndroidFiles::getFileHandle(std::string& path, gdx_cpp::Files::FileType type)
-{
-
-}
-
-gdx_cpp::files::FileHandle& gdx_cpp::backends::android::AndroidFiles::internal(std::string& path)
-{
-
-}
-
-bool gdx_cpp::backends::android::AndroidFiles::isExternalStorageAvailable()
-{
-
-}
+#endif // GDX_CPP_BACKENDS_ANDROID_ANDROIDFILEHANDLE_HPP

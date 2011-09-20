@@ -18,4 +18,3 @@ target_link_libraries(gdx-cpp-backend-linux openal vorbis ogg vorbisfile alut)
 
 install(DIRECTORY . DESTINATION include/gdx-cpp/backends/linux
           FILES_MATCHING PATTERN "*.hpp")
-

@@ -53,8 +53,11 @@ namespace nix {
         //Override
         bool isExternalStorageAvailable ();
 
+        
+        
     private:
         std::string externalPath;
+        
   };
     
 }

@@ -65,7 +65,7 @@ public:
     char getPathSeparator();
     char getSeparator();
     bool isAbsolute(const gdx_cpp::files::File& f);
-    bool list(const gdx_cpp::files::File& f, std::vector< std::string > &paths);
+    void list(const gdx_cpp::files::File& f, std::vector< std::string > &paths);
     std::string normalize(const std::string &pathname, const int &len, const int &off);
     std::string normalize(const std::string &path);
     int prefixLength(const std::string& path);

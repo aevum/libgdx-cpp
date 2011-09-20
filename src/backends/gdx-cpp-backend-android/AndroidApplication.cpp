@@ -23,6 +23,7 @@
 #include <gdx-cpp/implementation/System.hpp>
 #include <android/log.h>
 
+
 using namespace gdx_cpp::backends::android;
 using namespace gdx_cpp;
 
@@ -37,6 +38,7 @@ gdx_cpp::backends::android::AndroidApplication::AndroidApplication(gdx_cpp::Appl
         , graphics(0)
         , input(0)
         , logLevel(gdx_cpp::Application::LOG_INFO)
+        , files(0)
 {
     initialize();
 }
@@ -44,12 +46,13 @@ gdx_cpp::backends::android::AndroidApplication::AndroidApplication(gdx_cpp::Appl
 void AndroidApplication::initialize() {
     graphics = new AndroidGraphics();
     input = new AndroidInput();
-
+    files = new AndroidFiles();
+    
     graphics->initialize();
     graphics->setTitle(this->title);
     graphics->setDisplayMode(width, height, false);
 
-    Gdx::initialize(this, graphics, NULL, input, NULL);
+    Gdx::initialize(this, graphics, NULL, input, files);
 }
 
 void backends::android::AndroidApplication::onRunnableStop()

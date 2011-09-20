@@ -319,7 +319,7 @@ struct buffer : public buffer_base {
 
     int checkIndex(int i, int nb) {
         if ((i < 0) || (nb > _limit - i))
-            throw std::runtime_error();
+            throw std::runtime_error("wrong index");
         return i;
     }
 

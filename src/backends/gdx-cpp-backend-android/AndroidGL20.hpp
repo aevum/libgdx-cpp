@@ -200,10 +200,10 @@ public:
      void glGetFloatv (int pname,const float* params) const;
      void glGetFramebufferAttachmentParameteriv (int target,int attachment,int pname,const int* params) const;
      void glGetProgramiv (int program,int pname,const int* params) const;
-       std::string& glGetProgramInfoLog (int program) const;
+    std::string glGetProgramInfoLog (int program) const;
      void glGetRenderbufferParameteriv (int target,int pname,const int* params) const;
      void glGetShaderiv (int shader,int pname,const int* params) const;
-       std::string& glGetShaderInfoLog (int shader) const;
+       std::string glGetShaderInfoLog (int shader) const;
      void glGetShaderPrecisionFormat (int shadertype,int precisiontype,const int* range,const int* precision) const;
      void glGetShaderSource (int shader,int bufsize,const char* length,const std::string& source) const;
      void glGetTexParameterfv (int target,int pname,const float* params) const;
@@ -272,4 +272,4 @@ public:
 
 }
 
-#endif // GDX_CPP_BACKENDS_NIX_LINUXGL20_HPP
+#endif // GDX_CPP_BACKENDS_ANDROID_ANDROIDGL20_HPP

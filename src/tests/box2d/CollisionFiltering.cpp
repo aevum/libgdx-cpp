@@ -28,7 +28,6 @@ public:
             shape->SetAsEdge(b2Vec2(-40.0f, 0), b2Vec2(40, 0));
 
             b2FixtureDef fd;
-            fd;
             fd.shape = shape;
             fd.friction = 0.3f;
 

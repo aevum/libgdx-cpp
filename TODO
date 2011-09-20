@@ -1,4 +1,5 @@
 * Audio decoding
-* Box2d integration
+* Box2d integration (DONE)
 * Android support
 * IOs support
+* Verify the possibility of using only the Androi native wrapper, without Jni's
