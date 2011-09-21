@@ -1,4 +1,4 @@
-#include "../backends/current_backend.hpp"
+#include <gdx-cpp/backend_selector.hpp>
 #include "Box2DTest.cpp"
 #include "Box2D/Box2D.h"
 

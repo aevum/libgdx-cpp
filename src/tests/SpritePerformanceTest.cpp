@@ -1,4 +1,4 @@
-#include "backends/current_backend.hpp"
+#include <gdx-cpp/backend_selector.hpp>
 
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/Application.hpp>
