@@ -9,7 +9,9 @@
 
 #include <android/log.h>
 #include <android/asset_manager_jni.h>
+#include <jni.h>
 #include <gdx-cpp/files/FileHandle.hpp>
+#include "AndroidAudio.hpp"
 
 using namespace gdx_cpp;
 using namespace gdx_cpp::backends::android;
@@ -23,7 +25,7 @@ void createApplication(gdx_cpp::ApplicationListener* listener, const std::string
 }
 
 extern "C" {
-
+   
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitSystem(JNIEnv* env) {
         __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativeInit");
         Gdx::initializeSystem(new AndroidSystem);
@@ -43,9 +45,9 @@ extern "C" {
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeCreate(JNIEnv* env) {
-        __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativeCreate");
+        __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativeCreate, list %p", applicationListener);
         assert(applicationListener);
-        applicationListener->create();
+        applicationListener->create();        
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeUpdate(JNIEnv* env) {
@@ -80,5 +82,9 @@ extern "C" {
         static_cast<AndroidInput*>(Gdx::app->getInput())->handleTouchDrag(x, y, button);
     }
 
+    void Java_com_badlogic_gdx_backends_android_AndroidAudio_registerAudioEngine(JNIEnv* env, jclass clazz, jobject object) {
+        assert(applicationListener);
+        static_cast<AndroidAudio*>(Gdx::app->getAudio())->setupJNI(env, object);
+    }
 }
 

@@ -3,6 +3,8 @@ package com.aevumlab.gdxcpp;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.badlogic.gdx.backends.android.AndroidAudio;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -33,7 +35,8 @@ public class ApplicationManager {
 	InputHandler handler = new InputHandler();	
 	Activity activity;
 	private AssetManager assets;
-
+	private AndroidAudio audio;
+	
 	class NativeSurfaceRenderer implements GLSurfaceView.Renderer {
 		boolean created;
 		
@@ -46,7 +49,7 @@ public class ApplicationManager {
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
 			ApplicationManager.nativeResize(width, height);
 			if (!created) {
-				ApplicationManager.nativeCreate();
+				ApplicationManager.nativeCreate();				
 				created = true;
 			}
 		}
@@ -59,6 +62,8 @@ public class ApplicationManager {
 			int height = display.getHeight();
 
 			ApplicationManager.nativeInitialize(assets, width, height);
+			audio = new AndroidAudio(activity);
+			audio.registerAudioEngine(audio);
 		}
 	}
 
@@ -101,14 +106,16 @@ public class ApplicationManager {
 
 	public void pause() {
 		nativePause();
+		audio.pause();
 	}
 
 	public void resume() {
 		nativeResume();
+		audio.resume();
 	}
 
 	public void unload() {
-
+		audio.dispose();
 	}
 
 	public static void onTouchEvent(MotionEvent evt) {

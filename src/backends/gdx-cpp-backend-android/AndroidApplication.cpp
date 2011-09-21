@@ -22,6 +22,7 @@
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/implementation/System.hpp>
 #include <android/log.h>
+#include <stdexcept>
 
 
 using namespace gdx_cpp::backends::android;
@@ -35,10 +36,11 @@ gdx_cpp::backends::android::AndroidApplication::AndroidApplication(gdx_cpp::Appl
         , width(width)
         , height(height)
         , listener(listener)
-        , graphics(0)
-        , input(0)
+        , graphics(NULL)
+        , input(NULL)
         , logLevel(gdx_cpp::Application::LOG_INFO)
-        , files(0)
+        , files(NULL)
+        , audio(NULL)
 {
     initialize();
 }
@@ -47,12 +49,13 @@ void AndroidApplication::initialize() {
     graphics = new AndroidGraphics();
     input = new AndroidInput();
     files = new AndroidFiles();
+    audio = new AndroidAudio();
     
     graphics->initialize();
     graphics->setTitle(this->title);
     graphics->setDisplayMode(width, height, false);
 
-    Gdx::initialize(this, graphics, NULL, input, files);
+    Gdx::initialize(this, graphics, audio, input, files);
 }
 
 void backends::android::AndroidApplication::onRunnableStop()
@@ -99,17 +102,16 @@ void gdx_cpp::backends::android::AndroidApplication::exit()
 
 Audio* gdx_cpp::backends::android::AndroidApplication::getAudio()
 {
-
+    return audio;
 }
 
 Files* gdx_cpp::backends::android::AndroidApplication::getFiles()
 {
-
+    return files;
 }
 
 Graphics* gdx_cpp::backends::android::AndroidApplication::getGraphics()
-{
-    
+{    
     return graphics;
 }
 
@@ -120,7 +122,7 @@ Input* gdx_cpp::backends::android::AndroidApplication::getInput()
 
 Preferences* gdx_cpp::backends::android::AndroidApplication::getPreferences(std::string& name)
 {
-
+    throw std::runtime_error("not implemented");
 }
 
 gdx_cpp::Application::ApplicationType gdx_cpp::backends::android::AndroidApplication::getType()
@@ -168,5 +170,5 @@ void gdx_cpp::backends::android::AndroidApplication::postRunnable(Runnable::ptr 
 
 void gdx_cpp::backends::android::AndroidApplication::setLogLevel(int logLevel)
 {
-    logLevel = logLevel;
+    this->logLevel = logLevel;
 }

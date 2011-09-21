@@ -34,8 +34,7 @@ public:
     {
     }
 
-    void create() {
-        
+    void create() {        
         spriteBatch = new SpriteBatch(1000);
         gdx_cpp::Files::fhandle_ptr file = gdx_cpp::Gdx::files->internal("data/badlogicsmall.jpg");
         Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(*file));

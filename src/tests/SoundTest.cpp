@@ -75,11 +75,9 @@ public:
     {
     }
 
-
-
     void create() {
 //         sound = Gdx::audio->newSound(Gdx::files->getFileHandle("/home/ozires/tiao.ogg", gdx_cpp::Files::Internal));
-        music = Gdx::audio->newMusic(Gdx::files->getFileHandle("/home/ozires/tiao.ogg", gdx_cpp::Files::Internal));
+        music = Gdx::audio->newMusic(Gdx::files->getFileHandle("data/trombom.ogg", gdx_cpp::Files::Internal));
 
         Gdx::input->setInputProcessor(new InputProcessorTest(this));
     }

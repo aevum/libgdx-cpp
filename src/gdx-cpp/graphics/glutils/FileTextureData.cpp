@@ -87,7 +87,6 @@ file(file)
 , format(format)
 , pixmap(preloadedPixmap)
 {
-    Gdx::app->log("afdsdfg", "file: %p", file.get());
     if (pixmap != NULL) {
         width = pixmap->getWidth();
         height = pixmap->getHeight();

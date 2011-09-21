@@ -18,52 +18,53 @@
  *  @author aevum team
  */
 
-#ifndef GDX_CPP_BACKENDS_ANDROID_ANDROIDAUDIO_HPP
-#define GDX_CPP_BACKENDS_ANDROID_ANDROIDAUDIO_HPP
+#ifndef GDX_CPP_BACKENDS_ANDROID_ANDROIDMUSIC_HPP
+#define GDX_CPP_BACKENDS_ANDROID_ANDROIDMUSIC_HPP
 
-#include <gdx-cpp/Audio.hpp>
-#include <gdx-cpp/Files.hpp>
+#include <gdx-cpp/audio/Music.hpp>
 #include <jni.h>
 
 namespace gdx_cpp {
-namespace audio {
-
-class AudioDevice;
-class Music;
-class AudioRecorder;
-class Music;
-class Sound;
-}
 
 namespace backends {
 
 namespace android {
 
-class AndroidAudio : public gdx_cpp::Audio
+class AndroidMusic : public audio::Music
 {
 public:
-    AndroidAudio();
+    AndroidMusic(JNIEnv* env, jobject musicObj);
+    void dispose();
+    float getPosition();
+    bool isLooping();
+    bool isPlaying();
+    void pause();
+    void play();
+    void setLooping(bool isLooping);
+    void setVolume(float volume);
+    void stop();
+
+    ~AndroidMusic();
     
-    audio::AudioDevice* newAudioDevice(int samplingRate, bool isMono);
-    audio::AudioRecorder* newAudioRecoder(int samplingRate, bool isMono);
-    audio::Music* newMusic(const Files::fhandle_ptr file);
-    audio::Sound* newSound(const Files::fhandle_ptr fileHandle);
-
-    void setupJNI(JNIEnv* env, jobject androidAudioObj);
-
-    ~AndroidAudio();
-private:
+protected:
     JNIEnv* env;
-    jobject androidAudioObj;
+    jobject jniMusicObj;
     
-    jmethodID newAudioDeviceJNI;
-    jmethodID newAudioRecoderJNI;
-    jmethodID newMusicJNI;
-    jmethodID newSoundJNI;
+    jmethodID disposeJNI;
+    jmethodID getPositionJNI;
+    jmethodID isLoopingJNI;
+    jmethodID isPlayingJNI;
+    jmethodID pauseJNI;
+    jmethodID playJNI;
+    jmethodID setLoopingJNI;
+    jmethodID setVolumeJNI;
+    jmethodID stopJNI;
 };
 
 }
-}
+
 }
 
-#endif // GDX_CPP_BACKENDS_ANDROID_ANDROIDAUDIO_HPP
+}
+
+#endif // GDX_CPP_BACKENDS_ANDROID_ANDROIDMUSIC_HPP

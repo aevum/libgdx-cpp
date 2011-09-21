@@ -27,6 +27,7 @@
 #include <gdx-cpp/utils/Synchronized.hpp>
 #include "AndroidInput.hpp"
 #include "AndroidFiles.hpp"
+#include "AndroidAudio.hpp"
 
 namespace gdx_cpp {
 
@@ -69,6 +70,8 @@ protected:
     AndroidGraphics* graphics;
     AndroidInput* input;
     AndroidFiles* files;
+    AndroidAudio* audio;
+    
     std::list< Runnable::ptr > runnables;
 
     gdx_cpp::implementation::Thread::ptr mainLoopThread;

@@ -1,8 +1,6 @@
 package com.aevumlab.gdxcpp.tests;
 
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -26,7 +24,7 @@ public class LibGdxCppTestActivity extends Activity {
         
         System.loadLibrary("gdx-cpp-box2d");
         System.loadLibrary("gdx-cpp-box2d-layer");
-        manager.initializeWithSharedLib("SpritePerformanceTest", getAssets());
+        manager.initializeWithSharedLib("SoundTest", getAssets());
         setContentView(manager.createView(this));
     }
     
