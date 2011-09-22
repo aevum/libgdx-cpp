@@ -65,6 +65,8 @@ public:
     void updateTime();
 
     void resize(int width, int height);
+
+    graphics::TextureData::ptr resolveTextureData(Files::fhandle_ptr fileHandle, graphics::Pixmap::ptr preloadedPixmap, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps);
     
 protected:
     bool vsync;    

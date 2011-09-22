@@ -24,6 +24,8 @@
 #include <vector>
 
 #include "graphics/Pixmap.hpp"
+#include "graphics/TextureData.hpp"
+#include "Files.hpp"
 
 namespace gdx_cpp {
 
@@ -153,6 +155,11 @@ public:
     virtual BufferFormat getBufferFormat () = 0;
 
     virtual bool supportsExtension (const std::string& extension) = 0;
+
+    virtual graphics::TextureData::ptr resolveTextureData(Files::fhandle_ptr fileHandle,
+                                                          graphics::Pixmap::ptr preloadedPixmap,
+                                                          const gdx_cpp::graphics::Pixmap::Format* format,
+                                                          bool useMipMaps) = 0;
 };
 
 }

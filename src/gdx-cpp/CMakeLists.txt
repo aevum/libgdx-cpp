@@ -238,7 +238,7 @@ utils/Pool.hpp
 # utils/LongArray.hpp
 # utils/Logger.hpp
 # utils/ArrayBase.hpp
-# utils/XmlReader.hpp
+utils/XmlReader.hpp
 # utils/XmlWriter.hpp
 # utils/gzstream.hpp
 # utils/ObjectMap.hpp
@@ -471,7 +471,7 @@ utils/gzstream.cpp
 # utils/ObjectMap.cpp
 # utils/Logger.cpp
 # utils/SortedIntList.cpp
-# utils/XmlReader.cpp
+utils/XmlReader.cpp
 # utils/ComparableTimSort.cpp
 # utils/IdentityMap.cpp
 # utils/BufferUtils.cpp

@@ -32,6 +32,9 @@
 #include <list>
 #include "gdx-cpp/assets/Asset.hpp"
 
+#undef GL_NEAREST
+#undef GL_LINEAR
+
 namespace gdx_cpp {
 
 namespace files {
@@ -60,7 +63,7 @@ public:
         int glEnum;
 
         bool isMipMap () {
-            return glEnum != GL10::GL_NEAREST && glEnum != GL10::GL_LINEAR;
+            return glEnum != gdx_cpp::graphics::GL10::GL_NEAREST && glEnum != GL10::GL_LINEAR;
         }
 
         int getGLEnum () const {

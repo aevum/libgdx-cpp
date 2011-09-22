@@ -21,63 +21,126 @@
 #ifndef GDX_CPP_UTILS_XMLREADER_HPP_
 #define GDX_CPP_UTILS_XMLREADER_HPP_
 
+#include <string>
+#include <fstream>
+#include <tr1/unordered_map>
+#include <vector>
+
+#include "Aliases.hpp"
+
+#include "gdx-cpp/files/FileHandle.hpp"
+
 namespace gdx_cpp {
 namespace utils {
 
 class XmlReader {
+       
 public:
-    Element& parse (const std::string& xml);
-    Element& parse (const Reader& reader);
-    Element& parse (const InputStream& input);
-    Element& parse (const gdx_cpp::files::FileHandle& file);
-    Element& parse (int offset,int length);
-    std::string& getName ();
-    std::string& getAttribute (const std::string& name);
-    std::string& getAttribute (const std::string& name,const std::string& defaultValue);
-    void setAttribute (const std::string& name,const std::string& value);
-    int getChildCount ();
-    Element& getChild (int i);
-    void addChild (const Element& element);
-    std::string& getText ();
-    void setText (const std::string& text);
-    std::string& toString ();
-    std::string& toString (const std::string& indent);
-    Element& getChildByName (const std::string& name);
-    Element& getChildByNameRecursive (const std::string& name);
-    Array<Element>& getChildrenByName (const std::string& name);
-    float getFloatAttribute (const std::string& name);
-    float getFloatAttribute (const std::string& name,float defaultValue);
-    int getIntAttribute (const std::string& name);
-    int getIntAttribute (const std::string& name,int defaultValue);
-    bool getBooleanAttribute (const std::string& name);
-    bool getBooleanAttribute (const std::string& name,bool defaultValue);
-    std::string& get (const std::string& name);
-    std::string& get (const std::string& name,const std::string& defaultValue);
-    int getInt (const std::string& name);
-    int getInt (const std::string& name,int defaultValue);
-    float getFloat (const std::string& name);
-    float getFloat (const std::string& name,float defaultValue);
-    bool getBolean (const std::string& name);
-    bool getBoolean (const std::string& name,bool defaultValue);
+
+    /** Hurray for copy eliding!
+     * HURRAY!
+     * HURRAY!
+     * HURRAY!
+     */
+    class Element {
+    public:
+        typedef std::vector<Element*> ElementVector;
+        typedef ref_ptr_maker<Element>::type ptr;
+        
+        bool operator==(const Element& other) {
+            return other.name == this->name;
+        }
+
+        bool operator!=(const Element& other) {
+            return !(*this == other);
+        }
+
+        Element() {
+        }
+
+        ~Element() {
+            ElementVector::iterator it = children.begin();
+            ElementVector::iterator end = children.end();
+            for(;it != end; ++it) {
+                delete *it;
+            }
+        }
+        
+        Element (const std::string& name) ;
+        std::string getName () ;
+        std::string getAttribute (const std::string& name) ;
+        std::string getAttribute (const std::string& name, const std::string& defaultValue) ;
+        void setAttribute (const std::string& name, const std::string& value) ;
+        int getChildCount () ;
+        Element* const getChild (int i) ;
+        void addChild (gdx_cpp::utils::XmlReader::Element* element) ;
+        const std::string& getText () ;
+        void setText (const std::string& text) ;
+        std::string toString ();
+        std::string toString (const std::string& indent) ;
+        Element* const getChildByName (const std::string& name);
+        Element* const getChildByNameRecursive (const std::string& name);
+        std::vector<Element*> getChildrenByName (const std::string& name);
+        float getFloatAttribute (const std::string& name);
+        float getFloatAttribute (const std::string& name, float defaultValue);
+        int getIntAttribute (const std::string& name) ;
+        int getIntAttribute (const std::string& name, int defaultValue) ;
+        bool getBooleanAttribute (const std::string& name) ;
+        bool getBooleanAttribute (const std::string& name, bool defaultValue) ;
+        std::string get (const std::string& name) ;
+        std::string get (const std::string& name, const std::string& defaultValue) ;
+        int getInt (const std::string& name) ;
+        int getInt (const std::string& name, int defaultValue) ;
+        float getFloat (const std::string& name) ;
+        float getFloat (const std::string& name, float defaultValue) ;
+        bool getBolean (const std::string& name) ;
+        bool getBoolean (const std::string& name, bool defaultValue) ;
+
+        bool hasAttribute(const std::string& attributeName);
+    private:
+        typedef std::tr1::unordered_map<std::string, std::string> AttributesMap;
+        std::string name;
+        AttributesMap attributes;
+        ElementVector children;
+        std::string text;
+    };
+
+    XmlReader();
+    
+    Element::ptr parse (const std::string& xml);
+    Element::ptr parse (std::ifstream& reader);
+    Element::ptr parse (gdx_cpp::files::FileHandle& file);
+    Element::ptr parse (const char* data, int offset, int length);
 
 protected:
     void open (const std::string& name);
-    void attribute (const std::string& name,const std::string& value);
-    std::string& entity (const std::string& name);
-    void text (const std::string& text);
+    void attribute (std::string name, std::string value);
+    std::string entity (const std::string& name);
+    void text (std::string text);
     void close ();
 
 private:
-    static char* init__xml_actions_0 ();
-    static char* init__xml_key_offsets_0 ();
-    static char* init__xml_trans_keys_0 ();
-    static char* init__xml_single_lengths_0 ();
-    static char* init__xml_range_lengths_0 ();
-    static short* init__xml_index_offsets_0 ();
-    static char* init__xml_indicies_0 ();
-    static char* init__xml_trans_targs_0 ();
-    static char* init__xml_trans_actions_0 ();
-    String name;
+    static const char _xml_actions[26];
+    static const char _xml_key_offsets[36];
+    static const char _xml_trans_keys[116];
+    static const char _xml_single_lengths[36];
+    static const char _xml_range_lengths[36];
+    static const short _xml_index_offsets[36];
+    static const char _xml_indicies[129];
+    static const char _xml_trans_targs[63];
+    static const char _xml_trans_actions[63];
+
+    static const int xml_start;
+    static const int xml_first_final;
+    static const int xml_error;
+    
+    static const int xml_en_elementBody;
+    static const int xml_en_main;
+
+    Element *root, *current;
+    std::string name;
+    std::stringstream textBuffer;
+    Element::ElementVector elements;
 };
 
 } // namespace gdx_cpp

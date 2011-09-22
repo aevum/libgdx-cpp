@@ -70,11 +70,12 @@ whith the same parameters that you would expect on the constructor.
 
 ## What's working
 
-* The linux backend has file and input working
-* The android backend has input working
+* The linux backend has file,input and audio working
+* The android backend has input, file and audio working
 
 ## What has to be done
 
 * Backend polishing. Seriously, it's working, but there is a lot of stuff that is ugly and were fast-made.
 * iOs support
 * etc
+* SVG support. In the first phase we'll use an external lib (if we find something good enough)

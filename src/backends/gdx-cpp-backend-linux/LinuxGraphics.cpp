@@ -26,12 +26,15 @@
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/Graphics.hpp>
 #include <gdx-cpp/implementation/System.hpp>
+#include <gdx-cpp/graphics/glutils/FileTextureData.hpp>
 
 #include <iostream>
 #include <gdx-cpp/Application.hpp>
 
 #define GL_GLEXT_PROTOTYPES
 #include <GLES/gl.h>
+#include <gdx-cpp/graphics/Texture.hpp>
+
 
 using namespace gdx_cpp::backends::nix;
 using namespace gdx_cpp::graphics;
@@ -261,3 +264,10 @@ void gdx_cpp::backends::nix::LinuxGraphics::update()
     SDL_GL_SwapBuffers();
 }
 
+TextureData::ptr backends::nix::LinuxGraphics::resolveTextureData(Files::fhandle_ptr fileHandle,
+                                                                  Pixmap::ptr preloadedPixmap,
+                                                                  const gdx_cpp::graphics::Pixmap::Format* format,
+                                                                  bool useMipMaps)
+{
+    return TextureData::ptr(new glutils::FileTextureData(fileHandle, preloadedPixmap, format, useMipMaps));
+}

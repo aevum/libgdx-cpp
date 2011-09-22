@@ -357,12 +357,6 @@ void Texture::initialize(const gdx_cpp::files::FileHandle::ptr file, const Pixma
     std::string s = file->name();
     std::string suffix(".etc1");
     int found = s.rfind(suffix);
-    
-    if( found != s.npos && (found == (s.length() - suffix.length()) ) ){
-        // create(new ETC1TextureData(file, useMipMaps));
-     } else {
-         TextureData::ptr tex = TextureData::ptr(new glutils::FileTextureData(file, null_shared_ptr() , format, useMipMaps));
-         create(tex);
-     }
-}
 
+    create(TextureData::ptr(Gdx::graphics->resolveTextureData(file, null_shared_ptr(), format, useMipMaps)));    
+}

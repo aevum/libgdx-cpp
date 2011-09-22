@@ -30,6 +30,7 @@
 
 #include <cassert>
 #include <gdx-cpp/Application.hpp>
+#include <gdx-cpp/graphics/glutils/FileTextureData.hpp>
 
 using namespace gdx_cpp::backends::android;
 using namespace gdx_cpp::graphics;
@@ -244,3 +245,11 @@ void backends::android::AndroidGraphics::resize(int width, int height)
     glCommon->glViewport(0, 0, width, height);
 }
 
+TextureData::ptr backends::android::AndroidGraphics::resolveTextureData(Files::fhandle_ptr fileHandle,
+                                                                        graphics::Pixmap::ptr preloadedPixmap,
+                                                                        const gdx_cpp::graphics::Pixmap::Format* format,
+                                                                        bool useMipMaps)
+{
+    
+    return TextureData::ptr(new glutils::FileTextureData(fileHandle, preloadedPixmap, format, useMipMaps));
+}
