@@ -203,6 +203,8 @@ graphics/g2d/tiled/TiledObjectGroup.hpp
 graphics/g2d/tiled/TileSet.hpp
 graphics/g2d/tiled/TiledLoader.hpp
 graphics/g2d/Gdx2DPixmap.hpp
+graphics/g2d/svg/SvgParser.hpp
+graphics/g2d/svg/SvgPixmapInterface.hpp
 graphics/FPSLogger.hpp
 graphics/OrthographicCamera.hpp
 graphics/Color.hpp
@@ -445,6 +447,7 @@ graphics/g2d/Gdx2DPixmap.cpp
 # graphics/g2d/tiled/TiledObject.cpp
 # graphics/g2d/tiled/TiledObjectGroup.cpp
 # graphics/g2d/tiled/TiledLayer.cpp
+graphics/g2d/svg/SvgParser.cpp
 graphics/g2d/TextureRegion.cpp
 graphics/g2d/ParticleEffect.cpp
 graphics/g2d/Animation.cpp

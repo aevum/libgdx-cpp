@@ -21,6 +21,7 @@
 #include "XmlReader.hpp"
 #include <stdexcept>
 #include <cassert>
+#include "StringConvertion.hpp"
 
 using namespace gdx_cpp::utils;
 
@@ -39,33 +40,6 @@ const int XmlReader::xml_first_final = 34;
 const int XmlReader::xml_error = 0;
 const int XmlReader::xml_en_elementBody = 15;
 const int XmlReader::xml_en_main = 1;
-
-template <typename returnType>
-returnType from_string(std::string str) {
-    static std::stringstream ss;
-    ss.clear();
-    ss << str;
-    returnType retval;
-    ss >> retval;
-    
-    return retval;
-}
-
-template <>
-bool from_string<bool>(std::string str) {
-    assert(str == "1" || str == "true" || str == "false" || str == "0");
-    return str == "1" || str == "true";
-}
-
-template <typename T>
-std::string to_string(const T& item) {
-    static std::stringstream ss;
-    ss.clear();
-
-    ss << item;
-
-    return ss.str();
-}
 
 gdx_cpp::utils::XmlReader::XmlReader()
     : root(0)
@@ -617,3 +591,20 @@ bool gdx_cpp::utils::XmlReader::Element::hasAttribute(const std::string& attribu
 {
     return attributes.count(attributeName);
 }
+
+int gdx_cpp::utils::XmlReader::Element::getAttributeCount() const
+{
+    return attributes.size();
+}
+
+XmlReader::Element::AttributesMap::const_iterator gdx_cpp::utils::XmlReader::Element::getAttributesEnd()
+{
+    return attributes.end();
+}
+
+XmlReader::Element::AttributesMap::const_iterator gdx_cpp::utils::XmlReader::Element::getAttributesBegin()
+{
+    return attributes.begin();
+}
+
+

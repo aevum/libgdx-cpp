@@ -71,7 +71,6 @@ endif()
 if (BUILD_BACKEND_ANDROID)
     set(GENERATED_APPLICATION_TYPE "SHARED_LIB")
     SET(ANDROID_NDK "" CACHE PATH "Were the android NDK is located")
-    set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-gc-sections")
 
 #     include(cmake/android.toolchain.cmake)
     list(APPEND ACTIVE_BACKENDS ANDROID)
@@ -87,3 +86,5 @@ endif()
 if (BUILD_GDX_TESTS)
     add_subdirectory(src/tests)
 endif()
+
+add_subdirectory(src/agg)

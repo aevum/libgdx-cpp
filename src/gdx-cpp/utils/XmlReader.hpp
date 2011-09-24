@@ -46,6 +46,7 @@ public:
     public:
         typedef std::vector<Element*> ElementVector;
         typedef ref_ptr_maker<Element>::type ptr;
+        typedef std::tr1::unordered_map<std::string, std::string> AttributesMap;
         
         bool operator==(const Element& other) {
             return other.name == this->name;
@@ -96,9 +97,15 @@ public:
         bool getBolean (const std::string& name) ;
         bool getBoolean (const std::string& name, bool defaultValue) ;
 
+        ///returns the amount of atributes on the current node element
+        int getAttributeCount() const;
+
+        AttributesMap::const_iterator getAttributesBegin();
+        AttributesMap::const_iterator getAttributesEnd();
+        
         bool hasAttribute(const std::string& attributeName);
+
     private:
-        typedef std::tr1::unordered_map<std::string, std::string> AttributesMap;
         std::string name;
         AttributesMap attributes;
         ElementVector children;

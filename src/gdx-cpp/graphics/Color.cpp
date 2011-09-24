@@ -121,6 +121,11 @@ const std::string Color::toString () {
     return "FIXME";//;Integer.toHexString(toIntBits());
 }
 
+gdx_cpp::graphics::Color gdx_cpp::graphics::Color::fromRgb(unsigned int val)
+{
+    return Color((val >> 16) & 0xFF, (val >> 8) & 0xFF, val & 0xFF, 0);
+}
+
 float Color::toFloatBits (int r,int g,int b,int a) {
     int color = (a << 24) | (b << 16) | (g << 8) | r;
     float floatColor = gdx_cpp::utils::NumberUtils::intBitsToFloat(color & 0xfeffffff);

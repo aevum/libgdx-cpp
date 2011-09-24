@@ -52,6 +52,9 @@ public:
     static int toIntBits (int r,int g,int b,int a);
     float toFloatBits () const;
     int toIntBits () const;
+
+    static Color fromRgb(unsigned int val);
+    
     static float toFloatBits (float r,float g,float b,float a);
     static int alpha (float alpha);
     static int luminanceAlpha (float luminance,float alpha);
