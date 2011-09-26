@@ -491,6 +491,11 @@ Game.cpp
 InputAdapter.cpp
 Gdx.cpp)
 
+if (${SVG_BACKEND_ANTIGRAIN})
+    list(APPEND GDX_SRC graphics/g2d/svg/AggSvgPixmap.cpp)
+    list(APPEND GDX_HEADERS graphics/g2d/svg/AggSvgPixmap.hpp)
+endif()
+
 install(DIRECTORY . DESTINATION include/gdx-cpp
           FILES_MATCHING PATTERN "*.hpp")
 
