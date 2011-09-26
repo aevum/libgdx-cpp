@@ -83,8 +83,8 @@ Analogically, the calls to create an PixMap now are:
 
 ## What has to be done
 
-* Backend polishing. Seriously, it's working, but there is a lot of stuff that is ugly and were fast-made.
+* Backend polishing. Seriously, it's working, but there is a lot of stuff that is ugly and in a haste.
 * iOs support
 * GLEs 2. Check if it's working
 * etc
-* SVG support. In the first phase we'll use an external lib (if we find something good enough)
+* SVG support. In the first phase we'll use an external lib
