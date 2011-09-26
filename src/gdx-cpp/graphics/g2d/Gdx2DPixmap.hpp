@@ -72,7 +72,7 @@ public:
     
     PixmapType getType() const { return Pixmap::Gdx2d; }
     
-    const unsigned char* getPixels () const;
+    const unsigned char* getPixels ();
     int getHeight () const;
     int getWidth () const;
     const Pixmap::Format& getFormat ();

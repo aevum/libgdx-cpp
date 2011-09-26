@@ -492,7 +492,7 @@ InputAdapter.cpp
 Gdx.cpp)
 
 if (${SVG_BACKEND_ANTIGRAIN})
-    list(APPEND GDX_SRC graphics/g2d/svg/AggSvgPixmap.cpp)
+    include_directories(../agg/include ../agg/svg)
     list(APPEND GDX_HEADERS graphics/g2d/svg/AggSvgPixmap.hpp)
 endif()
 

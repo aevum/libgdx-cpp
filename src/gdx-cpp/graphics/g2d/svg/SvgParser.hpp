@@ -67,12 +67,12 @@ private:
     bool parse_attr(const std::string& name, const std::string& value);
     void parse_transform(const std::string& transform);
     void parse_style(const std::string& style);
-    void parse_scale(std::string scaleArgs);
-    void parse_translate(std::string translateArgs);
-    void parse_matrix(std::string matrixArgs);
-    void parse_rotate(std::string rotateArgs);
-    void parse_skew_x(std::string skewXargs);
-    void parse_skew_y(std::string skewYargs);
+    std::string::size_type parse_scale(std::string scaleArgs);
+    std::string::size_type parse_translate(std::string translateArgs);
+    std::string::size_type parse_matrix(std::string matrixArgs);
+    std::string::size_type parse_rotate(std::string rotateArgs);
+    std::string::size_type parse_skew_x(std::string skewXargs);
+    std::string::size_type parse_skew_y(std::string skewYargs);
     graphics::Color parse_color(const std::string& colorValue);
     
     bool m_titleFlag;

@@ -103,7 +103,7 @@ public:
     void load (const gdx_cpp::graphics::TextureData::ptr& data);
     void bind ();
     void bind (int unit);
-    void draw (const Pixmap& pixmap,int x,int y);
+    void draw (gdx_cpp::graphics::Pixmap& pixmap, int x, int y);
     int getWidth () const;
     int getHeight () const;
     const TextureFilter& getMinFilter () const;

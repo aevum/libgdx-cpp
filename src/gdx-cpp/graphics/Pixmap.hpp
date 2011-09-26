@@ -107,7 +107,7 @@ public:
     virtual int getGLFormat () const = 0;
     virtual int getGLInternalFormat () const = 0;
     virtual int getGLType () const = 0;
-    virtual const unsigned char* getPixels () const = 0;
+    virtual const unsigned char* getPixels () = 0;
     virtual const Format& getFormat () = 0;
 };
 

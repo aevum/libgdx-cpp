@@ -225,7 +225,7 @@ graphics::g2d::Gdx2DPixmap* Gdx2DPixmap::newPixmap (int width, int height, int f
     return new Gdx2DPixmap(width, height, format);
 }
 
-const unsigned char* Gdx2DPixmap::getPixels () const {
+const unsigned char* Gdx2DPixmap::getPixels () {
     assert(pixData != NULL);
     return pixData->pixels;
 }

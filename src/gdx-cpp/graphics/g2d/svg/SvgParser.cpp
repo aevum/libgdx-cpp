@@ -26,12 +26,37 @@
 #include <algorithm>
 #include "gdx-cpp/math/MathUtils.hpp"
 #include "gdx-cpp/utils/StringConvertion.hpp"
+#include <agg_color_rgba.h>
 
 using namespace gdx_cpp::graphics::g2d::svg;
 using namespace gdx_cpp::utils;
 
+///splits the items inside argument calls like transform(129.2, 44)
+template <typename T>
+std::vector<T> splitArgs(const std::string& item, const char* delimiters, std::string::size_type& resultPos) {
+    // Skip delimiters at beginning.
+    std::string::size_type lastPos = item.find_first_not_of(delimiters, 0);
+    // Find first "non-delimiter".
+    std::string::size_type pos     = item.find_first_of(delimiters, lastPos);
+    std::vector<T> result;
+    
+    while (std::string::npos != pos || std::string::npos != lastPos)
+    {
+        // Found a token, add it to the vector.
+        result.push_back(gdx_cpp::utils::from_string<T>(item.substr(lastPos, pos - lastPos)));
+        // Skip delimiters.  Note the "not_of"
+        lastPos = item.find_first_not_of(delimiters, pos);
+        // Find next "non-delimiter"
+        pos = item.find_first_of(delimiters, lastPos);
+    }
+    
+    resultPos = lastPos;
+    
+    return result;
+}
+
 gdx_cpp::graphics::g2d::svg::SvgParser::SvgParser(SvgPixmapInterface& iface)
-        : pixmap(iface)
+        : pixmap(iface), m_pathFlag(false), m_titleFlag(false)
 {
 }
 
@@ -49,7 +74,6 @@ void SvgParser::render(gdx_cpp::utils::XmlReader::Element* const svg)
 void SvgParser::beginElement(XmlReader::Element* const currentNode)
 {
     std::string name = currentNode->getName();
-
     if (name == "title")
     {
         m_titleFlag = true;
@@ -124,19 +148,14 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_attr(gdx_cpp::utils::XmlReade
 void gdx_cpp::graphics::g2d::svg::SvgParser::parse_style(const std::string& style)
 {
     std::string::size_type pos = 0, found = 0;
+    std::string::size_type result = 0;
 
-    while ((found = style.find(";", pos)) != std::string::npos)
-    {
-        std::string namedValue = style.substr(pos, found - pos);
-        std::string::size_type comma = namedValue.find(":");
-        std::string name = namedValue.substr(0, comma);
-        std::string value = namedValue.substr(comma, namedValue.length());
+    std::vector<std::string> res =  splitArgs<std::string>(style, ":;", result);
 
-        std::remove(name.begin(),name.end(), ' ');
-        std::remove(value.begin(),name.end(), ' ');
-        parse_attr(name, value);
-
-        pos = found;
+    for (int i = 0; i < res.size(); i += 2) {
+        std::remove(res[i].begin(), res[i].end(), ' ');
+        std::remove(res[i+1].begin(), res[i+1].end(), ' ');
+        parse_attr(res[i], res[i+1]);
     }
 }
 
@@ -216,53 +235,67 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_transform(const std::string& 
 {
     std::string::size_type pos = 0, last = 0;
 
+    struct delegates {
+       const char* name;
+       std::string::size_type (SvgParser::*func)(std::string);
+    };
+
+    static delegates transform_parsers[] = {
+        { "matrix", &SvgParser::parse_matrix },
+        { "translate", &SvgParser::parse_translate },
+        { "rotate", &SvgParser::parse_rotate },
+        { "scale", &SvgParser::parse_scale },
+        { "skewX", &SvgParser::parse_skew_x },
+        { "skewY", &SvgParser::parse_skew_y },
+    };
+    
+    
     while (pos != std::string::npos) {
-        if ((pos = transform.find("matrix", last)) != std::string::npos) {
-            parse_matrix(transform.substr(last, pos));
-        } else if ((pos = transform.find("translate", last)) != std::string::npos) {
-            parse_translate(transform.substr(last, pos));
-        } else if ((pos = transform.find("rotate", last)) != std::string::npos) {
-            parse_rotate(transform.substr(last, pos));
-        } else if ((pos = transform.find("scale", last)) != std::string::npos) {
-            parse_scale(transform.substr(last, pos));
-        } else if ((pos = transform.find("skewX", last)) != std::string::npos) {
-            parse_skew_x(transform.substr(last, pos));
-        } else if ((pos = transform.find("skewY", last)) != std::string::npos) {
-            parse_skew_y(transform.substr(last, pos));
-        } else {
-            pos++;
+        for (int i = 0; i < 6; ++i) {
+            pos = transform.find(transform_parsers[i].name, last);
+            if (pos != std::string::npos) {
+                pos += sizeof(transform_parsers[i].name);
+                last = (this->*transform_parsers[i].func)(transform.substr(pos + 1, transform.length() - last - 1));
+            }
         }
-
-        last = pos;
+        
+//         if ((pos = transform.find("matrix", last)) != std::string::npos) {
+//             parse_matrix(transform.substr(last, transform.length() - pos + sizeof("matrix")));
+//         } else if ((pos = transform.find("translate", last)) != std::string::npos) {
+//             parse_translate(transform.substr(last, pos + sizeof("translate") - 1));
+//         } else if ((pos = transform.find("rotate", last)) != std::string::npos) {
+//             parse_rotate(transform.substr(last, pos + sizeof("rotate") - 1));
+//         } else if ((pos = transform.find("scale", last)) != std::string::npos) {
+//             parse_scale(transform.substr(last, pos + sizeof("scale") - 1));
+//         } else if ((pos = transform.find("skewX", last)) != std::string::npos) {
+//             parse_skew_x(transform.substr(last, pos + sizeof("skewX") - 1));
+//         } else if ((pos = transform.find("skewY", last)) != std::string::npos) {
+//             parse_skew_y(transform.substr(last, pos + sizeof("skewY") - 1));
+//         } else {
+//             pos++;
+//         }
+// 
+//         last = pos;
     }
 }
 
-///splits the items inside argument calls like transform(129.2, 44)
-template <typename T>
-std::vector<T> splitArgs(const std::string& item, const char* delim) {
-    std::string::size_type pos = item.find("("), last = pos;
-    std::vector<T> result;
 
-    while ((pos = item.find(delim, last)) != std::string::npos ||
-            (pos = item.find(")", last)) != std::string::npos) {
-        result.push_back(gdx_cpp::utils::from_string<T>(item.substr(last, last - pos)));
-    }
-
-    return result;
-}
-
-void gdx_cpp::graphics::g2d::svg::SvgParser::parse_matrix(std::string matrixArgs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_matrix(std::string matrixArgs)
 {
-    std::vector<float> res = splitArgs<float>(matrixArgs, ",");
+    std::string::size_type result = 0;
+    std::vector<float> res = splitArgs<float>(matrixArgs, "(,)", result);
 
     assert(res.size() == 6);
 
     pixmap.transAffine(res);
+
+    return result;
 }
 
-void gdx_cpp::graphics::g2d::svg::SvgParser::parse_rotate(std::string rotateArgs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_rotate(std::string rotateArgs)
 {
-    std::vector<float> res = splitArgs<float>(rotateArgs, ",");
+    std::string::size_type result = 0;
+    std::vector<float> res = splitArgs<float>(rotateArgs, "(,)", result);
 
     if (res.size() == 1) {
         pixmap.setRotation(math::utils::toRadians(res[0]));
@@ -271,11 +304,14 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_rotate(std::string rotateArgs
     } else {
         throw std::runtime_error("SvgParser::parse_rotate: invalid number of arguments");
     }
+
+    return result;
 }
 
-void gdx_cpp::graphics::g2d::svg::SvgParser::parse_scale(std::string scaleArgs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_scale(std::string scaleArgs)
 {
-    std::vector<float> res = splitArgs<float>(scaleArgs, ",");
+    std::string::size_type result = 0;
+    std::vector<float> res = splitArgs<float>(scaleArgs, "(,)", result);
 
     assert(res.size() >= 1);
 
@@ -284,42 +320,54 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_scale(std::string scaleArgs)
     }
 
     pixmap.setScaling(res[0], res[1]);
+
+    return result;
 }
 
-void gdx_cpp::graphics::g2d::svg::SvgParser::parse_skew_x(std::string skewXargs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_skew_x(std::string skewXargs)
 {
-    std::vector<float> res = splitArgs<float>(skewXargs, ",");
+    std::string::size_type result = 0;    
+    std::vector<float> res = splitArgs<float>(skewXargs, "(,)", result);
 
     assert(res.size() == 1);
 
     pixmap.setSkew(res[0], 0.0f);
+    return result;
 }
 
-void gdx_cpp::graphics::g2d::svg::SvgParser::parse_skew_y(std::string skewYargs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_skew_y(std::string skewYargs)
 {
-    std::vector<float> res = splitArgs<float>(skewYargs, ",");
+    std::string::size_type result = 0;
+    std::vector<float> res = splitArgs<float>(skewYargs, "(,)", result);
 
     assert(res.size() == 1);
 
     pixmap.setSkew( 0.0f, res[0]);
+
+    return result;
 }
 
-void gdx_cpp::graphics::g2d::svg::SvgParser::parse_translate(std::string translateArgs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_translate(std::string translateArgs)
 {
-    std::vector<float> res = splitArgs<float>(translateArgs, ",");
+    std::string::size_type result = 0;
+    std::vector<float> res = splitArgs<float>(translateArgs, "(,)", result);
 
     assert(res.size() >= 1);
     if (res.size() == 1) res.push_back(0);
 
     pixmap.setTranslation(res[0], res[1]);
+    return result;
 }
 
 gdx_cpp::graphics::Color gdx_cpp::graphics::g2d::svg::SvgParser::parse_color(const std::string& colorValue)
 {
-    std::string::size_type pos = colorValue.find("#");
-
+    std::string::size_type pos = colorValue.find("#") + 1;
+    
     if (pos != std::string::npos) {
-        return graphics::Color::fromRgb(from_string< unsigned int >(colorValue.substr(pos, pos - colorValue.length())));
+        int color;        
+        sscanf(&colorValue[pos], "%x", &color);
+        std::cout << colorValue << std::endl;
+        return graphics::Color::fromRgb(color);
     } else if ((pos = colorValue.find("rgb")) != std::string::npos) {
         throw std::runtime_error("No implemented yet");
     } else {
@@ -348,7 +396,8 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_poly(gdx_cpp::utils::XmlReade
     parse_attr(node);
     
     std::string pointsStr = node->getAttribute("points");
-    std::vector<float> points = splitArgs<float>(pointsStr, ", "); //it's line AND space
+    std::string::size_type result = 0;
+    std::vector<float> points = splitArgs<float>(pointsStr, ", ", result); //it's line AND space
 
     for (unsigned int i = 0; i < points.size(); i += 2) {
         if (i % 2 == 0) {
@@ -403,67 +452,76 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
     parse_attr(node);
 
     std::string path = node->getAttribute("d");
-
-    std::vector<std::string> paths = splitArgs<std::string>(path, " ");
-
+    std::string::size_type result = 0;
+    std::vector<std::string> paths = splitArgs<std::string>(path, " ,", result);
+    static const char commands[]   = "MmZzLlHhVvCcSsQqTtAaFfPp";
+    
     unsigned int i = 0;
 
+    char cmd = paths[0][0];
+    
     while (i < paths.size()) {
-        char cmd = paths[i][0];
+        int j = 0;
+        for (;j < strlen(commands) && commands[j] != paths[i][0]; ++j)
+            ;
+
+        if (j < strlen(commands)) {
+            cmd = paths[i++][0];
+        }        
 
         switch(cmd) {
             case 'M': case 'm':
-                pixmap.moveTo(utils::from_string<float>(paths[i+1]), utils::from_string<float>(paths[i+2]), cmd == 'm');
-                i += 3;
+                pixmap.moveTo(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 'm');
+                i += 2;
                 break;
                 
             case 'L': case 'l':
-                pixmap.lineTo(utils::from_string<float>(paths[i+1]), utils::from_string<float>(paths[i+2]), cmd == 'l');
-                i += 3;
+                pixmap.lineTo(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 'l');
+                i += 2;
                 break;
                 
             case 'V': case 'v':
-                pixmap.verticalLineTo(utils::from_string<float>(paths[i+1]), cmd == 'v');
-                i += 2;
+                pixmap.verticalLineTo(utils::from_string<float>(paths[i]), cmd == 'v');
+                i += 1;
                 break;
                 
             case 'H': case 'h':
-                pixmap.horizontalLineTo(utils::from_string<float>(paths[i+1]), cmd == 'h');
-                i += 2;
+                pixmap.horizontalLineTo(utils::from_string<float>(paths[i]), cmd == 'h');
+                i += 1;
                 break;
                 
             case 'Q': case 'q':
-                pixmap.curve3(utils::from_string<float>(paths[i+1]),
-                              utils::from_string<float>(paths[i+2]),                                
+                pixmap.curve3(utils::from_string<float>(paths[i]),
+                              utils::from_string<float>(paths[i+1]),
+                              utils::from_string<float>(paths[i+2]),
                               utils::from_string<float>(paths[i+3]),
-                              utils::from_string<float>(paths[i+4]),
                               cmd == 'q');
-                i += 5;
+                i += 4;
                 break;
                 
             case 'T': case 't':
-                pixmap.curve3(utils::from_string<float>(paths[i+1]), utils::from_string<float>(paths[i+2]), cmd == 't');
-                i += 3;
+                pixmap.curve3(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 't');
+                i += 2;
                 break;
                 
             case 'C': case 'c':
-                pixmap.curve4(utils::from_string<float>(paths[i+1]),
-                              utils::from_string<float>(paths[i+2]),                              
-                              utils::from_string<float>(paths[i+3]),
-                              utils::from_string<float>(paths[i+4]),                              
-                              utils::from_string<float>(paths[i+5]),
-                              utils::from_string<float>(paths[i+6]),
-                              cmd == 'c');
-                i += 7;
-                break;
-                
-            case 'S': case 's':
-                pixmap.curve4(utils::from_string<float>(paths[i+1]),
+                pixmap.curve4(utils::from_string<float>(paths[i]),
+                              utils::from_string<float>(paths[i+1]),
                               utils::from_string<float>(paths[i+2]),
                               utils::from_string<float>(paths[i+3]),
                               utils::from_string<float>(paths[i+4]),
+                              utils::from_string<float>(paths[i+5]),
+                              cmd == 'c');
+                i += 6;
+                break;
+                
+            case 'S': case 's':
+                pixmap.curve4(utils::from_string<float>(paths[i]),
+                              utils::from_string<float>(paths[i+1]),
+                              utils::from_string<float>(paths[i+2]),
+                              utils::from_string<float>(paths[i+3]),
                               cmd == 's');
-                i += 5;                
+                i += 4;                
                 break;
                 
             case 'A': case 'a':

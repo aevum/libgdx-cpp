@@ -22,6 +22,7 @@
 #define GDX_CPP_GRAPHICS_G2D_SVG_SVGPIXMAPINTERFACE_H
 
 #include "gdx-cpp/graphics/Color.hpp"
+#include "gdx-cpp/graphics/Pixmap.hpp"
 
 namespace gdx_cpp {
 
@@ -33,7 +34,7 @@ namespace svg {
 
 /** Interface to an svg backend. Will provide the draw operations required to render svgs.
  */
-class SvgPixmapInterface
+class SvgPixmapInterface : public Pixmap
 {
 public:
     enum LineCap {

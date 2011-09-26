@@ -148,14 +148,14 @@ void Texture::bind (int unit) {
     Gdx::gl->glBindTexture(GL10::GL_TEXTURE_2D, glHandle);
 }
 
-void Texture::draw (const Pixmap& pixmap,int x,int y) {
+void Texture::draw (Pixmap& pixmap,int x,int y) {
     if (data->isManaged()){
         gdx_cpp::Gdx::app->error(__FILE__ , "can't draw to a managed texture");
     }
 
     Gdx::gl->glBindTexture(GL10::GL_TEXTURE_2D, glHandle);
     Gdx::gl->glTexSubImage2D(GL10::GL_TEXTURE_2D, 0, x, y, pixmap.getWidth(), pixmap.getHeight(), pixmap.getGLFormat(),
-                           pixmap.getGLType(), pixmap.getPixels());
+                           pixmap.getGLType(), (const unsigned char*) pixmap.getPixels());
 }
 
 int Texture::getWidth () const {

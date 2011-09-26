@@ -21,7 +21,11 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_AGGSVGPIXMAP_HPP
 #define GDX_CPP_GRAPHICS_G2D_AGGSVGPIXMAP_HPP
 
-#include <agg/svg/agg_svg_path_renderer.h>
+#include <agg_svg_path_renderer.h>
+#include <agg_rendering_buffer.h>
+#include <agg_pixfmt_rgba.h>
+#include <agg_scanline_p.h>
+
 #include "SvgPixmapInterface.hpp"
 #include "gdx-cpp/graphics/Pixmap.hpp"
 
@@ -39,6 +43,13 @@ namespace svg {
 class AggSvgPixmap : public SvgPixmapInterface
 {
 public:
+    AggSvgPixmap(int w, int h)
+        : width(w), height(h)
+    {
+        unsigned char* data = new unsigned char[width * height * (32 / 8)];
+        buffer.attach(data, width, height, -width * (32 / 8));
+    }
+    
     inline void begin() {
         renderer.push_attr();
     }
@@ -83,7 +94,7 @@ public:
         renderer.fill_none();
     }
     
-    int void fillOpacity(float opactiy) {
+    inline void fillOpacity(float opactiy) {
         renderer.fill_opacity(opactiy);
     }
     
@@ -100,11 +111,11 @@ public:
     }
     
     inline void setLineCap(LineCap cap) {
-        renderer.line_cap(cap);
+        renderer.line_cap((agg::line_cap_e) cap);
     }
     
     inline void setLineJoin(LineJoin join) {
-        renderer.line_join(join);
+        renderer.line_join((agg::line_join_e) join);
     }
     
     inline void setMiterLimit(float limit) {
@@ -125,7 +136,6 @@ public:
     inline void setScaling(float scaleX, float scaleY) {
         renderer.transform().premultiply(agg::trans_affine_scaling(scaleX, scaleY));
     }
-
     
     inline void setSkew(float skewX, float skewY) {
         renderer.transform().premultiply(agg::trans_affine_skewing(agg::deg2rad(skewX), agg::deg2rad(skewY)));
@@ -159,8 +169,126 @@ public:
         renderer.vline_to(y, relative);
     }
 
+    void dispose() {        
+    }
+
+    void drawCircle(int x, int y, int radius) {
+        
+    }
+
+    void drawLine(int x, int y, int x2, int y2) {
+        renderer.begin_path();
+        renderer.move_to(x, y);
+        renderer.line_to(x, y);
+        renderer.end_path();
+    }
+
+    void drawPixel(int x, int y) {
+        renderer.begin_path();
+        renderer.move_to(x, y);
+        renderer.line_to(x + 1, y + 1);
+        renderer.end_path();
+    }
+
+    void drawPixmap(const gdx_cpp::graphics::Pixmap& pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight) {
+    }
+
+    void drawPixmap(const gdx_cpp::graphics::Pixmap& pixmap, int srcx, int srcy, int srcWidth, int srcHeight, int dstx, int dsty, int dstWidth, int dstHeight) {
+    }
+
+    void drawRectangle(int x, int y, int width, int height) {
+        renderer.begin_path();
+        renderer.move_to(x, y);
+        renderer.line_to(x + width, y);        
+        renderer.line_to(x, y + height);
+        renderer.move_to(x + width, y + height);
+        renderer.line_to(x + width, y);
+        renderer.line_to(x, y + height);
+        renderer.end_path();
+    }
+
+    void fill() {        
+    }
+
+    void fillCircle(int x, int y, int radius) {
+
+    }
+
+    void fillRectangle(int x, int y, int width, int height) {
+
+    }
+
+    const gdx_cpp::graphics::Pixmap::Format& getFormat() {
+        return Pixmap::Format::RGBA8888;
+    }
+
+    int getGLFormat() const {
+
+    }
+
+    int getGLInternalFormat() const {
+
+    }
+
+    int getGLType() const {
+
+    }
+
+    int getHeight() const {
+        return height;
+    }
+
+    int getPixel(int x, int y) const {
+        return 0;
+    }
+
+    const unsigned char* getPixels() {
+        typedef agg::pixfmt_bgra32 pixfmt;
+        typedef agg::renderer_base<pixfmt> renderer_base;
+        typedef agg::renderer_scanline_aa_solid<renderer_base> renderer_solid;
+
+        pixfmt pixf(buffer);
+        renderer_base rb(pixf);
+        renderer_solid ren(rb);
+
+        rb.clear(agg::rgba(1,1,1));
+
+        agg::rasterizer_scanline_aa<> ras;
+        agg::scanline_p8 sl;
+        agg::trans_affine mtx;
+
+        renderer.render(ras, sl, ren, mtx, rb.clip_box(), 1.0);
+
+        return buffer.buf();
+    }
+
+    void setColor(float r, float g, float b, float a) {
+        color = agg::rgba8(r,g,b,a);
+    }
+
+    void setColor(const gdx_cpp::graphics::Color& color) {
+        this->color = agg::rgba8(color.r, color.g, color.b, color.a);
+    }
+
+    PixmapType getType() const {
+        return Pixmap::Svg;
+    }
+
+    int getWidth() const {
+        width;
+    }
+
+    void setStrokeWidth(int width) {
+        this->setStrokeWidth((float)width);
+    }
+
+    agg::rendering_buffer buffer;
 private:
-    agg::svg::path_renderer renderer;        
+    agg::svg::path_renderer renderer;
+    agg::rgba8 color;
+    
+    int width;
+    int height;
 };
 
 }

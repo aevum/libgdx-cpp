@@ -38,6 +38,17 @@ returnType from_string(std::string str) {
     return retval;
 }
 
+template <typename returnType>
+returnType from_hex_string(std::string str) {
+    static std::stringstream ss;
+    ss.clear();
+    ss << std::hex << str;
+    returnType retval;
+    ss >> retval;
+    
+    return retval;
+}
+
 template <>
 inline bool from_string<bool>(std::string str) {
     assert(str == "1" || str == "true" || str == "false" || str == "0");

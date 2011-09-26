@@ -123,7 +123,7 @@ const std::string Color::toString () {
 
 gdx_cpp::graphics::Color gdx_cpp::graphics::Color::fromRgb(unsigned int val)
 {
-    return Color((val >> 16) & 0xFF, (val >> 8) & 0xFF, val & 0xFF, 0);
+    return Color(((val >> 16) & 0xFF) / 255.f, ((val >> 8) & 0xFF) / 255.f, (val & 0xFF) / 255.f, 1);
 }
 
 float Color::toFloatBits (int r,int g,int b,int a) {
