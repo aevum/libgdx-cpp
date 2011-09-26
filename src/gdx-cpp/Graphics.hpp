@@ -24,8 +24,8 @@
 #include <vector>
 
 #include "graphics/Pixmap.hpp"
-#include "graphics/TextureData.hpp"
 #include "Files.hpp"
+#include "graphics/TextureData.hpp"
 
 namespace gdx_cpp {
 
@@ -35,6 +35,10 @@ class GL10;
 class GL11;
 class GL20;
 class GLU;
+}
+
+namespace files {
+    class FileHandle;
 }
 
 class Graphics {
@@ -156,10 +160,15 @@ public:
 
     virtual bool supportsExtension (const std::string& extension) = 0;
 
+    
     virtual graphics::TextureData::ptr resolveTextureData(Files::fhandle_ptr fileHandle,
                                                           graphics::Pixmap::ptr preloadedPixmap,
                                                           const gdx_cpp::graphics::Pixmap::Format* format,
                                                           bool useMipMaps) = 0;
+
+    virtual graphics::Pixmap* resolvePixmap(const graphics::Pixmap& other) = 0;
+    virtual graphics::Pixmap* resolvePixmap(const Files::fhandle_ptr& file) = 0;
+    virtual graphics::Pixmap* resolvePixmap(int width, int height,  const gdx_cpp::graphics::Pixmap::Format& format, int pixType) = 0;
 };
 
 }

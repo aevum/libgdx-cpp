@@ -19,7 +19,7 @@
 #include "LinuxOpenALAudio.hpp"
 #include "gdx-cpp/files/FileHandle.hpp"
 #include "LinuxOggInputStream.hpp"
-#include <strstream>
+#include <sstream>
 #include <cstdlib>
 #include <cassert>
 

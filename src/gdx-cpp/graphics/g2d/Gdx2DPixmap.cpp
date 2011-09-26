@@ -34,10 +34,11 @@
 using namespace gdx_cpp::graphics::g2d;
 using namespace gdx_cpp;
 
+Gdx2DPixmap::Blending Gdx2DPixmap::blending = SourceOver;
+
 //these were the private native Jni-wrapped methods
 
-gdx2d_pixmap* load (unsigned char* buffer, int offset, int len, int requestedFormat) {
-    
+gdx2d_pixmap* load (unsigned char* buffer, int offset, int len, int requestedFormat) {  
     unsigned char* p_buffer = buffer + offset;
     gdx2d_pixmap* pixmap = gdx2d_load(p_buffer, len, requestedFormat);
     return pixmap;
@@ -48,6 +49,34 @@ gdx2d_pixmap* newPixmap (int width, int height, int format) {
     return pixmap;
 }
 
+graphics::Pixmap::Blending graphics::g2d::Gdx2DPixmap::getBlending()
+{
+    return blending;
+}
+
+void graphics::g2d::Gdx2DPixmap::drawPixmap(const gdx_cpp::graphics::Pixmap& pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight)
+{
+    graphics::Pixmap::Blending last = blending;
+    setBlend(graphics::Pixmap::None);    
+    drawPixmap(pixmap, srcx, srcy, x, y, srcWidth, srcHeight );
+    setBlend(last);
+}
+
+void graphics::g2d::Gdx2DPixmap::setBlending(const gdx_cpp::graphics::Pixmap::Blending& _blending)
+{
+    blending = _blending;
+}
+
+void graphics::g2d::Gdx2DPixmap::setFilter(const gdx_cpp::graphics::Pixmap::Filter& filter)
+{
+    setScale(filter == NearestNeighbour ? GDX2D_SCALE_NEAREST : GDX2D_SCALE_LINEAR);
+}
+
+void graphics::g2d::Gdx2DPixmap::setStrokeWidth(int width)
+{
+
+}
+
 Gdx2DPixmap::Gdx2DPixmap (std::istream& in, int requestedFormat)
         :
         pixData(0)
@@ -56,27 +85,19 @@ Gdx2DPixmap::Gdx2DPixmap (std::istream& in, int requestedFormat)
         ,format(0)
 {
 
-    char* nativeBuffer = (char*) malloc(1024);
-    int bufSize = 1024;
-
-    int readBytes = 0;
-
-    while (!in.eof()) {
-        in.read(nativeBuffer, 1024);
-        readBytes += in.tellg();
-        while (readBytes >= bufSize) {
-            nativeBuffer = (char*) realloc(nativeBuffer, bufSize * 2);
-            bufSize *= 2;
-        }
-    }
-
-    pixData = load((unsigned char*)nativeBuffer, 0, readBytes, requestedFormat);
+    in.seekg(0, std::ios::end);
+    std::ifstream::pos_type filesize = in.tellg();
+    in.seekg(0, std::ios::beg);
+    
+    std::vector<char> bytes(filesize);
+    
+    in.read(&bytes[0], filesize);
+    
+    pixData = load((unsigned char*)&bytes[0], 0, filesize, requestedFormat);
 
     width = pixData->width;
     height = pixData->height;
     format = pixData->format;
-
-    free(nativeBuffer);
 
     if (pixData == NULL) {
         throw std::runtime_error("couldn't load pixmap");
@@ -133,7 +154,6 @@ void graphics::g2d::Gdx2DPixmap::setScale(int scale)
     gdx2d_set_scale(scale);
 }
 
-
 void Gdx2DPixmap::dispose () {
     if (pixData != NULL) {
         gdx2d_free(pixData);
@@ -141,55 +161,60 @@ void Gdx2DPixmap::dispose () {
     }
 }
 
-void Gdx2DPixmap::clear (int color) {
+void Gdx2DPixmap::fill () {
     assert(pixData != NULL);
     if (pixData != NULL) {
         gdx2d_clear(pixData, color);
     }
 }
 
-void Gdx2DPixmap::setPixel (int x,int y,int color) {
+void Gdx2DPixmap::drawPixel (int x,int y) {
     assert(pixData != NULL);
     gdx2d_set_pixel(pixData, x, y, color);
 }
 
-int Gdx2DPixmap::getPixel (int x,int y) {
+int Gdx2DPixmap::getPixel (int x,int y) const {
     assert(pixData != NULL);
     return gdx2d_get_pixel(pixData, x, y);
 }
 
-void Gdx2DPixmap::drawLine (int x,int y,int x2,int y2,int color) {
+void Gdx2DPixmap::drawLine (int x,int y,int x2,int y2) {
     assert(pixData != NULL);
     gdx2d_draw_line(pixData, x, y, x2, y2, color);
 }
 
-void Gdx2DPixmap::drawRect (int x,int y,int width,int height,int color) {
+void Gdx2DPixmap::drawRectangle (int x,int y,int width,int height) {
     assert(pixData != NULL);
     gdx2d_draw_rect((gdx2d_pixmap*)pixData, x, y, width, height, color);
 }
 
-void Gdx2DPixmap::drawCircle (int x,int y,int radius,int color) {
+void Gdx2DPixmap::drawCircle (int x,int y,int radius) {
     assert(pixData != NULL);
     gdx2d_draw_circle((gdx2d_pixmap*)pixData, x, y, radius, color);
 }
 
-void Gdx2DPixmap::fillRect (int x,int y,int width,int height,int color) {
+void Gdx2DPixmap::fillRectangle (int x,int y,int width,int height) {
     assert(pixData != NULL);
     gdx2d_fill_rect((gdx2d_pixmap*)pixData, x, y, width, height, color);
 }
 
-void Gdx2DPixmap::fillCircle (int x,int y,int radius,int color) {
+void Gdx2DPixmap::fillCircle (int x,int y,int radius) {
     assert(pixData != NULL);
     gdx2d_fill_circle((gdx2d_pixmap*)pixData, x, y, radius, color);
 }
 
-void Gdx2DPixmap::drawPixmap (const Gdx2DPixmap& src, int srcX, int srcY, int dstX, int dstY, int width, int height) {
+void Gdx2DPixmap::drawPixmap (const gdx_cpp::graphics::Pixmap& src, int srcX, int srcY, int dstX, int dstY, int width) {
     drawPixmap(src, srcX, srcY, width, height, dstX, dstY, width, height);
 }
 
-void Gdx2DPixmap::drawPixmap (const Gdx2DPixmap& src,int srcX,int srcY,int srcWidth,int srcHeight,int dstX,int dstY,int dstWidth,int dstHeight) {
+void Gdx2DPixmap::drawPixmap (const gdx_cpp::graphics::Pixmap& src, int srcX, int srcY, int srcWidth, int srcHeight, int dstX, int dstY, int dstWidth, int dstHeight) {
     assert(pixData != NULL);
-    gdx2d_draw_pixmap((gdx2d_pixmap*)src.pixData, (gdx2d_pixmap*)pixData, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight);
+
+    if (src.getType() == graphics::Pixmap::Gdx2d) {    
+        gdx2d_draw_pixmap((gdx2d_pixmap*)((Gdx2DPixmap&) src).pixData, (gdx2d_pixmap*)pixData, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight);
+    } else {
+        throw std::runtime_error("Unsupported conversion: expected a Gdx2DPixmap");
+    }
 }
 
 graphics::g2d::Gdx2DPixmap* Gdx2DPixmap::newPixmap (std::istream& in, int requestedFormat) {
@@ -200,24 +225,24 @@ graphics::g2d::Gdx2DPixmap* Gdx2DPixmap::newPixmap (int width, int height, int f
     return new Gdx2DPixmap(width, height, format);
 }
 
-const unsigned char* Gdx2DPixmap::getPixels () {
+const unsigned char* Gdx2DPixmap::getPixels () const {
     assert(pixData != NULL);
     return pixData->pixels;
 }
 
-int Gdx2DPixmap::getHeight () {
+int Gdx2DPixmap::getHeight () const {
     return height;
 }
 
-int Gdx2DPixmap::getWidth () {
+int Gdx2DPixmap::getWidth () const {
     return width;
 }
 
-int Gdx2DPixmap::getFormat () {
-    return format;
+const graphics::Pixmap::Format& Gdx2DPixmap::getFormat () {
+    return Pixmap::Format::fromGdx2DPixmapFormat(format);
 }
 
-int Gdx2DPixmap::getGLInternalFormat () {
+int Gdx2DPixmap::getGLInternalFormat () const {
     using namespace gdx_cpp::graphics;
 
     switch (pixData->format) {
@@ -240,11 +265,11 @@ int Gdx2DPixmap::getGLInternalFormat () {
     }
 }
 
-int Gdx2DPixmap::getGLFormat () {
+int Gdx2DPixmap::getGLFormat () const {
     return getGLInternalFormat();
 }
 
-int Gdx2DPixmap::getGLType () {
+int Gdx2DPixmap::getGLType () const {
     using namespace gdx_cpp::graphics;
     switch (pixData->format) {
     case GDX2D_FORMAT_ALPHA:
@@ -284,3 +309,12 @@ const std::string Gdx2DPixmap::getFormatString () {
     }
 }
 
+void graphics::g2d::Gdx2DPixmap::setColor(float r, float g, float b, float a)
+{
+    this->color = graphics::Color::rgba8888(r, g, b, a);
+}
+
+void graphics::g2d::Gdx2DPixmap::setColor(const gdx_cpp::graphics::Color& color)
+{
+    this->color = graphics::Color::rgba8888(color.r, color.g, color.b, color.a);
+}

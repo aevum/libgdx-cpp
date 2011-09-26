@@ -23,15 +23,10 @@
 
 #include "gdx-cpp/utils/Disposable.hpp"
 #include "gdx-cpp/utils/Aliases.hpp"
-#include "g2d/Gdx2DPixmap.hpp"
+#include <string>
+#include "gdx-cpp/Files.hpp"
 
 namespace gdx_cpp {
-    
-namespace files {
-    class FileHandle;
-}
-
-    
 namespace graphics {
 
 class Color;
@@ -39,13 +34,18 @@ class Color;
 class Pixmap: public utils::Disposable {
 public:
     typedef ref_ptr_maker<Pixmap>::type ptr;
-    
+
     enum Blending {
         None, SourceOver
     };
 
     enum Filter {
         NearestNeighbour, BiLinear
+    };
+
+    enum PixmapType {
+        Gdx2d,
+        Svg
     };
 
     class Format {
@@ -56,7 +56,7 @@ public:
         const static Format RGBA4444;
         const static Format RGB888;
         const static Format RGBA8888;
-        
+
         static int toGdx2DPixmapFormat (const Format& format);
         static const gdx_cpp::graphics::Pixmap::Format& fromGdx2DPixmapFormat (int format);
 
@@ -77,45 +77,38 @@ public:
         }
     };
 
-    Pixmap (int width, int height, const Format& format) ;
-    Pixmap (unsigned char* encodedData, int offset, int len) ;
-    Pixmap (files::FileHandle& file) ;
-    Pixmap (gdx_cpp::graphics::g2d::Gdx2DPixmap* pixmap) ;
-    
-    static void setBlending (const Blending& blending);
-    static void setFilter (const Filter& filter);
-    static Blending getBlending ();
-    
-    void setColor (float r,float g,float b,float a);
-    void setColor (const Color& color);
-    void fill ();
-    void setStrokeWidth (int width);
-    void drawLine (int x,int y,int x2,int y2);
-    void drawRectangle (int x,int y,int width,int height);
-    void drawPixmap (const Pixmap& pixmap,int x,int y,int srcx,int srcy,int srcWidth,int srcHeight);
-    void drawPixmap (const Pixmap& pixmap,int srcx,int srcy,int srcWidth,int srcHeight,int dstx,int dsty,int dstWidth,int dstHeight);
-    void fillRectangle (int x,int y,int width,int height);
-    void drawCircle (int x,int y,int radius);
-    void fillCircle (int x,int y,int radius);
-    int getPixel (int x,int y) const;
-    int getWidth () const;
-    int getHeight () const;
-    void dispose ();
-    void drawPixel (int x,int y);
-    int getGLFormat () const;
-    int getGLInternalFormat () const;
-    int getGLType () const;
-    const unsigned char* getPixels () const;
-    const Format& getFormat ();
+//     Pixmap (int width, int height, const Format& format) ;
+//     Pixmap (unsigned char* encodedData, int offset, int len) ;
+//     Pixmap (files::FileHandle& file) ;
+//     Pixmap (gdx_cpp::graphics::g2d::Gdx2DPixmap* pixmap) ;
 
-    virtual ~Pixmap();
-    
-protected:
-    g2d::Gdx2DPixmap* pixmap;
-    int color;
+    static Pixmap::ptr newFromRect(int width, int height, const Format& format, PixmapType pixType);
+    static Pixmap::ptr newFromPixmap(const Pixmap& pixmap);
+    static Pixmap::ptr newFromFile(const gdx_cpp::Files::fhandle_ptr& file);
+      
 
-private:
-    static Blending blending;
+    virtual PixmapType getType() const = 0;
+    virtual void setColor (float r,float g,float b,float a) = 0;
+    virtual void setColor (const Color& color) = 0;
+    virtual void fill () = 0;
+    virtual void setStrokeWidth (int width) = 0;
+    virtual void drawLine (int x,int y,int x2,int y2) = 0;
+    virtual void drawRectangle (int x,int y,int width,int height) = 0;
+    virtual void drawPixmap (const Pixmap& pixmap,int x,int y,int srcx,int srcy,int srcWidth,int srcHeight) = 0;
+    virtual void drawPixmap (const Pixmap& pixmap,int srcx,int srcy,int srcWidth,int srcHeight,int dstx,int dsty,int dstWidth,int dstHeight) = 0;
+    virtual void fillRectangle (int x,int y,int width,int height) = 0;
+    virtual void drawCircle (int x,int y,int radius) = 0;
+    virtual void fillCircle (int x,int y,int radius) = 0;
+    virtual int getPixel (int x,int y) const = 0;
+    virtual int getWidth () const = 0;
+    virtual int getHeight () const = 0;
+    virtual void dispose () = 0;
+    virtual void drawPixel (int x,int y) = 0;
+    virtual int getGLFormat () const = 0;
+    virtual int getGLInternalFormat () const = 0;
+    virtual int getGLType () const = 0;
+    virtual const unsigned char* getPixels () const = 0;
+    virtual const Format& getFormat () = 0;
 };
 
 } // namespace gdx_cpp

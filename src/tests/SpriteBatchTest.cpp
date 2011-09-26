@@ -37,14 +37,14 @@ public:
     void create() {        
         spriteBatch = new SpriteBatch(1000);
         gdx_cpp::Files::fhandle_ptr file = gdx_cpp::Gdx::files->internal("data/badlogicsmall.jpg");
-        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(*file));
+        Pixmap::ptr pixmap = Pixmap::newFromFile(file);
 
-        texture = Texture::ptr(new Texture(32, 32, gdx_cpp::graphics::Pixmap::Format::RGB565));
+        texture = Texture::ptr(new Texture(32, 32, gdx_cpp::graphics::Pixmap::Format::RGB565, Pixmap::Gdx2d));
         texture->setFilter(Texture::TextureFilter::Linear, Texture::TextureFilter::Linear);
         texture->draw(*pixmap, 0, 0);
         pixmap->dispose();
         
-        pixmap = Pixmap::ptr(new Pixmap(2, 2, Pixmap::Format::RGBA8888));
+        pixmap = Pixmap::newFromRect(2, 2, Pixmap::Format::RGBA8888, Pixmap::Gdx2d);
         pixmap->setColor(1,1,0 , 0.5f);
         pixmap->fill();
 

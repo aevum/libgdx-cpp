@@ -35,7 +35,7 @@ public:
     void create() {
         spriteCache = new SpriteCache(1000, true);
 
-        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(32, 32, Pixmap::Format::RGBA8888));
+        Pixmap::ptr pixmap = Pixmap::newFromRect(32, 32, Pixmap::Format::RGBA8888, Pixmap::Gdx2d);
         pixmap->setColor(1 ,1 ,0 ,0.5f);
         pixmap->fill();
 

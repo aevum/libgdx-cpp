@@ -55,7 +55,7 @@ public :
 EmptyNinePatch& EmptyNinePatch::getInstance () {
     if (instance == NULL) {
         // This is kind of gross...
-        Texture::ptr texture(new gdx_cpp::graphics::Texture(2, 2, gdx_cpp::graphics::Pixmap::Format::RGBA8888));
+        Texture::ptr texture(new gdx_cpp::graphics::Texture(2, 2, gdx_cpp::graphics::Pixmap::Format::RGBA8888, Pixmap::Gdx2d));
  
 
         region = TextureRegion::ptr(new EmpytTextureRegion(texture));

@@ -230,7 +230,7 @@ void FileHandle::list (const std::string& suffix, std::vector<FileHandle> &handl
     std::vector<std::string> relativePaths;
     getFile().list(relativePaths);
     handles.resize(relativePaths.size());
-    int count = 0, found;
+    unsigned int count = 0, found;
     for (int i = 0, n = relativePaths.size(); i < n; i++) {
         found = relativePaths[i].rfind(suffix);
         if(found == relativePaths[i].npos || found != (relativePaths[i].length() - suffix.length() ) ) continue;
@@ -273,7 +273,9 @@ bool FileHandle::exists () {
     switch (type) {
     case gdx_cpp::Files::Internal:
         if (file.exists()) return true;
-        // Fall through.
+        break;
+    default:
+        break;        
     }
     return getFile().exists();
 }

@@ -20,9 +20,12 @@
 
 #include "ParticleEffect.hpp"
 #include "ParticleEmitter.hpp"
+#include "gdx-cpp/graphics/Pixmap.hpp"
+
 #include <iostream>
 
 using namespace gdx_cpp::graphics::g2d;
+using namespace gdx_cpp::graphics;
 
 ParticleEffect::ParticleEffect () {
     emitters.reserve(8);
@@ -214,7 +217,8 @@ void ParticleEffect::loadEmitterImagesTest () {
     for (unsigned int i = 0, n = emitters.size(); i < n; i++) {
         ParticleEmitter * emitter = emitters[i];
 
-        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(16, 16, Pixmap::Format::RGBA8888));
+        Pixmap::ptr pixmap = Pixmap::newFromRect(16, 16, Pixmap::Format::RGBA8888, Pixmap::Gdx2d);
+        
         pixmap->setColor(1 ,1 ,1 ,0.5f);
         pixmap->fill();
 

@@ -21,10 +21,11 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_MIPMAPGENERATOR_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_MIPMAPGENERATOR_HPP_
 
+#include "gdx-cpp/graphics/Pixmap.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 
-class Pixmap;
 
 namespace glutils {
 
@@ -33,15 +34,15 @@ public:
     static bool useHWMipMap;
 
     static void setUseHardwareMipMap (bool useHWMipMap);
-    static void generateMipMap (gdx_cpp::graphics::Pixmap& pixmap, int textureWidth, int textureHeight, bool disposePixmap);
+    static void generateMipMap (gdx_cpp::graphics::Pixmap::ptr pixmap, int textureWidth, int textureHeight, bool disposePixmap);
 
 protected:
 
 
 private:
-    static void generateMipMapGLES20 (gdx_cpp::graphics::Pixmap& pixmap,bool disposePixmap);
-    static void generateMipMapDesktop (gdx_cpp::graphics::Pixmap& pixmap,int textureWidth,int textureHeight,bool disposePixmap);
-    static void generateMipMapCPU (gdx_cpp::graphics::Pixmap& pixmap,int textureWidth,int textureHeight,bool disposePixmap);
+    static void generateMipMapGLES20 (gdx_cpp::graphics::Pixmap::ptr pixmap, bool disposePixmap);
+    static void generateMipMapDesktop (gdx_cpp::graphics::Pixmap::ptr pixmap, int textureWidth, int textureHeight, bool disposePixmap);
+    static void generateMipMapCPU (gdx_cpp::graphics::Pixmap::ptr pixmap, int textureWidth, int textureHeight, bool disposePixmap);
 };
 
 } // namespace gdx_cpp

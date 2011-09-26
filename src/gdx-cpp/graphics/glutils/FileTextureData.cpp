@@ -35,7 +35,7 @@ gdx_cpp::graphics::Pixmap::ptr FileTextureData::getPixmap () {
         this->pixmap.reset();
         return tmp;
     } else {
-        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(*file));
+        Pixmap::ptr pixmap = Pixmap::newFromFile(file);
         width = pixmap->getWidth();
         height = pixmap->getHeight();
         if (format == NULL) format = &pixmap->getFormat();

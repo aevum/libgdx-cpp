@@ -94,9 +94,9 @@ public:
     };
 
     Texture (const gdx_cpp::graphics::TextureData::ptr data) ;
-    Texture (gdx_cpp::graphics::Pixmap::ptr pixmap, const gdx_cpp::graphics::Pixmap::Format& format, bool useMipMaps) ;
+    Texture (int width, int height, const gdx_cpp::graphics::Pixmap::Format& format, gdx_cpp::graphics::Pixmap::PixmapType pixType) ;
     Texture (const gdx_cpp::graphics::Pixmap::ptr pixmap, bool useMipMaps) ;
-    Texture (int width, int height, const Pixmap::Format& format) ;
+    Texture (const gdx_cpp::graphics::Pixmap::ptr pixmap, const Pixmap::Format& format, bool useMipMaps) ;
     Texture (const TextureData& data) ;
 
     const gdx_cpp::assets::AssetType& getAssetType();

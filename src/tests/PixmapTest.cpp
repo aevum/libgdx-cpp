@@ -22,9 +22,9 @@ public:
     }
 
     void create() {
-        Texture::ptr texture = Texture::ptr(new Texture(1024,1024, Pixmap::Format::RGBA8888));
+        Texture::ptr texture = Texture::ptr(new Texture(1024,1024, Pixmap::Format::RGBA8888, Pixmap::Gdx2d));
 
-        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(840, 480, Pixmap::Format::RGBA8888));
+        Pixmap::ptr pixmap = Pixmap::newFromRect(840, 480, Pixmap::Format::RGBA8888, Pixmap::Gdx2d);
         texture->setFilter(Texture::TextureFilter::Nearest, Texture::TextureFilter::Linear);
         texture->setWrap(Texture::TextureWrap::ClampToEdge, Texture::TextureWrap::ClampToEdge);
         pixmap->setColor(1.0f, 0.0f, 0.0f, 1.0f); // Red
@@ -43,14 +43,13 @@ public:
         region = new TextureRegion(texture, 0, 0, 800, 480);
         batch = new SpriteBatch();
 
-        Pixmap* px = new Pixmap(512, 1024, Pixmap::Format::RGBA8888);
+        Pixmap::ptr px = Pixmap::newFromRect(512, 1024, Pixmap::Format::RGBA8888, Pixmap::Gdx2d);
         for (int y = 0; y < pixmap->getHeight(); y++) { // 1024
             for (int x = 0; x < pixmap->getWidth(); x++) { // 512
                                 pixmap->getPixel(x, y);
                         }
         }
         px->dispose();
-        delete px;
     }
 
     void dispose() {

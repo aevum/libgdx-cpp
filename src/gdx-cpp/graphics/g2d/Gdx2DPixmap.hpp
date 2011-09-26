@@ -28,17 +28,23 @@
 #include <string>
 #include <vector>
 #include <istream>
+#include "gdx-cpp/graphics/Pixmap.hpp"
+#include "gdx-cpp/graphics/Color.hpp"
 
 namespace gdx_cpp {
 namespace graphics {
 namespace g2d {
 
-class Gdx2DPixmap: public utils::Disposable {
+class Gdx2DPixmap: public graphics::Pixmap {
 public:
     typedef ref_ptr_maker<Gdx2DPixmap>::type ptr;
 
     static const int GDX2D_SCALE_LINEAR = 1;
 
+    static void setBlending (const Blending& blending);
+    static void setFilter (const Filter& filter);
+    static Blending getBlending ();
+    
     Gdx2DPixmap (std::istream& in, int requestedFormat);
     Gdx2DPixmap (int width, int height, int format);
     Gdx2DPixmap (const Gdx2DPixmap& other);
@@ -46,28 +52,36 @@ public:
 
     static Gdx2DPixmap* newPixmap (int width,int height,int format);
     static Gdx2DPixmap* newPixmap (std::istream& in, int requestedFormat);
+
+    void setColor(float r, float g, float b, float a);
+    void setColor(const gdx_cpp::graphics::Color& color);
     
     void dispose ();
-    void clear (int color);
-    void setPixel (int x,int y,int color);
-    int getPixel (int x,int y);
-    void drawLine (int x,int y,int x2,int y2,int color);
-    void drawRect (int x,int y,int width,int height,int color);
-    void drawCircle (int x,int y,int radius,int color);
-    void fillRect (int x,int y,int width,int height,int color);
-    void fillCircle (int x,int y,int radius,int color);
-    void drawPixmap (const Gdx2DPixmap& src,int srcX,int srcY,int dstX,int dstY,int width,int height);
-    void drawPixmap (const Gdx2DPixmap& src,int srcX,int srcY,int srcWidth,int srcHeight,int dstX,int dstY,int dstWidth,int dstHeight);
+    void fill ();
+    void drawPixel (int x,int y);
+    int getPixel (int x,int y) const;
+    void drawLine (int x, int y, int x2, int y2);
+    void drawRectangle (int x, int y, int width, int height);
+    void drawCircle (int x, int y, int radius);
+    void fillRectangle (int x, int y, int width, int height);
+    void fillCircle (int x, int y, int radius);
+    void drawPixmap (const gdx_cpp::graphics::Pixmap& src, int srcX, int srcY, int dstX, int dstY, int width);
+    void drawPixmap (const graphics::Pixmap& src,int srcX,int srcY,int srcWidth,int srcHeight,int dstX,int dstY,int dstWidth,int dstHeight);    
+    void drawPixmap(const gdx_cpp::graphics::Pixmap& pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight);
+    void setStrokeWidth(int width);
     
-    const unsigned char* getPixels ();
-    int getHeight ();
-    int getWidth ();
-    int getFormat ();
-    int getGLInternalFormat ();
-    int getGLFormat ();
-    int getGLType ();
+    PixmapType getType() const { return Pixmap::Gdx2d; }
+    
+    const unsigned char* getPixels () const;
+    int getHeight () const;
+    int getWidth () const;
+    const Pixmap::Format& getFormat ();
+    
+    int getGLInternalFormat () const;
+    int getGLFormat () const;
+    int getGLType () const;
     const std::string getFormatString ();
-
+    
     static void setBlend (int blend);
     static void setScale (int scale);
     
@@ -86,11 +100,12 @@ protected:
   int width;
   int height;
   int format;
+  int color;
   
   gdx2d_pixmap* pixData;
 
 private:
-
+    static Blending blending;
 };
 
 } // namespace gdx_cpp

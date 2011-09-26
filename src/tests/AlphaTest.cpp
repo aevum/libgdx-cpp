@@ -19,7 +19,7 @@ public:
     }
     
     void create() {
-        Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(256, 256, Pixmap::Format::RGBA8888));
+        Pixmap::ptr pixmap = Pixmap::newFromRect(256, 256, Pixmap::Format::RGBA8888, Pixmap::Gdx2d);
         pixmap->setColor(0, 1, 0, 0.7f);
         pixmap->fill();
         

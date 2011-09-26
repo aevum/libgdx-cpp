@@ -31,7 +31,7 @@ using namespace gdx_cpp;
 FrameBuffer::buffer_map FrameBuffer::buffers;
 
 void FrameBuffer::build () {
-    colorTexture = Texture::ptr(new Texture(width, height, format));
+    colorTexture = Texture::ptr(new Texture(width, height, format, Pixmap::Gdx2d));
     colorTexture->setFilter(Texture::TextureFilter::Linear, Texture::TextureFilter::Linear);
     colorTexture->setWrap(Texture::TextureWrap::ClampToEdge, Texture::TextureWrap::ClampToEdge);
 

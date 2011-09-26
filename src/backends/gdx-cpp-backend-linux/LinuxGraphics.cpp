@@ -35,6 +35,8 @@
 #include <GLES/gl.h>
 #include <gdx-cpp/graphics/Texture.hpp>
 
+#include <gdx-cpp/graphics/g2d/Gdx2DPixmap.hpp>
+
 
 using namespace gdx_cpp::backends::nix;
 using namespace gdx_cpp::graphics;
@@ -270,4 +272,36 @@ TextureData::ptr backends::nix::LinuxGraphics::resolveTextureData(Files::fhandle
                                                                   bool useMipMaps)
 {
     return TextureData::ptr(new glutils::FileTextureData(fileHandle, preloadedPixmap, format, useMipMaps));
+}
+
+Pixmap* backends::nix::LinuxGraphics::resolvePixmap(int width, int height, const gdx_cpp::graphics::Pixmap::Format& format, int pixType)
+{
+    switch(pixType) {
+        case Pixmap::Gdx2d:
+            return g2d::Gdx2DPixmap::newPixmap(width, height, g2d::Gdx2DPixmap::Format::toGdx2DPixmapFormat(format));
+        case Pixmap::Svg:
+            //TODO:
+            break;
+    }
+}
+
+Pixmap* backends::nix::LinuxGraphics::resolvePixmap(const gdx_cpp::graphics::Pixmap& other)
+{
+    switch(other.getType()) {
+        case Pixmap::Gdx2d:
+            return new g2d::Gdx2DPixmap((g2d::Gdx2DPixmap&)other);
+    } 
+}
+
+Pixmap* backends::nix::LinuxGraphics::resolvePixmap(const Files::fhandle_ptr& file)
+{
+    std::string extension = file->extension();
+    
+    if (extension == "png" || extension == "jpg" || extension == "tga" || extension == "bmp")
+        return g2d::Gdx2DPixmap::newPixmap(*file->read(), 0);
+    else if (extension == "svg") {
+        throw std::runtime_error("you forgot here :(");
+    } else {
+        throw std::runtime_error("unsupported image format: " + extension);
+    }
 }

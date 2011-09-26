@@ -115,17 +115,14 @@ void Texture::uploadImageData (const gdx_cpp::graphics::Pixmap::ptr pixmap) {
     Pixmap::ptr tmp = pixmap;
     
     if (*data->getFormat() != pixmap->getFormat()) {
-        tmp = Pixmap::ptr(new Pixmap(pixmap->getWidth(), pixmap->getHeight(), *data->getFormat()));
-        Pixmap::Blending blend = Pixmap::getBlending();
-        Pixmap::setBlending(Pixmap::None);
+        tmp = Pixmap::newFromPixmap(*pixmap);
         tmp->drawPixmap(*pixmap, 0, 0, 0, 0, pixmap->getWidth(), pixmap->getHeight());
-        Pixmap::setBlending(blend);
         disposePixmap = true;
     }
 
     Gdx::gl->glBindTexture(GL10::GL_TEXTURE_2D, glHandle);
     if (data->useMipMaps()) {
-        glutils::MipMapGenerator::generateMipMap(*tmp, tmp->getWidth(), tmp->getHeight(), disposePixmap);
+        glutils::MipMapGenerator::generateMipMap(tmp, tmp->getWidth(), tmp->getHeight(), disposePixmap);
     } else {
         Gdx::gl->glTexImage2D(GL10::GL_TEXTURE_2D, 0, tmp->getGLInternalFormat(), tmp->getWidth(), tmp->getHeight(), 0,
                             tmp->getGLFormat(), tmp->getGLType(), tmp->getPixels());
@@ -306,14 +303,14 @@ minFilter(TextureFilter::Nearest)
     create(data);
 }
 
-Texture::Texture(int width, int height, const Pixmap::Format& format)
+Texture::Texture(int width, int height, const Pixmap::Format& format, Pixmap::PixmapType pixType)
 :
 minFilter(TextureFilter::Nearest)
 ,magFilter(TextureFilter::Nearest)
 ,uWrap(TextureWrap::ClampToEdge)
 ,vWrap(TextureWrap::ClampToEdge)
 {
-    Pixmap::ptr pixmap = Pixmap::ptr(new Pixmap(width, height, format));
+    Pixmap::ptr pixmap = Pixmap::newFromRect(width, height, format, pixType);
     glutils::PixmapTextureData::ptr ptd(new glutils::PixmapTextureData(pixmap, NULL, false, true));
     create(ptd);
 }

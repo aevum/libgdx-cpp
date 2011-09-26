@@ -33,108 +33,12 @@
 
 using namespace gdx_cpp::graphics;
 
-Pixmap::Blending Pixmap::blending = SourceOver;
-
 const Pixmap::Format Pixmap::Format::Alpha = Pixmap::Format("Alpha");
 const Pixmap::Format Pixmap::Format::LuminanceAlpha = Pixmap::Format("LuminanceAlpha");
 const Pixmap::Format Pixmap::Format::RGB565 = Pixmap::Format("RGB565");
 const Pixmap::Format Pixmap::Format::RGBA4444 = Pixmap::Format("RGBA4444");
 const Pixmap::Format Pixmap::Format::RGB888 = Pixmap::Format("RGB888");
 const Pixmap::Format Pixmap::Format::RGBA8888 = Pixmap::Format("RGBA888");
-
-void Pixmap::setBlending (const Blending& blending) {
-    Pixmap::blending = blending;
-    g2d::Gdx2DPixmap::setBlend(blending == Pixmap::None ? 0 : 1);
-}
-
-void Pixmap::setFilter (const Filter& filter) {
-    g2d::Gdx2DPixmap::setScale(filter == NearestNeighbour ? GDX2D_SCALE_NEAREST : g2d::Gdx2DPixmap::GDX2D_SCALE_LINEAR);
-}
-
-void Pixmap::setColor (float r,float g,float b,float a) {
-    color = Color::rgba8888(r, g, b, a);
-}
-
-void Pixmap::setColor (const Color& color) {
-    this->color = Color::rgba8888(color.r, color.g, color.b, color.a);
-}
-
-void Pixmap::fill () {
-    pixmap->clear(color);
-}
-
-void Pixmap::drawLine (int x,int y,int x2,int y2) {
-    pixmap->drawLine(x, y, x2, y2, color);
-}
-
-void Pixmap::drawRectangle (int x,int y,int width,int height) {
-    pixmap->drawRect(x, y, width, height, color);
-}
-
-void Pixmap::drawPixmap (const Pixmap& pixmap,int x,int y,int srcx,int srcy,int srcWidth,int srcHeight) {
-    this->pixmap->drawPixmap(*pixmap.pixmap, srcx, srcy, x, y, srcWidth, srcHeight);
-}
-
-void Pixmap::drawPixmap (const Pixmap& pixmap,int srcx,int srcy,int srcWidth,int srcHeight,int dstx,int dsty,int dstWidth,int dstHeight) {
-    this->pixmap->drawPixmap(*pixmap.pixmap, srcx, srcy, srcWidth, srcHeight, dstx, dsty, dstWidth, dstHeight);
-}
-
-void Pixmap::fillRectangle (int x,int y,int width,int height) {
-    pixmap->fillRect(x, y, width, height, color);
-}
-
-void Pixmap::drawCircle (int x,int y,int radius) {
-    pixmap->drawCircle(x, y, radius, color);
-}
-
-void Pixmap::fillCircle (int x,int y,int radius) {
-    pixmap->fillCircle(x, y, radius, color);
-}
-
-int Pixmap::getPixel (int x, int y) const {
-    return pixmap->getPixel(x, y);
-}
-
-int Pixmap::getWidth () const {
-    return pixmap->getWidth();
-}
-
-int Pixmap::getHeight () const {
-    return pixmap->getHeight();
-}
-
-void Pixmap::dispose () {
-    std::cout << "called dispose" << std::endl;
-    pixmap->dispose();
-}
-
-void Pixmap::drawPixel (int x,int y) {
-    pixmap->setPixel(x, y, color);
-}
-
-int Pixmap::getGLFormat () const {
-    return pixmap->getGLFormat();
-}
-
-int Pixmap::getGLInternalFormat () const {
-    return pixmap->getGLInternalFormat();
-}
-
-int Pixmap::getGLType () const {
-    return pixmap->getGLType();
-}
-
-const unsigned char* Pixmap::getPixels () const {
-    return pixmap->getPixels();
-}
-
-const gdx_cpp::graphics::Pixmap::Format& Pixmap::getFormat () {
-    return Format::fromGdx2DPixmapFormat(pixmap->getFormat());
-}
-
-Pixmap::Blending Pixmap::getBlending () {
-    return blending;
-}
 
 int Pixmap::Format::toGdx2DPixmapFormat(const gdx_cpp::graphics::Pixmap::Format& format) {
     if (format == Pixmap::Format::Alpha) return GDX2D_FORMAT_ALPHA;
@@ -162,40 +66,51 @@ const Pixmap::Format& Pixmap::Format::fromGdx2DPixmapFormat(int format) {
     throw std::runtime_error(ss.str());
 }
 
-Pixmap::Pixmap(int width, int height, const gdx_cpp::graphics::Pixmap::Format& format)
-        : color(0)
+// Pixmap::Pixmap(int width, int height, const gdx_cpp::graphics::Pixmap::Format& format)
+//         : color(0)
+// {
+//     pixmap = g2d::Gdx2DPixmap::newPixmap(width, height, Format::toGdx2DPixmapFormat(format));
+//     assert(pixmap);
+//     setColor(0, 0, 0, 0);
+//     fill();
+// }
+// 
+// Pixmap::Pixmap(unsigned char* encodedData, int offset, int len) {
+//     pixmap = new g2d::Gdx2DPixmap(encodedData, offset, len, 0);
+// }
+// 
+// Pixmap::Pixmap(gdx_cpp::files::FileHandle& file) {
+// 
+//     gdx_cpp::files::FileHandle::char_ptr bytes;
+//     int size = file.readBytes(bytes);
+//     pixmap = new g2d::Gdx2DPixmap((unsigned char*) bytes.get(), 0, size, 0);
+//     assert(pixmap);
+// }
+// 
+// Pixmap::Pixmap(g2d::Gdx2DPixmap* pixmap)
+//  : color(0)
+//  {
+//     this->pixmap = pixmap;
+// }
+
+Pixmap::ptr Pixmap::newFromFile(const gdx_cpp::Files::fhandle_ptr& file)
 {
-    pixmap = g2d::Gdx2DPixmap::newPixmap(width, height, Format::toGdx2DPixmapFormat(format));
-    assert(pixmap);
-    setColor(0, 0, 0, 0);
-    fill();
+    return Pixmap::ptr(gdx_cpp::Gdx::graphics->resolvePixmap(file));
 }
 
-Pixmap::Pixmap(unsigned char* encodedData, int offset, int len) {
-    pixmap = new g2d::Gdx2DPixmap(encodedData, offset, len, 0);
-}
-
-Pixmap::Pixmap(gdx_cpp::files::FileHandle& file) {
-
-    gdx_cpp::files::FileHandle::char_ptr bytes;
-    int size = file.readBytes(bytes);
-    pixmap = new g2d::Gdx2DPixmap((unsigned char*) bytes.get(), 0, size, 0);
-    assert(pixmap);
-}
-
-Pixmap::Pixmap(g2d::Gdx2DPixmap* pixmap)
- : color(0)
- {
-    this->pixmap = pixmap;
-}
-
-void gdx_cpp::graphics::Pixmap::setStrokeWidth(int width)
+Pixmap::ptr Pixmap::newFromPixmap(const gdx_cpp::graphics::Pixmap& pixmap)
 {
+    return Pixmap::ptr(gdx_cpp::Gdx::graphics->resolvePixmap(pixmap));
 }
 
-gdx_cpp::graphics::Pixmap::~Pixmap()
+Pixmap::ptr Pixmap::newFromRect(int width, int height,
+                                const gdx_cpp::graphics::Pixmap::Format& format,
+                                gdx_cpp::graphics::Pixmap::PixmapType pixType)
 {
-    delete this->pixmap;
+    return Pixmap::ptr(gdx_cpp::Gdx::graphics->resolvePixmap(width, height, format, pixType));
 }
+
+
+
 
 
