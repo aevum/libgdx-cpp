@@ -60,13 +60,21 @@ Libraries will be generated under the lib folder, binaries under the bin folder
         
 ## Differences from libgdx
 
-The texture class constructors that received an managed texture data had to be changed to static constructors.
+* The texture class constructors that received an managed texture data had to be changed to static constructors.
 This is because C++ contruction blocks us to use shared_pointers, so we had to make it two-phase-like. So instead of calling the constructor,
 you'll have to call, for example:
 
     Texture::fromFile()
 
 whith the same parameters that you would expect on the constructor.
+
+* The pixmap class was converted to an interface
+
+Analogically, the calls to create an PixMap now are:
+
+    Pixmap::newFromFile()
+    Pixmap::newFromPixmap()
+    Pixmap::newFromRect()
 
 ## What's working
 
