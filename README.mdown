@@ -66,7 +66,7 @@ you'll have to call, for example:
 
     Texture::fromFile()
 
-whith the same parameters that you would expect on the constructor.
+with the same parameters that you would expect on the constructor.
 
 * The pixmap class was converted to an interface
 
