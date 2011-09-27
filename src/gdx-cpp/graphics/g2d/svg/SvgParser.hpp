@@ -22,7 +22,6 @@
 #define GDX_CPP_GRAPHICS_G2D_SVG_SVGPARSER_HPP
 
 #include "gdx-cpp/utils/XmlReader.hpp"
-#include "SvgPixmapInterface.hpp"
 #include "gdx-cpp/graphics/Color.hpp"
 
 namespace gdx_cpp {
@@ -32,6 +31,8 @@ namespace graphics {
 namespace g2d {
 
 namespace svg {
+
+class SvgPixmapInterface;
 
 /** Uses the gdx-cpp built-in xml reader to parse svg files
  *

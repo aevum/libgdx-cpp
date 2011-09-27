@@ -24,9 +24,9 @@
 #include <string.h>
 #include <cassert>
 #include <algorithm>
+#include "SvgPixmapInterface.hpp"
 #include "gdx-cpp/math/MathUtils.hpp"
 #include "gdx-cpp/utils/StringConvertion.hpp"
-#include <agg_color_rgba.h>
 
 using namespace gdx_cpp::graphics::g2d::svg;
 using namespace gdx_cpp::utils;
@@ -74,6 +74,12 @@ void SvgParser::render(gdx_cpp::utils::XmlReader::Element* const svg)
 void SvgParser::beginElement(XmlReader::Element* const currentNode)
 {
     std::string name = currentNode->getName();
+    if (name == "svg") {
+        int width = from_string<float>(currentNode->getAttribute("width"));
+        int height = from_string<float>(currentNode->getAttribute("height"));
+
+        pixmap.setImageDimension(width, height);
+    }
     if (name == "title")
     {
         m_titleFlag = true;
@@ -147,9 +153,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_attr(gdx_cpp::utils::XmlReade
 
 void gdx_cpp::graphics::g2d::svg::SvgParser::parse_style(const std::string& style)
 {
-    std::string::size_type pos = 0, found = 0;
     std::string::size_type result = 0;
-
     std::vector<std::string> res =  splitArgs<std::string>(style, ":;", result);
 
     for (int i = 0; i < res.size(); i += 2) {
@@ -366,7 +370,6 @@ gdx_cpp::graphics::Color gdx_cpp::graphics::g2d::svg::SvgParser::parse_color(con
     if (pos != std::string::npos) {
         int color;        
         sscanf(&colorValue[pos], "%x", &color);
-        std::cout << colorValue << std::endl;
         return graphics::Color::fromRgb(color);
     } else if ((pos = colorValue.find("rgb")) != std::string::npos) {
         throw std::runtime_error("No implemented yet");
@@ -459,7 +462,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
     unsigned int i = 0;
 
     char cmd = paths[0][0];
-    
+
     while (i < paths.size()) {
         int j = 0;
         for (;j < strlen(commands) && commands[j] != paths[i][0]; ++j)
@@ -504,7 +507,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
                 i += 2;
                 break;
                 
-            case 'C': case 'c':
+            case 'C': case 'c':                            
                 pixmap.curve4(utils::from_string<float>(paths[i]),
                               utils::from_string<float>(paths[i+1]),
                               utils::from_string<float>(paths[i+2]),

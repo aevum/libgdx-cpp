@@ -1,0 +1,55 @@
+#include <gdx-cpp/backend_selector.hpp>
+
+#include <gdx-cpp/Gdx.hpp>
+#include <gdx-cpp/Application.hpp>
+#include <gdx-cpp/ApplicationListener.hpp>
+#include <gdx-cpp/graphics/Mesh.hpp>
+#include <gdx-cpp/graphics/GL10.hpp>
+#include <gdx-cpp/graphics/Texture.hpp>
+#include <gdx-cpp/graphics/g2d/SpriteBatch.hpp>
+#include <gdx-cpp/utils/ApplicationListenerDecorator.hpp>
+
+using namespace gdx_cpp::graphics::g2d;
+using namespace gdx_cpp::graphics;
+using namespace gdx_cpp;
+
+class SvgBackendTest : public gdx_cpp::ApplicationListener {
+public:
+    SvgBackendTest() {
+    }
+    
+    void create() {
+        Pixmap::ptr pixmap = Pixmap::newFromFile(Gdx::files->internal("data/example.svg"));
+        texture = Texture::ptr(new Texture(pixmap, false));
+        texture->setFilter(Texture::TextureFilter::Linear, Texture::TextureFilter::Linear);        
+        spriteBatch = new SpriteBatch();
+    }
+    
+    void dispose() {
+    }
+    
+    void pause() {
+    }
+    
+    void render() {
+        Gdx::graphics->getGL10()->glClear(GL10::GL_COLOR_BUFFER_BIT);
+        
+        spriteBatch->begin();
+        spriteBatch->draw(*texture, 0, 0, 256, 256, 0, 0, 256, 256, false, false);
+        spriteBatch->end();
+    }
+    
+    void resize(int width, int height) {
+    }
+    
+    void resume() {
+    }
+    
+private:
+    SpriteBatch* spriteBatch;
+    Texture::ptr texture;
+};
+
+void init() {
+    createApplication(new utils::ApplicationListenerDecorator<SvgBackendTest>(), "Svg Backend Test", 640, 480);
+}

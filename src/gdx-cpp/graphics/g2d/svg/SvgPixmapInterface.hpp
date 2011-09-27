@@ -51,6 +51,7 @@ public:
         MiterJoinRound   = 4
     };
 
+    virtual void setImageDimension(int width, int height) = 0;
     virtual void beginPath() = 0;
     virtual void begin() = 0;
     virtual void endPath() = 0;

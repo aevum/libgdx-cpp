@@ -22,6 +22,10 @@
 #define GDX_CPP_UTILS_STRINGCONVERTION_HPP
 
 #include <cassert>
+#include <string>
+#include <sstream>
+#include <cstdio>
+#include <stdexcept>
 
 namespace gdx_cpp {
 
@@ -38,6 +42,27 @@ returnType from_string(std::string str) {
     return retval;
 }
 
+template <>
+inline std::string from_string<std::string>(std::string str) {
+    return str;
+}
+
+template <>
+inline float from_string<float>(std::string str) {
+    float retval = 0;
+    if (sscanf(str.c_str(), "%f", &retval) <= 0) {
+        throw std::runtime_error("failed converting value [" + str + "] to float");
+    }
+
+    return retval;
+}
+
+template <>
+inline bool from_string<bool>(std::string str) {
+    assert(str == "1" || str == "true" || str == "false" || str == "0");
+    return str == "1" || str == "true";
+}
+
 template <typename returnType>
 returnType from_hex_string(std::string str) {
     static std::stringstream ss;
@@ -47,12 +72,6 @@ returnType from_hex_string(std::string str) {
     ss >> retval;
     
     return retval;
-}
-
-template <>
-inline bool from_string<bool>(std::string str) {
-    assert(str == "1" || str == "true" || str == "false" || str == "0");
-    return str == "1" || str == "true";
 }
 
 template <typename T>

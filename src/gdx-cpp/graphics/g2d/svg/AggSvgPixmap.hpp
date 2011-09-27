@@ -21,13 +21,23 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_AGGSVGPIXMAP_HPP
 #define GDX_CPP_GRAPHICS_G2D_AGGSVGPIXMAP_HPP
 
+#include <stdexcept>
+
+#include "SvgPixmapInterface.hpp"
+#include "gdx-cpp/graphics/Pixmap.hpp"
+#include "gdx-cpp/Files.hpp"
+#include "gdx-cpp/utils/XmlReader.hpp"
+#include "SvgParser.hpp"
+
 #include <agg_svg_path_renderer.h>
 #include <agg_rendering_buffer.h>
 #include <agg_pixfmt_rgba.h>
 #include <agg_scanline_p.h>
 
-#include "SvgPixmapInterface.hpp"
-#include "gdx-cpp/graphics/Pixmap.hpp"
+#include <gdx-cpp/graphics/GL10.hpp>
+
+#undef GL_RGBA
+#undef GL_UNSIGNED_BYTE
 
 namespace gdx_cpp {
 
@@ -43,11 +53,31 @@ namespace svg {
 class AggSvgPixmap : public SvgPixmapInterface
 {
 public:
-    AggSvgPixmap(int w, int h)
-        : width(w), height(h)
+
+    static AggSvgPixmap* newFromFile(const Files::fhandle_ptr& file) {
+        static utils::XmlReader reader;
+
+        AggSvgPixmap* pix = new AggSvgPixmap;        
+        SvgParser parser(*pix);
+        
+        parser.render(reader.parse(*file).get());
+        
+        return pix;
+    }
+    
+    AggSvgPixmap()
+        : width(0), height(0) , data(0)
     {
-        unsigned char* data = new unsigned char[width * height * (32 / 8)];
-        buffer.attach(data, width, height, -width * (32 / 8));
+    }
+
+    AggSvgPixmap(int width, int height)
+    : width(width), height(height) , data(0)
+    {
+    }
+
+    inline void setImageDimension(int width, int height) {
+        this->width = width;
+        this->height = height;
     }
     
     inline void begin() {
@@ -87,7 +117,7 @@ public:
     }
     
     inline void fill(Color color) {
-        renderer.fill(agg::rgb8_packed(color.toIntBits()));
+        renderer.fill(agg::rgba_pre(color.r, color.g, color.b));
     }
     
     inline void fillNone() {
@@ -154,7 +184,7 @@ public:
     }
     
     inline void stroke(Color color) {
-        renderer.stroke(agg::rgb8_packed(color.toIntBits()));
+        renderer.stroke(agg::rgba_pre(color.r, color.g, color.b, color.a));
     }
     
     inline void strokeNone() {
@@ -169,7 +199,9 @@ public:
         renderer.vline_to(y, relative);
     }
 
-    void dispose() {        
+    void dispose() {
+        delete [] data;
+        data = NULL;
     }
 
     void drawCircle(int x, int y, int radius) {
@@ -207,7 +239,8 @@ public:
         renderer.end_path();
     }
 
-    void fill() {        
+    void fill() {
+        renderer.fill(agg::rgba8_pre(color.r, color.b, color.g, color.a));
     }
 
     void fillCircle(int x, int y, int radius) {
@@ -223,15 +256,15 @@ public:
     }
 
     int getGLFormat() const {
-
+        return GL10::GL_RGBA;
     }
 
     int getGLInternalFormat() const {
-
+        return GL10::GL_UNSIGNED_BYTE;
     }
 
     int getGLType() const {
-
+        return GL10::GL_RGBA;
     }
 
     int getHeight() const {
@@ -243,15 +276,25 @@ public:
     }
 
     const unsigned char* getPixels() {
-        typedef agg::pixfmt_bgra32 pixfmt;
+        typedef agg::pixfmt_rgba32 pixfmt;
         typedef agg::renderer_base<pixfmt> renderer_base;
         typedef agg::renderer_scanline_aa_solid<renderer_base> renderer_solid;
 
+        if (width <= 0 || height <= 0) {
+            throw std::runtime_error("Missing width or height values to render svg");
+        }
+        
+        if (!data || (strlen((char*) data) != width * height * 4)) {
+            delete [] data;
+            data = new unsigned char[width * height * 4];
+            buffer.attach(data, width, height, -width * 4);
+        }         
+        
         pixfmt pixf(buffer);
         renderer_base rb(pixf);
         renderer_solid ren(rb);
 
-        rb.clear(agg::rgba(1,1,1));
+        rb.clear(agg::rgba(1,1,1,0));
 
         agg::rasterizer_scanline_aa<> ras;
         agg::scanline_p8 sl;
@@ -275,11 +318,15 @@ public:
     }
 
     int getWidth() const {
-        width;
+        return width;
     }
 
     void setStrokeWidth(int width) {
         this->setStrokeWidth((float)width);
+    }
+
+    ~AggSvgPixmap() {
+        delete [] data;
     }
 
     agg::rendering_buffer buffer;
@@ -289,6 +336,7 @@ private:
     
     int width;
     int height;
+    unsigned char* data;
 };
 
 }

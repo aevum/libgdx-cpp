@@ -36,7 +36,7 @@
 #include <gdx-cpp/graphics/Texture.hpp>
 
 #include <gdx-cpp/graphics/g2d/Gdx2DPixmap.hpp>
-
+#include <gdx-cpp/graphics/g2d/svg/AggSvgPixmap.hpp>
 
 using namespace gdx_cpp::backends::nix;
 using namespace gdx_cpp::graphics;
@@ -280,8 +280,7 @@ Pixmap* backends::nix::LinuxGraphics::resolvePixmap(int width, int height, const
         case Pixmap::Gdx2d:
             return g2d::Gdx2DPixmap::newPixmap(width, height, g2d::Gdx2DPixmap::Format::toGdx2DPixmapFormat(format));
         case Pixmap::Svg:
-            //TODO:
-            break;
+            return new g2d::svg::AggSvgPixmap(width, height);
     }
 }
 
@@ -300,7 +299,7 @@ Pixmap* backends::nix::LinuxGraphics::resolvePixmap(const Files::fhandle_ptr& fi
     if (extension == "png" || extension == "jpg" || extension == "tga" || extension == "bmp")
         return g2d::Gdx2DPixmap::newPixmap(*file->read(), 0);
     else if (extension == "svg") {
-        throw std::runtime_error("you forgot here :(");
+        return g2d::svg::AggSvgPixmap::newFromFile(file);        
     } else {
         throw std::runtime_error("unsupported image format: " + extension);
     }
