@@ -132,7 +132,7 @@ protected:
     
 private:
     void create (gdx_cpp::graphics::TextureData::ptr data);
-    void uploadImageData (const Pixmap::ptr pixmap);
+    void uploadImageData (const gdx_cpp::graphics::Pixmap::ptr& pixmap);
     void reload ();
     static void addManagedTexture (gdx_cpp::Application* app, const gdx_cpp::graphics::Texture::ptr texture);
     static assets::AssetManager* assetManager;

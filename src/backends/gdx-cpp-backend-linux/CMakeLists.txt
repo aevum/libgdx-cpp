@@ -1,6 +1,5 @@
 project(gdx-cpp-backend-linux)
 
-message(${SVG_BACKEND_ANTIGRAIN_INCLUDES})
 include_directories(${GDXCPP_INCLUDE_DIR} ${SVG_BACKEND_ANTIGRAIN_INCLUDES})
 
 set(GDX_CPP_BACKEND_LINUX_SRC LinuxApplication.cpp LinuxGL10.cpp LinuxOpenALMusic.cpp
@@ -13,7 +12,7 @@ LinuxOpenALAudio.hpp LinuxOpenALSound.hpp LinuxOgg.hpp LinuxOggInputStream.hpp L
 )
 
 add_library(gdx-cpp-backend-linux SHARED ${GDX_CPP_BACKEND_LINUX_SRC} ${GDX_CPP_BACKEND_LINUX_HEADERS})
-add_dependencies(gdx-cpp-backend-linux gdx-cpp)
+add_dependencies(gdx-cpp-backend-linux gdx-cpp gdx-cpp-agg-svg)
 
 target_link_libraries(gdx-cpp-backend-linux openal vorbis ogg vorbisfile)
 

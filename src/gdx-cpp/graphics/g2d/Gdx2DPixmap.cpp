@@ -318,3 +318,9 @@ void graphics::g2d::Gdx2DPixmap::setColor(const gdx_cpp::graphics::Color& color)
 {
     this->color = graphics::Color::rgba8888(color.r, color.g, color.b, color.a);
 }
+
+void graphics::g2d::Gdx2DPixmap::setScale(float scaleX, float scaleY)
+{
+    throw std::runtime_error("Unsupported operation");
+}
+

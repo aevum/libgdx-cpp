@@ -66,12 +66,12 @@ public:
     }
     
     AggSvgPixmap()
-        : width(0), height(0) , data(0)
+        : width(0), height(0) , data(0) , scaleX(1), scaleY(1)
     {
     }
 
     AggSvgPixmap(int width, int height)
-    : width(width), height(height) , data(0)
+    : width(width), height(height) , data(0)  , scaleX(1), scaleY(1)
     {
     }
 
@@ -199,6 +199,11 @@ public:
         renderer.vline_to(y, relative);
     }
 
+    inline void setScale(float scaleX, float scaleY) {
+        this->scaleX = scaleX;
+        this->scaleY = scaleY;
+    }
+
     void dispose() {
         delete [] data;
         data = NULL;
@@ -260,15 +265,15 @@ public:
     }
 
     int getGLInternalFormat() const {
+        return GL10::GL_RGBA;
+    }
+    
+    int getGLType() const {
         return GL10::GL_UNSIGNED_BYTE;
     }
 
-    int getGLType() const {
-        return GL10::GL_RGBA;
-    }
-
     int getHeight() const {
-        return height;
+        return height * scaleX;
     }
 
     int getPixel(int x, int y) const {
@@ -279,26 +284,31 @@ public:
         typedef agg::pixfmt_rgba32 pixfmt;
         typedef agg::renderer_base<pixfmt> renderer_base;
         typedef agg::renderer_scanline_aa_solid<renderer_base> renderer_solid;
-
+        
         if (width <= 0 || height <= 0) {
             throw std::runtime_error("Missing width or height values to render svg");
         }
+
+        int scaledWidth = width * scaleX;
+        int scaledHeight = height * scaleY;
         
-        if (!data || (strlen((char*) data) != width * height * 4)) {
+        if (!data || (strlen((char*) data) !=  scaledWidth * scaledHeight * 4)) {
             delete [] data;
-            data = new unsigned char[width * height * 4];
-            buffer.attach(data, width, height, -width * 4);
-        }         
-        
+            data = new unsigned char[scaledWidth * scaledHeight * 4];
+            buffer.attach(data, scaledWidth, scaledHeight, scaledWidth * 4);
+        }
+
         pixfmt pixf(buffer);
         renderer_base rb(pixf);
         renderer_solid ren(rb);
 
-        rb.clear(agg::rgba(1,1,1,0));
+        rb.clear(agg::rgba(1, 1, 1, 1));
 
         agg::rasterizer_scanline_aa<> ras;
         agg::scanline_p8 sl;
         agg::trans_affine mtx;
+
+        mtx *= agg::trans_affine_scaling(scaleX, scaleY);
 
         renderer.render(ras, sl, ren, mtx, rb.clip_box(), 1.0);
 
@@ -318,7 +328,7 @@ public:
     }
 
     int getWidth() const {
-        return width;
+        return width * scaleY;
     }
 
     void setStrokeWidth(int width) {
@@ -333,7 +343,8 @@ public:
 private:
     agg::svg::path_renderer renderer;
     agg::rgba8 color;
-    
+
+    float scaleX,scaleY;
     int width;
     int height;
     unsigned char* data;

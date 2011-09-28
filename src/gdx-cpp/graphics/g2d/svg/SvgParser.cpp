@@ -129,6 +129,7 @@ void SvgParser::endElement(utils::XmlReader::Element* currentNode)
     }
     else if (name == "g")
     {
+        std::cout << "end g: " << currentNode->getAttribute("id") << std::endl;
         pixmap.end();
     }
     else if (name == "path")
@@ -197,7 +198,7 @@ bool gdx_cpp::graphics::g2d::svg::SvgParser::parse_attr(const std::string& name,
     }
     else if (name == "stroke-width")
     {
-        pixmap.setStrokeWidth(utils::from_string<double>(value));
+        pixmap.setStrokeWidth(utils::from_string<float>(value));
     }
     else if (name == "stroke-linecap")
     {
@@ -253,33 +254,15 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_transform(const std::string& 
         { "skewY", &SvgParser::parse_skew_y },
     };
     
-    
-    while (pos != std::string::npos) {
+    while (pos != std::string::npos && last != std::string::npos) {
         for (int i = 0; i < 6; ++i) {
             pos = transform.find(transform_parsers[i].name, last);
             if (pos != std::string::npos) {
-                pos += sizeof(transform_parsers[i].name);
-                last = (this->*transform_parsers[i].func)(transform.substr(pos + 1, transform.length() - last - 1));
+                pos += strlen(transform_parsers[i].name);
+                last = (this->*transform_parsers[i].func)(transform.substr(pos, transform.length() - last - 1));
+                break;
             }
         }
-        
-//         if ((pos = transform.find("matrix", last)) != std::string::npos) {
-//             parse_matrix(transform.substr(last, transform.length() - pos + sizeof("matrix")));
-//         } else if ((pos = transform.find("translate", last)) != std::string::npos) {
-//             parse_translate(transform.substr(last, pos + sizeof("translate") - 1));
-//         } else if ((pos = transform.find("rotate", last)) != std::string::npos) {
-//             parse_rotate(transform.substr(last, pos + sizeof("rotate") - 1));
-//         } else if ((pos = transform.find("scale", last)) != std::string::npos) {
-//             parse_scale(transform.substr(last, pos + sizeof("scale") - 1));
-//         } else if ((pos = transform.find("skewX", last)) != std::string::npos) {
-//             parse_skew_x(transform.substr(last, pos + sizeof("skewX") - 1));
-//         } else if ((pos = transform.find("skewY", last)) != std::string::npos) {
-//             parse_skew_y(transform.substr(last, pos + sizeof("skewY") - 1));
-//         } else {
-//             pos++;
-//         }
-// 
-//         last = pos;
     }
 }
 

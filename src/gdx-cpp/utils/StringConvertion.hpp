@@ -49,12 +49,7 @@ inline std::string from_string<std::string>(std::string str) {
 
 template <>
 inline float from_string<float>(std::string str) {
-    float retval = 0;
-    if (sscanf(str.c_str(), "%f", &retval) <= 0) {
-        throw std::runtime_error("failed converting value [" + str + "] to float");
-    }
-
-    return retval;
+    return atof(str.c_str());
 }
 
 template <>

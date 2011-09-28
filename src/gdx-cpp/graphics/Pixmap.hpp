@@ -109,6 +109,7 @@ public:
     virtual int getGLType () const = 0;
     virtual const unsigned char* getPixels () = 0;
     virtual const Format& getFormat () = 0;
+    virtual void setScale(float scaleX, float scaleY) = 0;
 };
 
 } // namespace gdx_cpp

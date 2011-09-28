@@ -8,26 +8,24 @@
 #include <gdx-cpp/graphics/Texture.hpp>
 #include <gdx-cpp/graphics/g2d/SpriteBatch.hpp>
 #include <gdx-cpp/utils/ApplicationListenerDecorator.hpp>
+#include <gdx-cpp/graphics/g2d/Sprite.hpp>
+#include <gdx-cpp/utils/StringConvertion.hpp>
 
 using namespace gdx_cpp::graphics::g2d;
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
 
-class SvgBackendTest : public gdx_cpp::ApplicationListener {
+class SvgBackendTest2 : public gdx_cpp::ApplicationListener {
 public:
-    SvgBackendTest() {
+    SvgBackendTest2() {
     }
     
     void create() {
-        Pixmap::ptr pixmap = Pixmap::newFromFile(Gdx::files->internal("data/example.svg"));
-        
+        Pixmap::ptr pixmap = Pixmap::newFromFile(Gdx::files->internal("data/drawing.svg"));
         texture = Texture::ptr(new Texture(pixmap, false));
-        pixmap->setScale(2, 2);
-        texture2 = Texture::ptr(new Texture(pixmap, false));
 
-        texture2->setFilter(Texture::TextureFilter::Linear, Texture::TextureFilter::Linear);
-        texture->setFilter(Texture::TextureFilter::Linear, Texture::TextureFilter::Linear);        
-
+        sprite = new Sprite(texture);
+        sprite->setPosition(0, 0);
         spriteBatch = new SpriteBatch();
     }
     
@@ -38,14 +36,11 @@ public:
     }
     
     void render() {
-        Gdx::graphics->getGL10()->glClearColor(1, 1, 1, 1);
+        Gdx::graphics->getGL10()->glClearColor(0.5, 1, 1, 1);
         Gdx::graphics->getGL10()->glClear(GL10::GL_COLOR_BUFFER_BIT);
         
         spriteBatch->begin();
-        spriteBatch->draw(*texture, 0.f, 0.f, 64.f, 64.f);
-        spriteBatch->draw(*texture, 200.f, 0.f, 256.f, 256.f);
-        spriteBatch->draw(*texture2, 0.f, 400.f, 128.f, 128.f);
-        spriteBatch->draw(*texture2, 200.f, 250.f, 256.f, 256.f);
+        sprite->draw(*spriteBatch);        
         spriteBatch->end();
     }
     
@@ -57,10 +52,10 @@ public:
     
 private:
     SpriteBatch* spriteBatch;
+    Sprite* sprite;
     Texture::ptr texture;
-    Texture::ptr texture2;
 };
 
-void init() {
-    createApplication(new utils::ApplicationListenerDecorator<SvgBackendTest>(), "Svg Backend Test", 640, 480);
+void init() {  
+    createApplication(new utils::ApplicationListenerDecorator<SvgBackendTest2>(), "Svg Backend Test 2", 640, 480);
 }

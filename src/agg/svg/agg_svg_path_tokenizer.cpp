@@ -30,7 +30,7 @@ namespace svg
 
     //------------------------------------------------------------------------
     const char path_tokenizer::s_commands[]   = "+-MmZzLlHhVvCcSsQqTtAaFfPp";
-    const char path_tokenizer::s_numeric[]    = ".Ee0123456789";
+    const char path_tokenizer::s_numeric[]    = "-.Ee0123456789";
     const char path_tokenizer::s_separators[] = " ,\t\n\r";
 
     //------------------------------------------------------------------------

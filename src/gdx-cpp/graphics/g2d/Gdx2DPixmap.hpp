@@ -80,6 +80,8 @@ public:
     int getGLInternalFormat () const;
     int getGLFormat () const;
     int getGLType () const;
+    void setScale(float scaleX, float scaleY);
+    
     const std::string getFormatString ();
     
     static void setBlend (int blend);

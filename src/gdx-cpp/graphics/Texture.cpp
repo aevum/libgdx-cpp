@@ -32,6 +32,7 @@
 #include <list>
 #include <sstream>
 #include "glutils/FileTextureData.hpp"
+#include <stdexcept>
 
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
@@ -103,11 +104,11 @@ void Texture::load (const TextureData::ptr& data) {
     }
 }
 
-void Texture::uploadImageData (const gdx_cpp::graphics::Pixmap::ptr pixmap) {
+void Texture::uploadImageData (const gdx_cpp::graphics::Pixmap::ptr& pixmap) {
     if (enforcePotImages && Gdx::gl20 == NULL
             && (! gdx_cpp::math::utils::isPowerOfTwo(data->getWidth()) || !gdx_cpp::math::utils::isPowerOfTwo(data->getHeight())))
     {
-        Gdx::app->error("Texture.cpp", "texture width and height must be powers of two");
+        throw std::runtime_error("Texture.cpp: texture width and height must be powers of two");
     }
 
     bool disposePixmap = false;
@@ -126,6 +127,7 @@ void Texture::uploadImageData (const gdx_cpp::graphics::Pixmap::ptr pixmap) {
     } else {
         Gdx::gl->glTexImage2D(GL10::GL_TEXTURE_2D, 0, tmp->getGLInternalFormat(), tmp->getWidth(), tmp->getHeight(), 0,
                             tmp->getGLFormat(), tmp->getGLType(), tmp->getPixels());
+
         if (disposePixmap) tmp->dispose();
     }
 }
@@ -350,10 +352,6 @@ void Texture::initialize(const gdx_cpp::files::FileHandle::ptr file, const Pixma
     this->enforcePotImages = true;
     this->useHWMipMap = true;
     this->assetManager = 0;
-
-    std::string s = file->name();
-    std::string suffix(".etc1");
-    int found = s.rfind(suffix);
 
     create(TextureData::ptr(Gdx::graphics->resolveTextureData(file, null_shared_ptr(), format, useMipMaps)));    
 }

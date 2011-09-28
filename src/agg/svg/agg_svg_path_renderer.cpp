@@ -60,6 +60,7 @@ namespace svg
     //------------------------------------------------------------------------
     void path_renderer::end_path()
     {
+
         if(m_attr_storage.size() == 0) 
         {
             throw exception("end_path : The path was not begun");
@@ -177,12 +178,13 @@ namespace svg
         {
             throw exception("cur_attr : Attribute stack is empty");
         }
+
         return m_attr_stack[m_attr_stack.size() - 1];
     }
 
     //------------------------------------------------------------------------
     void path_renderer::push_attr()
-    {
+    {        
         m_attr_stack.add(m_attr_stack.size() ? 
                          m_attr_stack[m_attr_stack.size() - 1] :
                          path_attributes());
@@ -190,7 +192,7 @@ namespace svg
 
     //------------------------------------------------------------------------
     void path_renderer::pop_attr()
-    {
+    {        
         if(m_attr_stack.size() == 0)
         {
             throw exception("pop_attr : Attribute stack is empty");
