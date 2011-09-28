@@ -351,7 +351,7 @@ void XmlReader::text (std::string text) {
 void XmlReader::close () {
     root = elements.back();
     elements.pop_back();
-    current = elements.size() > 0 ? elements.front() : NULL;
+    current = elements.size() > 0 ? elements.back() : NULL;
 }
 
 XmlReader::Element::Element(const std::string& name) {
