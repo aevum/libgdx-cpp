@@ -24,7 +24,7 @@ public class LibGdxCppTestActivity extends Activity {
         
         System.loadLibrary("gdx-cpp-box2d");
         System.loadLibrary("gdx-cpp-box2d-layer");
-        manager.initializeWithSharedLib("SoundTest", getAssets());
+        manager.initializeWithSharedLib("SvgBackendTest2", getAssets());
         setContentView(manager.createView(this));
     }
     

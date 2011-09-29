@@ -18,8 +18,8 @@ package com.badlogic.gdx.backends.android;
 import java.io.IOException;
 
 import android.media.MediaPlayer;
+import android.util.Log;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 
 public class AndroidMusic implements Music {
@@ -38,7 +38,7 @@ public class AndroidMusic implements Music {
 			if (player.isPlaying()) player.stop();
 			player.release();
 		} catch(Throwable t) {
-			Gdx.app.log("AndroidMusic", "error while disposing AndroidMusic instance, non-fatal");
+			Log.e("AndroidMusic", "error while disposing AndroidMusic instance, non-fatal");
 		} finally {
 			player = null;
 			synchronized(audio.musics) {
