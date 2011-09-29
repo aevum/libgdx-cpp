@@ -57,7 +57,15 @@ Libraries will be generated under the lib folder, binaries under the bin folder
 5. Under Eclipse, change the initializeWithSharedLib method to the desired library _without_ the lib prefix on it.
 6. Run the project and pray for the Android gods
 
-        
+#### Running the tests (Eclipse-less way)
+
+1. cd to PATH-TO-CLONED-LIBGDXCPP/src/backends/gdx-cpp-backend-android/android-support
+2. Under the test-project/libs you'll have to symlink the required shared libraries to make the test run.If you compiled
+    the backend to armeabi it will be test-project/libs/armeabi. If armeabi-v7a it will be under test-project/libs/armeabi-v7a. Make sure
+    you symlinked all requirements (like libgdx-cpp, libgdx-box2d, libBox2D, and so on)
+3. Open LibGdxCppTestActivity.java (under src), change the initializeWithSharedLib method to the desired library _without_ the lib prefix on it.
+4. ant install
+
 ## Differences from libgdx
 
 * The texture class constructors that received an managed texture data had to be changed to static constructors.
@@ -76,10 +84,15 @@ Analogically, the calls to create an PixMap now are:
     Pixmap::newFromPixmap()
     Pixmap::newFromRect()
 
+* The Pixmap class has turned into an interface. This had to be done because we can have different pixmap backends (currently we have Svg and Gdx2d).
+The gdx_cpp::Graphics interface now have to handle the TextureData and Pixmap resolution and creation. This was made to decouple the texture class from determining
+how to load and create TextureData (etc1, wich is not supported in all platforms per example).
+
 ## What's working
 
 * The linux backend has file,input and audio working
 * The android backend has input, file and audio working
+* SVG support through AntiGrainGeometry
 
 ## What has to be done
 
@@ -87,4 +100,4 @@ Analogically, the calls to create an PixMap now are:
 * iOs support
 * GLEs 2. Check if it's working
 * etc
-* SVG support. In the first phase we'll use an external lib
+
