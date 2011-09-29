@@ -21,11 +21,12 @@ public:
     }
     
     void create() {
-        Pixmap::ptr pixmap = Pixmap::newFromFile(Gdx::files->internal("data/drawing.svg"));
+        Pixmap::ptr pixmap = Pixmap::newFromFile(Gdx::files->internal("data/boss.svg"));
         texture = Texture::ptr(new Texture(pixmap, false));
-
+        
         sprite = new Sprite(texture);
         sprite->setPosition(0, 0);
+        
         spriteBatch = new SpriteBatch();
     }
     
@@ -36,7 +37,7 @@ public:
     }
     
     void render() {
-        Gdx::graphics->getGL10()->glClearColor(0.5, 1, 1, 1);
+        Gdx::graphics->getGL10()->glClearColor(1, 1, 1, 1);
         Gdx::graphics->getGL10()->glClear(GL10::GL_COLOR_BUFFER_BIT);
         
         spriteBatch->begin();

@@ -22,6 +22,7 @@
 #include <stdexcept>
 #include <cassert>
 #include "StringConvertion.hpp"
+#include "gdx-cpp/Gdx.hpp"
 
 using namespace gdx_cpp::utils;
 
@@ -63,7 +64,9 @@ gdx_cpp::utils::XmlReader::Element::ptr XmlReader::parse (std::ifstream& reader)
 }
 
 gdx_cpp::utils::XmlReader::Element::ptr XmlReader::parse (gdx_cpp::files::FileHandle& file) {
-    return parse(*file.read().get());
+    gdx_cpp::files::FileHandle::char_ptr buffer;
+    int size = file.readBytes(buffer);
+    return parse(buffer.get(), 0 , size);
 }
 
 gdx_cpp::utils::XmlReader::Element::ptr XmlReader::parse (const char* data, int offset, int length) {

@@ -129,7 +129,6 @@ void SvgParser::endElement(utils::XmlReader::Element* currentNode)
     }
     else if (name == "g")
     {
-        std::cout << "end g: " << currentNode->getAttribute("id") << std::endl;
         pixmap.end();
     }
     else if (name == "path")

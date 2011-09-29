@@ -34,13 +34,9 @@ int gdx_cpp::backends::android::AndroidFileHandle::readBytes(gdx_cpp::files::Fil
     AAsset* asset = AAssetManager_open(this->manager, this->file.getPath().c_str(), AASSET_MODE_UNKNOWN);
 
     assert(asset);
-
-    off_t start, length;
-    int fd = AAsset_openFileDescriptor(asset, &start, &length);
-    
-    assert(0 <= fd);
     
     off_t bufferSize = AAsset_getLength(asset);
+
     char* buffer = new char[bufferSize];
 
     int numBytesRead = AAsset_read(asset, buffer, bufferSize); 

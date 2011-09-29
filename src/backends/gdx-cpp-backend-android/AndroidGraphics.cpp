@@ -32,6 +32,9 @@
 #include <gdx-cpp/Application.hpp>
 #include <gdx-cpp/graphics/glutils/FileTextureData.hpp>
 
+#include <gdx-cpp/graphics/g2d/Gdx2DPixmap.hpp>
+#include <gdx-cpp/graphics/g2d/svg/AggSvgPixmap.hpp>
+
 using namespace gdx_cpp::backends::android;
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
@@ -252,4 +255,35 @@ TextureData::ptr backends::android::AndroidGraphics::resolveTextureData(Files::f
 {
     
     return TextureData::ptr(new glutils::FileTextureData(fileHandle, preloadedPixmap, format, useMipMaps));
+}
+
+graphics::Pixmap* backends::android::AndroidGraphics::resolvePixmap(int width, int height, const gdx_cpp::graphics::Pixmap::Format& format, int pixType)
+{
+    switch(pixType) {
+        case graphics::Pixmap::Gdx2d:
+            return g2d::Gdx2DPixmap::newPixmap(width, height, g2d::Gdx2DPixmap::Format::toGdx2DPixmapFormat(format));
+        case graphics::Pixmap::Svg:
+            return new g2d::svg::AggSvgPixmap(width, height);
+    }
+}
+
+graphics::Pixmap* backends::android::AndroidGraphics::resolvePixmap(const gdx_cpp::graphics::Pixmap& other)
+{
+    switch(other.getType()) {
+        case graphics::Pixmap::Gdx2d:
+            return new g2d::Gdx2DPixmap((g2d::Gdx2DPixmap&)other);
+    } 
+}
+
+graphics::Pixmap* backends::android::AndroidGraphics::resolvePixmap(const gdx_cpp::Files::fhandle_ptr& file)
+{
+    std::string extension = file->extension();
+
+    if (extension == "png" || extension == "jpg" || extension == "tga" || extension == "bmp")
+        return g2d::Gdx2DPixmap::newPixmap(*file->read(), 0);
+    else if (extension == "svg") {
+        return g2d::svg::AggSvgPixmap::newFromFile(file);
+    } else {
+        throw std::runtime_error("unsupported image format: " + extension);
+    }
 }

@@ -17,6 +17,10 @@ foreach(BACKEND ${ACTIVE_BACKENDS})
     string(TOLOWER ${BACKEND} backend)
     set(EXECUTABLE_OUTPUT_PATH ${GDX_BINARY_ROOT_DIR}/bin/tests/${backend})
 
+    if (${BACKEND} STREQUAL ANDROID)
+        add_subdirectory(backends/android)
+    endif()
+
     foreach(APP ${APPLICATIONS})
         get_filename_component(APP_NAME ${APP} NAME)
         if (${GENERATED_APPLICATION_TYPE} STREQUAL "EXECUTABLE")
@@ -29,3 +33,5 @@ foreach(BACKEND ${ACTIVE_BACKENDS})
         add_dependencies(${APP_NAME} gdx-cpp gdx-cpp-backend-${backend})
     endforeach()
 endforeach()
+
+

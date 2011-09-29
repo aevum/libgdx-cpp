@@ -302,7 +302,7 @@ public:
         renderer_base rb(pixf);
         renderer_solid ren(rb);
 
-        rb.clear(agg::rgba(1, 1, 1, 1));
+        rb.clear(agg::rgba(1,1,1,0));
 
         agg::rasterizer_scanline_aa<> ras;
         agg::scanline_p8 sl;
