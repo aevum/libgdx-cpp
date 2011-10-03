@@ -16,41 +16,11 @@
  @author Victor Vicente de Carvalho victor.carvalho@aevumlab.com
  */
 
+#import <UIKit/UIKit.h>
+#import <OpenGLES/EAGL.h>
 
-#import "View.h"
-
-@implementation View
-
-- (id) initWithNibName:(NSString* ) nibNameOrNil bundle:(NSBundle*)nibBundleOrNil {
-	if (self = [ super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-		
-	}
-	return self;
+@interface IosGdxViewController: UIViewController {
+	EAGLContext *context;
 }
-
-- (void) loadView {
-	
-}
-
-- (void) viewDidLoad {
-	[super viewDidLoad];
-}
-
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
-	return UIInterfaceOrientationIsLandscape(interfaceOrientation);
-}
-
-- (void) didReceiveMemoryWarning {
-	[super didReceiveMemoryWarning];
-}
-
-- (void) viewDidUnload {
-	[super viewDidUnload];
-}
-
-- (void) dealloc {
-	[super dealloc];
-}
-
 
 @end

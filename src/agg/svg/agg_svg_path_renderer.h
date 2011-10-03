@@ -19,7 +19,7 @@
 #ifndef AGG_SVG_PATH_RENDERER_INCLUDED
 #define AGG_SVG_PATH_RENDERER_INCLUDED
 
-#include "agg_path_storage.h"
+#include <agg_path_storage.h>
 #include "agg_conv_transform.h"
 #include "agg_conv_stroke.h"
 #include "agg_conv_contour.h"

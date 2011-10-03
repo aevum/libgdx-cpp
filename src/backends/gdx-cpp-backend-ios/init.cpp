@@ -25,18 +25,14 @@
 #import "IosSystem.hpp"
 
 static gdx_cpp::ApplicationListener* g_Listener = 0;
-static int g_width = 0;
-static int g_height = 0;
 
 void createApplication(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, 
 					   int width, int height) {
 	g_Listener = listener;
-	g_width = width;
-	g_height = height;
 }
 
 void initializeGdxApplication(){
-	new gdx_cpp::backends::ios::IosApplication(g_Listener, g_width, g_height);
+	new gdx_cpp::backends::ios::IosApplication(g_Listener);
 }
 
 int main(int argc, char** argv) {

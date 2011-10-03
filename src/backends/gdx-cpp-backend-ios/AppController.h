@@ -18,11 +18,14 @@
 
 #import <UIKit/UIkit.h>
 
-@class View;
+@class IosGdxViewController;
 
 @interface AppController: NSObject <UIAccelerometerDelegate, UIAlertViewDelegate, UITextFieldDelegate, UIApplicationDelegate> {
 	UIWindow* window;
-	View* view;
+	IosGdxViewController* viewController;
 }
+
+@property (nonatomic, retain) IBOutlet UIWindow *window;
+@property (nonatomic, retain) IBOutlet IosGdxViewController *viewController;
 
 @end

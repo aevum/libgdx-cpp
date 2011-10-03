@@ -21,8 +21,10 @@
 
 #import <UIKit/UIKit.h>
 #import "EAGLView.h"
+#import "IosGdxViewController.h"
 
 #import <gdx-cpp/Gdx.hpp>
+#import <OpenGLES/EAGL.h>
 
 #include "init.cpp"
 
@@ -31,32 +33,21 @@
 #pragma mark -
 #pragma mark Application lifecycle
 
+@synthesize window;
+@synthesize viewController;
+
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
-	window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-	EAGLView* glview = [EAGLView viewWithFrame:[window bounds]
-								   pixelFormat: kEAGLColorFormatRGBA8
-								   depthFormat: GL_DEPTH_COMPONENT16_OES
-							preserveBackBuffer: NO
-									sharegroup: nil
-								 multiSampling: NO
-							   numberOfSamples:0];
+	self.window.rootViewController = self.viewController;
 	
-	viewController = [[View alloc] initWithNibName:nil bundle:nil];
-	viewController.wantsFullScreenLayout = YES;
-	viewController.view = glview;
-	
-	window.rootViewController = viewController;
-	[window makeAKeyAndVisible];
-			  
 	initializeGdxApplication();
-			
+	
 	return YES;
 }
-			  
-			  - (void) applicationWillResignActive:(UIApplication*) application {
-				  
-				  
-			  }
-			  
-			  
-			  @end
+
+- (void) applicationWillResignActive:(UIApplication*) application {
+	
+	
+}
+
+
+@end

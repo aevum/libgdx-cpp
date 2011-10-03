@@ -19,18 +19,62 @@
 #ifndef GDX_CPP_BACKEND_IOS_IOS_APPLICATION_HPP
 #define GDX_CPP_BACKEND_IOS_IOS_APPLICATION_HPP
 
-#include <gdc-cpp/Application.hpp>
+#include <gdx-cpp/Application.hpp>
+#include <gdx-cpp/ApplicationListener.hpp>
+#include <gdx-cpp/utils/Synchronized.hpp>
+#include <gdx-cpp/Gdx.hpp>
+#include <list>
 
 namespace gdx_cpp {
 namespace backends {
 namespace ios {
-			
-class IosApplication : public Application {
-public:		
 	
+class IosGraphics;
+class IosAudio;
+class IosFiles;
+class IosInput;
+			
+class IosApplication : public Application, public Synchronizable {
+public:		
+	IosApplication(ApplicationListener* p_listener);
 		
-		
-		
+	void error(const std::string& tag, const char* format, ...);
+    void exit();
+    Audio* getAudio();
+    Files* getFiles();
+    Graphics* getGraphics();
+    Input* getInput();
+    Preferences* getPreferences(std::string& name);
+    ApplicationType getType();
+    int getVersion();
+    void log(const std::string& tag, const char* format, ...);
+    void postRunnable(Runnable::ptr runnable);
+    void setLogLevel(int logLevel);
+	
+    void onRunnableStop();
+protected:
+    void run();
+    
+    bool useGL20iFAvailable;
+    std::string title;
+    
+	int height;
+    int width;
+    
+	ApplicationListener* listener;
+    
+	IosGraphics* graphics;
+    IosInput* input;
+    IosFiles* files;
+    IosAudio* audio;
+    
+    std::list< Runnable::ptr > runnables;
+	
+    gdx_cpp::implementation::Thread::ptr mainLoopThread;
+    
+    void initialize();
+	
+    int logLevel;
 };
 }
 }

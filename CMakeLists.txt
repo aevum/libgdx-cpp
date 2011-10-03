@@ -25,6 +25,9 @@ set(GENERATED_APPLICATION_TYPE "EXECUTABLE")
 
 # option(BUILD_GDX_DEPENDENCIES "Builds  the required dependencies for LibGDX-CPP" TRUE)
 
+option(BUILD_SVG_ANTIGRAIN "Build the antigrain's svg backend" TRUE)
+
+SET(SVG_BACKEND_ANTIGRAIN_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/agg/include ${CMAKE_CURRENT_SOURCE_DIR}/src/agg/svg)
 
 # if (BUILD_GDX_DEPENDENCIES)
 #     set(GDX_CPP_EXTERNAL_DEPENDENCIES gdx-cpp-mpg123 gdx-cpp-kiss-fft gdx-cpp-vorbis)
@@ -38,6 +41,10 @@ SET(ACTIVE_BACKENDS "")
 
 include_directories(src)
 add_subdirectory(src/gdx-cpp)
+
+if (BUILD_SVG_ANTIGRAIN)
+  add_subdirectory(src/agg)
+endif()
 
 if (BUILD_BACKEND_LINUX)
   OPTION(BUILD_LINUX_GRAPHICS_OPENGL "Builds the linux backend with OpenGL" FALSE)
@@ -53,10 +60,6 @@ if (BUILD_BACKEND_LINUX)
   if(CMAKE_COMPILER_IS_GNUCXX)
     SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wdouble-promotion")    
   endif()
-
-  add_subdirectory(src/agg)
-  SET(SVG_BACKEND_ANTIGRAIN TRUE CACHE BOOL "Build the antigrain's svg backend")
-  SET(SVG_BACKEND_ANTIGRAIN_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/agg/include ${CMAKE_CURRENT_SOURCE_DIR}/src/agg/svg)
 
   list(APPEND ACTIVE_BACKENDS LINUX)
   set(BACKEND-LINUX-DEPENDENCIES SDL ${GL_DEPENDENCIES} GLU gdx-cpp-agg-svg)
@@ -83,7 +86,7 @@ if (BUILD_BACKEND_IOS)
 	set(CMAKE_CXX_FLAGS "-x objective-c++")
 	set(CMAKE_EXE_LINKER_FLAGS
 		"-framework AudioToolbox -framework CoreGraphics -framework QuartzCore -framework UIKit")
-	
+
 	link_directories(\${HOME}/\${SDKROOT}/lib)
 	
 	set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.aevumlab.\${PRODUCT_NAME:identifier}")
@@ -95,11 +98,6 @@ if (BUILD_BACKEND_ANDROID)
     set(GENERATED_APPLICATION_TYPE "SHARED_LIB")
     SET(ANDROID_NDK "" CACHE PATH "Were the android NDK is located")
 
-    add_subdirectory(src/agg)
-    SET(SVG_BACKEND_ANTIGRAIN TRUE CACHE BOOL "Build the antigrain's svg backend")
-    SET(SVG_BACKEND_ANTIGRAIN_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/agg/include ${CMAKE_CURRENT_SOURCE_DIR}/src/agg/svg)
-
-#     include(cmake/android.toolchain.cmake)
     list(APPEND ACTIVE_BACKENDS ANDROID)
     set(BACKEND-ANDROID-DEPENDENCIES dl log GLESv1_CM GLESv2 android gdx-cpp gdx-cpp-agg-svg)
     set(GDX_CPP_BACKEND_ANDROID_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/backends)

@@ -9,10 +9,10 @@ file(GLOB GDX_CPP_BOX2D_LAYER_H
     Collision/*.h Common/*.h Dynamics/*.h
 )
 
-add_library(gdx-cpp-box2d SHARED ${GDX_CPP_BOX2D_SRC} ${GDX_CPP_BOX2D_LAYER_H})
+add_library(gdx-cpp-box2d ${GDX_CPP_BOX2D_SRC} ${GDX_CPP_BOX2D_LAYER_H})
 
 install(DIRECTORY . DESTINATION include/Box2D
           FILES_MATCHING PATTERN "*.h")
 
 install(TARGETS gdx-cpp-box2d
-    LIBRARY DESTINATION lib)
+    ARCHIVE DESTINATION lib)
