@@ -27,8 +27,7 @@
 #include "gdx-cpp/Application.hpp"
 #include "TextureData.hpp"
 
-#include <tr1/unordered_map>
-#include <tr1/shared_ptr.h>
+#include <tr1/unordered_map>s
 #include <list>
 #include "gdx-cpp/assets/Asset.hpp"
 

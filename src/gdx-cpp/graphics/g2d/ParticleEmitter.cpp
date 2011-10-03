@@ -19,15 +19,13 @@
 */
 
 #include "ParticleEmitter.hpp"
-#include <gdx-cpp/math/MathUtils.hpp>
+#include "gdx-cpp/math/MathUtils.hpp"
 #include <cmath>
 #include "gdx-cpp/graphics/GL10.hpp"
 #include "SpriteBatch.hpp"
 #include <iostream>
 #include <stdexcept>
 #include <algorithm>
-#include <initializer_list>
-
 
 using namespace gdx_cpp::graphics::g2d;
 

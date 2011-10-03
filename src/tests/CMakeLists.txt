@@ -20,11 +20,17 @@ foreach(BACKEND ${ACTIVE_BACKENDS})
     if (${BACKEND} STREQUAL ANDROID)
         add_subdirectory(backends/android)
     endif()
-
+    
     foreach(APP ${APPLICATIONS})
         get_filename_component(APP_NAME ${APP} NAME)
         if (${GENERATED_APPLICATION_TYPE} STREQUAL "EXECUTABLE")
             add_executable(${APP_NAME} ${APP}.cpp)
+            	
+           	if (${BACKEND} STREQUAL IOS)
+           		set_target_properties(${APP_NAME} PROPERTIES
+           								XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer: Aevum Team")
+           		set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE ON)
+           	endif()
         elseif (${GENERATED_APPLICATION_TYPE} STREQUAL "SHARED_LIB")
             add_library(${APP_NAME} SHARED ${APP}.cpp)
         endif()        

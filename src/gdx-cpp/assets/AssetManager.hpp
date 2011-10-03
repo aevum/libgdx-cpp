@@ -31,6 +31,7 @@
 #include "AssetLoaderParameters.hpp"
 #include "loaders/AssetLoader.hpp"
 #include "AssetDescriptor.hpp"
+#include "gdx-cpp/assets/AssetType.hpp"
 
 #include <tr1/unordered_map>
 #include <string>
@@ -46,7 +47,6 @@ class Logger;
 namespace assets {
 
 class AssetLoadingTask;
-class AssetType;
 class AssetErrorListener;
 class AssetErrorListener;
 class AssetDescriptor;
@@ -98,7 +98,7 @@ public:
 
 protected:
 
-    std::tr1::unordered_map<AssetType, loaders::AssetLoader* > loaders;
+    //std::tr1::unordered_map<AssetType, loaders::AssetLoader* > loaders;
     std::tr1::unordered_map<int, AssetMap > assets;
 
     AssetTypeMap assetTypes;

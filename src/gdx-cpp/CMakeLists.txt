@@ -499,7 +499,7 @@ endif()
 install(DIRECTORY . DESTINATION include/gdx-cpp
           FILES_MATCHING PATTERN "*.hpp")
 
-add_library(gdx-cpp SHARED ${GDX_HEADERS} ${GDX_SRC})
+add_library(gdx-cpp ${GDX_HEADERS} ${GDX_SRC})
 
 if (${BUILD_BOX2D})
     add_subdirectory(physics/box2d)
@@ -508,4 +508,4 @@ endif()
 target_link_libraries(gdx-cpp z)
 
 install(TARGETS gdx-cpp
-    LIBRARY DESTINATION lib)
+    ARCHIVE DESTINATION lib)

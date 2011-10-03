@@ -24,8 +24,6 @@
 #include "gdx-cpp/implementation/MutexFactory.hpp"
 #include "gdx-cpp/utils/Aliases.hpp"
 
-#include <tr1/shared_ptr.h>
-
 class Mutex;
 class Mutex;
 template <typename Object, typename MutexType>

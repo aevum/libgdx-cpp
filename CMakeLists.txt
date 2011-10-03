@@ -70,7 +70,25 @@ endif()
 
 if (BUILD_BACKEND_IOS)
     list(APPEND ACTIVE_BACKENDS IOS)
-    add_subdirectory(src/backends/ios)
+
+	cmake_policy(SET CMP0015 NEW)
+	cmake_policy(SET CMP0016 NEW)
+	
+	set(SDKVER "4.3" CACHE STRING "The iPhoneOs SDK version")
+	set(DEVROOT "/Developer/Platforms/iPhoneOS.platform/Developer")
+	set(SDKROOT "${DEVROOT}/SDKs/iPhoneOS${SDKVER}.sdk")
+	set(CMAKE_OSX_SYSROOT "${SDKROOT}")
+	set(CMAKE_OSX_ARCHITECTURES "${ARCHS_UNIVERSAL_IPHONE_OS}")
+	
+	set(CMAKE_CXX_FLAGS "-x objective-c++")
+	set(CMAKE_EXE_LINKER_FLAGS
+		"-framework AudioToolbox -framework CoreGraphics -framework QuartzCore -framework UIKit")
+	
+	link_directories(\${HOME}/\${SDKROOT}/lib)
+	
+	set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.aevumlab.\${PRODUCT_NAME:identifier}")
+
+	add_subdirectory(src/backends/gdx-cpp-backend-ios)
 endif()
 
 if (BUILD_BACKEND_ANDROID)

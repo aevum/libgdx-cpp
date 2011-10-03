@@ -20,8 +20,6 @@
 
 #ifndef GDX_CPP_MATH_QUATERNION_HPP
 #define GDX_CPP_MATH_QUATERNION_HPP
-#include <tr1/memory>
-#include <tr1/shared_ptr.h>
 
 #include <string>
 #include "gdx-cpp/utils/Aliases.hpp"
