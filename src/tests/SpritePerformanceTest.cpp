@@ -111,7 +111,7 @@ public:
         }
 
         frames++;
-        if (Gdx::system->nanoTime() - startTime > 5000000000l) {
+        if (Gdx::system->nanoTime() - startTime > 5000000000LL) {
             Gdx::app->log("SpritePerformanceTest", "mode: %s, fps: %f" , modes[mode], frames / 5.0f);
             log << "mode: " << modes[mode] << ", fps: " << frames / 5.0f << std::endl;
 

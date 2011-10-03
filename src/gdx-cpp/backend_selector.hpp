@@ -5,6 +5,8 @@
 #include <gdx-cpp-backend-linux/init.hpp>
 #elif CURRENT_BACKEND_ANDROID
 #include <gdx-cpp-backend-android/init.hpp>
+#elif CURRENT_BACKEND_IOS
+#include <gdx-cpp-backend-ios/init.hpp>
 #endif
 
 #endif // GDX_CPP_TESTS_BACKEND_SELECTOR_HPP

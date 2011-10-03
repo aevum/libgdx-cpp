@@ -107,7 +107,8 @@ void IosApplication::exit()
 
 Audio* IosApplication::getAudio()
 {
-	
+	throw std::runtime_error("not implemented yet");
+	//return audio;
 }
 
 Files* IosApplication::getFiles()

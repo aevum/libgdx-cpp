@@ -85,12 +85,13 @@ if (BUILD_BACKEND_IOS)
 	
 	set(CMAKE_CXX_FLAGS "-x objective-c++")
 	set(CMAKE_EXE_LINKER_FLAGS
-		"-framework AudioToolbox -framework CoreGraphics -framework QuartzCore -framework UIKit")
+		"-framework Foundation -framework AudioToolbox -framework CoreGraphics -framework QuartzCore -framework UIKit -framework OpenGLES")
 
 	link_directories(\${HOME}/\${SDKROOT}/lib)
 	
 	set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.aevumlab.\${PRODUCT_NAME:identifier}")
-
+	set(BACKEND-IOS-DEPENDENCIES gdx-cpp-agg-svg)
+	set(GDX_CPP_BACKEND_IOS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/backends)
 	add_subdirectory(src/backends/gdx-cpp-backend-ios)
 endif()
 

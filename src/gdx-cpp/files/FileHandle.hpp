@@ -81,8 +81,6 @@ public:
 protected:
     gdx_cpp::files::File file;
     gdx_cpp::Files::FileType type;
-    
-    
 
 private:
     gdx_cpp::files::File getFile();
