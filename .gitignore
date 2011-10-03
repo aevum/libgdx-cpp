@@ -1,6 +1,6 @@
 *.kdev4
 *~
-include/
+./include/
 build/
 bin/
 gen/
