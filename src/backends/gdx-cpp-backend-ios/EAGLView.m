@@ -25,22 +25,108 @@
     return [CAEAGLLayer class];
 }
 
-//The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:.
++ (id) viewWithFrame:(CGRect)frame
+{
+	return [[[self alloc] initWithFrame:frame] autorelease];
+}
+
++ (id) viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format
+{
+	return [[[self alloc]initWithFrame:frame pixelFormat:format] autorelease];
+}
+
++ (id) viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth
+{
+	return [[[self alloc] initWithFrame:frame pixelFormat:format depthFormat:depth preserveBackbuffer:NO sharegroup:nil multiSampling:NO numberOfSamples:0] autorelease];
+}
+
++ (id) viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth preserveBackbuffer:(BOOL)retained sharegroup:(EAGLSharegroup*)sharegroup multiSampling:(BOOL)multisampling numberOfSamples:(unsigned int)samples
+{
+	return [[[self alloc]initWithFrame:frame pixelFormat:format depthFormat:depth preserveBackbuffer:retained sharegroup:sharegroup multiSampling:multisampling numberOfSamples:samples] autorelease];
+}
+
++ (id) sharedEGLView
+{
+	return view;
+}
+
+- (id) initWithFrame:(CGRect)frame
+{
+	return [self initWithFrame:frame pixelFormat:kEAGLColorFormatRGB565 depthFormat:0 preserveBackbuffer:NO sharegroup:nil multiSampling:NO numberOfSamples:0];
+}
+
+- (id) initWithFrame:(CGRect)frame pixelFormat:(NSString*)format 
+{
+	return [self initWithFrame:frame pixelFormat:format depthFormat:0 preserveBackbuffer:NO sharegroup:nil multiSampling:NO numberOfSamples:0];
+}
+
+- (id) initWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth preserveBackbuffer:(BOOL)retained sharegroup:(EAGLSharegroup*)sharegroup multiSampling:(BOOL)sampling numberOfSamples:(unsigned int)nSamples;
+{
+	if((self = [super initWithFrame:frame]))
+	{
+		pixelformat_ = format;
+		depthFormat_ = depth;
+		multiSampling_ = sampling;
+		requestedSamples_ = nSamples;
+		preserveBackbuffer_ = retained;
+		markedText_ = nil;
+		if( ! [self setupSurfaceWithSharegroup:sharegroup] ) {
+			[self release];
+			return nil;
+		}
+	}
+	
+	indexBitsUsed = 0x00000000;
+	
+	return self;
+}
+
 - (id)initWithCoder:(NSCoder*)coder
 {
-    self = [super initWithCoder:coder];
-	if (self)
-    {
-        CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
-        
-        eaglLayer.opaque = TRUE;
-        eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking,
-                                        kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat,
-                                        nil];
-    }
-    
-    return self;
+	if( (self = [super initWithCoder:aDecoder]) ) {			
+		CAEAGLLayer* eaglLayer = (CAEAGLLayer*)[self layer];
+		
+		pixelformat_ = kEAGLColorFormatRGB565;
+		depthFormat_ = 0; // GL_DEPTH_COMPONENT24_OES;
+		multiSampling_= NO;
+		requestedSamples_ = 0;
+		size_ = [eaglLayer bounds].size;
+		markedText_ = nil;
+		
+		if( ! [self setupSurfaceWithSharegroup:nil] ) {
+			[self release];
+			return nil;
+		}
+	}
+	
+	return self;
+}
+
+-(BOOL) setupSurfaceWithSharegroup:(EAGLSharegroup*)sharegroup
+{
+	CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
+	
+	eaglLayer.opaque = YES;
+	eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
+									[NSNumber numberWithBool:preserveBackbuffer_], kEAGLDrawablePropertyRetainedBacking,
+									pixelformat_, kEAGLDrawablePropertyColorFormat, nil];
+	
+	
+	EAGLContext *aContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+	
+	if (!aContext)
+		NSLog(@"Failed to create ES context");
+	else if (![EAGLContext setCurrentContext:aContext])
+		NSLog(@"Failed to set ES context current");
+	
+	self.context = aContext;
+	[aContext release];
+	
+	[self.context renderbufferStorage:GL_RENDERBUFFER_OES fromDrawable:eaglLayer];
+		
+	[self createFramebuffer];
+	
+	return YES;
 }
 
 - (void)dealloc

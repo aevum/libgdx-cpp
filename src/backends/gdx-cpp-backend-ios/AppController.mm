@@ -21,26 +21,27 @@
 
 #import <UIKit/UIKit.h>
 #import "EAGLView.h"
+
 #import "IosGdxViewController.h"
 
-#import <gdx-cpp/Gdx.hpp>
 #import <OpenGLES/EAGL.h>
-
-#include "init.cpp"
 
 @implementation AppController
 
-#pragma mark -
-#pragma mark Application lifecycle
+@synthesize window, viewController;
 
-@synthesize window;
-@synthesize viewController;
+- (void) applicationDidFinishLaunching:(UIApplication *)application {
+	NSLog(@"Teste");	
+}
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
-	self.window.rootViewController = self.viewController;
+	self.window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
 	
-	initializeGdxApplication();
-	
+	viewController = [[IosGdxViewController alloc] initWithNibName:nil bundle:nil];	
+	viewController.wantsFullScreenLayout = YES;
+		
+	window.rootViewController = viewController;
+	[window makeKeyAndVisible];
 	return YES;
 }
 

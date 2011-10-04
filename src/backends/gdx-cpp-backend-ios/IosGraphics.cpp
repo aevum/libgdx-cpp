@@ -206,24 +206,17 @@ bool gdx_cpp::backends::ios::IosGraphics::supportsExtension(const std::string& e
 
 void gdx_cpp::backends::ios::IosGraphics::initialize()
 {   
-}
-
-bool gdx_cpp::backends::ios::IosGraphics::setDisplayMode(int width, int height, bool fullscreen)
-{
-    this->lastTime = Gdx::system->nanoTime();
-    this->width = width;
-    this->height = height;
-    
+	this->lastTime = Gdx::system->nanoTime();   
     const GLubyte* version = glGetString(GL_VERSION);
-
+	
     if (version) {
         
         int major = atoi((const char*) version);
         int minor = atoi((const char*) &version[2]);
-
+		
         if (false && major >= 2) {
-
-
+			
+			
         } else {
             if (major == 1 && minor < 5) {
                 glCommon = gl10 = new IosGL10;
@@ -231,14 +224,16 @@ bool gdx_cpp::backends::ios::IosGraphics::setDisplayMode(int width, int height, 
                 glCommon = gl10 = gl11 = new IosGL11;
             }
         }
-
+		
         glCommon->glViewport(0, 0, width, height);
-
-        return true;
     } else {
-        Gdx::app->error("IosGraphics", "Failed to recover the GL_VERSION, aborting");
-        return false;
+        throw std::runtime_error("IosGraphics: Failed to recover the GL_VERSION, aborting");
     } 
+}
+
+bool gdx_cpp::backends::ios::IosGraphics::setDisplayMode(int width, int height, bool fullscreen)
+{
+	return false;
 }
 
 void gdx_cpp::backends::ios::IosGraphics::update()

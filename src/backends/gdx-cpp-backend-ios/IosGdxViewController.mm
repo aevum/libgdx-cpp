@@ -20,6 +20,8 @@
 #import "IosGdxViewController.h"
 #import "EAGLView.h"
 
+#include "init.hpp"
+
 @interface IosGdxViewController ()
 @property (nonatomic, retain) EAGLContext *context;
 @end
@@ -28,26 +30,16 @@
 
 @synthesize context;
 
-- (void)awakeFromNib
-{
-	EAGLContext *aContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
-     
-    if (!aContext)
-        NSLog(@"Failed to create ES context");
-    else if (![EAGLContext setCurrentContext:aContext])
-        NSLog(@"Failed to set ES context current");
-    
-	self.context = aContext;
-	[aContext release];
-	
-    [(EAGLView *)self.view setContext:context];
-    [(EAGLView *)self.view setFramebuffer];
-}
-
-
 - (id) initWithNibName:(NSString* ) nibNameOrNil bundle:(NSBundle*)nibBundleOrNil {
 	if (self = [ super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
 		
+		
+		
+		self.view= [EAGLView viewWithFrame ];
+		[(EAGLView *)self.view setContext:context];
+		[(EAGLView *)self.view setFramebuffer];
+		
+		initializeGdxApplication();
 	}
 	return self;
 }

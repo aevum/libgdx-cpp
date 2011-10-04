@@ -23,6 +23,9 @@
 #import <gdx-cpp/Gdx.hpp>
 #import "IosApplication.hpp"
 #import "IosSystem.hpp"
+#import "AppController.h"
+
+#include <iostream>
 
 static gdx_cpp::ApplicationListener* g_Listener = 0;
 
@@ -36,12 +39,9 @@ void initializeGdxApplication(){
 }
 
 int main(int argc, char** argv) {
-	NSLog(@"oi mamae");
-	
-	gdx_cpp::Gdx::initializeSystem(new gdx_cpp::backends::ios::IosSystem);
-	
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, nil, nil);
+	gdx_cpp::Gdx::initializeSystem(new gdx_cpp::backends::ios::IosSystem);
+	int retVal = UIApplicationMain(argc, argv, nil, NSStringFromClass([AppController class]));
 	[pool release];
 	return retVal;
 }
