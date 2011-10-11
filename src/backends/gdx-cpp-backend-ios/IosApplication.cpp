@@ -53,6 +53,8 @@ void IosApplication::initialize() {
 	graphics->setDisplayMode(width, height, false);
 	
 	Gdx::initialize(this, graphics, NULL, NULL, NULL);
+	
+	this->listener->create();						   
 }
 
 void IosApplication::onRunnableStop()
@@ -62,8 +64,14 @@ void IosApplication::onRunnableStop()
 
 void IosApplication::run()
 {    
-     graphics->updateTime();
-		        
+ 	//audio->update();
+    
+}
+
+void IosApplication::update()
+{    
+	graphics->updateTime();
+	
 	{
 		lock_holder hnd = synchronize();
 		
@@ -79,10 +87,12 @@ void IosApplication::run()
 	
 	listener->render();
 	graphics->update();
-	//audio->update();
-    
+	//audio->update();    
 }
 
+void IosApplication::pause()
+{    
+}
 
 void IosApplication::error(const std::string& tag, const char* format, ...)
 {
@@ -97,7 +107,7 @@ void IosApplication::error(const std::string& tag, const char* format, ...)
     va_end (ap);
     fprintf(stderr,"%s",[body UTF8String]);
     [body release];
-	[_format release]; 
+	//[_format release]; 
 }
 
 void IosApplication::exit()
@@ -152,7 +162,7 @@ void IosApplication::log(const std::string& tag, const char* format, ...)
     va_end (ap);
     fprintf(stdout,"%s",[body UTF8String]);
     [body release];
-	[_format release]; 
+	//[_format release]; 
 }
 
 int IosApplication::getVersion()

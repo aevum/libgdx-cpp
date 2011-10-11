@@ -50,7 +50,8 @@ public:
     void log(const std::string& tag, const char* format, ...);
     void postRunnable(Runnable::ptr runnable);
     void setLogLevel(int logLevel);
-	
+	void update();
+	void pause();
     void onRunnableStop();
 protected:
     void run();

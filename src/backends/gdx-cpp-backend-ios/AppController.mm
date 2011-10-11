@@ -21,10 +21,12 @@
 
 #import <UIKit/UIKit.h>
 #import "EAGLView.h"
+#import <OpenGLES/EAGL.h>
 
 #import "IosGdxViewController.h"
 
-#import <OpenGLES/EAGL.h>
+#import <OpenGLES/EAGLDrawable.h>
+#include "init.hpp"
 
 @implementation AppController
 
@@ -37,18 +39,62 @@
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
 	self.window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
 	
-	viewController = [[IosGdxViewController alloc] initWithNibName:nil bundle:nil];	
+	EAGLView *glView = [EAGLView viewWithFrame: [window bounds]
+									 pixelFormat: kEAGLColorFormatRGBA8
+									 depthFormat: GL_DEPTH_COMPONENT16_OES
+							  preserveBackbuffer: NO
+									  sharegroup:nil
+								   multiSampling:NO
+								 numberOfSamples:0];
+    
+	
+	viewController = [[IosGdxViewController alloc] initWithNibName:nil bundle:nil];
+	[viewController retain];
+	
 	viewController.wantsFullScreenLayout = YES;
-		
+	[viewController setView:glView];
+	[glView setFramebuffer];
+	[glView retain];
+	
 	window.rootViewController = viewController;
 	[window makeKeyAndVisible];
+	
+	initializeGdxApplication();
+	
 	return YES;
 }
 
-- (void) applicationWillResignActive:(UIApplication*) application {
-	
-	
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+    [self.viewController pause];
 }
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    [self.viewController resume];
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    [self.viewController pause];
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+}
+
+- (void)dealloc
+{
+    [viewController release];
+    [window release];
+    
+    [super dealloc];
+}
+
 
 
 @end

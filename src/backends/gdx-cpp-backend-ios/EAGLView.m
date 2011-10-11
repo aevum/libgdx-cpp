@@ -13,9 +13,14 @@
 @interface EAGLView (PrivateMethods)
 - (void)createFramebuffer;
 - (void)deleteFramebuffer;
+- (BOOL) setupSurfaceWithSharegroup:(EAGLSharegroup*)sharegroup;
 @end
 
 @implementation EAGLView
+
+@synthesize surfaceSize=size_;
+@synthesize pixelFormat=pixelformat_, depthFormat=depthFormat_;
+@synthesize multiSampling=multiSampling_;
 
 @dynamic context;
 
@@ -45,11 +50,6 @@
 	return [[[self alloc]initWithFrame:frame pixelFormat:format depthFormat:depth preserveBackbuffer:retained sharegroup:sharegroup multiSampling:multisampling numberOfSamples:samples] autorelease];
 }
 
-+ (id) sharedEGLView
-{
-	return view;
-}
-
 - (id) initWithFrame:(CGRect)frame
 {
 	return [self initWithFrame:frame pixelFormat:kEAGLColorFormatRGB565 depthFormat:0 preserveBackbuffer:NO sharegroup:nil multiSampling:NO numberOfSamples:0];
@@ -66,24 +66,21 @@
 	{
 		pixelformat_ = format;
 		depthFormat_ = depth;
-		multiSampling_ = sampling;
+		multiSampling_ = sampling;			
 		requestedSamples_ = nSamples;
 		preserveBackbuffer_ = retained;
-		markedText_ = nil;
 		if( ! [self setupSurfaceWithSharegroup:sharegroup] ) {
 			[self release];
 			return nil;
 		}
 	}
-	
-	indexBitsUsed = 0x00000000;
-	
+		
 	return self;
 }
 
 - (id)initWithCoder:(NSCoder*)coder
 {
-	if( (self = [super initWithCoder:aDecoder]) ) {			
+	if( (self = [super initWithCoder:coder]) ) {			
 		CAEAGLLayer* eaglLayer = (CAEAGLLayer*)[self layer];
 		
 		pixelformat_ = kEAGLColorFormatRGB565;
@@ -91,7 +88,6 @@
 		multiSampling_= NO;
 		requestedSamples_ = 0;
 		size_ = [eaglLayer bounds].size;
-		markedText_ = nil;
 		
 		if( ! [self setupSurfaceWithSharegroup:nil] ) {
 			[self release];

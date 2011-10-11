@@ -21,6 +21,14 @@
 
 @interface IosGdxViewController: UIViewController {
 	EAGLContext *context;
+	CADisplayLink *displayLink;
+	BOOL isRunning;
 }
+
+- (void) resume;
+- (void) pause;
+- (void) mainLoop;
+
+@property (nonatomic, retain) IBOutlet CADisplayLink* displayLink;
 
 @end

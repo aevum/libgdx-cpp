@@ -71,8 +71,8 @@ public:
     virtual void postRunnable (Runnable::ptr runnable) = 0;
     
     virtual void exit () = 0;
-    void update();
-    void pause();
+    virtual void update() = 0;
+    virtual void pause() = 0;
 };
 
 }

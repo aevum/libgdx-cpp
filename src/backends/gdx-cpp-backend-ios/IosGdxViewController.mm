@@ -20,7 +20,8 @@
 #import "IosGdxViewController.h"
 #import "EAGLView.h"
 
-#include "init.hpp"
+#include <gdx-cpp/Gdx.hpp>
+#import <QuartzCore/QuartzCore.h>
 
 @interface IosGdxViewController ()
 @property (nonatomic, retain) EAGLContext *context;
@@ -28,18 +29,11 @@
 
 @implementation IosGdxViewController
 
-@synthesize context;
+@synthesize context, displayLink;
 
 - (id) initWithNibName:(NSString* ) nibNameOrNil bundle:(NSBundle*)nibBundleOrNil {
 	if (self = [ super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-		
-		
-		
-		self.view= [EAGLView viewWithFrame ];
-		[(EAGLView *)self.view setContext:context];
-		[(EAGLView *)self.view setFramebuffer];
-		
-		initializeGdxApplication();
+		isRunning = FALSE;
 	}
 	return self;
 }
@@ -73,5 +67,28 @@
     [super dealloc];
 }
 
+- (void) resume {
+	if (!isRunning) {
+		CADisplayLink *aDisplayLink = [[UIScreen mainScreen] displayLinkWithTarget:self selector:@selector(mainLoop)];
+		[aDisplayLink setFrameInterval:1];
+		[aDisplayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+		self.displayLink = aDisplayLink;
+	}
+}
+
+- (void) pause {
+	if (isRunning)
+    {
+        [self.displayLink invalidate];
+        self.displayLink = nil;
+        isRunning = FALSE;
+    }	
+}
+
+- (void) mainLoop {
+	[(EAGLView*)self.view setFramebuffer];
+	gdx_cpp::Gdx::app->update();
+	[(EAGLView*)self.view presentFramebuffer];
+}
 
 @end

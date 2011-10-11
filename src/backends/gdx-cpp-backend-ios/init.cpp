@@ -35,6 +35,7 @@ void createApplication(gdx_cpp::ApplicationListener* listener, const std::string
 }
 
 void initializeGdxApplication(){
+	init();
 	new gdx_cpp::backends::ios::IosApplication(g_Listener);
 }
 
