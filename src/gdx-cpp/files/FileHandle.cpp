@@ -61,17 +61,11 @@ std::string FileHandle::name () const {
 }
 
 std::string FileHandle::extension () const {
-    std::string name = file.getName();
-    int dotIndex = name.rfind('.');
-    if (dotIndex == std::string::npos) return "";
-    return name.substr(dotIndex + 1);
+	return file.extension();
 }
 
 std::string FileHandle::nameWithoutExtension () const {
-    std::string name = file.getName();
-    int dotIndex = name.rfind('.');
-    if (dotIndex == std::string::npos) return name;
-    return name.substr(0, dotIndex);
+	return file.nameWithoutExtension();
 }
 
 std::string FileHandle::typetoString () {

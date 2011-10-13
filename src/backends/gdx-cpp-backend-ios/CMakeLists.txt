@@ -4,14 +4,17 @@ include_directories(${GDXCPP_INCLUDE_DIR} ${SVG_BACKEND_ANTIGRAIN_INCLUDES})
 
 set(GDX_CPP_BACKEND_IOS_SRC 
 init.cpp
-IosApplication.cpp AppController.mm
+IosApplication.cpp
+AppController.mm
 IosGdxViewController.mm
 EAGLView.m
 IosGL10.cpp
 IosGL11.cpp
 IosGL20.cpp
-IosSystem.cpp
 IosGraphics.cpp
+IosFileHandle.mm
+IosFiles.cpp
+IosSystem.mm
 )
 set(GDX_CPP_BACKEND_IOS_HEADERS init.hpp IosApplication.hpp AppController.h 
 EAGLView.h
@@ -22,6 +25,8 @@ IosGL20.hpp
 IosGLU.hpp
 IosSystem.hpp
 IosGraphics.hpp
+IosFileHandle.hpp
+IosFiles.hpp
 )
 
 add_library(gdx-cpp-backend-ios ${GDX_CPP_BACKEND_IOS_SRC} ${GDX_CPP_BACKEND_IOS_HEADERS})

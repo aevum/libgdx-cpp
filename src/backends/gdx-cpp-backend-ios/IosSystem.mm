@@ -35,6 +35,8 @@
 #import <mach/mach.h>
 #import <mach/mach_time.h>
 
+#import <UIKit/UIKit.h>
+
 using namespace gdx_cpp::backends::ios;
 
 std::string IosSystem::canonicalize(const std::string& path)    
@@ -225,9 +227,12 @@ bool IosSystem::renameFile(gdx_cpp::files::File& f1, const gdx_cpp::files::File&
 std::string IosSystem::resolve(const gdx_cpp::files::File& f)
 {
     if (isAbsolute(f)) return f.getPath();
-    char buffer[2048];
-    if(getcwd(buffer, 2048) == NULL) throw std::runtime_error("Error trying to resolve path: " + f.getPath());
-    return resolve(std::string(buffer), f.getPath());
+	NSString *filePath = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String: f.getName().c_str()] ofType:[NSString stringWithUTF8String:f.extension().c_str()]];
+	if (filePath != nil) {
+		return std::string([filePath UTF8String], [filePath length]);
+	}
+	
+	throw std::runtime_error("File " + f.getName() + " not found");
 }
 
 std::string IosSystem::resolve(const std::string& parent, const std::string& child)

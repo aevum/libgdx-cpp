@@ -19,7 +19,7 @@ using namespace gdx_cpp;
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp::graphics::g2d;
 
-#define SPRITES 25000
+#define SPRITES 1
 
 class SpriteBatchTest : public gdx_cpp::ApplicationListener {
 public:

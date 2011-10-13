@@ -221,6 +221,10 @@ graphics::g2d::Gdx2DPixmap* Gdx2DPixmap::newPixmap (std::istream& in, int reques
     return new Gdx2DPixmap(in, requestedFormat);
 }
 
+graphics::g2d::Gdx2DPixmap* Gdx2DPixmap::pixmapFromByteArray (unsigned char* buffer, unsigned int size, int requestedFormat) {
+    return new Gdx2DPixmap(buffer, 0, size, requestedFormat);
+}
+
 graphics::g2d::Gdx2DPixmap* Gdx2DPixmap::newPixmap (int width, int height, int format) {
     return new Gdx2DPixmap(width, height, format);
 }

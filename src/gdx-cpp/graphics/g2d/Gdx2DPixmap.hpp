@@ -50,6 +50,7 @@ public:
     Gdx2DPixmap (const Gdx2DPixmap& other);
     Gdx2DPixmap (unsigned char* encodedData, int offset, int len, int requestedFormat);
 
+	static Gdx2DPixmap* pixmapFromByteArray (unsigned char* buffer, unsigned int size, int requestedFormat);
     static Gdx2DPixmap* newPixmap (int width,int height,int format);
     static Gdx2DPixmap* newPixmap (std::istream& in, int requestedFormat);
 

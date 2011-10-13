@@ -29,6 +29,8 @@ public:
     
     std::string getName() const;
     std::string getParent() const;
+	std::string extension() const;
+	std::string nameWithoutExtension () const;
     File getParentFile() const;
     const std::string &getPath() const;
     bool isAbsolute() const;

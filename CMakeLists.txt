@@ -92,6 +92,9 @@ if (BUILD_BACKEND_IOS)
 	set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.aevumlab.\${PRODUCT_NAME:identifier}")
 	set(BACKEND-IOS-DEPENDENCIES gdx-cpp-agg-svg)
 	set(GDX_CPP_BACKEND_IOS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/backends)
+	
+	file (GLOB RESOURCES etc/assets/data/*)
+
 	add_subdirectory(src/backends/gdx-cpp-backend-ios)
 endif()
 

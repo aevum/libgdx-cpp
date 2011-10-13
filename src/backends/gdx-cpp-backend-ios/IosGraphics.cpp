@@ -272,8 +272,11 @@ Pixmap* backends::ios::IosGraphics::resolvePixmap(const Files::fhandle_ptr& file
 {
     std::string extension = file->extension();
     
-    if (extension == "png" || extension == "jpg" || extension == "tga" || extension == "bmp")
-        return g2d::Gdx2DPixmap::newPixmap(*file->read(), 0);
+    if (extension == "png" || extension == "jpg" || extension == "tga" || extension == "bmp") {
+		gdx_cpp::files::FileHandle::char_ptr buffer;
+		int length = file->readBytes(buffer);
+		return g2d::Gdx2DPixmap::pixmapFromByteArray((unsigned char*) buffer.get(), length, 0);
+	}
     else if (extension == "svg") {
         return g2d::svg::AggSvgPixmap::newFromFile(file);        
     } else {

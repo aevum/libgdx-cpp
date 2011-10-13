@@ -1,6 +1,7 @@
 #include "FileHandleStream.hpp"
 #include <cstdio>
 #include <cassert>
+#include <string>
 #include <gdx-cpp/implementation/System.hpp>
 #include <gdx-cpp/Gdx.hpp>
 #include <stdexcept>
@@ -289,9 +290,21 @@ std::string File::toString()
     return getPath();
 }
 
+std::string File::extension() const {
+    std::string name = getName();
+	unsigned int  dotIndex = name.rfind('.');
+    if (dotIndex == std::string::npos) return "";
+    return name.substr(dotIndex + 1);	
+}
 
+std::string File::nameWithoutExtension () const {
+    std::string name = getName();
+    int dotIndex = name.rfind('.');
+    if (dotIndex == std::string::npos) return name;
+    return name.substr(0, dotIndex);
+}
 
-    //static std::string slashify(const std::string &path, const bool &isDirectory);
+//static std::string slashify(const std::string &path, const bool &isDirectory);
     /*
      * // lazy initialization of SecureRandom and temporary file directory
     private static class LazyInitialization {

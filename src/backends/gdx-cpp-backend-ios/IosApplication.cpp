@@ -27,6 +27,7 @@
 #include <stdexcept>
 
 #include "IosGraphics.hpp"
+#include "IosFiles.hpp"
 
 #import <UIKit/UIKit.h>
 
@@ -37,7 +38,8 @@ gdx_cpp::backends::ios::IosApplication::IosApplication(gdx_cpp::ApplicationListe
 :  Synchronizable(Gdx::system->getMutexFactory())
 , listener(listener)
 , graphics(NULL)
-, input(0)
+, input(NULL)
+, files(NULL)
 , logLevel(gdx_cpp::Application::LOG_INFO)
 {
     initialize();
@@ -46,13 +48,13 @@ gdx_cpp::backends::ios::IosApplication::IosApplication(gdx_cpp::ApplicationListe
 void IosApplication::initialize() {
 	graphics = new IosGraphics();
 //	input = new LinuxInput();
-//	files = new LinuxFiles();
+	files = new IosFiles();
 //	audio = new LinuxOpenALAudio();
 	
 	graphics->initialize();
 	graphics->setDisplayMode(width, height, false);
 	
-	Gdx::initialize(this, graphics, NULL, NULL, NULL);
+	Gdx::initialize(this, graphics, NULL, NULL, files);
 	
 	this->listener->create();						   
 }
@@ -141,7 +143,7 @@ Input* IosApplication::getInput()
 
 Preferences* IosApplication::getPreferences(std::string& name)
 {
-	
+	throw std::runtime_error("not implemented yet");
 }
 
 gdx_cpp::Application::ApplicationType IosApplication::getType()
