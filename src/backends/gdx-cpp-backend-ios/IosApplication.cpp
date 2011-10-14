@@ -28,6 +28,7 @@
 
 #include "IosGraphics.hpp"
 #include "IosFiles.hpp"
+#include "IosInput.hpp"
 
 #import <UIKit/UIKit.h>
 
@@ -47,16 +48,14 @@ gdx_cpp::backends::ios::IosApplication::IosApplication(gdx_cpp::ApplicationListe
 
 void IosApplication::initialize() {
 	graphics = new IosGraphics();
-//	input = new LinuxInput();
+	input = new IosInput();
 	files = new IosFiles();
 //	audio = new LinuxOpenALAudio();
 	
 	graphics->initialize();
 	graphics->setDisplayMode(width, height, false);
 	
-	Gdx::initialize(this, graphics, NULL, NULL, files);
-	
-	this->listener->create();						   
+	Gdx::initialize(this, graphics, NULL, input, files);
 }
 
 void IosApplication::onRunnableStop()
@@ -125,20 +124,17 @@ Audio* IosApplication::getAudio()
 
 Files* IosApplication::getFiles()
 {
-	throw std::runtime_error("not implemented yet");
-//    return files;
+	return files;
 }
 
 Graphics* IosApplication::getGraphics()
 {
-	throw std::runtime_error("not implemented yet");
-	//    return graphics;
+	return graphics;
 }
 
 Input* IosApplication::getInput()
 {
-	throw std::runtime_error("not implemented yet");
-//    return input;
+	return input;
 }
 
 Preferences* IosApplication::getPreferences(std::string& name)

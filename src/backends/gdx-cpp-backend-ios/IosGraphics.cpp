@@ -233,7 +233,10 @@ void gdx_cpp::backends::ios::IosGraphics::initialize()
 
 bool gdx_cpp::backends::ios::IosGraphics::setDisplayMode(int width, int height, bool fullscreen)
 {
-	return false;
+	this->width = width;
+	this->height = height;
+	
+	return true;
 }
 
 void gdx_cpp::backends::ios::IosGraphics::update()

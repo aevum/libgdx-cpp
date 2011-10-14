@@ -7,7 +7,7 @@ init.cpp
 IosApplication.cpp
 AppController.mm
 IosGdxViewController.mm
-EAGLView.m
+EAGLView.mm
 IosGL10.cpp
 IosGL11.cpp
 IosGL20.cpp
@@ -15,6 +15,7 @@ IosGraphics.cpp
 IosFileHandle.mm
 IosFiles.cpp
 IosSystem.mm
+IosInput.cpp
 )
 set(GDX_CPP_BACKEND_IOS_HEADERS init.hpp IosApplication.hpp AppController.h 
 EAGLView.h
@@ -27,6 +28,7 @@ IosSystem.hpp
 IosGraphics.hpp
 IosFileHandle.hpp
 IosFiles.hpp
+IosInput.hpp
 )
 
 add_library(gdx-cpp-backend-ios ${GDX_CPP_BACKEND_IOS_SRC} ${GDX_CPP_BACKEND_IOS_HEADERS})

@@ -25,5 +25,6 @@
 void init();
 void createApplication(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int width, int height);
 void initializeGdxApplication();
+void createListener();
 
 #endif //GDX_CPP_BACKENDS_IOS_INIT_CPP

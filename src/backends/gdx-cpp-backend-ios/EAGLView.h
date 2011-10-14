@@ -46,6 +46,8 @@
 @property(nonatomic,readonly) GLuint depthFormat;
 @property(nonatomic,readonly) CGSize surfaceSize;
 @property(nonatomic,readwrite) BOOL multiSampling;
+@property(nonatomic, readonly) GLint viewWidth;
+@property(nonatomic, readonly) GLint viewHeight;
 
 /** creates an initializes an EAGLView with a frame and 0-bit depth buffer, and a RGB565 color buffer */
 + (id) viewWithFrame:(CGRect)frame;
@@ -65,5 +67,10 @@
 
 - (void)setFramebuffer;
 - (BOOL)presentFramebuffer;
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
 
 @end

@@ -107,7 +107,7 @@ public:
 
         int error = Gdx::gl->glGetError();
         if (error != GL10::GL_NO_ERROR) {
-            Gdx::app->log("SpritePerformanceTest", "gl error: %s", error);
+            Gdx::app->log("SpritePerformanceTest", "gl error: %d", error);
         }
 
         frames++;

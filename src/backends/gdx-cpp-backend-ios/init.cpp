@@ -39,6 +39,10 @@ void initializeGdxApplication(){
 	new gdx_cpp::backends::ios::IosApplication(g_Listener);
 }
 
+void createListener() {
+	g_Listener->create();		
+}
+
 int main(int argc, char** argv) {
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
 	gdx_cpp::Gdx::initializeSystem(new gdx_cpp::backends::ios::IosSystem);

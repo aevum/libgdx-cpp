@@ -26,6 +26,8 @@
 #import "IosGdxViewController.h"
 
 #import <OpenGLES/EAGLDrawable.h>
+#include <gdx-cpp/Gdx.hpp>
+
 #include "init.hpp"
 
 @implementation AppController
@@ -59,7 +61,9 @@
 	window.rootViewController = viewController;
 	[window makeKeyAndVisible];
 	
-	initializeGdxApplication();
+	initializeGdxApplication();	
+	gdx_cpp::Gdx::graphics->setDisplayMode(glView.viewWidth, glView.viewHeight, true);
+	createListener();
 	
 	return YES;
 }

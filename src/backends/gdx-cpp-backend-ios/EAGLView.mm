@@ -10,6 +10,9 @@
 
 #import "EAGLView.h"
 
+#include <gdx-cpp/Gdx.hpp>
+#include "IosInput.hpp"
+
 @interface EAGLView (PrivateMethods)
 - (void)createFramebuffer;
 - (void)deleteFramebuffer;
@@ -21,6 +24,7 @@
 @synthesize surfaceSize=size_;
 @synthesize pixelFormat=pixelformat_, depthFormat=depthFormat_;
 @synthesize multiSampling=multiSampling_;
+@synthesize viewWidth=framebufferWidth, viewHeight=framebufferHeight;
 
 @dynamic context;
 
@@ -230,6 +234,38 @@
 {
     // The framebuffer will be re-created at the beginning of the next setFramebuffer method call.
     [self deleteFramebuffer];
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	int i = 0;
+	for (UITouch *touch in touches) {
+		CGPoint pos = [touch locationInView:self];
+		((gdx_cpp::backends::ios::IosInput*)gdx_cpp::Gdx::input)->handleTouchDown(pos.x, pos.y, i++);
+	}
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+	int i = 0;
+	for (UITouch *touch in touches) {
+		CGPoint pos = [touch locationInView:self];
+		((gdx_cpp::backends::ios::IosInput*)gdx_cpp::Gdx::input)->handleTouchDrag(pos.x, pos.y, i++);
+	}
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+	int i = 0;
+	for (UITouch *touch in touches) {
+		CGPoint pos = [touch locationInView:self];
+		((gdx_cpp::backends::ios::IosInput*)gdx_cpp::Gdx::input)->handleTouchUp(pos.x, pos.y, i++);
+	}
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+	int i = 0;
+	for (UITouch *touch in touches) {
+		CGPoint pos = [touch locationInView:self];
+		((gdx_cpp::backends::ios::IosInput*)gdx_cpp::Gdx::input)->handleTouchUp(pos.x, pos.y, i++);
+	}
 }
 
 @end
