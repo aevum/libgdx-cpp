@@ -21,6 +21,9 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTION_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTION_HPP_
 
+#include "OnActionCompleted.hpp"
+#include "Actor.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
@@ -34,12 +37,12 @@ public:
     void finish ();
     void callActionCompletedListener ();
     virtual   Action& copy () = 0;
-    Action& setCompletionListener (const final& OnActionCompleted);
-    OnActionCompleted& getCompletionListener ();
+    Action* setCompletionListener (gdx_cpp::scenes::scene2d::OnActionCompleted* listener);
+    OnActionCompleted* getCompletionListener ();
     void reset ();
 
 protected:
-
+    OnActionCompleted* listener;
 
 private:
 

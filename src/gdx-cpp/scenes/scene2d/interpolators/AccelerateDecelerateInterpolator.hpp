@@ -36,6 +36,7 @@ public:
 
 protected:
     AccelerateDecelerateInterpolator& newObject ();
+    float DEFAULT_FACTOR = 1.0f;
 
 private:
 

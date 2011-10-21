@@ -27,18 +27,16 @@ namespace glutils {
 
 class ImmediateModeRenderer {
 public:
-    virtual   void begin (const gdx_cpp::math::Matrix4& projModelView,int primitiveType) = 0;
+    virtual   void begin (gdx_cpp::math::Matrix4& projModelView,int primitiveType) = 0;
     virtual   void color (float r,float g,float b,float a) = 0;
     virtual   void texCoord (float u,float v) = 0;
     virtual   void normal (float x,float y,float z) = 0;
     virtual   void vertex (float x,float y,float z) = 0;
     virtual   void end () = 0;
     virtual   int getNumVertices () = 0;
+    virtual int getMaxVertices () = 0;
 
-protected:
-
-
-private:
+    virtual void dispose() = 0;
 
 };
 

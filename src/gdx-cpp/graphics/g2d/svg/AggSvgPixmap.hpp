@@ -57,9 +57,8 @@ public:
     static AggSvgPixmap* newFromFile(const Files::fhandle_ptr& file) {
         static utils::XmlReader reader;
 
-        AggSvgPixmap* pix = new AggSvgPixmap;        
+        AggSvgPixmap* pix = new AggSvgPixmap;
         SvgParser parser(*pix);
-        
         parser.render(reader.parse(*file).get());
         
         return pix;

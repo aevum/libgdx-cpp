@@ -22,74 +22,110 @@
 
 using namespace gdx_cpp::scenes::scene2d::ui;
 
-void Button::layout () {
-    final BitmapFont font = style.font;
-    final NinePatch downPatch = style.down;
-    bounds.set(font.getMultiLineBounds(text));
-
-    prefHeight = downPatch.getBottomHeight() + downPatch.getTopHeight() + bounds.height + -font.getDescent() * 2;
-    prefWidth = downPatch.getLeftWidth() + downPatch.getRightWidth() + bounds.width;
-    invalidated = false;
+void Button::click (const gdx_cpp::scenes::scene2d::Actor& actor) {
+    isChecked = !isChecked;
+    if (listener != null) listener.click(actor);
 }
 
-void Button::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
-    final BitmapFont font = style.font;
-    final Color fontColor = style.fontColor;
-    final NinePatch downPatch = style.down;
-    final NinePatch upPatch = style.up;
-
-    if (invalidated) layout();
-
-    batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-    if (isPressed)
-        downPatch.draw(batch, x, y, width, height);
-    else
-        upPatch.draw(batch, x, y, width, height);
-
-    float textY = (int)(height * 0.5f) + (int)(bounds.height * 0.5f);
-    font.setColor(fontColor.r, fontColor.g, fontColor.b, fontColor.a * parentAlpha);
-    font.drawMultiLine(batch, text, x + (int)(width * 0.5f), y + textY, 0, HAlignment.CENTER);
+void Button::setStyle (const ButtonStyle& style) {
+    this.style = style;
+    setBackground(isPressed ? style.down : style.up);
 }
 
-bool Button::touchDown (float x,float y,int pointer) {
-    if (pointer != 0) return false;
-    if (hit(x, y) != null) {
-        isPressed = true;
-        parent.focus(this, pointer);
-        return true;
-    }
-    return false;
-}
-
-bool Button::touchUp (float x,float y,int pointer) {
-    if (pointer != 0) return false;
-    if (hit(x, y) != null) {
-        if (listener != null) listener.click(this);
-        parent.focus(null, pointer);
-        isPressed = false;
-        return true;
-    }
-    isPressed = false;
-    parent.focus(null, pointer);
-    return false;
-}
-
-bool Button::touchDragged (float x,float y,int pointer) {
-    if (pointer != 0) return false;
-    return isPressed;
+void Button::setClickListener (const ClickListener& listener) {
+    this.listener = listener;
 }
 
 void Button::setText (const std::string& text) {
-    this.text = text;
-    invalidateHierarchy();
+    if (children.isEmpty()) {
+        add(new Label(text, style));
+        return;
+    }
+    for (int i = 0; i < children.size(); i++) {
+        Actor child = children.get(i);
+        if (child instanceof Label) {
+            ((Label)child).setText(text);
+            return;
+        }
+    }
+    throw new GdxRuntimeException("No child label was found.");
 }
 
 std::string& Button::getText () {
-    return text;
+    for (int i = 0; i < children.size(); i++) {
+        Actor child = children.get(i);
+        if (child instanceof Label) return ((Label)child).getText();
+    }
+    throw new GdxRuntimeException("No child label was found.");
 }
 
-Button& Button::setClickListener (const ClickListener& listener) {
-    this.listener = listener;
-    return this;
+void Button::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+    float offsetX = 0, offsetY = 0;
+    if (isPressed) {
+        setBackground(style.down == null ? style.up : style.down);
+        offsetX = style.pressedOffsetX;
+        offsetY = style.pressedOffsetY;
+    } else {
+        if (style.checked == null)
+            setBackground(style.up);
+        else
+            setBackground(isChecked ? style.checked : style.up);
+        offsetX = style.unpressedOffsetX;
+        offsetY = style.unpressedOffsetY;
+    }
+    for (int i = 0; i < children.size(); i++) {
+        Actor child = children.get(i);
+        child.x += offsetX;
+        child.y += offsetY;
+    }
+    super.draw(batch, parentAlpha);
+    for (int i = 0; i < children.size(); i++) {
+        Actor child = children.get(i);
+        child.x -= offsetX;
+        child.y -= offsetY;
+    }
+}
+
+Button::Button (const Skin& skin) {
+    this(skin.getStyle(ButtonStyle.class), null);
+}
+
+Button::Button (const ButtonStyle& style) {
+    this(style, null);
+}
+
+Button::Button (const gdx_cpp::scenes::scene2d::Actor& child,const Skin& skin) {
+    this(child, skin.getStyle(ButtonStyle.class));
+}
+
+Button::Button (const gdx_cpp::scenes::scene2d::Actor& child,const ButtonStyle& style) {
+    this(style, null);
+    add(child);
+}
+
+Button::Button (const std::string& text,const Skin& skin) {
+    this(skin.getStyle(ButtonStyle.class), null);
+    setText(text);
+}
+
+Button::Button (const std::string& text,const ButtonStyle& style) {
+    this(style, null);
+    setText(text);
+}
+
+Button::Button (const std::string& text,const ButtonStyle& style,const std::string& name) {
+    this(style, name);
+    setText(text);
+}
+
+Button::Button (const ButtonStyle& style,const std::string& name) {
+    super(name);
+    setStyle(style);
+    super.setClickListener(new ClickListener() {
+        public void click (Actor actor) {
+            isChecked = !isChecked;
+            if (listener != null) listener.click(actor);
+        }
+    });
 }
 

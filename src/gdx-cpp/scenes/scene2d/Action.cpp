@@ -23,28 +23,28 @@
 using namespace gdx_cpp::scenes::scene2d;
 
 void Action::finish () {
-    if (listener != null) {
-        listener.completed(this);
+    if (listener != NULL) {
+        listener->completed(this);
     }
 }
 
 void Action::callActionCompletedListener () {
-    if (listener != null) {
-        listener.completed(this);
+    if (listener != NULL) {
+        listener->completed(this);
     }
-    listener = null;
+    listener = NULL;
 }
 
-Action& Action::setCompletionListener (const final& OnActionCompleted) {
-    this.listener = listener;
+Action* Action::setCompletionListener (OnActionCompleted* listener) {
+    this->listener = listener;
     return this;
 }
 
-OnActionCompleted& Action::getCompletionListener () {
+OnActionCompleted* Action::getCompletionListener () {
     return listener;
 }
 
 void Action::reset () {
-    listener = null;
+    listener = NULL;
 }
 

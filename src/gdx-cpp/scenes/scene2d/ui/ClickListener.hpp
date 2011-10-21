@@ -18,13 +18,28 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "ActionResetingPool<T extends Action>.hpp"
+#ifndef GDX_CPP_SCENES_SCENE2D_UI_CLICKLISTENER_HPP_
+#define GDX_CPP_SCENES_SCENE2D_UI_CLICKLISTENER_HPP_
 
-using namespace gdx_cpp::scenes::scene2d::actions;
+namespace gdx_cpp {
+namespace scenes {
+namespace scene2d {
+namespace ui {
 
-T& ActionResetingPool<T extends Action>::obtain () {
-    T elem = super.obtain();
-    elem.reset();
-    return elem;
-}
+class ClickListener {
+public:
+    virtual   void click (const gdx_cpp::scenes::scene2d::Actor& actor) = 0;
 
+protected:
+
+
+private:
+
+};
+
+} // namespace gdx_cpp
+} // namespace scenes
+} // namespace scene2d
+} // namespace ui
+
+#endif // GDX_CPP_SCENES_SCENE2D_UI_CLICKLISTENER_HPP_

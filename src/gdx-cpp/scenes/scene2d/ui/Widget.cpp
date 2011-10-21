@@ -22,12 +22,20 @@
 
 using namespace gdx_cpp::scenes::scene2d::ui;
 
-float Widget::getPrefWidth () {
-    return prefWidth;
+float Widget::getMinWidth () {
+    return getPrefWidth();
 }
 
-float Widget::getPrefHeight () {
-    return prefHeight;
+float Widget::getMinHeight () {
+    return getPrefHeight();
+}
+
+float Widget::getMaxWidth () {
+    return 0;
+}
+
+float Widget::getMaxHeight () {
+    return 0;
 }
 
 void Widget::invalidate () {
@@ -47,9 +55,11 @@ gdx_cpp::scenes::scene2d::Actor& Widget::hit (float x,float y) {
     return x > 0 && x < width && y > 0 && y < height ? this : null;
 }
 
-void Widget::setPrefSize (int prefWidth,int prefHeight) {
-    this.prefWidth = width = prefWidth;
-    this.prefHeight = height = prefHeight;
-    invalidateHierarchy();
+Widget::Widget () {
+    super(null);
+}
+
+Widget::Widget (const std::string& name) {
+    super(name);
 }
 

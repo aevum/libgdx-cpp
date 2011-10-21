@@ -21,20 +21,26 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTIONS_ACTIONRESETINGPOOL<T EXTENDS ACTION>_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTIONS_ACTIONRESETINGPOOL<T EXTENDS ACTION>_HPP_
 
+#include "gdx-cpp/utils/Pool.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
 namespace actions {
 
-class ActionResetingPool {
+template <typename T>
+class ActionResetingPool : public utils::Pool<T> {
 public:
-    T& obtain ();
-
-protected:
-
-
-private:
-
+    ActionResetingPool (int initialCapacity, int max)
+        : utils::Pool(initialCapacity, max)
+    {        
+    }
+    
+    T obtain () {
+        T elem = utils::Pool::obtain();
+        elem->reset();
+        return elem;
+    }
 };
 
 } // namespace gdx_cpp

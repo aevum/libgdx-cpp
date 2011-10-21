@@ -27,8 +27,8 @@ void Stack::layout () {
     needsLayout = false;
     for (int i = 0, n = children.size(); i < n; i++) {
         Actor actor = children.get(i);
-        actor.x = x;
-        actor.y = y;
+        actor.x = 0;
+        actor.y = 0;
         actor.width = width;
         actor.height = height;
         if (actor instanceof Layout) {
@@ -60,5 +60,42 @@ float Stack::getPrefHeight () {
     for (int i = 0, n = children.size(); i < n; i++)
         height = Math.max(height, LibgdxToolkit.instance.getPrefHeight(children.get(i)));
     return height * scaleY;
+}
+
+float Stack::getMaxWidth () {
+    float width = 0;
+    for (int i = 0, n = children.size(); i < n; i++)
+        width = Math.max(width, LibgdxToolkit.instance.getMaxWidth(children.get(i)));
+    return width * scaleX;
+}
+
+float Stack::getMaxHeight () {
+    float height = 0;
+    for (int i = 0, n = children.size(); i < n; i++)
+        height = Math.max(height, LibgdxToolkit.instance.getMaxHeight(children.get(i)));
+    return height * scaleY;
+}
+
+float Stack::getMinWidth () {
+    float width = 0;
+    for (int i = 0, n = children.size(); i < n; i++)
+        width = Math.max(width, LibgdxToolkit.instance.getMinWidth(children.get(i)));
+    return width * scaleX;
+}
+
+float Stack::getMinHeight () {
+    float height = 0;
+    for (int i = 0, n = children.size(); i < n; i++)
+        height = Math.max(height, LibgdxToolkit.instance.getMinHeight(children.get(i)));
+    return height * scaleY;
+}
+
+Stack::Stack () {
+    this(null);
+}
+
+Stack::Stack (const std::string& name) {
+    super(name);
+    transform = false;
 }
 

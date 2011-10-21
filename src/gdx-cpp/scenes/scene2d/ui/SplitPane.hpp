@@ -28,24 +28,45 @@ namespace ui {
 
 class SplitPane {
 public:
+    void setStyle (const SplitPaneStyle& style);
     void layout ();
     void invalidate ();
     float getPrefWidth ();
     float getPrefHeight ();
+    float getMinWidth ();
+    float getMinHeight ();
+    float getMaxWidth ();
+    float getMaxHeight ();
     void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
     bool touchDown (float x,float y,int pointer);
-    bool touchUp (float x,float y,int pointer);
-    bool touchDragged (float x,float y,int pointer);
+    void touchUp (float x,float y,int pointer);
+    void touchDragged (float x,float y,int pointer);
     gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
     void setSplitAmount (float split);
     float getSplit ();
     void setMinSplitAmount (float minAmount);
     void setMaxSplitAmount (float maxAmount);
     void setWidgets (const gdx_cpp::scenes::scene2d::Actor& firstWidget,const gdx_cpp::scenes::scene2d::Actor& secondWidget);
-    NinePatch handle;
+    SplitPane (const gdx_cpp::scenes::scene2d::Actor& firstWidget,const gdx_cpp::scenes::scene2d::Actor& secondWidget,bool vertical,const gdx_cpp::scenes::scene2d::Stage& stage,const Skin& skin);
+    SplitPane (const gdx_cpp::scenes::scene2d::Actor& firstWidget,const gdx_cpp::scenes::scene2d::Actor& secondWidget,bool vertical,const gdx_cpp::scenes::scene2d::Stage& stage,const SplitPaneStyle& style);
+    SplitPane (const gdx_cpp::scenes::scene2d::Actor& firstWidget,const gdx_cpp::scenes::scene2d::Actor& secondWidget,bool vertical,const gdx_cpp::scenes::scene2d::Stage& stage,const SplitPaneStyle& style,const std::string& name);
 
 protected:
-
+    SplitPaneStyle style ;
+    boolean invalidated = false;
+    boolean vertical ;
+    float splitAmount = 0.5f;
+    float minAmount = 0;
+    float maxAmount = 1;
+    float oldSplitAmount = 0;
+    Stage stage ;
+    Actor firstWidget ;
+    Actor secondWidget ;
+    Rectangle firstWidgetBounds = new Rectangle();
+    Rectangle secondWidgetBounds = new Rectangle();
+    Rectangle handleBounds = new Rectangle();
+    Rectangle[] scissors = new Rectangle[] {new Rectangle(), new Rectangle()};
+    boolean touchDrag = false;
 
 private:
     void calculateBoundsAndPositions (const gdx_cpp::math::Matrix4& transform);

@@ -18,29 +18,9 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#ifndef GDX_CPP_SCENES_SCENE2D_UI_PANE_HPP_
-#define GDX_CPP_SCENES_SCENE2D_UI_PANE_HPP_
+#include "Align.hpp"
 
-namespace gdx_cpp {
-namespace scenes {
-namespace scene2d {
-namespace ui {
-
-class Pane: public gdx_cpp::scenes::scene2d::ui::tablelayout::Table {
-public:
-    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
-    NinePatch background;
-
-protected:
+using namespace gdx_cpp::scenes::scene2d::ui;
 
 
-private:
-    void calculateScissors (const gdx_cpp::math::Matrix4& transform);
-};
 
-} // namespace gdx_cpp
-} // namespace scenes
-} // namespace scene2d
-} // namespace ui
-
-#endif // GDX_CPP_SCENES_SCENE2D_UI_PANE_HPP_

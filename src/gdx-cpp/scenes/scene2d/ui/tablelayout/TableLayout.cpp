@@ -22,10 +22,6 @@
 
 using namespace gdx_cpp::scenes::scene2d::ui::tablelayout;
 
-void TableLayout::parse (const gdx_cpp::files::FileHandle& file) {
-    super.parse(file.readString());
-}
-
 gdx_cpp::scenes::scene2d::Actor& TableLayout::register (const gdx_cpp::scenes::scene2d::Actor& actor) {
     if (actor.name == null) throw new IllegalArgumentException("Actor must have a name: " + actor.getClass());
     return register(actor.name, actor);
@@ -45,8 +41,8 @@ void TableLayout::layout () {
     if (!needsLayout) return;
     needsLayout = false;
 
-    setLayoutSize(0, 0, (int)table.width, (int)table.height);
     Table table = getTable();
+    setLayoutSize(0, 0, (int)table.width, (int)table.height);
 
     super.layout();
 
@@ -70,6 +66,7 @@ void TableLayout::layout () {
 
 void TableLayout::invalidate () {
     needsLayout = true;
+    getTable().sizeInvalid = true;
 }
 
 void TableLayout::invalidateHierarchy () {
@@ -92,7 +89,7 @@ void TableLayout::drawDebug (const gdx_cpp::graphics::g2d::SpriteBatch& batch) {
 
     Table table = getTable();
     Actor parent = table.parent;
-    float x = 0, y = 0;
+    float x = table.x, y = 0;
     while (parent != null) {
         if (parent instanceof Group) {
             x += parent.x;
@@ -141,5 +138,13 @@ void TableLayout::drawDebug (const gdx_cpp::graphics::g2d::SpriteBatch& batch) {
         }
     }
     debugRenderer.end();
+}
+
+TableLayout::TableLayout () {
+    super(LibgdxToolkit.instance);
+}
+
+TableLayout::TableLayout (const LibgdxToolkit& toolkit) {
+    super(toolkit);
 }
 

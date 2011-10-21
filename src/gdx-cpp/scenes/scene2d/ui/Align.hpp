@@ -18,26 +18,17 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#ifndef GDX_CPP_SCENES_SCENE2D_ACTORS_CLICKLISTENER_HPP_
-#define GDX_CPP_SCENES_SCENE2D_ACTORS_CLICKLISTENER_HPP_
+#ifndef GDX_CPP_SCENES_SCENE2D_UI_ALIGN_HPP_
+#define GDX_CPP_SCENES_SCENE2D_UI_ALIGN_HPP_
 
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
-namespace actors {
+namespace ui {
 
-class ClickListener {
+class Align {
 public:
-    virtual   void clicked (const Button& button) = 0;
-    virtual   void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) = 0;
-    virtual   bool touchDown (float x,float y,int pointer) = 0;
-    virtual   bool touchUp (float x,float y,int pointer) = 0;
-    virtual   bool touchDragged (float x,float y,int pointer) = 0;
-    virtual   gdx_cpp::scenes::scene2d::Actor& hit (float x,float y) = 0;
-    virtual   void layout () = 0;
-    virtual   void invalidate () = 0;
-    virtual   float getPrefWidth () = 0;
-    virtual   float getPrefHeight () = 0;
+
 
 protected:
 
@@ -49,6 +40,6 @@ private:
 } // namespace gdx_cpp
 } // namespace scenes
 } // namespace scene2d
-} // namespace actors
+} // namespace ui
 
-#endif // GDX_CPP_SCENES_SCENE2D_ACTORS_CLICKLISTENER_HPP_
+#endif // GDX_CPP_SCENES_SCENE2D_UI_ALIGN_HPP_

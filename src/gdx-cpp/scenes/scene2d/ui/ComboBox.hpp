@@ -28,30 +28,40 @@ namespace ui {
 
 class ComboBox {
 public:
+    void setStyle (const ComboBoxStyle& style);
+    void setItems ();
     void layout ();
     void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
     bool touchDown (float x,float y,int pointer);
-    bool touchUp (float x,float y,int pointer);
-    bool touchDragged (float x,float y,int pointer);
+    void touchUp (float x,float y,int pointer);
+    void touchDragged (float x,float y,int pointer);
     void selected (const ComboBox& comboBox,int selectionIndex,const std::string& selection);
     void setSelectionListener (const SelectionListener& listener);
     void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
     bool touchDown (float x,float y,int pointer);
-    bool touchUp (float x,float y,int pointer);
-    bool touchDragged (float x,float y,int pointer);
+    void touchUp (float x,float y,int pointer);
+    void touchDragged (float x,float y,int pointer);
     bool touchMoved (float x,float y);
     gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
+    void act (float delta);
     void setSelection (int selection);
     int getSelectionIndex ();
     std::string& getSelection ();
-    void setEntries ();
-    NinePatch background;
-    NinePatch listBackground;
-    NinePatch listSelection;
-    BitmapFont font;
+    float getPrefWidth ();
+    float getPrefHeight ();
+    ComboBox (const gdx_cpp::scenes::scene2d::Stage& stage,const Skin& skin);
+    ComboBox (const gdx_cpp::scenes::scene2d::Stage& stage,const ComboBoxStyle& style);
+    ComboBox (const gdx_cpp::scenes::scene2d::Stage& stage,const ComboBoxStyle& style,const std::string& name);
 
 protected:
-
+    Stage stage ;
+    ComboBoxStyle style ;
+    String[] items ;
+    int selection = 0;
+    TextBounds bounds = new TextBounds();
+    Vector2 screenCoords = new Vector2();
+    ComboList list = null;
+    SelectionListener listener ;
 
 private:
     void layout ();

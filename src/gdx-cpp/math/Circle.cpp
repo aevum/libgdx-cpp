@@ -69,3 +69,11 @@ bool Circle::contains (const Vector2& point) {
     float _y = this->y - point.y;
     return _x * _x + _y * _y <= radius * radius;
 }
+
+void gdx_cpp::math::Circle::set(float x, float y, float radius)
+{
+    this->x = x;
+    this->y = y;
+    this->radius = radius;    
+}
+

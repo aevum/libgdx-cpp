@@ -22,45 +22,134 @@
 
 using namespace gdx_cpp::scenes::scene2d::ui;
 
+bool FlickScrollPane::pan (int x,int y,int deltaX,int deltaY) {
+    amountX -= deltaX;
+    amountY += deltaY;
+    clamp();
+    return false;
+}
+
+bool FlickScrollPane::fling (float x,float y) {
+    if (Math.abs(x) > 150) {
+        flingTimer = flingTime;
+        velocityX = x;
+    }
+    if (Math.abs(y) > 150) {
+        flingTimer = flingTime;
+        velocityY = -y;
+    }
+    return flingTimer > 0;
+}
+
+bool FlickScrollPane::touchDown (int x,int y,int pointer) {
+    flingTimer = 0;
+    return true;
+}
+
+bool FlickScrollPane::zoom (float originalDistance,float currentDistance) {
+    return false;
+}
+
+bool FlickScrollPane::tap (int x,int y,int count) {
+    return FlickScrollPane.this.tap(x, y);
+}
+
+bool FlickScrollPane::longPress (int x,int y) {
+    return false;
+}
+
+void FlickScrollPane::toLocalCoordinates (const gdx_cpp::scenes::scene2d::Actor& actor,const gdx_cpp::math::Vector2& point) {
+    if (actor.parent == this) return;
+    toLocalCoordinates(actor.parent, point);
+    Group.toChildCoordinates(actor, point.x, point.y, point);
+}
+
+void FlickScrollPane::act (float delta) {
+    if (flingTimer > 0) {
+        float alpha = flingTimer / flingTime;
+        alpha = alpha * alpha * alpha;
+        amountX -= velocityX * alpha * delta;
+        amountY -= velocityY * alpha * delta;
+        clamp();
+
+        // Stop fling if hit bounce distance.
+        if (amountX == -bounceDistance) velocityX = 0;
+        if (amountX >= maxX + bounceDistance) velocityX = 0;
+        if (amountY == -bounceDistance) velocityY = 0;
+        if (amountY >= maxY + bounceDistance) velocityY = 0;
+
+        flingTimer -= delta;
+    }
+
+    if (bounces && !gestureDetector.isPanning()) {
+        if (amountX < 0) {
+            amountX += (bounceSpeedMin + (bounceSpeedMax - bounceSpeedMin) * -amountX / bounceDistance) * delta;
+            if (amountX > 0) amountX = 0;
+        } else if (amountX > maxX) {
+            amountX -= (bounceSpeedMin + (bounceSpeedMax - bounceSpeedMin) * -(maxX - amountX) / bounceDistance) * delta;
+            if (amountX < maxX) amountX = maxX;
+        }
+        if (amountY < 0) {
+            amountY += (bounceSpeedMin + (bounceSpeedMax - bounceSpeedMin) * -amountY / bounceDistance) * delta;
+            if (amountY > 0) amountY = 0;
+        } else if (amountY > maxY) {
+            amountY -= (bounceSpeedMin + (bounceSpeedMax - bounceSpeedMin) * -(maxY - amountY) / bounceDistance) * delta;
+            if (amountY < maxY) amountY = maxY;
+        }
+    }
+}
+
 void FlickScrollPane::calculateBoundsAndPositions (const gdx_cpp::math::Matrix4& batchTransform) {
-    // get available space size by subtracting background's
-    // padded area
-    hasHScroll = false;
-    hasVScroll = false;
+    // Get widget's desired width.
+    float widgetWidth, widgetHeight;
+    if (widget instanceof Layout) {
+        Layout layout = (Layout)widget;
+        widgetWidth = layout.getPrefWidth();
+        widgetHeight = layout.getPrefHeight();
+    } else {
+        widgetWidth = widget.width;
+        widgetHeight = widget.height;
+    }
 
     // Figure out if we need horizontal/vertical scrollbars,
-    if (widget.width > width) hasHScroll = true;
-    if (widget.height > height) hasVScroll = true;
+    scrollX = widgetWidth > width || forceScrollX;
+    scrollY = widgetHeight > height || forceScrollY;
 
-    // Set the widget area bounds
+    // If the widget is smaller than the available space, make it take up the available space.
+    widgetWidth = Math.max(width, widgetWidth);
+    widgetHeight = Math.max(height, widgetHeight);
+    if (widget.width != widgetWidth || widget.height != widgetHeight) {
+        widget.width = widgetWidth;
+        widget.height = widgetHeight;
+        needsLayout = true;
+    }
+
+    // Set the widget area bounds.
     widgetAreaBounds.set(0, 0, width, height);
 
-    // Calculate the widgets offset depending on the scroll state and
-    // available widget area.
-    widget.y = -(!hasVScroll ? (int)(widget.height - height) : 0)
-               - (hasVScroll ? (int)((widget.height - height) * (1 - vScrollAmount)) : 0);
-    widget.x = -(hasHScroll ? (int)((widget.width - width) * hScrollAmount) : 0);
+    // Calculate the widgets offset depending on the scroll state and available widget area.
+    maxX = widget.width - width;
+    maxY = widget.height - height;
+    widget.y = (int)(scrollY ? amountY : maxY) - widget.height + height;
+    widget.x = -(int)(scrollX ? amountX : 0);
 
-    // Caculate the scissor bounds based on the batch transform,
-    // the available widget area and the camera transform. We
-    // need to project those to screen coordinates for OpenGL ES
-    // to consume. This is pretty freaking nasty...
+    // Caculate the scissor bounds based on the batch transform, the available widget area and the camera transform. We need to
+    // project those to screen coordinates for OpenGL ES to consume.
     ScissorStack.calculateScissors(stage.getCamera(), batchTransform, widgetAreaBounds, scissorBounds);
 }
 
 void FlickScrollPane::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
-    // setup transform for this group
-    setupTransform(batch);
+    if (widget == null) return;
 
-    // if invalidated layout!
-    if (invalidated) layout();
+    // Setup transform for this group.
+    applyTransform(batch);
 
-    // calculate the bounds for the scrollbars, the widget
-    // area and the scissor area. Nasty...
-    calculateBoundsAndPositions(batch.getTransformMatrix());
+    // Calculate the bounds for the scrollbars, the widget area and the scissor area.
+    calculateBoundsAndPositions(batch.getTransformMatrix()); // BOZO - Call every frame?
 
-    // enable scissors for widget area and draw that damn
-    // widget. Nasty #2
+    if (needsLayout) layout();
+
+    // Enable scissors for widget area and draw the widget.
     ScissorStack.pushScissors(scissorBounds);
     drawChildren(batch, parentAlpha);
     ScissorStack.popScissors();
@@ -69,257 +158,152 @@ void FlickScrollPane::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,flo
 }
 
 void FlickScrollPane::layout () {
+    if (!needsLayout) return;
+    needsLayout = false;
     if (widget instanceof Layout) {
         Layout layout = (Layout)widget;
-        widget.width = Math.max(width, layout.getPrefWidth());
-        widget.height = Math.max(height, layout.getPrefHeight());
         layout.invalidate();
         layout.layout();
     }
-    invalidated = false;
 }
 
 void FlickScrollPane::invalidate () {
-    if (widget instanceof Layout) ((Layout)widget).invalidate();
-    invalidated = true;
-}
-
-float FlickScrollPane::getPrefWidth () {
-    return prefWidth;
-}
-
-float FlickScrollPane::getPrefHeight () {
-    return prefHeight;
+    needsLayout = true;
 }
 
 bool FlickScrollPane::touchDown (float x,float y,int pointer) {
-    if (pointer != 0 || !touchable | hit(x, y) == null) {
-        Gdx.app.log("", "HERE d");
-        return false;
-    }
-    lastPoint.set(x, y);
-    scrolling = true;
-    scrollingStarted = System.currentTimeMillis();
-    scrollStartPoint.x = x;
-    scrollStartPoint.y = y;
-    focus(this, 0);
-    return true;
+    if (pointer != 0) return false;
+    if (emptySpaceOnlyScroll && super.touchDown(x, y, pointer)) return true;
+    return gestureDetector.touchDown((int)x, (int)y, pointer, 0);
 }
 
-bool FlickScrollPane::touchUp (float x,float y,int pointer) {
-
-    focus(null, 0);
-
-    if (pointer != 0) {
-        return false;
-    }
-
-    if (scrolling) {
-        scrolling = false;
-        long timetaken = System.currentTimeMillis() - scrollingStarted;
-        float diffx = Math.max(scrollStartPoint.x, x) - Math.min(scrollStartPoint.x, x);
-        float diffy = Math.max(scrollStartPoint.y, y) - Math.min(scrollStartPoint.y, y);
-
-        System.out.println(String.format("Scrolled for %dms, %f on x, %f on y ", timetaken, diffx, diffy));
-
-        if (vScrollAmount > 1f) {
-            smoothScrollTo(0, 1f);
-            return true;
-        }
-
-        else if (vScrollAmount < 0f) {
-            smoothScrollTo(0f, 0f);
-            return true;
-        }
-
-        if (diffx < 10 && diffy < 10) {
-            if (timetaken < 190) {
-                System.out.println("User has clicked");
-                Actor hitchild;
-for (Actor child : children) {
-
-                    Vector2 point = new Vector2();
-                    toChildCoordinates(child, x, y, point);
-
-                    if ((hitchild = child.hit(point.x, point.y)) != null) {
-                        hitchild.touchDown(point.x, point.y, pointer);
-                        hitchild.touchUp(point.x, point.y, pointer);
-
-                        Gdx.app.log("flick", hitchild.toString());
-
-                        return true;
-                    }
-                }
-            }
-        }
-
-        // fling
-
-        else {
-            float yaccel = diffy / timetaken;
-            float xaccel = diffx / timetaken;
-            System.out.println(String.format("y accel %f x accel %f", yaccel, xaccel));
-
-            if (yaccel > 1 || xaccel > 1) {
-                System.out.println("fling");
-
-                if (scrollStartPoint.y > y) {
-                    smoothScrollTo(hScrollAmount, (Math.max(vScrollAmount + (1 / widget.height) * -(diffy * 4), 0f)),
-                                   (int)(timetaken * 1.5));
-                } else {
-                    smoothScrollTo(hScrollAmount, Math.min(vScrollAmount + (1 / widget.height) * (diffy * 4), 1f),
-                                   (int)(timetaken * 1.5));
-                }
-
-                if (listener != null) {
-                    listener.onFlinged();
-                }
-            }
-        }
-
-        //
-
-        // if (scrolling) {
-        // focus(null, 0);
-        // scrolling = false;
-        // return true;
-        // } else
-
-    }
-
-    return super.touchUp(x, y, pointer);
-
+void FlickScrollPane::touchUp (float x,float y,int pointer) {
+    clamp();
+    gestureDetector.touchUp((int)x, (int)y, pointer, 0);
+    if (focusedActor[pointer] != null) super.touchUp(x, y, pointer);
 }
 
-bool FlickScrollPane::touchDragged (float x,float y,int pointer) {
-    if (pointer != 0 || !touchable) return false;
-    if (scrolling) {
-        if (hasHScroll) {
-            hScrollAmount -= (x - lastPoint.x) / (widget.width - width);
-            if (overscrolls) {
-                hScrollAmount = Math.max(0, hScrollAmount);
-                hScrollAmount = Math.min(1, hScrollAmount);
-            }
-        }
-
-        if (hasVScroll) {
-            vScrollAmount += (y - lastPoint.y) / (widget.height - height);
-            if (overscrolls) {
-                vScrollAmount = Math.max(0, vScrollAmount);
-                vScrollAmount = Math.min(1, vScrollAmount);
-            }
-        }
-        lastPoint.set(x, y);
-        return true;
-    }
-
-    Gdx.app.log("", "HERE dr!");
-
-    return false;
+void FlickScrollPane::touchDragged (float x,float y,int pointer) {
+    gestureDetector.touchDragged((int)x, (int)y, pointer);
+    super.touchDragged(x, y, pointer);
 }
 
 gdx_cpp::scenes::scene2d::Actor& FlickScrollPane::hit (float x,float y) {
     return x > 0 && x < width && y > 0 && y < height ? this : null;
 }
 
+void FlickScrollPane::setScrollX (float pixels) {
+    this.amountX = pixels;
+}
+
+float FlickScrollPane::getScrollX () {
+    return amountX;
+}
+
+void FlickScrollPane::setScrollY (float pixels) {
+    amountY = pixels;
+}
+
+float FlickScrollPane::getScrollY () {
+    return amountY;
+}
+
 void FlickScrollPane::setWidget (const gdx_cpp::scenes::scene2d::Actor& widget) {
-    if (widget == null) throw new IllegalArgumentException("widget must not be null");
-    this.removeActor(this.widget);
+    if (this.widget != null) removeActor(this.widget);
     this.widget = widget;
-    this.addActor(widget);
-    invalidate();
+    if (widget != null) addActor(widget);
 }
 
-void FlickScrollPane::scrollHorizontalTo (float scroll) {
-    Gdx.app.log("", "scrollHorizontalTo");
-    hScrollAmount = scroll;
+gdx_cpp::scenes::scene2d::Actor& FlickScrollPane::getWidget () {
+    return widget;
 }
 
-float FlickScrollPane::getHorizontalScrollAmount () {
-    return hScrollAmount;
+bool FlickScrollPane::isPanning () {
+    return gestureDetector.isPanning();
 }
 
-void FlickScrollPane::scrollVerticalTo (float scroll) {
-    vScrollAmount = scroll;
+float FlickScrollPane::getVelocityX () {
+    if (flingTimer <= 0) return 0;
+    float alpha = flingTimer / flingTime;
+    alpha = alpha * alpha * alpha;
+    return velocityX * alpha * alpha * alpha;
 }
 
-float FlickScrollPane::getVerticalScrollAmount () {
-    return vScrollAmount;
+float FlickScrollPane::getVelocityY () {
+    return velocityY;
 }
 
-void FlickScrollPane::smoothScrollTo (float horizontal,float vertical) {
-    smoothScrollTo(horizontal, vertical, SCROLLTIMEDEFAULT);
+float FlickScrollPane::getPrefWidth () {
+    return 150;
 }
 
-void FlickScrollPane::smoothScrollTo (float horizontal,float vertical,int duration) {
-
-    // Gdx.app.log("", String.format("hScrollAmount %f", hScrollAmount));
-    // Gdx.app.log("", String.format("hScrollAmount %f", horizontal));
-
-    smoothscrolldestx = horizontal;
-    smoothscrolldesty = vertical;
-    scrollstarth = hScrollAmount;
-    scrollstartv = vScrollAmount;
-    scrolledtime = 0;
-    scrolltime = duration;
-
+float FlickScrollPane::getPrefHeight () {
+    return 150;
 }
 
-void FlickScrollPane::cancelAnimation () {
-    smoothscrolldestx = -1;
-    smoothscrolldesty = -1;
+float FlickScrollPane::getMinWidth () {
+    return 0;
 }
 
-void FlickScrollPane::act (float delta) {
-    super.act(delta);
+float FlickScrollPane::getMinHeight () {
+    return 0;
+}
 
-    if (smoothscrolldestx != -1 && smoothscrolldesty != -1) {
+float FlickScrollPane::getMaxWidth () {
+    return 0;
+}
 
-        touchable = false;
+float FlickScrollPane::getMaxHeight () {
+    return 0;
+}
 
-        scrolledtime += (delta * 1000);
+FlickScrollPane::FlickScrollPane (const gdx_cpp::scenes::scene2d::Actor& widget,const gdx_cpp::scenes::scene2d::Stage& stage) {
+    this(widget, stage, null);
+}
 
-        float relscrolltime = ((float)1f / scrolltime) * scrolledtime;
+FlickScrollPane::FlickScrollPane (const gdx_cpp::scenes::scene2d::Actor& widget,const gdx_cpp::scenes::scene2d::Stage& stage,const std::string& name) {
+    super(name);
 
-        if (smoothscrolldestx > scrollstarth) {
-            // hScrollAmount += (((smoothscrolldestx - scrollstarth)) / scrolltime) * (delta * 1000);
+    this.stage = stage;
+    this.widget = widget;
+    if (widget != null) this.addActor(widget);
 
-            hScrollAmount = scrollstarth + (smoothscrolldestx - scrollstarth) * interpolator.getInterpolation(relscrolltime);
-        } else {
-            // hScrollAmount -= (((scrollstarth - smoothscrolldestx)) / scrolltime) * (delta * 1000);
-
-            hScrollAmount = scrollstarth - (scrollstarth - smoothscrolldestx) * interpolator.getInterpolation(relscrolltime);
-
+    gestureDetector = new GestureDetector(new GestureListener() {
+        public boolean pan (int x, int y, int deltaX, int deltaY) {
+            amountX -= deltaX;
+            amountY += deltaY;
+            clamp();
+            return false;
         }
 
-        if (smoothscrolldesty > scrollstartv) {
-            // vScrollAmount += (((smoothscrolldesty - scrollstartv)) / scrolltime) * (delta * 1000);
-            vScrollAmount = scrollstartv + (smoothscrolldesty - scrollstartv) * interpolator.getInterpolation(relscrolltime);
-        } else {
-            // vScrollAmount -= (((scrollstartv - smoothscrolldesty)) / scrolltime) * (delta * 1000);
-            vScrollAmount = scrollstartv - (scrollstartv - smoothscrolldesty) * interpolator.getInterpolation(relscrolltime);
-        }
-
-        // Gdx.app.log("", String.format("t %f h %f v %f", relscrolltime, hScrollAmount, vScrollAmount));
-
-        if (scrolledtime >= scrolltime) {
-            hScrollAmount = smoothscrolldestx;
-            vScrollAmount = smoothscrolldesty;
-            smoothscrolldestx = -1;
-            smoothscrolldesty = -1;
-            touchable = true;
-            scrolledtime = 0;
-            Gdx.app.log("", "SCROLL OVER");
-            if (listener != null) {
-                listener.onSmoothScrollComplete();
+        public boolean fling (float x, float y) {
+            if (Math.abs(x) > 150) {
+                flingTimer = flingTime;
+                velocityX = x;
             }
+            if (Math.abs(y) > 150) {
+                flingTimer = flingTime;
+                velocityY = -y;
+            }
+            return flingTimer > 0;
         }
 
-    }
+        public boolean touchDown (int x, int y, int pointer) {
+            flingTimer = 0;
+            return true;
+        }
 
-}
+        public boolean zoom (float originalDistance, float currentDistance) {
+            return false;
+        }
 
-void FlickScrollPane::setListener (const Listener& listener) {
-    this.listener = listener;
+        public boolean tap (int x, int y, int count) {
+            return FlickScrollPane.this.tap(x, y);
+        }
+
+        public boolean longPress (int x, int y) {
+            return false;
+        }
+    });
 }
 

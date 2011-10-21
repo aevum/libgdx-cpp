@@ -27,30 +27,51 @@ void ScrollPane::calculateBoundsAndPositions (const gdx_cpp::math::Matrix4& batc
     final NinePatch hScrollKnob = style.hScrollKnob;
     final NinePatch vScrollKnob = style.vScrollKnob;
 
-    // get available space size by subtracting background's
-    // padded area
+    // Get available space size by subtracting background's padded area.
     float areaWidth = width - background.getLeftWidth() - background.getRightWidth();
     float areaHeight = height - background.getTopHeight() - background.getBottomHeight();
-    hasHScroll = false;
-    hasVScroll = false;
+
+    // Get widget's desired width.
+    float widgetWidth, widgetHeight;
+    if (widget instanceof Layout) {
+        Layout layout = (Layout)widget;
+        widgetWidth = layout.getPrefWidth();
+        widgetHeight = layout.getPrefHeight();
+    } else {
+        widgetWidth = widget.width;
+        widgetHeight = widget.height;
+    }
 
     // Figure out if we need horizontal/vertical scrollbars,
-    if (widget.width > areaWidth) hasHScroll = true;
-    if (widget.height > areaHeight) hasVScroll = true;
+    hasHScroll = false;
+    hasVScroll = false;
+    if (widgetWidth > areaWidth) hasHScroll = true;
+    if (widgetHeight > areaHeight) hasVScroll = true;
 
-    // check again, now taking into account the area
-    // that's taken up by any enabled scrollbars
-    if (hasVScroll && (widget.width > areaWidth - vScrollKnob.getTotalWidth())) {
+    // Check again, now taking into account the area that's taken up by any enabled scrollbars.
+    if (hasVScroll && (widgetWidth > areaWidth - vScrollKnob.getTotalWidth())) {
         hasHScroll = true;
         areaWidth -= vScrollKnob.getTotalWidth();
     }
-    if (hasHScroll && (widget.height > areaHeight - hScrollKnob.getTotalHeight())) {
+    if (hasHScroll && (widgetHeight > areaHeight - hScrollKnob.getTotalHeight())) {
         hasVScroll = true;
         areaHeight -= hScrollKnob.getTotalHeight();
     }
 
-    // now we know what scrollbars we need, set the bounds and
-    // scroll knob sizes accordingly
+    // If the widget is smaller than the available space, make it take up the available space.
+    widgetWidth = Math.max(areaWidth, widgetWidth);
+    widgetHeight = Math.max(areaHeight, widgetHeight);
+    if (widget.width != widgetWidth || widget.height != widgetHeight) {
+        widget.width = widgetWidth;
+        widget.height = widgetHeight;
+        if (widget instanceof Layout) {
+            Layout layout = (Layout)widget;
+            layout.invalidate();
+            layout.layout();
+        }
+    }
+
+    // Set the bounds and scroll knob sizes if scrollbars are needed.
     if (hasHScroll) {
         hScrollBounds.set(background.getLeftWidth(), background.getBottomHeight(), areaWidth, hScrollKnob.getTotalHeight());
         hScrollKnobBounds.width = Math.max(hScrollKnob.getTotalWidth(), (int)(hScrollBounds.width * areaWidth / widget.width));
@@ -70,20 +91,17 @@ void ScrollPane::calculateBoundsAndPositions (const gdx_cpp::math::Matrix4& batc
         vScrollKnobBounds.y = vScrollBounds.y + (int)((vScrollBounds.height - vScrollKnobBounds.height) * (1 - vScrollAmount));
     }
 
-    // Set the widget area bounds
+    // Set the widget area bounds.
     widgetAreaBounds.set(background.getLeftWidth(), background.getBottomHeight()
                          + (hasHScroll ? hScrollKnob.getTotalHeight() : 0), areaWidth, areaHeight);
 
-    // Calculate the widgets offset depending on the scroll state and
-    // available widget area.
+    // Calculate the widgets offset depending on the scroll state and available widget area.
     widget.y = widgetAreaBounds.y - (!hasVScroll ? (int)(widget.height - areaHeight) : 0)
                - (hasVScroll ? (int)((widget.height - areaHeight) * (1 - vScrollAmount)) : 0);
     widget.x = widgetAreaBounds.x - (hasHScroll ? (int)((widget.width - areaWidth) * hScrollAmount) : 0);
 
-    // Caculate the scissor bounds based on the batch transform,
-    // the available widget area and the camera transform. We
-    // need to project those to screen coordinates for OpenGL ES
-    // to consume. This is pretty freaking nasty...
+    // Caculate the scissor bounds based on the batch transform, the available widget area and the camera transform. We need to
+    // project those to screen coordinates for OpenGL ES to consume.
     ScissorStack.calculateScissors(stage.getCamera(), batchTransform, widgetAreaBounds, scissorBounds);
 }
 
@@ -94,27 +112,23 @@ void ScrollPane::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float pa
     final NinePatch vScrollKnob = style.vScrollKnob;
     final NinePatch vScroll = style.vScroll;
 
-    // setup transform for this group
-    setupTransform(batch);
+    // Setup transform for this group.
+    applyTransform(batch);
 
-    // if invalidated layout!
-    if (invalidated) layout();
-
-    // calculate the bounds for the scrollbars, the widget
-    // area and the scissor area. Nasty...
+    // Calculate the bounds for the scrollbars, the widget area and the scissor area.
     calculateBoundsAndPositions(batch.getTransformMatrix());
 
-    // first draw the background ninepatch
+    // Draw the background ninepatch.
     batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
     background.draw(batch, 0, 0, width, height);
+    batch.flush();
 
-    // enable scissors for widget area and draw that damn
-    // widget. Nasty #2
+    // Enable scissors for widget area and draw the widget.
     ScissorStack.pushScissors(scissorBounds);
     drawChildren(batch, parentAlpha);
     ScissorStack.popScissors();
 
-    // render scrollbars and knobs on top.
+    // Render scrollbars and knobs on top.
     batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
     if (hasHScroll) {
         hScroll.draw(batch, hScrollBounds.x, hScrollBounds.y, hScrollBounds.width, hScrollBounds.height);
@@ -129,27 +143,33 @@ void ScrollPane::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float pa
 }
 
 void ScrollPane::layout () {
-    if (widget instanceof Layout) {
-        Layout layout = (Layout)widget;
-        widget.width = Math.max(width, layout.getPrefWidth());
-        widget.height = Math.max(height, layout.getPrefHeight());
-        layout.invalidate();
-        layout.layout();
-    }
-    invalidated = false;
 }
 
 void ScrollPane::invalidate () {
-    if (widget instanceof Layout) ((Layout)widget).invalidate();
-    invalidated = true;
 }
 
 float ScrollPane::getPrefWidth () {
-    return prefWidth;
+    return 150;
 }
 
 float ScrollPane::getPrefHeight () {
-    return prefHeight;
+    return 150;
+}
+
+float ScrollPane::getMinWidth () {
+    return 0;
+}
+
+float ScrollPane::getMinHeight () {
+    return 0;
+}
+
+float ScrollPane::getMaxWidth () {
+    return 0;
+}
+
+float ScrollPane::getMaxHeight () {
+    return 0;
 }
 
 bool ScrollPane::touchDown (float x,float y,int pointer) {
@@ -160,7 +180,6 @@ bool ScrollPane::touchDown (float x,float y,int pointer) {
             lastPoint.set(x, y);
             handlePos = hScrollKnobBounds.x;
             touchScrollH = true;
-            focus(this, 0);
         } else {
             if (x < hScrollKnobBounds.x) {
                 hScrollAmount = Math.max(0, hScrollAmount - 0.1f);
@@ -174,7 +193,6 @@ bool ScrollPane::touchDown (float x,float y,int pointer) {
             lastPoint.set(x, y);
             handlePos = vScrollKnobBounds.y;
             touchScrollV = true;
-            focus(this, 0);
         } else {
             if (y < vScrollKnobBounds.y) {
                 vScrollAmount = Math.min(1, vScrollAmount + 0.1f);
@@ -189,19 +207,16 @@ bool ScrollPane::touchDown (float x,float y,int pointer) {
         return false;
 }
 
-bool ScrollPane::touchUp (float x,float y,int pointer) {
-    if (pointer != 0) return false;
+void ScrollPane::touchUp (float x,float y,int pointer) {
     if (touchScrollH || touchScrollV) {
-        focus(null, 0);
         touchScrollH = false;
         touchScrollV = false;
-        return true;
-    } else
-        return super.touchUp(x, y, pointer);
+        return;
+    }
+    if (focusedActor[pointer] != null) super.touchUp(x, y, pointer);
 }
 
-bool ScrollPane::touchDragged (float x,float y,int pointer) {
-    if (pointer != 0) return false;
+void ScrollPane::touchDragged (float x,float y,int pointer) {
     if (touchScrollH) {
         float delta = x - lastPoint.x;
         float scrollH = handlePos + delta;
@@ -210,7 +225,6 @@ bool ScrollPane::touchDragged (float x,float y,int pointer) {
         scrollH = Math.min(hScrollBounds.x + hScrollBounds.width - hScrollKnobBounds.width, scrollH);
         hScrollAmount = (scrollH - hScrollBounds.x) / (hScrollBounds.width - hScrollKnobBounds.width);
         lastPoint.set(x, y);
-        return true;
     } else if (touchScrollV) {
         float delta = y - lastPoint.y;
         float scrollV = handlePos + delta;
@@ -219,13 +233,20 @@ bool ScrollPane::touchDragged (float x,float y,int pointer) {
         scrollV = Math.min(vScrollBounds.y + vScrollBounds.height - vScrollKnobBounds.height, scrollV);
         vScrollAmount = 1 - ((scrollV - vScrollBounds.y) / (vScrollBounds.height - vScrollKnobBounds.height));
         lastPoint.set(x, y);
-        return true;
     } else
-        return super.touchDragged(x, y, pointer);
+        super.touchDragged(x, y, pointer);
 }
 
 gdx_cpp::scenes::scene2d::Actor& ScrollPane::hit (float x,float y) {
     return x > 0 && x < width && y > 0 && y < height ? this : null;
+}
+
+void ScrollPane::setVScrollAmount (float vScrollAmount) {
+    this.vScrollAmount = vScrollAmount;
+}
+
+void ScrollPane::setHScrollAmount (float hScrollAmount) {
+    this.hScrollAmount = hScrollAmount;
 }
 
 void ScrollPane::setWidget (const gdx_cpp::scenes::scene2d::Actor& widget) {
@@ -234,5 +255,22 @@ void ScrollPane::setWidget (const gdx_cpp::scenes::scene2d::Actor& widget) {
     this.widget = widget;
     this.addActor(widget);
     invalidate();
+}
+
+ScrollPane::ScrollPane (const gdx_cpp::scenes::scene2d::Actor& widget,const gdx_cpp::scenes::scene2d::Stage& stage,const Skin& skin) {
+    this(widget, stage, skin.getStyle(ScrollPaneStyle.class), null);
+}
+
+ScrollPane::ScrollPane (const gdx_cpp::scenes::scene2d::Actor& widget,const gdx_cpp::scenes::scene2d::Stage& stage,const ScrollPaneStyle& style) {
+    this(widget, stage, style, null);
+}
+
+ScrollPane::ScrollPane (const gdx_cpp::scenes::scene2d::Actor& widget,const gdx_cpp::scenes::scene2d::Stage& stage,const ScrollPaneStyle& style,const std::string& name) {
+    super(name);
+    this.widget = widget;
+    this.stage = stage;
+    this.style = style;
+    addActor(widget);
+    layout();
 }
 

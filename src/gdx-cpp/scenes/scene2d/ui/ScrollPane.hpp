@@ -33,19 +33,39 @@ public:
     void invalidate ();
     float getPrefWidth ();
     float getPrefHeight ();
+    float getMinWidth ();
+    float getMinHeight ();
+    float getMaxWidth ();
+    float getMaxHeight ();
     bool touchDown (float x,float y,int pointer);
-    bool touchUp (float x,float y,int pointer);
-    bool touchDragged (float x,float y,int pointer);
+    void touchUp (float x,float y,int pointer);
+    void touchDragged (float x,float y,int pointer);
     gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
+    void setVScrollAmount (float vScrollAmount);
+    void setHScrollAmount (float hScrollAmount);
     void setWidget (const gdx_cpp::scenes::scene2d::Actor& widget);
-    NinePatch background;
-    NinePatch hScroll;
-    NinePatch hScrollKnob;
-    NinePatch vScroll;
-    NinePatch vScrollKnob;
+    ScrollPane (const gdx_cpp::scenes::scene2d::Actor& widget,const gdx_cpp::scenes::scene2d::Stage& stage,const Skin& skin);
+    ScrollPane (const gdx_cpp::scenes::scene2d::Actor& widget,const gdx_cpp::scenes::scene2d::Stage& stage,const ScrollPaneStyle& style);
+    ScrollPane (const gdx_cpp::scenes::scene2d::Actor& widget,const gdx_cpp::scenes::scene2d::Stage& stage,const ScrollPaneStyle& style,const std::string& name);
 
 protected:
-
+    ScrollPaneStyle style ;
+    Actor widget ;
+    Stage stage ;
+    Rectangle hScrollBounds = new Rectangle();
+    Rectangle vScrollBounds = new Rectangle();
+    Rectangle hScrollKnobBounds = new Rectangle();
+    Rectangle vScrollKnobBounds = new Rectangle();
+    Rectangle widgetAreaBounds = new Rectangle();
+    Rectangle scissorBounds = new Rectangle();
+    float hScrollAmount = 0;
+    float vScrollAmount = 0;
+    boolean hasHScroll = false;
+    boolean hasVScroll = false;
+    boolean touchScrollH = false;
+    boolean touchScrollV = false;
+    Vector2 lastPoint = new Vector2();
+    Vector3 tmp = new Vector3();
 
 private:
     void calculateBoundsAndPositions (const gdx_cpp::math::Matrix4& batchTransform);

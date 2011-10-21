@@ -21,17 +21,19 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_TEMPORALACTION_HPP_
 #define GDX_CPP_SCENES_SCENE2D_TEMPORALACTION_HPP_
 
+#include "Action.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
 
-class TemporalAction {
+class TemporalAction : public Action {
 public:
     Action& getAction ();
 
 protected:
-
-
+    Action action;
+    Actor target;
 private:
 
 };

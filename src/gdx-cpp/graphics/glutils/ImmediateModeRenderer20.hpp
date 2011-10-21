@@ -21,14 +21,16 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_IMMEDIATEMODERENDERER20_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_IMMEDIATEMODERENDERER20_HPP_
 
+#include "ImmediateModeRenderer.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 namespace glutils {
 
-class ImmediateModeRenderer20 {
+class ImmediateModeRenderer20 : public ImmediateModeRenderer{
 public:
     std::string& createVertexShader (bool hasNormals,bool hasColors,int numTexCoords);
-    void begin (const gdx_cpp::math::Matrix4& projModelView,int primitiveType);
+    void begin (const gdx_cpp::math::Matrix4& projModelView, int primitiveType);
     void begin (const ShaderProgram& shader,int primitiveType);
     void color (float r,float g,float b,float a);
     void texCoord (float u,float v);
@@ -36,13 +38,14 @@ public:
     void vertex (float x,float y,float z);
     void end ();
     int getNumVertices ();
-
-protected:
-
+    int getMaxVertices();
+    void dispose();
 
 private:
     gdx_cpp::graphics::VertexAttribute* buildVertexAttributes (bool hasNormals,bool hasColor,int numTexCoords);
     std::string& createFragmentShader (bool hasNormals,bool hasColors,int numTexCoords);
+    int maxVertices;
+    int numVertices;
 };
 
 } // namespace gdx_cpp

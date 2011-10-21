@@ -46,12 +46,15 @@ public:
     void addDebugRectangle (const TableLayout& layout,int type,int x,int y,int w,int h);
     void registerFont (const std::string& name,const gdx_cpp::graphics::g2d::BitmapFont& font);
     gdx_cpp::graphics::g2d::BitmapFont& getFont (const std::string& name);
+    LibgdxToolkit instance = new LibgdxToolkit();
+    BitmapFont defaultFont ;
 
 protected:
-
+    OR SERVICES ;
+    OR PROFITS ;
 
 private:
-
+    HashMap<String, BitmapFont> fonts = new HashMap();
 };
 
 } // namespace gdx_cpp

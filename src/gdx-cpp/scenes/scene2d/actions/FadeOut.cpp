@@ -22,42 +22,48 @@
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-FadeOut& FadeOut::newObject () {
-    return new FadeOut();
-}
+ActionResetingPool<FadeOut*> FadeOut::pool = ActionResetingPool<FadeOut*>(4, 100);
 
-FadeOut& FadeOut::$ (float duration) {
-    FadeOut action = pool.obtain();
-    action.duration = duration;
-    action.invDuration = 1 / duration;
+FadeOut* FadeOut::operator()(float duration)
+{
+    FadeOut* action = pool.obtain();
+    action->duration = duration;
+    action->invDuration = 1 / duration;
     return action;
 }
 
 void FadeOut::setTarget (const gdx_cpp::scenes::scene2d::Actor& actor) {
-    this.target = actor;
-    this.startAlpha = this.target.color.a;
-    this.deltaAlpha = -this.target.color.a;
-    this.taken = 0;
-    this.done = false;
+    this->target = actor;
+    this->startAlpha = target->color.a;
+    this->deltaAlpha = -target->color.a;
+    this->taken = 0;
+    this->done = false;
 }
 
 void FadeOut::act (float delta) {
     float alpha = createInterpolatedAlpha(delta);
     if (done) {
-        target.color.a = 0.0f;
+        target->color.a = 0.0f;
     } else {
-        target.color.a = startAlpha + deltaAlpha * alpha;
+        target->color.a = startAlpha + deltaAlpha * alpha;
     }
 }
 
 void FadeOut::finish () {
-    super.finish();
+    AnimationAction::finish();
     pool.free(this);
 }
 
 gdx_cpp::scenes::scene2d::Action& FadeOut::copy () {
-    FadeOut fadeOut = $(duration);
-    if (interpolator != null) fadeOut.setInterpolator(interpolator.copy());
+    FadeOut* fadeOut = FadeOut(duration);
+    if (interpolator != NULL) fadeOut->setInterpolator(interpolator->copy());
     return fadeOut;
 }
+
+gdx_cpp::scenes::scene2d::actions::FadeOut::FadeOut()
+: startAlpha(0)
+, deltaAlpha(0)
+{
+}
+
 

@@ -144,6 +144,10 @@ struct buffer : public buffer_base {
         return ((T*)bf.get())[checkIndex(position)];
     }
 
+    void eraseBuffer() {
+        memset(bf.get(), 0, sizeof(T) * _capacity);
+    }
+    
     buffer<T>& position(int newPosition) {
         if ((newPosition > _limit) || (newPosition < 0))
             throw std::runtime_error("");

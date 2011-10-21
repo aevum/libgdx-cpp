@@ -22,7 +22,7 @@
 
 using namespace gdx_cpp::scenes::scene2d;
 
-ArrayList<Action>& CompositeAction::getActions () {
+std::vector< Action* > CompositeAction::getActions () {
     return actions;
 }
 

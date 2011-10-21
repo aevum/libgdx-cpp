@@ -22,6 +22,7 @@
 #define GDX_CPP_GRAPHICS_GLUTILS_IMMEDIATEMODERENDERER10_HPP_
 
 #include "gdx-cpp/utils/Buffer.hpp"
+#include "ImmediateModeRenderer.hpp"
 
 namespace gdx_cpp {
 namespace math {
@@ -31,7 +32,7 @@ class Vector3;
 namespace graphics {
 namespace glutils {
 
-class ImmediateModeRenderer10 {
+class ImmediateModeRenderer10 : public ImmediateModeRenderer {
 public:
     ImmediateModeRenderer10(int maxVertices = 2000);
     ~ImmediateModeRenderer10();
@@ -44,7 +45,8 @@ public:
     int getNumVertices ();
     void end ();
     void vertex (const gdx_cpp::math::Vector3& point);
-
+    int getMaxVertices();
+    void dispose();
 protected:
 
 
@@ -60,13 +62,14 @@ private:
     float* texCoords;
     gdx_cpp::utils::float_buffer  texCoordsBuffer;
 
-
     int primitiveType;
     int idxPos;
     int idxCols;
     int idxNors;
     int idxTexCoords;
-
+    int maxVertices;
+    int numVertices;
+    
     bool hasCols;
     bool hasNors;
     bool hasTexCoords;

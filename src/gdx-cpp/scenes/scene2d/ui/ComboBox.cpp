@@ -22,17 +22,31 @@
 
 using namespace gdx_cpp::scenes::scene2d::ui;
 
-void ComboBox::layout () {
-    final NinePatch background = style.background;
-    final BitmapFont font = style.font;
+void ComboBox::setStyle (const ComboBoxStyle& style) {
+    this.style = style;
+    if (items != null) setItems(items);
+}
 
-    prefHeight = background.getTotalHeight();
+void ComboBox::setItems () {
+    if (items == null) throw new IllegalArgumentException("items cannot be null.");
+    this.items = items;
+
+    NinePatch background = style.background;
+    BitmapFont font = style.font;
+
+    prefHeight = Math.max(background.getTopHeight() + background.getBottomHeight() + font.getCapHeight() - font.getDescent()
+                          * 2, background.getTotalHeight());
+
     float max = 0;
-    for (int i = 0; i < entries.length; i++) {
-        max = Math.max(font.getBounds(entries[i]).width, max);
-    }
+    for (int i = 0; i < items.length; i++)
+        max = Math.max(font.getBounds(items[i]).width, max);
     prefWidth = background.getLeftWidth() + background.getRightWidth() + max;
-    invalidated = false;
+
+    width = prefWidth;
+    height = prefHeight;
+}
+
+void ComboBox::layout () {
 }
 
 void ComboBox::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
@@ -40,18 +54,15 @@ void ComboBox::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float pare
     final BitmapFont font = style.font;
     final Color fontColor = style.fontColor;
 
-    if (invalidated) layout();
-
     batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
     background.draw(batch, x, y, width, height);
-    if (entries.length > 0) {
+    if (items.length > 0) {
         float availableWidth = width - background.getLeftWidth() - background.getRightWidth();
-        int numGlyphs = font.computeVisibleGlyphs(entries[selection], 0, entries[selection].length(), availableWidth);
-        bounds.set(font.getBounds(entries[selection]));
-        bounds.height -= font.getDescent();
+        int numGlyphs = font.computeVisibleGlyphs(items[selection], 0, items[selection].length(), availableWidth);
+        bounds.set(font.getBounds(items[selection]));
         float textY = (int)(height / 2) + (int)(bounds.height / 2);
         font.setColor(fontColor.r, fontColor.g, fontColor.b, fontColor.a * parentAlpha);
-        font.draw(batch, entries[selection], x + background.getLeftWidth(), y + textY, 0, numGlyphs);
+        font.draw(batch, items[selection], x + background.getLeftWidth(), y + textY, 0, numGlyphs);
     }
 
     // calculate screen coords where list should be displayed
@@ -60,22 +71,18 @@ void ComboBox::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float pare
 
 bool ComboBox::touchDown (float x,float y,int pointer) {
     if (pointer != 0) return false;
-    if (hit(x, y) != null) {
-        if (list != null) stage.removeActor(list);
-        stage.toStageCoordinates((int)screenCoords.x, (int)screenCoords.y, stageCoords);
-        list = new ComboList(this.name + "-list", stageCoords.x, stageCoords.y);
-        stage.addActor(list);
-        return true;
-    }
-    return false;
+    if (list != null) stage.removeActor(list);
+    stage.toStageCoordinates((int)screenCoords.x, (int)screenCoords.y, stageCoords);
+    list = new ComboList(this.name + "-list", stageCoords.x, stageCoords.y);
+    stage.addActor(list);
+    return true;
 }
 
-bool ComboBox::touchUp (float x,float y,int pointer) {
-    return false;
+void ComboBox::touchUp (float x,float y,int pointer) {
+    stage.getRoot().focus(list, pointer);
 }
 
-bool ComboBox::touchDragged (float x,float y,int pointer) {
-    return false;
+void ComboBox::touchDragged (float x,float y,int pointer) {
 }
 
 void ComboBox::selected (const ComboBox& comboBox,int selectionIndex,const std::string& selection);
@@ -89,7 +96,7 @@ public void setSelectionListener (SelectionListener listener) {
 
 protected class ComboList extends Actor {
     Vector2 oldScreenCoords = new Vector2();
-    float entryHeight = 0;
+    float itemHeight = 0;
     float textOffsetX = 0;
     float textOffsetY = 0;
     int selected = ComboBox.this.selection;
@@ -116,20 +123,20 @@ protected class ComboList extends Actor {
         float prefWidth = 0;
         float prefHeight = 0;
 
-        for (int i = 0; i < entries.length; i++) {
-            String entry = entries[i];
-            TextBounds bounds = font.getBounds(entry);
+        for (int i = 0; i < items.length; i++) {
+            String item = items[i];
+            TextBounds bounds = font.getBounds(item);
             prefWidth = Math.max(bounds.width, prefWidth);
 
         }
 
-        entryHeight = font.getLineHeight() - font.getDescent();
-        entryHeight += listSelection.getTopHeight() + listSelection.getBottomHeight();
-        entryHeight *= ComboBox.this.parent.scaleY;
+        itemHeight = font.getCapHeight() + -font.getDescent() * 2;
+        itemHeight += listSelection.getTopHeight() + listSelection.getBottomHeight();
+        itemHeight *= ComboBox.this.parent.scaleY;
         prefWidth += listSelection.getLeftWidth() + listSelection.getRightWidth();
-        prefHeight = entries.length * entryHeight;
+        prefHeight = items.length * itemHeight;
         textOffsetX = listSelection.getLeftWidth();
-        textOffsetY = listSelection.getTopHeight() - font.getDescent();
+        textOffsetY = listSelection.getTopHeight() + -font.getDescent();
 
         width = Math.max(prefWidth, ComboBox.this.width);
         width *= ComboBox.this.parent.scaleX;
@@ -146,57 +153,52 @@ protected class ComboList extends Actor {
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
         listBackground.draw(batch, x, y, width, height);
         float posY = height;
-        for (int i = 0; i < entries.length; i++) {
+        for (int i = 0; i < items.length; i++) {
             if (selected == i) {
-                listSelection.draw(batch, x, y + posY - entryHeight, width, entryHeight);
+                listSelection.draw(batch, x, y + posY - itemHeight, width, itemHeight);
             }
             font.setColor(fontColor.r, fontColor.g, fontColor.b, fontColor.a * parentAlpha);
             font.setScale(ComboBox.this.parent.scaleX, ComboBox.this.parent.scaleY);
-            font.draw(batch, entries[i], x + textOffsetX, y + posY - textOffsetY);
+            font.draw(batch, items[i], x + textOffsetX, y + posY - textOffsetY);
             font.setScale(1, 1);
-            posY -= entryHeight;
-        }
-
-        if (screenCoords.x != oldScreenCoords.x || screenCoords.y != oldScreenCoords.y) {
-            stage.removeActor(this);
+            posY -= itemHeight;
         }
     }
 
     bool ComboBox::touchDown (float x,float y,int pointer) {
-        if (pointer != 0) return false;
-        if (hit(x, y) != null) {
-            selected = (int)((height - y) / entryHeight);
-            selected = Math.max(0, selected);
-            selected = Math.min(entries.length - 1, selected);
-            selection = selected;
-            if (entries.length > 0 && listener != null) listener.selected(ComboBox.this, selected, entries[selected]);
-        }
+        if (pointer != 0 || hit(x, y) == null) return false;
+        selected = (int)((height - y) / itemHeight);
+        selected = Math.max(0, selected);
+        selected = Math.min(items.length - 1, selected);
+        selection = selected;
+        if (items.length > 0 && listener != null) listener.selected(ComboBox.this, selected, items[selected]);
         return true;
     }
 
-    bool ComboBox::touchUp (float x,float y,int pointer) {
-        if (firstUp) {
-            stage.removeActor(this);
-        } else
-            firstUp = true;
-        return true;
+    void ComboBox::touchUp (float x,float y,int pointer) {
+        stage.removeActor(this);
     }
 
-    bool ComboBox::touchDragged (float x,float y,int pointer) {
-        return true;
+    void ComboBox::touchDragged (float x,float y,int pointer) {
     }
 
     bool ComboBox::touchMoved (float x,float y) {
         if (hit(x, y) != null) {
-            selected = (int)((height - y) / entryHeight);
+            selected = (int)((height - y) / itemHeight);
             selected = Math.max(0, selected);
-            selected = Math.min(entries.length - 1, selected);
+            selected = Math.min(items.length - 1, selected);
         }
         return true;
     }
 
     gdx_cpp::scenes::scene2d::Actor& ComboBox::hit (float x,float y) {
         return x > 0 && x < width && y > 0 && y < height ? this : null;
+    }
+
+    void ComboBox::act (float delta) {
+        if (screenCoords.x != oldScreenCoords.x || screenCoords.y != oldScreenCoords.y) {
+            stage.removeActor(this);
+        }
     }
 
     void ComboBox::setSelection (int selection) {
@@ -208,11 +210,30 @@ protected class ComboList extends Actor {
     }
 
     std::string& ComboBox::getSelection () {
-        return entries[selection];
+        return items[selection];
     }
 
-    void ComboBox::setEntries () {
-        this.entries = entries;
-        invalidateHierarchy();
+    float ComboBox::getPrefWidth () {
+        return prefWidth;
+    }
+
+    float ComboBox::getPrefHeight () {
+        return prefHeight;
+    }
+
+    ComboBox::ComboBox (const gdx_cpp::scenes::scene2d::Stage& stage,const Skin& skin) {
+        this(items, stage, skin.getStyle(ComboBoxStyle.class), null);
+    }
+
+    ComboBox::ComboBox (const gdx_cpp::scenes::scene2d::Stage& stage,const ComboBoxStyle& style) {
+        this(items, stage, style, null);
+    }
+
+    ComboBox::ComboBox (const gdx_cpp::scenes::scene2d::Stage& stage,const ComboBoxStyle& style,const std::string& name) {
+        super(name);
+        setStyle(style);
+        setItems(items);
+        this.stage = stage;
+        layout();
     }
 

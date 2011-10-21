@@ -30,9 +30,13 @@ class Image: public gdx_cpp::scenes::scene2d::Actor {
 public:
     void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
     bool touchDown (float x,float y,int pointer);
-    bool touchUp (float x,float y,int pointer);
-    bool touchDragged (float x,float y,int pointer);
+    void touchUp (float x,float y,int pointer);
+    void touchDragged (float x,float y,int pointer);
     gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
+    Image (const std::string& name);
+    Image (const std::string& name,const gdx_cpp::graphics::Texture& texture);
+    Image (const std::string& name,const gdx_cpp::graphics::g2d::TextureRegion& region);
+    TextureRegion region = null;
 
 protected:
 

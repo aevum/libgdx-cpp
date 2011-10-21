@@ -33,12 +33,19 @@ public:
     void invalidate ();
     float getPrefWidth ();
     float getPrefHeight ();
+    float getMaxWidth ();
+    float getMaxHeight ();
+    float getMinWidth ();
+    float getMinHeight ();
+    Stack ();
+    Stack (const std::string& name);
 
 protected:
-
+    OR SERVICES ;
+    OR PROFITS ;
 
 private:
-
+    boolean needsLayout = true;
 };
 
 } // namespace gdx_cpp

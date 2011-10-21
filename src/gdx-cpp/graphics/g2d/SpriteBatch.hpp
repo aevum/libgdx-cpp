@@ -72,7 +72,8 @@ public:
     void setTransformMatrix (const gdx_cpp::math::Matrix4& transform);
     void setShader (gdx_cpp::graphics::glutils::ShaderProgram* shader);
     bool isBlendingEnabled ();
-
+    void setTransformMatrix(math::Matrix4& transform);
+    void setProjectionMatrix(math::Matrix4& projection);
     int renderCalls;
     int maxSpritesInBatch;
 
@@ -105,6 +106,8 @@ private:
     bool blendingDisabled ;
     int blendSrcFunc;
     int blendDstFunc;
+
+    void setupMatrices();
     
     glutils::ShaderProgram *shader;
     Color tempColor;

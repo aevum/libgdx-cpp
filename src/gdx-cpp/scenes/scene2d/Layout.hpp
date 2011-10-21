@@ -29,14 +29,12 @@ class Layout {
 public:
     virtual   void layout () = 0;
     virtual   void invalidate () = 0;
+    virtual   float getMinWidth () = 0;
+    virtual   float getMinHeight () = 0;
     virtual   float getPrefWidth () = 0;
     virtual   float getPrefHeight () = 0;
-
-protected:
-
-
-private:
-
+    virtual   float getMaxWidth () = 0;
+    virtual   float getMaxHeight () = 0;
 };
 
 } // namespace gdx_cpp

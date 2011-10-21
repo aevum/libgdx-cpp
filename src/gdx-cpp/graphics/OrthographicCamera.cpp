@@ -23,6 +23,7 @@
 
 #include "gdx-cpp/math/Vector2.hpp"
 #include "gdx-cpp/math/MathUtils.hpp"
+#include "gdx-cpp/Gdx.hpp"
 
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
@@ -101,3 +102,22 @@ void OrthographicCamera::update () {
     frustum.update(invProjectionView);
 }
 
+
+void OrthographicCamera::setToOrtho(bool yDown)
+{
+    setToOrtho(yDown, gdx_cpp::Gdx::graphics.getWidth(), Gdx.graphics.getHeight());
+}
+
+void OrthographicCamera::setToOrtho(bool yDown, float viewportWidth, float viewportHeight)
+{
+  if (yDown) {
+        up.set(0, -1, 0);
+        direction.set(0, 0, 1);
+    }
+    this->viewportWidth = viewportWidth;
+    this->viewportHeight = viewportHeight;
+    
+    position.set(viewportWidth / 2.0f, viewportHeight / 2.0f, 0);
+    update();
+}
+    

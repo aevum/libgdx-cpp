@@ -21,23 +21,31 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ANIMATIONACTION_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ANIMATIONACTION_HPP_
 
+#include "Action.hpp"
+#include "Interpolator.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
 
-class AnimationAction {
+class Actor;
+
+class AnimationAction: public Action {
 public:
     bool isDone ();
     void finish ();
-    AnimationAction& setInterpolator (const Interpolator& interpolator);
-    Actor& getTarget ();
+    AnimationAction& setInterpolator (const gdx_cpp::scenes::scene2d::Interpolator* interpolator);
+    Actor* getTarget ();
     void reset ();
 
 protected:
     float createInterpolatedAlpha (float delta);
-
-private:
-
+    float duration;
+    float invDuration;
+    float taken;
+    Actor* target;
+    bool done;
+    Interpolator* interpolator;
 };
 
 } // namespace gdx_cpp

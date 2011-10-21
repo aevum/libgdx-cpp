@@ -166,8 +166,8 @@ float Matrix3::det() {
 Matrix3& Matrix3::inv() {
     float _det = det();
     if (_det == 0) {
-      gdx_cpp::Gdx::app->error("Matrix3.cpp", "Can't invert a singular matrix");
-      assert(false);
+        gdx_cpp::Gdx::app->error("Matrix3.cpp", "Can't invert a singular matrix");
+        assert(false);
     }
 
     float inv_det = 1.0f / _det;
@@ -225,8 +225,83 @@ float* Matrix3::getValues() {
     return vals;
 }
 
+void gdx_cpp::math::Matrix3::translate(float x, float y)
+{
+    tmp[0] = 1;
+    tmp[1] = 0;
+    tmp[2] = 0;
 
+    tmp[3] = 0;
+    tmp[4] = 1;
+    tmp[5] = 0;
 
+    tmp[6] = x;
+    tmp[7] = y;
+    tmp[8] = 1;
+    mul(vals, tmp);
+}
+
+void gdx_cpp::math::Matrix3::rotate(float angle)
+{
+    if (angle == 0) return;
+    angle = DEGREE_TO_RAD * angle;
+    float cos = (float)Math.cos(angle);
+    float sin = (float)Math.sin(angle);
+
+    tmp[0] = cos;
+    tmp[1] = sin;
+    tmp[2] = 0;
+
+    tmp[3] = -sin;
+    tmp[4] = cos;
+    tmp[5] = 0;
+
+    tmp[6] = 0;
+    tmp[7] = 0;
+    tmp[8] = 1;
+    mul(vals, tmp);
+}
+
+void gdx_cpp::math::Matrix3::scale(float scaleX, float scaleY)
+{
+    tmp[0] = scaleX;
+    tmp[1] = 0;
+    tmp[2] = 0;
+
+    tmp[3] = 0;
+    tmp[4] = scaleY;
+    tmp[5] = 0;
+
+    tmp[6] = 0;
+    tmp[7] = 0;
+    tmp[8] = 1;
+    mul(vals, tmp);
+}
+
+void gdx_cpp::math::Matrix3::mul(float* mata, float* matb)
+{
+    float v00 = mata[0] * matb[0] + mata[3] * matb[1] + mata[6] * matb[2];
+    float v01 = mata[0] * matb[3] + mata[3] * matb[4] + mata[6] * matb[5];
+    float v02 = mata[0] * matb[6] + mata[3] * matb[7] + mata[6] * matb[8];
+
+    float v10 = mata[1] * matb[0] + mata[4] * matb[1] + mata[7] * matb[2];
+    float v11 = mata[1] * matb[3] + mata[4] * matb[4] + mata[7] * matb[5];
+    float v12 = mata[1] * matb[6] + mata[4] * matb[7] + mata[7] * matb[8];
+
+    float v20 = mata[2] * matb[0] + mata[5] * matb[1] + mata[8] * matb[2];
+    float v21 = mata[2] * matb[3] + mata[5] * matb[4] + mata[8] * matb[5];
+    float v22 = mata[2] * matb[6] + mata[5] * matb[7] + mata[8] * matb[8];
+
+    mata[0] = v00;
+    mata[1] = v10;
+    mata[2] = v20;
+    mata[3] = v01;
+    mata[4] = v11;
+    mata[5] = v21;
+    mata[6] = v02;
+    mata[7] = v12;
+    mata[8] = v22;
+}
 
 
 

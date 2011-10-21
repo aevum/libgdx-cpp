@@ -21,6 +21,8 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTIONS_FOREVER_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTIONS_FOREVER_HPP_
 
+#include "gdx-cpp/scenes/scene2d/AnimationAction.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {

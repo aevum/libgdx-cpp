@@ -21,24 +21,29 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTIONS_FADEIN_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTIONS_FADEIN_HPP_
 
+#include "gdx-cpp/scenes/scene2d/AnimationAction.hpp"
+#include "ActionResetingPool.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
 namespace actions {
 
-class FadeIn: public gdx_cpp::scenes::scene2d::AnimationAction {
+class FadeIn: public AnimationAction {
 public:
-    static FadeIn& $ (float duration);
-    void setTarget (const gdx_cpp::scenes::scene2d::Actor& actor);
+    static FadeIn* operator() (float duration);
+    
+    void setTarget (const gdx_cpp::scenes::scene2d::Actor* actor);
     void act (float delta);
     void finish ();
-    gdx_cpp::scenes::scene2d::Action& copy ();
+    Action& copy ();
 
 protected:
-    FadeIn& newObject ();
+    float startAlpha;
+    float deltaAlpha;
+    Actor* target;
 
-private:
-
+    static ActionResetingPool<FadeIn*> pool;
 };
 
 } // namespace gdx_cpp

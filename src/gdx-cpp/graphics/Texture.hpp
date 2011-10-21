@@ -115,7 +115,7 @@ public:
     int getTextureObjectHandle ();
     void setWrap (const TextureWrap& u, const TextureWrap& v);
     void setFilter (const gdx_cpp::graphics::Texture::TextureFilter& minFilter, const gdx_cpp::graphics::Texture::TextureFilter& magFilter);
-    void dispose ();
+    
     void setEnforcePotImages (bool enforcePotImages);
     static void clearAllTextures (gdx_cpp::Application* app);
     static void invalidateAllTextures (gdx_cpp::Application* app);
@@ -126,9 +126,14 @@ public:
     static ptr fromFile(const gdx_cpp::files::FileHandle::ptr file,
                         const gdx_cpp::graphics::Pixmap::Format* format = NULL,
                         bool useMipMaps = false);
+
+    ~Texture();
+    void dispose ();
+    
 protected:
     void initialize(const gdx_cpp::files::FileHandle::ptr file, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps);
     Texture ();
+    
     
 private:
     void create (gdx_cpp::graphics::TextureData::ptr data);

@@ -122,6 +122,7 @@ void Texture::uploadImageData (const gdx_cpp::graphics::Pixmap::ptr& pixmap) {
     }
 
     Gdx::gl->glBindTexture(GL10::GL_TEXTURE_2D, glHandle);
+    Gdx::gl->glPixelStorei(GL10::GL_UNPACK_ALIGNMENT, 1);
     if (data->useMipMaps()) {
         glutils::MipMapGenerator::generateMipMap(tmp, tmp->getWidth(), tmp->getHeight(), disposePixmap);
     } else {
@@ -213,12 +214,15 @@ void Texture::setFilter (const gdx_cpp::graphics::Texture::TextureFilter& minFil
 }
 
 void Texture::dispose () {
-    buffer = glHandle;
-    Gdx::gl->glDeleteTextures(1, &buffer);
-    
-    if (data->isManaged()) {
-        if (managedTextures.count(Gdx::app))
-            managedTextures[Gdx::app].remove(shared_from_this());
+    if (glHandle != 0) {
+        Gdx::gl->glDeleteTextures(1, &glHandle);
+
+        if (data->isManaged()) {
+            if (managedTextures.count(Gdx::app))
+                managedTextures[Gdx::app].remove(shared_from_this());
+        }
+
+        glHandle = 0;
     }
 }
 
@@ -355,3 +359,9 @@ void Texture::initialize(const gdx_cpp::files::FileHandle::ptr file, const Pixma
 
     create(TextureData::ptr(Gdx::graphics->resolveTextureData(file, null_shared_ptr(), format, useMipMaps)));    
 }
+
+Texture::~Texture()
+{
+    dispose();
+}
+

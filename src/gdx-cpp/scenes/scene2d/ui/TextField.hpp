@@ -28,11 +28,12 @@ namespace ui {
 
 class TextField {
 public:
+    void setStyle (const TextFieldStyle& style);
     void layout ();
     void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
     bool touchDown (float x,float y,int pointer);
-    bool touchUp (float x,float y,int pointer);
-    bool touchDragged (float x,float y,int pointer);
+    void touchUp (float x,float y,int pointer);
+    void touchDragged (float x,float y,int pointer);
     bool keyDown (int keycode);
     bool keyTyped (char character);
     gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
@@ -40,19 +41,43 @@ public:
     void setTextFieldListener (const TextFieldListener& listener);
     void setText (const std::string& text);
     std::string& getText ();
+    float getPrefWidth ();
+    float getPrefHeight ();
     OnscreenKeyboard& getOnscreenKeyboard ();
     void setOnscreenKeyboard (const OnscreenKeyboard& keyboard);
     void show (bool visible);
     void show (bool visible);
     void setClipboard (const gdx_cpp::scenes::scene2d::ui::utils::Clipboard& clipboard);
-    NinePatch background;
-    BitmapFont font;
-    Color fontColor;
-    NinePatch cursor;
-    TextureRegion selection;
+    TextField (const Skin& skin);
+    TextField (const std::string& text,const Skin& skin);
+    TextField (const TextFieldStyle& style);
+    TextField (const std::string& text,const TextFieldStyle& style);
+    TextField (const std::string& text,const TextFieldStyle& style,const std::string& name);
 
 protected:
-
+    TextFieldStyle style ;
+    Clipboard clipboard ;
+    Rectangle fieldBounds = new Rectangle();
+    TextBounds textBounds = new TextBounds();
+    Rectangle scissor = new Rectangle();
+    TextFieldListener listener ;
+    String text = "";
+    int cursor = 0;
+    float renderOffset = 0;
+    float textOffset = 0;
+    int visibleTextStart = 0;
+    int visibleTextEnd = 0;
+    StringBuilder builder = new StringBuilder();
+    FloatArray glyphAdvances = new FloatArray();
+    FloatArray glyphPositions = new FloatArray();
+    float blinkTime = 0.42f;
+    long lastBlink = System.nanoTime();
+    boolean cursorOn = true;
+    boolean hasSelection = false;
+    int selectionStart = 0;
+    float selectionX = 0;
+    float selectionWidth = 0;
+    OnscreenKeyboard keyboard = new DefaultOnscreenKeyboard();
 
 private:
     void blink ();

@@ -21,26 +21,44 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTIONS_SEQUENCE_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTIONS_SEQUENCE_HPP_
 
+#include "gdx-cpp/scenes/scene2d/CompositeAction.hpp"
+#include "gdx-cpp/scenes/scene2d/Action.hpp"
+#include "ActionResetingPool.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
 namespace actions {
 
-class Sequence: public gdx_cpp::scenes::scene2d::CompositeAction {
+class Sequence: public CompositeAction {
 public:
-    static Sequence& $ ();
+    template<typename T, int size>
+    static Sequence* operator() (T(&actions)[size]) {
+        Sequence* sequence = pool.obtain();
+        
+        for (int i = 0; i < sequence->actions.size();  ++i) {
+            delete sequence->actions[i];
+        }
+    
+        for (int i = 0; i < size; i++)
+            sequence->actions.push_back(actions[i]);
+        
+        return sequence;
+    }
+     
     void setTarget (const gdx_cpp::scenes::scene2d::Actor& actor);
     void act (float delta);
     bool isDone ();
     void finish ();
     gdx_cpp::scenes::scene2d::Action& copy ();
-    gdx_cpp::scenes::scene2d::Actor& getTarget ();
+    Actor* getTarget ();
 
 protected:
-    Sequence& newObject ();
+    Sequence* newObject ();
+    Actor* target;
+    int currAction;
 
-private:
-
+    static ActionResetingPool<Sequence*> pool;
 };
 
 } // namespace gdx_cpp

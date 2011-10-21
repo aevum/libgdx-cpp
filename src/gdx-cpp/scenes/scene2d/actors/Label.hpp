@@ -34,19 +34,31 @@ public:
     void setFont (const gdx_cpp::graphics::g2d::BitmapFont& font);
     void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
     bool touchDown (float x,float y,int pointer);
-    bool touchUp (float x,float y,int pointer);
-    bool touchDragged (float x,float y,int pointer);
+    void touchUp (float x,float y,int pointer);
+    void touchDragged (float x,float y,int pointer);
     gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
     void layout ();
     void invalidate ();
     float getPrefWidth ();
     float getPrefHeight ();
+    float getMinWidth ();
+    float getMinHeight ();
+    float getMaxWidth ();
+    float getMaxHeight ();
+    Label (const std::string& name,const gdx_cpp::graphics::g2d::BitmapFont& font);
+    Label (const std::string& name,const gdx_cpp::graphics::g2d::BitmapFont& font,const std::string& text);
+    BitmapFontCache cache ;
+    VAlignment valign = VAlignment.BOTTOM;
+    String text ;
+    TextBounds bounds = new TextBounds();
 
 protected:
 
 
 private:
-
+    WrapType wrapType ;
+    HAlignment halign ;
+    float lastWidth = -1;
 };
 
 } // namespace gdx_cpp

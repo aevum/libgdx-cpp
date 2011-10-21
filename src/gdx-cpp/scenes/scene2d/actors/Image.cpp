@@ -36,17 +36,37 @@ bool Image::touchDown (float x,float y,int pointer) {
     return x > 0 && y > 0 && x < width && y < height;
 }
 
-bool Image::touchUp (float x,float y,int pointer) {
-    return false;
+void Image::touchUp (float x,float y,int pointer) {
 }
 
-bool Image::touchDragged (float x,float y,int pointer) {
-    return false;
+void Image::touchDragged (float x,float y,int pointer) {
 }
 
 gdx_cpp::scenes::scene2d::Actor& Image::hit (float x,float y) {
     if (x > 0 && x < width) if (y > 0 && y < height) return this;
 
     return null;
+}
+
+Image::Image (const std::string& name) {
+    super(name);
+}
+
+Image::Image (const std::string& name,const gdx_cpp::graphics::Texture& texture) {
+    super(name);
+    this.originX = texture.getWidth() / 2.0f;
+    this.originY = texture.getHeight() / 2.0f;
+    this.width = texture.getWidth();
+    this.height = texture.getHeight();
+    this.region = new TextureRegion(texture);
+}
+
+Image::Image (const std::string& name,const gdx_cpp::graphics::g2d::TextureRegion& region) {
+    super(name);
+    width = Math.abs(region.getRegionWidth());
+    height = Math.abs(region.getRegionHeight());
+    originX = width / 2.0f;
+    originY = height / 2.0f;
+    this.region = new TextureRegion(region);
 }
 

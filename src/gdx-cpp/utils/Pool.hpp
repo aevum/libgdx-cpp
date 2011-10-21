@@ -39,15 +39,15 @@ public:
     }
 
     T& obtain () {
-      if (freeObjects.size() == 0)
-      {
-        return *newObject();
-      } else {
-        T * ret = freeObjects.back();
-        freeObjects.pop_back();
-        return *ret;
-      }
-        
+        if (freeObjects.size() == 0)
+        {
+            return *newObject();
+        } else {
+            T * ret = freeObjects.back();
+            freeObjects.pop_back();
+            return *ret;
+        }
+
     }
 
     void free (T* object) {
@@ -82,6 +82,7 @@ private:
             }
         }
     }
+
     T* newObject () {
         return new T();
     }

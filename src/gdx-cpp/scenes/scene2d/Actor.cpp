@@ -19,6 +19,8 @@
 */
 
 #include "Actor.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "Group.hpp"
 
 using namespace gdx_cpp::scenes::scene2d;
 
@@ -43,27 +45,26 @@ bool Actor::keyTyped (char character) {
 }
 
 void Actor::toLocalCoordinates (const gdx_cpp::math::Vector2& point) {
-    if (parent == null) {
+    if (parent == NULL) {
         return;
     }
 
-    parent.toLocalCoordinates(point);
-    Group.toChildCoordinates(this, point.x, point.y, point);
+    parent->toLocalCoordinates(point);
+    Group::toChildCoordinates(this, point.x, point.y, point);
 }
 
 void Actor::remove () {
-    parent.removeActor(this);
+    parent->removeActor(this);
 }
 
 void Actor::act (float delta) {
     actions.iter();
-    Action action;
 
-    while ((action = actions.next()) != null) {
-        action.act(delta);
-        if (action.isDone()) {
-            action.finish();
-            actions.remove();
+    while ((Action* action = actions.next()) != NULL) {
+        action->act(delta);
+        if (action->isDone()) {
+            action->finish();
+            actions->remove();
         }
     }
 }
@@ -77,16 +78,39 @@ void Actor::clearActions () {
     actions.clear();
 }
 
-std::string& Actor::toString () {
-    return name + ": [x=" + x + ", y=" + y + ", refX=" + originX + ", refY=" + originY + ", width=" + width + ", height="
-           + height + "]";
+std::string Actor::toString () {
+    char buffer[1024];
+    sprintf(buffer, "%s: [x= %d, y= %d, refX= %d, refY= %d, width= %d, height=%d]", name.c_str(), x, y, originX, originY, width, height);
+            
+    return std::string(buffer);
 }
 
-void Actor::markToRemove (const final& boolean) {
+void Actor::markToRemove (bool boolean) {
     toRemove = remove;
 }
 
 bool Actor::isMarkedToRemove () {
     return toRemove;
+}
+
+Actor::Actor ()
+ : toRemove(false)
+ , color(1,1,1,1)
+ , touchable(true)
+ , visible(true)
+ , parent(NULL)
+ , actions(10)
+{    
+}
+
+Actor::Actor (const std::string& name)
+: toRemove(false)
+, color(1,1,1,1)
+, touchable(true)
+, visible(true)
+, parent(NULL)
+, actions(10)
+{
+    this->name = name;
 }
 

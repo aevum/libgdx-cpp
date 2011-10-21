@@ -21,24 +21,30 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTIONS_FADEOUT_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTIONS_FADEOUT_HPP_
 
+#include "gdx-cpp/scenes/scene2d/AnimationAction.hpp"
+#include "ActionResetingPool.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
 namespace actions {
 
-class FadeOut: public gdx_cpp::scenes::scene2d::AnimationAction {
+class FadeOut: public AnimationAction {
 public:
-    static FadeOut& $ (float duration);
+    static FadeOut* operator() (float duration);
+
     void setTarget (const gdx_cpp::scenes::scene2d::Actor& actor);
     void act (float delta);
     void finish ();
+    
     gdx_cpp::scenes::scene2d::Action& copy ();
 
 protected:
-    FadeOut& newObject ();
+    FadeOut();
+    float startAlpha = 0;
+    float deltaAlpha = 0;
 
-private:
-
+    static ActionResetingPool<FadeOut*> pool;
 };
 
 } // namespace gdx_cpp

@@ -21,6 +21,9 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTIONS_FADETO_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTIONS_FADETO_HPP_
 
+#include "gdx-cpp/scenes/scene2d/AnimationAction.hpp"
+#include "ActionResetingPool.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
@@ -28,17 +31,22 @@ namespace actions {
 
 class FadeTo: public gdx_cpp::scenes::scene2d::AnimationAction {
 public:
-    static FadeTo& $ (float alpha,float duration);
+    static FadeTo* operator() (float alpha,float duration);
+    
     void setTarget (const gdx_cpp::scenes::scene2d::Actor& actor);
     void act (float delta);
     void finish ();
     gdx_cpp::scenes::scene2d::Action& copy ();
 
 protected:
-    FadeTo& newObject ();
-
+    FadeTo();
+    
 private:
+    float toAlpha;
+    float startAlpha;
+    float deltaAlpha;
 
+    static ActionResetingPool<FadeTo*> pool;
 };
 
 } // namespace gdx_cpp

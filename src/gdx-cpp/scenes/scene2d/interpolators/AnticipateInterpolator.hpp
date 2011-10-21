@@ -36,6 +36,7 @@ public:
 
 protected:
     AnticipateInterpolator& newObject ();
+    float DEFAULT_TENSION = 2.0f;
 
 private:
 
