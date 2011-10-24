@@ -22,9 +22,9 @@
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-ActionResetingPool<FadeTo*> FadeTo::pool = ActionResetingPool<FadeTo*>(4, 100);
+ActionResetingPool<FadeTo> FadeTo::pool = ActionResetingPool<FadeTo>(4, 100);
 
-FadeTo* FadeTo::operator () (float alpha,float duration) {
+FadeTo* FadeTo::build (float alpha,float duration) {
     FadeTo* action = pool.obtain();
     action->toAlpha = std::min(std::max(alpha, 0.0f), 1.0f);
     action->duration = duration;
@@ -32,7 +32,7 @@ FadeTo* FadeTo::operator () (float alpha,float duration) {
     return action;
 }
 
-void FadeTo::setTarget (const gdx_cpp::scenes::scene2d::Actor& actor) {
+void FadeTo::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
     this->target = actor;
     this->startAlpha = this->target->color.a;
     this->deltaAlpha = toAlpha - this->target->color.a;
@@ -55,9 +55,17 @@ void FadeTo::finish () {
     pool.free(this);
 }
 
-gdx_cpp::scenes::scene2d::Action& FadeTo::copy () {
-    FadeTo* fadeTo = FadeTo(toAlpha, duration);
+gdx_cpp::scenes::scene2d::Action* FadeTo::copy () {
+    FadeTo* fadeTo = FadeTo::build(toAlpha, duration);
     if (interpolator != NULL) fadeTo->setInterpolator(interpolator->copy());
     return fadeTo;
+}
+
+gdx_cpp::scenes::scene2d::actions::FadeTo::FadeTo()
+ : toAlpha(0),
+startAlpha(0),
+deltaAlpha(0)
+{
+
 }
 

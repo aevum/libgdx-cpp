@@ -22,7 +22,7 @@
 
 using namespace gdx_cpp::scenes::scene2d;
 
-Action& TemporalAction::getAction () {
+Action* TemporalAction::getAction () {
     return action;
 }
 

@@ -29,12 +29,11 @@ namespace scene2d {
 
 class TemporalAction : public Action {
 public:
-    Action& getAction ();
+    Action* getAction ();
 
 protected:
-    Action action;
-    Actor target;
-private:
+    Action* action;
+    Actor* target;
 
 };
 

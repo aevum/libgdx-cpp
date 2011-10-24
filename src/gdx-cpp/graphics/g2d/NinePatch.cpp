@@ -115,25 +115,25 @@ void NinePatch::draw (SpriteBatch& batch,float x,float y,float width,float heigh
         topRowY -= patches[TOP_RIGHT]->getRegionHeight();
 
     // Bottom row
-    if (patches[BOTTOM_LEFT] != NULL) batch.draw(patches[BOTTOM_LEFT], x, y, centerColumnX - x, middleRowY - y);
+    if (patches[BOTTOM_LEFT] != NULL) batch.draw(*patches[BOTTOM_LEFT], x, y, centerColumnX - x, middleRowY - y);
     if (patches[BOTTOM_CENTER] != NULL)
-        batch.draw(patches[BOTTOM_CENTER], centerColumnX, y, rightColumnX - centerColumnX, middleRowY - y);
+        batch.draw(*patches[BOTTOM_CENTER], centerColumnX, y, rightColumnX - centerColumnX, middleRowY - y);
     if (patches[BOTTOM_RIGHT] != NULL)
-        batch.draw(patches[BOTTOM_RIGHT], rightColumnX, y, x + width - rightColumnX, middleRowY - y);
+        batch.draw(*patches[BOTTOM_RIGHT], rightColumnX, y, x + width - rightColumnX, middleRowY - y);
 
     // Middle row
-    if (patches[MIDDLE_LEFT] != NULL) batch.draw(patches[MIDDLE_LEFT], x, middleRowY, centerColumnX - x, topRowY - middleRowY);
+    if (patches[MIDDLE_LEFT] != NULL) batch.draw(*patches[MIDDLE_LEFT], x, middleRowY, centerColumnX - x, topRowY - middleRowY);
     if (patches[MIDDLE_CENTER] != NULL)
-        batch.draw(patches[MIDDLE_CENTER], centerColumnX, middleRowY, rightColumnX - centerColumnX, topRowY - middleRowY);
+        batch.draw(*patches[MIDDLE_CENTER], centerColumnX, middleRowY, rightColumnX - centerColumnX, topRowY - middleRowY);
     if (patches[MIDDLE_RIGHT] != NULL)
-        batch.draw(patches[MIDDLE_RIGHT], rightColumnX, middleRowY, x + width - rightColumnX, topRowY - middleRowY);
+        batch.draw(*patches[MIDDLE_RIGHT], rightColumnX, middleRowY, x + width - rightColumnX, topRowY - middleRowY);
 
     // Top row
-    if (patches[TOP_LEFT] != NULL) batch.draw(patches[TOP_LEFT], x, topRowY, centerColumnX - x, y + height - topRowY);
+    if (patches[TOP_LEFT] != NULL) batch.draw(*patches[TOP_LEFT], x, topRowY, centerColumnX - x, y + height - topRowY);
     if (patches[TOP_CENTER] != NULL)
-        batch.draw(patches[TOP_CENTER], centerColumnX, topRowY, rightColumnX - centerColumnX, y + height - topRowY);
+        batch.draw(*patches[TOP_CENTER], centerColumnX, topRowY, rightColumnX - centerColumnX, y + height - topRowY);
     if (patches[TOP_RIGHT] != NULL)
-        batch.draw(patches[TOP_RIGHT], rightColumnX, topRowY, x + width - rightColumnX, y + height - topRowY);
+        batch.draw(*patches[TOP_RIGHT], rightColumnX, topRowY, x + width - rightColumnX, y + height - topRowY);
 }
 
 float NinePatch::getLeftWidth () {

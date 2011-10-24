@@ -21,13 +21,15 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_IMMEDIATEMODERENDERER_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_IMMEDIATEMODERENDERER_HPP_
 
+#include "gdx-cpp/math/Matrix4.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 namespace glutils {
 
 class ImmediateModeRenderer {
 public:
-    virtual   void begin (gdx_cpp::math::Matrix4& projModelView,int primitiveType) = 0;
+    virtual   void begin (gdx_cpp::math::Matrix4& projModelView, int primitiveType) = 0;
     virtual   void color (float r,float g,float b,float a) = 0;
     virtual   void texCoord (float u,float v) = 0;
     virtual   void normal (float x,float y,float z) = 0;

@@ -31,19 +31,21 @@ namespace actions {
 
 class FadeIn: public AnimationAction {
 public:
-    static FadeIn* operator() (float duration);
+    static FadeIn* build (float duration);
     
-    void setTarget (const gdx_cpp::scenes::scene2d::Actor* actor);
+    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
     void act (float delta);
     void finish ();
-    Action& copy ();
+    Action* copy ();
 
-protected:
+    FadeIn();
+
+protected:       
     float startAlpha;
     float deltaAlpha;
     Actor* target;
 
-    static ActionResetingPool<FadeIn*> pool;
+    static ActionResetingPool<FadeIn> pool;
 };
 
 } // namespace gdx_cpp

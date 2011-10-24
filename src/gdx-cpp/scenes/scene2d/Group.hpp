@@ -41,10 +41,11 @@ namespace scene2d {
 
 class Group : public Actor {
 public:
-    ActorType getType() { return Actor_Group; }
+    typedef std::vector<Actor*> ActorList;
+    ActorType getType() const { return Actor_Group; }
     
     void act (float delta);
-    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
+    void draw (gdx_cpp::graphics::g2d::SpriteBatch& batch, float parentAlpha);
     bool touchDown (float x,float y,int pointer);
     void touchUp (float x,float y,int pointer);
     bool touchMoved (float x,float y);
@@ -54,25 +55,25 @@ public:
     bool keyUp (int keycode);
     bool keyTyped (char character);
     Actor* hit (float x, float y);
-    void addActor (const gdx_cpp::scenes::scene2d::Actor* actor);
-    void addActorAt (int index, const gdx_cpp::scenes::scene2d::Actor* actor);
-    void addActorBefore (const gdx_cpp::scenes::scene2d::Actor* actorBefore, const gdx_cpp::scenes::scene2d::Actor* actor);
-    void addActorAfter (const gdx_cpp::scenes::scene2d::Actor* actorAfter, const gdx_cpp::scenes::scene2d::Actor* actor);
-    void removeActor (const gdx_cpp::scenes::scene2d::Actor* actor);
-    void removeActorRecursive (const gdx_cpp::scenes::scene2d::Actor* actor);
-    Actor& findActor (const std::string& name);
+    void addActor (gdx_cpp::scenes::scene2d::Actor* actor);
+    void addActorAt (int index, gdx_cpp::scenes::scene2d::Actor* actor);
+    void addActorBefore (const gdx_cpp::scenes::scene2d::Actor* actorBefore, gdx_cpp::scenes::scene2d::Actor* actor);
+    void addActorAfter (const gdx_cpp::scenes::scene2d::Actor* actorAfter, gdx_cpp::scenes::scene2d::Actor* actor);
+    void removeActor (gdx_cpp::scenes::scene2d::Actor* actor);
+    void removeActorRecursive (gdx_cpp::scenes::scene2d::Actor* actor);
+    Actor* findActor (const std::string& name);
     bool swapActor (int first,int second);
-    bool swapActor (const gdx_cpp::scenes::scene2d::Actor* first, const gdx_cpp::scenes::scene2d::Actor* second);
-    std::list<Actor>& getActors ();
-    std::list<Group>& getGroups ();
-    void focus (const gdx_cpp::scenes::scene2d::Actor* actor, int pointer);
-    void keyboardFocus (const gdx_cpp::scenes::scene2d::Actor* actor);
-    void scrollFocus (const gdx_cpp::scenes::scene2d::Actor* actor);
+    bool swapActor (gdx_cpp::scenes::scene2d::Actor* first, gdx_cpp::scenes::scene2d::Actor* second);
+    Group::ActorList getActors ();
+    std::list< Group* > getGroups ();
+    void focus (gdx_cpp::scenes::scene2d::Actor* actor, int pointer);
+    void keyboardFocus (gdx_cpp::scenes::scene2d::Actor* actor);
+    void scrollFocus (gdx_cpp::scenes::scene2d::Actor* actor);
     void clear ();
-    void sortChildren (const Comparator<Actor>& comparator);
+    void sortChildren (bool (*comparator)(Actor* a, Actor* b));
     void unfocusAll ();
     void unfocusAll (const gdx_cpp::scenes::scene2d::Actor* actor);
-    static void toChildCoordinates (const gdx_cpp::scenes::scene2d::Actor* child, float x, float y, const gdx_cpp::math::Vector2& out);
+    static void toChildCoordinates (gdx_cpp::scenes::scene2d::Actor* const child, float x, float y, gdx_cpp::math::Vector2& out);
     void enableDebugging (const std::string& debugTextureFile);
     void disableDebugging ();
     Group ();
@@ -88,13 +89,12 @@ public:
     Actor* scrollFocusedActor;
 
 protected:
-    void drawChildren (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
-    void drawChild (const Actor& child,const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
-    void applyTransform (const gdx_cpp::graphics::g2d::SpriteBatch& batch);
+    void drawChildren (gdx_cpp::graphics::g2d::SpriteBatch& batch, float parentAlpha);
+    void drawChild (gdx_cpp::scenes::scene2d::Actor* child, gdx_cpp::graphics::g2d::SpriteBatch& batch, float parentAlpha);
+    void applyTransform (gdx_cpp::graphics::g2d::SpriteBatch& batch);
     gdx_cpp::math::Matrix4& updateTransform ();
-    void resetTransform (const gdx_cpp::graphics::g2d::SpriteBatch& batch);
-
-    typedef std::vector<Actor*> ActorList;
+    void resetTransform (gdx_cpp::graphics::g2d::SpriteBatch& batch);
+    
     ActorList children;
     ActorList immutableChildren;
     std::list<Group*> groups;

@@ -580,7 +580,7 @@ void Matrix4::mul (float* mata, float* matb) {
     _tmp[M31] = mata[M30] * matb[M01] + mata[M31] * matb[M11] + mata[M32] * matb[M21] + mata[M33] * matb[M31];
     _tmp[M32] = mata[M30] * matb[M02] + mata[M31] * matb[M12] + mata[M32] * matb[M22] + mata[M33] * matb[M32];
     _tmp[M33] = mata[M30] * matb[M03] + mata[M31] * matb[M13] + mata[M32] * matb[M23] + mata[M33] * matb[M33];
-    memcpy(mata, tmp, sizeof(float) *  16);
+    memcpy(mata, _tmp, sizeof(float) *  16);
 }
 
 void Matrix4::mulVec (float* mat, float* vec) {

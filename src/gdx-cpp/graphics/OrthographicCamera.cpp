@@ -105,7 +105,7 @@ void OrthographicCamera::update () {
 
 void OrthographicCamera::setToOrtho(bool yDown)
 {
-    setToOrtho(yDown, gdx_cpp::Gdx::graphics.getWidth(), Gdx.graphics.getHeight());
+    setToOrtho(yDown, gdx_cpp::Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
 }
 
 void OrthographicCamera::setToOrtho(bool yDown, float viewportWidth, float viewportHeight)

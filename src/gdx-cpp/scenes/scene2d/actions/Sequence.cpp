@@ -23,16 +23,12 @@
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-ActionResetingPool<Sequence*> Sequence::pool = ActionResetingPool<Sequence*>(4, 100);
+ActionResetingPool<Sequence> Sequence::pool = ActionResetingPool<Sequence>(4, 100);
 
-Sequence* Sequence::newObject () {
-    return new Sequence();
-}
-
-void Sequence::setTarget (const gdx_cpp::scenes::scene2d::Actor& actor) {
-    this.target = actor;
+void Sequence::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+    this->target = actor;
     if (actions.size() > 0) actions[0]->setTarget(target);
-    this.currAction = 0;
+    this->currAction = 0;
 }
 
 void Sequence::act (float delta) {
@@ -64,16 +60,16 @@ void Sequence::finish () {
     CompositeAction::finish();
 }
 
-gdx_cpp::scenes::scene2d::Action& Sequence::copy () {
+gdx_cpp::scenes::scene2d::Action* Sequence::copy () {
     Sequence* action = pool.obtain();
 
     action->actions.clear();
 
-    std::list<Action*>::iterator it = actions.begin();
-    std::list<Action*>::iterator end = actions.end();
+    std::vector<Action*>::iterator it = actions.begin();
+    std::vector<Action*>::iterator end = actions.end();
     
     for (; it != end; ++it) {
-        action.actions.push_back(it->copy());
+        action->actions.push_back((*it)->copy());
     }
     
     return action;
@@ -84,7 +80,7 @@ gdx_cpp::scenes::scene2d::Actor* Sequence::getTarget () {
 }
 
 Sequence::Sequence()
-: currAction(0)
-, target(0)
+: target(0)
+, currAction(0)
 {
 }

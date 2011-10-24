@@ -34,10 +34,11 @@ class AnimationAction: public Action {
 public:
     bool isDone ();
     void finish ();
-    AnimationAction& setInterpolator (const gdx_cpp::scenes::scene2d::Interpolator* interpolator);
+    AnimationAction* setInterpolator (gdx_cpp::scenes::scene2d::Interpolator* interpolator);
     Actor* getTarget ();
     void reset ();
-
+    AnimationAction();
+    
 protected:
     float createInterpolatedAlpha (float delta);
     float duration;

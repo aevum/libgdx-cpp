@@ -22,9 +22,9 @@
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-ActionResetingPool<FadeIn*> FadeIn::pool = ActionResetingPool<FadeIn*>(4, 100);
+ActionResetingPool<FadeIn> FadeIn::pool = ActionResetingPool<FadeIn>(4, 100);
 
-FadeIn* FadeIn::operator()(float duration)
+FadeIn* FadeIn::build(float duration)
 {
     FadeIn* action = pool.obtain();
     action->duration = duration;
@@ -32,10 +32,10 @@ FadeIn* FadeIn::operator()(float duration)
     return action;
 }
 
-void FadeIn::setTarget (const gdx_cpp::scenes::scene2d::Actor* actor) {
+void FadeIn::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
     this->target = actor;
-    this->startAlpha = this->target.color.a;
-    this->deltaAlpha = 1 - this->target.color.a;
+    this->startAlpha = this->target->color.a;
+    this->deltaAlpha = 1 - this->target->color.a;
     this->taken = 0;
     this->done = false;
 }
@@ -50,15 +50,15 @@ void FadeIn::act (float delta) {
 }
 
 void FadeIn::finish () {
-    pool.free(this);
     if (listener != NULL) {
         listener->completed(this);
     }
+    pool.free(this);
 }
 
-gdx_cpp::scenes::scene2d::Action& FadeIn::copy () {
-    FadeIn* fadeIn = FadeIn(duration);
-    if (interpolator != NULL) fadeIn->setInterpolator(interpolator.copy());
+gdx_cpp::scenes::scene2d::Action* FadeIn::copy () {
+    FadeIn* fadeIn = FadeIn::build(duration);
+    if (interpolator != NULL) fadeIn->setInterpolator(interpolator->copy());
     return fadeIn;
 }
 

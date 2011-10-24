@@ -31,14 +31,13 @@ namespace actions {
 
 class FadeTo: public gdx_cpp::scenes::scene2d::AnimationAction {
 public:
-    static FadeTo* operator() (float alpha,float duration);
+    FadeTo* build (float alpha,float duration);
     
-    void setTarget (const gdx_cpp::scenes::scene2d::Actor& actor);
+    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
     void act (float delta);
     void finish ();
-    gdx_cpp::scenes::scene2d::Action& copy ();
+    Action* copy ();
 
-protected:
     FadeTo();
     
 private:
@@ -46,7 +45,7 @@ private:
     float startAlpha;
     float deltaAlpha;
 
-    static ActionResetingPool<FadeTo*> pool;
+    static ActionResetingPool<FadeTo> pool;
 };
 
 } // namespace gdx_cpp

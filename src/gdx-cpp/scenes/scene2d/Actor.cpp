@@ -21,6 +21,7 @@
 #include "Actor.hpp"
 #include "gdx-cpp/Gdx.hpp"
 #include "Group.hpp"
+#include "Action.hpp"
 
 using namespace gdx_cpp::scenes::scene2d;
 
@@ -44,7 +45,7 @@ bool Actor::keyTyped (char character) {
     return false;
 }
 
-void Actor::toLocalCoordinates (const gdx_cpp::math::Vector2& point) {
+void Actor::toLocalCoordinates (gdx_cpp::math::Vector2& point) {
     if (parent == NULL) {
         return;
     }
@@ -60,17 +61,18 @@ void Actor::remove () {
 void Actor::act (float delta) {
     actions.iter();
 
-    while ((Action* action = actions.next()) != NULL) {
+    Action* action = 0;
+    while ((action = actions.next()) != NULL) {
         action->act(delta);
         if (action->isDone()) {
             action->finish();
-            actions->remove();
+            actions.remove();
         }
     }
 }
 
-void Actor::action (const Action& action) {
-    action.setTarget(this);
+void Actor::action (Action* const action) {
+    action->setTarget(this);
     actions.add(action);
 }
 
@@ -78,14 +80,14 @@ void Actor::clearActions () {
     actions.clear();
 }
 
-std::string Actor::toString () {
+std::string Actor::toString () const {
     char buffer[1024];
-    sprintf(buffer, "%s: [x= %d, y= %d, refX= %d, refY= %d, width= %d, height=%d]", name.c_str(), x, y, originX, originY, width, height);
+    sprintf(buffer, "%s: [x= %f, y= %f, refX= %f, refY= %f, width= %f, height=%f]", name.c_str(), x, y, originX, originY, width, height);
             
     return std::string(buffer);
 }
 
-void Actor::markToRemove (bool boolean) {
+void Actor::markToRemove (bool remove) {
     toRemove = remove;
 }
 
@@ -100,6 +102,8 @@ Actor::Actor ()
  , visible(true)
  , parent(NULL)
  , actions(10)
+ , scaleX(1)
+ ,scaleY(1)
 {    
 }
 
@@ -110,6 +114,8 @@ Actor::Actor (const std::string& name)
 , visible(true)
 , parent(NULL)
 , actions(10)
+, scaleX(1)
+, scaleY(1)
 {
     this->name = name;
 }

@@ -33,7 +33,7 @@ void AnimationAction::finish () {
     }
 }
 
-AnimationAction& AnimationAction::setInterpolator (const Interpolator* interpolator) {
+AnimationAction* AnimationAction::setInterpolator (Interpolator* interpolator) {
     this->interpolator = interpolator;
     return this;
 }

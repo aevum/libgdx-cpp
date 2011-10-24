@@ -18,8 +18,8 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#ifndef GDX_CPP_SCENES_SCENE2D_ACTIONS_ACTIONRESETINGPOOL<T EXTENDS ACTION>_HPP_
-#define GDX_CPP_SCENES_SCENE2D_ACTIONS_ACTIONRESETINGPOOL<T EXTENDS ACTION>_HPP_
+#ifndef GDX_CPP_SCENES_SCENE2D_ACTIONS_ACTIONRESETINGPOOL_HPP_
+#define GDX_CPP_SCENES_SCENE2D_ACTIONS_ACTIONRESETINGPOOL_HPP_
 
 #include "gdx-cpp/utils/Pool.hpp"
 
@@ -32,12 +32,12 @@ template <typename T>
 class ActionResetingPool : public utils::Pool<T> {
 public:
     ActionResetingPool (int initialCapacity, int max)
-        : utils::Pool(initialCapacity, max)
+        : utils::Pool<T>(initialCapacity, max)
     {        
     }
     
-    T obtain () {
-        T elem = utils::Pool::obtain();
+    T* obtain () {
+        T* elem = utils::Pool<T>::obtain();
         elem->reset();
         return elem;
     }

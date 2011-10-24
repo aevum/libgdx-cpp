@@ -21,6 +21,9 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTIONS_ROTATETO_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTIONS_ROTATETO_HPP_
 
+#include "gdx-cpp/scenes/scene2d/AnimationAction.hpp"
+#include "ActionResetingPool.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
@@ -28,17 +31,18 @@ namespace actions {
 
 class RotateTo: public gdx_cpp::scenes::scene2d::AnimationAction {
 public:
-    static RotateTo& $ (float rotation,float duration);
-    void setTarget (const gdx_cpp::scenes::scene2d::Actor& actor);
+    static RotateTo* build(float rotation,float duration);
+    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
     void act (float delta);
     void finish ();
-    gdx_cpp::scenes::scene2d::Action& copy ();
+    gdx_cpp::scenes::scene2d::Action* copy ();
 
 protected:
-    RotateTo& newObject ();
+    float rotation;
+    float startRotation;;
+    float deltaRotation;
 
-private:
-
+    static ActionResetingPool<RotateTo> pool;
 };
 
 } // namespace gdx_cpp

@@ -22,28 +22,26 @@
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-Forever& Forever::newObject () {
-    return new Forever();
-}
+ActionResetingPool<Forever> Forever::pool = ActionResetingPool<Forever>(4, 100);
 
-Forever& Forever::$ (const gdx_cpp::scenes::scene2d::Action& action) {
-    Forever forever = pool.obtain();
-    forever.action = action;
+Forever* Forever::build (gdx_cpp::scenes::scene2d::Action* action) {
+    Forever* forever = pool.obtain();
+    forever->action = action;
     return forever;
 }
 
-void Forever::setTarget (const gdx_cpp::scenes::scene2d::Actor& actor) {
-    action.setTarget(actor);
+void Forever::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+    action->setTarget(actor);
     target = actor;
 }
 
 void Forever::act (float delta) {
-    action.act(delta);
-    if (action.isDone()) {
-        Action oldAction = action;
-        action = action.copy();
-        oldAction.finish();
-        action.setTarget(target);
+    action->act(delta);
+    if (action->isDone()) {
+        Action* oldAction = action;
+        action = action->copy();
+        oldAction->finish();
+        action->setTarget(target);
     }
 }
 
@@ -53,15 +51,15 @@ bool Forever::isDone () {
 
 void Forever::finish () {
     pool.free(this);
-    action.finish();
-    super.finish();
+    action->finish();
+    TemporalAction::finish();
 }
 
-gdx_cpp::scenes::scene2d::Action& Forever::copy () {
-    return $(action.copy());
+gdx_cpp::scenes::scene2d::Action* Forever::copy () {
+    return Forever::build(action->copy());
 }
 
-gdx_cpp::scenes::scene2d::Actor& Forever::getTarget () {
+gdx_cpp::scenes::scene2d::Actor* Forever::getTarget () {
     return target;
 }
 

@@ -218,7 +218,7 @@ void Mesh::render (gdx_cpp::graphics::glutils::ShaderProgram& shader,int primiti
 
 void Mesh::dispose () {
     if (!disposed) {
-        if (meshes.count(Gdx::app) > 0 && meshes[Gdx::app].cound(this))
+        if (meshes.count(Gdx::app) > 0 && meshes[Gdx::app].count(this))
             meshes[Gdx::app].erase(this);
         vertices->dispose();
         indices->dispose();

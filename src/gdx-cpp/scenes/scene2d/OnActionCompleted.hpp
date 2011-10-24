@@ -29,7 +29,7 @@ class Action;
 
 class OnActionCompleted {
 public:
-    virtual   void completed (const Action& action) = 0;
+    virtual   void completed (Action* const action) = 0;
 };
 
 } // namespace gdx_cpp

@@ -1,13 +1,15 @@
 file(GLOB GDX_HEADERS
 Files.hpp
 Input.hpp
-# scenes/scene2d/Group.hpp
-# scenes/scene2d/Stage.hpp
-# scenes/scene2d/CompositeAction.hpp
-# scenes/scene2d/TemporalAction.hpp
-# scenes/scene2d/AnimationAction.hpp
-# scenes/scene2d/OnActionCompleted.hpp
-# scenes/scene2d/Interpolator.hpp
+scenes/scene2d/Group.hpp
+scenes/scene2d/Stage.hpp
+scenes/scene2d/CompositeAction.hpp
+scenes/scene2d/TemporalAction.hpp
+scenes/scene2d/AnimationAction.hpp
+scenes/scene2d/OnActionCompleted.hpp
+scenes/scene2d/Interpolator.hpp
+scenes/scene2d/Action.hpp
+scenes/scene2d/Actor.hpp
 # scenes/scene2d/actors/Label.hpp
 # scenes/scene2d/actors/FastImage.hpp
 # scenes/scene2d/actors/Image.hpp
@@ -54,21 +56,21 @@ Input.hpp
 # scenes/scene2d/ui/Pane.hpp
 # scenes/scene2d/Actor.hpp
 # scenes/scene2d/Action.hpp
-# scenes/scene2d/actions/Delay.hpp
-# scenes/scene2d/actions/Remove.hpp
-# scenes/scene2d/actions/FadeIn.hpp
-# scenes/scene2d/actions/FadeTo.hpp
-# scenes/scene2d/actions/FadeOut.hpp
-# scenes/scene2d/actions/Sequence.hpp
-# scenes/scene2d/actions/RotateBy.hpp
-# scenes/scene2d/actions/ActionResetingPool.hpp
-# scenes/scene2d/actions/Parallel.hpp
-# scenes/scene2d/actions/Forever.hpp
-# scenes/scene2d/actions/RotateTo.hpp
-# scenes/scene2d/actions/ScaleTo.hpp
-# scenes/scene2d/actions/Repeat.hpp
-# scenes/scene2d/actions/MoveTo.hppMessage
-# scenes/scene2d/actions/MoveBy.hpp
+scenes/scene2d/actions/Delay.hpp
+scenes/scene2d/actions/Remove.hpp
+scenes/scene2d/actions/FadeIn.hpp
+scenes/scene2d/actions/FadeTo.hpp
+scenes/scene2d/actions/FadeOut.hpp
+scenes/scene2d/actions/Sequence.hpp
+scenes/scene2d/actions/RotateBy.hpp
+scenes/scene2d/actions/ActionResetingPool.hpp
+scenes/scene2d/actions/Parallel.hpp
+scenes/scene2d/actions/Forever.hpp
+scenes/scene2d/actions/RotateTo.hpp
+scenes/scene2d/actions/ScaleTo.hpp
+scenes/scene2d/actions/Repeat.hpp
+scenes/scene2d/actions/MoveTo.hpp
+scenes/scene2d/actions/MoveBy.hpp
 ApplicationListener.hpp
 # audio/analysis/kissfft/kiss_fft.h
 # audio/analysis/kissfft/kiss_fftr.h
@@ -276,9 +278,13 @@ Version.cpp
 # assets/loaders/TextureAtlasParameter.cpp
 assets/AssetType.cpp
 # assets/AssetDescriptor.cpp
-# scenes/scene2d/Stage.cpp
-# scenes/scene2d/Action.cpp
-# scenes/scene2d/TemporalAction.cpp
+scenes/scene2d/Group.cpp
+scenes/scene2d/Stage.cpp
+scenes/scene2d/CompositeAction.cpp
+scenes/scene2d/TemporalAction.cpp
+scenes/scene2d/AnimationAction.cpp
+scenes/scene2d/Action.cpp
+scenes/scene2d/Actor.cpp
 # scenes/scene2d/actors/Image.cpp
 # scenes/scene2d/actors/LinearGroup.cpp
 # scenes/scene2d/actors/Button.cpp
@@ -323,21 +329,20 @@ assets/AssetType.cpp
 # scenes/scene2d/ui/Stack.cpp
 # scenes/scene2d/ui/ImageButton.cpp
 # scenes/scene2d/ui/ComboBox.cpp
-# scenes/scene2d/actions/ActionResetingPool.cpp
-# scenes/scene2d/actions/Parallel.cpp
-# scenes/scene2d/actions/Forever.cpp
-# scenes/scene2d/actions/MoveTo.cpp
-# scenes/scene2d/actions/MoveBy.cpp
-# scenes/scene2d/actions/Remove.cpp
-# scenes/scene2d/actions/FadeIn.cpp
-# scenes/scene2d/actions/FadeTo.cpp
-# scenes/scene2d/actions/ScaleTo.cpp
-# scenes/scene2d/actions/RotateTo.cpp
-# scenes/scene2d/actions/Sequence.cpp
-# scenes/scene2d/actions/FadeOut.cpp
-# scenes/scene2d/actions/Repeat.cpp
-# scenes/scene2d/actions/Delay.cpp
-# scenes/scene2d/actions/RotateBy.cpp
+scenes/scene2d/actions/Delay.cpp
+scenes/scene2d/actions/Remove.cpp
+scenes/scene2d/actions/FadeIn.cpp
+scenes/scene2d/actions/FadeTo.cpp
+scenes/scene2d/actions/FadeOut.cpp
+scenes/scene2d/actions/Sequence.cpp
+scenes/scene2d/actions/RotateBy.cpp
+scenes/scene2d/actions/Parallel.cpp
+scenes/scene2d/actions/Forever.cpp
+scenes/scene2d/actions/RotateTo.cpp
+scenes/scene2d/actions/ScaleTo.cpp
+scenes/scene2d/actions/Repeat.cpp
+scenes/scene2d/actions/MoveTo.cpp
+scenes/scene2d/actions/MoveBy.cpp
 # scenes/scene2d/Actor.cpp
 # scenes/scene2d/CompositeAction.cpp
 # audio/analysis/kissfft/kiss_fft.c

@@ -146,9 +146,9 @@ void SpriteCache::beginCache (unsigned int cacheID) {
         throw std::runtime_error("endCache must be called before begin.");
     
     if (cacheID == caches.size() - 1) {
-        Cache& oldCache = caches[cacheID];
+        Cache* oldCache = caches[cacheID];
         caches.erase(caches.begin() + cacheID);
-        mesh->getVerticesBuffer().limit(oldCache.offset);
+        mesh->getVerticesBuffer().limit(oldCache->offset);
         beginCache();
         return;
     }

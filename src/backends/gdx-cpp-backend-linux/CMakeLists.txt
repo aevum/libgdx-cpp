@@ -14,7 +14,7 @@ LinuxOpenALAudio.hpp LinuxOpenALSound.hpp LinuxOgg.hpp LinuxOggInputStream.hpp L
 add_library(gdx-cpp-backend-linux SHARED ${GDX_CPP_BACKEND_LINUX_SRC} ${GDX_CPP_BACKEND_LINUX_HEADERS})
 add_dependencies(gdx-cpp-backend-linux gdx-cpp gdx-cpp-agg-svg)
 
-target_link_libraries(gdx-cpp-backend-linux openal vorbis ogg vorbisfile gdx-cpp gdx-cpp-agg-svg)
+target_link_libraries(gdx-cpp-backend-linux openal vorbis ogg vorbisfile gdx-cpp)
 
 install(DIRECTORY . DESTINATION include/gdx-cpp/backends/linux
           FILES_MATCHING PATTERN "*.hpp")

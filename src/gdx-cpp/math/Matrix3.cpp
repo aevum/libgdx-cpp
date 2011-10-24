@@ -245,8 +245,9 @@ void gdx_cpp::math::Matrix3::rotate(float angle)
 {
     if (angle == 0) return;
     angle = DEGREE_TO_RAD * angle;
-    float cos = (float)Math.cos(angle);
-    float sin = (float)Math.sin(angle);
+    
+    float cos = (float)math::utils::cos(angle);
+    float sin = (float)math::utils::sin(angle);
 
     tmp[0] = cos;
     tmp[1] = sin;

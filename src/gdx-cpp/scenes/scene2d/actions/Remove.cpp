@@ -22,24 +22,28 @@
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-Remove& Remove::newObject () {
-    return new Remove();
+ActionResetingPool<Remove> Remove::pool = ActionResetingPool<Remove>(4, 100);
+
+Remove::Remove()
+: target(0),
+removed(false)
+{
 }
 
-Remove& Remove::$ () {
-    Remove remove = pool.obtain();
-    remove.removed = false;
-    remove.target = null;
+Remove* Remove::build () {
+    Remove* remove = pool.obtain();
+    remove->removed = false;
+    remove->target = NULL;
     return remove;
 }
 
-void Remove::setTarget (const gdx_cpp::scenes::scene2d::Actor& actor) {
-    this.target = actor;
+void Remove::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+    this->target = actor;
 }
 
 void Remove::act (float delta) {
     if (!removed) {
-        target.markToRemove(true);
+        target->markToRemove(true);
         removed = true;
         callActionCompletedListener();
     }
@@ -49,11 +53,11 @@ bool Remove::isDone () {
     return removed;
 }
 
-gdx_cpp::scenes::scene2d::Action& Remove::copy () {
-    return $();
+gdx_cpp::scenes::scene2d::Action* Remove::copy () {
+    return Remove::build();
 }
 
-gdx_cpp::scenes::scene2d::Actor& Remove::getTarget () {
+gdx_cpp::scenes::scene2d::Actor* Remove::getTarget () {
     return target;
 }
 

@@ -48,9 +48,9 @@ public:
     float centerX ();
     float centerY ();
     bool isStretched ();
-    Actor& findActor (const std::string& name);
-    std::list<Actor>& getActors ();
-    std::list<Group>& getGroups ();
+    Actor* findActor (const std::string& name);
+    Group::ActorList getActors ();
+    std::list<Group*> getGroups ();
     bool touchDown (int x,int y,int pointer,int button);
     bool touchUp (int x,int y,int pointer,int button);
     bool touchDragged (int x,int y,int pointer);
@@ -62,31 +62,31 @@ public:
     void act (float delta);
     void draw ();
     void dispose ();
-    void addActor (const Actor& actor);
+    void addActor (gdx_cpp::scenes::scene2d::Actor*const actor);
     std::string graphToString ();
     Group& getRoot ();
     graphics::g2d::SpriteBatch* getSpriteBatch ();
-    gdx_cpp::graphics::Camera& getCamera ();
-    void setCamera (const gdx_cpp::graphics::Camera& camera);
+    graphics::Camera*const getCamera ();
+    void setCamera (gdx_cpp::graphics::Camera* camera);
     Actor* getLastTouchedChild ();
     Actor* hit (float x, float y);
-    void toStageCoordinates (int x,int y,const gdx_cpp::math::Vector2& out);
+    void toStageCoordinates (int x, int y, gdx_cpp::math::Vector2& out);
     void clear ();
-    void removeActor (const Actor& actor);
+    void removeActor (gdx_cpp::scenes::scene2d::Actor* actor);
     void unfocusAll ();
     Stage (float width,float height,bool stretch);
 
     ~Stage();
     
 protected:
-    float width ;
-    float height ;
-    float centerX ;
-    float centerY ;
+    float _width ;
+    float _height ;
+    float _centerX ;
+    float _centerY ;
     bool stretch ;
     Group root ;
     graphics::g2d::SpriteBatch* batch ;
-    graphics::Camera camera ;
+    graphics::Camera* camera ;
 
     math::Vector2 point;
     math::Vector2 coords;

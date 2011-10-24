@@ -30,13 +30,13 @@ namespace scene2d {
 
 class Action {
 public:
-    virtual   void setTarget (const Actor& actor) = 0;
-    virtual   Actor& getTarget () = 0;
+    virtual   void setTarget (Actor* const actor) = 0;
+    virtual   Actor* getTarget () = 0;
     virtual   void act (float delta) = 0;
     virtual   bool isDone () = 0;
     void finish ();
     void callActionCompletedListener ();
-    virtual   Action& copy () = 0;
+    virtual   Action* copy () = 0;
     Action* setCompletionListener (gdx_cpp::scenes::scene2d::OnActionCompleted* listener);
     OnActionCompleted* getCompletionListener ();
     void reset ();

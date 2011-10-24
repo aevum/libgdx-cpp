@@ -20,8 +20,9 @@
 
 #include "Group.hpp"
 
+#include <algorithm>
 #include "gdx-cpp/utils/StringConvertion.hpp"
-#include <math/MathUtils.hpp>
+#include "gdx-cpp/math/MathUtils.hpp"
 
 using namespace gdx_cpp::scenes::scene2d;
 using namespace gdx_cpp;
@@ -36,16 +37,16 @@ void Group::act (float delta) {
     ActorList::iterator end = children.end();
     
     for (; it != end; ++it) {
-        it->act(delta);
-        if (it->isMarkedToRemove()) {
-            it->markToRemove(false);
+        (*it)->act(delta);
+        if ((*it)->isMarkedToRemove()) {
+            (*it)->markToRemove(false);
             removeActor(*it);
             it--;
         }
     }
 }
 
-void Group::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void Group::draw (gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
     if (!visible) return;
 
     if (debug && debugTexture != NULL && parent != NULL)
@@ -57,7 +58,7 @@ void Group::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentA
     if (transform) resetTransform(batch);
 }
 
-void Group::drawChildren (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void Group::drawChildren (gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
     parentAlpha *= color.a;
     
     ActorList::iterator it = children.begin();
@@ -65,29 +66,29 @@ void Group::drawChildren (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float
     
     if (transform) {       
         for (; it != end; ++it) {
-            if (!it->visible) continue;
-            it->draw(batch, parentAlpha);
+            if (!(*it)->visible) continue;
+            (*it)->draw(batch, parentAlpha);
         }
     } else {
         
         for (; it != end; ++it) {
-            if (!it->visible) continue;
-            it->x += x;
-            it->y += y;
-            it->draw(batch, parentAlpha);
-            it->x -= x;
-            it->y -= y;
+            if (!(*it)->visible) continue;
+            (*it)->x += x;
+            (*it)->y += y;
+            (*it)->draw(batch, parentAlpha);
+            (*it)->x -= x;
+            (*it)->y -= y;
         }
     }
     if (transform) batch.flush();
 }
 
-void Group::drawChild (const Actor& child, const gdx_cpp::graphics::g2d::SpriteBatch& batch, float parentAlpha) {
-    if (child.visible) child.draw(batch, parentAlpha * color.a);
+void Group::drawChild (Actor* child, gdx_cpp::graphics::g2d::SpriteBatch& batch, float parentAlpha) {
+    if (child->visible) child->draw(batch, parentAlpha * color.a);
     if (transform) batch.flush();
 }
 
-void Group::applyTransform (const gdx_cpp::graphics::g2d::SpriteBatch& batch) {
+void Group::applyTransform (gdx_cpp::graphics::g2d::SpriteBatch& batch) {
     gdx_cpp::math::Matrix4& newBatchTransform = updateTransform();
 
     batch.end();
@@ -108,7 +109,7 @@ gdx_cpp::math::Matrix4& Group::updateTransform () {
     if (originX != 0 || originY != 0) localTransform.mul(temp.setToTranslation(-originX, -originY));
     localTransform.trn(x, y);
 
-    Group* parentGroup = *parent;
+    Group* parentGroup = parent;
     while (parentGroup != NULL) {
         if (parentGroup->transform) break;
         parentGroup = parentGroup->parent;
@@ -125,7 +126,7 @@ gdx_cpp::math::Matrix4& Group::updateTransform () {
     return batchTransform;
 }
 
-void Group::resetTransform (const gdx_cpp::graphics::g2d::SpriteBatch& batch) {
+void Group::resetTransform (gdx_cpp::graphics::g2d::SpriteBatch& batch) {
     batch.end();
     batch.setTransformMatrix(oldBatchTransform);
     batch.begin();
@@ -134,7 +135,7 @@ void Group::resetTransform (const gdx_cpp::graphics::g2d::SpriteBatch& batch) {
 bool Group::touchDown (float x,float y,int pointer) {
     if (!touchable) return false;
 
-    if (debug) gdx_cpp::Gdx::app->log("Group", name + ": " + gdx_cpp::utils::to_string(x) + ", " + gdx_cpp::utils::to_string(y));
+    if (debug) gdx_cpp::Gdx::app->log("Group", "%s: %f,%f", name.c_str() , x, y);
 
     if (focusedActor[pointer] != NULL) {
         point.x = x;
@@ -144,10 +145,11 @@ bool Group::touchDown (float x,float y,int pointer) {
         return true;
     }
 
-    ActorList::reverse_iterator child = children.rbegin();
+    ActorList::reverse_iterator it = children.rbegin();
     ActorList::reverse_iterator end = children.rend();
     
-    for (; child != end; ++child) {   
+    for (; it != end; ++it) {
+        Actor* child = *it;
         if (!child->touchable) continue;
 
         toChildCoordinates(child, x, y, point);
@@ -158,7 +160,7 @@ bool Group::touchDown (float x,float y,int pointer) {
             }
             
             if (child->getType() == Actor::Actor_Group)
-                lastTouchedChild = ((Group*)*child)->lastTouchedChild;
+                lastTouchedChild = ((Group*)child)->lastTouchedChild;
             else
                 lastTouchedChild = child;
 
@@ -190,11 +192,11 @@ bool Group::touchMoved (float x,float y) {
     ActorList::reverse_iterator end = children.rend();
     
     for (; child != end; ++child) {   
-        if (!child->touchable) continue;
+        if (!(*child)->touchable) continue;
 
-        toChildCoordinates(child, x, y, point);
+        toChildCoordinates((*child), x, y, point);
 
-        if (child->touchMoved(point.x, point.y)) return true;
+        if ((*child)->touchMoved(point.x, point.y)) return true;
     }
     return false;
 }
@@ -242,7 +244,7 @@ Actor* Group::hit (float x,float y) {
     for (; child != end; ++child) {   
         toChildCoordinates(*child, x, y, point);
 
-        Actor* hit = child->hit(point.x, point.y);
+        Actor* hit = (*child)->hit(point.x, point.y);
         if (hit != NULL) {
             return hit;
         }
@@ -250,14 +252,14 @@ Actor* Group::hit (float x,float y) {
     return NULL;
 }
 
-void Group::addActor (const Actor* actor) {
+void Group::addActor (Actor* actor) {
     children.push_back(actor);
     if (actor->getType() == Actor_Group) groups.push_back((Group*) actor);
     if (!actor->name.empty()) namesToActors[actor->name] = actor;
     actor->parent = this;
 }
 
-void Group::addActorAt (int index,const Actor* actor) {
+void Group::addActorAt (int index, Actor* actor) {
     children.insert(children.begin() + index, actor);
     
     if (actor->getType() == Actor_Group) groups.push_back((Group*)actor);
@@ -266,19 +268,19 @@ void Group::addActorAt (int index,const Actor* actor) {
     actor->parent = this;
 }
 
-void Group::addActorBefore (const Actor* actorBefore, const Actor* actor) {
+void Group::addActorBefore (const Actor* actorBefore, Actor* actor) {
     ActorList::iterator item = std::find(children.begin(), children.end(), actorBefore);    
-    children.push_back(item - 1, actor);
+    children.insert(item - 1, actor);
     
     if (actor->getType() == Actor::Actor_Group) groups.push_back((Group*)actor);
     if (!actor->name.empty()) namesToActors[actor->name] = actor;
     actor->parent = this;
 }
 
-void Group::addActorAfter (const Actor* actorAfter,const Actor* actor) {
+void Group::addActorAfter (const Actor* actorAfter, Actor* actor) {
     ActorList::iterator item = std::find(children.begin(), children.end(), actorAfter);
 
-    children.push_back(item, actor);
+    children.insert(item, actor);
 
     if (actor->getType() == Actor_Group) groups.push_back((Group*)actor);
     
@@ -286,7 +288,7 @@ void Group::addActorAfter (const Actor* actorAfter,const Actor* actor) {
     actor->parent = this;
 }
 
-void Group::removeActor (const Actor* actor) {
+void Group::removeActor (Actor* actor) {
     children.erase(std::find(children.begin(), children.end(), actor));
     
     if (actor->getType() == Actor_Group) groups.remove((Group*)actor);
@@ -294,31 +296,33 @@ void Group::removeActor (const Actor* actor) {
     unfocusAll(actor);
 }
 
-void Group::removeActorRecursive (const Actor* actor) {
-    if (children.remove(actor)) {
+void Group::removeActorRecursive (Actor* actor) {
+    ActorList::iterator found = std::find(children.begin(), children.end(), actor);    
+    if (found != children.end()) {
+        children.erase(found);
         if (actor->getType() == Actor_Group) groups.remove((Group*)actor);
         if (!actor->name.empty()) namesToActors.erase(actor->name);
         unfocusAll(actor);
         return;
     }
 
-    std::list<Group>::iterator it = children.begin();
-    std::list<Group>::iterator end = children.end();
+    std::list<Group*>::iterator it = groups.begin();
+    std::list<Group*>::iterator end = groups.end();
 
     for (; it != end; ++it) {
-        it->removeActorRecursive(actor);
+        (*it)->removeActorRecursive(actor);
     }
 }
 
-Actor& Group::findActor (const std::string& name) {       
+Actor* Group::findActor (const std::string& name) {
     Actor* actor = NULL;
     
     if (namesToActors.count(name) == 0) {       
-        std::list<Group>::iterator it = children.begin();
-        std::list<Group>::iterator end = children.end();
+        std::list<Group*>::iterator it = groups.begin();
+        std::list<Group*>::iterator end = groups.end();
         
         for (; it != end; ++it) {
-            actor = it->findActor(name);
+            actor = (*it)->findActor(name);
             if (actor != NULL) return actor;
         }
     }
@@ -341,26 +345,28 @@ bool Group::swapActor (int first,int second) {
     return true;
 }
 
-bool Group::swapActor (const Actor* first,const Actor* second) {
+bool Group::swapActor (Actor* first, Actor* second) {
 
-    int firstIndex = children.find(first);
-    int secondIndex = children.indexOf(second);
+    ActorList::iterator firstIndex = std::find(children.begin(), children.end(), first);
+    ActorList::iterator secondIndex = std::find(children.begin(), children.end(), second);
 
-    if (firstIndex == -1 || secondIndex == -1) return false;
+    if (firstIndex == children.end() || secondIndex == children.end()) return false;
 
-    Collections.swap(children, firstIndex, secondIndex);
+    children.at(std::distance(children.begin(), firstIndex)) = second;
+    children.at(std::distance(children.begin(), secondIndex)) = first;
+    
     return true;
 }
 
-std::list<Actor>& Group::getActors () {
+Group::ActorList Group::getActors () {
     return immutableChildren;
 }
 
-std::list<Group>& Group::getGroups () {
+std::list<Group*> Group::getGroups () {
     return immutableGroups;
 }
 
-void Group::focus (const Actor* actor,int pointer) {
+void Group::focus (Actor* actor,int pointer) {
     Actor* existingActor = focusedActor[pointer];
     if (existingActor != NULL) {
         // An actor already has focus. Remove the focus if it is not a child of this group, because the focused actor could be
@@ -368,19 +374,19 @@ void Group::focus (const Actor* actor,int pointer) {
         focusedActor[pointer] = NULL;
         if (existingActor->parent != this) existingActor->parent->focus(NULL, pointer);
     }
-    if (debug) Gdx::app->log("Group", std::string("focus: ") + (actor == NULL ? "null" : actor->name));
+    if (debug) Gdx::app->log("Group", "focus: %s", actor == NULL ? "null" : actor->name.c_str());
     focusedActor[pointer] = actor;
     if (parent != NULL) parent->focus(actor, pointer);
 }
 
-void Group::keyboardFocus (const Actor* actor) {
+void Group::keyboardFocus (Actor* actor) {
     keyboardFocusedActor = actor;
     if (parent != NULL) parent->keyboardFocus(actor);
 }
 
-void Group::scrollFocus (const Actor* actor) {
+void Group::scrollFocus (scenes::scene2d::Actor* actor) {
     scrollFocusedActor = actor;
-    if (parent != NULL) parent.scrollFocus(actor);
+    if (parent != NULL) parent->scrollFocus(actor);
 }
 
 void Group::clear () {
@@ -389,8 +395,8 @@ void Group::clear () {
     namesToActors.clear();
 }
 
-void Group::sortChildren (const Comparator<Actor>& comparator) {
-    Collections.sort(children, comparator);
+void Group::sortChildren (bool (*comparator)(Actor* a, Actor* b) ) {
+    std::sort(children.begin(), children.end(), comparator);
 }
 
 void Group::unfocusAll () {
@@ -398,8 +404,11 @@ void Group::unfocusAll () {
         focusedActor[i] = NULL;
     }
 
-    for (int i = 0; i < groups.size(); i++) {
-        groups[i].unfocusAll();
+    std::list<Group*>::iterator it = groups.begin();
+    std::list<Group*>::iterator end = groups.end();
+    
+    for (; it != end; ++it) {
+        (*it)->unfocusAll();
     }
 
     keyboardFocusedActor = NULL;
@@ -417,7 +426,7 @@ void Group::unfocusAll (const Actor* actor) {
     if (scrollFocusedActor == actor) scrollFocus(NULL);
 }
 
-void Group::toChildCoordinates (const Actor* child,float x,float y,const gdx_cpp::math::Vector2& out) {
+void Group::toChildCoordinates (scenes::scene2d::Actor*const child, float x, float y, math::Vector2& out) {
     if (child->rotation == 0) {
         if (child->scaleX == 1 && child->scaleY == 1) {
             out.x = x - child->x;
@@ -432,8 +441,8 @@ void Group::toChildCoordinates (const Actor* child,float x,float y,const gdx_cpp
             }
         }
     } else {
-        float cos = (float)math::utils::cos(child.rotation * math::utils::degreesToRadians);
-        float sin = (float)math::utils::sin(child.rotation * math::utils::degreesToRadians);
+        float cos = (float)math::utils::cos(child->rotation * math::utils::detail::degreesToRadians);
+        float sin = (float)math::utils::sin(child->rotation * math::utils::detail::degreesToRadians);
 
         if (child->scaleX == 1 && child->scaleY == 1) {
             if (child->originX == 0 && child->originY == 0) {

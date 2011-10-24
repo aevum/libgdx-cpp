@@ -24,6 +24,7 @@
 #include "gdx-cpp/graphics/Color.hpp"
 #include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
 #include "gdx-cpp/utils/PooledLinkedList.hpp"
+#include "gdx-cpp/math/Vector2.hpp"
 
 namespace gdx_cpp {
 namespace scenes {
@@ -39,9 +40,9 @@ public:
         Actor_Group
     };
 
-    virtual ActorType getType() { return Actor_Actor; }
+    virtual ActorType getType() const { return Actor_Actor; }
     
-    virtual void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) = 0;
+    virtual void draw (gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) = 0;
     virtual bool touchDown (float x,float y,int pointer) = 0;
     virtual void touchUp (float x,float y,int pointer) = 0;
     virtual void touchDragged (float x,float y,int pointer) = 0;
@@ -52,12 +53,12 @@ public:
     bool keyUp (int keycode);
     bool keyTyped (char character);
     virtual Actor* hit (float x,float y) = 0;
-    void toLocalCoordinates (const gdx_cpp::math::Vector2& point);
+    void toLocalCoordinates (gdx_cpp::math::Vector2& point);
     void remove ();
     void act (float delta);
-    void action (const Action& action);
+    void action (gdx_cpp::scenes::scene2d::Action*const action);
     void clearActions ();
-    std::string toString ();
+    std::string toString () const;
     void markToRemove (bool boolean);
     bool isMarkedToRemove ();
     Actor ();
@@ -72,8 +73,8 @@ public:
     float height ;
     float originX ;
     float originY ;
-    float scaleX = 1;
-    float scaleY = 1;
+    float scaleX;
+    float scaleY;
     float rotation ;
     
     gdx_cpp::graphics::Color color;

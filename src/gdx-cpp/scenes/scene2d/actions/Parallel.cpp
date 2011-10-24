@@ -22,43 +22,27 @@
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-Parallel& Parallel::newObject () {
-    return new Parallel();
-}
+ActionResetingPool<Parallel> Parallel::pool = ActionResetingPool<Parallel>(4, 100);
 
-Parallel& Parallel::$ () {
-    Parallel parallel = pool.obtain();
-    parallel.actions.clear();
-    if (parallel.finished == null || parallel.finished.length < actions.length)
-        parallel.finished = new boolean[actions.length];
-    int len = actions.length;
-    for (int i = 0; i < len; i++)
-        parallel.finished[i] = false;
-    len = actions.length;
-    for (int i = 0; i < len; i++)
-        parallel.actions.add(actions[i]);
-    return parallel;
-}
-
-void Parallel::setTarget (const gdx_cpp::scenes::scene2d::Actor& actor) {
-    this.target = actor;
+void Parallel::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+    this->target = actor;
     int len = actions.size();
     for (int i = 0; i < len; i++)
-        actions.get(i).setTarget(actor);
+        actions[i]->setTarget(actor);
 }
 
 void Parallel::act (float delta) {
     int len = actions.size();
-    boolean allDone = true;
-    Action action;
+    bool allDone = true;
+    Action* action;
     for (int i = 0; i < len; i++) {
-        action = actions.get(i);
-        if (!action.isDone()) {
-            action.act(delta);
+        action = actions[i];
+        if (!action->isDone()) {
+            action->act(delta);
             allDone = false;
         } else {
             if (!finished[i]) {
-                action.finish();
+                action->finish();
                 finished[i] = true;
                 allDone &= finished[i];
             }
@@ -70,34 +54,37 @@ void Parallel::act (float delta) {
 bool Parallel::isDone () {
     int len = actions.size();
     for (int i = 0; i < len; i++)
-        if (actions.get(i).isDone() == false) return false;
+        if (actions[i]->isDone() == false) return false;
     return true;
 }
 
 void Parallel::finish () {
     pool.free(this);
+
     int len = actions.size();
     for (int i = 0; i < len; i++) {
-        if (!finished[i]) actions.get(i).finish();
+        if (!finished[i]) actions[i]->finish();
     }
-    super.finish();
+    
+    CompositeAction::finish();
 }
 
-gdx_cpp::scenes::scene2d::Action& Parallel::copy () {
-    Parallel parallel = pool.obtain();
-    parallel.actions.clear();
-    if (parallel.finished == null || parallel.finished.length < actions.size())
-        parallel.finished = new boolean[actions.size()];
+gdx_cpp::scenes::scene2d::Action* Parallel::copy () {
+    Parallel* parallel = pool.obtain();
+    parallel->actions.clear();
+    if (parallel->finished.empty() || parallel->finished.size() < actions.size())
+        parallel->finished.resize(actions.size());
+
     int len = actions.size();
-    for (int i = 0; i < len; i++)
-        parallel.finished[i] = false;
-    len = actions.size();
-    for (int i = 0; i < len; i++)
-        parallel.actions.add(actions.get(i).copy());
+    for (int i = 0; i < len; i++) {
+        parallel->finished[i] = false;
+        parallel->actions.push_back(actions[i]->copy());
+    }
+    
     return parallel;
 }
 
-gdx_cpp::scenes::scene2d::Actor& Parallel::getTarget () {
+gdx_cpp::scenes::scene2d::Actor* Parallel::getTarget () {
     return target;
 }
 

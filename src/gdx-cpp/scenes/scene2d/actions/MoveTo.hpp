@@ -21,6 +21,9 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTIONS_MOVETO_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTIONS_MOVETO_HPP_
 
+#include "gdx-cpp/scenes/scene2d/AnimationAction.hpp"
+#include "ActionResetingPool.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
@@ -28,17 +31,21 @@ namespace actions {
 
 class MoveTo: public gdx_cpp::scenes::scene2d::AnimationAction {
 public:
-    static MoveTo& $ (float x,float y,float duration);
-    void setTarget (const gdx_cpp::scenes::scene2d::Actor& actor);
+    static MoveTo* build(float x,float y,float duration);
+    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
     void act (float delta);
     void finish ();
-    gdx_cpp::scenes::scene2d::Action& copy ();
+    gdx_cpp::scenes::scene2d::Action* copy ();
 
 protected:
-    MoveTo& newObject ();
+    float x;
+    float y;
+    float startX;
+    float startY;
+    float deltaX;
+    float deltaY;
 
-private:
-
+    static ActionResetingPool<MoveTo> pool;
 };
 
 } // namespace gdx_cpp

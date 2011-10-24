@@ -31,20 +31,21 @@ namespace actions {
 
 class FadeOut: public AnimationAction {
 public:
-    static FadeOut* operator() (float duration);
+    static FadeOut* build (float duration);
 
-    void setTarget (const gdx_cpp::scenes::scene2d::Actor& actor);
+    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
     void act (float delta);
     void finish ();
     
-    gdx_cpp::scenes::scene2d::Action& copy ();
+    gdx_cpp::scenes::scene2d::Action* copy ();
 
-protected:
     FadeOut();
-    float startAlpha = 0;
-    float deltaAlpha = 0;
+    
+protected:    
+    float startAlpha;
+    float deltaAlpha;
 
-    static ActionResetingPool<FadeOut*> pool;
+    static ActionResetingPool<FadeOut> pool;
 };
 
 } // namespace gdx_cpp

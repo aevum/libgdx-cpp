@@ -17,8 +17,8 @@
     @author Victor Vicente de Carvalho victor.carvalho@aevumlab.com
 */
 
-#ifndef GDX_CPP_UTILS_POOLEDLINKEDLIST<T>_HPP_
-#define GDX_CPP_UTILS_POOLEDLINKEDLIST<T>_HPP_
+#ifndef GDX_CPP_UTILS_POOLEDLINKEDLIST_HPP_
+#define GDX_CPP_UTILS_POOLEDLINKEDLIST_HPP_
 
 #include "Pool.hpp"
 
@@ -35,40 +35,41 @@ public:
     
     struct Item {
         T* payload;
-        Item<T>* next;
-        Item<T>* prev;
+        Item* next;
+        Item* prev;
+        Item() : payload(NULL), next(NULL), prev(NULL) { }
     };
     
-    void add (T object) {
-        Item<T>& item = pool.obtain();
-        item.payload = object;
-        item.next = NULL;
-        item.prev = NULL;
+    void add (T* const object) {
+        Item* item = pool.obtain();
+        item->payload = object;
+        item->next = NULL;
+        item->prev = NULL;
         
         if (head == NULL) {
-            head = &item;
-            tail = &item;
+            head = item;
+            tail = item;
             size++;
             return;
         }
         
-        item.prev = tail;
-        tail.next = &item;
-        tail = &item;
+        item->prev = tail;
+        tail->next = item;
+        tail = item;
         size++;
 
     }
     
     void iter () {
-        iter = head;
+        iterator = head;
     }
     
-    T next () {
-        if (iter == NULL) return NULL;
+    T* next () {
+        if (iterator == NULL) return NULL;
         
-        T payload = iter->payload;
-        curr = iter;
-        iter = iter->next;
+        T* payload = iterator->payload;
+        curr = iterator;
+        iterator = iterator->next;
         return payload;
     }
     
@@ -78,9 +79,9 @@ public:
         size--;
         pool.free(curr);
         
-        Item<T>* c = curr;
-        Item<T>* n = curr->next;
-        Item<T>* p = curr->prev;
+        Item* c = curr;
+        Item* n = curr->next;
+        Item* p = curr->prev;
         curr = NULL;
         
         if (size == 0) {
@@ -107,21 +108,21 @@ public:
     
     void clear () {
         iter();
-        T v = NULL;
+        T* v = NULL;
         while ((v = next()) != NULL) {
             remove();
         }
     }
 
 protected:
-    Item<T>* newObject ();
+    Item* newObject ();
 
 private:
-    Pool< Item<T> > pool;
-    Item<T>* head;
-    Item<T>* tail;
-    Item<T>* iter;
-    Item<T>* curr;
+    Pool< Item > pool;
+    Item* head;
+    Item* tail;
+    Item* iterator;
+    Item* curr;
     int size;
 };
 

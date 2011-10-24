@@ -22,9 +22,9 @@
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-ActionResetingPool<FadeOut*> FadeOut::pool = ActionResetingPool<FadeOut*>(4, 100);
+ActionResetingPool<FadeOut> FadeOut::pool = ActionResetingPool<FadeOut>(4, 100);
 
-FadeOut* FadeOut::operator()(float duration)
+FadeOut* FadeOut::build(float duration)
 {
     FadeOut* action = pool.obtain();
     action->duration = duration;
@@ -32,7 +32,7 @@ FadeOut* FadeOut::operator()(float duration)
     return action;
 }
 
-void FadeOut::setTarget (const gdx_cpp::scenes::scene2d::Actor& actor) {
+void FadeOut::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
     this->target = actor;
     this->startAlpha = target->color.a;
     this->deltaAlpha = -target->color.a;
@@ -54,8 +54,8 @@ void FadeOut::finish () {
     pool.free(this);
 }
 
-gdx_cpp::scenes::scene2d::Action& FadeOut::copy () {
-    FadeOut* fadeOut = FadeOut(duration);
+gdx_cpp::scenes::scene2d::Action* FadeOut::copy () {
+    FadeOut* fadeOut = FadeOut::build(duration);
     if (interpolator != NULL) fadeOut->setInterpolator(interpolator->copy());
     return fadeOut;
 }

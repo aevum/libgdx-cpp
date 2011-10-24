@@ -26,7 +26,6 @@
 #include "gdx-cpp/graphics/Mesh.hpp"
 #include "gdx-cpp/graphics/VertexAttribute.hpp"
 #include "gdx-cpp/graphics/GL20.hpp"
-#include "gdx-cpp/Graphics.hpp"
 #include "gdx-cpp/Gdx.hpp"
 #include "Sprite.hpp"
 #include "gdx-cpp/utils/NumberUtils.hpp"
@@ -1023,7 +1022,7 @@ SpriteBatch::~SpriteBatch()
         delete customShader;
     }
 
-    for (int i = 0; i < buffers.size(); ++i) {
+    for (unsigned int i = 0; i < buffers.size(); ++i) {
         delete buffers[i];
     }
 
@@ -1066,12 +1065,12 @@ void SpriteBatch::draw(const Texture& texture, float* const spriteVertices, int 
 
 void SpriteBatch::setupMatrices()
 {
-    if (!Gdx.graphics.isGL20Available()) {
+    if (!Gdx::graphics->isGL20Available()) {
         GL10& gl = *Gdx::gl10;
         gl.glMatrixMode(GL10::GL_PROJECTION);
-        gl.glLoadMatrixf(projectionMatrix.val, 0);
+        gl.glLoadMatrixf(projectionMatrix.val);
         gl.glMatrixMode(GL10::GL_MODELVIEW);
-        gl.glLoadMatrixf(transformMatrix.val, 0);
+        gl.glLoadMatrixf(transformMatrix.val);
     } else {
         combinedMatrix.set(projectionMatrix).mul(transformMatrix);
         if (customShader != NULL) {

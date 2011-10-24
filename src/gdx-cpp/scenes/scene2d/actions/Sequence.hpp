@@ -33,7 +33,7 @@ namespace actions {
 class Sequence: public CompositeAction {
 public:
     template<typename T, int size>
-    static Sequence* operator() (T(&actions)[size]) {
+    static Sequence* build (T(&actions)[size]) {
         Sequence* sequence = pool.obtain();
         
         for (int i = 0; i < sequence->actions.size();  ++i) {
@@ -46,19 +46,20 @@ public:
         return sequence;
     }
      
-    void setTarget (const gdx_cpp::scenes::scene2d::Actor& actor);
+    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
     void act (float delta);
     bool isDone ();
     void finish ();
-    gdx_cpp::scenes::scene2d::Action& copy ();
+    gdx_cpp::scenes::scene2d::Action* copy ();
     Actor* getTarget ();
 
+    Sequence();
+    
 protected:
-    Sequence* newObject ();
     Actor* target;
-    int currAction;
+    unsigned int currAction;
 
-    static ActionResetingPool<Sequence*> pool;
+    static ActionResetingPool<Sequence> pool;
 };
 
 } // namespace gdx_cpp
