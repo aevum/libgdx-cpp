@@ -25,6 +25,16 @@
 using namespace gdx_cpp::graphics::g2d;
 using namespace gdx_cpp::graphics;
 
+TextureRegion::ptr TextureRegion::nemFromTexture(gdx_cpp::graphics::Texture::ptr texture)
+{
+    return ptr(new TextureRegion(texture));
+}
+
+TextureRegion::ptr TextureRegion::nemFromRegion(TextureRegion& region)
+{
+    return ptr(new TextureRegion(region));
+}
+
 /** Constructs a region with no texture and no coordinates defined. */
 TextureRegion::TextureRegion ():  u(0.0), v(0.0), u2(0.0), v2(0.0)
 {

@@ -22,7 +22,7 @@
 #define GDX_CPP_GRAPHICS_G2D_TEXTUREREGION_HPP_
 
 #include "gdx-cpp/graphics/Texture.hpp"
-#include <gdx-cpp/utils/MatrixBase.hpp>//TODO check
+#include "gdx-cpp/utils/MatrixBase.hpp"
 
 namespace gdx_cpp {
 namespace graphics {
@@ -32,6 +32,9 @@ class TextureRegion {
 public:
     typedef ref_ptr_maker<TextureRegion>::type ptr;
 
+    static ptr nemFromTexture(Texture::ptr texture);
+    static ptr nemFromRegion(TextureRegion& region);
+    
     TextureRegion ();
     TextureRegion (Texture::ptr _texture);
     TextureRegion (Texture::ptr _texture, int x, int y, int width, int height);

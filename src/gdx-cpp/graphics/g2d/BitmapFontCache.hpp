@@ -21,6 +21,9 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_BITMAPFONTCACHE_HPP_
 #define GDX_CPP_GRAPHICS_G2D_BITMAPFONTCACHE_HPP_
 
+#include "gdx-cpp/utils/Disposable.hpp"
+#include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
+
 namespace gdx_cpp {
 namespace graphics {
 namespace g2d {
@@ -29,10 +32,11 @@ class BitmapFontCache: public gdx_cpp::utils::Disposable {
 public:
     void setPosition (float x,float y);
     void translate (float xAmount,float yAmount);
+    void setColor (float color);
     void setColor (const gdx_cpp::graphics::Color& tint);
     void setColor (float r,float g,float b,float a);
-    void draw (const SpriteBatch& spriteBatch);
-    void draw (const SpriteBatch& spriteBatch,float alphaModulation);
+    void draw (SpriteBatch& spriteBatch);
+    void draw (SpriteBatch& spriteBatch,float alphaModulation);
     gdx_cpp::graphics::Color& getColor ();
     gdx_cpp::graphics::g2d::BitmapFont::TextBounds& setText (const CharSequence& str,float x,float y);
     gdx_cpp::graphics::g2d::BitmapFont::TextBounds& setText (const CharSequence& str,float x,float y,int start,int end);
@@ -47,6 +51,8 @@ public:
     void dispose ();
     void setUseIntegerPositions (bool use);
     bool usesIntegerPositions ();
+    BitmapFontCache (const BitmapFont& font);
+    BitmapFontCache (const BitmapFont& font,bool integer);
 
 protected:
 
@@ -55,7 +61,13 @@ private:
     void reset (int glyphCount);
     float addToCache (const CharSequence& str,float x,float y,int start,int end);
     void addGlyph (const gdx_cpp::graphics::g2d::BitmapFont::Glyph& glyph,float x,float y,float width,float height);
-    BitmapFont font;
+    BitmapFont font ;
+    float[] vertices = new float[0];
+    int idx ;
+    float color = Color.WHITE.toFloatBits();
+    Color tmpColor = new Color(Color.WHITE);
+    TextBounds textBounds = new TextBounds();
+    boolean integer = true;
 };
 
 } // namespace gdx_cpp

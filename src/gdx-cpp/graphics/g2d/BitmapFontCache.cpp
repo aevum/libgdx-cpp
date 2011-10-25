@@ -41,6 +41,14 @@ void BitmapFontCache::translate (float xAmount,float yAmount) {
     }
 }
 
+void BitmapFontCache::setColor (float color) {
+    if (color == this.color) return;
+    this.color = color;
+    float[] vertices = this.vertices;
+    for (int i = 2, n = idx; i < n; i += 5)
+        vertices[i] = color;
+}
+
 void BitmapFontCache::setColor (const gdx_cpp::graphics::Color& tint) {
     final float color = tint.toFloatBits();
     if (color == this.color) return;
@@ -150,63 +158,45 @@ float BitmapFontCache::addToCache (const CharSequence& str,float x,float y,int s
 }
 
 void BitmapFontCache::addGlyph (const gdx_cpp::graphics::g2d::BitmapFont::Glyph& glyph,float x,float y,float width,float height) {
-    final float x2 = x + width;
-    final float y2 = y + height;
+    float x2 = x + width;
+    float y2 = y + height;
     final float u = glyph.u;
     final float u2 = glyph.u2;
     final float v = glyph.v;
     final float v2 = glyph.v2;
 
     final float[] vertices = this.vertices;
-    if (!integer) {
-        vertices[idx++] = x;
-        vertices[idx++] = y;
-        vertices[idx++] = color;
-        vertices[idx++] = u;
-        vertices[idx++] = v;
 
-        vertices[idx++] = x;
-        vertices[idx++] = y2;
-        vertices[idx++] = color;
-        vertices[idx++] = u;
-        vertices[idx++] = v2;
-
-        vertices[idx++] = x2;
-        vertices[idx++] = y2;
-        vertices[idx++] = color;
-        vertices[idx++] = u2;
-        vertices[idx++] = v2;
-
-        vertices[idx++] = x2;
-        vertices[idx++] = y;
-        vertices[idx++] = color;
-        vertices[idx++] = u2;
-        vertices[idx++] = v;
-    } else {
-        vertices[idx++] = (int)x;
-        vertices[idx++] = (int)y;
-        vertices[idx++] = color;
-        vertices[idx++] = u;
-        vertices[idx++] = v;
-
-        vertices[idx++] = (int)x;
-        vertices[idx++] = (int)y2;
-        vertices[idx++] = color;
-        vertices[idx++] = u;
-        vertices[idx++] = v2;
-
-        vertices[idx++] = (int)x2;
-        vertices[idx++] = (int)y2;
-        vertices[idx++] = color;
-        vertices[idx++] = u2;
-        vertices[idx++] = v2;
-
-        vertices[idx++] = (int)x2;
-        vertices[idx++] = (int)y;
-        vertices[idx++] = color;
-        vertices[idx++] = u2;
-        vertices[idx++] = v;
+    if (integer) {
+        x = (int)x;
+        y = (int)y;
+        x2 = (int)x2;
+        y2 = (int)y2;
     }
+
+    vertices[idx++] = x;
+    vertices[idx++] = y;
+    vertices[idx++] = color;
+    vertices[idx++] = u;
+    vertices[idx++] = v;
+
+    vertices[idx++] = x;
+    vertices[idx++] = y2;
+    vertices[idx++] = color;
+    vertices[idx++] = u;
+    vertices[idx++] = v2;
+
+    vertices[idx++] = x2;
+    vertices[idx++] = y2;
+    vertices[idx++] = color;
+    vertices[idx++] = u2;
+    vertices[idx++] = v2;
+
+    vertices[idx++] = x2;
+    vertices[idx++] = y;
+    vertices[idx++] = color;
+    vertices[idx++] = u2;
+    vertices[idx++] = v;
 }
 
 gdx_cpp::graphics::g2d::BitmapFont::TextBounds& BitmapFontCache::setText (const CharSequence& str,float x,float y) {
@@ -326,5 +316,14 @@ void BitmapFontCache::setUseIntegerPositions (bool use) {
 
 bool BitmapFontCache::usesIntegerPositions () {
     return integer;
+}
+
+BitmapFontCache::BitmapFontCache (const BitmapFont& font) {
+    this(font, true);
+}
+
+BitmapFontCache::BitmapFontCache (const BitmapFont& font,bool integer) {
+    this.font = font;
+    this.integer = integer;
 }
 
