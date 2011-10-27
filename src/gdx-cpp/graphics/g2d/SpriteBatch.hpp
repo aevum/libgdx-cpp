@@ -77,9 +77,7 @@ public:
     int renderCalls;
     int maxSpritesInBatch;
 
-    virtual ~SpriteBatch();
-    
-protected:
+    virtual ~SpriteBatch();    
     float color;
 private:
     void createShader ();

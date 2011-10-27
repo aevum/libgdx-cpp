@@ -32,8 +32,8 @@ class TextureRegion {
 public:
     typedef ref_ptr_maker<TextureRegion>::type ptr;
 
-    static ptr nemFromTexture(Texture::ptr texture);
-    static ptr nemFromRegion(TextureRegion& region);
+    static ptr newFromTexture(Texture::ptr texture);
+    static ptr newFromRegion(TextureRegion& region);
     
     TextureRegion ();
     TextureRegion (Texture::ptr _texture);

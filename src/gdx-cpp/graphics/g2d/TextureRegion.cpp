@@ -25,12 +25,12 @@
 using namespace gdx_cpp::graphics::g2d;
 using namespace gdx_cpp::graphics;
 
-TextureRegion::ptr TextureRegion::nemFromTexture(gdx_cpp::graphics::Texture::ptr texture)
+TextureRegion::ptr TextureRegion::newFromTexture(gdx_cpp::graphics::Texture::ptr texture)
 {
     return ptr(new TextureRegion(texture));
 }
 
-TextureRegion::ptr TextureRegion::nemFromRegion(TextureRegion& region)
+TextureRegion::ptr TextureRegion::newFromRegion(TextureRegion& region)
 {
     return ptr(new TextureRegion(region));
 }

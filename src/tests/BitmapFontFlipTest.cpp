@@ -130,7 +130,7 @@ public:
         
         static std::string text3 = "Kerning: LYA moo";
         font->setColor(Color::WHITE);
-        font->draw(*spriteBatch, text3, 210, 320 - 66, 0, text.length() - 3);
+        font->draw(*spriteBatch, text3, 210, 320 - 66, 0, text3.length() - 3);
     }
 
     void renderCached () {

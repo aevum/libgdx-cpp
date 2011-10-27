@@ -1104,7 +1104,7 @@ void SpriteBatch::setProjectionMatrix(math::Matrix4& projection)
         flush();
     }
 
-    projection.set(projection);
+    projectionMatrix.set(projection);
 
     if (drawing) {
         setupMatrices();

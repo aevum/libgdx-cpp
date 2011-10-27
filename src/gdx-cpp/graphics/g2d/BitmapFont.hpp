@@ -33,23 +33,23 @@ namespace gdx_cpp {
 namespace graphics {
 namespace g2d {
 
+class BitmapFontCache;
+
 class BitmapFont: public gdx_cpp::utils::Disposable {
+friend class BitmapFontCache;
 protected:
-    static int LOG2_PAGE_SIZE = 9;
-    static int PAGE_SIZE = 1 << LOG2_PAGE_SIZE;
-    static int PAGES = 0x10000 / PAGE_SIZE;
+    static const int LOG2_PAGE_SIZE = 9;
+    static const int PAGE_SIZE = 1 << LOG2_PAGE_SIZE;
+    static const int PAGES = 0x10000 / PAGE_SIZE;
     
 public:
     enum HAlignment {
-        LEFT, CENTER, RIGHT
+        HALIGNMENT_LEFT, HALIGNMENT_CENTER, HALIGNMENT_RIGHT
     };
     
-    class Glyph {
-    public:
+    struct Glyph {    
         int srcX;
         int srcY;
-
-    protected:
         int width, height;
         float u, v, u2, v2;
         int xoffset, yoffset;
@@ -58,34 +58,40 @@ public:
         
         int getKerning (char ch);        
         void setKerning (int ch, int value);
+
+        ~Glyph();
     };
     
     class BitmapFontData {
+    friend class BitmapFont;
+    friend class BitmapFontCache;
     protected:
         std::string imagePath;
         files::FileHandle::ptr fontFile;
         bool flipped;
         float lineHeight;
-        float capHeight = 1;
+        float capHeight;
         float ascent;
         float descent;
         float down;
-        float scaleX = 1, scaleY = 1;
+        float scaleX , scaleY;
 
-        Glyph** glyphs;
+        Glyph*** glyphs;
         
         float spaceWidth;
-        float xHeight = 1;
+        float xHeight;
 
     public:
-        BitmapFontData (gdx_cpp::files::FileHandle::ptr fontFile, boolean flip);
+        ~BitmapFontData();
+        
+        BitmapFontData (gdx_cpp::files::FileHandle::ptr fontFile, bool flip);
         Glyph* getGlyph (char ch);
         std::string getImagePath ();
-        gdx_cpp::files::FileHandle& getFontFile ();
+        gdx_cpp::files::FileHandle::ptr getFontFile ();
 
     private:
         void setGlyph (int ch,Glyph* glyph);
-        Glyph& getFirstGlyph ();
+        Glyph* getFirstGlyph ();
     };
 
     struct TextBounds {
@@ -94,20 +100,20 @@ public:
         
         TextBounds () ;
         
-        TextBounds (TextBounds bounds) {
+        TextBounds (const TextBounds& bounds) {
             set(bounds);
         }
         
-        void set (TextBounds bounds) ;
+        void set (const TextBounds& bounds) ;
     };
 
 
     TextBounds& draw (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, const std::string& str, float x, float y);
     TextBounds& draw (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, const std::string& str, float x, float y, int start, int end);
     TextBounds& drawMultiLine (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, const std::string& str, float x, float y);
-    TextBounds& drawMultiLine (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, const std::string& str, float x, float y, float alignmentWidth, const gdx_cpp::graphics::g2d::BitmapFont::HAlignment& alignment);
-    TextBounds& drawWrapped (const graphics::g2d::SpriteBatch& spriteBatch,const CharSequence& str,float x,float y,float wrapWidth);
-    TextBounds& drawWrapped (const graphics::g2d::SpriteBatch& spriteBatch,const CharSequence& str,float x,float y,float wrapWidth,const HAlignment& alignment);
+    TextBounds& drawMultiLine (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, const std::string& str, float x, float y, float alignmentWidth, int alignment);
+    TextBounds& drawWrapped (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth);
+    TextBounds& drawWrapped (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth, const gdx_cpp::graphics::g2d::BitmapFont::HAlignment& alignment);
     TextBounds& getBounds (const std::string& str);
     TextBounds& getBounds (const std::string& str,int start,int end);
     TextBounds& getMultiLineBounds (const std::string& str);
@@ -126,7 +132,7 @@ public:
     void scale (float amount);
     float getScaleX ();
     float getScaleY ();
-    TextureRegion::ptr& getRegion ();
+    TextureRegion::ptr getRegion ();
     float getLineHeight ();
     float getSpaceWidth ();
     float getXHeight ();
@@ -146,29 +152,30 @@ public:
                       bool flip = false,
                       bool integer = true);
 
-
-protected:
-    int indexOf (const std::string& text, char ch, int start) {
+    static int indexOf (const std::string& text, char ch, int start) {
         int n = text.length();
         for (; start < n; start++)
             if (text[start] == ch) return start;
-        return n;
+            return n;
     }
+    
+protected:  
     
     BitmapFont (BitmapFontData* data, TextureRegion::ptr region, bool integer);
     
-    static char xChars[] = {'x', 'e', 'a', 'o', 'n', 's', 'r', 'c', 'u', 'm', 'v', 'w', 'z'};
-
+    static const char xChars[];
+    static const char capChars[];
+    
     graphics::g2d::TextureRegion::ptr region;
     TextBounds textBounds;
-    float color = graphics::Color::WHITE.toFloatBits();
-    Color tempColor = new Color(1, 1, 1, 1);
+    float color;
+    Color tempColor;
     bool flipped;
-    bool integer = true;
+    bool integer;
     BitmapFontData* data;
     
 private:    
-    void load (const BitmapFontData& data);
+    void load (BitmapFontData* data);
 };
 
 } // namespace gdx_cpp

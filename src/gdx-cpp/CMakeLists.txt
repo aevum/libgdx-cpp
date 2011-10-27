@@ -181,11 +181,11 @@ graphics/g3d/keyframed/Keyframe.hpp
 graphics/g3d/keyframed/KeyframeAnimator.hpp
 graphics/g3d/keyframed/KeyframedModel.hpp
 graphics/g3d/keyframed/KeyframeAnimation.hpp
-# graphics/g2d/BitmapFontCache.hpp
+graphics/g2d/BitmapFontCache.hpp
 graphics/g2d/Animation.hpp
 graphics/g2d/detail/gdx2d.h
 graphics/g2d/detail/stb_truetype.h
-# graphics/g2d/BitmapFont.hpp
+graphics/g2d/BitmapFont.hpp
 graphics/g2d/TextureRegion.hpp
 graphics/g2d/SpriteCache.hpp
 graphics/g2d/ParticleEffect.hpp
@@ -433,8 +433,8 @@ graphics/Pixmap.cpp
 # graphics/g3d/keyframed/KeyframedModel.cpp
 # graphics/g3d/keyframed/KeyframeAnimator.cpp
 # graphics/g3d/Animator.cpp
-# graphics/g2d/BitmapFont.cpp
-# # graphics/g2d/BitmapFontCache.cpp
+graphics/g2d/BitmapFont.cpp
+graphics/g2d/BitmapFontCache.cpp
 graphics/g2d/detail/gdx2d.c
 graphics/g2d/detail/stb_image.c
 graphics/g2d/EmptyNinePatch.cpp
