@@ -24,8 +24,8 @@ public:
 
     void createWorld (b2World& world) {
         {
-            b2PolygonShape * shape = new b2PolygonShape();
-            shape->SetAsEdge(b2Vec2(-40.0f, 0), b2Vec2(40, 0));
+            b2EdgeShape* shape = new b2EdgeShape();
+            shape->Set(b2Vec2(-40.0f, 0), b2Vec2(40, 0));
 
             b2FixtureDef fd;
             fd.shape = shape;
@@ -91,7 +91,7 @@ public:
             jd.enableLimit = true;
             jd.localAnchorA.Set(0, 4);
             jd.localAnchorB.Set(0, 0);
-            jd.localAxis1.Set(0, 1);
+            jd.localAxisA.Set(0, 1);
             jd.lowerTranslation = -1;
             jd.upperTranslation = 1;
 

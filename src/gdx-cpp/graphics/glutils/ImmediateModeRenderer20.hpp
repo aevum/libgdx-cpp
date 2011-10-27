@@ -22,30 +22,57 @@
 #define GDX_CPP_GRAPHICS_GLUTILS_IMMEDIATEMODERENDERER20_HPP_
 
 #include "ImmediateModeRenderer.hpp"
+#include "ShaderProgram.hpp"
+#include "gdx-cpp/graphics/Mesh.hpp"
+
+#include <string>
+#include <vector>
 
 namespace gdx_cpp {
 namespace graphics {
 namespace glutils {
 
-class ImmediateModeRenderer20 : public ImmediateModeRenderer{
+class ImmediateModeRenderer20 : public ImmediateModeRenderer {
 public:
-    std::string& createVertexShader (bool hasNormals,bool hasColors,int numTexCoords);
-    void begin (const gdx_cpp::math::Matrix4& projModelView, int primitiveType);
-    void begin (const ShaderProgram& shader,int primitiveType);
+    RendererType getRendererType() { return IMMEDIATE_GLES20; }
+    
+    std::string createVertexShader (bool hasNormals, bool hasColors, int numTexCoords);
+    void begin (gdx_cpp::math::Matrix4& projModelView,int primitiveType);
+    void begin (gdx_cpp::graphics::glutils::ShaderProgram* shader, int primitiveType);
     void color (float r,float g,float b,float a);
     void texCoord (float u,float v);
     void normal (float x,float y,float z);
     void vertex (float x,float y,float z);
     void end ();
     int getNumVertices ();
-    int getMaxVertices();
-    void dispose();
+    int getMaxVertices ();
+    void dispose ();
+    
+    ImmediateModeRenderer20 (bool hasNormals,bool hasColors,int numTexCoords, int maxVertices = 5000);
 
-private:
-    gdx_cpp::graphics::VertexAttribute* buildVertexAttributes (bool hasNormals,bool hasColor,int numTexCoords);
-    std::string& createFragmentShader (bool hasNormals,bool hasColors,int numTexCoords);
+protected:
+    int primitiveType;
+    int vertexIdx;
+    int numSetTexCoords;
     int maxVertices;
     int numVertices;
+    Mesh mesh;
+    int numTexCoords;
+    int vertexSize;
+    int normalOffset;
+    int colorOffset;
+    int texCoordOffset ;
+    math::Matrix4 projModelView;
+    float* vertices;
+    ShaderProgram* customShader ;
+    ShaderProgram* defaultShader ;
+    std::vector<VertexAttribute> attribs;
+    std::string vertexShader;
+    std::string fragmentShader;
+
+private:
+    std::vector<gdx_cpp::graphics::VertexAttribute> buildVertexAttributes (bool hasNormals,bool hasColor,int numTexCoords);
+    std::string createFragmentShader (bool hasNormals, bool hasColors, int numTexCoords);
 };
 
 } // namespace gdx_cpp
@@ -53,4 +80,3 @@ private:
 } // namespace glutils
 
 #endif // GDX_CPP_GRAPHICS_GLUTILS_IMMEDIATEMODERENDERER20_HPP_
-

@@ -22,13 +22,15 @@ public:
             bd.position.Set(0, 0);
             b2Body * body = world.CreateBody(&bd);
 
-            b2PolygonShape * shape = new b2PolygonShape();
-            shape->SetAsEdge(b2Vec2(-10, 0), b2Vec2(10, 0));
-            body->CreateFixture(shape, 0);
-
-            shape->SetAsBox(0.2f, 1.0f, b2Vec2(0.5f, 1.0f), 0);
+            b2EdgeShape * shape = new b2EdgeShape();
+            shape->Set(b2Vec2(-10, 0), b2Vec2(10, 0));
             body->CreateFixture(shape, 0);
             delete shape;
+
+            b2PolygonShape* poly = new b2PolygonShape;
+            poly->SetAsBox(0.2f, 1.0f, b2Vec2(0.5f, 1.0f), 0);
+            body->CreateFixture(shape, 0);
+            delete poly;
         }
 
         {

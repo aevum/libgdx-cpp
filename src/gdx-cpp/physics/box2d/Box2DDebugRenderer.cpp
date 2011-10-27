@@ -19,65 +19,151 @@
 */
 
 #include "Box2DDebugRenderer.hpp"
-#include "gdx-cpp/math/MathUtils.hpp"
 #include <cmath>
+#include "gdx-cpp/math/MathUtils.hpp"
 
 using namespace gdx_cpp::physics::box2d;
+using namespace gdx_cpp::graphics::glutils;
+using namespace gdx_cpp;
 
+b2Vec2 Box2DDebugRenderer::mLower;
+b2Vec2 Box2DDebugRenderer::mUpper;
 
-Box2DDebugRenderer::Box2DDebugRenderer(): SHAPE_NOT_ACTIVE(0.5f, 0.5f, 0.3f, 1), SHAPE_STATIC(0.5f, 0.9f, 0.5f, 1),
-                                          SHAPE_KINEMATIC(0.5f, 0.5f, 0.9f, 1), SHAPE_NOT_AWAKE(0.6f, 0.6f, 0.6f, 1),
-                                          SHAPE_AWAKE(0.9f, 0.7f, 0.7f, 1), JOINT_COLOR(0.5f, 0.8f, 0.8f, 1)                                          
-{
-  
-}
-void Box2DDebugRenderer::render (b2World& world) {
+void Box2DDebugRenderer::render (b2World& world,const gdx_cpp::math::Matrix4& projMatrix) {
+    renderer.setProjectionMatrix(projMatrix);
     renderBodies(world);
 }
 
-void Box2DDebugRenderer::renderBodies (b2World& world) {
-    for (b2Body * body = world.GetBodyList(); body; body = body->GetNext()) {
-        const b2Transform& transform = body->GetTransform();
-        for (b2Fixture* fixture = body->GetFixtureList(); fixture; fixture = fixture->GetNext())
-        {
-            if (body->IsActive() == false)
-                drawShape(*fixture, transform, SHAPE_NOT_ACTIVE);
-            else if (body->GetType() == b2_staticBody)
-                drawShape(*fixture, transform, SHAPE_STATIC);
-            else if (body->GetType() == b2_kinematicBody)
-                drawShape(*fixture, transform, SHAPE_KINEMATIC);
-            else if (body->IsAwake() == false)
-                drawShape(*fixture, transform, SHAPE_NOT_AWAKE);
-            else
-                drawShape(*fixture, transform, SHAPE_AWAKE);
+void Box2DDebugRenderer::renderBodies ( b2World& world) {
+    renderer.begin(ShapeRenderer::ShapeType::Line);
+
+    if (mDrawBodies || mDrawAABBs) {        
+        for (b2Body * body = world.GetBodyList(); body; body = body->GetNext())  {
+            
+            const b2Transform& transform = body->GetTransform();
+            for (b2Fixture* fixture = body->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
+                if (mDrawBodies) {
+                    if (body->IsActive() == false)
+                        drawShape(*fixture, transform, SHAPE_NOT_ACTIVE);
+                    else if (body->GetType() == b2_staticBody)
+                        drawShape(*fixture, transform, SHAPE_STATIC);
+                    else if (body->GetType() == b2_kinematicBody)
+                        drawShape(*fixture, transform, SHAPE_KINEMATIC);
+                    else if (body->IsAwake() == false)
+                        drawShape(*fixture, transform, SHAPE_NOT_AWAKE);
+                    else
+                        drawShape(*fixture, transform, SHAPE_AWAKE);
+                }
+
+                if (mDrawAABBs) {
+                    drawAABB(*fixture, transform);
+                }
+            }
         }
     }
 
-
-    for (b2Joint* joint = world.GetJointList(); joint; joint= joint->GetNext())
-    {
-        drawJoint(*joint);
-
+    if (mDrawJoints) {
+        for (b2Joint* joint = world.GetJointList(); joint; joint= joint->GetNext())
+        {
+            drawJoint(*joint);            
+        }
     }
+    
+    renderer.end();
 
-    for (b2Contact* contact = world.GetContactList(); contact; contact= contact->GetNext())
-    {
+    if (Gdx::gl10 != NULL) {
+        Gdx::gl10->glPointSize(3);
+    }
+    
+    renderer.begin(ShapeRenderer::ShapeType::Point);
+
+    for (b2Contact* contact = world.GetContactList(); contact; contact = contact->GetNext()) {
         drawContact(*contact);
+    }
+    renderer.end();
+    
+    if (Gdx::gl10 != NULL) {
+        Gdx::gl10->glPointSize(1);
     }
 }
 
-
-
-void Box2DDebugRenderer::drawShape (b2Fixture& fixture, const b2Transform& transform, gdx_cpp::graphics::Color& color) {
+void Box2DDebugRenderer::drawAABB (const b2Fixture& fixture, const b2Transform& transform) {
     if (fixture.GetType() == b2Shape::e_circle) {
-        b2CircleShape * circle = (b2CircleShape *)fixture.GetShape();
-        b2Vec2 t = b2Mul(transform, circle->m_p);
-        drawSolidCircle(t, circle->m_radius, transform.R.col1, color);
-    } else {
-        b2PolygonShape * poly = (b2PolygonShape *)fixture.GetShape();
-        int vertexCount = poly->GetVertexCount();
+
+        b2CircleShape* shape = (b2CircleShape*)fixture.GetShape();
+                
+        vertices[0] = shape->m_p;
+        vertices[0] = b2Mul(transform.q, vertices[0]) + transform.p;
+             
+        mLower.Set(vertices[0].x - shape->m_radius, vertices[0].y - shape->m_radius);
+        mUpper.Set(vertices[0].x + shape->m_radius, vertices[0].y + shape->m_radius);
+
+        // define vertices in ccw fashion...
+        vertices[0].Set(mLower.x, mLower.y);
+        vertices[1].Set(mUpper.x, mLower.y);
+        vertices[2].Set(mUpper.x, mUpper.y);
+        vertices[3].Set(mLower.x, mUpper.y);
+
+        drawSolidPolygon(vertices, 4, AABB_COLOR);
+    } else if (fixture.GetType() == b2Shape::e_polygon) {
+        b2PolygonShape* shape = (b2PolygonShape*)fixture.GetShape();
+        int vertexCount = shape->GetVertexCount();
+
+        vertices[0] = shape->GetVertex(0);
+        
+        mUpper = mLower = b2Mul(transform, vertices[0]);
+
+        for (int i = 1; i < vertexCount; i++) {
+            vertices[i] = shape->GetVertex(i);
+            vertices[i] = b2Mul(transform,vertices[i]);
+            
+            mLower.x = std::min(mLower.x, vertices[i].x);
+            mLower.y = std::min(mLower.y, vertices[i].y);
+            mUpper.x = std::max(mUpper.x, vertices[i].x);
+            mUpper.y = std::max(mUpper.y, vertices[i].y);
+        }
+
+        // define vertices in ccw fashion...
+        vertices[0].Set(mLower.x, mLower.y);
+        vertices[1].Set(mUpper.x, mLower.y);
+        vertices[2].Set(mUpper.x, mUpper.y);
+        vertices[3].Set(mLower.x, mUpper.y);
+
+        drawSolidPolygon(vertices, 4, AABB_COLOR);
+    }
+}
+
+void Box2DDebugRenderer::drawShape (const b2Fixture& fixture,
+                                    const b2Transform& transform,
+                                    const gdx_cpp::graphics::Color& color) {
+    if (fixture.GetType() == b2Shape::e_circle) {
+        b2CircleShape* circle = (b2CircleShape*)fixture.GetShape();        
+        t = b2Mul(transform, circle->m_p);                
+        drawSolidCircle(t, circle->m_radius, transform.q.GetXAxis() , color);
+    } else if (fixture.GetType() == b2Shape::e_edge) {
+        b2EdgeShape* edge = (b2EdgeShape*)fixture.GetShape();
+        vertices[0] = edge->m_vertex0;
+        vertices[1] = edge->m_vertex2;
+        vertices[0] = b2Mul(transform, vertices[0]);
+        vertices[1] = b2Mul(transform, vertices[1]);
+        
+        drawSolidPolygon(vertices, 2, color);
+    } else if (fixture.GetType() == b2Shape::e_polygon) {
+        
+        b2PolygonShape* chain = (b2PolygonShape*)fixture.GetShape();
+        int vertexCount = chain->GetVertexCount();
         for (int i = 0; i < vertexCount; i++) {
-            vertices[i] = poly->GetVertex(i);
+            vertices[i] = chain->GetVertex(i);
+            vertices[i] = b2Mul(transform, vertices[i]);
+        }
+        
+        drawSolidPolygon(vertices, vertexCount, color);
+    }
+    else if (fixture.GetType() == b2Shape::e_chain) {
+        b2ChainShape* chain = (b2ChainShape*)fixture.GetShape();
+        int vertexCount = chain->m_count;
+        for (int i = 0; i < vertexCount; i++) {
+            vertices[i] = chain->m_vertices[i];
             vertices[i] = b2Mul(transform, vertices[i]);
         }
         drawSolidPolygon(vertices, vertexCount, color);
@@ -85,75 +171,98 @@ void Box2DDebugRenderer::drawShape (b2Fixture& fixture, const b2Transform& trans
 }
 
 void Box2DDebugRenderer::drawSolidCircle (const b2Vec2& center,float radius,const b2Vec2& axis,const gdx_cpp::graphics::Color& color) {
-    renderer.begin(gdx_cpp::graphics::GL10::GL_LINE_LOOP);
     float angle = 0;
-    float angleInc = 2 * (float)gdx_cpp::math::utils::detail::PI / 20;
+    float angleInc = 2 * math::utils::detail::PI / 20.f;
+    renderer.setColor(color.r, color.g, color.b, color.a);
     for (int i = 0; i < 20; i++, angle += angleInc) {
         v.Set((float)std::cos(angle) * radius + center.x, (float)std::sin(angle) * radius + center.y);
-        renderer.color(color.r, color.g, color.b, color.a);
-        renderer.vertex(v.x, v.y, 0);
+        if (i == 0) {
+            lv = v;
+            f = v;
+            continue;
+        }
+        renderer.line(lv.x, lv.y, v.x, v.y);
+        lv = v;
     }
-    renderer.end();
-
-    renderer.begin(gdx_cpp::graphics::GL10::GL_LINES);
-    renderer.color(color.r, color.g, color.b, color.a);
-    renderer.vertex(center.x, center.y, 0);
-    renderer.color(color.r, color.g, color.b, color.a);
-    renderer.vertex(center.x + axis.x * radius, center.y + axis.y * radius, 0);
-    renderer.end();
+    renderer.line(f.x, f.y, lv.x, lv.y);
+    renderer.line(center.x, center.y, 0, center.x + axis.x * radius, center.y + axis.y * radius, 0);
 }
 
 void Box2DDebugRenderer::drawSolidPolygon (b2Vec2* vertices, int vertexCount, const gdx_cpp::graphics::Color& color) {
-    renderer.begin(gdx_cpp::graphics::GL10::GL_LINE_LOOP);
+    renderer.setColor(color.r, color.g, color.b, color.a);
+    
     for (int i = 0; i < vertexCount; i++) {
-        renderer.color(color.r, color.g, color.b, color.a);
-        renderer.vertex(vertices[i].x, vertices[i].y, 0);
+        b2Vec2& v = vertices[i];
+        if (i == 0) {
+            lv = v;
+            f = v;
+            continue;
+        }
+        renderer.line(lv.x, lv.y, v.x, v.y);
+        lv = v;
     }
-    renderer.end();
+    renderer.line(f.x, f.y, lv.x, lv.y);
 }
 
 void Box2DDebugRenderer::drawJoint (b2Joint& joint) {
+
     b2Body* bodyA = joint.GetBodyA();
     b2Body* bodyB = joint.GetBodyB();
     const b2Transform& xf1 = bodyA->GetTransform();
     const b2Transform& xf2 = bodyB->GetTransform();
 
+    const b2Vec2& x1 = xf1.p;
+    const b2Vec2& x2 = xf2.p;
     b2Vec2 p1 = joint.GetAnchorA();
     b2Vec2 p2 = joint.GetAnchorB();
 
     if (joint.GetType() == e_distanceJoint) {
-        drawSegment(p1, p2, JOINT_COLOR);
+        drawSegment(joint.GetAnchorA(), joint.GetAnchorB(), JOINT_COLOR);
     } else if (joint.GetType() == e_pulleyJoint) {
-        b2PulleyJoint * pulley = (b2PulleyJoint *)&joint;
-        b2Vec2 s1 = pulley->GetGroundAnchorA();
-        b2Vec2 s2 = pulley->GetGroundAnchorB();
+        b2PulleyJoint& pulley = (b2PulleyJoint&)joint;
+        b2Vec2 s1 = pulley.GetGroundAnchorA();
+        b2Vec2 s2 = pulley.GetGroundAnchorB();
         drawSegment(s1, p1, JOINT_COLOR);
         drawSegment(s2, p2, JOINT_COLOR);
         drawSegment(s1, s2, JOINT_COLOR);
     } else if (joint.GetType() == e_mouseJoint) {
-        drawSegment(p1, p2, JOINT_COLOR);
+        drawSegment(joint.GetAnchorA(), joint.GetAnchorB(), JOINT_COLOR);
     } else {
-        drawSegment(xf1.position, p1, JOINT_COLOR);
+        drawSegment(x1, p1, JOINT_COLOR);
         drawSegment(p1, p2, JOINT_COLOR);
-        drawSegment(xf2.position, p2, JOINT_COLOR);
+        drawSegment(x2, p2, JOINT_COLOR);
     }
 }
 
-void Box2DDebugRenderer::drawSegment (const b2Vec2& x1,const b2Vec2& x2,const gdx_cpp::graphics::Color& color) {
-    renderer.begin(gdx_cpp::graphics::GL10::GL_LINES);
-    renderer.color(color.r, color.g, color.b, color.a);
-    renderer.vertex(x1.x, x1.y, 0);
-    renderer.color(color.r, color.g, color.b, color.a);
-    renderer.vertex(x2.x, x2.y, 0);
-    renderer.end();
+void Box2DDebugRenderer::drawSegment (const b2Vec2& x1, const b2Vec2& x2, const gdx_cpp::graphics::Color& color) {
+    renderer.setColor(color);
+    renderer.line(x1.x, x1.y, x2.x, x2.y);
 }
 
-void Box2DDebugRenderer::drawContact (b2Contact& contact) {
-
+void Box2DDebugRenderer::drawContact (const b2Contact& contact) {
+    b2WorldManifold worldManifold;
+    contact.GetWorldManifold(&worldManifold);
+    
+    if (contact.GetManifold()->pointCount == 0) return;
+    b2Vec2& point = worldManifold.points[0];
+    renderer.point(point.x, point.y, 0);
 }
 
 void Box2DDebugRenderer::dispose () {
     batch.dispose();
-// font.dispose();
+}
+
+Box2DDebugRenderer::Box2DDebugRenderer (bool drawBodies,bool drawJoints,bool drawAABBs)
+: mDrawBodies(drawBodies),
+mDrawJoints(drawJoints),
+mDrawAABBs(drawAABBs),
+SHAPE_NOT_ACTIVE(0.5f, 0.5f, 0.3f, 1),
+SHAPE_STATIC(0.5f, 0.9f, 0.5f, 1),
+SHAPE_KINEMATIC(0.5f, 0.5f, 0.9f, 1),
+SHAPE_NOT_AWAKE(0.6f, 0.6f, 0.6f, 1),
+SHAPE_AWAKE(0.9f, 0.7f, 0.7f, 1),
+JOINT_COLOR(0.5f, 0.8f, 0.8f, 1),
+AABB_COLOR(1.0f, 0, 1.0f, 1)
+{
 }
 

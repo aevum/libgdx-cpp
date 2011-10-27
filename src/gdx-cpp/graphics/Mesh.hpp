@@ -84,7 +84,7 @@ public:
     void render (gdx_cpp::graphics::glutils::ShaderProgram& shader, int primitiveType);
     void render (gdx_cpp::graphics::glutils::ShaderProgram& shader, int primitiveType, int offset, int count);
     void dispose ();
-    VertexAttribute& getVertexAttribute (int usage);
+    VertexAttribute* const getVertexAttribute (int usage);
     VertexAttributes& getVertexAttributes ();
     utils::float_buffer& getVerticesBuffer ();
     void calculateBoundingBox (gdx_cpp::math::collision::BoundingBox& bbox);

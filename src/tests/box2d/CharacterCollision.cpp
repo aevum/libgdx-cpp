@@ -16,8 +16,8 @@ public:
             b2BodyDef bd;
             b2Body * ground = world.CreateBody(&bd);
 
-            b2PolygonShape * shape = new b2PolygonShape();
-            shape->SetAsEdge(b2Vec2(-20, 0), b2Vec2(20, 0));
+            b2EdgeShape * shape = new b2EdgeShape();
+            shape->Set(b2Vec2(-20, 0), b2Vec2(20, 0));
             ground->CreateFixture(shape, 0);
             delete shape;
         }
@@ -26,13 +26,13 @@ public:
             b2BodyDef bd;
             b2Body * ground = world.CreateBody(&bd);
 
-            b2PolygonShape * shape = new b2PolygonShape();
+            b2EdgeShape * shape = new b2EdgeShape();
             shape->m_radius = 0;
-            shape->SetAsEdge(b2Vec2(-8, 1), b2Vec2(-6, 1));
+            shape->Set(b2Vec2(-8, 1), b2Vec2(-6, 1));
             ground->CreateFixture(shape, 0);
-            shape->SetAsEdge(b2Vec2(-6, 1), b2Vec2(-4, 1));
+            shape->Set(b2Vec2(-6, 1), b2Vec2(-4, 1));
             ground->CreateFixture(shape, 0);
-            shape->SetAsEdge(b2Vec2(-4, 1), b2Vec2(-2, 1));
+            shape->Set(b2Vec2(-4, 1), b2Vec2(-2, 1));
             ground->CreateFixture(shape, 0);
             delete shape;
         }
@@ -55,16 +55,16 @@ public:
             b2BodyDef bd;
             b2Body * ground = world.CreateBody(&bd);
 
-            b2PolygonShape * shape = new b2PolygonShape();
+            b2EdgeShape * shape = new b2EdgeShape();
             float d = 2 * 2 * 0.005f;
             shape->m_radius = 0;
-            shape->SetAsEdge(b2Vec2(-1 + d, 3), b2Vec2(1 - d, 3));
+            shape->Set(b2Vec2(-1 + d, 3), b2Vec2(1 - d, 3));
             ground->CreateFixture(shape, 0);
-            shape->SetAsEdge(b2Vec2(1, 3 + d), b2Vec2(1, 5 - d));
+            shape->Set(b2Vec2(1, 3 + d), b2Vec2(1, 5 - d));
             ground->CreateFixture(shape, 0);
-            shape->SetAsEdge(b2Vec2(1 - d, 5), b2Vec2(-1 + d, 5));
+            shape->Set(b2Vec2(1 - d, 5), b2Vec2(-1 + d, 5));
             ground->CreateFixture(shape, 0);
-            shape->SetAsEdge(b2Vec2(-1, 5 - d), b2Vec2(-1, 3 + d));
+            shape->Set(b2Vec2(-1, 5 - d), b2Vec2(-1, 3 + d));
             ground->CreateFixture(shape, 0);
             delete shape;
         }

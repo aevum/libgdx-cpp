@@ -22,22 +22,23 @@ public:
             bd.position.Set(0, 20);
             ground = world.CreateBody(&bd);
 
-            b2PolygonShape * shape = new b2PolygonShape;
+            b2EdgeShape * shape = new b2EdgeShape;
 
             b2FixtureDef sd;
             sd.shape = shape;
             sd.density = 0;
             sd.restitution = k_restitution;
-            shape->SetAsEdge(b2Vec2(-20, -20), b2Vec2(-20, 20));
+            
+            shape->Set(b2Vec2(-20, -20), b2Vec2(-20, 20));
             ground->CreateFixture(&sd);
 
-            shape->SetAsEdge(b2Vec2(20, -20), b2Vec2(20, 20));
+            shape->Set(b2Vec2(20, -20), b2Vec2(20, 20));
             ground->CreateFixture(&sd);
 
-            shape->SetAsEdge(b2Vec2(-20, 20), b2Vec2(20, 20));
+            shape->Set(b2Vec2(-20, 20), b2Vec2(20, 20));
             ground->CreateFixture(&sd);
 
-            shape->SetAsEdge(b2Vec2(-20, -20), b2Vec2(20, -20));
+            shape->Set(b2Vec2(-20, -20), b2Vec2(20, -20));
             ground->CreateFixture(&sd);
 
             delete shape;
@@ -46,7 +47,8 @@ public:
         {
             b2Transform xf1;
             xf1.Set(b2Vec2(0,0), 0.3524f * (float)gdx_cpp::math::utils::detail::PI);
-            xf1.Set(b2Mul(xf1, b2Vec2(1, 0)), xf1.GetAngle());
+            
+            xf1.p = b2Mul(xf1, b2Vec2(1, 0));
 
             b2Vec2 vertices[3];
             vertices[0] = b2Mul(xf1, b2Vec2(-1, 0));
@@ -62,7 +64,7 @@ public:
 
             b2Transform xf2;
             xf2.Set(b2Vec2(), -0.3524f * (float)gdx_cpp::math::utils::detail::PI);
-            xf2.Set(b2Mul(xf2, b2Vec2(-1, 0)), xf2.GetAngle());
+            xf2.p = b2Mul(xf2, b2Vec2(-1, 0));
 
             vertices[0] = b2Mul(xf2, b2Vec2(-1, 0));
             vertices[1] = b2Mul(xf2, b2Vec2(1, 0));

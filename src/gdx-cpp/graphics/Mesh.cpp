@@ -225,18 +225,16 @@ void Mesh::dispose () {
     }
 }
 
-VertexAttribute& Mesh::getVertexAttribute (int usage) {
+VertexAttribute* const Mesh::getVertexAttribute (int usage) {
     VertexAttributes& attributes = vertices->getAttributes();
     int len = attributes.size();
     for (int i = 0; i < len; i++) {
         if (attributes.get(i).usage == usage){
-            return attributes.get(i);
+            return &attributes.get(i);
         }
     }
 
-    std::stringstream ss;
-    ss << "vertex attribute not found: " << usage;
-    throw std::runtime_error(ss.str());
+    return NULL;
 }
 
 VertexAttributes& Mesh::getVertexAttributes () {
@@ -253,7 +251,7 @@ void Mesh::calculateBoundingBox (gdx_cpp::math::collision::BoundingBox& bbox) {
 
     utils::float_buffer verts = vertices->getBuffer();
     bbox.inf();
-    VertexAttribute& posAttrib = getVertexAttribute(VertexAttributes::Usage::Position);
+    VertexAttribute& posAttrib = *getVertexAttribute(VertexAttributes::Usage::Position);
     int offset = posAttrib.offset / 4;
     int vertexSize = vertices->getAttributes().vertexSize / 4;
     int idx = offset;
@@ -320,7 +318,7 @@ std::string Mesh::getManagedStatus () {
 }
 
 void Mesh::scale (float scaleX,float scaleY,float scaleZ) {
-    VertexAttribute& posAttr = getVertexAttribute(VertexAttributes::Usage::Position);
+    VertexAttribute& posAttr = *getVertexAttribute(VertexAttributes::Usage::Position);
     int offset = posAttr.offset / 4;
     int numComponents = posAttr.numComponents;
     int numVertices = getNumVertices();

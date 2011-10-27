@@ -21,11 +21,11 @@ public:
             b2BodyDef bd;
             b2Body * ground = world.CreateBody(&bd);
 
-            b2PolygonShape * shape = new b2PolygonShape();
-            shape->SetAsEdge(b2Vec2(-40, 0), b2Vec2(40, 0));
+            b2EdgeShape* shape = new b2EdgeShape();
+            shape->Set(b2Vec2(-40, 0), b2Vec2(40, 0));
             ground->CreateFixture(shape, 0.0f);
 
-            shape->SetAsEdge(b2Vec2(20, 0), b2Vec2(20, 20));
+            shape->Set(b2Vec2(20, 0), b2Vec2(20, 20));
             ground->CreateFixture(shape, 0);
             delete shape;
         }

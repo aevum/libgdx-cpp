@@ -12,8 +12,8 @@ class DebugRendererTest : public Box2DTest {
 public:
     void createWorld (b2World& world) {
         {
-            b2PolygonShape * shape = new b2PolygonShape();
-            shape->SetAsEdge(b2Vec2(-40.0f, 0), b2Vec2(40, 0));
+            b2EdgeShape* shape = new b2EdgeShape();
+            shape->Set(b2Vec2(-40.0f, 0), b2Vec2(40, 0));
 
             b2FixtureDef fd;
             fd.shape = shape;

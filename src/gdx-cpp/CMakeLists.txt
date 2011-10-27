@@ -131,6 +131,7 @@ graphics/Mesh.hpp
 graphics/Camera.hpp
 graphics/PerspectiveCamera.hpp
 graphics/glutils/ImmediateModeRenderer20.hpp
+graphics/glutils/ShapeRenderer.hpp
 graphics/glutils/VertexArray.hpp
 graphics/glutils/IndexBufferObject.hpp
 graphics/glutils/MipMapGenerator.hpp
@@ -400,8 +401,9 @@ graphics/glutils/PixmapTextureData.cpp
 graphics/glutils/ShaderProgram.cpp
 graphics/glutils/IndexBufferObject.cpp
 graphics/glutils/VertexBufferObjectSubData.cpp
+graphics/glutils/ShapeRenderer.cpp
 # graphics/glutils/ETC1.cpp
-# graphics/glutils/ImmediateModeRenderer20.cpp
+graphics/glutils/ImmediateModeRenderer20.cpp
 # graphics/glutils/ETC1TextureData.cpp
 graphics/glutils/VertexArray.cpp
 # graphics/TextureDict.cpp

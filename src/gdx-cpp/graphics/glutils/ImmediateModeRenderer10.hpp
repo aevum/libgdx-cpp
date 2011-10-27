@@ -36,6 +36,9 @@ class ImmediateModeRenderer10 : public ImmediateModeRenderer {
 public:
     ImmediateModeRenderer10(int maxVertices = 2000);
     ~ImmediateModeRenderer10();
+
+    RendererType getRendererType() { return IMMEDIATE_GLES10; }
+    
     void begin (gdx_cpp::math::Matrix4& projModelView, int primitiveType);
     void begin (int primitiveType);
     void color (float r,float g,float b,float a);

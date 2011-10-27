@@ -61,12 +61,10 @@ public:
         camera->apply(*gl);
 
         // render the world using the debug renderer
-        renderer->render(*world);
+        renderer->render(*world, camera->combined);
+        
         float renderTime = (gdx_cpp::Gdx::system->nanoTime() - startTime) / 1000000000.0f;
 
-//         batch->begin();
-//         font.draw(batch, "fps:" + Gdx.graphics.getFramesPerSecond() + ", update: " + updateTime + ", render: " + renderTime, 0, 20);
-//         batch->end();
     }
 
 
@@ -85,8 +83,9 @@ public:
         renderer = new gdx_cpp::physics::box2d::Box2DDebugRenderer();
 
         // create the world
-        world = new b2World(b2Vec2(0, -10), true);
-
+        world = new b2World(b2Vec2(0, -10));
+        world->SetAllowSleeping(true);
+        
         // we also need an invisible zero size ground body
         // to which we can connect the mouse joint
         b2BodyDef bodyDef;
