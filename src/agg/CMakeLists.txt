@@ -12,3 +12,5 @@ svg/agg_svg_parser.h)
 file(GLOB AGG_SRC src/*.cpp src/ctrl/*.cpp)
 
 add_library(gdx-cpp-agg-svg STATIC ${AGG_SVG_SRC} ${AGG_SRC})
+
+install(TARGETS gdx-cpp-agg-svg ARCHIVE DESTINATION lib)

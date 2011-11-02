@@ -66,22 +66,7 @@ Matrix4& Matrix4::set(const Matrix4& matrix) {
 }
 
 Matrix4& Matrix4::set(const float* values) {
-    val[M00] = values[M00];
-    val[M10] = values[M10];
-    val[M20] = values[M20];
-    val[M30] = values[M30];
-    val[M01] = values[M01];
-    val[M11] = values[M11];
-    val[M21] = values[M21];
-    val[M31] = values[M31];
-    val[M02] = values[M02];
-    val[M12] = values[M12];
-    val[M22] = values[M22];
-    val[M32] = values[M32];
-    val[M03] = values[M03];
-    val[M13] = values[M13];
-    val[M23] = values[M23];
-    val[M33] = values[M33];
+    memcpy(val, values, sizeof(float) * 15);
     return *this;
 }
 

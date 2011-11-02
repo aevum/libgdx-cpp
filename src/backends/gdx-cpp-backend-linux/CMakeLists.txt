@@ -16,5 +16,9 @@ add_dependencies(gdx-cpp-backend-linux gdx-cpp gdx-cpp-agg-svg)
 
 target_link_libraries(gdx-cpp-backend-linux openal vorbis ogg vorbisfile gdx-cpp)
 
-install(DIRECTORY . DESTINATION include/gdx-cpp/backends/linux
+install(DIRECTORY . DESTINATION include/gdx-cpp/backends/gdx-cpp-backend-linux
           FILES_MATCHING PATTERN "*.hpp")
+
+install(TARGETS gdx-cpp-backend-linux
+        LIBRARY DESTINATION lib)
+

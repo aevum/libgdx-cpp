@@ -142,7 +142,8 @@ void Box2DDebugRenderer::drawShape (const b2Fixture& fixture,
         drawSolidCircle(t, circle->m_radius, transform.q.GetXAxis() , color);
     } else if (fixture.GetType() == b2Shape::e_edge) {
         b2EdgeShape* edge = (b2EdgeShape*)fixture.GetShape();
-        vertices[0] = edge->m_vertex0;
+        vertices[0] = edge->m_vertex1;
+        
         vertices[1] = edge->m_vertex2;
         vertices[0] = b2Mul(transform, vertices[0]);
         vertices[1] = b2Mul(transform, vertices[1]);

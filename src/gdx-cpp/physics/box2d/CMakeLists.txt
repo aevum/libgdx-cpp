@@ -9,3 +9,5 @@ include_directories(${GDXCPP_BOX2D_INCLUDE_DIR})
 
 add_library(gdx-cpp-box2d-layer ${GDX_CPP_BOX2D_LAYER_SRC} ${GDX_CPP_BOX2D_LAYER_H})
 add_dependencies(gdx-cpp-box2d-layer gdx-cpp-box2d)
+
+install(TARGETS gdx-cpp-box2d-layer ARCHIVE DESTINATION lib)
