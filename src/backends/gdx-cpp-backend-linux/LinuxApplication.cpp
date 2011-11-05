@@ -26,34 +26,37 @@ using namespace gdx_cpp::backends::nix;
 using namespace gdx_cpp;
 
 gdx_cpp::backends::nix::LinuxApplication::LinuxApplication(gdx_cpp::ApplicationListener* listener,
-                                                           const std::string& title, int width, int height,
-                                                           bool useGL20IfAvailable)
-:  Synchronizable(Gdx::system->getMutexFactory())
-    , width(width)
-    , height(height)
-    , title(title)
-    , useGL20iFAvailable(useGL20IfAvailable)
-    , listener(listener)
-    , graphics(0)
-    , input(0)
-    , logLevel(gdx_cpp::Application::LOG_INFO)
+        const std::string& title, int width, int height,
+        bool useGL20IfAvailable)
+        :  Synchronizable(Gdx::system->getMutexFactory())
+        , width(width)
+        , height(height)
+        , title(title)
+        , useGL20iFAvailable(useGL20IfAvailable)
+        , listener(listener)
+        , graphics(0)
+        , input(0)
+        , logLevel(gdx_cpp::Application::LOG_INFO)
 {
     initialize();
 }
 
 void LinuxApplication::initialize() {
-        graphics = new LinuxGraphics();
-        input = new LinuxInput();
-        files = new LinuxFiles();
-        audio = new LinuxOpenALAudio();
-        
-        graphics->initialize();
-        graphics->setTitle(this->title);
-        graphics->setDisplayMode(width, height, false);
-        
-        Gdx::initialize(this, graphics, audio, input, files);
-        
-        this->run();
+
+    graphics = new LinuxGraphics();
+    input = new LinuxInput();
+    files = new LinuxFiles();
+    audio = new LinuxOpenALAudio();
+
+    graphics->initialize();
+    graphics->setTitle(this->title);
+    graphics->setDisplayMode(width, height, false);
+
+    SDL_EnableKeyRepeat(1, SDL_DEFAULT_REPEAT_INTERVAL);
+    
+    Gdx::initialize(this, graphics, audio, input, files);
+
+    this->run();
 }
 
 void backends::nix::LinuxApplication::onRunnableStop()
@@ -65,7 +68,7 @@ void backends::nix::LinuxApplication::run()
 {
     listener->create();
     listener->resize(graphics->getWidth(), graphics->getHeight());
-    
+
     while (true) {
         graphics->updateTime();
 
@@ -78,21 +81,21 @@ void backends::nix::LinuxApplication::run()
             } else {
                 this->input->processEvents(event);
             }
-        }        
-        
+        }
+
         {
             lock_holder hnd = synchronize();
 
             std::list < Runnable::ptr >::iterator it = runnables.begin();
             std::list < Runnable::ptr >::iterator end = runnables.end();
 
-            for(;it != end; ++it) {
+            for (;it != end; ++it) {
                 (*it)->run();
             }
 
             runnables.clear();
         }
-        
+
         listener->render();
         graphics->update();
         audio->update();
@@ -105,7 +108,7 @@ void LinuxApplication::error(const std::string& tag, const char* format, ...)
     va_list list;
     va_start(list, format);
     std::string newTag = tag + ":" + format + "\n";
-    
+
     vfprintf(stderr, newTag.c_str(), list);
     fflush(stderr);
 #if DEBUG
@@ -155,8 +158,8 @@ void LinuxApplication::log(const std::string& tag, const char* format, ...)
 
     va_list list;
     va_start(list, format);
-    std::string newTag = tag + ":" + format + "\n"; 
-    
+    std::string newTag = tag + ":" + format + "\n";
+
     vfprintf(stdout, newTag.c_str(), list);
     fflush(stdout);
 }

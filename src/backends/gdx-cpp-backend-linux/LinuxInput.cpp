@@ -35,7 +35,7 @@ gdx_cpp::backends::nix::LinuxInput::LinuxInput()
         ,processor(0)
         ,deltaX(0)
         ,deltaY(0)
-{
+{    
 }
 
 void gdx_cpp::backends::nix::LinuxInput::cancelVibrate()
