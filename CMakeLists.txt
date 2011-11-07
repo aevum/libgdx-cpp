@@ -66,6 +66,7 @@ endif()
 
 if (BUILD_BOX2D)
     set(BOX2D_BUILD_SHARED TRUE)
+    set(BOX2D_INSTALL TRUE)
     add_subdirectory(src/Box2D)
 endif()
 
