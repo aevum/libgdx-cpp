@@ -74,7 +74,7 @@ std::string FileHandle::nameWithoutExtension () const {
     return name.substr(0, dotIndex);
 }
 
-std::string FileHandle::typetoString () {
+std::string FileHandle::typetoString () const {
     if(type == gdx_cpp::Files::Absolute) return "Absolute";
     if (type == gdx_cpp::Files::External) return "External";
     if (type == gdx_cpp::Files::Internal) return "Internal";
@@ -85,12 +85,12 @@ gdx_cpp::Files::FileType& FileHandle::getType () {
     return type;
 }
 
-File FileHandle::getFile () {
+File FileHandle::getFile () const {
     if (type == gdx_cpp::Files::External) return File( gdx_cpp::Gdx::files->getExternalStoragePath(), file.getPath());
     return file;
 }
 
-FileHandle::ifstream_ptr FileHandle::read ()
+FileHandle::ifstream_ptr FileHandle::read () const
 {
     ifstream_ptr input;
     
@@ -150,7 +150,7 @@ std::string FileHandle::readString (const std::string& charset) {
     return output;
 }
 
-int FileHandle::readBytes (char_ptr &c) {
+int FileHandle::readBytes (char_ptr &c) const {
     int Length = (int) length();
     if (Length == 0) Length = 512;
     int bufferlength = Length;
@@ -319,7 +319,7 @@ void FileHandle::moveTo (FileHandle& dest) {
     deleteFile();
 }
 
-int64_t FileHandle::length () {
+int64_t FileHandle::length () const {
     if ((type == gdx_cpp::Files::Internal && !file.exists())) {
       int64_t length = 0;
       ifstream_ptr input = read();
@@ -342,7 +342,7 @@ int64_t FileHandle::length () {
     return getFile().length();
 }
 
-std::string FileHandle::toString () {
+std::string FileHandle::toString () const {
     return getFile().getPath();
 }
 

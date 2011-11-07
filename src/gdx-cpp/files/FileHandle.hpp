@@ -55,12 +55,12 @@ public:
     std::string name () const;
     std::string extension () const;
     std::string nameWithoutExtension () const;
-    std::string typetoString ();
+    std::string typetoString () const;
     gdx_cpp::Files::FileType& getType ();
-    ifstream_ptr read ();
+    ifstream_ptr read () const;
     std::string readString ();
     std::string readString (const std::string& charset);
-    virtual int readBytes (char_ptr &c);
+    virtual int readBytes (gdx_cpp::files::FileHandle::char_ptr& c) const;
     ofstream_ptr write (bool append);
     void list (std::vector<FileHandle> &handles);
     void list (const std::string& suffix, std::vector<FileHandle> &handles);
@@ -73,8 +73,8 @@ public:
     bool deleteDirectory ();
     void copyTo (FileHandle& dest);
     void moveTo (FileHandle& dest);
-    int64_t length ();
-    std::string toString ();
+    int64_t length () const;
+    std::string toString () const;
     FileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
     FileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type);
     
@@ -85,7 +85,7 @@ protected:
     
 
 private:
-    gdx_cpp::files::File getFile();
+    gdx_cpp::files::File getFile() const;
     static bool deleteDirectory (File &file);
 };
 
