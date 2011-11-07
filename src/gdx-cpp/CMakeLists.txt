@@ -226,6 +226,8 @@ InputProcessor.hpp
 # utils/Sort.hpp
 # utils/AtomicQueue.hpp
 # utils/Json.hpp
+utils/JsonItem.hpp
+utils/JsonReader.hpp
 # utils/IntArray.hpp
 # utils/IdentityMap.hpp
 # utils/Runnable.hpp
@@ -464,6 +466,8 @@ graphics/TextureData.cpp
 graphics/OrthographicCamera.cpp
 # graphics/TextureRef.cpp
 graphics/Camera.cpp
+utils/JsonItem.cpp
+utils/JsonReader.cpp
 # utils/Sort.cpp
 utils/gzstream.cpp
 # utils/LongMap.cpp

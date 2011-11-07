@@ -21,37 +21,59 @@
 #ifndef GDX_CPP_UTILS_JSONREADER_HPP_
 #define GDX_CPP_UTILS_JSONREADER_HPP_
 
+#include "JsonItem.hpp"
+
+#include <string>
+#include "gdx-cpp/files/FileHandle.hpp"
+
 namespace gdx_cpp {
 namespace utils {
 
 class JsonReader {
 public:
-    Object& parse (const std::string& json);
-    Object& parse (const Reader& reader);
-    Object& parse (const InputStream& input);
-    Object& parse (const gdx_cpp::files::FileHandle& file);
-    Object& parse (int offset,int length);
+    JsonReader();
+    
+    json_item::ptr parse (const std::string& json);
+    json_item::ptr parse (const gdx_cpp::files::FileHandle& file);
+    json_item::ptr parse (const char* data, int offset, int length);
 
 protected:
     void startObject (const std::string& name);
     void startArray (const std::string& name);
-    void pop ();
-    void string (const std::string& name,const std::string& value);
-    void number (const std::string& name,const std::string& value);
 
+    void pop ();
+
+    void string (const std::string& name,const std::string& value);
+    void number (const std::string& name,float value);
+    void boolean (const std::string& name, bool value);
+        
 private:
-    static char* init__json_actions_0 ();
-    static short* init__json_key_offsets_0 ();
-    static char* init__json_trans_keys_0 ();
-    static char* init__json_single_lengths_0 ();
-    static char* init__json_range_lengths_0 ();
-    static short* init__json_index_offsets_0 ();
-    static char* init__json_indicies_0 ();
-    static char* init__json_trans_targs_0 ();
-    static char* init__json_trans_actions_0 ();
-    static char* init__json_eof_actions_0 ();
-    void set (const std::string& name,const Object& value);
-    std::string& unescape (const std::string& value);
+    static const char _json_actions[61];
+    static const short _json_key_offsets[92];
+    static const char _json_trans_keys[606];
+    static const char _json_single_lengths[92];
+    static const char _json_range_lengths[92];
+    static const short _json_index_offsets[591];
+    static const char _json_trans_targs[591];
+    static const char _json_trans_actions[591];
+    static const char _json_eof_actions[92];
+
+    static const int json_start;
+    static const int json_first_final;
+    static const int json_error;
+
+    static const int json_en_object;
+    static const int json_en_array;
+    static const int json_en_main;
+    
+    void set (const std::string& name, gdx_cpp::utils::json_item* value);
+    
+    std::string unescape (const std::string& value);
+
+    json_item* root;
+    json_item* current;
+
+    std::list< json_item* > elements;
 };
 
 } // namespace gdx_cpp

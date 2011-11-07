@@ -19,59 +19,153 @@
 */
 
 #include "JsonReader.hpp"
+#include <stdexcept>
+#include <list>
+#include "StringConvertion.hpp"
+#include <string.h>
+#include "ArrayUtils.hpp"
 
 using namespace gdx_cpp::utils;
+using namespace gdx_cpp;
 
-Object& JsonReader::parse (const std::string& json) {
-    char[] data = json.toCharArray();
-    return parse(data, 0, data.length);
+const char JsonReader::_json_actions[61] = { 0, 1, 0, 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 1, 7, 1, 8, 1, 9, 1, 10, 1, 11, 2, 0, 2, 2, 0, 3, 2, 3, 9,
+        2, 3, 11, 2, 4, 9, 2, 4, 11, 2, 5, 9, 2, 5, 11, 2, 6, 9, 2, 6, 11, 2, 7, 9, 2, 7, 11
+    };
+
+const short JsonReader::_json_key_offsets[92] = {0, 0, 19, 21, 23, 32, 35, 37, 41, 43, 55, 57, 59, 63, 82, 84, 86, 91, 102, 109, 118, 125, 128, 136,
+138, 147, 151, 153, 160, 170, 178, 186, 194, 202, 207, 215, 223, 231, 236, 244, 252, 260, 265, 274, 295, 297, 299, 304,
+324, 331, 334, 342, 344, 353, 357, 359, 366, 376, 384, 392, 400, 408, 413, 421, 429, 437, 442, 450, 458, 466, 471, 480,
+483, 490, 496, 503, 508, 516, 524, 532, 540, 548, 551, 559, 567, 575, 578, 586, 594, 602, 605, 605    };
+
+const char JsonReader::_json_trans_keys[606] = { 32, 34, 36, 45, 48, 91, 95, 102, 110, 116, 123, 9, 13, 49, 57, 65, 90, 97, 122, 34, 92, 34, 92, 34, 47,
+    92, 98, 102, 110, 114, 116, 117, 48, 49, 57, 48, 57, 43, 45, 48, 57, 48, 57, 32, 34, 36, 44, 95, 125, 9, 13, 65, 90, 97,
+    122, 34, 92, 34, 92, 32, 58, 9, 13, 32, 34, 36, 45, 48, 91, 95, 102, 110, 116, 123, 9, 13, 49, 57, 65, 90, 97, 122, 34,
+    92, 34, 92, 32, 44, 125, 9, 13, 32, 34, 36, 95, 125, 9, 13, 65, 90, 97, 122, 32, 44, 58, 93, 125, 9, 13, 34, 47, 92, 98,
+    102, 110, 114, 116, 117, 32, 44, 58, 93, 125, 9, 13, 48, 49, 57, 32, 44, 46, 69, 101, 125, 9, 13, 48, 57, 32, 44, 69,
+    101, 125, 9, 13, 48, 57, 43, 45, 48, 57, 48, 57, 32, 44, 125, 9, 13, 48, 57, 32, 44, 46, 69, 101, 125, 9, 13, 48, 57,
+    32, 44, 58, 93, 97, 125, 9, 13, 32, 44, 58, 93, 108, 125, 9, 13, 32, 44, 58, 93, 115, 125, 9, 13, 32, 44, 58, 93, 101,
+    125, 9, 13, 32, 44, 125, 9, 13, 32, 44, 58, 93, 117, 125, 9, 13, 32, 44, 58, 93, 108, 125, 9, 13, 32, 44, 58, 93, 108,
+    125, 9, 13, 32, 44, 125, 9, 13, 32, 44, 58, 93, 114, 125, 9, 13, 32, 44, 58, 93, 117, 125, 9, 13, 32, 44, 58, 93, 101,
+    125, 9, 13, 32, 44, 125, 9, 13, 34, 47, 92, 98, 102, 110, 114, 116, 117, 32, 34, 36, 44, 45, 48, 91, 93, 95, 102, 110,
+    116, 123, 9, 13, 49, 57, 65, 90, 97, 122, 34, 92, 34, 92, 32, 44, 93, 9, 13, 32, 34, 36, 45, 48, 91, 93, 95, 102, 110,
+    116, 123, 9, 13, 49, 57, 65, 90, 97, 122, 32, 44, 58, 93, 125, 9, 13, 48, 49, 57, 32, 44, 46, 69, 93, 101, 9, 13, 48,
+    57, 32, 44, 69, 93, 101, 9, 13, 48, 57, 43, 45, 48, 57, 48, 57, 32, 44, 93, 9, 13, 48, 57, 32, 44, 46, 69, 93, 101, 9,
+    13, 48, 57, 32, 44, 58, 93, 97, 125, 9, 13, 32, 44, 58, 93, 108, 125, 9, 13, 32, 44, 58, 93, 115, 125, 9, 13, 32, 44,
+    58, 93, 101, 125, 9, 13, 32, 44, 93, 9, 13, 32, 44, 58, 93, 117, 125, 9, 13, 32, 44, 58, 93, 108, 125, 9, 13, 32, 44,
+    58, 93, 108, 125, 9, 13, 32, 44, 93, 9, 13, 32, 44, 58, 93, 114, 125, 9, 13, 32, 44, 58, 93, 117, 125, 9, 13, 32, 44,
+    58, 93, 101, 125, 9, 13, 32, 44, 93, 9, 13, 34, 47, 92, 98, 102, 110, 114, 116, 117, 32, 9, 13, 32, 44, 58, 93, 125, 9,
+    13, 32, 46, 69, 101, 9, 13, 32, 69, 101, 9, 13, 48, 57, 32, 9, 13, 48, 57, 32, 46, 69, 101, 9, 13, 48, 57, 32, 44, 58,
+    93, 97, 125, 9, 13, 32, 44, 58, 93, 108, 125, 9, 13, 32, 44, 58, 93, 115, 125, 9, 13, 32, 44, 58, 93, 101, 125, 9, 13,
+    32, 9, 13, 32, 44, 58, 93, 117, 125, 9, 13, 32, 44, 58, 93, 108, 125, 9, 13, 32, 44, 58, 93, 108, 125, 9, 13, 32, 9, 13,
+    32, 44, 58, 93, 114, 125, 9, 13, 32, 44, 58, 93, 117, 125, 9, 13, 32, 44, 58, 93, 101, 125, 9, 13, 32, 9, 13, 0
+    };
+
+const char JsonReader::_json_single_lengths[92] = {0, 11, 2, 2, 7, 1, 0, 2, 0, 6, 2, 2, 2, 11, 2, 2, 3, 5, 5, 7, 5, 1, 6, 0, 5, 2, 0, 3, 6, 6, 6, 6, 6, 3,
+6, 6, 6, 3, 6, 6, 6, 3, 7, 13, 2, 2, 3, 12, 5, 1, 6, 0, 5, 2, 0, 3, 6, 6, 6, 6, 6, 3, 6, 6, 6, 3, 6, 6, 6, 3, 7, 1, 5,
+4, 3, 1, 4, 6, 6, 6, 6, 1, 6, 6, 6, 1, 6, 6, 6, 1, 0, 0    };
+
+const char JsonReader::_json_range_lengths[92] = {0, 4, 0, 0, 1, 1, 1, 1, 1, 3, 0, 0, 1, 4, 0, 0, 1, 3, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1,
+1, 1, 1, 1, 1, 1, 1, 1, 4, 0, 0, 1, 4, 1, 1, 1, 1, 2, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0    };
+
+const short JsonReader::_json_index_offsets[591] = {0, 0, 16, 19, 22, 31, 34, 36, 40, 42, 52, 55, 58, 62, 78, 81, 84, 89, 98, 105, 114, 121, 124, 132, 134,
+142, 146, 148, 154, 163, 171, 179, 187, 195, 200, 208, 216, 224, 229, 237, 245, 253, 258, 267, 285, 288, 291, 296, 313,
+320, 323, 331, 333, 341, 345, 347, 353, 362, 370, 378, 386, 394, 399, 407, 415, 423, 428, 436, 444, 452, 457, 466, 469,
+476, 482, 488, 492, 499, 507, 515, 523, 531, 534, 542, 550, 558, 561, 569, 577, 585, 588, 589    };
+
+const char JsonReader::_json_trans_targs[591] = {1, 2, 72, 5, 73, 71, 72, 77, 82, 86, 71, 1, 76, 72, 72, 0, 71, 4, 3, 71, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+    0, 73, 76, 0, 74, 0, 8, 8, 75, 0, 75, 0, 9, 10, 18, 17, 18, 90, 9, 18, 18, 0, 12, 42, 11, 12, 42, 11, 12, 13, 12, 0, 13,
+    14, 20, 21, 22, 16, 20, 29, 34, 38, 16, 13, 28, 20, 20, 0, 16, 19, 15, 16, 19, 15, 16, 17, 90, 16, 0, 17, 10, 18, 18,
+    90, 17, 18, 18, 0, 12, 0, 13, 0, 0, 12, 18, 15, 15, 15, 15, 15, 15, 15, 15, 0, 16, 17, 0, 0, 90, 16, 20, 22, 28, 0, 16,
+    17, 23, 25, 25, 90, 16, 0, 24, 0, 16, 17, 25, 25, 90, 16, 24, 0, 26, 26, 27, 0, 27, 0, 16, 17, 90, 16, 27, 0, 16, 17,
+    23, 25, 25, 90, 16, 28, 0, 16, 17, 0, 0, 30, 90, 16, 20, 16, 17, 0, 0, 31, 90, 16, 20, 16, 17, 0, 0, 32, 90, 16, 20, 16,
+    17, 0, 0, 33, 90, 16, 20, 16, 17, 90, 16, 0, 16, 17, 0, 0, 35, 90, 16, 20, 16, 17, 0, 0, 36, 90, 16, 20, 16, 17, 0, 0,
+    37, 90, 16, 20, 16, 17, 90, 16, 0, 16, 17, 0, 0, 39, 90, 16, 20, 16, 17, 0, 0, 40, 90, 16, 20, 16, 17, 0, 0, 41, 90, 16,
+    20, 16, 17, 90, 16, 0, 11, 11, 11, 11, 11, 11, 11, 11, 0, 43, 44, 48, 47, 49, 50, 46, 91, 48, 57, 62, 66, 46, 43, 56,
+    48, 48, 0, 46, 70, 45, 46, 70, 45, 46, 47, 91, 46, 0, 47, 44, 48, 49, 50, 46, 91, 48, 57, 62, 66, 46, 47, 56, 48, 48, 0,
+    46, 47, 0, 91, 0, 46, 48, 50, 56, 0, 46, 47, 51, 53, 91, 53, 46, 0, 52, 0, 46, 47, 53, 91, 53, 46, 52, 0, 54, 54, 55, 0,
+    55, 0, 46, 47, 91, 46, 55, 0, 46, 47, 51, 53, 91, 53, 46, 56, 0, 46, 47, 0, 91, 58, 0, 46, 48, 46, 47, 0, 91, 59, 0, 46,
+    48, 46, 47, 0, 91, 60, 0, 46, 48, 46, 47, 0, 91, 61, 0, 46, 48, 46, 47, 91, 46, 0, 46, 47, 0, 91, 63, 0, 46, 48, 46, 47,
+    0, 91, 64, 0, 46, 48, 46, 47, 0, 91, 65, 0, 46, 48, 46, 47, 91, 46, 0, 46, 47, 0, 91, 67, 0, 46, 48, 46, 47, 0, 91, 68,
+    0, 46, 48, 46, 47, 0, 91, 69, 0, 46, 48, 46, 47, 91, 46, 0, 45, 45, 45, 45, 45, 45, 45, 45, 0, 71, 71, 0, 71, 0, 0, 0,
+    0, 71, 72, 71, 6, 7, 7, 71, 0, 71, 7, 7, 71, 74, 0, 71, 71, 75, 0, 71, 6, 7, 7, 71, 76, 0, 71, 0, 0, 0, 78, 0, 71, 72,
+    71, 0, 0, 0, 79, 0, 71, 72, 71, 0, 0, 0, 80, 0, 71, 72, 71, 0, 0, 0, 81, 0, 71, 72, 71, 71, 0, 71, 0, 0, 0, 83, 0, 71,
+    72, 71, 0, 0, 0, 84, 0, 71, 72, 71, 0, 0, 0, 85, 0, 71, 72, 71, 71, 0, 71, 0, 0, 0, 87, 0, 71, 72, 71, 0, 0, 0, 88, 0,
+    71, 72, 71, 0, 0, 0, 89, 0, 71, 72, 71, 71, 0, 0, 0, 0
+    };
+
+const char JsonReader::_json_trans_actions[591] = {0, 0, 1, 1, 1, 21, 1, 1, 1, 1, 17, 0, 1, 1, 1, 0, 28, 1, 1, 7, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 19, 0, 1, 1, 0, 25, 1, 1, 5, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 21, 1, 1, 1, 1, 17,
+0, 1, 1, 1, 0, 28, 1, 1, 7, 0, 0, 0, 0, 19, 0, 0, 0, 0, 1, 1, 19, 0, 1, 1, 0, 5, 0, 5, 0, 0, 5, 0, 3, 3, 3, 3, 3, 3, 3,
+3, 0, 7, 7, 0, 0, 31, 7, 0, 0, 0, 0, 9, 9, 0, 0, 0, 37, 9, 0, 0, 0, 9, 9, 0, 0, 37, 9, 0, 0, 0, 0, 0, 0, 0, 0, 9, 9, 37,
+9, 0, 0, 9, 9, 0, 0, 0, 37, 9, 0, 0, 7, 7, 0, 0, 0, 31, 7, 0, 7, 7, 0, 0, 0, 31, 7, 0, 7, 7, 0, 0, 0, 31, 7, 0, 7, 7, 0,
+0, 0, 31, 7, 0, 13, 13, 49, 13, 0, 7, 7, 0, 0, 0, 31, 7, 0, 7, 7, 0, 0, 0, 31, 7, 0, 7, 7, 0, 0, 0, 31, 7, 0, 15, 15,
+55, 15, 0, 7, 7, 0, 0, 0, 31, 7, 0, 7, 7, 0, 0, 0, 31, 7, 0, 7, 7, 0, 0, 0, 31, 7, 0, 11, 11, 43, 11, 0, 3, 3, 3, 3, 3,
+3, 3, 3, 0, 0, 0, 1, 0, 1, 1, 21, 23, 1, 1, 1, 1, 17, 0, 1, 1, 1, 0, 28, 1, 1, 7, 0, 0, 0, 0, 23, 0, 0, 0, 0, 1, 1, 1,
+21, 23, 1, 1, 1, 1, 17, 0, 1, 1, 1, 0, 7, 7, 0, 34, 0, 7, 0, 0, 0, 0, 9, 9, 0, 0, 40, 0, 9, 0, 0, 0, 9, 9, 0, 40, 0, 9,
+0, 0, 0, 0, 0, 0, 0, 0, 9, 9, 40, 9, 0, 0, 9, 9, 0, 0, 40, 0, 9, 0, 0, 7, 7, 0, 34, 0, 0, 7, 0, 7, 7, 0, 34, 0, 0, 7, 0,
+7, 7, 0, 34, 0, 0, 7, 0, 7, 7, 0, 34, 0, 0, 7, 0, 13, 13, 52, 13, 0, 7, 7, 0, 34, 0, 0, 7, 0, 7, 7, 0, 34, 0, 0, 7, 0,
+7, 7, 0, 34, 0, 0, 7, 0, 15, 15, 58, 15, 0, 7, 7, 0, 34, 0, 0, 7, 0, 7, 7, 0, 34, 0, 0, 7, 0, 7, 7, 0, 34, 0, 0, 7, 0,
+11, 11, 46, 11, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 7, 0, 0, 0, 0, 7, 0, 9, 0, 0, 0, 9, 0, 9, 0, 0, 9, 0, 0, 9, 9, 0,
+0, 9, 0, 0, 0, 9, 0, 0, 7, 0, 0, 0, 0, 0, 7, 0, 7, 0, 0, 0, 0, 0, 7, 0, 7, 0, 0, 0, 0, 0, 7, 0, 7, 0, 0, 0, 0, 0, 7, 0,
+13, 13, 0, 7, 0, 0, 0, 0, 0, 7, 0, 7, 0, 0, 0, 0, 0, 7, 0, 7, 0, 0, 0, 0, 0, 7, 0, 15, 15, 0, 7, 0, 0, 0, 0, 0, 7, 0, 7,
+0, 0, 0, 0, 0, 7, 0, 7, 0, 0, 0, 0, 0, 7, 0, 11, 11, 0, 0, 0, 0    };
+
+const char JsonReader::_json_eof_actions[92] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 9, 9,
+9, 9, 7, 7, 7, 7, 13, 7, 7, 7, 15, 7, 7, 7, 11, 0, 0 };
+
+const int JsonReader::json_start = 1;
+const int JsonReader::json_first_final = 71;
+const int JsonReader::json_error = 0;
+
+const int JsonReader::json_en_object = 9;
+const int JsonReader::json_en_array = 43;
+const int JsonReader::json_en_main = 1;
+ 
+JsonReader::JsonReader() : current(0), root(0)
+{
 }
 
-Object& JsonReader::parse (const Reader& reader) throws IOException {
-    char[] data = new char[1024];
-    int offset = 0;
-    while (true) {
-        int length = reader.read(data, offset, data.length - offset);
-        if (length == -1) break;
-        if (length == 0) {
-            char[] newData = new char[data.length * 2];
-            System.arraycopy(data, 0, newData, 0, data.length);
-            data = newData;
-        } else
-            offset += length;
+json_item::ptr JsonReader::parse (const std::string& json) {
+    return parse(json.c_str(), 0, json.length());
+}
+
+json_item::ptr JsonReader::parse (const gdx_cpp::files::FileHandle& file) {
+    try {
+        gdx_cpp::files::FileHandle::char_ptr buffer;
+        int size = file.readBytes(buffer);
+        
+        return parse(buffer.get(), 0, size);
+    } catch (...) {
+        throw std::runtime_error("Error parsing file: " + file.name());
     }
-    return parse(data, 0, offset);
 }
 
-Object& JsonReader::parse (const InputStream& input) throws IOException {
-    return parse(new InputStreamReader(input, "ISO-8859-1"));
-}
-
-Object& JsonReader::parse (const gdx_cpp::files::FileHandle& file) throws IOException {
-    return parse(file.read());
-}
-
-Object& JsonReader::parse (int offset,int length) {
-    int cs, p = 0, pe = data.length, eof = pe, top = 0;
-    int[] stack = new int[4];
+json_item::ptr JsonReader::parse (const char* data, int offset, int length) {
+    int cs, p = offset, pe = length, eof = pe, top = 0;
+    std::vector<int> stack(4);
 
     int s = 0;
-    Array<String> names = new Array(8);
-    boolean needsUnescape = false;
-    RuntimeException parseRuntimeEx = null;
-
-    boolean debug = false;
-    if (debug) System.out.println();
+    std::list<std::string> names;
+    
+    bool needsUnescape = false;
+    
+    bool debug = false;
+    
+    if (debug) {
+        Gdx::app->log("JsonReader","\n");
+    }
 
     try {
 
-        // line 3 "../src/com/pennypop/animation/JsonParser.java"
+        // line 3 "JsonReader.java"
         {
             cs = json_start;
             top = 0;
         }
 
-        // line 8 "../src/com/pennypop/animation/JsonParser.java"
+        // line 8 "JsonReader.java"
         {
             int _klen;
             int _trans = 0;
@@ -86,14 +180,13 @@ _goto:
                 case 0:
                     if (p == pe) {
                         _goto_targ = 4;
-                        continue _goto;
+                        goto _goto;
                     }
                     if (cs == 0) {
                         _goto_targ = 5;
-                        continue _goto;
+                        goto _goto;
                     }
                 case 1:
-_match:
                     do {
                         _keys = _json_key_offsets[cs];
                         _trans = _json_index_offsets[cs];
@@ -112,7 +205,7 @@ _match:
                                     _lower = _mid + 1;
                                 else {
                                     _trans += (_mid - _keys);
-                                    break _match;
+                                    goto _match;
                                 }
                             }
                             _keys += _klen;
@@ -134,14 +227,13 @@ _match:
                                     _lower = _mid + 2;
                                 else {
                                     _trans += ((_mid - _keys) >> 1);
-                                    break _match;
+                                    goto _match;
                                 }
                             }
                             _trans += _klen;
                         }
                     } while (false);
-
-                    _trans = _json_indicies[_trans];
+_match:
                     cs = _json_trans_targs[_trans];
 
                     if (_json_trans_actions[_trans] != 0) {
@@ -150,124 +242,202 @@ _match:
                         while (_nacts-- > 0) {
                             switch (_json_actions[_acts++]) {
                             case 0:
-                                // line 37 "JsonParser.rl"
+                                // line 99 "JsonReader.rl"
                             {
                                 s = p;
                                 needsUnescape = false;
                             }
                             break;
                             case 1:
-                                // line 41 "JsonParser.rl"
+                                // line 103 "JsonReader.rl"
                             {
                                 needsUnescape = true;
                             }
                             break;
                             case 2:
-                                // line 44 "JsonParser.rl"
+                                // line 106 "JsonReader.rl"
                             {
-                                String name = new String(data, s, p - s);
+                                std::string name(data, s, p - s);
                                 s = p;
                                 if (needsUnescape) name = unescape(name);
-                                if (debug) System.out.println("name: " + name);
-                                names.add(name);
+                                if (debug) {
+                                    Gdx::app->log("JsonReader","name: %s", name.c_str());
+                                }
+                                names.push_back(name);
                             }
                             break;
                             case 3:
-                                // line 51 "JsonParser.rl"
+                                // line 113 "JsonReader.rl"
                             {
-                                String value = new String(data, s, p - s);
+                                std::string value(data, s, p - s);
                                 s = p;
                                 if (needsUnescape) value = unescape(value);
-                                String name = names.size > 0 ? names.pop() : null;
-                                if (debug) System.out.println("string: " + name + "=" + value);
+
+                                std::string name = "";
+                                if (names.size() > 0) {
+                                    name = names.front();
+                                    names.pop_front();
+                                }
+                                
+                                if (debug) {
+                                    Gdx::app->log("JsonReader","string: %s = %s", name.c_str(), value.c_str());
+                                }
+                                
                                 string(name, value);
                             }
                             break;
                             case 4:
-                                // line 59 "JsonParser.rl"
+                                // line 121 "JsonReader.rl"
                             {
-                                String value = new String(data, s, p - s);
+                                std::string value(data, s, p - s);
                                 s = p;
-                                String name = names.size > 0 ? names.pop() : null;
-                                if (debug) System.out.println("number: " + name + "=" + Float.parseFloat(value));
-                                number(name, value);
+                                std::string name = "";
+                                if (names.size() > 0) {
+                                    name = names.front();
+                                    names.pop_front();
+                                }
+                                
+                                if (debug) {
+                                    Gdx::app->log("JsonReader","number: %s = %s", name.c_str(), value.c_str());
+                                }
+                                number(name, utils::from_string<float>(value));
                             }
                             break;
                             case 5:
-                                // line 66 "JsonParser.rl"
+                                // line 128 "JsonReader.rl"
                             {
-                                String name = names.size > 0 ? names.pop() : null;
-                                if (debug) System.out.println("null: " + name);
-                                string(name, null);
+                                std::string name = "";
+                                if (names.size() > 0) {
+                                    name = names.front();
+                                    names.pop_front();
+                                }
+                                
+                                if (debug) {
+                                    Gdx::app->log("JsonReader","number: %s = true", name.c_str());
+                                }
+                                boolean(name, true);
                             }
                             break;
                             case 6:
-                                // line 71 "JsonParser.rl"
+                                // line 133 "JsonReader.rl"
                             {
-                                String name = names.size > 0 ? names.pop() : null;
-                                if (debug) System.out.println("startObject: " + name);
-                                startObject(name);
-                                {
-                                    if (top == stack.length) {
-                                        int[] newStack = new int[stack.length * 2];
-                                        System.arraycopy(stack, 0, newStack, 0, stack.length);
-                                        stack = newStack;
-                                    }
-                                    {
-                                        stack[top++] = cs;
-                                        cs = 12;
-                                        _goto_targ = 2;
-                                        if (true) continue _goto;
-                                    }
+                                std::string name = "";
+                                if (names.size() > 0) {
+                                    name = names.front();
+                                    names.pop_front();
                                 }
+                                
+                                if (debug) {
+                                    Gdx::app->log("JsonReader","number: %s = false", name.c_str());
+                                }
+                                boolean(name, false);
                             }
                             break;
                             case 7:
-                                // line 77 "JsonParser.rl"
+                                // line 138 "JsonReader.rl"
                             {
-                                if (debug) System.out.println("endObject");
-                                pop();
-                                {
-                                    cs = stack[--top];
-                                    _goto_targ = 2;
-                                    if (true) continue _goto;
+                                std::string name = "";
+                                if (names.size() > 0) {
+                                    name = names.front();
+                                    names.pop_front();
                                 }
+                                
+                                if (debug) {
+                                    Gdx::app->log("JsonReader","nulll: %s", name.c_str());
+                                }
+                                string(name, "");
                             }
                             break;
                             case 8:
-                                // line 82 "JsonParser.rl"
+                                // line 143 "JsonReader.rl"
                             {
-                                String name = names.size > 0 ? names.pop() : null;
-                                if (debug) System.out.println("startArray: " + name);
-                                startArray(name);
+                                std::string name = "";
+                                if (names.size() > 0) {
+                                    name = names.front();
+                                    names.pop_front();
+                                }
+                                
+                                if (debug) {
+                                    Gdx::app->log("JsonReader","startObject: %s", name.c_str());                                    
+                                }
+                                
+                                startObject(name);
                                 {
-                                    if (top == stack.length) {
-                                        int[] newStack = new int[stack.length * 2];
-                                        System.arraycopy(stack, 0, newStack, 0, stack.length);
-                                        stack = newStack;
+                                    if (top == stack.size()) {
+                                        stack.resize(stack.size() * 2);
                                     }
                                     {
                                         stack[top++] = cs;
-                                        cs = 35;
+                                        cs = 9;
                                         _goto_targ = 2;
-                                        if (true) continue _goto;
+                                        if (true) {
+                                            goto _goto;
+                                        }
                                     }
                                 }
                             }
                             break;
                             case 9:
-                                // line 88 "JsonParser.rl"
+                                // line 149 "JsonReader.rl"
                             {
-                                if (debug) System.out.println("endArray");
+                                if (debug) {
+                                    Gdx::app->log("JsonReader","endObject");
+                                }
                                 pop();
                                 {
                                     cs = stack[--top];
                                     _goto_targ = 2;
-                                    if (true) continue _goto;
+                                    if (true) {
+                                        goto _goto;
+                                    }
                                 }
                             }
                             break;
-                            // line 186 "../src/com/pennypop/animation/JsonParser.java"
+                            case 10:
+                                // line 154 "JsonReader.rl"
+                            {
+                                std::string name = "";
+                                if (names.size() > 0) {
+                                    name = names.front();
+                                    names.pop_front();
+                                }
+                                
+                                if (debug) {
+                                    Gdx::app->log("JsonReader","startArray: %s", name.c_str());
+                                }
+                                
+                                startArray(name);
+                                {
+                                    if (top == stack.size()) {
+                                        stack.resize(stack.size() * 2);
+                                    }
+                                    {
+                                        stack[top++] = cs;
+                                        cs = 43;
+                                        _goto_targ = 2;
+                                        if (true) goto _goto;
+                                    }
+                                }
+                            }
+                            break;
+                            case 11:
+                                // line 160 "JsonReader.rl"
+                            {
+                                if (debug) {
+                                    Gdx::app->log("JsonReader","endtArray");
+                                }
+                                
+                                pop();
+                                {
+                                    cs = stack[--top];
+                                    _goto_targ = 2;
+                                    if (true) {
+                                        goto _goto;
+                                    }
+                                }
+                            }
+                            break;
+                            // line 201 "JsonReader.java"
                             }
                         }
                     }
@@ -275,11 +445,11 @@ _match:
                 case 2:
                     if (cs == 0) {
                         _goto_targ = 5;
-                        continue _goto;
+                        goto _goto;
                     }
                     if (++p != pe) {
                         _goto_targ = 1;
-                        continue _goto;
+                        goto _goto;
                     }
                 case 4:
                     if (p == eof) {
@@ -287,190 +457,197 @@ _match:
                         int __nacts = (int)_json_actions[__acts++];
                         while (__nacts-- > 0) {
                             switch (_json_actions[__acts++]) {
-                            case 4:
-                                // line 59 "JsonParser.rl"
+                            case 3:
+                                // line 113 "JsonReader.rl"
                             {
-                                String value = new String(data, s, p - s);
+                                std::string value(data, s, p - s);
                                 s = p;
-                                String name = names.size > 0 ? names.pop() : null;
-                                if (debug) System.out.println("number: " + name + "=" + Float.parseFloat(value));
-                                number(name, value);
+                                if (needsUnescape) value = unescape(value);
+                                std::string name = "";
+                                if (names.size() > 0) {
+                                    name = names.front();
+                                    names.pop_front();
+                                }
+                                
+                                if (debug) {
+                                    Gdx::app->log("JsonReader","string: %s = %s", name.c_str(), value.c_str());
+                                }
+                                string(name, value);
+                            }
+                            break;
+                            case 4:
+                                // line 121 "JsonReader.rl"
+                            {
+                                std::string value(data, s, p - s);
+                                s = p;
+
+                                std::string name = "";
+                                if (names.size() > 0) {
+                                    name = names.front();
+                                    names.pop_front();
+                                }
+                                if (debug) {
+                                    Gdx::app->log("JsonReader","number: %s = %s", name.c_str(), value.c_str());
+                                }
+                                number(name, utils::from_string< float >(value));
                             }
                             break;
                             case 5:
-                                // line 66 "JsonParser.rl"
+                                // line 128 "JsonReader.rl"
                             {
-                                String name = names.size > 0 ? names.pop() : null;
-                                if (debug) System.out.println("null: " + name);
-                                string(name, null);
+                                std::string name = "";
+                                if (names.size() > 0) {
+                                    name = names.front();
+                                    names.pop_front();
+                                }
+                                if (debug) {
+                                    Gdx::app->log("JsonReader","boolean: %s = true", name.c_str());
+                                }
+                                boolean(name, true);
                             }
                             break;
-                            // line 225 "../src/com/pennypop/animation/JsonParser.java"
+                            case 6:
+                                // line 133 "JsonReader.rl"
+                            {
+                                std::string name = "";
+                                if (names.size() > 0) {
+                                    name = names.front();
+                                    names.pop_front();
+                                }
+                                
+                                if (debug) {
+                                    Gdx::app->log("JsonReader","boolean: %s = false", name.c_str());
+                                }
+                                boolean(name, false);
+                            }
+                            break;
+                            case 7:
+                                // line 138 "JsonReader.rl"
+                            {
+                                std::string name = "";
+                                if (names.size() > 0) {
+                                    name = names.front();
+                                    names.pop_front();
+                                }
+                                if (debug) {
+                                    Gdx::app->log("JsonReader","null: %s", name.c_str());
+                                }
+                                string(name, "");
+                            }
+                            break;
+                            // line 267 "JsonReader.java"
                             }
                         }
                     }
 
                 case 5:
+                    break;
                 }
                 break;
             }
         }
 
-        // line 114 "JsonParser.rl"
+        // line 190 "JsonReader.rl"
 
-    } catch (RuntimeException ex) {
-        parseRuntimeEx = ex;
+    } catch (std::runtime_error& ex) {
+        
     }
 
     if (p < pe) {
         int lineNumber = 1;
         for (int i = 0; i < p; i++)
             if (data[i] == '\n') lineNumber++;
-        throw new IllegalArgumentException("Error parsing JSON on line " + lineNumber + " near: " + new String(data, p, pe - p),
-                                           parseRuntimeEx);
-    } else if (elements.size != 0) {
-        Object element = elements.peek();
+        throw std::runtime_error("Error parsing JSON on line " + utils::to_string(lineNumber) + " near: " + std::string(data, p, pe - p));
+    } else if (elements.size() != 0) {
+        int element_type = elements.front()->item_type;
+        
+        std::list< json_item* >::iterator it = elements.begin();
+        std::list< json_item* >::iterator end = elements.end();
+
+        for (; it != end; ++it) {
+            delete *it;
+        }
+
         elements.clear();
-        if (element instanceof ObjectMap)
-            throw new IllegalArgumentException("Error parsing JSON, unmatched brace.");
+        
+        if (element_type == json_json)
+            throw std::runtime_error("Error parsing JSON, unmatched brace.");
         else
-            throw new IllegalArgumentException("Error parsing JSON, unmatched bracket.");
+            throw std::runtime_error("Error parsing JSON, unmatched bracket.");
     }
-    Object root = this.root;
-    this.root = null;
-    return root;
+    
+    json_item* root = this->root;
+    this->root = NULL;
+
+    return std::tr1::shared_ptr< json_item >(root);
 }
 
-char* JsonReader::init__json_actions_0 () {
-    return new byte[] {0, 1, 0, 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 1, 7, 1, 8, 1, 9, 2, 0, 2, 2, 0, 3, 2, 4, 7, 2, 4, 9, 2, 5,
-                       7, 2, 5, 9
-                      };
-}
-
-short* JsonReader::init__json_key_offsets_0 () {
-    return new short[] {0, 0, 11, 13, 15, 24, 27, 29, 33, 35, 36, 37, 38, 44, 46, 48, 52, 63, 65, 67, 72, 76, 85, 88, 96, 98,
-                        107, 111, 113, 120, 130, 131, 132, 133, 138, 147, 160, 162, 164, 169, 180, 183, 191, 193, 202, 206, 208, 215, 225, 226,
-                        227, 228, 233, 242, 245, 251, 258, 263, 271, 274, 274
-                       };
-}
-
-char* JsonReader::init__json_trans_keys_0 () {
-    return new char[] {32, 34, 45, 48, 91, 110, 123, 9, 13, 49, 57, 34, 92, 34, 92, 34, 47, 92, 98, 102, 110, 114, 116, 117,
-                       48, 49, 57, 48, 57, 43, 45, 48, 57, 48, 57, 117, 108, 108, 32, 34, 44, 125, 9, 13, 34, 92, 34, 92, 32, 58, 9, 13, 32,
-                       34, 45, 48, 91, 110, 123, 9, 13, 49, 57, 34, 92, 34, 92, 32, 44, 125, 9, 13, 32, 34, 9, 13, 34, 47, 92, 98, 102, 110,
-                       114, 116, 117, 48, 49, 57, 32, 44, 46, 69, 101, 125, 9, 13, 48, 57, 32, 44, 69, 101, 125, 9, 13, 48, 57, 43, 45, 48, 57,
-                       48, 57, 32, 44, 125, 9, 13, 48, 57, 32, 44, 46, 69, 101, 125, 9, 13, 48, 57, 117, 108, 108, 32, 44, 125, 9, 13, 34, 47,
-                       92, 98, 102, 110, 114, 116, 117, 32, 34, 44, 45, 48, 91, 93, 110, 123, 9, 13, 49, 57, 34, 92, 34, 92, 32, 44, 93, 9, 13,
-                       32, 34, 45, 48, 91, 110, 123, 9, 13, 49, 57, 48, 49, 57, 32, 44, 46, 69, 93, 101, 9, 13, 48, 57, 32, 44, 69, 93, 101, 9,
-                       13, 48, 57, 43, 45, 48, 57, 48, 57, 32, 44, 93, 9, 13, 48, 57, 32, 44, 46, 69, 93, 101, 9, 13, 48, 57, 117, 108, 108,
-                       32, 44, 93, 9, 13, 34, 47, 92, 98, 102, 110, 114, 116, 117, 32, 9, 13, 32, 46, 69, 101, 9, 13, 32, 69, 101, 9, 13, 48,
-                       57, 32, 9, 13, 48, 57, 32, 46, 69, 101, 9, 13, 48, 57, 32, 9, 13, 0
-                      };
-}
-
-char* JsonReader::init__json_single_lengths_0 () {
-    return new byte[] {0, 7, 2, 2, 7, 1, 0, 2, 0, 1, 1, 1, 4, 2, 2, 2, 7, 2, 2, 3, 2, 7, 1, 6, 0, 5, 2, 0, 3, 6, 1, 1, 1, 3, 7,
-                       9, 2, 2, 3, 7, 1, 6, 0, 5, 2, 0, 3, 6, 1, 1, 1, 3, 7, 1, 4, 3, 1, 4, 1, 0, 0
-                      };
-}
-
-char* JsonReader::init__json_range_lengths_0 () {
-    return new byte[] {0, 2, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 2, 0, 0, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 2, 0, 0, 0, 1, 1,
-                       2, 0, 0, 1, 2, 1, 1, 1, 2, 1, 1, 2, 2, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 1, 0, 0
-                      };
-}
-
-short* JsonReader::init__json_index_offsets_0 () {
-    return new short[] {0, 0, 10, 13, 16, 25, 28, 30, 34, 36, 38, 40, 42, 48, 51, 54, 58, 68, 71, 74, 79, 83, 92, 95, 103, 105,
-                        113, 117, 119, 125, 134, 136, 138, 140, 145, 154, 166, 169, 172, 177, 187, 190, 198, 200, 208, 212, 214, 220, 229, 231,
-                        233, 235, 240, 249, 252, 258, 264, 268, 275, 278, 279
-                       };
-}
-
-char* JsonReader::init__json_indicies_0 () {
-    return new byte[] {0, 2, 3, 4, 6, 7, 8, 0, 5, 1, 10, 11, 9, 13, 14, 12, 15, 15, 15, 15, 15, 15, 15, 15, 1, 16, 17, 1, 18,
-                       1, 19, 19, 20, 1, 20, 1, 21, 1, 22, 1, 23, 1, 24, 25, 26, 27, 24, 1, 29, 30, 28, 32, 33, 31, 34, 35, 34, 1, 35, 36, 37,
-                       38, 40, 41, 42, 35, 39, 1, 44, 45, 43, 47, 48, 46, 49, 26, 27, 49, 1, 26, 25, 26, 1, 50, 50, 50, 50, 50, 50, 50, 50, 1,
-                       51, 52, 1, 53, 54, 55, 56, 56, 57, 53, 1, 58, 1, 53, 54, 56, 56, 57, 53, 58, 1, 59, 59, 60, 1, 60, 1, 53, 54, 57, 53,
-                       60, 1, 53, 54, 55, 56, 56, 57, 53, 52, 1, 61, 1, 62, 1, 63, 1, 64, 65, 66, 64, 1, 67, 67, 67, 67, 67, 67, 67, 67, 1, 68,
-                       69, 70, 71, 72, 74, 75, 76, 77, 68, 73, 1, 79, 80, 78, 82, 83, 81, 84, 70, 75, 84, 1, 70, 69, 71, 72, 74, 76, 77, 70,
-                       73, 1, 85, 86, 1, 87, 88, 89, 90, 91, 90, 87, 1, 92, 1, 87, 88, 90, 91, 90, 87, 92, 1, 93, 93, 94, 1, 94, 1, 87, 88, 91,
-                       87, 94, 1, 87, 88, 89, 90, 91, 90, 87, 86, 1, 95, 1, 96, 1, 97, 1, 98, 99, 100, 98, 1, 101, 101, 101, 101, 101, 101,
-                       101, 101, 1, 102, 102, 1, 103, 104, 105, 105, 103, 1, 103, 105, 105, 103, 18, 1, 103, 103, 20, 1, 103, 104, 105, 105,
-                       103, 17, 1, 106, 106, 1, 1, 1, 0
-                      };
-}
-
-char* JsonReader::init__json_trans_targs_0 () {
-    return new byte[] {1, 0, 2, 5, 54, 57, 53, 9, 53, 3, 53, 4, 3, 53, 4, 3, 54, 57, 55, 8, 56, 10, 11, 58, 12, 13, 20, 59, 14,
-                       15, 34, 14, 15, 34, 15, 16, 17, 22, 23, 29, 19, 30, 19, 18, 19, 21, 18, 19, 21, 19, 18, 23, 29, 19, 20, 24, 26, 59, 25,
-                       27, 28, 31, 32, 33, 19, 20, 59, 14, 35, 36, 39, 40, 41, 47, 38, 60, 48, 38, 37, 38, 52, 37, 38, 52, 38, 41, 47, 38, 39,
-                       42, 44, 60, 43, 45, 46, 49, 50, 51, 38, 39, 60, 37, 53, 53, 6, 7, 53
-                      };
-}
-
-char* JsonReader::init__json_trans_actions_0 () {
-    return new byte[] {0, 0, 0, 1, 1, 1, 17, 0, 13, 1, 24, 1, 0, 7, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 1, 21, 1, 0, 5,
-                       0, 0, 0, 0, 1, 1, 1, 17, 0, 13, 1, 24, 1, 0, 7, 0, 0, 3, 0, 0, 9, 9, 0, 0, 27, 0, 0, 0, 0, 0, 0, 11, 11, 33, 3, 0, 0, 0,
-                       1, 1, 1, 17, 19, 0, 13, 1, 24, 1, 0, 7, 0, 0, 0, 0, 9, 9, 0, 0, 30, 0, 0, 0, 0, 0, 0, 11, 11, 36, 3, 0, 9, 0, 0, 11
-                      };
-}
-
-char* JsonReader::init__json_eof_actions_0 () {
-    return new byte[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 9, 9, 9, 11, 0, 0
-                      };
-}
-
-void JsonReader::set (const std::string& name,const Object& value) {
-    if (current instanceof ObjectMap)
-        ((ObjectMap)current).put(name, value);
-    else if (current instanceof Array)
-        ((Array)current).add(value);
-    else
-        root = value;
+void JsonReader::set (const std::string& name, gdx_cpp::utils::json_item* value) {
+    switch (current->item_type) {
+        case json_json:
+            ((json_item::item_map&)(*current))[name] = value;
+            break;
+        case json_list:
+            ((json_item::array&)*current).push_back(value);
+        default:
+            current = value;
+            break;
+    }    
 }
 
 void JsonReader::startObject (const std::string& name) {
-    ObjectMap value = new ObjectMap();
-    if (current != null) set(name, value);
-    elements.add(value);
+    json_item* value = json_item::newNodeAsJson();
+    
+    if (current != NULL) {
+        set(name, value);
+    }
+    
+    elements.push_back(value);
     current = value;
 }
 
 void JsonReader::startArray (const std::string& name) {
-    Array value = new Array();
-    if (current != null) set(name, value);
-    elements.add(value);
-    current = value;
+    json_item* array_item = json_item::newNodeAsArray();
+    
+    if (current != NULL) {
+        set(name, array_item);
+    }
+    
+    elements.push_back(array_item);
+    current = array_item;
 }
 
 void JsonReader::pop () {
-    root = elements.pop();
-    current = elements.size > 0 ? elements.peek() : null;
+    root = elements.back();
+    elements.pop_back();
+    current = elements.size() > 0 ? elements.back() : NULL;
 }
 
 void JsonReader::string (const std::string& name,const std::string& value) {
-    set(name, value);
+    set(name, json_item::newNodeAsString(new std::string(value)));
 }
 
-void JsonReader::number (const std::string& name,const std::string& value) {
-    set(name, value);
+void JsonReader::number (const std::string& name, float value) {
+    set(name, json_item::newNodeAsFloat(new float(value)));
 }
 
-std::string& JsonReader::unescape (const std::string& value) {
+void JsonReader::boolean (const std::string& name, bool value) {
+    set(name, json_item::newNodeAsBool(new bool(value)));
+}
+
+std::string JsonReader::unescape (const std::string& value) {
     int length = value.length();
-    StringBuilder buffer = new StringBuilder(length + 16);
+    std::stringstream buffer;
     for (int i = 0; i < length;) {
-        char c = value.charAt(i++);
+        char c = value[i++];
         if (c != '\\') {
-            buffer.append(c);
+            buffer << c;
             continue;
         }
         if (i == length) break;
-        c = value.charAt(i++);
+        c = value[i++];
         if (c == 'u') {
-            buffer.append(Character.toChars(Integer.parseInt(value.substring(i, i + 4), 16)));
+            buffer << utils::from_string< int >(value.substr(i, i + 4));
             i += 4;
             continue;
         }
@@ -495,10 +672,11 @@ std::string& JsonReader::unescape (const std::string& value) {
             c = '\t';
             break;
         default:
-            throw new SerializationException("Illegal escaped character: \\" + c);
+            throw std::runtime_error("Illegal escaped character: \\" + c);
         }
-        buffer.append(c);
+        
+        buffer << c;
     }
-    return buffer.toString();
+    return buffer.str();
 }
 
