@@ -15,6 +15,7 @@ set(APPLICATIONS MyFirstTriangle SpriteBatchTest PixmapTest SpriteCacheTest
 message("Active backend is: " ${ACTIVE_BACKENDS})
 
 foreach(BACKEND ${ACTIVE_BACKENDS})
+    add_definitions(-DCURRENT_BACKEND_${BACKEND})
     include_directories(${GDX_CPP_BACKEND_${BACKEND}_INCLUDES})
     string(TOLOWER ${BACKEND} backend)
     set(EXECUTABLE_OUTPUT_PATH ${GDX_BINARY_ROOT_DIR}/bin/tests/${backend})
@@ -31,7 +32,7 @@ foreach(BACKEND ${ACTIVE_BACKENDS})
             add_library(${APP_NAME} SHARED ${APP}.cpp)
         endif()        
         target_link_libraries(${APP_NAME} gdx-cpp gdx-cpp-backend-${backend} ${BACKEND-${BACKEND}-DEPENDENCIES} Box2D_shared gdx-cpp-box2d-layer)
-        add_definitions(-DCURRENT_BACKEND_${BACKEND})
+        
         add_dependencies(${APP_NAME} gdx-cpp gdx-cpp-backend-${backend})
     endforeach()
 endforeach()
