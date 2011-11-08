@@ -20,5 +20,6 @@ install(DIRECTORY . DESTINATION include/gdx-cpp/backends/gdx-cpp-backend-linux
           FILES_MATCHING PATTERN "*.hpp")
 
 install(TARGETS gdx-cpp-backend-linux
-        LIBRARY DESTINATION lib)
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
 

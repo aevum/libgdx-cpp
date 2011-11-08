@@ -18,66 +18,66 @@
  *  @author aevum team
  */
 
-#include "JsonItem.hpp"
+#include "JsonValue.hpp"
 
 #include <cassert>
 #include <algorithm>
 
 using namespace gdx_cpp::utils;
 
-json_item::json_item(int val) : item_type(json_int) {
+JsonValue::JsonValue(int val) : item_type(json_int) {
     item_val = std::tr1::shared_ptr<void>( new int(val) );
 }
 
-json_item::json_item(int* val) : item_val(std::tr1::shared_ptr<void>(val)), item_type(json_int) {
+JsonValue::JsonValue(int* val) : item_val(std::tr1::shared_ptr<void>(val)), item_type(json_int) {
 
 }
 
-json_item::json_item(float val) : item_type(json_float) {
+JsonValue::JsonValue(float val) : item_type(json_float) {
     item_val = std::tr1::shared_ptr<void>( new int(val) );
 }
 
-json_item::json_item(float* val) : item_val(std::tr1::shared_ptr<void>(val)), item_type(json_float)
+JsonValue::JsonValue(float* val) : item_val(std::tr1::shared_ptr<void>(val)), item_type(json_float)
 {
 }
 
-json_item::json_item(bool* val) : item_type(json_bool) , item_val(std::tr1::shared_ptr<void>( val )) {
+JsonValue::JsonValue(bool* val) : item_type(json_bool) , item_val(std::tr1::shared_ptr<void>( val )) {
 }
 
-json_item::json_item(const std::string& val)
+JsonValue::JsonValue(const std::string& val)
         : item_type(json_string)
 {
     item_val = std::tr1::shared_ptr<void>( new std::string(val) );
 }
 
-json_item::json_item(std::string* val)
+JsonValue::JsonValue(std::string* val)
         : item_type(json_string), item_val(std::tr1::shared_ptr<void>( val ))
 {
 }
 
-json_item::json_item(const item_map& val) : item_type(json_json) {
+JsonValue::JsonValue(const item_map& val) : item_type(json_json) {
     item_val = std::tr1::shared_ptr<void>( new item_map(val) );
 }
 
-json_item::json_item(const array& val) : item_type(json_list) {
+JsonValue::JsonValue(const array& val) : item_type(json_list) {
     item_val = std::tr1::shared_ptr<void>( new array(val) );
 }
 
-gdx_cpp::utils::json_item& json_item::operator[](const char* name) {
+gdx_cpp::utils::JsonValue& JsonValue::operator[](const char* name) {
     assert(item_type == json_json);
     return *((item_map&) *this)[name];
 }
 
-json_item::json_item(bool val) : item_type(json_bool) , item_val(std::tr1::shared_ptr<void>(new bool(val))) {
+JsonValue::JsonValue(bool val) : item_type(json_bool) , item_val(std::tr1::shared_ptr<void>(new bool(val))) {
 }
 
-gdx_cpp::utils::json_item& gdx_cpp::utils::json_item::operator[](int idx)
+gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::operator[](int idx)
 {
     assert(item_type == json_list);
     return *((array&)*this)[idx];
 }
 
-json_item::~json_item() {
+JsonValue::~JsonValue() {
     if (item_type == json_list) {
         array& lst = *this;
 
@@ -99,21 +99,21 @@ json_item::~json_item() {
     }
 }
 
-json_item::item_map::const_iterator json_item::begin() {
+JsonValue::item_map::const_iterator JsonValue::begin() {
     assert(item_type == json_json);
     return ((item_map&)*this).begin();
 }
 
-json_item::item_map::const_iterator json_item::end() {
+JsonValue::item_map::const_iterator JsonValue::end() {
     assert(item_type == json_json);
     return ((item_map&)*this).end();
 }
 
-json_item::json_item() : item_type(json_null)
+JsonValue::JsonValue() : item_type(json_null)
 {
 }
 
-size_t gdx_cpp::utils::json_item::count()
+size_t gdx_cpp::utils::JsonValue::count()
 {
     assert(item_type == json_json);
     return ((item_map&)*this).size();
@@ -124,7 +124,7 @@ size_t gdx_cpp::utils::json_item::count()
 namespace gdx_cpp {
 namespace utils {
 
-std::ostream& operator<< (std::ostream& out, gdx_cpp::utils::json_item& item) {
+std::ostream& operator<< (std::ostream& out, gdx_cpp::utils::JsonValue& item) {
     switch (item.getType()) {
     case json_bool:
         out << ((bool)item ? "true" : "false");
@@ -136,8 +136,8 @@ std::ostream& operator<< (std::ostream& out, gdx_cpp::utils::json_item& item) {
         out << (int) item;
         break;
     case json_list: {
-        json_item::array::iterator iit = ((json_item::array&)item).begin();
-        json_item::array::iterator eend = ((json_item::array&)item).end();
+        JsonValue::array::iterator iit = ((JsonValue::array&)item).begin();
+        JsonValue::array::iterator eend = ((JsonValue::array&)item).end();
 
         out << "[ ";
 
@@ -153,8 +153,8 @@ std::ostream& operator<< (std::ostream& out, gdx_cpp::utils::json_item& item) {
     break;
     case json_json: {
 
-        json_item::item_map::const_iterator it = item.begin();
-        json_item::item_map::const_iterator end = item.end();
+        JsonValue::item_map::const_iterator it = item.begin();
+        JsonValue::item_map::const_iterator end = item.end();
 
         out << "{ ";
         

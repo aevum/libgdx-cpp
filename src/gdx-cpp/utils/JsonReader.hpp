@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_UTILS_JSONREADER_HPP_
 #define GDX_CPP_UTILS_JSONREADER_HPP_
 
-#include "JsonItem.hpp"
+#include "JsonValue.hpp"
 
 #include <string>
 #include <list>
@@ -34,9 +34,9 @@ class JsonReader {
 public:
     JsonReader();
     
-    json_item::ptr parse (const std::string& json);
-    json_item::ptr parse (const gdx_cpp::files::FileHandle& file);
-    json_item::ptr parse (const char* data, int offset, int length);
+    JsonValue::ptr parse (const std::string& json);
+    JsonValue::ptr parse (const gdx_cpp::files::FileHandle& file);
+    JsonValue::ptr parse (const char* data, int offset, int length);
 
 protected:
     void startObject (const std::string& name);
@@ -68,14 +68,14 @@ private:
     static const int json_en_array;
     static const int json_en_main;
     
-    void set (const std::string& name, gdx_cpp::utils::json_item* value);
+    void set (const std::string& name, gdx_cpp::utils::JsonValue* value);
     
     std::string unescape (const std::string& value);
 
-    json_item* root;
-    json_item* current;
+    JsonValue* root;
+    JsonValue* current;
 
-    std::list< json_item* > elements;
+    std::list< JsonValue* > elements;
 };
 
 } // namespace gdx_cpp

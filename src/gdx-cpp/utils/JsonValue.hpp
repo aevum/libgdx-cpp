@@ -43,26 +43,25 @@ enum json_item_type {
     json_null
 };
 
-class json_item {
+class JsonValue {
 public:
-    typedef ref_ptr_maker< json_item >::type ptr;
-    typedef std::tr1::unordered_map< std::string, json_item* > item_map;
-    typedef std::vector< json_item* > array;
+    typedef ref_ptr_maker< JsonValue >::type ptr;
+    typedef std::tr1::unordered_map< std::string, JsonValue* > item_map;
+    typedef std::vector< JsonValue* > array;
 
-
-    json_item(int val) ;
-    json_item(int* val) ;
-    json_item(float val) ;
-    json_item(float* val) ;
-    json_item(bool val) ;
-    json_item(bool* val) ;
-    json_item(const std::string& val) ;
-    json_item(std::string* val) ;
-    json_item(const item_map& val) ;
-    json_item(item_map* val) : item_type(json_json), item_val(std::tr1::shared_ptr<void>( val )) {}
-    json_item(const array& val) ;
-    json_item(array* val) : item_type(json_list) , item_val(std::tr1::shared_ptr<void>( val )) {}
-    json_item(const json_item& other) : item_val(other.item_val), item_type(other.item_type)
+    JsonValue(int val) ;
+    JsonValue(int* val) ;
+    JsonValue(float val) ;
+    JsonValue(float* val) ;
+    JsonValue(bool val) ;
+    JsonValue(bool* val) ;
+    JsonValue(const std::string& val) ;
+    JsonValue(std::string* val) ;
+    JsonValue(const item_map& val) ;
+    JsonValue(item_map* val) : item_type(json_json), item_val(std::tr1::shared_ptr<void>( val )) {}
+    JsonValue(const array& val) ;
+    JsonValue(array* val) : item_type(json_list) , item_val(std::tr1::shared_ptr<void>( val )) {}
+    JsonValue(const JsonValue& other) : item_val(other.item_val), item_type(other.item_type)
     {
     }
 
@@ -95,47 +94,47 @@ public:
         return *(T*)item_val.get();
     }
     
-    json_item& operator [](const char* name);
-    json_item& operator[](int idx);
+    JsonValue& operator [](const char* name);
+    JsonValue& operator[](int idx);
 
-    json_item() ;
+    JsonValue() ;
 
     item_map::const_iterator begin() ;
     item_map::const_iterator end() ;
 
     size_t count();
 
-    static json_item* newNodeAsJson(json_item::item_map* preset = NULL) {
-        return new json_item(preset == NULL ? new json_item::item_map : preset);
+    static JsonValue* newNodeAsJson(JsonValue::item_map* preset = NULL) {
+        return new JsonValue(preset == NULL ? new JsonValue::item_map : preset);
     }
 
-    static json_item* newNodeAsInt(int* val = NULL) {
-        return new json_item(val == NULL ? new int(0) : val);
+    static JsonValue* newNodeAsInt(int* val = NULL) {
+        return new JsonValue(val == NULL ? new int(0) : val);
     }
 
-    static json_item* newNodeAsArray(json_item::array* preset = NULL) {
-        return new json_item(preset == NULL ? new json_item::array : preset);
+    static JsonValue* newNodeAsArray(JsonValue::array* preset = NULL) {
+        return new JsonValue(preset == NULL ? new JsonValue::array : preset);
     }
 
-    static json_item* newNodeAsString(std::string* preset = NULL) {
-        return new json_item(preset == NULL ? new std::string : preset);
+    static JsonValue* newNodeAsString(std::string* preset = NULL) {
+        return new JsonValue(preset == NULL ? new std::string : preset);
     }
 
-    static json_item* newNodeAsBool(bool* preset = NULL) {
-        return new json_item(preset == NULL ? new bool : preset);
+    static JsonValue* newNodeAsBool(bool* preset = NULL) {
+        return new JsonValue(preset == NULL ? new bool : preset);
     }
 
-    static json_item* newNodeAsFloat(float* preset = NULL) {
-        return new json_item(preset == NULL ? new float : preset);
+    static JsonValue* newNodeAsFloat(float* preset = NULL) {
+        return new JsonValue(preset == NULL ? new float : preset);
     }
 
     json_item_type getType() {
         return (json_item_type) item_type;
     }
 
-    ~json_item() ;
+    ~JsonValue() ;
 
-    friend std::ostream& operator<< (std::ostream &out, json_item& item);
+    friend std::ostream& operator<< (std::ostream &out, JsonValue& item);
 
 private:
     friend class JsonReader;
