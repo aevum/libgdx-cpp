@@ -23,9 +23,10 @@
 
 #include <tr1/memory>
 #include <tr1/unordered_map>
-#include <list>
+#include <vector>
 #include <string>
-
+#include <fstream>
+#include <cassert>
 #include "gdx-cpp/utils/Aliases.hpp"
 
 namespace gdx_cpp {
@@ -42,12 +43,13 @@ enum json_item_type {
     json_null
 };
 
-struct json_item {
+class json_item {
+public:
     typedef ref_ptr_maker< json_item >::type ptr;
     typedef std::tr1::unordered_map< std::string, json_item* > item_map;
-    typedef std::list< json_item* > array;
+    typedef std::vector< json_item* > array;
 
-    
+
     json_item(int val) ;
     json_item(int* val) ;
     json_item(float val) ;
@@ -64,44 +66,61 @@ struct json_item {
     {
     }
 
-    operator int();
-    operator std::string&() ;
-    operator array& () ;
-    operator json_item&() ;
-    operator bool () ;
-    operator std::tr1::unordered_map< std::string, json_item* >& () ;
-    operator float();
+    template <typename T>
+    operator T&() {
+        switch(item_type) {
+            case json_int:
+                assert(typeid(int) == typeid(T));
+                break;
+            case json_float:
+                assert(typeid(float) == typeid(T));
+                break;
+            case json_list:
+                assert(typeid(array) == typeid(T));
+                break;
+            case json_json:
+                assert(typeid(item_map) == typeid(T));
+                break;
+            case json_bool:
+                assert(typeid(bool) == typeid(T));
+                break;
+            case json_string:
+                assert(typeid(std::string) == typeid(T));
+                break;
+            case json_null:
+            default:
+                break;
+        }
+
+        return *(T*)item_val.get();
+    }
     
-    json_item& operator [](const std::string& name) ;
+    json_item& operator [](const char* name);
+    json_item& operator[](int idx);
 
-    json_item() : item_type(json_null)
-    {
-    }
+    json_item() ;
 
-    item_map::const_iterator begin() {
-        return ((item_map&)*this).begin();
-    }
+    item_map::const_iterator begin() ;
+    item_map::const_iterator end() ;
 
-    item_map::const_iterator end() {
-        return ((item_map&)*this).end();
-    }
-    
+    size_t count();
+
     static json_item* newNodeAsJson(json_item::item_map* preset = NULL) {
         return new json_item(preset == NULL ? new json_item::item_map : preset);
     }
-    
+
     static json_item* newNodeAsInt(int* val = NULL) {
         return new json_item(val == NULL ? new int(0) : val);
     }
-    
+
     static json_item* newNodeAsArray(json_item::array* preset = NULL) {
         return new json_item(preset == NULL ? new json_item::array : preset);
     }
-    
+
     static json_item* newNodeAsString(std::string* preset = NULL) {
         return new json_item(preset == NULL ? new std::string : preset);
     }
-    
+
     static json_item* newNodeAsBool(bool* preset = NULL) {
         return new json_item(preset == NULL ? new bool : preset);
     }
@@ -113,7 +132,11 @@ struct json_item {
     json_item_type getType() {
         return (json_item_type) item_type;
     }
-    
+
+    ~json_item() ;
+
+    friend std::ostream& operator<< (std::ostream &out, json_item& item);
+
 private:
     friend class JsonReader;
     std::tr1::shared_ptr<void> item_val;

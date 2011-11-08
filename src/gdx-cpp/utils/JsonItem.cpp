@@ -21,6 +21,7 @@
 #include "JsonItem.hpp"
 
 #include <cassert>
+#include <algorithm>
 
 using namespace gdx_cpp::utils;
 
@@ -29,7 +30,7 @@ json_item::json_item(int val) : item_type(json_int) {
 }
 
 json_item::json_item(int* val) : item_val(std::tr1::shared_ptr<void>(val)), item_type(json_int) {
-    
+
 }
 
 json_item::json_item(float val) : item_type(json_float) {
@@ -37,20 +38,20 @@ json_item::json_item(float val) : item_type(json_float) {
 }
 
 json_item::json_item(float* val) : item_val(std::tr1::shared_ptr<void>(val)), item_type(json_float)
-{    
+{
 }
 
 json_item::json_item(bool* val) : item_type(json_bool) , item_val(std::tr1::shared_ptr<void>( val )) {
 }
 
 json_item::json_item(const std::string& val)
-    : item_type(json_string)
+        : item_type(json_string)
 {
     item_val = std::tr1::shared_ptr<void>( new std::string(val) );
 }
 
 json_item::json_item(std::string* val)
-    : item_type(json_string), item_val(std::tr1::shared_ptr<void>( val ))
+        : item_type(json_string), item_val(std::tr1::shared_ptr<void>( val ))
 {
 }
 
@@ -62,48 +63,120 @@ json_item::json_item(const array& val) : item_type(json_list) {
     item_val = std::tr1::shared_ptr<void>( new array(val) );
 }
 
-gdx_cpp::utils::json_item& json_item::operator[](const std::string& name) {
+gdx_cpp::utils::json_item& json_item::operator[](const char* name) {
     assert(item_type == json_json);
-
-    item_map map = *this;
-    return *map[name];
-}
-
-json_item::operator int() {
-    assert(item_type == json_int);
-    return *(int*)item_val.get();
-}
-
-json_item::operator std::string& () {
-    assert(item_type == json_string);
-    return *(std::string*) item_val.get();
-}
-
-json_item::operator json_item::array& () {
-    assert(item_type == json_list);
-    return *(json_item::array *) item_val.get();
-}
-
-json_item::operator json_item& () {
-    assert(item_type == json_json);
-    return *(json_item*) item_val.get();
-}
-
-json_item::operator bool() {
-    assert(item_type == json_bool);
-    return *(bool*) item_val.get();
-}
-
-json_item::operator std::tr1::unordered_map< std::string, json_item* >&() {
-    assert(item_type == json_json);
-    return *(item_map*) item_val.get();
+    return *((item_map&) *this)[name];
 }
 
 json_item::json_item(bool val) : item_type(json_bool) , item_val(std::tr1::shared_ptr<void>(new bool(val))) {
 }
 
-gdx_cpp::utils::json_item::operator float()
+gdx_cpp::utils::json_item& gdx_cpp::utils::json_item::operator[](int idx)
 {
-    assert(item_type == json_float);
-    return *(float*) item_val.get();
+    assert(item_type == json_list);
+    return *((array&)*this)[idx];
 }
+
+json_item::~json_item() {
+    if (item_type == json_list) {
+        array& lst = *this;
+
+        array::iterator it = lst.begin();
+        array::iterator end = lst.end();
+
+        for (; it != end; ++it) {
+            delete *it;
+        }
+    } else if (item_type == json_json) {
+        item_map& map = *this;
+
+        item_map::iterator it = map.begin();
+        item_map::iterator end = map.end();
+
+        for (; it != end; ++it) {
+            delete it->second;
+        }
+    }
+}
+
+json_item::item_map::const_iterator json_item::begin() {
+    assert(item_type == json_json);
+    return ((item_map&)*this).begin();
+}
+
+json_item::item_map::const_iterator json_item::end() {
+    assert(item_type == json_json);
+    return ((item_map&)*this).end();
+}
+
+json_item::json_item() : item_type(json_null)
+{
+}
+
+size_t gdx_cpp::utils::json_item::count()
+{
+    assert(item_type == json_json);
+    return ((item_map&)*this).size();
+}
+
+//sob... c++ sucks A LOT sometimes...
+
+namespace gdx_cpp {
+namespace utils {
+
+std::ostream& operator<< (std::ostream& out, gdx_cpp::utils::json_item& item) {
+    switch (item.getType()) {
+    case json_bool:
+        out << ((bool)item ? "true" : "false");
+        break;
+    case json_float:
+        out << (float) item;
+        break;
+    case json_int:
+        out << (int) item;
+        break;
+    case json_list: {
+        json_item::array::iterator iit = ((json_item::array&)item).begin();
+        json_item::array::iterator eend = ((json_item::array&)item).end();
+
+        out << "[ ";
+
+        for (; iit != eend;) {
+            out << **iit;
+            if (++iit == eend)
+                break;
+            out << " , ";
+        }
+
+        out << " ]";
+    }
+    break;
+    case json_json: {
+
+        json_item::item_map::const_iterator it = item.begin();
+        json_item::item_map::const_iterator end = item.end();
+
+        out << "{ ";
+        
+        for (; it != end;) {        
+            out << it->first << " : " << *it->second;
+            if (++it == end)
+                break;            
+            out << " , ";
+        }
+        out << " }";
+    }
+    break;
+    case json_null:
+        out << "null";
+        break;
+    case json_string:
+        out << "\"" << (std::string&) item << "\"";
+        break;
+    };
+
+    return out;
+}
+}
+}
+

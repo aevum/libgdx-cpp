@@ -24,6 +24,7 @@
 #include "JsonItem.hpp"
 
 #include <string>
+#include <list>
 #include "gdx-cpp/files/FileHandle.hpp"
 
 namespace gdx_cpp {
@@ -43,10 +44,11 @@ protected:
 
     void pop ();
 
-    void string (const std::string& name,const std::string& value);
-    void number (const std::string& name,float value);
+    void string (const std::string& name,  const std::string& value);
+    void number (const std::string& name,  float value);
+    void number (const std::string& name,  int value);
     void boolean (const std::string& name, bool value);
-        
+
 private:
     static const char _json_actions[61];
     static const short _json_key_offsets[92];

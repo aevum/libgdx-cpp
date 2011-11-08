@@ -143,7 +143,7 @@ json_item::ptr JsonReader::parse (const gdx_cpp::files::FileHandle& file) {
 }
 
 json_item::ptr JsonReader::parse (const char* data, int offset, int length) {
-    int cs, p = offset, pe = length, eof = pe, top = 0;
+    unsigned int cs, p = offset, pe = length, eof = pe, top = 0;
     std::vector<int> stack(4);
 
     int s = 0;
@@ -300,7 +300,12 @@ _match:
                                 if (debug) {
                                     Gdx::app->log("JsonReader","number: %s = %s", name.c_str(), value.c_str());
                                 }
-                                number(name, utils::from_string<float>(value));
+
+                                if (value.find(".") != std::string::npos) {
+                                    number(name, utils::from_string<float>(value));
+                                } else {
+                                    number(name, utils::from_string<int>(value));
+                                }
                             }
                             break;
                             case 5:
@@ -489,7 +494,11 @@ _match:
                                 if (debug) {
                                     Gdx::app->log("JsonReader","number: %s = %s", name.c_str(), value.c_str());
                                 }
-                                number(name, utils::from_string< float >(value));
+                                if (value.find(".") != std::string::npos) {
+                                    number(name, utils::from_string< float >(value));
+                                } else {
+                                    number(name, utils::from_string< int >(value));
+                                }
                             }
                             break;
                             case 5:
@@ -555,7 +564,7 @@ _match:
 
     if (p < pe) {
         int lineNumber = 1;
-        for (int i = 0; i < p; i++)
+        for (unsigned int i = 0; i < p; i++)
             if (data[i] == '\n') lineNumber++;
         throw std::runtime_error("Error parsing JSON on line " + utils::to_string(lineNumber) + " near: " + std::string(data, p, pe - p));
     } else if (elements.size() != 0) {
@@ -589,6 +598,7 @@ void JsonReader::set (const std::string& name, gdx_cpp::utils::json_item* value)
             break;
         case json_list:
             ((json_item::array&)*current).push_back(value);
+            break;
         default:
             current = value;
             break;
@@ -678,5 +688,10 @@ std::string JsonReader::unescape (const std::string& value) {
         buffer << c;
     }
     return buffer.str();
+}
+
+void JsonReader::number(const std::string& name, int value)
+{
+    set(name, json_item::newNodeAsInt(new int(value)));
 }
 
