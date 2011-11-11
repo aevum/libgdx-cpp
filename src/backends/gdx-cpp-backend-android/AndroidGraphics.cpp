@@ -272,6 +272,9 @@ graphics::Pixmap* backends::android::AndroidGraphics::resolvePixmap(const gdx_cp
     switch(other.getType()) {
         case graphics::Pixmap::Gdx2d:
             return new g2d::Gdx2DPixmap((g2d::Gdx2DPixmap&)other);
+        case graphics::Pixmap::Svg:
+        default:
+            throw std::runtime_error("Pixmap of type Svg doesnt provide a copy constructor");
     } 
 }
 
