@@ -1,5 +1,3 @@
-#include <gdx-cpp/backend_selector.hpp>
-
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/Application.hpp>
 #include <gdx-cpp/ApplicationListener.hpp>
@@ -61,6 +59,6 @@ private:
     Texture::ptr texture2;
 };
 
-void init() {
+void init(int argc, char** argv) {
     createApplication(new utils::ApplicationListenerDecorator<SvgBackendTest>(), "Svg Backend Test", 640, 480);
 }

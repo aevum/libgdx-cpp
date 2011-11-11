@@ -22,94 +22,90 @@
 
 using namespace gdx_cpp::utils;
 
+void JsonWriter::setOutputType (const OutputType& outputType) {
+    this.outputType = outputType;
+}
+
+JsonWriter& JsonWriter::name (const std::string& name) throws IOException {
+    if (current == null || current.array) throw new IllegalStateException("Current item must be an object.");
+    if (!current.needsComma)
+        current.needsComma = true;
+    else
+        writer.write(',');
+    writer.write(outputType.quoteName(name));
+    writer.write(':');
+    named = true;
+    return this;
+}
+
 JsonWriter& JsonWriter::object () throws IOException {
     if (current != null) {
-        if (!current.array) throw new RuntimeException("Current item must be an array.");
-        if (!current.needsComma)
-            current.needsComma = true;
-        else
-            writer.write(",");
+        if (current.array) {
+            if (!current.needsComma)
+                current.needsComma = true;
+            else
+                writer.write(',');
+        } else {
+            if (!named && !current.array) throw new IllegalStateException("Name must be set.");
+            named = false;
+        }
     }
-    stack.push(current = new JsonObject(false));
+    stack.add(current = new JsonObject(false));
     return this;
 }
 
 JsonWriter& JsonWriter::array () throws IOException {
     if (current != null) {
-        if (!current.array) throw new RuntimeException("Current item must be an array.");
-        if (!current.needsComma)
-            current.needsComma = true;
-        else
-            writer.write(",");
+        if (current.array) {
+            if (!current.needsComma)
+                current.needsComma = true;
+            else
+                writer.write(',');
+        } else {
+            if (!named && !current.array) throw new IllegalStateException("Name must be set.");
+            named = false;
+        }
     }
-    stack.push(current = new JsonObject(true));
+    stack.add(current = new JsonObject(true));
     return this;
 }
 
-JsonWriter& JsonWriter::add (const Object& value) throws IOException {
-    if (!current.array) throw new RuntimeException("Current item must be an array.");
-    if (!current.needsComma)
-        current.needsComma = true;
-    else
-        writer.write(",");
-    if (value == null || value instanceof Number || value instanceof Boolean)
+JsonWriter& JsonWriter::value (const Object& value) throws IOException {
+    if (current != null) {
+        if (current.array) {
+            if (!current.needsComma)
+                current.needsComma = true;
+            else
+                writer.write(',');
+        } else {
+            if (!named) throw new IllegalStateException("Name must be set.");
+            named = false;
+        }
+    }
+    if (value == null || value instanceof Number || value instanceof Boolean) {
         writer.write(String.valueOf(value));
-    else {
-        writer.write("\"");
-        writer.write(value.toString());
-        writer.write("\"");
+    } else {
+        writer.write(outputType.quoteValue(value.toString()));
     }
     return this;
 }
 
 JsonWriter& JsonWriter::object (const std::string& name) throws IOException {
-    if (current == null || current.array) throw new RuntimeException("Current item must be an object.");
-    if (!current.needsComma)
-        current.needsComma = true;
-    else
-        writer.write(",");
-    writer.write("\"");
-    writer.write(name);
-    writer.write("\":");
-    stack.push(current = new JsonObject(false));
-    return this;
+    return name(name).object();
 }
 
 JsonWriter& JsonWriter::array (const std::string& name) throws IOException {
-    if (current == null || current.array) throw new RuntimeException("Current item must be an object.");
-    if (!current.needsComma)
-        current.needsComma = true;
-    else
-        writer.write(",");
-    writer.write("\"");
-    writer.write(name);
-    writer.write("\":");
-    stack.push(current = new JsonObject(true));
-    return this;
+    return name(name).array();
 }
 
 JsonWriter& JsonWriter::set (const std::string& name,const Object& value) throws IOException {
-    if (current == null || current.array) throw new RuntimeException("Current item must be an object.");
-    if (!current.needsComma)
-        current.needsComma = true;
-    else
-        writer.write(",");
-    writer.write("\"");
-    writer.write(name);
-    if (value == null || value instanceof Number || value instanceof Boolean) {
-        writer.write("\":");
-        writer.write(String.valueOf(value));
-    } else {
-        writer.write("\":\"");
-        writer.write(value.toString());
-        writer.write("\"");
-    }
-    return this;
+    return name(name).value(value);
 }
 
 JsonWriter& JsonWriter::pop () throws IOException {
+    if (named) throw new IllegalStateException("Expected an object, array, or value since a name was set.");
     stack.pop().close();
-    current = stack.peek();
+    current = stack.size == 0 ? null : stack.peek();
     return this;
 }
 
@@ -122,8 +118,33 @@ void JsonWriter::flush () throws IOException {
 }
 
 void JsonWriter::close () throws IOException {
-    while (!stack.isEmpty())
+    while (stack.size > 0)
         pop();
     writer.close();
+}
+
+std::string& JsonWriter::quoteValue (const std::string& value) {
+    value = value.replace("\\", "\\\\");
+    if (this == OutputType.minimal && !value.equals("true") && !value.equals("false") && !value.equals("null")
+            && minimalPattern.matcher(value).matches()) return value;
+    return '"' + value + '"';
+}
+
+std::string& JsonWriter::quoteName (const std::string& value) {
+    value = value.replace("\\", "\\\\");
+    switch (this) {
+    case minimal:
+        if (minimalPattern.matcher(value).matches()) return value;
+        return '"' + value + '"';
+    case javascript:
+        if (javascriptPattern.matcher(value).matches()) return value;
+        return '"' + value + '"';
+    default:
+        return '"' + value + '"';
+    }
+}
+
+JsonWriter::JsonWriter (const Writer& writer) {
+    this.writer = writer;
 }
 

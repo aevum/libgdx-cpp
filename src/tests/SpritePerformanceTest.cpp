@@ -1,5 +1,3 @@
-#include <gdx-cpp/backend_selector.hpp>
-
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/Application.hpp>
 #include <gdx-cpp/ApplicationListener.hpp>
@@ -237,6 +235,6 @@ private:
     int frames;
 };
 
-void init() {
+void init(int argc, char** argv) {
     createApplication(new SpritePerformanceTest, "Sprite Performance Test", 640, 480);
 }

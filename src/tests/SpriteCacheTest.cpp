@@ -1,5 +1,3 @@
-#include <gdx-cpp/backend_selector.hpp>
-
 #include <gdx-cpp/Application.hpp>
 #include <gdx-cpp/Graphics.hpp>
 #include <gdx-cpp/implementation/System.hpp>
@@ -224,6 +222,6 @@ protected:
     int normalCacheID, spriteCacheID;
 };
 
-void init() {
+void init(int argc, char** argv) {
     createApplication(new SpriteCacheTest, "SpriteCache Test", 800, 480);
 }

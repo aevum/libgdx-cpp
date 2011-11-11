@@ -1,5 +1,3 @@
-#include <gdx-cpp/backend_selector.hpp>
-
 #include <gdx-cpp/Application.hpp>
 #include <gdx-cpp/Graphics.hpp>
 #include <gdx-cpp/Files.hpp>
@@ -233,6 +231,6 @@ protected:
     int frames;
 };
 
-void init() {
+void init(int argc, char** argv) {
     createApplication(new SpriteBatchTest, "SpriteBatch Test", 640, 480);
 }

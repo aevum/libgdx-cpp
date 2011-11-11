@@ -1,4 +1,3 @@
-#include <gdx-cpp/backend_selector.hpp>
 #include "Box2DTest.cpp"
 #include "Box2D/Box2D.h"
 
@@ -54,6 +53,6 @@ public:
 private:
 };
 
-void init() {
+void init(int argc, char** argv) {
     createApplication(new Chain, "Chain test", 640, 480);
 }

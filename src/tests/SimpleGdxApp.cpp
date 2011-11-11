@@ -1,5 +1,5 @@
 #include <iostream>
-#include "backends/current_backend.hpp"
+#include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/ApplicationListener.hpp>
 
 class DullListener : public gdx_cpp::ApplicationListener {
@@ -26,6 +26,6 @@ public:
     }
 };
 
-void init() {
+void init(int argc, char** argv) {
     createApplication(new DullListener, "Dull Listener", 640, 480);
 }

@@ -1,5 +1,3 @@
-#include "backends/current_backend.hpp"
-
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/Application.hpp>
 #include <gdx-cpp/ApplicationListener.hpp>
@@ -35,6 +33,6 @@ public:
 private:
 };
 
-void init() {
+void init(int argc, char** argv) {
     createApplication(new BaseApplication, "Base App", 640, 480);
 }

@@ -1,5 +1,3 @@
-#include <gdx-cpp/backend_selector.hpp>
-
 #include <gdx-cpp/Application.hpp>
 #include <gdx-cpp/ApplicationListener.hpp>
 #include <gdx-cpp/graphics/Mesh.hpp>
@@ -140,6 +138,6 @@ private:
     int height;
 };
 
-void init() {
+void init(int argc, char** argv) {
     createApplication(new SoundTest, "SoundTest test", 640, 480);
 }

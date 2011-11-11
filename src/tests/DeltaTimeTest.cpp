@@ -1,5 +1,3 @@
-#include <gdx-cpp/backend_selector.hpp>
-
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/Application.hpp>
 #include <gdx-cpp/ApplicationListener.hpp>
@@ -44,6 +42,6 @@ private:
     uint64_t lastFrameTime;
 };
 
-void init() {
+void init(int argc, char** argv) {
     createApplication(new DeltaTimeTest, "Delta Time Test", 640, 480);
 }

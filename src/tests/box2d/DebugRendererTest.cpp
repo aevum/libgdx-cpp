@@ -1,5 +1,3 @@
-#include <gdx-cpp/backend_selector.hpp>
-
 #include <gdx-cpp/Gdx.hpp>
 #include "Box2DTest.cpp"
 #include "Box2D/Box2D.h"
@@ -52,6 +50,6 @@ public:
 private:
 };
 
-void init() {
+void init(int argc, char** argv) {
     createApplication(new DebugRendererTest, "DebugRendererTest test", 640, 480);
 }

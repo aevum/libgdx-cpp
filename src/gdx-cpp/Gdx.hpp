@@ -27,6 +27,7 @@
 #include "Input.hpp"
 #include "Files.hpp"
 #include "implementation/System.hpp"
+#include "backend.hpp"
 
 namespace gdx_cpp {
 

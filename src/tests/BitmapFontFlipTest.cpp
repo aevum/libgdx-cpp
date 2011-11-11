@@ -1,5 +1,3 @@
-#include <gdx-cpp/backend_selector.hpp>
-
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/Application.hpp>
 #include <gdx-cpp/ApplicationListener.hpp>
@@ -176,6 +174,6 @@ private:
     graphics::Color red;
 };
 
-void init() {
+void init(int argc, char** argv) {
     createApplication(new utils::ApplicationListenerDecorator<BitmapFontFlipTest>(), "BitmapFontFlipTest Test", 640, 480);
 }

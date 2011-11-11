@@ -1,4 +1,3 @@
-#include "init.hpp"
 #include <cassert>
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/implementation/System.hpp>
@@ -29,7 +28,7 @@ extern "C" {
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitSystem(JNIEnv* env) {
         __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativeInit");
         Gdx::initializeSystem(new AndroidSystem);
-        init();       
+        init(1, NULL);       
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitialize(JNIEnv* env, jclass clazz, jobject assetManager, int width, int height) {

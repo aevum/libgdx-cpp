@@ -1,10 +1,16 @@
-#ifndef GDX_CPP_BACKEND_SELECTOR_HPP
-#define GDX_CPP_BACKEND_SELECTOR_HPP
+#ifndef GDX_CPP_BACKEND_HPP
+#define GDX_CPP_BACKEND_HPP
 
-#ifdef CURRENT_BACKEND_LINUX
-#include "gdx-cpp-backend-linux/init.hpp"
-#elif CURRENT_BACKEND_ANDROID
-#include <gdx-cpp-backend-android/init.hpp>
-#endif
+#include <string>
+#include "gdx-cpp/ApplicationListener.hpp"
 
-#endif // GDX_CPP_TESTS_BACKEND_SELECTOR_HPP
+void init(int argc, char** argv);
+void createApplication(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int width, int height);
+
+typedef int (*gdx_main)(int, char**);
+
+struct main_selector {
+    static gdx_main selector;
+};
+
+#endif // GDX_CPP_BACKEN_HPP
