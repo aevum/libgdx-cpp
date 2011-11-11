@@ -55,17 +55,25 @@ std::vector<T> splitArgs(const std::string& item, const char* delimiters, std::s
     return result;
 }
 
-gdx_cpp::graphics::g2d::svg::SvgParser::SvgParser(SvgPixmapInterface& iface)
-        : pixmap(iface), m_pathFlag(false), m_titleFlag(false)
-{
-}
+gdx_cpp::utils::SvgRendererHandler* SvgParser::handler = NULL;
+bool SvgParser::m_titleFlag = false;
+bool SvgParser::m_pathFlag = false;
 
-void SvgParser::render(gdx_cpp::utils::XmlReader::Element* const svg)
+void SvgParser::render(gdx_cpp::utils::XmlReader::Element*const svg, gdx_cpp::utils::SvgRendererHandler* p_handler)
 {
+    m_pathFlag = false;
+    m_titleFlag = false;
+
+    if (p_handler) {
+        handler = p_handler;
+    }
+
+    assert(handler != NULL);
+    
     beginElement(svg);
 
     for (int i = 0; i < svg->getChildCount(); ++i) {
-        render(svg->getChild(i));
+        SvgParser::render(svg->getChild(i));
     }
 
     endElement(svg);
@@ -78,7 +86,7 @@ void SvgParser::beginElement(XmlReader::Element* const currentNode)
         int width = from_string<float>(currentNode->getAttribute("width"));
         int height = from_string<float>(currentNode->getAttribute("height"));
 
-        pixmap.setImageDimension(width, height);
+        handler->setImageDimension(width, height);
     }
     if (name == "title")
     {
@@ -86,7 +94,7 @@ void SvgParser::beginElement(XmlReader::Element* const currentNode)
     }
     else if (name == "g")
     {
-        pixmap.begin();
+        handler->begin();
         parse_attr(currentNode);
     }
     else if (name == "path")
@@ -96,9 +104,9 @@ void SvgParser::beginElement(XmlReader::Element* const currentNode)
             throw std::runtime_error("start_element: Nested path");
         }
 
-        pixmap.beginPath();
+        handler->beginPath();
         parse_path(currentNode);
-        pixmap.endPath();
+        handler->endPath();
         m_pathFlag = true;
     }
     else if (name == "rect")
@@ -129,7 +137,7 @@ void SvgParser::endElement(utils::XmlReader::Element* currentNode)
     }
     else if (name == "g")
     {
-        pixmap.end();
+        handler->end();
     }
     else if (name == "path")
     {
@@ -173,51 +181,51 @@ bool gdx_cpp::graphics::g2d::svg::SvgParser::parse_attr(const std::string& name,
     {
         if (value == "none")
         {
-            pixmap.fillNone();
+            handler->fillNone();
         }
         else
         {
-            pixmap.fill(parse_color(value));
+            handler->fill(parse_color(value));
         }
     }
     else if (name == "fill-opacity")
     {
-        pixmap.fillOpacity(utils::from_string<double>(value));
+        handler->fillOpacity(utils::from_string<double>(value));
     }
     else  if (name == "stroke")
     {
         if (value == "none")
         {
-            pixmap.strokeNone();
+            handler->strokeNone();
         }
         else
         {
-            pixmap.stroke(parse_color(value));
+            handler->stroke(parse_color(value));
         }
     }
     else if (name == "stroke-width")
     {
-        pixmap.setStrokeWidth(utils::from_string<float>(value));
+        handler->setStrokeWidth(utils::from_string<float>(value));
     }
     else if (name == "stroke-linecap")
     {
-        if (value == "butt")        pixmap.setLineCap(SvgPixmapInterface::ButtLineCap);
-        else if (value == "round")  pixmap.setLineCap(SvgPixmapInterface::RoundLineCap);
-        else if (value == "square") pixmap.setLineCap(SvgPixmapInterface::SquareLineCap);
+        if (value == "butt")        handler->setLineCap(SvgPixmapInterface::ButtLineCap);
+        else if (value == "round")  handler->setLineCap(SvgPixmapInterface::RoundLineCap);
+        else if (value == "square") handler->setLineCap(SvgPixmapInterface::SquareLineCap);
     }
     else if (name == "stroke-linejoin")
     {
-        if (value == "miter")      pixmap.setLineJoin(SvgPixmapInterface::MiterJoin);
-        else if (value == "round") pixmap.setLineJoin(SvgPixmapInterface::RoundJoin);
-        else if (value == "bevel") pixmap.setLineJoin(SvgPixmapInterface::BevelJoin);
+        if (value == "miter")      handler->setLineJoin(SvgPixmapInterface::MiterJoin);
+        else if (value == "round") handler->setLineJoin(SvgPixmapInterface::RoundJoin);
+        else if (value == "bevel") handler->setLineJoin(SvgPixmapInterface::BevelJoin);
     }
     else if (name == "stroke-miterlimit")
     {
-        pixmap.setMiterLimit(utils::from_string<double>(value));
+        handler->setMiterLimit(utils::from_string<double>(value));
     }
     else if (name == "stroke-opacity")
     {
-        pixmap.setStrokeOpacity(utils::from_string<double>(value));
+        handler->setStrokeOpacity(utils::from_string<double>(value));
     }
     else if (name == "transform")
     {
@@ -241,7 +249,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_transform(const std::string& 
 
     struct delegates {
        const char* name;
-       std::string::size_type (SvgParser::*func)(std::string);
+       std::string::size_type (*func)(std::string);
     };
 
     static delegates transform_parsers[] = {
@@ -258,7 +266,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_transform(const std::string& 
             pos = transform.find(transform_parsers[i].name, last);
             if (pos != std::string::npos) {
                 pos += strlen(transform_parsers[i].name);
-                last = (this->*transform_parsers[i].func)(transform.substr(pos, transform.length() - last - 1));
+                last = (*transform_parsers[i].func)(transform.substr(pos, transform.length() - last - 1));
                 break;
             }
         }
@@ -273,7 +281,7 @@ std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_matrix(std:
 
     assert(res.size() == 6);
 
-    pixmap.transAffine(res);
+    handler->transAffine(res);
 
     return result;
 }
@@ -284,9 +292,9 @@ std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_rotate(std:
     std::vector<float> res = splitArgs<float>(rotateArgs, "(,)", result);
 
     if (res.size() == 1) {
-        pixmap.setRotation(math::utils::toRadians(res[0]));
+        handler->setRotation(math::utils::toRadians(res[0]));
     } else if (res.size() == 3) {
-        pixmap.setRotationTranslation(math::utils::toRadians(res[0]), res[1], res[2]);
+        handler->setRotationTranslation(math::utils::toRadians(res[0]), res[1], res[2]);
     } else {
         throw std::runtime_error("SvgParser::parse_rotate: invalid number of arguments");
     }
@@ -305,7 +313,7 @@ std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_scale(std::
         res.push_back(res[0]);
     }
 
-    pixmap.setScaling(res[0], res[1]);
+    handler->setScaling(res[0], res[1]);
 
     return result;
 }
@@ -317,7 +325,7 @@ std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_skew_x(std:
 
     assert(res.size() == 1);
 
-    pixmap.setSkew(res[0], 0.0f);
+    handler->setSkew(res[0], 0.0f);
     return result;
 }
 
@@ -328,7 +336,7 @@ std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_skew_y(std:
 
     assert(res.size() == 1);
 
-    pixmap.setSkew( 0.0f, res[0]);
+    handler->setSkew( 0.0f, res[0]);
 
     return result;
 }
@@ -341,7 +349,7 @@ std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_translate(s
     assert(res.size() >= 1);
     if (res.size() == 1) res.push_back(0);
 
-    pixmap.setTranslation(res[0], res[1]);
+    handler->setTranslation(res[0], res[1]);
     return result;
 }
 
@@ -362,21 +370,21 @@ gdx_cpp::graphics::Color gdx_cpp::graphics::g2d::svg::SvgParser::parse_color(con
 
 void gdx_cpp::graphics::g2d::svg::SvgParser::parse_line(gdx_cpp::utils::XmlReader::Element* node)
 {
-    pixmap.beginPath();
+    handler->beginPath();
 
     parse_attr(node);
 
-    pixmap.moveTo(utils::from_string<float>(node->getAttribute("x1")),
+    handler->moveTo(utils::from_string<float>(node->getAttribute("x1")),
                   utils::from_string<float>(node->getAttribute("y1")));
-    pixmap.lineTo(utils::from_string<float>(node->getAttribute("x2")),
+    handler->lineTo(utils::from_string<float>(node->getAttribute("x2")),
                   utils::from_string<float>(node->getAttribute("y2")));
 
-    pixmap.endPath();
+    handler->endPath();
 }
 
 void gdx_cpp::graphics::g2d::svg::SvgParser::parse_poly(gdx_cpp::utils::XmlReader::Element* node, bool close)
 {
-    pixmap.beginPath();
+    handler->beginPath();
 
     parse_attr(node);
     
@@ -386,22 +394,22 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_poly(gdx_cpp::utils::XmlReade
 
     for (unsigned int i = 0; i < points.size(); i += 2) {
         if (i % 2 == 0) {
-            pixmap.lineTo(points[i], points[i+1]);
+            handler->lineTo(points[i], points[i+1]);
         } else {
-            pixmap.moveTo(points[i], points[i+1]);
+            handler->moveTo(points[i], points[i+1]);
         }
     }
 
     if (close) {
-        pixmap.closeSubPath();
+        handler->closeSubPath();
     }
 
-    pixmap.endPath();
+    handler->endPath();
 }
 
 void gdx_cpp::graphics::g2d::svg::SvgParser::parse_rect(gdx_cpp::utils::XmlReader::Element* node)
 {
-    pixmap.beginPath();
+    handler->beginPath();
     parse_attr(node);
 
     float x = utils::from_string< float >(node->getAttribute("x")),
@@ -422,14 +430,14 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_rect(gdx_cpp::utils::XmlReade
             throw std::runtime_error(buffer);
         }
 
-        pixmap.moveTo(x,  y);
-        pixmap.lineTo(x + w, y);
-        pixmap.lineTo(x + w, y + h);
-        pixmap.lineTo(x,     y + h);
-        pixmap.closeSubPath();
+        handler->moveTo(x,  y);
+        handler->lineTo(x + w, y);
+        handler->lineTo(x + w, y + h);
+        handler->lineTo(x,     y + h);
+        handler->closeSubPath();
     }
 
-    pixmap.endPath();
+    handler->endPath();
 }
 
 void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReader::Element* node)
@@ -456,27 +464,27 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
 
         switch(cmd) {
             case 'M': case 'm':
-                pixmap.moveTo(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 'm');
+                handler->moveTo(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 'm');
                 i += 2;
                 break;
                 
             case 'L': case 'l':
-                pixmap.lineTo(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 'l');
+                handler->lineTo(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 'l');
                 i += 2;
                 break;
                 
             case 'V': case 'v':
-                pixmap.verticalLineTo(utils::from_string<float>(paths[i]), cmd == 'v');
+                handler->verticalLineTo(utils::from_string<float>(paths[i]), cmd == 'v');
                 i += 1;
                 break;
                 
             case 'H': case 'h':
-                pixmap.horizontalLineTo(utils::from_string<float>(paths[i]), cmd == 'h');
+                handler->horizontalLineTo(utils::from_string<float>(paths[i]), cmd == 'h');
                 i += 1;
                 break;
                 
             case 'Q': case 'q':
-                pixmap.curve3(utils::from_string<float>(paths[i]),
+                handler->curve3(utils::from_string<float>(paths[i]),
                               utils::from_string<float>(paths[i+1]),
                               utils::from_string<float>(paths[i+2]),
                               utils::from_string<float>(paths[i+3]),
@@ -485,12 +493,12 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
                 break;
                 
             case 'T': case 't':
-                pixmap.curve3(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 't');
+                handler->curve3(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 't');
                 i += 2;
                 break;
                 
             case 'C': case 'c':                            
-                pixmap.curve4(utils::from_string<float>(paths[i]),
+                handler->curve4(utils::from_string<float>(paths[i]),
                               utils::from_string<float>(paths[i+1]),
                               utils::from_string<float>(paths[i+2]),
                               utils::from_string<float>(paths[i+3]),
@@ -501,7 +509,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
                 break;
                 
             case 'S': case 's':
-                pixmap.curve4(utils::from_string<float>(paths[i]),
+                handler->curve4(utils::from_string<float>(paths[i]),
                               utils::from_string<float>(paths[i+1]),
                               utils::from_string<float>(paths[i+2]),
                               utils::from_string<float>(paths[i+3]),
@@ -513,7 +521,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
                 throw std::runtime_error("parse_path: Command A: NOT IMPLEMENTED YET");
                 
             case 'Z': case 'z':
-                pixmap.closeSubPath();
+                handler->closeSubPath();
                 break;
                 
             default:

@@ -58,8 +58,8 @@ public:
         static utils::XmlReader reader;
 
         AggSvgPixmap* pix = new AggSvgPixmap;
-        SvgParser parser(*pix);
-        parser.render(reader.parse(*file).get());
+        
+        SvgParser::render(reader.parse(*file).get(), pix);
         
         return pix;
     }
