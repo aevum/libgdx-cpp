@@ -1,5 +1,4 @@
 #include <cassert>
-#include <gdx-cpp/backend_selector.hpp>
 #include <gdx-cpp/ApplicationListener.hpp>
 #include <gdx-cpp/Gdx.hpp>
 #include "LinuxApplication.hpp"

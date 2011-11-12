@@ -1,5 +1,36 @@
 # Libgdx-cpp: libgdx C++ port
 
+
+## Instalation guide
+
+1. Build LibgdxCpp
+2. Change your install prefix to /usr
+3. sudo make install
+
+### Use guide
+
+I've provided a nice finder that hopefully would suffice the needs for a newbie-in-c++ developer:
+
+1. If you installed libgdx, you can just use:
+
+    find_package(GdxCpp)
+
+2. When running cmake, if everything is ok, you should have two variables now, so use them!
+
+    include_directories(${GDXCPP_INCLUDE_DIR})
+    target_link_libraries(<your-app> ${GDXCPP_LIBRARIES})
+
+3. It will try to figure out witch libraries you'll want to use (in example, differ from android/linux build automagically)
+4. There are some flags you can set prior running the find_package:
+4.1. To enable Box2D and it's dependencies:
+
+    SET(GdxCpp_USE_BOX2D TRUE)
+
+4.2 To enable OpenGL instead of OpenGLES
+
+    SET(GdxCpp_BUILD_GRAPHICS_OPENGL TRUE)
+
+
 ## Build guide
 
 ### Linux 
