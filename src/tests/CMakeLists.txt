@@ -1,5 +1,6 @@
 project(gdx-cpp-tests)
 
+set(GdxCpp_ADDITIONAL_LIBRARY_PATHS ${LIBRARY_OUTPUT_PATH})
 set(GdxCpp_USE_BOX2D TRUE)
 find_package(GdxCpp)
 
@@ -49,5 +50,5 @@ foreach(APP ${APPLICATIONS})
     endif()
 
     target_link_libraries(${APP_NAME} ${GDXCPP_LIBRARIES})
-    add_dependencies(${APP_NAME} ${GDXCPP_LIBRARIES})
+#     add_dependencies(${APP_NAME} ${GDXCPP_LIBRARIES})
 endforeach()

@@ -502,20 +502,10 @@ Game.cpp
 InputAdapter.cpp
 Gdx.cpp)
 
-if (${SVG_BACKEND_ANTIGRAIN})
-    include_directories(../agg/include ../agg/svg)
-    list(APPEND GDX_HEADERS graphics/g2d/svg/AggSvgPixmap.hpp)
-endif()
-
 install(DIRECTORY . DESTINATION include/gdx-cpp
           FILES_MATCHING PATTERN "*.hpp")
 
 add_library(gdx-cpp SHARED ${GDX_HEADERS} ${GDX_SRC})
-
-if (${BUILD_BOX2D})
-    add_subdirectory(physics/box2d)
-endif()
-
 target_link_libraries(gdx-cpp z)
 
 install(TARGETS gdx-cpp
