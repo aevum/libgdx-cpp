@@ -29,9 +29,9 @@ set(GENERATED_APPLICATION_TYPE "EXECUTABLE")
 include_directories(src)
 add_subdirectory(src/gdx-cpp)
 
-SET(SVG_BACKEND_ANTIGRAIN TRUE CACHE BOOL "Build the antigrain's svg backend")
+SET(BUILD_SVG_BACKEND_ANTIGRAIN TRUE CACHE BOOL "Build the antigrain's svg backend")
 
-if(SVG_BACKEND_ANTIGRAIN)
+if(BUILD_SVG_BACKEND_ANTIGRAIN)
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/agg/include ${CMAKE_CURRENT_SOURCE_DIR}/src/agg/svg)
     add_subdirectory(src/agg)
 endif()
