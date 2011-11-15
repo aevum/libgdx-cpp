@@ -389,6 +389,7 @@ graphics/Color.cpp
 graphics/VertexAttributes.cpp
 graphics/Mesh.cpp
 graphics/VertexAttribute.cpp
+graphics/GLCommon.cpp
 graphics/GL10.cpp
 graphics/GL11.cpp
 graphics/GL20.cpp
