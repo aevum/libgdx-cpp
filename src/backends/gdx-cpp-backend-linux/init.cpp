@@ -21,7 +21,8 @@ int default_main(int argc, char** argv) {
     assert(applicationListener);
     
     gdx_cpp::backends::nix::LinuxApplication app(applicationListener, title, width, height, false);
-    
+    app.initialize();
+
     return 0;   
 }
 

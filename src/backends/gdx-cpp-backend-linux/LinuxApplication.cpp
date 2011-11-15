@@ -38,7 +38,6 @@ gdx_cpp::backends::nix::LinuxApplication::LinuxApplication(gdx_cpp::ApplicationL
         , input(0)
         , logLevel(gdx_cpp::Application::LOG_INFO)
 {
-    initialize();
 }
 
 void LinuxApplication::initialize() {
@@ -72,16 +71,7 @@ void backends::nix::LinuxApplication::run()
     while (true) {
         graphics->updateTime();
 
-        SDL_Event event;
-
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                this->exit();
-                return;
-            } else {
-                this->input->processEvents(event);
-            }
-        }
+        processEvents();
 
         {
             lock_holder hnd = synchronize();
@@ -178,4 +168,18 @@ void gdx_cpp::backends::nix::LinuxApplication::postRunnable(Runnable::ptr runnab
 void gdx_cpp::backends::nix::LinuxApplication::setLogLevel(int logLevel)
 {
     logLevel = logLevel;
+}
+
+void gdx_cpp::backends::nix::LinuxApplication::processEvents()
+{
+    static SDL_Event event;
+
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            this->exit();
+            return;
+        } else {
+            this->input->processEvents(event);
+        }
+    }
 }

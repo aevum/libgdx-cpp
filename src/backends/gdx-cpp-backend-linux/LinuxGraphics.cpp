@@ -233,32 +233,7 @@ bool gdx_cpp::backends::nix::LinuxGraphics::setDisplayMode(int width, int height
         throw std::runtime_error("Failed to initialize SDL video");
     }
 
-    const GLubyte* version = glGetString(GL_VERSION);
-
-    if (version) {
-        
-        int major = atoi((const char*) version);
-        int minor = atoi((const char*) &version[2]);
-
-        if (false && major >= 2) {
-
-
-        } else {
-            if (major == 1 && minor < 5) {
-                glCommon = gl10 = new LinuxGL10;
-            } else {
-                glCommon = gl10 = gl11 = new LinuxGL11;
-            }
-        }
-
-        SDL_WM_SetCaption(this->title.c_str(), NULL);
-        glCommon->glViewport(0, 0, width, height);
-
-        return true;
-    } else {
-        Gdx::app->error("LinuxGraphics", "Failed to recover the GL_VERSION, aborting");
-        return false;
-    } 
+    return setupGLModes();
 }
 
 void gdx_cpp::backends::nix::LinuxGraphics::update()
@@ -302,5 +277,35 @@ Pixmap* backends::nix::LinuxGraphics::resolvePixmap(const Files::fhandle_ptr& fi
         return g2d::svg::AggSvgPixmap::newFromFile(file);        
     } else {
         throw std::runtime_error("unsupported image format: " + extension);
+    }
+}
+
+bool gdx_cpp::backends::nix::LinuxGraphics::setupGLModes()
+{
+    const GLubyte* version = glGetString(GL_VERSION);
+
+    if (version) {
+
+        int major = atoi((const char*) version);
+        int minor = atoi((const char*) &version[2]);
+
+        if (false && major >= 2) {
+
+
+        } else {
+            if (major == 1 && minor < 5) {
+                glCommon = gl10 = new LinuxGL10;
+            } else {
+                glCommon = gl10 = gl11 = new LinuxGL11;
+            }
+        }
+
+        SDL_WM_SetCaption(this->title.c_str(), NULL);
+        glCommon->glViewport(0, 0, width, height);
+
+        return true;
+    } else {
+        Gdx::app->error("LinuxGraphics", "Failed to recover the GL_VERSION, aborting");
+        return false;
     }
 }

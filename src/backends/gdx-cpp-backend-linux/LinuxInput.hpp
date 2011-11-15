@@ -103,7 +103,8 @@ public:
     void reset();
 
     int getGdxEventKey(SDL_Event& eventkey);
-    
+
+    void setKeyboardRepeat(int delay, int repeatInterval);
     
 protected:
     gdx_cpp::InputProcessor* processor;

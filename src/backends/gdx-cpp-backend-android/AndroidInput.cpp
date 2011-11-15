@@ -234,3 +234,9 @@ void gdx_cpp::backends::android::AndroidInput::handleTouchUp(float x, float y, i
         this->processor->touchUp(x, y, 0 , button);
     }
 }
+
+void gdx_cpp::backends::android::AndroidInput::setKeyboardRepeat(int delay, int repeatInterval)
+{
+
+}
+

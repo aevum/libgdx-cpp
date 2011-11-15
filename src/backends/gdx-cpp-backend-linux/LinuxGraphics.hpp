@@ -33,7 +33,7 @@ class LinuxGraphics : public Graphics
 public:
     LinuxGraphics();
 
-    void initialize();
+    virtual void initialize();
     bool isGL11Available ();
     bool isGL20Available ();
     graphics::GLCommon* getGLCommon ();
@@ -61,7 +61,7 @@ public:
     void setVSync (bool vsync);
     BufferFormat getBufferFormat ();
     bool supportsExtension (const std::string& extension);
-    void update();
+    virtual void update();
     void updateTime();
 
     graphics::TextureData::ptr resolveTextureData(Files::fhandle_ptr fileHandle, graphics::Pixmap::ptr preloadedPixmap, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps);
@@ -71,6 +71,7 @@ public:
     graphics::Pixmap* resolvePixmap(const gdx_cpp::Files::fhandle_ptr& file);
     
 protected:
+    virtual bool setupGLModes();
     bool vsync;    
     std::string title;
     int window;

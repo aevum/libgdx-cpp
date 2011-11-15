@@ -736,4 +736,9 @@ int gdx_cpp::backends::nix::LinuxInput::getGdxEventKey(SDL_Event& eventkey) {
     }
 }
 
+void gdx_cpp::backends::nix::LinuxInput::setKeyboardRepeat(int delay, int repeatInterval)
+{
+    SDL_EnableKeyRepeat(delay, repeatInterval);
+}
+
 
