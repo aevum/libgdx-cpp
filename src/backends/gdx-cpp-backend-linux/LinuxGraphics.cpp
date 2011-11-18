@@ -31,8 +31,6 @@
 #include <iostream>
 #include <gdx-cpp/Application.hpp>
 
-#define GL_GLEXT_PROTOTYPES
-#include <GLES/gl.h>
 #include <gdx-cpp/graphics/Texture.hpp>
 
 #include <gdx-cpp/graphics/g2d/Gdx2DPixmap.hpp>
@@ -282,12 +280,12 @@ Pixmap* backends::nix::LinuxGraphics::resolvePixmap(const Files::fhandle_ptr& fi
 
 bool gdx_cpp::backends::nix::LinuxGraphics::setupGLModes()
 {
-    const GLubyte* version = glGetString(GL_VERSION);
+    std::string version =  LinuxGL10().glGetString(GL10::GL_VERSION);
 
-    if (version) {
+    if (!version.empty()) {
 
-        int major = atoi((const char*) version);
-        int minor = atoi((const char*) &version[2]);
+        int major = atoi((const char*) version.c_str());
+        int minor = atoi((const char*) &version.c_str()[2]);
 
         if (false && major >= 2) {
 
