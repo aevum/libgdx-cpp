@@ -56,10 +56,7 @@ graphics::Pixmap::Blending graphics::g2d::Gdx2DPixmap::getBlending()
 
 void graphics::g2d::Gdx2DPixmap::drawPixmap(const gdx_cpp::graphics::Pixmap& pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight)
 {
-    graphics::Pixmap::Blending last = blending;
-    setBlend(graphics::Pixmap::None);    
-    drawPixmap(pixmap, srcx, srcy, x, y, srcWidth, srcHeight );
-    setBlend(last);
+    drawPixmap(pixmap, srcx, srcy, srcWidth, srcHeight, x, y, srcWidth, srcHeight);
 }
 
 void graphics::g2d::Gdx2DPixmap::setBlending(const gdx_cpp::graphics::Pixmap::Blending& _blending)
