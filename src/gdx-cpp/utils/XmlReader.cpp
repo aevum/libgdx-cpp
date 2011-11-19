@@ -410,17 +410,17 @@ void XmlReader::Element::setText(const std::string& text) {
     this->text = text;
 }
 
-std::string XmlReader::Element::toString() {
+std::string XmlReader::Element::toString() const {
     return toString("");
 }
-std::string XmlReader::Element::toString(const std::string& indent) {
+std::string XmlReader::Element::toString(const std::string& indent) const {
     std::stringstream buffer;
 
     buffer << indent << '<' << name ;
 
     if (attributes.size()) {
-        AttributesMap::iterator it = attributes.begin();
-        AttributesMap::iterator end = attributes.end();
+        AttributesMap::const_iterator it = attributes.begin();
+        AttributesMap::const_iterator end = attributes.end();
 
         for (; it != end; ++it) {
             buffer << ' ' << it->first << "=\"" << it->second << '\"';
@@ -436,8 +436,8 @@ std::string XmlReader::Element::toString(const std::string& indent) {
             buffer << childIndent << text << '\n';
         }
         if (children.size()) {
-            ElementVector::iterator it = children.begin();
-            ElementVector::iterator end = children.end();
+            ElementVector::const_iterator it = children.begin();
+            ElementVector::const_iterator end = children.end();
 
             for (; it != end; ++it) {
                 buffer << (*it)->toString(childIndent) << '\n';

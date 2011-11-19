@@ -246,7 +246,7 @@ utils/Pool.hpp
 # utils/Logger.hpp
 # utils/ArrayBase.hpp
 utils/XmlReader.hpp
-# utils/XmlWriter.hpp
+utils/XmlWriter.hpp
 # utils/gzstream.hpp
 # utils/ObjectMap.hpp
 # utils/NumberUtils.hpp
@@ -474,7 +474,7 @@ utils/gzstream.cpp
 # utils/LongMap.cpp
 # utils/LongArray.cpp
 # utils/JsonReader.cpp
-# utils/XmlWriter.cpp
+utils/XmlWriter.cpp
 # utils/FloatArray.cpp
 # utils/JsonWriter.cpp
 # utils/AtomicQueue.cpp

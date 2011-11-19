@@ -19,88 +19,99 @@
 */
 
 #include "XmlWriter.hpp"
+#include "XmlReader.hpp"
+
+#include <stdexcept>
 
 using namespace gdx_cpp::utils;
 
-void XmlWriter::indent () throws IOException {
+gdx_cpp::utils::XmlWriter::XmlWriter(std::ofstream& _writer)
+ : writer(_writer)
+{
+}
+
+void XmlWriter::_indent () {
     int count = indent;
-    if (currentElement != null) count++;
+    if (currentElement.empty()) count++;
     for (int i = 0; i < count; i++)
-        writer.write('\t');
+        writer << '\t';
 }
 
-XmlWriter& XmlWriter::element (const std::string& name) throws IOException {
-    if (startElementContent()) writer.write('\n');
-    indent();
-    writer.write('<');
-    writer.write(name);
+XmlWriter& XmlWriter::element (const std::string& name) {
+    if (startElementContent())
+        writer << '\n';
+    
+    _indent();
+    writer << '<';
+    writer << name;
     currentElement = name;
-    return this;
+    return *this;
 }
 
-XmlWriter& XmlWriter::element (const std::string& name,const Object& text) throws IOException {
+XmlWriter& XmlWriter::element (const std::string& name ,const XmlReader::Element* text) {
     return element(name).text(text).pop();
 }
 
-bool XmlWriter::startElementContent () throws IOException {
-    if (currentElement == null) return false;
+bool XmlWriter::startElementContent () {
+    if (currentElement.empty()) return false;
     indent++;
-    stack.push(currentElement);
-    currentElement = null;
-    writer.write(">");
+    stack.push_front(currentElement);
+    currentElement.clear();;
+    writer << ">";
     return true;
 }
 
-XmlWriter& XmlWriter::attribute (const std::string& name,const Object& value) throws IOException {
-    if (currentElement == null) throw new IllegalStateException();
-    writer.write(' ');
-    writer.write(name);
-    writer.write("=\"");
-    writer.write(value == null ? "null" : value.toString());
-    writer.write('"');
-    return this;
+XmlWriter& XmlWriter::attribute (const std::string& name, const XmlReader::Element* value) {
+    if (currentElement.empty()) throw std::runtime_error("Empty element");
+    writer << (' ');
+    writer << (name);
+    writer << ("=\"");
+    writer << (value == NULL ? "null" : value->toString());
+    writer << ('"');
+    return *this;
 }
 
-XmlWriter& XmlWriter::text (const Object& text) throws IOException {
+XmlWriter& XmlWriter::text (const XmlReader::Element* text) {
     startElementContent();
-    String string = text == null ? "null" : text.toString();
+    std::string string = (text == NULL ? "null" : text->toString());
     indentNextClose = string.length() > 64;
     if (indentNextClose) {
-        writer.write('\n');
-        indent();
+        writer << ('\n');
+        _indent();
     }
-    writer.write(string);
-    if (indentNextClose) writer.write('\n');
-    return this;
+    writer << (string);
+    if (indentNextClose) writer << ('\n');
+    return *this;
 }
 
-XmlWriter& XmlWriter::pop () throws IOException {
-    if (currentElement != null) {
-        writer.write("/>\n");
-        currentElement = null;
+XmlWriter& XmlWriter::pop () {
+    if (!currentElement.empty()) {
+        writer << ("/>\n");
+        currentElement.empty();
     } else {
-        indent = Math.max(indent - 1, 0);
-        if (indentNextClose) indent();
-        writer.write("</");
-        writer.write(stack.pop());
-        writer.write(">\n");
+        indent = std::max(indent - 1, 0);
+        if (indentNextClose) _indent();
+        writer << ("</");
+        writer << (stack.front());
+        stack.pop_front();
+        writer << (">\n");
     }
     indentNextClose = true;
-    return this;
+    return *this;
 }
 
-void XmlWriter::close () throws IOException {
-    while (!stack.isEmpty())
+void XmlWriter::close () {
+    while (!stack.empty())
         pop();
     writer.close();
 }
 
-void XmlWriter::write (int off,int len) throws IOException {
+void XmlWriter::write (const char* cbuf, int off,int len){
     startElementContent();
-    writer.write(cbuf, off, len);
+    writer.write(&cbuf[off], len);
 }
 
-void XmlWriter::flush () throws IOException {
+void XmlWriter::flush () {
     writer.flush();
 }
 
