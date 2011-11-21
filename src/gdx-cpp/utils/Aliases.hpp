@@ -47,6 +47,7 @@ struct ref_ptr_maker
 {
 public:
   typedef std::tr1::shared_ptr< T > type;
+  typedef std::tr1::weak_ptr< T > weak_type;
 };
 
 /** A simple template class to create a Null Pointer to any sharedPtr

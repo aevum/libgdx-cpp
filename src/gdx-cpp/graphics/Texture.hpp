@@ -49,6 +49,7 @@ class Texture
       public std::tr1::enable_shared_from_this<Texture> {
 public:
     typedef ref_ptr_maker<Texture>::type ptr;
+    typedef ref_ptr_maker<Texture>::weak_type weak_ptr;
     
     class TextureFilter {
     public:
