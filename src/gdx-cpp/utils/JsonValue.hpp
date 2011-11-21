@@ -94,8 +94,8 @@ public:
         return *(T*)item_val.get();
     }
     
-    JsonValue& operator [](const char* name);
-    JsonValue& operator[](int idx);
+    JsonValue& operator [](const char* name) const;
+    JsonValue& operator[](int idx) const;
 
     JsonValue() ;
 

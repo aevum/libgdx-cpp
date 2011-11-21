@@ -11,6 +11,8 @@ svg/agg_svg_parser.h)
 
 file(GLOB AGG_SRC src/*.cpp src/ctrl/*.cpp)
 
+#crazy bug on gcc 4.6 that requires a STATIC lib to be compiled with fPIC :S
+set(CMAKE_CXX_FLAGS "-fPIC")
 add_library(gdx-cpp-agg-svg STATIC ${AGG_SVG_SRC} ${AGG_SRC})
 
 install(TARGETS gdx-cpp-agg-svg ARCHIVE DESTINATION lib)

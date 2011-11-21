@@ -115,8 +115,8 @@ Gdx2DPixmap::Gdx2DPixmap (int width, int height, int format)
 Gdx2DPixmap::Gdx2DPixmap (const Gdx2DPixmap& other)
         : pixData(0)
 {
-    this->pixData =  (gdx2d_pixmap*) malloc(sizeof(gdx2d_pixmap));
-    memcpy(this->pixData, other.pixData, sizeof(gdx2d_pixmap));
+    this->pixData = gdx2d_new(other.width, other.height, other.format);
+    memcpy((void*) this->pixData->pixels, other.pixData->pixels, other.width * other.height * gdx2d_bytes_per_pixel(other.format));
 
     this->width = pixData->width;
     this->height = pixData->height;

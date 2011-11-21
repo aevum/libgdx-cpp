@@ -63,7 +63,7 @@ JsonValue::JsonValue(const array& val) : item_type(json_list) {
     item_val = std::tr1::shared_ptr<void>( new array(val) );
 }
 
-gdx_cpp::utils::JsonValue& JsonValue::operator[](const char* name) {
+gdx_cpp::utils::JsonValue& JsonValue::operator[](const char* name) const {
     assert(item_type == json_json);
     return *((item_map&) *this)[name];
 }
@@ -71,7 +71,7 @@ gdx_cpp::utils::JsonValue& JsonValue::operator[](const char* name) {
 JsonValue::JsonValue(bool val) : item_type(json_bool) , item_val(std::tr1::shared_ptr<void>(new bool(val))) {
 }
 
-gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::operator[](int idx)
+gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::operator[](int idx) const
 {
     assert(item_type == json_list);
     return *((array&)*this)[idx];
