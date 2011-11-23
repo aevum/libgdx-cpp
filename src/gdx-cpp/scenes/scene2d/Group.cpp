@@ -511,7 +511,7 @@ void Group::enableDebugging (const std::string& debugTextureFile) {
 }
 
 void Group::disableDebugging () {
-    if (debugTexture != NULL) debugTexture->dispose();
+    if (debugTexture != NULL) debugTexture.reset();
     debug = false;
 }
 

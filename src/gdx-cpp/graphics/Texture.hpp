@@ -28,7 +28,7 @@
 #include "TextureData.hpp"
 
 #include <tr1/unordered_map>
-#include <tr1/shared_ptr.h>
+#include <tr1/memory>
 #include <list>
 #include "gdx-cpp/assets/Asset.hpp"
 
@@ -129,9 +129,9 @@ public:
                         bool useMipMaps = false);
 
     virtual ~Texture();
-    void dispose ();
-    
+
 protected:
+    void dispose ();
     void initialize(const gdx_cpp::files::FileHandle::ptr file, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps);
     Texture ();
     
@@ -142,7 +142,7 @@ private:
     static void addManagedTexture (gdx_cpp::Application* app, const gdx_cpp::graphics::Texture::ptr texture);
     static assets::AssetManager* assetManager;
 
-    typedef std::list< Texture::ptr > textureList;
+    typedef std::list< Texture::weak_ptr > textureList;
     typedef std::tr1::unordered_map< Application* , textureList > managedTextureMap;
     
     static managedTextureMap managedTextures;

@@ -22,7 +22,6 @@
 #define GDX_CPP_UTILS_ALIASES_HPP
 
 #include <tr1/memory>
-#include <tr1/shared_ptr.h>
 #include <cstdlib>
 
 struct shared_ptr_array_deleter {

@@ -214,13 +214,12 @@ void Texture::setFilter (const gdx_cpp::graphics::Texture::TextureFilter& minFil
 }
 
 void Texture::dispose () {
-    if (glHandle != 0 && (!isManaged() || shared_from_this().unique())) {
+    if (glHandle != 0) {
         Gdx::gl->glDeleteTextures(1, &glHandle);
 
         if (data->isManaged()) {
-            if (managedTextures.count(Gdx::app))
-                managedTextures[Gdx::app].remove(shared_from_this());
-        }
+//                 managedTextures[Gdx::app].remove();
+            }
 
         glHandle = 0;
     }
@@ -251,7 +250,7 @@ void Texture::invalidateAllTextures (gdx_cpp::Application* app) {
         textureList::iterator end = managedTexureList.end();
        
         for (; it != end; it++) {
-            (*it)->reload();
+            it->lock()->reload();
         }
     } else {
 //         textureList t(managedTexureList);

@@ -534,7 +534,7 @@ bool BitmapFont::isFlipped () {
 }
 
 void BitmapFont::dispose () {
-    region->getTexture()->dispose();
+//     region->getTexture()->dispose();
 }
 
 void BitmapFont::setFixedWidthGlyphs (const std::string& glyphs) {

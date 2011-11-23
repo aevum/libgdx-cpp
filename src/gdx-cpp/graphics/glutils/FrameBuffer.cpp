@@ -67,13 +67,12 @@ void FrameBuffer::build () {
     gl.glBindFramebuffer(GL20::GL_FRAMEBUFFER, 0);
 
     if (result != GL20::GL_FRAMEBUFFER_COMPLETE) {
-        colorTexture->dispose();
+        colorTexture.reset();
         if (hasDepth) {
             handle = depthbufferHandle;
             gl.glDeleteRenderbuffers(1, &handle);
         }
 
-        colorTexture->dispose();
         handle = framebufferHandle;
         
         gl.glDeleteFramebuffers(1, &handle);
@@ -92,7 +91,7 @@ void FrameBuffer::dispose () {
 
     int handle = 0;
 
-    colorTexture->dispose();
+    colorTexture.reset();
     if (hasDepth) {
         handle = depthbufferHandle;
         gl.glDeleteRenderbuffers(1, &handle);

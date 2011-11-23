@@ -235,9 +235,9 @@ gdx_cpp::graphics::Texture::ptr ParticleEffect::loadTexture (const gdx_cpp::file
 }
 
 void ParticleEffect::dispose () {
-    for (unsigned int i = 0, n = emitters.size(); i < n; i++) {
-        ParticleEmitter * emitter = emitters[i];
-        emitter->getSprite()->getTexture()->dispose();
-    }
+//     for (unsigned int i = 0, n = emitters.size(); i < n; i++) {
+//         ParticleEmitter * emitter = emitters[i];
+//         emitter->getSprite()->getTexture()->dispose();
+//     }
 }
 
