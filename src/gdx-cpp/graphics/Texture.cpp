@@ -214,7 +214,7 @@ void Texture::setFilter (const gdx_cpp::graphics::Texture::TextureFilter& minFil
 }
 
 void Texture::dispose () {
-    if (glHandle != 0) {
+    if (glHandle != 0 && (!isManaged() || shared_from_this().unique())) {
         Gdx::gl->glDeleteTextures(1, &glHandle);
 
         if (data->isManaged()) {

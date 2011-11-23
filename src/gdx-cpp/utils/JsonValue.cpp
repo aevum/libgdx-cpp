@@ -115,8 +115,11 @@ JsonValue::JsonValue() : item_type(json_null)
 
 size_t gdx_cpp::utils::JsonValue::count()
 {
-    assert(item_type == json_json);
-    return ((item_map&)*this).size();
+    assert(item_type == json_json || item_type == json_list);
+    if (item_type == json_json)
+        return ((item_map&)*this).size();
+    else
+        return ((array&)*this).size();
 }
 
 //sob... c++ sucks A LOT sometimes...

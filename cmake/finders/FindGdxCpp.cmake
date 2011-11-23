@@ -12,7 +12,7 @@ SET(GDXCPP_FIND_QUIETLY TRUE)
 ENDIF(GDXCPP_LIBRARIES AND GDXCPP_INCLUDE_DIR)
 
 FIND_PATH(GDXCPP_INCLUDE_DIR
-Gdx.hpp
+gdx-cpp/Gdx.hpp
 PATHS
 /usr/local/include
 /usr/include
@@ -20,7 +20,7 @@ PATHS
 /opt/local/include
 /opt/csw/include
 /opt/include
-PATH_SUFFIXES gdx-cpp
+${GDX_ROOT}/include
 )
 
 macro(find_libraries)
@@ -33,7 +33,7 @@ macro(find_libraries)
             /usr/lib
             /opt/local/lib
             /opt/lib
-            ${GdxCpp_ADDITIONAL_LIBRARY_PATHS}
+            ${GDX_ROOT}/lib
             )
 
         if (GDXCPP_${lib})

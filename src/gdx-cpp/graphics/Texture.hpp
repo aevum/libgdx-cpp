@@ -128,13 +128,12 @@ public:
                         const gdx_cpp::graphics::Pixmap::Format* format = NULL,
                         bool useMipMaps = false);
 
-    ~Texture();
+    virtual ~Texture();
     void dispose ();
     
 protected:
     void initialize(const gdx_cpp::files::FileHandle::ptr file, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps);
     Texture ();
-    
     
 private:
     void create (gdx_cpp::graphics::TextureData::ptr data);
