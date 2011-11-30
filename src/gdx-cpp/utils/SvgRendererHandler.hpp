@@ -21,6 +21,8 @@
 #ifndef GDX_CPP_UTILS_SVGRENDERERHANDLER_HPP
 #define GDX_CPP_UTILS_SVGRENDERERHANDLER_HPP
 
+#include "gdx-cpp/graphics/Color.hpp"
+
 namespace gdx_cpp {
 
 namespace utils {

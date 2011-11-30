@@ -22,6 +22,7 @@
 #define GDX_CPP_UTILS_XMLREADER_HPP_
 
 #include <string>
+#include <sstream>
 #include <fstream>
 #include <tr1/unordered_map>
 #include <vector>

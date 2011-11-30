@@ -19,14 +19,15 @@
 
 #ifndef GDX_CPP_FILES_FILEHANDLE_HPP_
 #define GDX_CPP_FILES_FILEHANDLE_HPP_
-#include "gdx-cpp/Files.hpp"
-#include "gdx-cpp/Gdx.hpp"
-#include "gdx-cpp/Application.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <cstdio>
 #include <string>
 #include <sys/types.h>
+
+#include "gdx-cpp/Files.hpp"
+#include "gdx-cpp/Application.hpp"
 #include "gdx-cpp/files/File.hpp"
 #include "gdx-cpp/utils/Aliases.hpp"
 
@@ -56,7 +57,7 @@ public:
     std::string extension () const;
     std::string nameWithoutExtension () const;
     std::string typetoString () const;
-    gdx_cpp::Files::FileType& getType ();
+    gdx_cpp::Files::FileType getType () const;
     ifstream_ptr read () const;
     std::string readString ();
     std::string readString (const std::string& charset);
@@ -77,7 +78,9 @@ public:
     std::string toString () const;
     FileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
     FileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type);
-    
+
+
+    virtual ~FileHandle() {};
 protected:
     gdx_cpp::files::File file;
     gdx_cpp::Files::FileType type;

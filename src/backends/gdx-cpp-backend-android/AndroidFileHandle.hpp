@@ -23,7 +23,6 @@
 
 #include <gdx-cpp/files/FileHandle.hpp>
 #include <sys/types.h>
-#include <android/asset_manager.h>
 
 namespace gdx_cpp {
 
@@ -34,11 +33,8 @@ namespace android {
 class AndroidFileHandle : public gdx_cpp::files::FileHandle
 {
 public:
-    AndroidFileHandle(AAssetManager* manager, const std::string& fileName, gdx_cpp::Files::FileType type);
-
-    virtual int readBytes(char_ptr& c);
-protected:
-    AAssetManager* manager;
+    AndroidFileHandle(const std::string& fileName, gdx_cpp::Files::FileType type);
+    virtual int readBytes(char_ptr& c) const;
 };
 
 }

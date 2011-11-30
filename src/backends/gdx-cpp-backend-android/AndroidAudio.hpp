@@ -22,7 +22,7 @@
 #define GDX_CPP_BACKENDS_ANDROID_ANDROIDAUDIO_HPP
 
 #include <gdx-cpp/Audio.hpp>
-#include <gdx-cpp/Files.hpp>
+#include <gdx-cpp/files/FileHandle.hpp>
 #include <jni.h>
 
 namespace gdx_cpp {
@@ -46,8 +46,8 @@ public:
     
     audio::AudioDevice* newAudioDevice(int samplingRate, bool isMono);
     audio::AudioRecorder* newAudioRecoder(int samplingRate, bool isMono);
-    audio::Music* newMusic(const Files::fhandle_ptr file);
-    audio::Sound* newSound(const Files::fhandle_ptr fileHandle);
+    audio::Music* newMusic(const files::FileHandle::ptr file);
+    audio::Sound* newSound(const files::FileHandle::ptr fileHandle);
 
     void setupJNI(JNIEnv* env, jobject androidAudioObj);
 

@@ -321,3 +321,7 @@ void graphics::g2d::Gdx2DPixmap::setScale(float scaleX, float scaleY)
     throw std::runtime_error("Unsupported operation");
 }
 
+Gdx2DPixmap* Gdx2DPixmap::newPixmapFromBuffer(unsigned char* data, int len, int requestedFormat)
+{
+    return new Gdx2DPixmap(data, 0, len, requestedFormat);
+}

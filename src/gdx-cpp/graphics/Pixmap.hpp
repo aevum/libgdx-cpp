@@ -24,7 +24,8 @@
 #include "gdx-cpp/utils/Disposable.hpp"
 #include "gdx-cpp/utils/Aliases.hpp"
 #include <string>
-#include "gdx-cpp/Files.hpp"
+
+#include "gdx-cpp/files/FileHandle.hpp"
 
 namespace gdx_cpp {
 namespace graphics {
@@ -84,7 +85,7 @@ public:
 
     static Pixmap::ptr newFromRect(int width, int height, const Format& format, PixmapType pixType);
     static Pixmap::ptr newFromPixmap(const Pixmap& pixmap);
-    static Pixmap::ptr newFromFile(const gdx_cpp::Files::fhandle_ptr& file);
+    static Pixmap::ptr newFromFile(const gdx_cpp::files::FileHandle::ptr file);
       
 
     virtual PixmapType getType() const = 0;

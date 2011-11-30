@@ -22,6 +22,7 @@
 
 #include "gdx-cpp/graphics/Pixmap.hpp"
 #include "gdx-cpp/files/FileHandle.hpp"
+#include "gdx-cpp/Gdx.hpp"
 
 #include <stdexcept>
 
@@ -79,7 +80,7 @@ void FileTextureData::uploadCompressedData () {
     throw std::runtime_error("This TextureData implementation does not upload data itself");
 }
 
-FileTextureData::FileTextureData(Files::fhandle_ptr file, gdx_cpp::graphics::Pixmap::ptr preloadedPixmap,
+FileTextureData::FileTextureData(files::FileHandle::ptr file, gdx_cpp::graphics::Pixmap::ptr preloadedPixmap,
                                  const Pixmap::Format* format, bool useMipMaps)
 :
 file(file)

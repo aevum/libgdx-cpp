@@ -62,7 +62,6 @@ Mesh::Mesh(bool isStatic, int maxVertices, int maxIndices, const std::vector< Ve
     addManagedMesh(gdx_cpp::Gdx::app, this);
 }
 
-
 void Mesh::setVertices (const std::vector<float>& vertices) {
     this->vertices->setVertices(&vertices[0], 0, vertices.size());
 }
@@ -385,4 +384,6 @@ void Mesh::setVertices(const float* vertices, int size) {
 Mesh::~Mesh()
 {
     dispose();
+    delete vertices;
+    delete indices;
 }

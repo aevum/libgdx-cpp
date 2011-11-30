@@ -64,11 +64,11 @@ public:
     virtual void update();
     void updateTime();
 
-    graphics::TextureData::ptr resolveTextureData(Files::fhandle_ptr fileHandle, graphics::Pixmap::ptr preloadedPixmap, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps);
+    graphics::TextureData::ptr resolveTextureData(files::FileHandle::ptr fileHandle, graphics::Pixmap::ptr preloadedPixmap, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps);
 
     graphics::Pixmap* resolvePixmap(int width, int height, const gdx_cpp::graphics::Pixmap::Format& format, int pixType);
     graphics::Pixmap* resolvePixmap(const gdx_cpp::graphics::Pixmap& other);
-    graphics::Pixmap* resolvePixmap(const gdx_cpp::Files::fhandle_ptr& file);
+    graphics::Pixmap* resolvePixmap(const gdx_cpp::files::FileHandle::ptr& file);
     
 protected:
     virtual bool setupGLModes();

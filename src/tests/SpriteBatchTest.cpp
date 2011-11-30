@@ -34,7 +34,7 @@ public:
 
     void create() {        
         spriteBatch = new SpriteBatch(1000);
-        gdx_cpp::Files::fhandle_ptr file = gdx_cpp::Gdx::files->internal("data/badlogicsmall.jpg");
+        gdx_cpp::files::FileHandle::ptr file = gdx_cpp::Gdx::files->internal("data/badlogicsmall.jpg");
         Pixmap::ptr pixmap = Pixmap::newFromFile(file);
 
         texture = Texture::ptr(new Texture(32, 32, gdx_cpp::graphics::Pixmap::Format::RGB565, Pixmap::Gdx2d));

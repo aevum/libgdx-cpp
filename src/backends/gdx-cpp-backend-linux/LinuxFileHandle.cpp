@@ -32,13 +32,13 @@ LinuxFileHandle::LinuxFileHandle (const gdx_cpp::files::File &file, gdx_cpp::Fil
 {
 }
 
-gdx_cpp::Files::fhandle_ptr LinuxFileHandle::child (const std::string &name)
+gdx_cpp::files::FileHandle::ptr LinuxFileHandle::child (const std::string &name)
 {
-    if (file.getPath().length() == 0) return gdx_cpp::Files::fhandle_ptr (new LinuxFileHandle(gdx_cpp::files::File(name), this->type));
-    return gdx_cpp::Files::fhandle_ptr (new LinuxFileHandle(gdx_cpp::files::File(file, name), this->type));
+    if (file.getPath().length() == 0) return gdx_cpp::files::FileHandle::ptr (new LinuxFileHandle(gdx_cpp::files::File(name), this->type));
+    return gdx_cpp::files::FileHandle::ptr (new LinuxFileHandle(gdx_cpp::files::File(file, name), this->type));
 }
         
-gdx_cpp::Files::fhandle_ptr LinuxFileHandle::parent ()
+gdx_cpp::files::FileHandle::ptr LinuxFileHandle::parent ()
 {
     gdx_cpp::files::File parent = file.getParentFile();
     if (parent.getPath() == "")
@@ -48,5 +48,5 @@ gdx_cpp::Files::fhandle_ptr LinuxFileHandle::parent ()
         else
             parent = gdx_cpp::files::File("");
     }
-    return gdx_cpp::Files::fhandle_ptr (new LinuxFileHandle(parent, type));
+    return gdx_cpp::files::FileHandle::ptr (new LinuxFileHandle(parent, type));
 }

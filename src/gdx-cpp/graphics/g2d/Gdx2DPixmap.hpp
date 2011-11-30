@@ -52,7 +52,8 @@ public:
 
     static Gdx2DPixmap* newPixmap (int width,int height,int format);
     static Gdx2DPixmap* newPixmap (std::istream& in, int requestedFormat);
-
+    static Gdx2DPixmap* newPixmapFromBuffer (unsigned char* data, int len, int requestedFormat);
+    
     void setColor(float r, float g, float b, float a);
     void setColor(const gdx_cpp::graphics::Color& color);
     

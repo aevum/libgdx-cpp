@@ -239,7 +239,7 @@ void gdx_cpp::backends::nix::LinuxGraphics::update()
     SDL_GL_SwapBuffers();
 }
 
-TextureData::ptr backends::nix::LinuxGraphics::resolveTextureData(Files::fhandle_ptr fileHandle,
+TextureData::ptr backends::nix::LinuxGraphics::resolveTextureData(files::FileHandle::ptr fileHandle,
                                                                   Pixmap::ptr preloadedPixmap,
                                                                   const gdx_cpp::graphics::Pixmap::Format* format,
                                                                   bool useMipMaps)
@@ -265,7 +265,7 @@ Pixmap* backends::nix::LinuxGraphics::resolvePixmap(const gdx_cpp::graphics::Pix
     } 
 }
 
-Pixmap* backends::nix::LinuxGraphics::resolvePixmap(const Files::fhandle_ptr& file)
+Pixmap* backends::nix::LinuxGraphics::resolvePixmap(const files::FileHandle::ptr& file)
 {
     std::string extension = file->extension();
     

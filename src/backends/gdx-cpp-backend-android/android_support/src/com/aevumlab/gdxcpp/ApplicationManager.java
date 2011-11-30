@@ -3,8 +3,6 @@ package com.aevumlab.gdxcpp;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import com.badlogic.gdx.backends.android.AndroidAudio;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -12,6 +10,11 @@ import android.opengl.GLSurfaceView;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.badlogic.gdx.Files.FileType;
+import com.badlogic.gdx.backends.android.AndroidAudio;
+import com.badlogic.gdx.backends.android.AndroidFiles;
+import com.badlogic.gdx.files.FileHandle;
 
 public class ApplicationManager {
 	static native void nativeInitSystem();
@@ -34,7 +37,7 @@ public class ApplicationManager {
 	
 	InputHandler handler = new InputHandler();	
 	Activity activity;
-	private AssetManager assets;
+	static AndroidFiles files;
 	private AndroidAudio audio;
 	
 	class NativeSurfaceRenderer implements GLSurfaceView.Renderer {
@@ -61,7 +64,7 @@ public class ApplicationManager {
 			int width = display.getWidth();
 			int height = display.getHeight();
 
-			ApplicationManager.nativeInitialize(assets, width, height);
+			ApplicationManager.nativeInitialize(null, width, height);
 			audio = new AndroidAudio(activity);
 			audio.registerAudioEngine(audio);
 		}
@@ -91,7 +94,8 @@ public class ApplicationManager {
 	}
 
 	public void initializeWithSharedLib(String library, AssetManager assetManager) {
-		this.assets = assetManager;
+		files = new AndroidFiles(assetManager);
+		
 		System.loadLibrary(library);
 		nativeInitSystem();
 	}
@@ -130,5 +134,15 @@ public class ApplicationManager {
 			nativeTouchDragEvent(evt.getX(), evt.getY(), evt.getAction() & MotionEvent.ACTION_POINTER_ID_MASK >> MotionEvent.ACTION_POINTER_ID_SHIFT);
 			break;
 		}		
+	}
+			
+	static byte[] readFile(String filename, int fileType) {
+		FileHandle handle = files.getFileHandle(filename, FileType.values()[fileType]);
+		
+		if (handle != null) {			
+			return handle.readBytes();
+		}
+		
+		return null;
 	}
 }

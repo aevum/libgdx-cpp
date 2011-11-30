@@ -1010,19 +1010,18 @@ SpriteBatch::SpriteBatch(int size, int buffers) :
 
 SpriteBatch::~SpriteBatch()
 {
-    if (mesh) {
-        delete mesh;
-    }
-
     if (shader) {
+        shader->dispose();
         delete shader;
     }
 
     if (customShader) {
+        customShader->dispose();
         delete customShader;
     }
 
     for (unsigned int i = 0; i < buffers.size(); ++i) {
+        buffers[i]->dispose();
         delete buffers[i];
     }
 

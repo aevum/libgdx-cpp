@@ -25,6 +25,8 @@
 #include <string.h>
 #include "ArrayUtils.hpp"
 
+#include "gdx-cpp/Gdx.hpp"
+
 using namespace gdx_cpp::utils;
 using namespace gdx_cpp;
 

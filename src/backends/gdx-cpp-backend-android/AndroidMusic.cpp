@@ -28,6 +28,15 @@ using namespace gdx_cpp::backends::android;
 gdx_cpp::backends::android::AndroidMusic::AndroidMusic(JNIEnv* env, jobject musicObj)
     : env(env)
     , jniMusicObj(musicObj)
+    , disposeJNI(NULL)
+    , getPositionJNI(NULL)
+    , isLoopingJNI(NULL)
+    , isPlayingJNI(NULL)
+    , pauseJNI(NULL)
+    , playJNI(NULL)
+    , setLoopingJNI(NULL)
+    , setVolumeJNI(NULL)
+    , stopJNI(NULL)
 { 
     jclass cls = env->GetObjectClass(jniMusicObj);
 
@@ -39,14 +48,17 @@ gdx_cpp::backends::android::AndroidMusic::AndroidMusic(JNIEnv* env, jobject musi
     setLoopingJNI = env->GetMethodID(cls, "setLooping", "(Z)V");
     setVolumeJNI = env->GetMethodID(cls, "setVolume", "(F)V");
     getPositionJNI = env->GetMethodID(cls, "getPosition", "()F");
-
+    pauseJNI = env->GetMethodID(cls, "pause", "()V");
+    
     assert(disposeJNI);
-    assert(playJNI);
-    assert(isLoopingJNI);
-    assert(stopJNI);
-    assert(isPlayingJNI);
-    assert(setVolumeJNI);
     assert(getPositionJNI);
+    assert(isLoopingJNI);
+    assert(isPlayingJNI);
+    assert(pauseJNI);
+    assert(playJNI);
+    assert(setLoopingJNI);
+    assert(setVolumeJNI);
+    assert(stopJNI);
 }
 
 void gdx_cpp::backends::android::AndroidMusic::dispose()

@@ -54,7 +54,7 @@ class AggSvgPixmap : public SvgPixmapInterface
 {
 public:
 
-    static AggSvgPixmap* newFromFile(const Files::fhandle_ptr& file) {
+    static AggSvgPixmap* newFromFile(const files::FileHandle::ptr& file) {
         static utils::XmlReader reader;
 
         AggSvgPixmap* pix = new AggSvgPixmap;

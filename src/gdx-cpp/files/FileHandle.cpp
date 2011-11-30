@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <cassert>
 
+#include "gdx-cpp/Gdx.hpp"
+
 using namespace gdx_cpp::files;
 
 FileHandle::FileHandle (){}
@@ -40,8 +42,8 @@ FileHandle::FileHandle (File const& file)
 {
 }
 
-FileHandle::FileHandle (const std::string &fileName, gdx_cpp::Files::FileType type)
-  : type(type),
+FileHandle::FileHandle (const std::string &fileName, gdx_cpp::Files::FileType _type)
+  : type(_type),
     file(fileName)
 {
 }
@@ -81,7 +83,7 @@ std::string FileHandle::typetoString () const {
     return "Classpath";
 }
 
-gdx_cpp::Files::FileType& FileHandle::getType () {
+gdx_cpp::Files::FileType FileHandle::getType () const {
     return type;
 }
 

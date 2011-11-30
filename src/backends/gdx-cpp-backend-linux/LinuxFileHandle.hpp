@@ -39,8 +39,8 @@ namespace nix {
         LinuxFileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
         LinuxFileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type);
 
-        gdx_cpp::Files::fhandle_ptr child (const std::string &name);
-        gdx_cpp::Files::fhandle_ptr parent ();
+        gdx_cpp::files::FileHandle::ptr child (const std::string &name);
+        gdx_cpp::files::FileHandle::ptr parent ();
   };
 
 }

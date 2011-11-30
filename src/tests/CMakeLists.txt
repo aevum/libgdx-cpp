@@ -19,6 +19,7 @@ set(APPLICATIONS MyFirstTriangle
     SvgBackendTest2
     BitmapFontTest
     BitmapFontFlipTest
+    BaseTest
     box2d/Chain box2d/ApplyForce
     box2d/Bridge box2d/Cantilever
     box2d/CharacterCollision

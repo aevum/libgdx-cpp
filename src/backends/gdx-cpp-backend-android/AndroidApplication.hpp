@@ -58,6 +58,11 @@ public:
     void update();
     void pause();
     void create();
+
+    void setJavaVM(JavaVM* vm);
+
+    JavaVM* const getJavaVM();
+    JNIEnv* getJniEnv();
     
 protected:
     void run();
@@ -75,6 +80,9 @@ protected:
     std::list< Runnable::ptr > runnables;
 
     gdx_cpp::implementation::Thread::ptr mainLoopThread;
+
+    JavaVM* vm;
+    JNIEnv* env;
     
     void initialize();
 
