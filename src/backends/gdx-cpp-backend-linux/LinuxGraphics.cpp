@@ -270,7 +270,7 @@ Pixmap* backends::nix::LinuxGraphics::resolvePixmap(const files::FileHandle::ptr
     std::string extension = file->extension();
     
     if (extension == "png" || extension == "jpg" || extension == "tga" || extension == "bmp")
-        return g2d::Gdx2DPixmap::newPixmap(*file->read(), 0);
+        return g2d::Gdx2DPixmap::newPixmapFromFile(file, 0);
     else if (extension == "svg") {
         return g2d::svg::AggSvgPixmap::newFromFile(file);        
     } else {

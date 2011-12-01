@@ -1,4 +1,3 @@
-#include "FileHandleStream.hpp"
 #include <cstdio>
 #include <cassert>
 #include <gdx-cpp/implementation/System.hpp>

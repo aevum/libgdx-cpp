@@ -282,7 +282,7 @@ graphics::Pixmap* backends::android::AndroidGraphics::resolvePixmap(const gdx_cp
     std::string extension = file->extension();
     
     if (extension == "png" || extension == "jpg" || extension == "tga" || extension == "bmp") {
-        gdx_cpp::files::FileHandle::char_ptr data;
+        gdx_cpp::files::FileHandle::buffer_ptr data;
         int len = file->readBytes(data);
         return g2d::Gdx2DPixmap::newPixmapFromBuffer((unsigned char*) data.get(), len, 0);
     } else if (extension == "svg") {

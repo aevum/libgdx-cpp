@@ -34,7 +34,7 @@ class AndroidFileHandle : public gdx_cpp::files::FileHandle
 {
 public:
     AndroidFileHandle(const std::string& fileName, gdx_cpp::Files::FileType type);
-    virtual int readBytes(char_ptr& c) const;
+    virtual int readBytes(buffer_ptr& c) const;
 };
 
 }

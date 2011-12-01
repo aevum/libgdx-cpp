@@ -610,7 +610,7 @@ BitmapFont::BitmapFontData::BitmapFontData(files::FileHandle::ptr fontFile, bool
     glyphs = new Glyph**[PAGES];
     memset(glyphs, 0, sizeof(Glyph*) * PAGES);
     
-    files::FileHandle::char_ptr buffer;
+    files::FileHandle::buffer_ptr buffer;
     fontFile->readBytes(buffer);
     char* line_r = NULL;
     

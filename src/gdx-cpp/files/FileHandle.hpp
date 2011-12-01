@@ -46,23 +46,22 @@ class File;
 class FileHandle {
 public:
     typedef ref_ptr_maker<FileHandle>::type ptr;
-    typedef ref_ptr_maker< std::ifstream >::type ifstream_ptr;
-    typedef ref_ptr_maker< std::ofstream >::type ofstream_ptr;
-    typedef ref_ptr_maker< char >::type char_ptr;
-    FileHandle ();
+    typedef ref_ptr_maker< char >::type buffer_ptr;
+
+    FileHandle();
     FileHandle (const std::string &fileName);
     FileHandle (const gdx_cpp::files::File &file);
+    
     const std::string& path () const;
     std::string name () const;
     std::string extension () const;
     std::string nameWithoutExtension () const;
     std::string typetoString () const;
     gdx_cpp::Files::FileType getType () const;
-    ifstream_ptr read () const;
-    std::string readString ();
-    std::string readString (const std::string& charset);
-    virtual int readBytes (gdx_cpp::files::FileHandle::char_ptr& c) const;
-    ofstream_ptr write (bool append);
+
+    virtual int readBytes (gdx_cpp::files::FileHandle::buffer_ptr& c) const;
+    virtual int write (char* data, int lenght, bool append);
+    
     void list (std::vector<FileHandle> &handles);
     void list (const std::string& suffix, std::vector<FileHandle> &handles);
     bool isDirectory ();
@@ -72,13 +71,12 @@ public:
     bool exists ();
     bool deleteFile ();
     bool deleteDirectory ();
-    void copyTo (FileHandle& dest);
+    virtual void copyTo (FileHandle& dest);
     void moveTo (FileHandle& dest);
-    int64_t length () const;
+    virtual int64_t length () const;
     std::string toString () const;
     FileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
     FileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type);
-
 
     virtual ~FileHandle() {};
 protected:

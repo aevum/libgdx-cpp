@@ -28,7 +28,9 @@
 
 using namespace gdx_cpp::files;
 
-FileHandle::FileHandle (){}
+FileHandle::FileHandle()
+{
+}
 
 FileHandle::FileHandle (const std::string &fileName)
   :   file(fileName),
@@ -92,131 +94,78 @@ File FileHandle::getFile () const {
     return file;
 }
 
-FileHandle::ifstream_ptr FileHandle::read () const
-{
-    ifstream_ptr input;
+int FileHandle::readBytes (buffer_ptr &c) const {
+    throw std::runtime_error("Not implemented, if you're seeing this error your backend"
+                             " hasn't implemented the readBytes method, wich he should");
     
-    if (type == gdx_cpp::Files::Internal && !file.exists()) {
-        int found;
-        std::string s = "/" + file.getPath();
-        while((found = s.find("//")) != s.npos) s.replace(found, 2, "/");
-        input = ifstream_ptr (new std::ifstream( s.c_str(), std::ios::in | std::ios::binary));
-        if(!input->is_open()) throw std::runtime_error("File not found: " + file.getPath() + " (" + typetoString() + ")");
-        
-        return input;
-    }
-
-    input = ifstream_ptr (new std::ifstream(file.getPath().c_str(), std::ios::in | std::ios::binary));
-
-    if(!input->is_open())
-    {
-      if(file.isDirectory()) throw std::runtime_error("Cannot open a stream to a directory: " + file.getPath() + " (" + typetoString() + ")");
-      else throw std::runtime_error("Error reading file: " + file.getPath() + " (" + typetoString() + ")");
-    }
-    return input; 
+//     int Length = (int) length();
+//     if (Length == 0) Length = 512;
+//     int bufferlength = Length;
+//     
+//     char* buf = (char*) malloc(bufferlength);
+//     
+//     int position = 0;
+//     ifstream_ptr input = read();
+//     try
+//     {
+//         while (true)
+//         {
+//             int count = 0;
+//             input->read( buf + position, Length - position);
+//             count = input->gcount();
+//             position += count;
+//             if(input->eof() || !count || input->peek() == EOF)
+//             {
+//               break;
+//             }
+// 
+//             if (position == bufferlength) {
+//                 // Grow buffer.
+//                 buf = (char * ) realloc(buf, bufferlength * 2);
+//                 assert(buf);
+//                 bufferlength *= 2;
+//             }
+//         }
+//     }
+//     catch(std::runtime_error e)
+//     {
+//         if(input->is_open()) input->close();
+//         throw std::runtime_error("Error reading file: " + this->toString());
+//     }
+//     
+//     if(input->is_open()) {
+//         input->close();
+//     }
+//     
+//     if(position < bufferlength)
+//     {
+//         buf = (char *) realloc(buf, position);
+//         assert(buf);
+//     }
+// 
+//     buffer_ptr new_ptr = buffer_ptr(buf, shared_ptr_free_deleter());
+//     c.swap(new_ptr);
+//     return position;
 }
 
-std::string FileHandle::readString () {
-    return readString("");
-}
 
-std::string FileHandle::readString (const std::string& charset) {
-    std::string output = "";
-    ifstream_ptr reader;
-
-    if (charset == "") reader = read();
-    //else     TODO TEM QUE CRIAR CHARSET AQUI
-    //    reader = new InputStreamReader(read(), charset);
-    try
-    {
-        char buffer[257];
-        std::streampos  earlypos;
-        buffer[256] = '\0';
-        while (true) {
-                    earlypos = reader->tellg();
-                    if(!reader->read(buffer, 256)) break;
-                    output += std::string(buffer);
-        }
-        reader->clear();
-        reader->seekg (earlypos);
-        reader->seekg (0, std::ios::end);
-        buffer[((int) reader->tellg()-earlypos)] = '\0';
-        output += std::string(buffer);
-    }
-    catch(std::runtime_error e)
-    {
-        if (reader->is_open()) reader->close();
-        throw std::runtime_error("Error reading file: " + this->toString());
-    }
-    if (reader->is_open()) reader->close();
-    return output;
-}
-
-int FileHandle::readBytes (char_ptr &c) const {
-    int Length = (int) length();
-    if (Length == 0) Length = 512;
-    int bufferlength = Length;
+int FileHandle::write (char* data, int lenght, bool append) {
+    throw std::runtime_error("Not implemented, if you're seeing this error your backend"
+    " hasn't implemented the write method, wich he should");
     
-    char* buf = (char*) malloc(bufferlength);
-    
-    int position = 0;
-    ifstream_ptr input = read();
-    try
-    {
-        while (true)
-        {
-            int count = 0;
-            input->read( buf + position, Length - position);
-            count = input->gcount();
-            position += count;
-            if(input->eof() || !count || input->peek() == EOF)
-            {
-              break;
-            }
-
-            if (position == bufferlength) {
-                // Grow buffer.
-                buf = (char * ) realloc(buf, bufferlength * 2);
-                assert(buf);
-                bufferlength *= 2;
-            }
-        }
-    }
-    catch(std::runtime_error e)
-    {
-        if(input->is_open()) input->close();
-        throw std::runtime_error("Error reading file: " + this->toString());
-    }
-    
-    if(input->is_open()) {
-        input->close();
-    }
-    
-    if(position < bufferlength)
-    {
-        buf = (char *) realloc(buf, position);
-        assert(buf);
-    }
-
-    char_ptr new_ptr = char_ptr(buf, shared_ptr_free_deleter());
-    c.swap(new_ptr);
-    return position;
-}
-
-FileHandle::ofstream_ptr FileHandle::write (bool append) {
-    if (type == gdx_cpp::Files::Internal) throw std::runtime_error("Cannot write to an internal file: " + file.getPath());
-    ofstream_ptr output;
-    try
-    {
-        if(append) output = ofstream_ptr (new std::ofstream(file.getPath().c_str(), std::fstream::out | std::ios::app));
-        else output = ofstream_ptr (new std::ofstream(file.getPath().c_str(), std::ios::out | std::ios::trunc));
-    }
-    catch(std::runtime_error e)
-    {
-        if(getFile().isDirectory()) throw std::runtime_error("Cannot open a stream to a directory: " + file.getPath() + " (" + typetoString() + ")");
-        else throw std::runtime_error("Error writing file: " + file.getPath() + " (" + typetoString() + ")");
-    }
-    return output;
+//     if (type == gdx_cpp::Files::Internal) throw std::runtime_error("Cannot write to an internal file: " + file.getPath());
+//     ofstream_ptr output;
+//     try
+//     {
+//         if(append) output = ofstream_ptr (new std::ofstream(file.getPath().c_str(), std::fstream::out | std::ios::app));
+//         else output = ofstream_ptr (new std::ofstream(file.getPath().c_str(), std::ios::out | std::ios::trunc));
+//     }
+//     catch(std::runtime_error e)
+//     {
+//         if(getFile().isDirectory()) throw std::runtime_error("Cannot open a stream to a directory: " + file.getPath() + " (" + typetoString() + ")");
+//         else throw std::runtime_error("Error writing file: " + file.getPath() + " (" + typetoString() + ")");
+//     }
+//     return output;
 }
 
 void FileHandle::list(std::vector<FileHandle> &handles) {
@@ -244,10 +193,9 @@ void FileHandle::list (const std::string& suffix, std::vector<FileHandle> &handl
 
 bool FileHandle::isDirectory () {
     return getFile().isDirectory();
-
 }
 
-FileHandle FileHandle::child (const std::string &name) {
+FileHandle FileHandle::child (const std::string& name) {
     if (file.getPath().length() == 0) return FileHandle(File(name), type);
     return FileHandle(File(file, name), type);
 }
@@ -294,25 +242,27 @@ bool FileHandle::deleteDirectory () {
     return deleteDirectory(target);
 }
 
-void FileHandle::copyTo (FileHandle& dest) { 
-    ifstream_ptr input;
-    ofstream_ptr output;
-    try {
-        input = read();
-        output = dest.write(false);
-        char buffer[4096];
-        while (true) {
-            input->read(buffer, 4096);
-            output->write(buffer, input->gcount());
-            if(input->eof() || input->peek() == EOF) break;
-        }
-    } catch(std::runtime_error ex) {
-        if(input->is_open()) input->close();
-        if(output->is_open()) output->close();
-        throw std::runtime_error("Error copying source file: " + path() + " (" + typetoString() + ")\n" + "To destination: " + dest.path() + " (" + dest.typetoString() + ")");
-    }
-   if(input->is_open()) input->close();
-   if(output->is_open()) output->close();
+void FileHandle::copyTo (FileHandle& dest) {
+    throw std::runtime_error("Not implemented, if you're seeing this error your backend"
+                             " hasn't implemented the readBytes method, wich he should");    
+//     ifstream_ptr input;
+//     ofstream_ptr output;
+//     try {
+//         input = read();
+//         output = dest.write(false);
+//         char buffer[4096];
+//         while (true) {
+//             input->read(buffer, 4096);
+//             output->write(buffer, input->gcount());
+//             if(input->eof() || input->peek() == EOF) break;
+//         }
+//     } catch(std::runtime_error ex) {
+//         if(input->is_open()) input->close();
+//         if(output->is_open()) output->close();
+//         throw std::runtime_error("Error copying source file: " + path() + " (" + typetoString() + ")\n" + "To destination: " + dest.path() + " (" + dest.typetoString() + ")");
+//     }
+//    if(input->is_open()) input->close();
+//    if(output->is_open()) output->close();
 }
 
 void FileHandle::moveTo (FileHandle& dest) {
@@ -322,26 +272,29 @@ void FileHandle::moveTo (FileHandle& dest) {
 }
 
 int64_t FileHandle::length () const {
-    if ((type == gdx_cpp::Files::Internal && !file.exists())) {
-      int64_t length = 0;
-      ifstream_ptr input = read();
-      try
-      {
-          if(input != NULL)
-          {
-              input->seekg (0, std::ios::end);
-              length = (int64_t) input->tellg();
-              input->close();
-          }
-      }
-      catch(std::runtime_error ignored)
-      {
-          if(input->is_open()) input->close();
-      }
-      return length;
-    }
-   
-    return getFile().length();
+    throw std::runtime_error("Not implemented, if you're seeing this error your backend"
+    " hasn't implemented the length method, wich he should");
+    
+//     if ((type == gdx_cpp::Files::Internal && !file.exists())) {
+//       int64_t length = 0;
+//       ifstream_ptr input = read();
+//       try
+//       {
+//           if(input != NULL)
+//           {
+//               input->seekg (0, std::ios::end);
+//               length = (int64_t) input->tellg();
+//               input->close();
+//           }
+//       }
+//       catch(std::runtime_error ignored)
+//       {
+//           if(input->is_open()) input->close();
+//       }
+//       return length;
+//     }
+//    
+//     return getFile().length();
 }
 
 std::string FileHandle::toString () const {

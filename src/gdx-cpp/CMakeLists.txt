@@ -93,7 +93,6 @@ audio/AudioRecorder.hpp
 Screen.hpp
 Graphics.hpp
 files/FileHandle.hpp
-files/FileHandleStream.hpp
 files/File.hpp
 Gdx.hpp
 implementation/MutexFactory.hpp
@@ -363,7 +362,6 @@ InputMultiplexer.cpp
 # input/RemoteSender.cpp
 # input/RemoteInput.cpp
 files/FileHandle.cpp
-files/FileHandleStream.cpp
 files/File.cpp
 math/MathUtils.cpp
 math/Circle.cpp

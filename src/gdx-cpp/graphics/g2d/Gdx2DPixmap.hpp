@@ -45,13 +45,13 @@ public:
     static void setFilter (const Filter& filter);
     static Blending getBlending ();
     
-    Gdx2DPixmap (std::istream& in, int requestedFormat);
+    Gdx2DPixmap (files::FileHandle::ptr fhandle, int requestedFormat);
     Gdx2DPixmap (int width, int height, int format);
     Gdx2DPixmap (const Gdx2DPixmap& other);
     Gdx2DPixmap (unsigned char* encodedData, int offset, int len, int requestedFormat);
 
     static Gdx2DPixmap* newPixmap (int width,int height,int format);
-    static Gdx2DPixmap* newPixmap (std::istream& in, int requestedFormat);
+    static Gdx2DPixmap* newPixmapFromFile (files::FileHandle::ptr fhandle, int requestedFormat);
     static Gdx2DPixmap* newPixmapFromBuffer (unsigned char* data, int len, int requestedFormat);
     
     void setColor(float r, float g, float b, float a);

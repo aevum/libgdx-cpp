@@ -26,22 +26,24 @@
 namespace gdx_cpp {
 
 class Files;
-  
+
 namespace backends {
 
 namespace nix {
 
-  class LinuxFileHandle : public gdx_cpp::files::FileHandle
-  {
+class LinuxFileHandle : public gdx_cpp::files::FileHandle
+{
 
-  public:
-    
-        LinuxFileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
-        LinuxFileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type);
+public:
 
-        gdx_cpp::files::FileHandle::ptr child (const std::string &name);
-        gdx_cpp::files::FileHandle::ptr parent ();
-  };
+    LinuxFileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
+    LinuxFileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type);
+
+    virtual int readBytes(buffer_ptr& c) const;
+    virtual int write(char* data, int lenght, bool append);
+    virtual void copyTo(FileHandle& dest);
+    virtual int64_t length() const;
+};
 
 }
 

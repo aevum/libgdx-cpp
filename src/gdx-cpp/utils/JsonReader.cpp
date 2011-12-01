@@ -135,7 +135,7 @@ JsonValue::ptr JsonReader::parse (const std::string& json) {
 
 JsonValue::ptr JsonReader::parse (const gdx_cpp::files::FileHandle& file) {
     try {
-        gdx_cpp::files::FileHandle::char_ptr buffer;
+        gdx_cpp::files::FileHandle::buffer_ptr buffer;
         int size = file.readBytes(buffer);
         
         return parse(buffer.get(), 0, size);

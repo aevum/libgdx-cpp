@@ -64,7 +64,7 @@ gdx_cpp::utils::XmlReader::Element::ptr XmlReader::parse (std::ifstream& reader)
 }
 
 gdx_cpp::utils::XmlReader::Element::ptr XmlReader::parse (gdx_cpp::files::FileHandle& file) {
-    gdx_cpp::files::FileHandle::char_ptr buffer;
+    gdx_cpp::files::FileHandle::buffer_ptr buffer;
     int size = file.readBytes(buffer);
     return parse(buffer.get(), 0 , size);
 }

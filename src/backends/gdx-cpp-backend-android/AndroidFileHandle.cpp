@@ -32,7 +32,7 @@ AndroidFileHandle::AndroidFileHandle(const std::string& fileName, gdx_cpp::Files
 {
 }
 
-int gdx_cpp::backends::android::AndroidFileHandle::readBytes(gdx_cpp::files::FileHandle::char_ptr& c) const
+int gdx_cpp::backends::android::AndroidFileHandle::readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) const
 {
     JNIEnv* env = static_cast<AndroidApplication*>(Gdx::app)->getJniEnv();    
     jstring strpath = env->NewStringUTF(this->file.getPath().c_str());
@@ -56,7 +56,7 @@ int gdx_cpp::backends::android::AndroidFileHandle::readBytes(gdx_cpp::files::Fil
     char* sbuffer = new char[size];
     memcpy(sbuffer, buffer, size);
 
-    gdx_cpp::files::FileHandle::char_ptr swapable(sbuffer, shared_ptr_array_deleter());
+    gdx_cpp::files::FileHandle::buffer_ptr swapable(sbuffer, shared_ptr_array_deleter());
     c.swap(swapable);
 
     return size;

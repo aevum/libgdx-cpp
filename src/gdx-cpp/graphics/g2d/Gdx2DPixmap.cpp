@@ -74,23 +74,19 @@ void graphics::g2d::Gdx2DPixmap::setStrokeWidth(int width)
 
 }
 
-Gdx2DPixmap::Gdx2DPixmap (std::istream& in, int requestedFormat)
+Gdx2DPixmap::Gdx2DPixmap (files::FileHandle::ptr fhandle, int requestedFormat)
         :
         pixData(0)
         ,width(0)
         ,height(0)
         ,format(0)
 {
+    files::FileHandle::buffer_ptr buffer;    
+    int readed = fhandle->readBytes(buffer);
 
-    in.seekg(0, std::ios::end);
-    std::ifstream::pos_type filesize = in.tellg();
-    in.seekg(0, std::ios::beg);
+    assert(readed);
     
-    std::vector<char> bytes(filesize);
-    
-    in.read(&bytes[0], filesize);
-    
-    pixData = load((unsigned char*)&bytes[0], 0, filesize, requestedFormat);
+    pixData = load((unsigned char*) buffer.get(), 0, readed, requestedFormat);
 
     width = pixData->width;
     height = pixData->height;
@@ -214,8 +210,10 @@ void Gdx2DPixmap::drawPixmap (const gdx_cpp::graphics::Pixmap& src, int srcX, in
     }
 }
 
-graphics::g2d::Gdx2DPixmap* Gdx2DPixmap::newPixmap (std::istream& in, int requestedFormat) {
-    return new Gdx2DPixmap(in, requestedFormat);
+graphics::g2d::Gdx2DPixmap* Gdx2DPixmap::newPixmapFromFile (files::FileHandle::ptr file, int requestedFormat) {
+    files::FileHandle::buffer_ptr buffer;
+    int readed = file->readBytes(buffer);
+    return newPixmapFromBuffer((unsigned char*) buffer.get(), readed, requestedFormat);
 }
 
 graphics::g2d::Gdx2DPixmap* Gdx2DPixmap::newPixmap (int width, int height, int format) {
