@@ -26,23 +26,6 @@ void LinuxOggInputStream::open(std::string path)
         format = AL_FORMAT_MONO16;
     else
         format = AL_FORMAT_STEREO16;
-
-           std::cout
-        << "version         " << vorbisInfo->version         << "\n"
-        << "channels        " << vorbisInfo->channels        << "\n"
-        << "rate (hz)       " << vorbisInfo->rate            << "\n"
-        << "bitrate upper   " << vorbisInfo->bitrate_upper   << "\n"
-        << "bitrate nominal " << vorbisInfo->bitrate_nominal << "\n"
-        << "bitrate lower   " << vorbisInfo->bitrate_lower   << "\n"
-        << "bitrate window  " << vorbisInfo->bitrate_window  << "\n"
-        << "\n"
-        << "vendor " << vorbisComment->vendor << "\n";
-
-    for(int i = 0; i < vorbisComment->comments; i++)
-        std::cout << "   " << vorbisComment->user_comments[i] << "\n";
-
-    std::cout << std::endl;
-
 }
 
 int LinuxOggInputStream::getChannels() {

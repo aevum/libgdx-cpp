@@ -115,7 +115,6 @@ public:
 
 
     virtual bool keyDown (int keycode) {
-        std::cout << "apertou: " << keycode << std::endl;
         return false;
     }
 

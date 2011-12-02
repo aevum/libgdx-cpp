@@ -132,7 +132,6 @@ public:
 
 
     bool keyDown (int keyCode) {
-        std::cout << "apertou: " << keyCode << std::endl;
         if (keyCode == gdx_cpp::Input::Keys::W) {
             b2Vec2 f = m_body->GetWorldVector(b2Vec2(0, -200));
             b2Vec2 p = m_body->GetWorldPoint(b2Vec2(0, 2));

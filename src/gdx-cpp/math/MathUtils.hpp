@@ -124,7 +124,7 @@ inline int random (int range) {
 }
 
 inline int random (int start, int end) {
-    return start + random(end - start + 1);
+    return start + random(end - start);
 }
 
 inline bool randomBoolean () {
