@@ -246,8 +246,9 @@ void ShapeRenderer::checkDirty () {
 
 void ShapeRenderer::checkFlush (int newVertices) {
     if(renderer->getMaxVertices() - renderer->getNumVertices() >= newVertices) return;
+    const ShapeType* checkType = currType;
     end();
-    begin(*currType);
+    begin(*checkType);
 }
 
 void ShapeRenderer::end () {
