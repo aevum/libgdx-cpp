@@ -35,6 +35,8 @@ namespace glutils {
 
 namespace g2d {
 
+class Sprite;
+
 class TextureRegion;
 
 
@@ -79,7 +81,11 @@ public:
 
     virtual ~SpriteBatch();    
     float color;
+
 private:
+    SpriteBatch(const SpriteBatch& other);
+    SpriteBatch& operator = (const SpriteBatch& other);
+    
     void createShader ();
     void renderMesh ();
     float* vertices;
