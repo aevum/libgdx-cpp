@@ -63,18 +63,35 @@ JsonValue::JsonValue(const array& val) : item_type(json_list) {
     item_val = std::tr1::shared_ptr<void>( new array(val) );
 }
 
-gdx_cpp::utils::JsonValue& JsonValue::operator[](const char* name) const {
-    assert(item_type == json_json);
-    return *((item_map&) *this)[name];
-}
-
 JsonValue::JsonValue(bool val) : item_type(json_bool) , item_val(std::tr1::shared_ptr<void>(new bool(val))) {
 }
 
-gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::operator[](int idx) const
+gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int idx)
 {
     assert(item_type == json_list);
     return *((array&)*this)[idx];
+}
+
+JsonValue& JsonValue::operator[](const std::string& name)
+{
+    assert(item_type == json_json);
+    return *((item_map&)*this)[name];
+}
+
+size_t JsonValue::count()
+{
+   if (item_type == json_json) {
+       return ((item_map&)*this).size();
+   } else if (item_type == json_list) {
+       return ((array&)*this).size();
+   }
+   return 1;
+}
+
+bool JsonValue::contains(const std::string& name) const
+{
+    assert(item_type == json_json);
+    return ((item_map&)*this).count(name) > 0;
 }
 
 JsonValue::~JsonValue() {
@@ -113,17 +130,7 @@ JsonValue::JsonValue() : item_type(json_null)
 {
 }
 
-size_t gdx_cpp::utils::JsonValue::count()
-{
-    assert(item_type == json_json || item_type == json_list);
-    if (item_type == json_json)
-        return ((item_map&)*this).size();
-    else
-        return ((array&)*this).size();
-}
-
 //sob... c++ sucks A LOT sometimes...
-
 namespace gdx_cpp {
 namespace utils {
 

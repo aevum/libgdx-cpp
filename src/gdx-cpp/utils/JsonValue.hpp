@@ -67,6 +67,7 @@ public:
 
     template <typename T>
     operator T&() {
+#ifdef _DEBUG
         switch(item_type) {
             case json_int:
                 assert(typeid(int) == typeid(T));
@@ -90,12 +91,13 @@ public:
             default:
                 break;
         }
+#endif
 
         return *(T*)item_val.get();
     }
-    
-    JsonValue& operator [](const char* name) const;
-    JsonValue& operator[](int idx) const;
+
+    JsonValue& operator[](const std::string& name);
+    JsonValue& at(int index);
 
     JsonValue() ;
 
@@ -103,6 +105,8 @@ public:
     item_map::const_iterator end() ;
 
     size_t count();
+
+    bool contains(const std::string& name) const;
 
     static JsonValue* newNodeAsJson(JsonValue::item_map* preset = NULL) {
         return new JsonValue(preset == NULL ? new JsonValue::item_map : preset);

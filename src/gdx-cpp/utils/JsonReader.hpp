@@ -34,20 +34,20 @@ class JsonReader {
 public:
     JsonReader();
     
-    JsonValue::ptr parse (const std::string& json);
-    JsonValue::ptr parse (const gdx_cpp::files::FileHandle& file);
-    JsonValue::ptr parse (const char* data, int offset, int length);
+    static JsonValue::ptr parse (const std::string& json);
+    static JsonValue::ptr parse (const gdx_cpp::files::FileHandle& file);
+    static JsonValue::ptr parse (const char* data, int offset, int length);
 
 protected:
-    void startObject (const std::string& name);
-    void startArray (const std::string& name);
+    static void startObject (const std::string& name);
+    static void startArray (const std::string& name);
 
-    void pop ();
+    static void pop ();
 
-    void string (const std::string& name,  const std::string& value);
-    void number (const std::string& name,  float value);
-    void number (const std::string& name,  int value);
-    void boolean (const std::string& name, bool value);
+    static void string (const std::string& name,  const std::string& value);
+    static void number (const std::string& name,  float value);
+    static void number (const std::string& name,  int value);
+    static void boolean (const std::string& name, bool value);
 
 private:
     static const char _json_actions[61];
@@ -68,14 +68,14 @@ private:
     static const int json_en_array;
     static const int json_en_main;
     
-    void set (const std::string& name, gdx_cpp::utils::JsonValue* value);
+    static void set (const std::string& name, gdx_cpp::utils::JsonValue* value);
     
-    std::string unescape (const std::string& value);
+    static std::string unescape (const std::string& value);
 
-    JsonValue* root;
-    JsonValue* current;
+    static JsonValue* root;
+    static JsonValue* current;
 
-    std::list< JsonValue* > elements;
+    static std::list< JsonValue* > elements;
 };
 
 } // namespace gdx_cpp

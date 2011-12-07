@@ -124,8 +124,12 @@ const int JsonReader::json_error = 0;
 const int JsonReader::json_en_object = 9;
 const int JsonReader::json_en_array = 43;
 const int JsonReader::json_en_main = 1;
- 
-JsonReader::JsonReader() : current(0), root(0)
+
+JsonValue* JsonReader::root = 0;
+JsonValue* JsonReader::current = 0;
+std::list< JsonValue* > JsonReader::elements;
+
+JsonReader::JsonReader()
 {
 }
 
@@ -145,9 +149,10 @@ JsonValue::ptr JsonReader::parse (const gdx_cpp::files::FileHandle& file) {
 }
 
 JsonValue::ptr JsonReader::parse (const char* data, int offset, int length) {
+    elements.clear();
+    
     unsigned int cs, p = offset, pe = length, eof = pe, top = 0;
     std::vector<int> stack(4);
-
     int s = 0;
     std::list<std::string> names;
     
@@ -587,10 +592,10 @@ _match:
             throw std::runtime_error("Error parsing JSON, unmatched bracket.");
     }
     
-    JsonValue* root = this->root;
-    this->root = NULL;
+    JsonValue* _root = root;
+    root = NULL;
 
-    return std::tr1::shared_ptr< JsonValue >(root);
+    return std::tr1::shared_ptr< JsonValue >(_root);
 }
 
 void JsonReader::set (const std::string& name, gdx_cpp::utils::JsonValue* value) {
