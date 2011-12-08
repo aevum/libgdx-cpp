@@ -33,7 +33,8 @@ namespace math {
 class EarClippingTriangulator {
 public:
   std::vector<Vector2> computeTriangles (const std::vector<Vector2>& polygon);
-
+  EarClippingTriangulator();
+  
 private:
     static bool areVerticesClockwise (const std::vector<Vector2>& pVertices);
     std::vector<int> classifyVertices (std::vector< gdx_cpp::math::Vector2 >& pVertices);
@@ -52,9 +53,6 @@ private:
                              int pNextIndex);
     static int computePreviousIndex (const std::vector< gdx_cpp::math::Vector2 >& pVertices, int pIndex);
     static int computeNextIndex (const std::vector<Vector2>& pVertices, int pIndex);
-
-    const static int CONCAVE = 1;
-    const static int CONVEX = -1;
     
     int concaveVertexCount;
 };

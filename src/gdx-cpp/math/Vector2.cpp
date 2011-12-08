@@ -51,6 +51,7 @@ Vector2::~Vector2()
 
 Vector2& Vector2::operator=(const Vector2& other)
 {
+    set(other);
     return *this;
 }
 
@@ -64,8 +65,8 @@ bool Vector2::operator==(const Vector2& other) const
 }
 
 Vector2& Vector2::set (const Vector2& v) {
-    x = v.x;
-    y = v.y;
+    this->x = v.x;
+    this->y = v.y;
     return *this;
 }
 

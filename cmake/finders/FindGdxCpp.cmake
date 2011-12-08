@@ -33,6 +33,7 @@ macro(find_libraries)
             /usr/lib
             /opt/local/lib
             /opt/lib
+            /usr/lib/x86_64-linux-gnu
             ${GDX_ROOT}/lib
             )
 
