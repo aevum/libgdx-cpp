@@ -23,9 +23,6 @@ option(BUILD_BACKEND_WINDOWS "Builds the windows backend for gdx-cpp" WIN32)
 
 option(BUILD_BOX2D "Builds Box2D" TRUE)
 
-option(BUILD_GDX_TESTS "Builds(tries) all libgdx tests" TRUE)
-set(GENERATED_APPLICATION_TYPE "EXECUTABLE")
-
 include_directories(src)
 add_subdirectory(src/gdx-cpp)
 
@@ -65,7 +62,6 @@ if (BUILD_BACKEND_IOS)
 endif()
 
 if (BUILD_BACKEND_ANDROID)
-    set(GENERATED_APPLICATION_TYPE "SHARED_LIB")
     SET(ANDROID_NDK "" CACHE PATH "Were the android NDK is located")
 
     add_subdirectory(src/backends/gdx-cpp-backend-android)    
@@ -73,10 +69,6 @@ endif()
 
 if (BUILD_BACKEND_WINDOWS)
     add_subdirectory(src/backends/windows)
-endif()
-
-if (BUILD_GDX_TESTS)
-    add_subdirectory(src/tests)
 endif()
 
 install(FILES cmake/finders/FindGdxCpp.cmake
