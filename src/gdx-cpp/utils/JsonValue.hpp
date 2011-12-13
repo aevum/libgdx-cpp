@@ -27,6 +27,7 @@
 #include <string>
 #include <fstream>
 #include <cassert>
+#include <stdexcept>
 #include "gdx-cpp/utils/Aliases.hpp"
 
 namespace gdx_cpp {
@@ -64,9 +65,64 @@ public:
     JsonValue(const JsonValue& other) : item_val(other.item_val), item_type(other.item_type)
     {
     }
+   
+    JsonValue& operator = (const std::string& other) {
+        if (item_type == json_null) {
+            this->item_val = std::tr1::shared_ptr<void>(new std::string(other));
+            this->item_type = json_string;
+        } else {
+            ((std::string&)*this) = other;
+        }
+    }
+
+    JsonValue& operator = (int other) {
+        if (item_type == json_null) {
+            this->item_val = std::tr1::shared_ptr<void>(new int(other));
+            this->item_type = json_int;
+        } else {
+            ((int&)*this) = other;
+        }
+    }
+
+    JsonValue& operator = (bool other) {
+        if (item_type == json_null) {
+            this->item_val = std::tr1::shared_ptr<void>(new bool(other));
+            this->item_type = json_bool;
+        } else {
+            ((bool&)*this) = other;
+        }
+    }
+
+    JsonValue& operator = (float other) {
+        if (item_type == json_null) {
+            this->item_val = std::tr1::shared_ptr<void>(new float(other));
+            this->item_type = json_float;
+        } else {
+            ((float&)*this) = other;
+        }
+    }
+
+    JsonValue& operator = (const array& other) {
+        if (item_type == json_null) {
+            this->item_val = std::tr1::shared_ptr<void>(new array(other));
+            this->item_type = json_list;
+        } else {
+            ((array&)*this) = other;
+        }
+    }
+
+    JsonValue& operator = (const JsonValue& other) {
+        this->item_type = other.item_type;
+        this->item_val = other.item_val;
+    }
 
     template <typename T>
     operator T&() const {
+        return *(T*)item_val.get();
+    }
+    
+    template <typename T>
+    operator T&() {
 #ifdef GDX_DEBUGGING
         switch(item_type) {
             case json_int:
@@ -88,10 +144,14 @@ public:
                 assert(typeid(std::string) == typeid(T));
                 break;
             case json_null:
+                throw std::runtime_error("casting a null json value to another type is forbidden");
             default:
                 break;
         }
 #endif
+        if (this->item_type == json_null) {
+            *this = T(0);
+        }
 
         return *(T*)item_val.get();
     }

@@ -68,7 +68,21 @@ JsonValue::JsonValue(bool val) : item_type(json_bool) , item_val(std::tr1::share
 
 gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int idx)
 {
+    if (this->item_type == json_null) {
+        array* new_array = new array;
+        new_array->resize(idx);
+        
+        this->item_val = std::tr1::shared_ptr<void>(new_array);
+        this->item_type = json_list;
+    }
+    
     assert(item_type == json_list);
+    array& thisAsArray = *this;
+
+    if (thisAsArray[idx] == NULL) {
+        thisAsArray[idx] = new JsonValue;
+    }
+    
 #ifdef GDX_DEBUGGING
     array& asArray = *this;
     assert( asArray.size() > idx );
@@ -80,14 +94,22 @@ gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int idx)
 
 JsonValue& JsonValue::operator[](const std::string& name)
 {
+    {
+        if (this->item_type == json_null) {
+            this->item_val = std::tr1::shared_ptr<void>(new item_map);
+            this->item_type = json_json;
+        }
+    }
+    
     assert(item_type == json_json);
-#ifdef GDX_DEBUGGING
-    item_map& map = *this;
-    assert(map.count(name));
-    return *(map[name]);
-#else
-    return *((item_map&)*this)[name];
-#endif
+
+    item_map& thisAsMap = *this;
+        
+    if (thisAsMap.count(name) == 0) {
+        thisAsMap[name] = new JsonValue;
+    }
+    
+    return *thisAsMap[name];
 }
 
 size_t JsonValue::count()
@@ -97,12 +119,13 @@ size_t JsonValue::count()
    } else if (item_type == json_list) {
        return ((array&)*this).size();
    }
+   
    return 1;
 }
 
 bool JsonValue::contains(const std::string& name) const
 {
-    assert(item_type == json_json);    
+    assert(item_type == json_json);
     return ((item_map&) *this).count(name) > 0;
 }
 
