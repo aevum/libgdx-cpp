@@ -69,13 +69,25 @@ JsonValue::JsonValue(bool val) : item_type(json_bool) , item_val(std::tr1::share
 gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int idx)
 {
     assert(item_type == json_list);
+#ifdef GDX_DEBUGGING
+    array& asArray = *this;
+    assert( asArray.size() > idx );
+    return *(asArray[idx]);
+#else
     return *((array&)*this)[idx];
+#endif
 }
 
 JsonValue& JsonValue::operator[](const std::string& name)
 {
     assert(item_type == json_json);
+#ifdef GDX_DEBUGGING
+    item_map& map = *this;
+    assert(map.count(name));
+    return *(map[name]);
+#else
     return *((item_map&)*this)[name];
+#endif
 }
 
 size_t JsonValue::count()
@@ -90,8 +102,8 @@ size_t JsonValue::count()
 
 bool JsonValue::contains(const std::string& name) const
 {
-    assert(item_type == json_json);
-    return ((item_map&)*this).count(name) > 0;
+    assert(item_type == json_json);    
+    return ((item_map&) *this).count(name) > 0;
 }
 
 JsonValue::~JsonValue() {

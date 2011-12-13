@@ -33,6 +33,10 @@ if(BUILD_SVG_BACKEND_ANTIGRAIN)
     add_subdirectory(src/agg)
 endif()
 
+if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    add_definitions(-DGDX_DEBUGGING)    
+endif()
+
 if (BUILD_BACKEND_LINUX)
   OPTION(BUILD_LINUX_GRAPHICS_OPENGL "Builds the linux backend with OpenGL" FALSE)
   OPTION(BUILD_LINUX_GRAPHICS_OPENGLES "Builds the linux backend with OpenGL ES" TRUE)

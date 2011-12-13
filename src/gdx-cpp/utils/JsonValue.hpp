@@ -66,8 +66,8 @@ public:
     }
 
     template <typename T>
-    operator T&() {
-#ifdef _DEBUG
+    operator T&() const {
+#ifdef GDX_DEBUGGING
         switch(item_type) {
             case json_int:
                 assert(typeid(int) == typeid(T));
