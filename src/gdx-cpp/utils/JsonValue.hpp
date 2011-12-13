@@ -73,8 +73,19 @@ public:
         } else {
             ((std::string&)*this) = other;
         }
+        return *this;
     }
 
+    JsonValue& operator = (const char* other) {
+        if (item_type == json_null) {
+            this->item_val = std::tr1::shared_ptr<void>(new std::string(other));
+            this->item_type = json_string;
+        } else {
+            ((std::string&)*this) = other;
+        }
+        return *this;
+    }
+    
     JsonValue& operator = (int other) {
         if (item_type == json_null) {
             this->item_val = std::tr1::shared_ptr<void>(new int(other));
@@ -82,6 +93,7 @@ public:
         } else {
             ((int&)*this) = other;
         }
+        return *this;
     }
 
     JsonValue& operator = (bool other) {
@@ -91,6 +103,7 @@ public:
         } else {
             ((bool&)*this) = other;
         }
+        return *this;
     }
 
     JsonValue& operator = (float other) {
@@ -100,6 +113,7 @@ public:
         } else {
             ((float&)*this) = other;
         }
+        return *this;
     }
 
     JsonValue& operator = (const array& other) {
@@ -109,6 +123,7 @@ public:
         } else {
             ((array&)*this) = other;
         }
+        return *this;
     }
 
     JsonValue& operator = (const JsonValue& other) {

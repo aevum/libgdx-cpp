@@ -70,8 +70,6 @@ gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int idx)
 {
     if (this->item_type == json_null) {
         array* new_array = new array;
-        new_array->resize(idx);
-        
         this->item_val = std::tr1::shared_ptr<void>(new_array);
         this->item_type = json_list;
     }
@@ -79,6 +77,10 @@ gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int idx)
     assert(item_type == json_list);
     array& thisAsArray = *this;
 
+    if (idx >= thisAsArray.size()) {
+        thisAsArray.resize(idx + 1);
+    }
+    
     if (thisAsArray[idx] == NULL) {
         thisAsArray[idx] = new JsonValue;
     }
