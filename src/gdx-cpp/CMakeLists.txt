@@ -215,7 +215,7 @@ Game.hpp
 InputProcessor.hpp
 # utils/LittleEndianInputStream.hpp
 # utils/TimSort.hpp
-# utils/Base64Coder.hpp
+# utils/Coder.hpp
 # utils/Buffer.hpp
 # utils/BufferUtils.hpp
 # utils/PooledLinkedList.hpp
@@ -225,6 +225,7 @@ InputProcessor.hpp
 # utils/Sort.hpp
 # utils/AtomicQueue.hpp
 # utils/Json.hpp
+utils/Base64Coder.hpp
 utils/JsonValue.hpp
 utils/JsonReader.hpp
 # utils/IntArray.hpp
@@ -480,7 +481,7 @@ utils/XmlWriter.cpp
 # utils/GdxRuntimeException.cpp
 # utils/PauseableThread.cpp
 # utils/PooledLinkedList.cpp
-# utils/Base64Coder.cpp
+utils/Base64Coder.cpp
 # utils/ObjectMap.cpp
 # utils/Logger.cpp
 # utils/SortedIntList.cpp

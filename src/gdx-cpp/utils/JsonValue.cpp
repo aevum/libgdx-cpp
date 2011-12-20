@@ -94,6 +94,18 @@ gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int idx)
 #endif
 }
 
+const gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::operator[](const std::string& name) const
+{
+    assert(item_type == json_json);
+    item_map& thisAsMap = *this;
+    
+    if (thisAsMap.count(name) == 0) {
+        throw std::runtime_error("Missing field named [" + name + "]");
+    }
+    
+    return *(thisAsMap[name]);
+}
+
 JsonValue& JsonValue::operator[](const std::string& name)
 {
     {

@@ -171,7 +171,45 @@ public:
         return *(T*)item_val.get();
     }
 
+    template <typename T>
+    operator const T&() {
+        #ifdef GDX_DEBUGGING
+        switch(item_type) {
+            case json_int:
+                assert(typeid(int) == typeid(T));
+                break;
+            case json_float:
+                assert(typeid(float) == typeid(T));
+                break;
+            case json_list:
+                assert(typeid(array) == typeid(T));
+                break;
+            case json_json:
+                assert(typeid(item_map) == typeid(T));
+                break;
+            case json_bool:
+                assert(typeid(bool) == typeid(T));
+                break;
+            case json_string:
+                assert(typeid(std::string) == typeid(T));
+                break;
+            case json_null:
+                throw std::runtime_error("casting a null json value to another type is forbidden");
+            default:
+                break;
+        }
+        #endif
+        
+        if (this->item_type == json_null) {
+            throw std::runtime_error("Trying to deserialize a null json value");
+        }
+        
+        return *(T*)item_val.get();
+    }
+
+    const JsonValue& operator[](const std::string& name) const;
     JsonValue& operator[](const std::string& name);
+    
     JsonValue& at(int index);
 
     JsonValue() ;
