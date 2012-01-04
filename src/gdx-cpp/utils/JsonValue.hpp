@@ -211,13 +211,14 @@ public:
     JsonValue& operator[](const std::string& name);
     
     JsonValue& at(int index);
-
+    JsonValue& at(int index) const;
+    
     JsonValue() ;
 
     item_map::const_iterator begin() ;
     item_map::const_iterator end() ;
 
-    size_t count();
+    size_t count() const;
 
     bool contains(const std::string& name) const;
 
@@ -245,7 +246,7 @@ public:
         return new JsonValue(preset == NULL ? new float : preset);
     }
 
-    json_item_type getType() {
+    json_item_type getType() const {
         return (json_item_type) item_type;
     }
 

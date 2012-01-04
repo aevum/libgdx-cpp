@@ -94,6 +94,15 @@ gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int idx)
 #endif
 }
 
+gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int index) const
+{
+    assert(item_type == json_list);
+    array& thisAsArray = *this;
+    assert(thisAsArray.size() > index);
+
+    return *thisAsArray[index];
+}
+
 const gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::operator[](const std::string& name) const
 {
     assert(item_type == json_json);
@@ -126,12 +135,14 @@ JsonValue& JsonValue::operator[](const std::string& name)
     return *thisAsMap[name];
 }
 
-size_t JsonValue::count()
+size_t JsonValue::count() const
 {
    if (item_type == json_json) {
        return ((item_map&)*this).size();
    } else if (item_type == json_list) {
        return ((array&)*this).size();
+   } else if (item_type == json_null) {
+        return 0;
    }
    
    return 1;
@@ -218,7 +229,8 @@ std::ostream& operator<< (std::ostream& out, gdx_cpp::utils::JsonValue& item) {
         out << "{ ";
         
         for (; it != end;) {        
-            out << it->first << " : " << *it->second;
+            out << '"' << it->first << "\" : " << *it->second;
+
             if (++it == end)
                 break;            
             out << " , ";
