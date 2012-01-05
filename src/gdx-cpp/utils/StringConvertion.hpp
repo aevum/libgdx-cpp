@@ -72,7 +72,7 @@ returnType from_hex_string(std::string str) {
 template <typename T>
 std::string to_string(const T& item) {
     static std::stringstream ss;
-    ss.clear();
+    ss.str("");
 
     ss << item;
 
