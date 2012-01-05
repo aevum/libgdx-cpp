@@ -578,7 +578,7 @@ color(graphics::Color::WHITE.toFloatBits()),
 tempColor(1,1,1,1)
 {
     if (region == NULL) {
-        region = TextureRegion::newFromTexture(graphics::Texture::fromFile(Gdx::files->internal(data->imagePath), NULL, false));
+        region = TextureRegion::newFromTexture(graphics::Texture::newFromFile(Gdx::files->internal(data->imagePath), NULL, false));
     }
     load(data);
 }
@@ -589,7 +589,7 @@ BitmapFont* BitmapFont::fromFiles(files::FileHandle::ptr fontFile, files::FileHa
     graphics::g2d::TextureRegion::ptr region;
 
     if (imageFile != NULL) {
-        region = graphics::g2d::TextureRegion::newFromTexture(graphics::Texture::fromFile(imageFile, NULL, false));
+        region = graphics::g2d::TextureRegion::newFromTexture(graphics::Texture::newFromFile(imageFile, NULL, false));
     }
 
     return new BitmapFont(data, region, integer);

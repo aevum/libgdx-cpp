@@ -124,7 +124,7 @@ public:
     std::string getManagedStatus ();
     static int createGLHandle ();
 
-    static ptr fromFile(const gdx_cpp::files::FileHandle::ptr file,
+    static ptr newFromFile(const gdx_cpp::files::FileHandle::ptr file,
                         const gdx_cpp::graphics::Pixmap::Format* format = NULL,
                         bool useMipMaps = false);
 

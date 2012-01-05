@@ -52,7 +52,7 @@ Texture::managedTextureMap Texture::managedTextures;
 int Texture::buffer = 0;
 assets::AssetManager* Texture::assetManager = 0;
 
-Texture::ptr Texture::fromFile(const gdx_cpp::files::FileHandle::ptr file,
+Texture::ptr Texture::newFromFile(const gdx_cpp::files::FileHandle::ptr file,
                                const gdx_cpp::graphics::Pixmap::Format* format,
                                bool useMipMaps)
 {

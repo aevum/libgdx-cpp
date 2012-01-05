@@ -231,7 +231,7 @@ void ParticleEffect::loadEmitterImagesTest () {
 }
 
 gdx_cpp::graphics::Texture::ptr ParticleEffect::loadTexture (const gdx_cpp::files::FileHandle::ptr file) {
-    return gdx_cpp::graphics::Texture::fromFile(file, NULL, false);
+    return gdx_cpp::graphics::Texture::newFromFile(file, NULL, false);
 }
 
 void ParticleEffect::dispose () {

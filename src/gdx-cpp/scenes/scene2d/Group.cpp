@@ -506,7 +506,7 @@ void Group::toChildCoordinates (scenes::scene2d::Actor*const child, float x, flo
 }
 
 void Group::enableDebugging (const std::string& debugTextureFile) {
-    debugTexture = graphics::Texture::fromFile(Gdx::files->internal(debugTextureFile), 0, false);
+    debugTexture = graphics::Texture::newFromFile(Gdx::files->internal(debugTextureFile), 0, false);
     debug = true;
 }
 
