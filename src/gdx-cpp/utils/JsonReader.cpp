@@ -276,7 +276,7 @@ _match:
                             case 3:
                                 // line 113 "JsonReader.rl"
                             {
-                                std::string value(data, s, p - s);
+                                std::string value(&data[s], p-s);
                                 s = p;
                                 if (needsUnescape) value = unescape(value);
 
@@ -296,7 +296,7 @@ _match:
                             case 4:
                                 // line 121 "JsonReader.rl"
                             {
-                                std::string value(data, s, p - s);
+                                std::string value(&data[s], p-s);
                                 s = p;
                                 std::string name = "";
                                 if (names.size() > 0) {
@@ -472,7 +472,7 @@ _match:
                             case 3:
                                 // line 113 "JsonReader.rl"
                             {
-                                std::string value(data, s, p - s);
+                                std::string value(&data[s], p-s);
                                 s = p;
                                 if (needsUnescape) value = unescape(value);
                                 std::string name = "";
@@ -490,7 +490,7 @@ _match:
                             case 4:
                                 // line 121 "JsonReader.rl"
                             {
-                                std::string value(data, s, p - s);
+                                std::string value(&data[s], p-s);
                                 s = p;
 
                                 std::string name = "";

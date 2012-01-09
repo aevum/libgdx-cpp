@@ -129,8 +129,17 @@ public:
     JsonValue& operator = (const JsonValue& other) {
         this->item_type = other.item_type;
         this->item_val = other.item_val;
+
+        return *this;
     }
 
+    JsonValue& operator + (const JsonValue& other) {
+        return *this += other;
+    }
+
+    JsonValue& operator += (const JsonValue& other) ;
+    
+    
     template <typename T>
     operator T&() const {
         return *(T*)item_val.get();

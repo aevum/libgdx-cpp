@@ -248,6 +248,23 @@ std::ostream& operator<< (std::ostream& out, gdx_cpp::utils::JsonValue& item) {
 
     return out;
 }
+JsonValue& JsonValue::operator+=(const gdx_cpp::utils::JsonValue& other) {
+    assert(item_type == json_json && other.item_type == json_json);
+
+    item_map& thisAsMap = *this;
+    const item_map& otherAsMap = other;
+
+    item_map::const_iterator it = otherAsMap.begin();
+    item_map::const_iterator end = otherAsMap.end();
+
+    for (; it != end; ++it) {
+        JsonValue* newValue = new JsonValue;
+        *newValue = *it->second;
+        thisAsMap[it->first] = newValue;
+    }
+
+    return *this;
+}
 }
 }
 
