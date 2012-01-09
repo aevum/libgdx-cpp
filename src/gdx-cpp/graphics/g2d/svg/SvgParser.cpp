@@ -82,22 +82,23 @@ void SvgParser::render(gdx_cpp::utils::XmlReader::Element*const svg, gdx_cpp::ut
 void SvgParser::beginElement(XmlReader::Element* const currentNode)
 {
     std::string name = currentNode->getName();
-    if (name == "svg") {
+    
+    if (name == "svg" || name == "svg:svg") {
         int width = from_string<float>(currentNode->getAttribute("width"));
         int height = from_string<float>(currentNode->getAttribute("height"));
 
         handler->setImageDimension(width, height);
     }
-    if (name == "title")
+    if (name == "title" || name == "svg:title")
     {
         m_titleFlag = true;
     }
-    else if (name == "g")
+    else if (name == "g" | name == "svg:g")
     {
         handler->begin();
         parse_attr(currentNode);
     }
-    else if (name == "path")
+    else if (name == "path" || name == "svg:path")
     {
         if (m_pathFlag)
         {
@@ -109,19 +110,19 @@ void SvgParser::beginElement(XmlReader::Element* const currentNode)
         handler->endPath();
         m_pathFlag = true;
     }
-    else if (name == "rect")
+    else if (name == "rect" || name == "svg:rect")
     {
         parse_rect(currentNode);
     }
-    else if (name == "line")
+    else if (name == "line" || name == "svg:line")
     {
         parse_line(currentNode);
     }
-    else if (name == "polyline")
+    else if (name == "polyline" || name == "svg:polyline")
     {
         parse_poly(currentNode, false);
     }
-    else if (name == "polygon")
+    else if (name == "polygon" ||  name == "svg:polygon")
     {
         parse_poly(currentNode, true);
     }
@@ -131,15 +132,15 @@ void SvgParser::endElement(utils::XmlReader::Element* currentNode)
 {
     std::string name = currentNode->getName();
 
-    if (name == "title")
+    if (name == "title" || name == "svg:title")
     {
         m_titleFlag = false;
     }
-    else if (name == "g")
+    else if (name == "g" || name == "svg:g")
     {
         handler->end();
     }
-    else if (name == "path")
+    else if (name == "path" || name == "svg:path")
     {
         m_pathFlag = false;
     }
