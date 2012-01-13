@@ -58,14 +58,16 @@ std::vector<T> splitArgs(const std::string& item, const char* delimiters, std::s
 gdx_cpp::utils::SvgRendererHandler* SvgParser::handler = NULL;
 bool SvgParser::m_titleFlag = false;
 bool SvgParser::m_pathFlag = false;
+gdx_cpp::utils::XmlReader::Element* SvgParser::defsElement = NULL;
 
 void SvgParser::render(gdx_cpp::utils::XmlReader::Element*const svg, gdx_cpp::utils::SvgRendererHandler* p_handler)
 {
     m_pathFlag = false;
     m_titleFlag = false;
-
+        
     if (p_handler) {
         handler = p_handler;
+        defsElement = NULL;
     }
 
     assert(handler != NULL);
@@ -93,7 +95,7 @@ void SvgParser::beginElement(XmlReader::Element* const currentNode)
     {
         m_titleFlag = true;
     }
-    else if (name == "g" | name == "svg:g")
+    else if (name == "g" || name == "svg:g")
     {
         handler->begin();
         parse_attr(currentNode);
@@ -125,6 +127,8 @@ void SvgParser::beginElement(XmlReader::Element* const currentNode)
     else if (name == "polygon" ||  name == "svg:polygon")
     {
         parse_poly(currentNode, true);
+    } else if (name == "defs" || name == "svg:defs") {
+        defsElement = currentNode;
     }
 }
 
@@ -153,30 +157,39 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_attr(gdx_cpp::utils::XmlReade
 
     for (; it != end; ++it) {
         if (it->first == "style") {
-            parse_style(it->second);
+            std::vector< std::pair< std::string , std::string > > res = parse_style(it->second);
+            for (unsigned int i = 0; i < res.size(); ++i) {
+                parse_attr(res[i].first, res[i].second);
+            }
         } else {
             parse_attr(it->first, it->second);
         }
     }
 }
 
-void gdx_cpp::graphics::g2d::svg::SvgParser::parse_style(const std::string& style)
+std::vector< std::pair< std::string , std::string > > gdx_cpp::graphics::g2d::svg::SvgParser::parse_style(const std::string& style)
 {
     std::string::size_type result = 0;
     std::vector<std::string> res =  splitArgs<std::string>(style, ":;", result);
-
+    std::vector< std::pair< std::string , std::string > > ret;
+    
     for (int i = 0; i < res.size(); i += 2) {
         std::remove(res[i].begin(), res[i].end(), ' ');
         std::remove(res[i+1].begin(), res[i+1].end(), ' ');
-        parse_attr(res[i], res[i+1]);
+        ret.push_back( std::make_pair(res[i], res[i+1]) );
     }
+
+    return ret;
 }
 
 bool gdx_cpp::graphics::g2d::svg::SvgParser::parse_attr(const std::string& name, const std::string& value)
 {
     if (name == "style")
     {
-        parse_style(value);
+        std::vector< std::pair< std::string , std::string > > res = parse_style(value);
+        for (int i = 0; i < res.size(); ++i) {
+            parse_attr(res[i].first, res[i].second);
+        }
     }
     else if (name == "fill")
     {
@@ -186,7 +199,11 @@ bool gdx_cpp::graphics::g2d::svg::SvgParser::parse_attr(const std::string& name,
         }
         else
         {
-            handler->fill(parse_color(value));
+            if (value.find("url") != std::string::npos) {
+                parse_gradient(value);
+            } else {
+                handler->fill(parse_color(value));
+            }
         }
     }
     else if (name == "fill-opacity")
@@ -230,7 +247,7 @@ bool gdx_cpp::graphics::g2d::svg::SvgParser::parse_attr(const std::string& name,
     }
     else if (name == "transform")
     {
-        parse_transform(value);
+        parse_transform(value, *handler->currentTransform());
     }
     //else
     //if(strcmp(el, "<OTHER_ATTRIBUTES>") == 0)
@@ -244,13 +261,14 @@ bool gdx_cpp::graphics::g2d::svg::SvgParser::parse_attr(const std::string& name,
     return true;
 }
 
-void gdx_cpp::graphics::g2d::svg::SvgParser::parse_transform(const std::string& transform)
+void gdx_cpp::graphics::g2d::svg::SvgParser::parse_transform(const std::string& transform_string,
+                                                             utils::SvgRendererHandler::transform& transform)
 {
     std::string::size_type pos = 0, last = 0;
 
     struct delegates {
        const char* name;
-       std::string::size_type (*func)(std::string);
+       std::string::size_type (*func)(std::string, utils::SvgRendererHandler::transform& applier );
     };
 
     static delegates transform_parsers[] = {
@@ -264,10 +282,10 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_transform(const std::string& 
     
     while (pos != std::string::npos && last != std::string::npos) {
         for (int i = 0; i < 6; ++i) {
-            pos = transform.find(transform_parsers[i].name, last);
+            pos = transform_string.find(transform_parsers[i].name, last);
             if (pos != std::string::npos) {
                 pos += strlen(transform_parsers[i].name);
-                last = (*transform_parsers[i].func)(transform.substr(pos, transform.length() - last - 1));
+                last = (*transform_parsers[i].func)(transform_string.substr(pos, transform_string.length() - last - 1), transform);
                 break;
             }
         }
@@ -275,27 +293,28 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_transform(const std::string& 
 }
 
 
-std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_matrix(std::string matrixArgs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_matrix(std::string matrixArgs,
+                                                                            gdx_cpp::utils::SvgRendererHandler::transform& transform)
 {
     std::string::size_type result = 0;
     std::vector<float> res = splitArgs<float>(matrixArgs, "(,)", result);
-
+   
     assert(res.size() == 6);
-
-    handler->transAffine(res);
+    
+    transform.affine(res);
 
     return result;
 }
 
-std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_rotate(std::string rotateArgs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_rotate(std::string rotateArgs, utils::SvgRendererHandler::transform& transform)
 {
     std::string::size_type result = 0;
     std::vector<float> res = splitArgs<float>(rotateArgs, "(,)", result);
 
     if (res.size() == 1) {
-        handler->setRotation(math::utils::toRadians(res[0]));
+        transform.rotate(math::utils::toRadians(res[0]));
     } else if (res.size() == 3) {
-        handler->setRotationTranslation(math::utils::toRadians(res[0]), res[1], res[2]);
+        transform.rotate_trasnlate(math::utils::toRadians(res[0]), res[1], res[2]);
     } else {
         throw std::runtime_error("SvgParser::parse_rotate: invalid number of arguments");
     }
@@ -303,7 +322,8 @@ std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_rotate(std:
     return result;
 }
 
-std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_scale(std::string scaleArgs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_scale(std::string scaleArgs,
+                                                                           utils::SvgRendererHandler::transform& transform)
 {
     std::string::size_type result = 0;
     std::vector<float> res = splitArgs<float>(scaleArgs, "(,)", result);
@@ -313,36 +333,38 @@ std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_scale(std::
     if (res.size() == 1) {
         res.push_back(res[0]);
     }
-
-    handler->setScaling(res[0], res[1]);
+    
+    transform.scale(res[0], res[1]);
 
     return result;
 }
 
-std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_skew_x(std::string skewXargs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_skew_x(std::string skewXargs,
+                                                                            utils::SvgRendererHandler::transform& transform)
 {
     std::string::size_type result = 0;    
     std::vector<float> res = splitArgs<float>(skewXargs, "(,)", result);
 
     assert(res.size() == 1);
 
-    handler->setSkew(res[0], 0.0f);
+    transform.skew_x(res[0]);
+    
     return result;
 }
 
-std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_skew_y(std::string skewYargs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_skew_y(std::string skewYargs, utils::SvgRendererHandler::transform& transform)
 {
     std::string::size_type result = 0;
     std::vector<float> res = splitArgs<float>(skewYargs, "(,)", result);
 
     assert(res.size() == 1);
 
-    handler->setSkew( 0.0f, res[0]);
+    transform.skew_y(res[0]);
 
     return result;
 }
 
-std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_translate(std::string translateArgs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_translate(std::string translateArgs, utils::SvgRendererHandler::transform& transform)
 {
     std::string::size_type result = 0;
     std::vector<float> res = splitArgs<float>(translateArgs, "(,)", result);
@@ -350,7 +372,7 @@ std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_translate(s
     assert(res.size() >= 1);
     if (res.size() == 1) res.push_back(0);
 
-    handler->setTranslation(res[0], res[1]);
+    transform.translate(res[0], res[1]);
     return result;
 }
 
@@ -535,6 +557,83 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
     }
     
 }
+
+void gdx_cpp::graphics::g2d::svg::SvgParser::fetchStopData(gdx_cpp::utils::XmlReader::Element* node , std::vector< SvgRendererHandler::GradientStopData >& stopData) {
+    for( int i = 0; i < node->getChildCount(); ++i) {
+        gdx_cpp::utils::XmlReader::Element* child = node->getChild(i);
+        if (child->getName() == "svg:stop" || child->getName() == "stop") {
+            int offset = from_string< int >(child->getAttribute("offset"));
+            
+            if (stopData.size() < offset + 1) {
+                stopData.resize(offset + 1);
+            }
+
+            std::vector< std::pair< std::string , std::string > > res = parse_style(child->getAttribute("style"));
+            
+            for (int i = 0; i < res.size(); ++i) {
+                if (res[i].first == "stop-color") {
+                    stopData[offset].color = parse_color(res[i].second);  
+                } else if (res[i].first == "stop-opacity") {
+                    stopData[offset].opacity = from_string< float >(res[i].second);
+                }
+            }
+        }
+    }
+
+    if (node->hasAttribute("xlink:href")) {
+        std::string nodeName =  node->getAttribute("xlink:href").substr(1);
+
+        for (int i = 0; i < defsElement->getChildCount(); ++i) {
+            if (defsElement->getChild(i)->getAttribute("id") == nodeName) {
+                fetchStopData(defsElement->getChild(i), stopData); 
+                break;
+            }
+        }
+    }
+}
+
+void gdx_cpp::graphics::g2d::svg::SvgParser::parse_gradient(const std::string& gradient)
+{
+    std::string::size_type result = 0;
+    std::vector< std::string > url = splitArgs<std::string>(gradient, "()", result);
+
+    assert(defsElement != NULL);
+
+    std::string gradientNodeUrl = url[1].substr(1);
+    
+    gdx_cpp::utils::XmlReader::Element* gradientDef = NULL;
+
+    for (int i = 0; i < defsElement->getChildCount(); ++i) {
+        if (defsElement->getChild(i)->getAttribute("id") == gradientNodeUrl) {
+            gradientDef = defsElement->getChild(i);
+            break;
+        }
+    }
+
+    assert(gradientDef);
+
+    SvgRendererHandler::LinearGradient gradientData;
+
+    fetchStopData(gradientDef, gradientData.stops);
+
+    gradientData.x1 = from_string< float >(gradientDef->getAttribute("x1"));
+    gradientData.y1 = from_string< float >(gradientDef->getAttribute("y1"));
+    gradientData.x2 = from_string< float >(gradientDef->getAttribute("x2"));
+    gradientData.y2 = from_string< float >(gradientDef->getAttribute("y2"));
+    
+    if (gradientDef->hasAttribute("gradientTransform")) {
+        gradientData.gradient_transform = handler->createTransform();
+        std::string gradientTransform = gradientDef->getAttribute("gradientTransform");        
+        parse_transform(gradientTransform, *gradientData.gradient_transform);
+    }
+    
+    handler->fillLinearGradient(gradientData);
+}
+
+
+
+
+
 
 
 

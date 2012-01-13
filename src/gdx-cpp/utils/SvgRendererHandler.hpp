@@ -22,6 +22,8 @@
 #define GDX_CPP_UTILS_SVGRENDERERHANDLER_HPP
 
 #include "gdx-cpp/graphics/Color.hpp"
+#include <vector>
+#include <list>
 
 namespace gdx_cpp {
 
@@ -47,6 +49,35 @@ public:
         MiterJoinRound   = 4
     };
 
+    class transform {
+    public:
+        virtual void skew_x(float skew) = 0;
+        virtual void skew_y(float skew) = 0;
+        virtual void affine(const std::vector<float>& matrix) = 0;
+        virtual void translate(float x, float y) = 0;
+        virtual void rotate(float radians) = 0;
+        virtual void rotate_trasnlate(float radians, float x, float y) = 0;
+        virtual void scale(float scale_x, float scale_y) = 0;
+        virtual void skew(float x, float y) = 0;
+    };
+    
+    struct GradientStopData {
+        gdx_cpp::graphics::Color color;
+        float opacity;
+
+        GradientStopData() : color(1,1,1,1), opacity(1) {
+        }
+    };
+
+    struct LinearGradient {
+        float x1,x2,y1,y2;
+        transform* gradient_transform;
+        std::vector< GradientStopData > stops;
+
+        LinearGradient() : x1(0), x2(0), y1(0), y2(0), gradient_transform(NULL) { }
+        ~LinearGradient() { delete gradient_transform; }
+    };
+    
     virtual void setImageDimension(int width, int height) = 0;
     virtual void beginPath() = 0;
     virtual void begin() = 0;
@@ -58,21 +89,19 @@ public:
     virtual void strokeNone() = 0;
     virtual void stroke(gdx_cpp::graphics::Color color) = 0;
     virtual void setStrokeWidth(float width) = 0;
-    virtual void setTranslation(float x, float y) = 0;
-    virtual void setSkew(float skewX, float skewY) = 0;
-    virtual void setRotationTranslation(float rotation, float x, float y) = 0;
     virtual void setStrokeOpacity(float opacit) = 0;
     virtual void setLineJoin(LineJoin join) = 0;
     virtual void setLineCap(LineCap cap) = 0;
     virtual void setMiterLimit(float limit) = 0;
-    virtual void transAffine(const std::vector<float>& affine) = 0;
-    virtual void setRotation(float radians) = 0;
-    virtual void setScaling(float scaleX, float scaleY) = 0;
     virtual void moveTo(float x, float y, bool relative = false) = 0;
     virtual void lineTo(float x, float y, bool relative = false) = 0;
     virtual void curve3(float x, float y, bool relative = false) = 0;
     virtual void curve3(float x, float y, float x1, float y1, bool relative = false) = 0;
+    virtual void fillLinearGradient(const LinearGradient&) = 0;
 
+    virtual transform* createTransform() = 0;
+    virtual transform* const currentTransform() = 0;
+    
     virtual void closeSubPath() = 0;
     virtual void verticalLineTo(float y, bool relative = false) = 0;
     virtual void horizontalLineTo(float x, bool relative = false) = 0;

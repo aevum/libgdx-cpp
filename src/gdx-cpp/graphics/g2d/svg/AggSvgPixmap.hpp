@@ -31,10 +31,12 @@
 
 #include <agg_svg_path_renderer.h>
 #include <agg_rendering_buffer.h>
-#include <agg_pixfmt_rgba.h>
-#include <agg_scanline_p.h>
+#include <agg_pixfmt_rgb.h>
+#include <agg_scanline_u.h>
 
 #include <gdx-cpp/graphics/GL10.hpp>
+#include <stdlib.h>
+#include <stdio.h>
 
 #undef GL_RGBA
 #undef GL_UNSIGNED_BYTE
@@ -54,23 +56,86 @@ class AggSvgPixmap : public SvgPixmapInterface
 {
 public:
 
+    class AggTransform : public utils::SvgRendererHandler::transform {
+        friend class AggSvgPixmap;
+    public:
+        AggTransform()
+            : transform(new agg::trans_affine),
+                should_del(true)
+        {            
+        }
+
+        AggTransform(agg::trans_affine& _transform)
+            : transform(&_transform),
+                should_del(false)
+        {
+        }
+        
+        virtual void affine(const std::vector< float >& matrix) {
+            transform->premultiply(agg::trans_affine(matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]));
+        }
+
+        virtual void rotate(float radians) {
+            transform->rotate(radians);
+        }
+
+        virtual void rotate_trasnlate(float radians, float x, float y) {
+            agg::trans_affine t = agg::trans_affine_translation(-x, -y);
+            t *= agg::trans_affine_rotation(radians);
+            t *= agg::trans_affine_translation(x, y);
+            transform->premultiply(t);
+        }
+
+        virtual void scale(float scale_x, float scale_y) {
+            transform->premultiply(agg::trans_affine_scaling(scale_x, scale_y));
+        }
+
+        virtual void skew(float x, float y) {
+            transform->premultiply(agg::trans_affine_skewing(agg::deg2rad(x), agg::deg2rad(y)));
+        }
+
+        virtual void skew_x(float skew) {
+            transform->premultiply(agg::trans_affine_skewing(agg::deg2rad(skew), 0));
+        }
+
+        virtual void skew_y(float skew) {
+            transform->premultiply(agg::trans_affine_skewing(0, agg::deg2rad(skew)));
+        }
+
+        virtual void translate(float x, float y) {
+            transform->premultiply(agg::trans_affine_translation(x, y));
+        }
+
+        ~AggTransform() {
+            if (should_del) {
+                delete transform;
+            }
+        }
+        
+    private:
+        agg::trans_affine* transform;
+        ///ps: this is lame...
+        bool should_del;
+    };
+
+    
+    
     static AggSvgPixmap* newFromFile(const files::FileHandle::ptr& file) {
         static utils::XmlReader reader;
 
         AggSvgPixmap* pix = new AggSvgPixmap;
-        
         SvgParser::render(reader.parse(*file).get(), pix);
-        
+
         return pix;
     }
-    
+
     AggSvgPixmap()
         : width(0), height(0) , data(0) , scaleX(1), scaleY(1)
     {
     }
 
     AggSvgPixmap(int width, int height)
-    : width(width), height(height) , data(0)  , scaleX(1), scaleY(1)
+            : width(width), height(height) , data(0)  , scaleX(1), scaleY(1)
     {
     }
 
@@ -78,31 +143,31 @@ public:
         this->width = width;
         this->height = height;
     }
-    
+
     inline void begin() {
         renderer.push_attr();
     }
-    
+
     inline void beginPath() {
         renderer.begin_path();
     }
-    
+
     inline void closeSubPath() {
         renderer.close_subpath();
     }
-    
+
     inline void curve3(float x, float y, bool relative = false) {
-      renderer.curve3(x, y, relative);
+        renderer.curve3(x, y, relative);
     }
-    
+
     inline void curve3(float x, float y, float x1, float y1, bool relative = false) {
         renderer.curve3(x, y, x1, y1 , relative);
     }
-    
+
     inline void curve4(float x2, float y2, float x, float y, bool relative = false) {
         renderer.curve4(x2, y2, x, y, relative);
     }
-    
+
     inline void curve4(float x1, float y1, float x2, float y2, float x, float y, bool relative = false) {
         renderer.curve4(x1, y1, x2, y2, x, y, relative);
     }
@@ -110,90 +175,67 @@ public:
     inline void end() {
         renderer.pop_attr();
     }
-    
+
     inline void endPath() {
         renderer.end_path();
     }
-    
+
     inline void fill(Color color) {
         renderer.fill(agg::rgba_pre(color.r, color.g, color.b));
     }
-    
+
     inline void fillNone() {
         renderer.fill_none();
     }
-    
+
     inline void fillOpacity(float opactiy) {
         renderer.fill_opacity(opactiy);
     }
-    
+
     inline void horizontalLineTo(float x, bool relative = false) {
         renderer.hline_to(x, relative);
     }
-    
+
     inline void lineTo(float x, float y, bool relative = false) {
         renderer.line_to(x, y, relative);
     }
-    
+
     inline void moveTo(float x, float y, bool relative = false) {
         renderer.move_to(x, y, relative);
     }
-    
+
     inline void setLineCap(LineCap cap) {
         renderer.line_cap((agg::line_cap_e) cap);
     }
-    
+
     inline void setLineJoin(LineJoin join) {
         renderer.line_join((agg::line_join_e) join);
     }
-    
+
     inline void setMiterLimit(float limit) {
         renderer.miter_limit(limit);
     }
-    
-    inline void setRotation(float radians) {
-        renderer.transform().premultiply(agg::trans_affine_rotation(radians));
-    }
-    
-    inline void setRotationTranslation(float rotation, float x, float y) {
-        agg::trans_affine t = agg::trans_affine_translation(-x, -y);
-        t *= agg::trans_affine_rotation(rotation);
-        t *= agg::trans_affine_translation(x, y);
-        renderer.transform().premultiply(t);
-    }
-    
-    inline void setScaling(float scaleX, float scaleY) {
-        renderer.transform().premultiply(agg::trans_affine_scaling(scaleX, scaleY));
-    }
-    
+
     inline void setSkew(float skewX, float skewY) {
         renderer.transform().premultiply(agg::trans_affine_skewing(agg::deg2rad(skewX), agg::deg2rad(skewY)));
     }
-    
+
     inline void setStrokeOpacity(float opacit) {
         renderer.stroke_opacity(opacit);
     }
-    
+
     inline void setStrokeWidth(float width) {
         renderer.stroke_width(width);
     }
-    
-    inline void setTranslation(float x, float y) {
-        renderer.transform().premultiply(agg::trans_affine_translation(x, y));
-    }
-    
+
     inline void stroke(Color color) {
         renderer.stroke(agg::rgba_pre(color.r, color.g, color.b, color.a));
     }
-    
+
     inline void strokeNone() {
         renderer.stroke_none();
     }
-    
-    inline void transAffine(const std::vector< float >& affine) {
-        renderer.transform().premultiply(agg::trans_affine(affine[0], affine[1], affine[2], affine[3], affine[4], affine[5]));
-    }
-    
+
     inline void verticalLineTo(float y, bool relative = false) {
         renderer.vline_to(y, relative);
     }
@@ -209,7 +251,7 @@ public:
     }
 
     void drawCircle(int x, int y, int radius) {
-        
+
     }
 
     void drawLine(int x, int y, int x2, int y2) {
@@ -235,7 +277,7 @@ public:
     void drawRectangle(int x, int y, int width, int height) {
         renderer.begin_path();
         renderer.move_to(x, y);
-        renderer.line_to(x + width, y);        
+        renderer.line_to(x + width, y);
         renderer.line_to(x, y + height);
         renderer.move_to(x + width, y + height);
         renderer.line_to(x + width, y);
@@ -266,7 +308,7 @@ public:
     int getGLInternalFormat() const {
         return GL10::GL_RGBA;
     }
-    
+
     int getGLType() const {
         return GL10::GL_UNSIGNED_BYTE;
     }
@@ -283,39 +325,74 @@ public:
         typedef agg::pixfmt_rgba32 pixfmt;
         typedef agg::renderer_base<pixfmt> renderer_base;
         typedef agg::renderer_scanline_aa_solid<renderer_base> renderer_solid;
-        
+
         if (width <= 0 || height <= 0) {
             throw std::runtime_error("Missing width or height values to render svg");
         }
 
         int scaledWidth = width * scaleX;
         int scaledHeight = height * scaleY;
-        
+
         if (!data || (strlen((char*) data) !=  scaledWidth * scaledHeight * 4)) {
             delete [] data;
             data = new unsigned char[scaledWidth * scaledHeight * 4];
-            buffer.attach(data, scaledWidth, scaledHeight, scaledWidth * 4);
         }
 
-        pixfmt pixf(buffer);
+        agg::rendering_buffer rbuf(data,
+                                  width,
+                                  height,
+                                  width * 4);
+        
+        pixfmt pixf(rbuf);
         renderer_base rb(pixf);
         renderer_solid ren(rb);
 
-        rb.clear(agg::rgba(1,1,1,0));
+        rb.clear(agg::rgba8(255,0,0,255));
 
         agg::rasterizer_scanline_aa<> ras;
-        agg::scanline_p8 sl;
+        agg::scanline_u8 sl;
         agg::trans_affine mtx;
 
-        mtx *= agg::trans_affine_scaling(scaleX, scaleY);
+//         mtx *= agg::trans_affine_scaling(scaleX, scaleY);
+        renderer.arrange_orientations();
+        renderer.expand(0);
+        renderer.render(ras, sl, ren, mtx, rb, rb.clip_box(), 1.0);
 
-        renderer.render(ras, sl, ren, mtx, rb.clip_box(), 1.0);
-
-        return buffer.buf();
+//         FILE* fd = fopen("test.ppm", "wb");
+//         if(fd)
+//         {
+//             fprintf(fd, "P6 %d %d 65535 ", width, height);
+//             fwrite(rbuf.buf(), 1, width * height * 4, fd);
+//             fclose(fd);
+//         }
+        
+        return rbuf.buf();
     }
 
     void setColor(float r, float g, float b, float a) {
         color = agg::rgba8(r,g,b,a);
+    }
+
+    virtual void fillLinearGradient(const gdx_cpp::utils::SvgRendererHandler::LinearGradient& gradient) {
+        agg::svg::linear_gradient li_gradient;
+
+        li_gradient.x1 = gradient.x1;
+        li_gradient.y1 = gradient.y1;
+        li_gradient.x2 = gradient.x2;
+        li_gradient.y2 = gradient.y2;
+
+        if (gradient.gradient_transform) {
+            li_gradient.transform = *static_cast<AggTransform*>(gradient.gradient_transform)->transform;
+        }
+
+        for (int i = 0; i < gradient.stops.size(); ++i) {
+            agg::svg::linear_gradient::stop stop;
+            stop.color = agg::rgba(gradient.stops[i].color.r, gradient.stops[i].color.g, gradient.stops[i].color.b, gradient.stops[i].color.a);
+            stop.opacity = gradient.stops[i].opacity;
+            li_gradient.stops.push_back(stop);
+        }
+
+        renderer.fill_linear_gradient(li_gradient);
     }
 
     void setColor(const gdx_cpp::graphics::Color& color) {
@@ -338,11 +415,21 @@ public:
         delete [] data;
     }
 
-    agg::rendering_buffer buffer;
+
+    virtual transform* createTransform() {
+        return new AggTransform();
+    }
+
+    virtual transform* const currentTransform() {
+        return new AggTransform(renderer.transform());
+    }
+    
 private:
     agg::svg::path_renderer renderer;
     agg::rgba8 color;
 
+    AggTransform transform;
+    
     float scaleX,scaleY;
     int width;
     int height;
