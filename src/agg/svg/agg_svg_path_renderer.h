@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -29,52 +29,105 @@
 #include "agg_bounding_rect.h"
 #include "agg_rasterizer_scanline_aa.h"
 #include "agg_svg_path_tokenizer.h"
+#include "agg_span_interpolator_linear.h"
+#include "agg_span_allocator.h"
+#include "agg_span_gradient.h"
+#include "agg_pixfmt_rgba.h"
+
+
+#include <iostream>
+#include <agg_ellipse.h>
 
 namespace agg
 {
 namespace svg
 {
-    template<class VertexSource> class conv_count
+template<class VertexSource> class conv_count
+{
+public:
+    conv_count(VertexSource& vs) : m_source(&vs), m_count(0) {}
+
+    void count(unsigned n) {
+        m_count = n;
+    }
+    unsigned count() const {
+        return m_count;
+    }
+
+    void rewind(unsigned path_id) {
+        m_source->rewind(path_id);
+    }
+    unsigned vertex(double* x, double* y)
     {
-    public:
-        conv_count(VertexSource& vs) : m_source(&vs), m_count(0) {}
+        ++m_count;
+        return m_source->vertex(x, y);
+    }
 
-        void count(unsigned n) { m_count = n; }
-        unsigned count() const { return m_count; }
+private:
+    VertexSource* m_source;
+    unsigned m_count;
+};
 
-        void rewind(unsigned path_id) { m_source->rewind(path_id); }
-        unsigned vertex(double* x, double* y) 
-        { 
-            ++m_count; 
-            return m_source->vertex(x, y); 
-        }
-
-    private:
-        VertexSource* m_source;
-        unsigned m_count;
+//============================================================================
+//defines a gradient data for a path
+class gradient_data {
+public:
+    enum enum_gradient_type {
+        e_linear,
+        e_radial
     };
 
+    enum_gradient_type gradient_type;
 
+    gradient_data(enum_gradient_type type) : gradient_type(type) { }
+};
 
+class linear_gradient : public gradient_data {
+public:
+    double x1,y1,x2,y2;
+    trans_affine transform;
 
-    //============================================================================
-    // Basic path attributes
-    struct path_attributes
+    struct stop {
+        rgba8 color;
+        float opacity;
+        float offset;
+    };
+
+    pod_bvector < stop > stops;
+
+    linear_gradient() : gradient_data(e_linear), x1(0),y1(0),x2(0),y2(0) { }
+    linear_gradient(const linear_gradient& other)
+            : gradient_data(e_linear)
+            ,x1(other.x1)
+            ,y1(other.y1)
+            ,x2(other.x2)
+            ,y2(other.y2)
+            ,stops(other.stops)
+            , transform(other.transform)
     {
-        unsigned     index;
-        rgba8        fill_color;
-        rgba8        stroke_color;
-        bool         fill_flag;
-        bool         stroke_flag;
-        bool         even_odd_flag;
-        line_join_e  line_join;
-        line_cap_e   line_cap;
-        double       miter_limit;
-        double       stroke_width;
-        trans_affine transform;
+    }
+};
 
-        // Empty constructor
-        path_attributes() :
+//============================================================================
+// Basic path attributes
+struct path_attributes
+{
+    unsigned     index;
+    rgba8        fill_color;
+    rgba8        stroke_color;
+    bool         fill_flag;
+    bool         stroke_flag;
+    bool         even_odd_flag;
+    line_join_e  line_join;
+    line_cap_e   line_cap;
+    double       miter_limit;
+    double       stroke_width;
+    trans_affine transform;
+
+    linear_gradient* gradient;
+
+    // Empty constructor
+    path_attributes() :
             index(0),
             fill_color(rgba(0,0,0)),
             stroke_color(rgba(0,0,0)),
@@ -85,12 +138,13 @@ namespace svg
             line_cap(butt_cap),
             miter_limit(4.0),
             stroke_width(1.0),
-            transform()
-        {
-        }
+            transform(),
+            gradient(0)
+    {
+    }
 
-        // Copy constructor
-        path_attributes(const path_attributes& attr) :
+    // Copy constructor
+    path_attributes(const path_attributes& attr) :
             index(attr.index),
             fill_color(attr.fill_color),
             stroke_color(attr.stroke_color),
@@ -101,12 +155,16 @@ namespace svg
             line_cap(attr.line_cap),
             miter_limit(attr.miter_limit),
             stroke_width(attr.stroke_width),
-            transform(attr.transform)
-        {
+            transform(attr.transform),
+            gradient(NULL)
+    {
+        if (attr.gradient) {
+            this->gradient = new linear_gradient(*attr.gradient);
         }
+    }
 
-        // Copy constructor with new index value
-        path_attributes(const path_attributes& attr, unsigned idx) :
+    // Copy constructor with new index value
+    path_attributes(const path_attributes& attr, unsigned idx) :
             index(idx),
             fill_color(attr.fill_color),
             stroke_color(attr.stroke_color),
@@ -117,203 +175,285 @@ namespace svg
             line_cap(attr.line_cap),
             miter_limit(attr.miter_limit),
             stroke_width(attr.stroke_width),
-            transform(attr.transform)
-        {
-        }
-    };
-
-
-    //============================================================================
-    // Path container and renderer. 
-    class path_renderer
+            transform(attr.transform),
+            gradient(NULL)
     {
-    public:
-        typedef pod_bvector<path_attributes>   attr_storage;
+        if (attr.gradient) {
+            this->gradient = new linear_gradient(*attr.gradient);
+        }
+    }
 
-        typedef conv_curve<path_storage>       curved;
-        typedef conv_count<curved>             curved_count;
+    ~path_attributes() {
+        if (gradient) {
+            delete gradient;
+        }
+    }
+};
 
-        typedef conv_stroke<curved_count>      curved_stroked;
-        typedef conv_transform<curved_stroked> curved_stroked_trans;
 
-        typedef conv_transform<curved_count>   curved_trans;
-        typedef conv_contour<curved_trans>     curved_trans_contour;
+//============================================================================
+// Path container and renderer.
+class path_renderer
+{
+public:
+    typedef pod_bvector<path_attributes>   attr_storage;
 
-        path_renderer();
+    typedef conv_curve<path_storage>       curved;
+    typedef conv_count<curved>             curved_count;
 
-        void remove_all();
+    typedef conv_stroke<curved_count>      curved_stroked;
+    typedef conv_transform<curved_stroked> curved_stroked_trans;
 
-        // Use these functions as follows:
-        // begin_path() when the XML tag <path> comes ("start_element" handler)
-        // parse_path() on "d=" tag attribute
-        // end_path() when parsing of the entire tag is done.
-        void begin_path();
-        void parse_path(path_tokenizer& tok);
-        void end_path();
+    typedef conv_transform<curved_count>   curved_trans;
+    typedef conv_contour<curved_trans>     curved_trans_contour;
 
-        // The following functions are essentially a "reflection" of
-        // the respective SVG path commands.
-        void move_to(double x, double y, bool rel=false);   // M, m
-        void line_to(double x,  double y, bool rel=false);  // L, l
-        void hline_to(double x, bool rel=false);            // H, h
-        void vline_to(double y, bool rel=false);            // V, v
-        void curve3(double x1, double y1,                   // Q, q
-                    double x,  double y, bool rel=false);
-        void curve3(double x, double y, bool rel=false);    // T, t
-        void curve4(double x1, double y1,                   // C, c
-                    double x2, double y2, 
-                    double x,  double y, bool rel=false);
-        void curve4(double x2, double y2,                   // S, s
-                    double x,  double y, bool rel=false);
-        void close_subpath();                               // Z, z
+    path_renderer();
 
-//        template<class VertexSource> 
-//        void add_path(VertexSource& vs, 
-//                      unsigned path_id = 0, 
+    void remove_all();
+
+    // Use these functions as follows:
+    // begin_path() when the XML tag <path> comes ("start_element" handler)
+    // parse_path() on "d=" tag attribute
+    // end_path() when parsing of the entire tag is done.
+    void begin_path();
+    void parse_path(path_tokenizer& tok);
+    void end_path();
+
+    // The following functions are essentially a "reflection" of
+    // the respective SVG path commands.
+    void move_to(double x, double y, bool rel=false);   // M, m
+    void line_to(double x,  double y, bool rel=false);  // L, l
+    void hline_to(double x, bool rel=false);            // H, h
+    void vline_to(double y, bool rel=false);            // V, v
+    void curve3(double x1, double y1,                   // Q, q
+                double x,  double y, bool rel=false);
+    void curve3(double x, double y, bool rel=false);    // T, t
+    void curve4(double x1, double y1,                   // C, c
+                double x2, double y2,
+                double x,  double y, bool rel=false);
+    void curve4(double x2, double y2,                   // S, s
+                double x,  double y, bool rel=false);
+    void close_subpath();                               // Z, z
+
+//        template<class VertexSource>
+//        void add_path(VertexSource& vs,
+//                      unsigned path_id = 0,
 //                      bool solid_path = true)
 //        {
 //            m_storage.add_path(vs, path_id, solid_path);
 //        }
 
 
-        unsigned vertex_count() const { return m_curved_count.count(); }
-        
+    unsigned vertex_count() const {
+        return m_curved_count.count();
+    }
 
-        // Call these functions on <g> tag (start_element, end_element respectively)
-        void push_attr();
-        void pop_attr();
 
-        // Attribute setting functions.
-        void fill(const rgba8& f);
-        void stroke(const rgba8& s);
-        void even_odd(bool flag);
-        void stroke_width(double w);
-        void fill_none();
-        void stroke_none();
-        void fill_opacity(double op);
-        void stroke_opacity(double op);
-        void line_join(line_join_e join);
-        void line_cap(line_cap_e cap);
-        void miter_limit(double ml);
-        trans_affine& transform();
+    // Call these functions on <g> tag (start_element, end_element respectively)
+    void push_attr();
+    void pop_attr();
 
-        // Make all polygons CCW-oriented
-        void arrange_orientations()
+    // Attribute setting functions.
+    void fill(const rgba8& f);
+    void stroke(const rgba8& s);
+    void even_odd(bool flag);
+    void stroke_width(double w);
+    void fill_none();
+    void stroke_none();
+    void fill_opacity(double op);
+    void stroke_opacity(double op);
+    void line_join(line_join_e join);
+    void line_cap(line_cap_e cap);
+    void miter_limit(double ml);
+    trans_affine& transform();
+
+    void fill_linear_gradient(linear_gradient& gradient);
+
+    // Make all polygons CCW-oriented
+    void arrange_orientations()
+    {
+        m_storage.arrange_orientations_all_paths(path_flags_ccw);
+    }
+
+    // Expand all polygons
+    void expand(double value)
+    {
+        m_curved_trans_contour.width(value);
+    }
+
+    unsigned operator [](unsigned idx)
+    {
+        m_transform = m_attr_storage[idx].transform;
+        return m_attr_storage[idx].index;
+    }
+
+    void bounding_rect(double* x1, double* y1, double* x2, double* y2)
+    {
+        agg::conv_transform<agg::path_storage> trans(m_storage, m_transform);
+        agg::bounding_rect(trans, *this, 0, m_attr_storage.size(), x1, y1, x2, y2);
+    }
+
+    // Rendering. One can specify two additional parameters:
+    // trans_affine and opacity. They can be used to transform the whole
+    // image and/or to make it translucent.
+    template<class Rasterizer, class Scanline, class Renderer, class RendererBase>
+    void render(Rasterizer& ras,
+                Scanline& sl,
+                Renderer& ren,
+                const trans_affine& mtx,
+                RendererBase& renderer_base,
+                const rect_i& cb,
+                double opacity=1.0)
+    {
+        unsigned i;
+
+        ras.clip_box(cb.x1, cb.y1, cb.x2, cb.y2);
+        m_curved_count.count(0);
+
+        for (i = 0; i < m_attr_storage.size(); i++)
         {
-            m_storage.arrange_orientations_all_paths(path_flags_ccw);
-        }
+            const path_attributes& attr = m_attr_storage[i];
+            m_transform = attr.transform;
+            m_transform *= mtx;
+            double scl = m_transform.scale();
+            //m_curved.approximation_method(curve_inc);
+            m_curved.approximation_scale(scl);
+            m_curved.angle_tolerance(0.0);
 
-        // Expand all polygons 
-        void expand(double value)
-        {
-            m_curved_trans_contour.width(value);
-        }
+            rgba8 color;
 
-        unsigned operator [](unsigned idx)
-        {
-            m_transform = m_attr_storage[idx].transform;
-            return m_attr_storage[idx].index;
-        }
-
-        void bounding_rect(double* x1, double* y1, double* x2, double* y2)
-        {
-            agg::conv_transform<agg::path_storage> trans(m_storage, m_transform);
-            agg::bounding_rect(trans, *this, 0, m_attr_storage.size(), x1, y1, x2, y2);
-        }
-
-        // Rendering. One can specify two additional parameters: 
-        // trans_affine and opacity. They can be used to transform the whole
-        // image and/or to make it translucent.
-        template<class Rasterizer, class Scanline, class Renderer> 
-        void render(Rasterizer& ras, 
-                    Scanline& sl,
-                    Renderer& ren, 
-                    const trans_affine& mtx, 
-                    const rect_i& cb,
-                    double opacity=1.0)
-        {
-            unsigned i;
-
-            ras.clip_box(cb.x1, cb.y1, cb.x2, cb.y2);
-            m_curved_count.count(0);
-
-            for(i = 0; i < m_attr_storage.size(); i++)
+            if (attr.fill_flag)
             {
-                const path_attributes& attr = m_attr_storage[i];
-                m_transform = attr.transform;
-                m_transform *= mtx;
-                double scl = m_transform.scale();
-                //m_curved.approximation_method(curve_inc);
-                m_curved.approximation_scale(scl);
-                m_curved.angle_tolerance(0.0);
-
-                rgba8 color;
-
-                if(attr.fill_flag)
+                ras.reset();
+                ras.filling_rule(attr.even_odd_flag ? fill_even_odd : fill_non_zero);
+                if (fabs(m_curved_trans_contour.width()) < 0.0001)
                 {
-                    ras.reset();
-                    ras.filling_rule(attr.even_odd_flag ? fill_even_odd : fill_non_zero);
-                    if(fabs(m_curved_trans_contour.width()) < 0.0001)
-                    {
-                        ras.add_path(m_curved_trans, attr.index);
-                    }
-                    else
-                    {
-                        m_curved_trans_contour.miter_limit(attr.miter_limit);
-                        ras.add_path(m_curved_trans_contour, attr.index);
-                    }
+                    ras.add_path(m_curved_trans, attr.index);
+                }
+                else
+                {
+                    m_curved_trans_contour.miter_limit(attr.miter_limit);
+                    ras.add_path(m_curved_trans_contour, attr.index);
+                }
 
+                if (attr.gradient) {
+                    if (attr.gradient->gradient_type == gradient_data::e_linear) {
+                        typedef agg::pod_auto_array<agg::rgba8, 1024> color_array_type;
+                        typedef gradient_x gradient_func_type;
+                        typedef agg::span_interpolator_linear<> interpolator_type;
+                        typedef agg::span_allocator<agg::rgba8> span_allocator_type;
+                        typedef agg::span_gradient<agg::rgba8,
+                        interpolator_type,
+                        gradient_func_type,
+                        color_array_type > span_gradient_type;
+
+                        gradient_func_type  gradient_func;                   // The gradient function
+                        agg::trans_affine   gradient_mtx;                    // Affine transformer
+                        interpolator_type   span_interpolator(gradient_mtx); // Span interpolator
+                        span_allocator_type span_allocator;                  // Span Allocator
+                        color_array_type    color_array;                     // Gradient colors
+
+                        linear_gradient* grad = attr.gradient;
+                        double dx = grad->x2 - grad->x1;
+                        double dy = grad->y2 - grad->y1;
+
+                        double distance = sqrt(dx * dx + dy * dy);
+                        double angle = atan2(dy, dx);
+
+                        gradient_mtx *= m_transform;
+                        gradient_mtx *= grad->transform;
+
+                        gradient_mtx.invert();
+
+                        gradient_mtx *= agg::trans_affine_translation(-grad->x1, -grad->y1);
+                        gradient_mtx *= agg::trans_affine_rotation(-angle);
+
+                        typedef agg::renderer_scanline_aa<RendererBase, span_allocator_type,
+                        span_gradient_type> renderer_gradient_type;
+
+                        span_gradient_type span_gradient(span_interpolator, gradient_func, color_array, 0, distance);
+                        renderer_gradient_type ren_gradient(renderer_base, span_allocator, span_gradient);
+
+                        fill_color_array(color_array, grad->stops);
+
+                        agg::render_scanlines(ras, sl, ren_gradient);
+                    }
+                } else {
                     color = attr.fill_color;
                     color.opacity(color.opacity() * opacity);
                     ren.color(color);
                     agg::render_scanlines(ras, sl, ren);
                 }
-
-                if(attr.stroke_flag)
-                {
-                    m_curved_stroked.width(attr.stroke_width);
-                    //m_curved_stroked.line_join((attr.line_join == miter_join) ? miter_join_round : attr.line_join);
-                    m_curved_stroked.line_join(attr.line_join);
-                    m_curved_stroked.line_cap(attr.line_cap);
-                    m_curved_stroked.miter_limit(attr.miter_limit);
-                    m_curved_stroked.inner_join(inner_round);
-                    m_curved_stroked.approximation_scale(scl);
-
-                    // If the *visual* line width is considerable we 
-                    // turn on processing of curve cusps.
-                    //---------------------
-                    if(attr.stroke_width * scl > 1.0)
-                    {
-                        m_curved.angle_tolerance(0.2);
-                    }
-                    ras.reset();
-                    ras.filling_rule(fill_non_zero);
-                    ras.add_path(m_curved_stroked_trans, attr.index);
-                    color = attr.stroke_color;
-                    color.opacity(color.opacity() * opacity);
-                    ren.color(color);
-                    agg::render_scanlines(ras, sl, ren);
-                }
             }
+
+            if (attr.stroke_flag)
+            {
+                m_curved_stroked.width(attr.stroke_width);
+                //m_curved_stroked.line_join((attr.line_join == miter_join) ? miter_join_round : attr.line_join);
+                m_curved_stroked.line_join(attr.line_join);
+                m_curved_stroked.line_cap(attr.line_cap);
+                m_curved_stroked.miter_limit(attr.miter_limit);
+                m_curved_stroked.inner_join(inner_round);
+                m_curved_stroked.approximation_scale(scl);
+
+                // If the *visual* line width is considerable we
+                // turn on processing of curve cusps.
+                //---------------------
+                if (attr.stroke_width * scl > 1.0)
+                {
+                    m_curved.angle_tolerance(0.2);
+                }
+                ras.reset();
+                ras.filling_rule(fill_non_zero);
+                ras.add_path(m_curved_stroked_trans, attr.index);
+                color = attr.stroke_color;
+                color.opacity(color.opacity() * opacity);
+                ren.color(color);
+                agg::render_scanlines(ras, sl, ren);
+            }
+
+
         }
+    }
 
-    private:
-        path_attributes& cur_attr();
+private:
 
-        path_storage   m_storage;
-        attr_storage   m_attr_storage;
-        attr_storage   m_attr_stack;
-        trans_affine   m_transform;
+    template <typename ColorArray>
+    void fill_color_array(ColorArray& array, pod_bvector< linear_gradient::stop >& stops) {
+        unsigned i = 0;
 
-        curved                       m_curved;
-        curved_count                 m_curved_count;
+        unsigned int stop = 0;
+        unsigned int nextStopPos = 0;
+        unsigned int sliceSize = 0;
+        
+        while (stop < stops.size()) {            
+            nextStopPos = array.size() * stops[stop + 1].offset;
+            sliceSize = nextStopPos - i;
 
-        curved_stroked               m_curved_stroked;
-        curved_stroked_trans         m_curved_stroked_trans;
+            for (int j = 0; i < nextStopPos; ++i, j++) {
+                array[i] = stops[stop].color.gradient(stops[stop + 1].color, j / (float) sliceSize);
+            }
 
-        curved_trans                 m_curved_trans;
-        curved_trans_contour         m_curved_trans_contour;
-    };
+            stop++;
+        }
+    }
+
+    path_attributes& cur_attr();
+
+    path_storage   m_storage;
+    attr_storage   m_attr_storage;
+    attr_storage   m_attr_stack;
+    trans_affine   m_transform;
+
+    curved                       m_curved;
+    curved_count                 m_curved_count;
+
+    curved_stroked               m_curved_stroked;
+    curved_stroked_trans         m_curved_stroked_trans;
+
+    curved_trans                 m_curved_trans;
+    curved_trans_contour         m_curved_trans_contour;
+};
 
 }
 }

@@ -64,8 +64,8 @@ public:
     struct GradientStopData {
         gdx_cpp::graphics::Color color;
         float opacity;
-
-        GradientStopData() : color(1,1,1,1), opacity(1) {
+        float offset;
+        GradientStopData() : color(1,1,1,1), opacity(1), offset(0) {
         }
     };
 

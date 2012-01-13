@@ -34,10 +34,6 @@
 #include <agg_pixfmt_rgb.h>
 #include <agg_scanline_u.h>
 
-#include <gdx-cpp/graphics/GL10.hpp>
-#include <stdlib.h>
-#include <stdio.h>
-
 #undef GL_RGBA
 #undef GL_UNSIGNED_BYTE
 
@@ -117,8 +113,6 @@ public:
         ///ps: this is lame...
         bool should_del;
     };
-
-    
     
     static AggSvgPixmap* newFromFile(const files::FileHandle::ptr& file) {
         static utils::XmlReader reader;
@@ -347,25 +341,18 @@ public:
         renderer_base rb(pixf);
         renderer_solid ren(rb);
 
-        rb.clear(agg::rgba8(255,0,0,255));
+        rb.clear(agg::rgba8(0,0,0,0));
 
         agg::rasterizer_scanline_aa<> ras;
         agg::scanline_u8 sl;
         agg::trans_affine mtx;
 
-//         mtx *= agg::trans_affine_scaling(scaleX, scaleY);
-        renderer.arrange_orientations();
-        renderer.expand(0);
+        mtx *= agg::trans_affine_scaling(scaleX, scaleY);
+        
+//         renderer.arrange_orientations();
+//         renderer.expand(0);
         renderer.render(ras, sl, ren, mtx, rb, rb.clip_box(), 1.0);
 
-//         FILE* fd = fopen("test.ppm", "wb");
-//         if(fd)
-//         {
-//             fprintf(fd, "P6 %d %d 65535 ", width, height);
-//             fwrite(rbuf.buf(), 1, width * height * 4, fd);
-//             fclose(fd);
-//         }
-        
         return rbuf.buf();
     }
 
@@ -387,8 +374,12 @@ public:
 
         for (int i = 0; i < gradient.stops.size(); ++i) {
             agg::svg::linear_gradient::stop stop;
-            stop.color = agg::rgba(gradient.stops[i].color.r, gradient.stops[i].color.g, gradient.stops[i].color.b, gradient.stops[i].color.a);
-            stop.opacity = gradient.stops[i].opacity;
+            const SvgRendererHandler::GradientStopData& data = gradient.stops[i];
+
+            stop.color = agg::rgba(data.color.r, data.color.g, data.color.b, data.color.a);
+            stop.opacity = data.opacity;
+            stop.offset = data.offset;
+            
             li_gradient.stops.push_back(stop);
         }
 

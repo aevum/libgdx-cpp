@@ -562,21 +562,20 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::fetchStopData(gdx_cpp::utils::XmlRe
     for( int i = 0; i < node->getChildCount(); ++i) {
         gdx_cpp::utils::XmlReader::Element* child = node->getChild(i);
         if (child->getName() == "svg:stop" || child->getName() == "stop") {
-            int offset = from_string< int >(child->getAttribute("offset"));
-            
-            if (stopData.size() < offset + 1) {
-                stopData.resize(offset + 1);
-            }
+            SvgRendererHandler::GradientStopData stop;
+            stop.offset = from_string< float >(child->getAttribute("offset"));
 
             std::vector< std::pair< std::string , std::string > > res = parse_style(child->getAttribute("style"));
             
             for (int i = 0; i < res.size(); ++i) {
                 if (res[i].first == "stop-color") {
-                    stopData[offset].color = parse_color(res[i].second);  
+                    stop.color = parse_color(res[i].second);
                 } else if (res[i].first == "stop-opacity") {
-                    stopData[offset].opacity = from_string< float >(res[i].second);
+                    stop.opacity = from_string< float >(res[i].second);
                 }
             }
+
+            stopData.push_back(stop);
         }
     }
 
@@ -590,6 +589,10 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::fetchStopData(gdx_cpp::utils::XmlRe
             }
         }
     }
+}
+
+bool sortByStop(const SvgRendererHandler::GradientStopData& a,const SvgRendererHandler::GradientStopData& b) {
+    return a.offset < b.offset;
 }
 
 void gdx_cpp::graphics::g2d::svg::SvgParser::parse_gradient(const std::string& gradient)
@@ -616,6 +619,8 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_gradient(const std::string& g
 
     fetchStopData(gradientDef, gradientData.stops);
 
+    std::sort(gradientData.stops.begin(), gradientData.stops.end(), sortByStop);
+    
     gradientData.x1 = from_string< float >(gradientDef->getAttribute("x1"));
     gradientData.y1 = from_string< float >(gradientDef->getAttribute("y1"));
     gradientData.x2 = from_string< float >(gradientDef->getAttribute("x2"));
