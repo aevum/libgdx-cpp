@@ -224,6 +224,8 @@ public:
     
     JsonValue() ;
 
+    void toString(std::ostream& out, bool prettyPrint = false) const;
+
     item_map::const_iterator begin() ;
     item_map::const_iterator end() ;
 
@@ -264,6 +266,9 @@ public:
     friend std::ostream& operator<< (std::ostream &out, JsonValue& item);
 
 private:
+
+    void toString(std::ostream& out, bool prettyPrint, int ident) const;
+    
     friend class JsonReader;
     std::tr1::shared_ptr<void> item_val;
     char item_type;

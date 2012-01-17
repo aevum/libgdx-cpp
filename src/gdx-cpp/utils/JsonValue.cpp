@@ -190,64 +190,94 @@ JsonValue::JsonValue() : item_type(json_null)
 {
 }
 
+void gdx_cpp::utils::JsonValue::toString(std::ostream& out, bool prettyPrint, int ident) const
+{
+    std::string identLevel(ident, '\t');
+    
+    switch (item_type) {
+        case json_bool:
+            out << ((bool)*this ? "true" : "false");
+            break;
+        case json_float:
+            out << (float) *this;
+            break;
+        case json_int:
+            out << (int) *this;
+            break;
+        case json_list: {
+            JsonValue::array::iterator iit = ((JsonValue::array&)*this).begin();
+            JsonValue::array::iterator eend = ((JsonValue::array&)*this).end();
+            
+            out << "[";
+            if (prettyPrint) out << std::endl;
+            
+            for (; iit != eend;) {
+                out << identLevel;
+                
+                (*iit)->toString(out, prettyPrint, ident + 1);
+
+                if (++iit == eend)
+                    break;
+
+                out << ",";
+                if (prettyPrint) out << std::endl;
+            }
+            
+            out << "]";
+            if (prettyPrint) out << std::endl;
+        }
+        break;
+        case json_json: {
+            
+            JsonValue::item_map::const_iterator it =  ((item_map&)*this).begin();
+            JsonValue::item_map::const_iterator end = ((item_map&)*this).end();
+            
+            out << "{";
+            if (prettyPrint) out << std::endl;
+            
+            for (; it != end;) {
+                out << identLevel;
+                
+                out << '"' << it->first << "\" : ";
+                it->second->toString(out, prettyPrint, ident + 1);
+                
+                if (++it == end) {
+                    if (prettyPrint) out << std::endl;
+                    break;
+                }
+                
+                out << ",";
+                if (prettyPrint) out << std::endl;
+            }
+            if (prettyPrint) out << identLevel.substr(0, identLevel.length() - 1);
+            out << " }";
+        }
+        break;
+        case json_null:
+            out << "null";
+            break;
+        case json_string:
+            out << "\"" << (std::string&) *this << "\"";
+            break;
+    };
+}
+
+
+void gdx_cpp::utils::JsonValue::toString(std::ostream& out, bool prettyPrint) const
+{
+    toString(out, prettyPrint, 1);    
+}
+
 //sob... c++ sucks A LOT sometimes...
 namespace gdx_cpp {
 namespace utils {
 
 std::ostream& operator<< (std::ostream& out, gdx_cpp::utils::JsonValue& item) {
-    switch (item.getType()) {
-    case json_bool:
-        out << ((bool)item ? "true" : "false");
-        break;
-    case json_float:
-        out << (float) item;
-        break;
-    case json_int:
-        out << (int) item;
-        break;
-    case json_list: {
-        JsonValue::array::iterator iit = ((JsonValue::array&)item).begin();
-        JsonValue::array::iterator eend = ((JsonValue::array&)item).end();
-
-        out << "[ ";
-
-        for (; iit != eend;) {
-            out << **iit;
-            if (++iit == eend)
-                break;
-            out << " , ";
-        }
-
-        out << " ]";
-    }
-    break;
-    case json_json: {
-
-        JsonValue::item_map::const_iterator it = item.begin();
-        JsonValue::item_map::const_iterator end = item.end();
-
-        out << "{ ";
-        
-        for (; it != end;) {        
-            out << '"' << it->first << "\" : " << *it->second;
-
-            if (++it == end)
-                break;            
-            out << " , ";
-        }
-        out << " }";
-    }
-    break;
-    case json_null:
-        out << "null";
-        break;
-    case json_string:
-        out << "\"" << (std::string&) item << "\"";
-        break;
-    };
+    item.toString(out);
 
     return out;
 }
+
 JsonValue& JsonValue::operator+=(const gdx_cpp::utils::JsonValue& other) {
     assert(item_type == json_json && other.item_type == json_json);
 
