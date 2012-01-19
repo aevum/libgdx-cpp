@@ -264,7 +264,7 @@ _match:
                             case 2:
                                 // line 106 "JsonReader.rl"
                             {
-                                std::string name(data, s, p - s);
+                                std::string name(&data[s], p-s);
                                 s = p;
                                 if (needsUnescape) name = unescape(name);
                                 if (debug) {
