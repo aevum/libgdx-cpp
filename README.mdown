@@ -1,9 +1,9 @@
-# Libgdx-cpp: libgdx C++ port
+# gdx++: libgdx C++ port
 
 
 ## Instalation guide
 
-1. Build LibgdxCpp
+1. Build gdx++
 2. Change your install prefix to /usr
 3. sudo make install
 
@@ -41,6 +41,10 @@ These are the requirements to compile libgdx-cpp over linux(ubuntu):
 * libgles1-mesa-dev
 * libgles2-mesa-dev
 * libopenal-dev
+* libvorbis-dev
+* libopenal
+* libvorbisfile-dev
+* zlib1g-dev
 
 #### Step-by-step (Ohhh baby)
 
@@ -59,7 +63,7 @@ Libraries will be generated under the lib folder, binaries under the bin folder
 
 ### Android
 
-LibgdxCpp uses the cmake toolset from [android-cmake](http://code.google.com/p/android-cmake/ "android-cmake").
+gdx++ uses the cmake toolset from [android-cmake](http://code.google.com/p/android-cmake/ "android-cmake").
 Sadly, currently cmake doesn't support multiple toolsets under the same build directory, so you'll have to create another build folder.
 
 Requirements:
@@ -103,7 +107,7 @@ Libraries will be generated under the lib folder, binaries under the bin folder
 This is because C++ contruction blocks us to use shared_pointers, so we had to make it two-phase-like. So instead of calling the constructor,
 you'll have to call, for example:
 
-    Texture::fromFile()
+    Texture::newFromFile()
 
 with the same parameters that you would expect on the constructor.
 
@@ -119,13 +123,20 @@ Analogically, the calls to create an PixMap now are:
 The gdx_cpp::Graphics interface now have to handle the TextureData and Pixmap resolution and creation. This was made to decouple the texture class from determining
 how to load and create TextureData (etc1, wich is not supported in all platforms per example).
 
-## What's working
+## For GDX++ developers
+
+I've specified a variable called GDX_ROOT that should be useful when developing the library on a non-root folder.
+Just run:
+
+cmake -DGDX_ROOT=PATH_TO_GDX_INSTALATION PATH_TO_GDX_SOURCE
+
+### What's working
 
 * The linux backend has file,input and audio working
 * The android backend has input, file and audio working
 * SVG support through AntiGrainGeometry
 
-## What has to be done
+### What has to be done
 
 * Backend polishing. Seriously, it's working, but there is a lot of stuff that is ugly and in a haste.
 * iOs support
