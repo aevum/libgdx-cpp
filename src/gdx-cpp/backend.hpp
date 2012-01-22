@@ -2,14 +2,16 @@
 #define GDX_CPP_BACKEND_HPP
 
 #include <string>
+
 #include "gdx-cpp/ApplicationListener.hpp"
 
-void init(int argc, char** argv);
-void createApplication(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int width, int height);
+extern "C" bool gdxcpp_check_backend_presence();
+extern "C" void gdxcpp_init(int argc, char** argv);
+extern "C" void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int width, int height);
 
 typedef int (*gdx_main)(int, char**);
 
-struct main_selector {
+struct gdxcpp_main_selector {
     static gdx_main selector;
 };
 

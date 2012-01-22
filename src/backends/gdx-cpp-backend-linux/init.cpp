@@ -13,10 +13,10 @@ std::string title;
 
 int main(int argc, char** argv);
 
-int default_main(int argc, char** argv) {
+extern "C" int default_main(int argc, char** argv) {
     Gdx::initializeSystem(new LinuxSystem);
     
-    init(argc, argv);
+    gdxcpp_init(argc, argv);
     
     assert(applicationListener);
     
@@ -26,9 +26,11 @@ int default_main(int argc, char** argv) {
     return 0;   
 }
 
-gdx_main main_selector::selector = default_main;
+gdx_main gdxcpp_main_selector::selector = default_main;
 
-void createApplication(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int p_width, int p_height) {
+extern "C" void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener,
+                                          const std::string& applicationName,
+                                          int p_width, int p_height) {
     applicationListener = listener;
     width = p_width;
     height = p_height;
@@ -36,5 +38,9 @@ void createApplication(gdx_cpp::ApplicationListener* listener, const std::string
 }
 
 int main(int argc, char** argv) {
-    return main_selector::selector(argc, argv);
+    return gdxcpp_main_selector::selector(argc, argv);
+}
+
+extern "C" bool gdxcpp_check_backend_presence() {
+    return true;
 }

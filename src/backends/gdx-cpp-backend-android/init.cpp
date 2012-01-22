@@ -18,17 +18,20 @@ gdx_cpp::ApplicationListener* applicationListener = 0;
 JavaVM* vm = 0;
 AndroidApplication* app = 0;
 
-void createApplication(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int width, int height)
+void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int width, int height)
 {
     applicationListener = listener;
 }
 
 extern "C" {
+    bool gdxcpp_check_backend_existence() {
+        return true;
+    }
    
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitSystem(JNIEnv* env) {
         __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativeInit");
         Gdx::initializeSystem(new AndroidSystem);
-        init(1, NULL);       
+        gdxcpp_init(1, NULL);
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitialize(JNIEnv* env, jclass clazz, jobject assetManager, int width, int height) {
@@ -130,5 +133,4 @@ extern "C" {
         return JNI_VERSION_1_2;
     }
 }
-
 
