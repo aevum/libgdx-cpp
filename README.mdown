@@ -1,5 +1,9 @@
 # gdx++: libgdx C++ port
 
+# changelog
+
+22/01/2012 : Updated the intialization method names to gdxcpp_init, gdxcpp_create_application
+
 
 ## Instalation guide
 
