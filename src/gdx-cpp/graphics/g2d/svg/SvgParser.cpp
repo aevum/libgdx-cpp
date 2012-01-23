@@ -615,24 +615,46 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_gradient(const std::string& g
 
     assert(gradientDef);
 
-    SvgRendererHandler::LinearGradient gradientData;
+    if ( gradientDef->getName() == "svg:linearGradient" || gradientDef->getName() == "linearGradient") {
+        SvgRendererHandler::LinearGradient gradientData;
 
-    fetchStopData(gradientDef, gradientData.stops);
+        fetchStopData(gradientDef, gradientData.stops);
 
-    std::sort(gradientData.stops.begin(), gradientData.stops.end(), sortByStop);
-    
-    gradientData.x1 = from_string< float >(gradientDef->getAttribute("x1"));
-    gradientData.y1 = from_string< float >(gradientDef->getAttribute("y1"));
-    gradientData.x2 = from_string< float >(gradientDef->getAttribute("x2"));
-    gradientData.y2 = from_string< float >(gradientDef->getAttribute("y2"));
-    
-    if (gradientDef->hasAttribute("gradientTransform")) {
-        gradientData.gradient_transform = handler->createTransform();
-        std::string gradientTransform = gradientDef->getAttribute("gradientTransform");        
-        parse_transform(gradientTransform, *gradientData.gradient_transform);
+        std::sort(gradientData.stops.begin(), gradientData.stops.end(), sortByStop);
+
+        gradientData.x1 = from_string< float >(gradientDef->getAttribute("x1"));
+        gradientData.y1 = from_string< float >(gradientDef->getAttribute("y1"));
+        gradientData.x2 = from_string< float >(gradientDef->getAttribute("x2"));
+        gradientData.y2 = from_string< float >(gradientDef->getAttribute("y2"));
+
+        if (gradientDef->hasAttribute("gradientTransform")) {
+            gradientData.gradient_transform = handler->createTransform();
+            std::string gradientTransform = gradientDef->getAttribute("gradientTransform");
+            parse_transform(gradientTransform, *gradientData.gradient_transform);
+        }
+
+        handler->fillLinearGradient(gradientData);
+    } else if ( gradientDef->getName() == "svg:radialGradient" || gradientDef->getName() == "radialGradient") {
+        SvgRendererHandler::RadialGradient gradientData;
+        
+        fetchStopData(gradientDef, gradientData.stops);
+        
+        std::sort(gradientData.stops.begin(), gradientData.stops.end(), sortByStop);
+        
+        gradientData.cx = from_string< float >(gradientDef->getAttribute("cx"));
+        gradientData.cy = from_string< float >(gradientDef->getAttribute("cy"));
+        gradientData.fx = from_string< float >(gradientDef->getAttribute("fx"));
+        gradientData.fy = from_string< float >(gradientDef->getAttribute("fy"));
+        gradientData.r = from_string< float >(gradientDef->getAttribute("r"));
+        
+        if (gradientDef->hasAttribute("gradientTransform")) {
+            gradientData.gradient_transform = handler->createTransform();
+            std::string gradientTransform = gradientDef->getAttribute("gradientTransform");
+            parse_transform(gradientTransform, *gradientData.gradient_transform);
+        }
+        
+        handler->fillRadialGradient(gradientData);
     }
-    
-    handler->fillLinearGradient(gradientData);
 }
 
 

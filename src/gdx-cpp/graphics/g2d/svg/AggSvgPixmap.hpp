@@ -360,6 +360,33 @@ public:
         color = agg::rgba8(r,g,b,a);
     }
 
+    virtual void fillRadialGradient(const gdx_cpp::utils::SvgRendererHandler::RadialGradient& gradient) {
+        agg::svg::radial_gradient ra_gradient;
+        
+        ra_gradient.cx = gradient.cx;
+        ra_gradient.cy = gradient.cy;
+        ra_gradient.fx = gradient.fx;
+        ra_gradient.fy = gradient.fy;
+        ra_gradient.r = gradient.r;
+        
+        if (gradient.gradient_transform) {
+            ra_gradient.transform = *static_cast<AggTransform*>(gradient.gradient_transform)->transform;
+        }
+        
+        for (int i = 0; i < gradient.stops.size(); ++i) {
+            agg::svg::svg_gradient::stop stop;
+            const SvgRendererHandler::GradientStopData& data = gradient.stops[i];
+            
+            stop.color = agg::rgba(data.color.r, data.color.g, data.color.b, data.color.a);
+            stop.opacity = data.opacity;
+            stop.offset = data.offset;
+            
+            ra_gradient.stops.push_back(stop);
+        }
+        
+        renderer.fill_gradient(ra_gradient);
+    }
+    
     virtual void fillLinearGradient(const gdx_cpp::utils::SvgRendererHandler::LinearGradient& gradient) {
         agg::svg::linear_gradient li_gradient;
 
@@ -373,7 +400,7 @@ public:
         }
 
         for (int i = 0; i < gradient.stops.size(); ++i) {
-            agg::svg::linear_gradient::stop stop;
+            agg::svg::svg_gradient::stop stop;
             const SvgRendererHandler::GradientStopData& data = gradient.stops[i];
 
             stop.color = agg::rgba(data.color.r, data.color.g, data.color.b, data.color.a);
@@ -383,7 +410,7 @@ public:
             li_gradient.stops.push_back(stop);
         }
 
-        renderer.fill_linear_gradient(li_gradient);
+        renderer.fill_gradient(li_gradient);
     }
 
     void setColor(const gdx_cpp::graphics::Color& color) {

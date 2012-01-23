@@ -77,6 +77,15 @@ public:
         LinearGradient() : x1(0), x2(0), y1(0), y2(0), gradient_transform(NULL) { }
         ~LinearGradient() { delete gradient_transform; }
     };
+
+    struct RadialGradient {
+        float cx, cy, fx, fy, r;
+        transform* gradient_transform;
+        std::vector< GradientStopData > stops;
+        
+        RadialGradient() : cx(0), cy(0), fx(0), fy(0), r(0), gradient_transform(NULL) { }
+        ~RadialGradient() { delete gradient_transform; }
+    };
     
     virtual void setImageDimension(int width, int height) = 0;
     virtual void beginPath() = 0;
@@ -97,8 +106,10 @@ public:
     virtual void lineTo(float x, float y, bool relative = false) = 0;
     virtual void curve3(float x, float y, bool relative = false) = 0;
     virtual void curve3(float x, float y, float x1, float y1, bool relative = false) = 0;
-    virtual void fillLinearGradient(const LinearGradient&) = 0;
 
+    virtual void fillLinearGradient(const LinearGradient&) = 0;
+    virtual void fillRadialGradient(const RadialGradient&) = 0;
+    
     virtual transform* createTransform() = 0;
     virtual transform* const currentTransform() = 0;
     

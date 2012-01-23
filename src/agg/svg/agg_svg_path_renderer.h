@@ -70,22 +70,12 @@ private:
 
 //============================================================================
 //defines a gradient data for a path
-class gradient_data {
+class svg_gradient {
 public:
     enum enum_gradient_type {
         e_linear,
         e_radial
     };
-
-    enum_gradient_type gradient_type;
-
-    gradient_data(enum_gradient_type type) : gradient_type(type) { }
-};
-
-class linear_gradient : public gradient_data {
-public:
-    double x1,y1,x2,y2;
-    trans_affine transform;
 
     struct stop {
         rgba8 color;
@@ -94,19 +84,152 @@ public:
     };
 
     pod_bvector < stop > stops;
+    const enum_gradient_type gradient_type;
+    trans_affine transform;
 
-    linear_gradient() : gradient_data(e_linear), x1(0),y1(0),x2(0),y2(0) { }
+    virtual svg_gradient* clone() = 0;
+
+    svg_gradient(enum_gradient_type grad_type)
+            : gradient_type(grad_type)
+    {
+    }
+    svg_gradient(const svg_gradient& other) :
+            gradient_type(other.gradient_type),
+            stops(other.stops),
+            transform(other.transform)
+    {
+    }
+};
+
+struct linear_gradient : public svg_gradient {
+public:
+    double x1,y1,x2,y2;
+
+    linear_gradient() : svg_gradient(e_linear), x1(0),y1(0),x2(0),y2(0) { }
+
     linear_gradient(const linear_gradient& other)
-            : gradient_data(e_linear)
+            : svg_gradient(other)
             ,x1(other.x1)
             ,y1(other.y1)
             ,x2(other.x2)
             ,y2(other.y2)
-            ,stops(other.stops)
-            , transform(other.transform)
     {
     }
+
+    virtual linear_gradient* clone() {
+        return new linear_gradient(*this);
+    }
+
+    template <typename color_array_type,
+                typename scanline,
+                typename renderer_base_type,
+                typename rasterizer>
+    void  render_gradient(trans_affine& _transform,
+                          color_array_type& color_array,
+                          rasterizer& ras,
+                          scanline& sl,
+                          renderer_base_type& renderer_base)
+    {
+        //------------------------- gradient transformation
+        
+        _transform *= this->transform;
+
+        double dx = x2 - x1;
+        double dy = y2 - y1;
+        
+        double distance = sqrt(dx * dx + dy * dy);
+        double angle = atan2(dy, dx);
+        
+        _transform.invert();
+        
+        _transform *= agg::trans_affine_translation(-x1, -y1);
+        _transform *= agg::trans_affine_rotation(-angle);
+
+        //-------------------------
+        
+        typedef agg::span_interpolator_linear<> interpolator_type;
+        typedef agg::span_allocator<agg::rgba8> span_allocator_type;
+        typedef gradient_x gradient_func_type;
+        
+        span_allocator_type span_allocator;                  // Span Allocator
+        interpolator_type span_interpolator(_transform);
+        
+        typedef agg::span_gradient<agg::rgba8,
+        interpolator_type,
+        gradient_func_type,
+        color_array_type > span_gradient_type;
+
+        gradient_func_type grad_func;
+
+        typedef agg::renderer_scanline_aa<renderer_base_type, span_allocator_type,
+        span_gradient_type> renderer_gradient_type;
+
+        span_gradient_type span_gradient(span_interpolator, grad_func, color_array, 0, distance);
+        renderer_gradient_type ren_gradient(renderer_base, span_allocator, span_gradient);
+
+        agg::render_scanlines(ras, sl, ren_gradient);
+    }
 };
+
+
+class radial_gradient : public svg_gradient {
+public:
+    double cx, cy, r, fx, fy;
+
+    virtual radial_gradient* clone() {
+        return new radial_gradient(*this);
+    }
+
+    radial_gradient() : svg_gradient(e_radial) , cx(0), cy(0), r(0), fx(0) , fy(0)  { }
+    radial_gradient(const radial_gradient& other)
+            : svg_gradient(other), cx(other.cx), cy(other.cy), r(other.r), fx(other.fx) , fy(other.fy)  {
+
+    }
+
+    template <typename color_array_type,
+                typename scanline,
+                typename renderer_base_type,
+                typename rasterizer>
+    void  render_gradient(trans_affine& _transform,
+                          color_array_type& color_array,
+                          rasterizer& ras,
+                          scanline& sl,
+                          renderer_base_type& renderer_base)
+    {
+        //------------------------- gradient transformation
+        
+        _transform *= this->transform;
+        
+        _transform.invert();        
+        _transform *= agg::trans_affine_translation(-cx, -cy);
+        
+        //-------------------------
+        
+        typedef agg::span_interpolator_linear<> interpolator_type;
+        typedef agg::span_allocator<agg::rgba8> span_allocator_type;
+        typedef gradient_radial_focus gradient_func_type;
+        
+        span_allocator_type span_allocator;                  // Span Allocator
+        interpolator_type span_interpolator(_transform);
+        
+        typedef agg::span_gradient<agg::rgba8,
+                    interpolator_type,
+                    gradient_func_type,
+                    color_array_type > span_gradient_type;
+        
+        gradient_func_type grad_func(r, fx - cx , fy - cy);
+        
+        typedef agg::renderer_scanline_aa<renderer_base_type, span_allocator_type,
+        span_gradient_type> renderer_gradient_type;
+        
+        span_gradient_type span_gradient(span_interpolator, grad_func, color_array, 0, r);
+        
+        renderer_gradient_type ren_gradient(renderer_base, span_allocator, span_gradient);
+        
+        agg::render_scanlines(ras, sl, ren_gradient);
+    }
+};
+
 
 //============================================================================
 // Basic path attributes
@@ -124,7 +247,7 @@ struct path_attributes
     double       stroke_width;
     trans_affine transform;
 
-    linear_gradient* gradient;
+    svg_gradient* gradient;
 
     // Empty constructor
     path_attributes() :
@@ -156,11 +279,8 @@ struct path_attributes
             miter_limit(attr.miter_limit),
             stroke_width(attr.stroke_width),
             transform(attr.transform),
-            gradient(NULL)
+            gradient(attr.gradient ? attr.gradient->clone() : NULL)
     {
-        if (attr.gradient) {
-            this->gradient = new linear_gradient(*attr.gradient);
-        }
     }
 
     // Copy constructor with new index value
@@ -176,11 +296,8 @@ struct path_attributes
             miter_limit(attr.miter_limit),
             stroke_width(attr.stroke_width),
             transform(attr.transform),
-            gradient(NULL)
+            gradient(attr.gradient ? attr.gradient->clone() : NULL)
     {
-        if (attr.gradient) {
-            this->gradient = new linear_gradient(*attr.gradient);
-        }
     }
 
     ~path_attributes() {
@@ -267,7 +384,7 @@ public:
     void miter_limit(double ml);
     trans_affine& transform();
 
-    void fill_linear_gradient(linear_gradient& gradient);
+    void fill_gradient(svg_gradient& gradient);
 
     // Make all polygons CCW-oriented
     void arrange_orientations()
@@ -292,6 +409,8 @@ public:
         agg::conv_transform<agg::path_storage> trans(m_storage, m_transform);
         agg::bounding_rect(trans, *this, 0, m_attr_storage.size(), x1, y1, x2, y2);
     }
+
+
 
     // Rendering. One can specify two additional parameters:
     // trans_affine and opacity. They can be used to transform the whole
@@ -337,46 +456,14 @@ public:
                 }
 
                 if (attr.gradient) {
-                    if (attr.gradient->gradient_type == gradient_data::e_linear) {
-                        typedef agg::pod_auto_array<agg::rgba8, 1024> color_array_type;
-                        typedef gradient_x gradient_func_type;
-                        typedef agg::span_interpolator_linear<> interpolator_type;
-                        typedef agg::span_allocator<agg::rgba8> span_allocator_type;
-                        typedef agg::span_gradient<agg::rgba8,
-                        interpolator_type,
-                        gradient_func_type,
-                        color_array_type > span_gradient_type;
+                    agg::trans_affine   gradient_mtx;                    // Affine transformer
+                    fill_color_array(gradient_color_array, attr.gradient->stops);
+                    gradient_mtx *= m_transform;
 
-                        gradient_func_type  gradient_func;                   // The gradient function
-                        agg::trans_affine   gradient_mtx;                    // Affine transformer
-                        interpolator_type   span_interpolator(gradient_mtx); // Span interpolator
-                        span_allocator_type span_allocator;                  // Span Allocator
-                        color_array_type    color_array;                     // Gradient colors
-
-                        linear_gradient* grad = attr.gradient;
-                        double dx = grad->x2 - grad->x1;
-                        double dy = grad->y2 - grad->y1;
-
-                        double distance = sqrt(dx * dx + dy * dy);
-                        double angle = atan2(dy, dx);
-
-                        gradient_mtx *= m_transform;
-                        gradient_mtx *= grad->transform;
-
-                        gradient_mtx.invert();
-
-                        gradient_mtx *= agg::trans_affine_translation(-grad->x1, -grad->y1);
-                        gradient_mtx *= agg::trans_affine_rotation(-angle);
-
-                        typedef agg::renderer_scanline_aa<RendererBase, span_allocator_type,
-                        span_gradient_type> renderer_gradient_type;
-
-                        span_gradient_type span_gradient(span_interpolator, gradient_func, color_array, 0, distance);
-                        renderer_gradient_type ren_gradient(renderer_base, span_allocator, span_gradient);
-
-                        fill_color_array(color_array, grad->stops);
-
-                        agg::render_scanlines(ras, sl, ren_gradient);
+                    if (attr.gradient->gradient_type == svg_gradient::e_linear) {
+                        static_cast<linear_gradient*>(attr.gradient)->render_gradient(gradient_mtx, gradient_color_array, ras, sl, renderer_base);
+                    } else if (attr.gradient->gradient_type == svg_gradient::e_radial) {
+                        static_cast<radial_gradient*>(attr.gradient)->render_gradient(gradient_mtx, gradient_color_array, ras, sl, renderer_base);
                     }
                 } else {
                     color = attr.fill_color;
@@ -419,24 +506,27 @@ public:
 private:
 
     template <typename ColorArray>
-    void fill_color_array(ColorArray& array, pod_bvector< linear_gradient::stop >& stops) {
+    void fill_color_array(ColorArray& array, pod_bvector< svg_gradient::stop >& stops) {
         unsigned i = 0;
 
         unsigned int stop = 0;
-        unsigned int nextStopPos = 0;
-        unsigned int sliceSize = 0;
-        
-        while (stop < stops.size()) {            
-            nextStopPos = array.size() * stops[stop + 1].offset;
-            sliceSize = nextStopPos - i;
+
+        while (stop < stops.size()) {
+            const unsigned int nextStopPos = array.size() * stops[stop + 1].offset;
+            const unsigned int sliceSize = nextStopPos - i;
+            const float opactiy_interval = (stops[stop + 1].opacity - stops[stop].opacity) / (float) sliceSize;
 
             for (int j = 0; i < nextStopPos; ++i, j++) {
                 array[i] = stops[stop].color.gradient(stops[stop + 1].color, j / (float) sliceSize);
+                array[i].opacity(stops[stop].opacity + (j *  opactiy_interval));
             }
 
             stop++;
         }
     }
+
+    typedef agg::pod_auto_array<agg::rgba8, 1024> color_array_type;
+    color_array_type gradient_color_array;
 
     path_attributes& cur_attr();
 

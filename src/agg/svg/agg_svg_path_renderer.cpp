@@ -278,14 +278,14 @@ namespace svg
     }
 
     //------------------------------------------------------------------------
-    void path_renderer::fill_linear_gradient(linear_gradient& gradient)
+    void path_renderer::fill_gradient(svg_gradient& gradient)
     {
         path_attributes& cur = cur_attr();
         if (cur.gradient != NULL) {
             delete cur.gradient;
         }
 
-        cur.gradient = new linear_gradient(gradient);
+        cur.gradient = gradient.clone();
     }
 
 }
