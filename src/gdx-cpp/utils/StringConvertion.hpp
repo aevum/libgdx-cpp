@@ -32,7 +32,7 @@ namespace gdx_cpp {
 namespace utils {
 
 template <typename returnType>
-returnType from_string(std::string str) {
+returnType from_string(const std::string& str) {
     static std::stringstream ss;
     ss.clear();
     ss << str;
@@ -43,23 +43,23 @@ returnType from_string(std::string str) {
 }
 
 template <>
-inline std::string from_string<std::string>(std::string str) {
+inline std::string from_string<std::string>(const std::string& str) {
     return str;
 }
 
 template <>
-inline float from_string<float>(std::string str) {
+inline float from_string<float>(const std::string& str) {
     return atof(str.c_str());
 }
 
 template <>
-inline bool from_string<bool>(std::string str) {
+inline bool from_string<bool>(const std::string& str) {
     assert(str == "1" || str == "true" || str == "false" || str == "0");
     return str == "1" || str == "true";
 }
 
 template <typename returnType>
-returnType from_hex_string(std::string str) {
+returnType from_hex_string(const std::string& str) {
     static std::stringstream ss;
     ss.clear();
     ss << std::hex << str;
