@@ -181,7 +181,7 @@ _match:
                                     p = s + 2;
                                     while (data[p - 2] != ']' || data[p - 1] != ']' || data[p] != '>')
                                         p++;
-                                    text(std::string(data, s, p - s - 2));
+                                    text(std::string(&data[s], p - s - 2));
                                 } else
                                     while (data[p] != '>')
                                         p++;
@@ -192,7 +192,7 @@ _match:
                                 }
                             }
                             hasBody = true;
-                            open(std::string(data, s, p - s));
+                            open(std::string(&data[s], p - s));
                         }
                         break;
                         case 2:
@@ -231,13 +231,13 @@ _match:
                         case 5:
                             // line 117 "Xml.rl"
                         {
-                            attributeName.assign(data, s, p - s);
+                            attributeName.assign(&data[s], p - s);
                         }
                         break;
                         case 6:
                             // line 120 "Xml.rl"
                         {
-                            attribute(attributeName, std::string(data, s, p - s));
+                            attribute(attributeName, std::string(&data[s], p - s));
                         }
                         break;
                         case 7:
@@ -262,7 +262,7 @@ _match:
                                 int entityStart = current;
                                 while (current != end) {
                                     if (data[current++] != ';') continue;
-                                    textBuffer  << std::string(data, s, entityStart - s - 1);
+                                    textBuffer  << std::string(&data[s], entityStart - s - 1);
                                     std::string name(data, entityStart, current - entityStart - 1);
                                     std::string value = entity(name);
                                     textBuffer << (value.empty() ? value : name);
@@ -273,11 +273,11 @@ _match:
                             }
                             if (entityFound) {
                                 if (s < end)
-                                    textBuffer << std::string(data, s, end - s);
+                                    textBuffer << std::string(&data[s], end - s);
                                 text(textBuffer.str());
                                 textBuffer.clear();
                             } else
-                                text(std::string(data, s, end - s));
+                                text(std::string(&data[s], end - s));
                         }
                         break;
                         // line 190 "Xml.java"
@@ -308,7 +308,7 @@ _match:
         int lineNumber = 1;
         for (int i = 0; i < p; i++)
             if (data[i] == '\n') lineNumber++;
-        throw std::runtime_error("Error parsing XML on line " + to_string(lineNumber) + " near: " + std::string(data, p, std::min(32, pe - p)));
+        throw std::runtime_error("Error parsing XML on line " + to_string(lineNumber) + " near: " + std::string(&data[p], std::min(32, pe - p)));
     } else if (elements.size() != 0) {
         Element* element = elements.back();
         elements.clear();
