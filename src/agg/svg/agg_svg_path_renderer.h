@@ -81,6 +81,8 @@ public:
         rgba8 color;
         float opacity;
         float offset;
+
+        stop() : opacity(1), offset(0) { }
     };
 
     pod_bvector < stop > stops;

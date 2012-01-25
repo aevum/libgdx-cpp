@@ -36,7 +36,7 @@ namespace svg {
 
 /** Pixmap + SvgRendererHandler glue code :)
  */
-class SvgPixmapInterface : public virtual Pixmap, public virtual utils::SvgRendererHandler
+class SvgPixmapInterface : public Pixmap, public virtual utils::SvgRendererHandler
 {
 public:
     virtual void fill(graphics::Color color) = 0;    

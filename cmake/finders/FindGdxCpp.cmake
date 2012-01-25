@@ -54,9 +54,9 @@ if (UNIX)
         find_libraries("Box2D;gdx-cpp-box2d-layer")
     endif()
     
-    if (ANDROID_NDK)         
+    if (ANDROID_NDK)
+        find_libraries("gdx-cpp-backend-android;gdx-cpp-agg-svg;")
          set(GDXCPP_LIBRARIES "${GDXCPP_LIBRARIES};dl;log;GLESv1_CM;GLESv2;")
-         find_libraries("gdx-cpp-agg-svg;gdx-cpp-backend-android")
     else(ANDROID_NDK)
         find_libraries("gdx-cpp-backend-linux;gdx-cpp-agg-svg;vorbis;vorbisfile;openal;ogg;SDL;GLU;")
 
