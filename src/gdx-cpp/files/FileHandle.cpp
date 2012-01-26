@@ -149,7 +149,7 @@ int FileHandle::readBytes (buffer_ptr &c) const {
 }
 
 
-int FileHandle::write (char* data, int lenght, bool append) {
+int FileHandle::write ( const char* data, int lenght, bool append) {
     throw std::runtime_error("Not implemented, if you're seeing this error your backend"
     " hasn't implemented the write method, wich he should");
     

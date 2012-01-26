@@ -60,7 +60,7 @@ public:
     gdx_cpp::Files::FileType getType () const;
 
     virtual int readBytes (gdx_cpp::files::FileHandle::buffer_ptr& c) const;
-    virtual int write (char* data, int lenght, bool append);
+    virtual int write ( const char* data, int lenght, bool append);
     
     void list (std::vector<FileHandle> &handles);
     void list (const std::string& suffix, std::vector<FileHandle> &handles);

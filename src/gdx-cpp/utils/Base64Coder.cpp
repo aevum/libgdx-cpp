@@ -79,8 +79,7 @@ std::vector<char> Base64Coder::encode (const char* in, int length, int iOff) {
     int oLen = ((length + 2) / 3) * 4; // output length including padding
     std::vector<char> out;
 
-    out.resize(oLen + 1);
-    out[oLen] = '\0';
+    out.resize(oLen);
 
     int ip = iOff;
     int iEnd = iOff + length;
@@ -104,13 +103,13 @@ std::vector<char> Base64Coder::encode (const char* in, int length, int iOff) {
 }
 
 std::string Base64Coder::decodeString (const std::string& s) {
-    return std::string(&decode(s)[0]);
+    std::vector<char> decoded = decode(s);
+    return std::string(&decoded[0], decoded.size());
 }
 
 std::vector<char> Base64Coder::decodeLines (const std::string& s) {
     std::vector<char> buf;
-    buf.resize(s.length() + 1);
-    buf[s.length()] = '\0';
+    buf.resize(s.length());
 
     int p = 0;
     for (unsigned int ip = 0; ip < s.length(); ip++) {
@@ -133,10 +132,8 @@ std::vector< char > Base64Coder::decode (const char* in, int iLen, int iOff) {
 
     int oLen = (iLen * 3) / 4;
 
-    std::vector< char> out;
-    out.resize(oLen + 1);
-
-    out[oLen] = '\0';
+    std::vector< char > out;
+    out.resize(oLen);
 
     int ip = iOff;
     int iEnd = iOff + iLen;

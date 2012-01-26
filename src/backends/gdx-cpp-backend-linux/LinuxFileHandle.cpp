@@ -71,7 +71,7 @@ int LinuxFileHandle::readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) const
     return position;
 }
 
-int LinuxFileHandle::write(char* data, int lenght, bool append)
+int LinuxFileHandle::write( const char* data, int lenght, bool append)
 {
     return gdx_cpp::files::FileHandle::write(data, lenght, append);
 }
