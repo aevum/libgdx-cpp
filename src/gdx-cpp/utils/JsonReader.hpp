@@ -49,25 +49,7 @@ protected:
     static void number (const std::string& name,  int value);
     static void boolean (const std::string& name, bool value);
 
-private:
-    static const char _json_actions[61];
-    static const short _json_key_offsets[92];
-    static const char _json_trans_keys[606];
-    static const char _json_single_lengths[92];
-    static const char _json_range_lengths[92];
-    static const short _json_index_offsets[591];
-    static const char _json_trans_targs[591];
-    static const char _json_trans_actions[591];
-    static const char _json_eof_actions[92];
-
-    static const int json_start;
-    static const int json_first_final;
-    static const int json_error;
-
-    static const int json_en_object;
-    static const int json_en_array;
-    static const int json_en_main;
-    
+private:    
     static void set (const std::string& name, gdx_cpp::utils::JsonValue* value);
     
     static std::string unescape (const std::string& value);
