@@ -40,7 +40,3 @@ extern "C" void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener
 int main(int argc, char** argv) {
     return gdxcpp_main_selector::selector(argc, argv);
 }
-
-extern "C" bool gdxcpp_check_backend_presence() {
-    return true;
-}

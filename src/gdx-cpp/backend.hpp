@@ -5,7 +5,6 @@
 
 #include "gdx-cpp/ApplicationListener.hpp"
 
-extern "C" bool gdxcpp_check_backend_presence();
 extern "C" void gdxcpp_init(int argc, char** argv);
 extern "C" void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int width, int height);
 

@@ -44,8 +44,6 @@ implementation::System* Gdx::system = 0;
 void Gdx::initialize(Application* application,
                      Graphics* graphics, Audio* audio, Input*  input , Files* files)
 {
-    assert(gdxcpp_check_backend_presence());
-    
     Gdx::app = application;
     Gdx::graphics = graphics;
     Gdx::audio = audio;

@@ -18,13 +18,13 @@ gdx_cpp::ApplicationListener* applicationListener = 0;
 JavaVM* vm = 0;
 AndroidApplication* app = 0;
 
-void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int width, int height)
+extern "C" void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int width, int height)
 {
     applicationListener = listener;
 }
 
 extern "C" {
-    bool gdxcpp_check_backend_existence() {
+    bool gdxcpp_check_backend_presence() {
         return true;
     }
    
