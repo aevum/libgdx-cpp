@@ -64,7 +64,7 @@ JsonValue::ptr JsonReader::parse (const char* data, int offset, int length) {
 
     unsigned int cs, top = 0;
 
-    std::vector<int> stack(4);
+    std::vector<int> stack;
     char* s = NULL, *p = (char*)data + offset,* pe = (char*)data + length,* eof = pe;
 
     std::list<std::string> names;
@@ -81,6 +81,10 @@ JsonValue::ptr JsonReader::parse (const char* data, int offset, int length) {
         %%{
                 machine json;
 
+
+				prepush {
+					stack.resize(top + 1);
+				}
                 action buffer {
                         s = p;
                         needsUnescape = false;
