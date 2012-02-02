@@ -23,11 +23,7 @@ extern "C" void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener
     applicationListener = listener;
 }
 
-extern "C" {
-    bool gdxcpp_check_backend_presence() {
-        return true;
-    }
-   
+extern "C" {  
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitSystem(JNIEnv* env) {
         __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativeInit");
         Gdx::initializeSystem(new AndroidSystem);
