@@ -649,7 +649,7 @@ BitmapFont::BitmapFontData::BitmapFontData(files::FileHandle::ptr fontFile, bool
         strncpy(unquoted, file + 1, strlen(file) - 2);
         unquoted[strlen(file) - 2] = 0;
         
-        imagePath = fontFile->parent().child(unquoted).path();
+        imagePath = unquoted;
         descent = 0;
 
         while (true) {
