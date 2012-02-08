@@ -455,7 +455,7 @@ namespace agg
     // 
     //------------------------------------------------------------------------
     template<class AlphaMask> 
-    class scanline32_u8_am : public scanline32_u8
+    class scanline32_u8_am : public scanline32_u8, public scanline_u8
     {
     public:
         typedef scanline_u8           base_type;
@@ -464,8 +464,8 @@ namespace agg
         typedef base_type::coord_type coord_type;
 
 
-        scanline32_u8_am() : base_type(), m_alpha_mask(0) {}
-        scanline32_u8_am(const AlphaMask& am) : base_type(), m_alpha_mask(&am) {}
+        scanline32_u8_am() : m_alpha_mask(0) {}
+        scanline32_u8_am(const AlphaMask& am) : m_alpha_mask(&am) {}
 
         //--------------------------------------------------------------------
         void finalize(int span_y)
