@@ -12,10 +12,11 @@ svg/AggSvgPixmap.cpp
 )
 
 file(GLOB AGG_SRC src/*.cpp src/ctrl/*.cpp)
-add_library(gdx-cpp-agg-svg STATIC ${AGG_SVG_SRC} ${AGG_SRC})
 
-IF( CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64" )
-  SET_TARGET_PROPERTIES(gdx-cpp-agg-svg PROPERTIES COMPILE_FLAGS "-fPIC")
-ENDIF( CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64" )
+if (BUILD_AS_SHARED_LIBRARIES)
+    add_library(gdx-cpp-agg-svg SHARED ${AGG_SVG_SRC} ${AGG_SRC})
+else()
+    add_library(gdx-cpp-agg-svg STATIC ${AGG_SVG_SRC} ${AGG_SRC})
+endif()
 
-install(TARGETS gdx-cpp-agg-svg ARCHIVE DESTINATION lib)
+install(TARGETS gdx-cpp-agg-svg ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)

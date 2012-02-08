@@ -42,11 +42,13 @@ elseif(WIN32)
 endif()
 
 option(BUILD_BOX2D "Builds Box2D" TRUE)
+option(BUILD_AS_SHARED_LIBRARIES "Build libraries as shared libraries instead of static" FALSE)
 
 if (BUILD_BOX2D)
-    set(BOX2D_BUILD_STATIC TRUE)
-    set(BOX2D_BUILD_SHARED TRUE)
+    set(BOX2D_BUILD_STATIC NOT ${BUILD_AS_SHARED_LIBRARIES})
+    set(BOX2D_BUILD_SHARED ${BUILD_AS_SHARED_LIBRARIES})
     set(BOX2D_INSTALL TRUE)
+
     add_subdirectory(src/Box2D)
     add_subdirectory(src/gdx-cpp/physics/box2d)
 endif()

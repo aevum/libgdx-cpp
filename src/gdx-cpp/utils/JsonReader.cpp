@@ -2827,10 +2827,10 @@ case 70:
 void JsonReader::set (const std::string& name, gdx_cpp::utils::JsonValue* value) {
     switch (current->item_type) {
         case json_json:
-            ((JsonValue::item_map&)(*current))[name] = value;
+            current->as_item_map()[name] = value;
             break;
         case json_list:
-            ((JsonValue::array&)*current).push_back(value);
+            current->as_array().push_back(value);
             break;
         default:
             current = value;

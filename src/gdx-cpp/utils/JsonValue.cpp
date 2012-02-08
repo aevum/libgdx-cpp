@@ -33,25 +33,24 @@ JsonValue::JsonValue(int* val) : item_val(std::tr1::shared_ptr<void>(val)), item
 
 }
 
-JsonValue::JsonValue(float val) : item_type(json_float) {
-    item_val = std::tr1::shared_ptr<void>( new int(val) );
+JsonValue::JsonValue(float val) : item_val(std::tr1::shared_ptr<void>( new int(val) ) ), item_type(json_float) {
+
 }
 
 JsonValue::JsonValue(float* val) : item_val(std::tr1::shared_ptr<void>(val)), item_type(json_float)
 {
 }
 
-JsonValue::JsonValue(bool* val) : item_type(json_bool) , item_val(std::tr1::shared_ptr<void>( val )) {
+JsonValue::JsonValue(bool* val) : item_val(std::tr1::shared_ptr<void>( val )), item_type(json_bool)  {
 }
 
 JsonValue::JsonValue(const std::string& val)
-        : item_type(json_string)
+        : item_val(std::tr1::shared_ptr<void>( new std::string(val))) , item_type(json_string)
 {
-    item_val = std::tr1::shared_ptr<void>( new std::string(val) );
 }
 
 JsonValue::JsonValue(std::string* val)
-        : item_type(json_string), item_val(std::tr1::shared_ptr<void>( val ))
+        : item_val(std::tr1::shared_ptr<void>( val )),item_type(json_string)
 {
 }
 
@@ -63,7 +62,7 @@ JsonValue::JsonValue(const array& val) : item_type(json_list) {
     item_val = std::tr1::shared_ptr<void>( new array(val) );
 }
 
-JsonValue::JsonValue(bool val) : item_type(json_bool) , item_val(std::tr1::shared_ptr<void>(new bool(val))) {
+JsonValue::JsonValue(bool val) : item_val(std::tr1::shared_ptr<void>(new bool(val))), item_type(json_bool) {
 }
 
 gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int idx)
@@ -73,31 +72,31 @@ gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int idx)
         this->item_val = std::tr1::shared_ptr<void>(new_array);
         this->item_type = json_list;
     }
-    
+
     assert(item_type == json_list);
-    array& thisAsArray = *this;
+    array& thisAsArray = this->as_array();
 
     if (idx >= thisAsArray.size()) {
         thisAsArray.resize(idx + 1);
     }
-    
+
     if (thisAsArray[idx] == NULL) {
         thisAsArray[idx] = new JsonValue;
     }
-    
+
 #ifdef GDX_DEBUGGING
     array& asArray = *this;
     assert( asArray.size() > idx );
     return *(asArray[idx]);
 #else
-    return *((array&)*this)[idx];
+    return *this->as_array()[idx];
 #endif
 }
 
 gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int index) const
 {
     assert(item_type == json_list);
-    array& thisAsArray = *this;
+    const array& thisAsArray = this->as_array();
     assert(thisAsArray.size() > index);
 
     return *thisAsArray[index];
@@ -105,29 +104,38 @@ gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int index) const
 
 const gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::operator[](const std::string& name) const
 {
-    assert(item_type == json_json);
-    item_map& thisAsMap = *this;
-    
-    if (thisAsMap.count(name) == 0) {
-        throw std::runtime_error("Missing field named [" + name + "]");
-    }
-    
-    return *(thisAsMap[name]);
+    return operator[](name.c_str());
 }
 
 JsonValue& JsonValue::operator[](const std::string& name)
 {
-    {
-        if (this->item_type == json_null) {
-            this->item_val = std::tr1::shared_ptr<void>(new item_map);
-            this->item_type = json_json;
-        }
+    return operator[](name.c_str());
+}
+
+const gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::operator[](const char* name) const
+{
+    assert(item_type == json_json);
+    
+    item_map::const_iterator found = this->as_item_map().find(name);
+    
+    if (found == this->as_item_map().end()) {
+        throw std::runtime_error("Missing field named [" + std::string(name) + "]");
+    }
+    
+    return *found->second;
+}
+
+gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::operator[](const char* name)
+{
+    if (this->item_type == json_null) {
+        this->item_val = std::tr1::shared_ptr<void>(new item_map);
+        this->item_type = json_json;
     }
     
     assert(item_type == json_json);
-
-    item_map& thisAsMap = *this;
-        
+    
+    item_map& thisAsMap = this->as_item_map();
+    
     if (thisAsMap.count(name) == 0) {
         thisAsMap[name] = new JsonValue;
     }
@@ -137,26 +145,26 @@ JsonValue& JsonValue::operator[](const std::string& name)
 
 size_t JsonValue::count() const
 {
-   if (item_type == json_json) {
-       return ((item_map&)*this).size();
-   } else if (item_type == json_list) {
-       return ((array&)*this).size();
-   } else if (item_type == json_null) {
+    if (item_type == json_json) {
+        return this->as_item_map().size();
+    } else if (item_type == json_list) {
+        return this->as_array().size();
+    } else if (item_type == json_null) {
         return 0;
-   }
-   
-   return 1;
+    }
+
+    return 1;
 }
 
 bool JsonValue::contains(const std::string& name) const
 {
     assert(item_type == json_json);
-    return ((item_map&) *this).count(name) > 0;
+    return this->as_item_map().count(name) > 0;
 }
 
 JsonValue::~JsonValue() {
     if (item_type == json_list) {
-        array& lst = *this;
+        array& lst = this->as_array();
 
         array::iterator it = lst.begin();
         array::iterator end = lst.end();
@@ -165,7 +173,7 @@ JsonValue::~JsonValue() {
             delete *it;
         }
     } else if (item_type == json_json) {
-        item_map& map = *this;
+        item_map& map = this->as_item_map();
 
         item_map::iterator it = map.begin();
         item_map::iterator end = map.end();
@@ -178,12 +186,12 @@ JsonValue::~JsonValue() {
 
 JsonValue::item_map::const_iterator JsonValue::begin() {
     assert(item_type == json_json);
-    return ((item_map&)*this).begin();
+    return this->as_item_map().begin();
 }
 
 JsonValue::item_map::const_iterator JsonValue::end() {
     assert(item_type == json_json);
-    return ((item_map&)*this).end();
+    return this->as_item_map().end();
 }
 
 JsonValue::JsonValue() : item_type(json_null)
@@ -193,96 +201,95 @@ JsonValue::JsonValue() : item_type(json_null)
 void gdx_cpp::utils::JsonValue::toString(std::ostream& out, bool prettyPrint, int ident) const
 {
     std::string identLevel(ident, '\t');
-    
+
     switch (item_type) {
-        case json_bool:
-            out << ((bool)*this ? "true" : "false");
-            break;
-        case json_float:
-            out << (float) *this;
-            break;
-        case json_int:
-            out << (int) *this;
-            break;
-        case json_list: {
-            JsonValue::array::iterator iit = ((JsonValue::array&)*this).begin();
-            JsonValue::array::iterator eend = ((JsonValue::array&)*this).end();
-            
-            out << "[";
-            if (prettyPrint) out << std::endl;
-            
-            for (; iit != eend;) {
-                out << identLevel;
-                
-                (*iit)->toString(out, prettyPrint, ident + 1);
+    case json_bool:
+        out << this->as_bool() ? "true" : "false";
+        break;
+    case json_float:
+        out << this->as_float();
+        break;
+    case json_int:
+        out << this->as_int();
+        break;
+    case json_list: {
+        JsonValue::array::const_iterator iit = this->as_array().begin();
+        JsonValue::array::const_iterator eend = this->as_array().end();
 
-                if (++iit == eend)
-                    break;
+        out << "[";
+        if (prettyPrint) out << std::endl;
 
-                out << ",";
-                if (prettyPrint) out << std::endl;
-            }
-            
-            out << "]";
+        for (; iit != eend;) {
+            out << identLevel;
+
+            (*iit)->toString(out, prettyPrint, ident + 1);
+
+            if (++iit == eend)
+                break;
+
+            out << ",";
             if (prettyPrint) out << std::endl;
         }
-        break;
-        case json_json: {
-            
-            JsonValue::item_map::const_iterator it =  ((item_map&)*this).begin();
-            JsonValue::item_map::const_iterator end = ((item_map&)*this).end();
-            
-            out << "{";
-            if (prettyPrint) out << std::endl;
-            
-            for (; it != end;) {
-                out << identLevel;
-                
-                out << '"' << it->first << "\" : ";
-                it->second->toString(out, prettyPrint, ident + 1);
-                
-                if (++it == end) {
-                    if (prettyPrint) out << std::endl;
-                    break;
-                }
-                
-                out << ",";
+
+        out << "]";
+        if (prettyPrint) out << std::endl;
+    }
+    break;
+    case json_json: {
+
+        JsonValue::item_map::const_iterator it =  this->as_item_map().begin();
+        JsonValue::item_map::const_iterator end = this->as_item_map().end();
+
+        out << "{";
+        if (prettyPrint) out << std::endl;
+
+        for (; it != end;) {
+            out << identLevel;
+
+            out << '"' << it->first << "\" : ";
+            it->second->toString(out, prettyPrint, ident + 1);
+
+            if (++it == end) {
                 if (prettyPrint) out << std::endl;
+                break;
             }
-            if (prettyPrint) out << identLevel.substr(0, identLevel.length() - 1);
-            out << " }";
+
+            out << ",";
+            if (prettyPrint) out << std::endl;
         }
+        if (prettyPrint) out << identLevel.substr(0, identLevel.length() - 1);
+        out << " }";
+    }
+    break;
+    case json_null:
+        out << "null";
         break;
-        case json_null:
-            out << "null";
-            break;
-        case json_string:
-            out << "\"" << (std::string&) *this << "\"";
-            break;
+    case json_string:
+        out << "\"" << this->as_string() << "\"";
+        break;
     };
 }
 
 
 void gdx_cpp::utils::JsonValue::toString(std::ostream& out, bool prettyPrint) const
 {
-    toString(out, prettyPrint, 1);    
+    toString(out, prettyPrint, 1);
 }
 
 //sob... c++ sucks A LOT sometimes...
 namespace gdx_cpp {
 namespace utils {
 
-std::ostream& operator<< (std::ostream& out, gdx_cpp::utils::JsonValue& item) {
+std::ostream& operator<< (std::ostream& out, const gdx_cpp::utils::JsonValue& item) {
     item.toString(out);
-
     return out;
 }
 
 JsonValue& JsonValue::operator+=(const gdx_cpp::utils::JsonValue& other) {
     assert(item_type == json_json && other.item_type == json_json);
 
-    item_map& thisAsMap = *this;
-    const item_map& otherAsMap = other;
+    item_map& thisAsMap = this->as_item_map();
+    const item_map& otherAsMap = other.as_item_map();
 
     item_map::const_iterator it = otherAsMap.begin();
     item_map::const_iterator end = otherAsMap.end();
@@ -297,4 +304,5 @@ JsonValue& JsonValue::operator+=(const gdx_cpp::utils::JsonValue& other) {
 }
 }
 }
+
 

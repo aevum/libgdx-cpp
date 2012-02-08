@@ -59,9 +59,9 @@ public:
     JsonValue(const std::string& val) ;
     JsonValue(std::string* val) ;
     JsonValue(const item_map& val) ;
-    JsonValue(item_map* val) : item_type(json_json), item_val(std::tr1::shared_ptr<void>( val )) {}
+    JsonValue(item_map* val) : item_val(std::tr1::shared_ptr<void>( val )),item_type(json_json) {}
     JsonValue(const array& val) ;
-    JsonValue(array* val) : item_type(json_list) , item_val(std::tr1::shared_ptr<void>( val )) {}
+    JsonValue(array* val) : item_val(std::tr1::shared_ptr<void>( val )), item_type(json_list) {}
     JsonValue(const JsonValue& other) : item_val(other.item_val), item_type(other.item_type)
     {
     }
@@ -71,7 +71,7 @@ public:
             this->item_val = std::tr1::shared_ptr<void>(new std::string(other));
             this->item_type = json_string;
         } else {
-            ((std::string&)*this) = other;
+            this->as_string() = other;
         }
         return *this;
     }
@@ -81,7 +81,7 @@ public:
             this->item_val = std::tr1::shared_ptr<void>(new std::string(other));
             this->item_type = json_string;
         } else {
-            ((std::string&)*this) = other;
+            this->as_string() = other;
         }
         return *this;
     }
@@ -91,7 +91,7 @@ public:
             this->item_val = std::tr1::shared_ptr<void>(new int(other));
             this->item_type = json_int;
         } else {
-            ((int&)*this) = other;
+            this->as_int() = other;
         }
         return *this;
     }
@@ -101,7 +101,7 @@ public:
             this->item_val = std::tr1::shared_ptr<void>(new bool(other));
             this->item_type = json_bool;
         } else {
-            ((bool&)*this) = other;
+            this->as_bool() = other;
         }
         return *this;
     }
@@ -111,7 +111,7 @@ public:
             this->item_val = std::tr1::shared_ptr<void>(new float(other));
             this->item_type = json_float;
         } else {
-            ((float&)*this) = other;
+            this->as_float() = other;
         }
         return *this;
     }
@@ -121,7 +121,7 @@ public:
             this->item_val = std::tr1::shared_ptr<void>(new array(other));
             this->item_type = json_list;
         } else {
-            ((array&)*this) = other;
+            this->as_array() = other;
         }
         return *this;
     }
@@ -138,86 +138,30 @@ public:
     }
 
     JsonValue& operator += (const JsonValue& other) ;
-    
-    
-    template <typename T>
-    operator T&() const {
-        return *(T*)item_val.get();
-    }
-    
-    template <typename T>
-    operator T&() {
-#ifdef GDX_DEBUGGING
-        switch(item_type) {
-            case json_int:
-                assert(typeid(int) == typeid(T));
-                break;
-            case json_float:
-                assert(typeid(float) == typeid(T));
-                break;
-            case json_list:
-                assert(typeid(array) == typeid(T));
-                break;
-            case json_json:
-                assert(typeid(item_map) == typeid(T));
-                break;
-            case json_bool:
-                assert(typeid(bool) == typeid(T));
-                break;
-            case json_string:
-                assert(typeid(std::string) == typeid(T));
-                break;
-            case json_null:
-                throw std::runtime_error("casting a null json value to another type is forbidden");
-            default:
-                break;
-        }
-#endif
-        if (this->item_type == json_null) {
-            *this = T(0);
-        }
+   
+    int& as_int()       { build_from_null<int>(); assert(item_type == json_int); return *(int*)item_val.get(); }
+    const int& as_int() const { assert(item_type == json_int); return *(int*)item_val.get(); }
 
-        return *(T*)item_val.get();
-    }
+    bool& as_bool()       { build_from_null<bool>(); assert(item_type == json_bool); return *(bool*)item_val.get(); }
+    const bool& as_bool() const { assert(item_type == json_bool); return *(bool*)item_val.get(); }
 
-    template <typename T>
-    operator const T&() {
-        #ifdef GDX_DEBUGGING
-        switch(item_type) {
-            case json_int:
-                assert(typeid(int) == typeid(T));
-                break;
-            case json_float:
-                assert(typeid(float) == typeid(T));
-                break;
-            case json_list:
-                assert(typeid(array) == typeid(T));
-                break;
-            case json_json:
-                assert(typeid(item_map) == typeid(T));
-                break;
-            case json_bool:
-                assert(typeid(bool) == typeid(T));
-                break;
-            case json_string:
-                assert(typeid(std::string) == typeid(T));
-                break;
-            case json_null:
-                throw std::runtime_error("casting a null json value to another type is forbidden");
-            default:
-                break;
-        }
-        #endif
-        
-        if (this->item_type == json_null) {
-            throw std::runtime_error("Trying to deserialize a null json value");
-        }
-        
-        return *(T*)item_val.get();
-    }
+    float& as_float()       { build_from_null<float>(); assert(item_type == json_float); return *(float*)item_val.get(); }
+    const float& as_float() const { assert(item_type == json_float); return *(float*)item_val.get(); }
 
+    std::string& as_string()       { build_from_null<std::string>(); assert(item_type == json_string); return *(std::string*)item_val.get(); }
+    const std::string& as_string() const { assert(item_type == json_string); return *(std::string*)item_val.get(); }
+
+    array& as_array()       { build_from_null<array>(); assert(item_type == json_list); return *(array*)item_val.get(); }
+    const array& as_array() const { assert(item_type == json_list); return *(array*)item_val.get(); }
+    
+    item_map& as_item_map()       { build_from_null<item_map>(); assert(item_type == json_json); return *(item_map*)item_val.get(); }
+    const item_map& as_item_map() const { assert(item_type == json_json); return *(item_map*)item_val.get(); }
+    
     const JsonValue& operator[](const std::string& name) const;
     JsonValue& operator[](const std::string& name);
+
+    const JsonValue& operator[](const char* name) const;
+    JsonValue& operator[](const char* name);
     
     JsonValue& at(int index);
     JsonValue& at(int index) const;
@@ -263,15 +207,30 @@ public:
 
     ~JsonValue() ;
 
-    friend std::ostream& operator<< (std::ostream &out, JsonValue& item);
+    friend std::ostream& operator<< (std::ostream &out, const JsonValue& item);
 
 private:
+    template <typename T>
+    void build_from_null() {
+        if ( item_type == json_null) {
+            *this = T();
+        }
+    }
 
+
+    
     void toString(std::ostream& out, bool prettyPrint, int ident) const;
     
     friend class JsonReader;
     std::tr1::shared_ptr<void> item_val;
     char item_type;
+    
+    operator array& ();
+    operator item_map& ();
+    operator int&();
+    operator bool&();
+    operator float&();
+    operator std::string&();
 };
 
 }
