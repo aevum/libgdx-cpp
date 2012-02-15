@@ -50,14 +50,14 @@ protected:
     static void boolean (const std::string& name, bool value);
 
 private:    
-    static void set (const std::string& name, gdx_cpp::utils::JsonValue* value);
+    static void set (const std::string& name, gdx_cpp::utils::JsonValue::ptr value);
     
     static std::string unescape (const std::string& value);
 
-    static JsonValue* root;
-    static JsonValue* current;
+    static JsonValue::ptr root;
+    static JsonValue::ptr current;
 
-    static std::list< JsonValue* > elements;
+    static std::list< JsonValue::ptr > elements;
 };
 
 } // namespace gdx_cpp

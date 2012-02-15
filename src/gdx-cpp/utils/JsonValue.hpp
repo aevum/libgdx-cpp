@@ -47,8 +47,8 @@ enum json_item_type {
 class JsonValue {
 public:
     typedef ref_ptr_maker< JsonValue >::type ptr;
-    typedef std::tr1::unordered_map< std::string, JsonValue* > item_map;
-    typedef std::vector< JsonValue* > array;
+    typedef std::tr1::unordered_map< std::string, ptr > item_map;
+    typedef std::vector< ptr > array;
 
     JsonValue(int val) ;
     JsonValue(int* val) ;
@@ -163,8 +163,8 @@ public:
     const JsonValue& operator[](const char* name) const;
     JsonValue& operator[](const char* name);
     
-    JsonValue& at(int index);
-    JsonValue& at(int index) const;
+    JsonValue& at(unsigned int idx);
+    const JsonValue& at(unsigned int index) const;
     
     JsonValue() ;
 
@@ -177,28 +177,28 @@ public:
 
     bool contains(const std::string& name) const;
 
-    static JsonValue* newNodeAsJson(JsonValue::item_map* preset = NULL) {
-        return new JsonValue(preset == NULL ? new JsonValue::item_map : preset);
+    static JsonValue::ptr newNodeAsJson(JsonValue::item_map* preset = NULL) {
+        return ptr(new JsonValue(preset == NULL ? new JsonValue::item_map : preset));
     }
 
-    static JsonValue* newNodeAsInt(int* val = NULL) {
-        return new JsonValue(val == NULL ? new int(0) : val);
+    static JsonValue::ptr newNodeAsInt(int* val = NULL) {
+        return ptr(new JsonValue(val == NULL ? new int(0) : val));
     }
 
-    static JsonValue* newNodeAsArray(JsonValue::array* preset = NULL) {
-        return new JsonValue(preset == NULL ? new JsonValue::array : preset);
+    static JsonValue::ptr newNodeAsArray(JsonValue::array* preset = NULL) {
+        return ptr(new JsonValue(preset == NULL ? new JsonValue::array : preset));
     }
 
-    static JsonValue* newNodeAsString(std::string* preset = NULL) {
-        return new JsonValue(preset == NULL ? new std::string : preset);
+    static JsonValue::ptr newNodeAsString(std::string* preset = NULL) {
+        return ptr(new JsonValue(preset == NULL ? new std::string : preset));
     }
 
-    static JsonValue* newNodeAsBool(bool* preset = NULL) {
-        return new JsonValue(preset == NULL ? new bool : preset);
+    static JsonValue::ptr newNodeAsBool(bool* preset = NULL) {
+        return ptr(new JsonValue(preset == NULL ? new bool : preset));
     }
 
-    static JsonValue* newNodeAsFloat(float* preset = NULL) {
-        return new JsonValue(preset == NULL ? new float : preset);
+    static JsonValue::ptr newNodeAsFloat(float* preset = NULL) {
+        return ptr(new JsonValue(preset == NULL ? new float : preset));
     }
 
     json_item_type getType() const {

@@ -33,9 +33,9 @@ using namespace gdx_cpp::utils;
 using namespace gdx_cpp;
 
 
-JsonValue* JsonReader::root = 0;
-JsonValue* JsonReader::current = 0;
-std::list< JsonValue* > JsonReader::elements;
+JsonValue::ptr JsonReader::root;
+JsonValue::ptr JsonReader::current;
+std::list< JsonValue::ptr > JsonReader::elements;
 
 
 /* #line 42 "JsonReader.cpp" */
@@ -2802,13 +2802,6 @@ case 70:
     } else if (elements.size() != 0) {
         int element_type = elements.front()->item_type;
 
-        std::list< JsonValue* >::iterator it = elements.begin();
-        std::list< JsonValue* >::iterator end = elements.end();
-
-        for (; it != end; ++it) {
-            delete *it;
-        }
-
         elements.clear();
 
         if (element_type == json_json)
@@ -2817,14 +2810,14 @@ case 70:
             throw std::runtime_error("Error parsing JSON, unmatched bracket.");
     }
 
-    JsonValue* _root = root;
-    root = NULL;
+    JsonValue::ptr _root = root;
+    root.reset();
 
-    return std::tr1::shared_ptr< JsonValue >(_root);
+    return _root;
 }
 
 
-void JsonReader::set (const std::string& name, gdx_cpp::utils::JsonValue* value) {
+void JsonReader::set (const std::string& name, gdx_cpp::utils::JsonValue::ptr value) {
     switch (current->item_type) {
         case json_json:
             current->as_item_map()[name] = value;
@@ -2839,7 +2832,7 @@ void JsonReader::set (const std::string& name, gdx_cpp::utils::JsonValue* value)
 }
 
 void JsonReader::startObject (const std::string& name) {
-    JsonValue* value = JsonValue::newNodeAsJson();
+    JsonValue::ptr value = JsonValue::newNodeAsJson();
 
     if (current != NULL) {
         set(name, value);
@@ -2850,7 +2843,7 @@ void JsonReader::startObject (const std::string& name) {
 }
 
 void JsonReader::startArray (const std::string& name) {
-    JsonValue* array_item = JsonValue::newNodeAsArray();
+    JsonValue::ptr array_item = JsonValue::newNodeAsArray();
 
     if (current != NULL) {
         set(name, array_item);
@@ -2863,7 +2856,7 @@ void JsonReader::startArray (const std::string& name) {
 void JsonReader::pop () {
     root = elements.back();
     elements.pop_back();
-    current = elements.size() > 0 ? elements.back() : NULL;
+    current = elements.size() > 0 ? elements.back() : null_shared_ptr();
 }
 
 void JsonReader::string (const std::string& name,const std::string& value) {

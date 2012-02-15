@@ -65,7 +65,7 @@ JsonValue::JsonValue(const array& val) : item_type(json_list) {
 JsonValue::JsonValue(bool val) : item_val(std::tr1::shared_ptr<void>(new bool(val))), item_type(json_bool) {
 }
 
-gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int idx)
+gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(unsigned int idx)
 {
     if (this->item_type == json_null) {
         array* new_array = new array;
@@ -81,7 +81,7 @@ gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int idx)
     }
 
     if (thisAsArray[idx] == NULL) {
-        thisAsArray[idx] = new JsonValue;
+        thisAsArray[idx] = ptr(new JsonValue);
     }
 
 #ifdef GDX_DEBUGGING
@@ -93,7 +93,7 @@ gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int idx)
 #endif
 }
 
-gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(int index) const
+const gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(unsigned int index) const
 {
     assert(item_type == json_list);
     const array& thisAsArray = this->as_array();
@@ -137,7 +137,7 @@ gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::operator[](const char* nam
     item_map& thisAsMap = this->as_item_map();
     
     if (thisAsMap.count(name) == 0) {
-        thisAsMap[name] = new JsonValue;
+        thisAsMap[name] = ptr(new JsonValue);
     }
     
     return *thisAsMap[name];
@@ -164,23 +164,9 @@ bool JsonValue::contains(const std::string& name) const
 
 JsonValue::~JsonValue() {
     if (item_type == json_list) {
-        array& lst = this->as_array();
-
-        array::iterator it = lst.begin();
-        array::iterator end = lst.end();
-
-        for (; it != end; ++it) {
-            delete *it;
-        }
+        this->as_array().clear();
     } else if (item_type == json_json) {
-        item_map& map = this->as_item_map();
-
-        item_map::iterator it = map.begin();
-        item_map::iterator end = map.end();
-
-        for (; it != end; ++it) {
-            delete it->second;
-        }
+        this->as_item_map().clear();
     }
 }
 
@@ -204,7 +190,7 @@ void gdx_cpp::utils::JsonValue::toString(std::ostream& out, bool prettyPrint, in
 
     switch (item_type) {
     case json_bool:
-        out << this->as_bool() ? "true" : "false";
+        out << (this->as_bool() ? "true" : "false");
         break;
     case json_float:
         out << this->as_float();
@@ -295,7 +281,7 @@ JsonValue& JsonValue::operator+=(const gdx_cpp::utils::JsonValue& other) {
     item_map::const_iterator end = otherAsMap.end();
 
     for (; it != end; ++it) {
-        JsonValue* newValue = new JsonValue;
+        ptr newValue = ptr(new JsonValue);
         *newValue = *it->second;
         thisAsMap[it->first] = newValue;
     }
