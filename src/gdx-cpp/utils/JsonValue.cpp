@@ -163,11 +163,6 @@ bool JsonValue::contains(const std::string& name) const
 }
 
 JsonValue::~JsonValue() {
-    if (item_type == json_list) {
-        this->as_array().clear();
-    } else if (item_type == json_json) {
-        this->as_item_map().clear();
-    }
 }
 
 JsonValue::item_map::const_iterator JsonValue::begin() {

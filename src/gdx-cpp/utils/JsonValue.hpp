@@ -133,6 +133,13 @@ public:
         return *this;
     }
 
+    JsonValue& operator = (const ptr& other) {
+        this->item_type = other->item_type;
+        this->item_val = other->item_val;
+        
+        return *this;
+    }
+
     JsonValue& operator + (const JsonValue& other) {
         return *this += other;
     }
@@ -223,7 +230,7 @@ private:
     
     friend class JsonReader;
     std::tr1::shared_ptr<void> item_val;
-    char item_type;
+    json_item_type item_type;
     
     operator array& ();
     operator item_map& ();
