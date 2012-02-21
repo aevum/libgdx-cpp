@@ -134,7 +134,7 @@ public:
     {
         //------------------------- gradient transformation
         
-        _transform *= this->transform;
+        agg::trans_affine final_transform = _transform * this->transform;
 
         double dx = x2 - x1;
         double dy = y2 - y1;
@@ -142,10 +142,10 @@ public:
         double distance = sqrt(dx * dx + dy * dy);
         double angle = atan2(dy, dx);
         
-        _transform.invert();
+        final_transform.invert();
         
-        _transform *= agg::trans_affine_translation(-x1, -y1);
-        _transform *= agg::trans_affine_rotation(-angle);
+        final_transform *= agg::trans_affine_translation(-x1, -y1);
+        final_transform *= agg::trans_affine_rotation(-angle);
 
         //-------------------------
         
@@ -154,7 +154,7 @@ public:
         typedef gradient_x gradient_func_type;
         
         span_allocator_type span_allocator;                  // Span Allocator
-        interpolator_type span_interpolator(_transform);
+        interpolator_type span_interpolator(final_transform);
         
         typedef agg::span_gradient<agg::rgba8,
         interpolator_type,
@@ -200,10 +200,10 @@ public:
     {
         //------------------------- gradient transformation
         
-        _transform *= this->transform;
+        agg::trans_affine final_transform = _transform * this->transform;
         
-        _transform.invert();        
-        _transform *= agg::trans_affine_translation(-cx, -cy);
+        final_transform.invert();        
+        final_transform *= agg::trans_affine_translation(-cx, -cy);
         
         //-------------------------
         
@@ -212,7 +212,7 @@ public:
         typedef gradient_radial_focus gradient_func_type;
         
         span_allocator_type span_allocator;                  // Span Allocator
-        interpolator_type span_interpolator(_transform);
+        interpolator_type span_interpolator(final_transform);
         
         typedef agg::span_gradient<agg::rgba8,
                     interpolator_type,
@@ -229,6 +229,13 @@ public:
         renderer_gradient_type ren_gradient(renderer_base, span_allocator, span_gradient);
         
         agg::render_scanlines(ras, sl, ren_gradient);
+
+        agg::ellipse el( 100, 100, 500 , 500, 100);
+
+        ras.add_path(el);
+        
+        agg::render_scanlines(ras, sl, ren_gradient);
+        
     }
 };
 
@@ -469,7 +476,9 @@ public:
                     }
                 } else {
                     color = attr.fill_color;
+                    std::cout << color.opacity() << std::endl;
                     color.opacity(color.opacity() * opacity);
+                    std::cout << color.opacity() << std::endl;
                     ren.color(color);
                     agg::render_scanlines(ras, sl, ren);
                 }

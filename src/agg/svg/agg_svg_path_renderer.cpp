@@ -205,7 +205,11 @@ namespace svg
     void path_renderer::fill(const rgba8& f)
     {
         path_attributes& attr = cur_attr();
+        int32u alpha = (f.a * attr.fill_color.a ) / 255;
+        
         attr.fill_color = f;
+        attr.fill_color.a = alpha;
+        
         attr.fill_flag = true;
     }
 
@@ -244,7 +248,8 @@ namespace svg
     //------------------------------------------------------------------------
     void path_renderer::fill_opacity(double op)
     {
-        cur_attr().fill_color.opacity(op);
+        double alpha = cur_attr().fill_color.opacity() * op;
+        cur_attr().fill_color.opacity(alpha);
     }
 
     //------------------------------------------------------------------------

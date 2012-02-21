@@ -24,7 +24,7 @@
 #include <agg_svg_path_renderer.h>
 #include <agg_rendering_buffer.h>
 #include <agg_pixfmt_rgb.h>
-#include <agg_scanline_u.h>
+#include <agg_scanline_p.h>
 
 #undef GL_RGBA
 #undef GL_UNSIGNED_BYTE
@@ -323,13 +323,12 @@ const unsigned char* AggSvgPixmap::getPixels() {
     rb.clear(agg::rgba8(0,0,0,0));
 
     agg::rasterizer_scanline_aa<> ras;
-    agg::scanline_u8 sl;
+    agg::scanline_p8 sl;
     agg::trans_affine mtx;
 
     mtx *= agg::trans_affine_scaling(scaleX, scaleY);
-
-    //         pimpl->renderer.arrange_orientations();
-    pimpl->renderer.expand(0);
+    
+    pimpl->renderer.expand(0.01);
     pimpl->renderer.render(ras, sl, ren, mtx, rb, rb.clip_box(), 1.0);
 
     return rbuf.buf();

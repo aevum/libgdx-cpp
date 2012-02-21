@@ -24,22 +24,18 @@ extern "C" void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener
 }
 
 extern "C" {  
-    void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitSystem(JNIEnv* env) {
-        __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativeInit");
+    void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitSystem(JNIEnv* env) {        
         Gdx::initializeSystem(new AndroidSystem);
         gdxcpp_init(1, NULL);
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitialize(JNIEnv* env, jclass clazz, jobject assetManager, int width, int height) {
-        __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativeInitialize aaaaaaaaaaa");
-
         assert(applicationListener);
-        app = new AndroidApplication(applicationListener, "test", width, height, false);
+        app = new AndroidApplication(applicationListener, "gdx-android", width, height, false);
         app->setJavaVM(vm);
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeCreate(JNIEnv* env) {
-        __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativeCreate, list %p", applicationListener);
         assert(applicationListener);
         applicationListener->create();        
     }
@@ -50,13 +46,11 @@ extern "C" {
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativePause(JNIEnv* env) {
-        __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativePause foi!");
         assert(applicationListener);
         app->pause();
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeResize(JNIEnv* env, jobject object, jint width, jint height) {
-        __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "nativeResize: width %d height %d", width, height);
         assert(applicationListener);
         static_cast<AndroidGraphics*>(Gdx::app->getGraphics())->resize(width, height);
     }
@@ -123,9 +117,7 @@ extern "C" {
     
     JNIEXPORT jint JNICALL
     JNI_OnLoad(JavaVM *jvm, void *reserved) {
-        __android_log_print(ANDROID_LOG_INFO, "GdxCpp", "onLoad");
         vm = jvm;
-
         return JNI_VERSION_1_2;
     }
 }

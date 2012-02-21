@@ -206,7 +206,7 @@ bool gdx_cpp::graphics::g2d::svg::SvgParser::parse_attr(const std::string& name,
             }
         }
     }
-    else if (name == "fill-opacity")
+    else if (name == "fill-opacity" || name == "opacity")
     {
         handler->fillOpacity(utils::from_string<double>(value));
     }
@@ -468,6 +468,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
     parse_attr(node);
 
     std::string path = node->getAttribute("d");
+
     std::string::size_type result = 0;
     std::vector<std::string> paths = splitArgs<std::string>(path, " ,", result);
     static const char commands[]   = "MmZzLlHhVvCcSsQqTtAaFfPp";
@@ -475,7 +476,6 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
     unsigned int i = 0;
 
     char cmd = paths[0][0];
-    bool implicitCommand = false;
     
     while (i < paths.size()) {
         int j = 0;
@@ -484,17 +484,12 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
 
         if (j < strlen(commands)) {
             cmd = paths[i++][0];
-        } else {
-            implicitCommand = true;
         }
-
+        
         switch(cmd) {
             case 'M': case 'm':
-                if (implicitCommand) {
-                    handler->lineTo(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 'm');
-                } else {
-                    handler->moveTo(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 'm');
-                }
+                handler->moveTo(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 'm');
+                cmd = cmd == 'm' ? 'l' : 'L';                
                 i += 2;
                 break;
                 
@@ -551,7 +546,6 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
                 throw std::runtime_error("parse_path: Command A: NOT IMPLEMENTED YET");
                 
             case 'Z': case 'z':
-                implicitCommand = false;
                 handler->closeSubPath();
                 break;
                 
