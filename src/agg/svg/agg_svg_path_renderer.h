@@ -134,7 +134,7 @@ public:
     {
         //------------------------- gradient transformation
         
-        agg::trans_affine final_transform = _transform * this->transform;
+        this->transform *= _transform;
 
         double dx = x2 - x1;
         double dy = y2 - y1;
@@ -142,10 +142,10 @@ public:
         double distance = sqrt(dx * dx + dy * dy);
         double angle = atan2(dy, dx);
         
-        final_transform.invert();
+        this->transform.invert();
         
-        final_transform *= agg::trans_affine_translation(-x1, -y1);
-        final_transform *= agg::trans_affine_rotation(-angle);
+        this->transform *= agg::trans_affine_translation(-x1, -y1);
+        this->transform *= agg::trans_affine_rotation(-angle);
 
         //-------------------------
         
@@ -154,7 +154,7 @@ public:
         typedef gradient_x gradient_func_type;
         
         span_allocator_type span_allocator;                  // Span Allocator
-        interpolator_type span_interpolator(final_transform);
+        interpolator_type span_interpolator(this->transform);
         
         typedef agg::span_gradient<agg::rgba8,
         interpolator_type,
@@ -200,10 +200,10 @@ public:
     {
         //------------------------- gradient transformation
         
-        agg::trans_affine final_transform = _transform * this->transform;
+        this->transform *= _transform;
         
-        final_transform.invert();        
-        final_transform *= agg::trans_affine_translation(-cx, -cy);
+        this->transform.invert();        
+        this->transform *= agg::trans_affine_translation(-cx, -cy);
         
         //-------------------------
         
@@ -212,7 +212,7 @@ public:
         typedef gradient_radial_focus gradient_func_type;
         
         span_allocator_type span_allocator;                  // Span Allocator
-        interpolator_type span_interpolator(final_transform);
+        interpolator_type span_interpolator(this->transform);
         
         typedef agg::span_gradient<agg::rgba8,
                     interpolator_type,
@@ -230,12 +230,7 @@ public:
         
         agg::render_scanlines(ras, sl, ren_gradient);
 
-        agg::ellipse el( 100, 100, 500 , 500, 100);
-
-        ras.add_path(el);
-        
-        agg::render_scanlines(ras, sl, ren_gradient);
-        
+        ras.reset();
     }
 };
 
@@ -465,20 +460,16 @@ public:
                 }
 
                 if (attr.gradient) {
-                    agg::trans_affine   gradient_mtx;                    // Affine transformer
                     fill_color_array(gradient_color_array, attr.gradient->stops);
-                    gradient_mtx *= m_transform;
 
                     if (attr.gradient->gradient_type == svg_gradient::e_linear) {
-                        static_cast<linear_gradient*>(attr.gradient)->render_gradient(gradient_mtx, gradient_color_array, ras, sl, renderer_base);
+                        static_cast<linear_gradient*>(attr.gradient)->render_gradient(m_transform, gradient_color_array, ras, sl, renderer_base);
                     } else if (attr.gradient->gradient_type == svg_gradient::e_radial) {
-                        static_cast<radial_gradient*>(attr.gradient)->render_gradient(gradient_mtx, gradient_color_array, ras, sl, renderer_base);
+                        static_cast<radial_gradient*>(attr.gradient)->render_gradient(m_transform, gradient_color_array, ras, sl, renderer_base);
                     }
                 } else {
                     color = attr.fill_color;
-                    std::cout << color.opacity() << std::endl;
                     color.opacity(color.opacity() * opacity);
-                    std::cout << color.opacity() << std::endl;
                     ren.color(color);
                     agg::render_scanlines(ras, sl, ren);
                 }
