@@ -165,12 +165,12 @@ bool JsonValue::contains(const std::string& name) const
 JsonValue::~JsonValue() {
 }
 
-JsonValue::item_map::const_iterator JsonValue::begin() {
+JsonValue::item_map::const_iterator JsonValue::begin() const {
     assert(item_type == json_json);
     return this->as_item_map().begin();
 }
 
-JsonValue::item_map::const_iterator JsonValue::end() {
+JsonValue::item_map::const_iterator JsonValue::end() const {
     assert(item_type == json_json);
     return this->as_item_map().end();
 }

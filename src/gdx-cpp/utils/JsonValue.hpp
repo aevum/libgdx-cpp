@@ -177,8 +177,8 @@ public:
 
     void toString(std::ostream& out, bool prettyPrint = false) const;
 
-    item_map::const_iterator begin() ;
-    item_map::const_iterator end() ;
+    item_map::const_iterator begin() const;
+    item_map::const_iterator end() const;
 
     size_t count() const;
 
