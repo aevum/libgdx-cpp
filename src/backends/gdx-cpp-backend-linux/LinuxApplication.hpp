@@ -55,9 +55,12 @@ public:
     void setLogLevel(int logLevel);
 
     void onRunnableStop();
+    virtual void initialize();
+
 protected:
-    void run();
-    
+    virtual void run();
+    virtual void processEvents();
+
     bool useGL20iFAvailable;
     std::string title;
     int height;
@@ -72,8 +75,6 @@ protected:
 
     gdx_cpp::implementation::Thread::ptr mainLoopThread;
     
-    void initialize();
-
     int logLevel;
 };
 

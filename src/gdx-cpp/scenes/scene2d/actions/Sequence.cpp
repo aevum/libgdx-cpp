@@ -19,26 +19,16 @@
 */
 
 #include "Sequence.hpp"
+#include <cstdarg>
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-Sequence& Sequence::newObject () {
-    return new Sequence();
-}
+ActionResetingPool<Sequence> Sequence::pool = ActionResetingPool<Sequence>(4, 100);
 
-Sequence& Sequence::$ () {
-    Sequence sequence = pool.obtain();
-    sequence.actions.clear();
-    int len = actions.length;
-    for (int i = 0; i < len; i++)
-        sequence.actions.add(actions[i]);
-    return sequence;
-}
-
-void Sequence::setTarget (const gdx_cpp::scenes::scene2d::Actor& actor) {
-    this.target = actor;
-    if (actions.size() > 0) actions.get(0).setTarget(target);
-    this.currAction = 0;
+void Sequence::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+    this->target = actor;
+    if (actions.size() > 0) actions[0]->setTarget(target);
+    this->currAction = 0;
 }
 
 void Sequence::act (float delta) {
@@ -52,11 +42,12 @@ void Sequence::act (float delta) {
         return;
     }
 
-    actions.get(currAction).act(delta);
-    if (actions.get(currAction).isDone()) {
-        actions.get(currAction).callActionCompletedListener();
+    actions[currAction]->act(delta);
+    
+    if (actions[currAction]->isDone()) {
+        actions[currAction]->callActionCompletedListener();
         currAction++;
-        if (currAction < actions.size()) actions.get(currAction).setTarget(target);
+        if (currAction < actions.size()) actions[currAction]->setTarget(target);
     }
 }
 
@@ -66,20 +57,30 @@ bool Sequence::isDone () {
 
 void Sequence::finish () {
     pool.free(this);
-    super.finish();
+    CompositeAction::finish();
 }
 
-gdx_cpp::scenes::scene2d::Action& Sequence::copy () {
-    Sequence action = pool.obtain();
-    action.actions.clear();
-    int len = actions.size();
-    for (int i = 0; i < len; i++) {
-        action.actions.add(actions.get(i).copy());
+gdx_cpp::scenes::scene2d::Action* Sequence::copy () {
+    Sequence* action = pool.obtain();
+
+    action->actions.clear();
+
+    std::vector<Action*>::iterator it = actions.begin();
+    std::vector<Action*>::iterator end = actions.end();
+    
+    for (; it != end; ++it) {
+        action->actions.push_back((*it)->copy());
     }
+    
     return action;
 }
 
-gdx_cpp::scenes::scene2d::Actor& Sequence::getTarget () {
+gdx_cpp::scenes::scene2d::Actor* Sequence::getTarget () {
     return target;
 }
 
+Sequence::Sequence()
+: target(0)
+, currAction(0)
+{
+}

@@ -95,7 +95,11 @@ public:
     void getTranslation(gdx_cpp::math::Vector3& position);
     void getRotation(gdx_cpp::math::Quaternion& rotation);
     Matrix4& toNormalMatrix();
-
+    
+    void translate(float x, float y, float z);
+    void rotate(float axisX, float axisY, float axisZ, float angle);
+    void scale(float scaleX, float scaleY, float scaleZ);
+    
     static bool inv (float* val);
     static float det (float* val);
     static void rot (float* mat, float* vecs, int offset, int numVecs, int stride) ;
@@ -108,6 +112,7 @@ public:
 
     const static int length = 16;
     float val[length];
+    
 };
 
 }

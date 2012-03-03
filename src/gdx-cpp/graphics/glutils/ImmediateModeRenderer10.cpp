@@ -27,8 +27,9 @@
 using namespace gdx_cpp::graphics::glutils;
 
 
-ImmediateModeRenderer10::ImmediateModeRenderer10 (int maxVertices) : primitiveType(false), idxPos(0), idxCols(0), idxNors(0), idxTexCoords(0),
-                                                                            hasCols(false), hasNors(false), hasTexCoords(false)
+ImmediateModeRenderer10::ImmediateModeRenderer10 (int maxVertices) :
+primitiveType(false), idxPos(0), idxCols(0), idxNors(0), idxTexCoords(0),
+hasCols(false), hasNors(false), hasTexCoords(false), maxVertices(maxVertices)
 {
     this->positions = new float[3 * maxVertices];
     this->positionsBuffer = allocateBuffer(3 * maxVertices);
@@ -65,6 +66,7 @@ void ImmediateModeRenderer10::begin (gdx_cpp::math::Matrix4& projModelView,int p
 
 void ImmediateModeRenderer10::begin (int primitiveType) {
     this->primitiveType = primitiveType;
+    numVertices = 0;
     idxPos = 0;
     idxCols = 0;
     idxNors = 0;
@@ -103,6 +105,7 @@ void ImmediateModeRenderer10::vertex (float x,float y,float z) {
     if (hasCols) idxCols += 4;
     if (hasNors) idxNors += 3;
     if (hasTexCoords) idxTexCoords += 2;
+    numVertices++;
 }
 
 int ImmediateModeRenderer10::getNumVertices () {
@@ -151,3 +154,12 @@ void ImmediateModeRenderer10::vertex (const gdx_cpp::math::Vector3& point) {
     vertex(point.x, point.y, point.z);
 }
 
+int gdx_cpp::graphics::glutils::ImmediateModeRenderer10::getMaxVertices()
+{
+    return maxVertices; 
+}
+
+void gdx_cpp::graphics::glutils::ImmediateModeRenderer10::dispose()
+{
+
+}

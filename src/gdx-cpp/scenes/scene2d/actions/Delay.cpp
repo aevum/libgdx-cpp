@@ -22,50 +22,48 @@
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-Delay& Delay::newObject () {
-    return new Delay();
-}
+ActionResetingPool<Delay> Delay::pool = ActionResetingPool<Delay>(4, 100);
 
-Delay& Delay::$ (const gdx_cpp::scenes::scene2d::Action& action,float duration) {
-    Delay delay = pool.obtain();
-    delay.duration = duration;
-    delay.action = action;
+Delay* Delay::build (gdx_cpp::scenes::scene2d::Action* action, float duration) {
+    Delay* delay = pool.obtain();
+    delay->duration = duration;
+    delay->action = action;
     return delay;
 }
 
 void Delay::reset () {
-    super.reset();
+    Action::reset();
 }
 
-void Delay::setTarget (const gdx_cpp::scenes::scene2d::Actor& actor) {
-    action.setTarget(actor);
-    this.taken = 0;
+void Delay::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+    action->setTarget(actor);
+    this->taken = 0;
 }
 
 void Delay::act (float delta) {
     taken += delta;
     if (taken > duration) {
         callActionCompletedListener();
-        action.act(delta);
-        if (action.isDone()) action.callActionCompletedListener();
+        action->act(delta);
+        if (action->isDone()) action->callActionCompletedListener();
     }
 }
 
 bool Delay::isDone () {
-    return taken > duration && action.isDone();
+    return taken > duration && action->isDone();
 }
 
 void Delay::finish () {
     pool.free(this);
-    action.finish();
-    super.finish();
+    action->finish();
+    Action::finish();
 }
 
-gdx_cpp::scenes::scene2d::Action& Delay::copy () {
-    return $(action.copy(), duration);
+gdx_cpp::scenes::scene2d::Action* Delay::copy () {
+    return Delay::build(action->copy(), duration);
 }
 
-gdx_cpp::scenes::scene2d::Actor& Delay::getTarget () {
-    return action.getTarget();
+gdx_cpp::scenes::scene2d::Actor* Delay::getTarget () {
+    return action->getTarget();
 }
 

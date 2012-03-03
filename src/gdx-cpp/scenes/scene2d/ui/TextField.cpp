@@ -22,17 +22,11 @@
 
 using namespace gdx_cpp::scenes::scene2d::ui;
 
+void TextField::setStyle (const TextFieldStyle& style) {
+    this.style = style;
+}
+
 void TextField::layout () {
-    final BitmapFont font = style.font;
-    final NinePatch background = style.background;
-
-    textBounds.set(font.getBounds(text));
-    textBounds.height -= font.getDescent() * 2;
-    font.computeGlyphAdvancesAndPositions(text, glyphAdvances, glyphPositions);
-
-    prefHeight = background.getBottomHeight() + background.getTopHeight() + textBounds.height;
-    prefWidth = background.getLeftWidth() + background.getRightWidth() + initialPrefWidth;
-    invalidated = false;
 }
 
 void TextField::blink () {
@@ -103,8 +97,6 @@ void TextField::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float par
     final TextureRegion selection = style.selection;
     final NinePatch cursorPatch = style.cursor;
 
-    if (invalidated) layout();
-
     batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
     background.draw(batch, x, y, width, height);
     float textY = (int)(height / 2) + (int)(textBounds.height / 2) + font.getDescent() / 2;
@@ -121,35 +113,31 @@ void TextField::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float par
         blink();
         if (cursorOn) {
             cursorPatch.draw(batch, x + background.getLeftWidth() + glyphPositions.get(cursor) + renderOffset - 1, y + textY
-                             - textBounds.height - font.getDescent() / 2, cursorPatch.getTotalWidth(), textBounds.height);
+                             - textBounds.height - font.getDescent(), cursorPatch.getTotalWidth(), textBounds.height + font.getDescent() / 2);
         }
     }
 }
 
 bool TextField::touchDown (float x,float y,int pointer) {
     if (pointer != 0) return false;
-    if (hit(x, y) != null) {
-        parent.keyboardFocus(this);
-        keyboard.show(true);
-        x = x - renderOffset;
-        for (int i = 0; i < glyphPositions.size; i++) {
-            float pos = glyphPositions.items[i];
-            if (pos > x) {
-                cursor = Math.max(0, i - 1);
-                break;
-            }
+    parent.keyboardFocus(this);
+    keyboard.show(true);
+    x = x - renderOffset;
+    for (int i = 0; i < glyphPositions.size; i++) {
+        float pos = glyphPositions.items[i];
+        if (pos > x) {
+            cursor = Math.max(0, i - 1);
+            return true;
         }
-        return true;
-    } else
-        return false;
+    }
+    cursor = Math.max(0, glyphPositions.size - 1);
+    return true;
 }
 
-bool TextField::touchUp (float x,float y,int pointer) {
-    return false;
+void TextField::touchUp (float x,float y,int pointer) {
 }
 
-bool TextField::touchDragged (float x,float y,int pointer) {
-    return false;
+void TextField::touchDragged (float x,float y,int pointer) {
 }
 
 bool TextField::keyDown (int keycode) {
@@ -320,19 +308,32 @@ public void setTextFieldListener (TextFieldListener listener) {
 /** Sets the text of this text field.
  * @param text the text */
 public void setText (String text) {
-    final BitmapFont font = style.font;
-
     if (text == null) throw new IllegalArgumentException("text must not be null");
+
+    BitmapFont font = style.font;
+
     this.text = text;
     this.cursor = 0;
     this.hasSelection = false;
     font.computeGlyphAdvancesAndPositions(text, this.glyphAdvances, this.glyphPositions);
-    invalidateHierarchy();
+
+    textBounds.set(font.getBounds(text));
+    textBounds.height -= font.getDescent() * 2;
+    font.computeGlyphAdvancesAndPositions(text, glyphAdvances, glyphPositions);
 }
 
 /** @return the text of this text field. Never null, might be an empty string. */
 public String getText () {
     return text;
+}
+
+public float getPrefWidth () {
+    return 150;
+}
+
+public float getPrefHeight () {
+    NinePatch background = style.background;
+    return background.getBottomHeight() + background.getTopHeight() + textBounds.height;
 }
 
 /** Returns the currently used {@link OnscreenKeyboard}. {@link TextField} instances use the {@link DefaultOnscreenKeyboard} by
@@ -368,18 +369,31 @@ public static class DefaultOnscreenKeyboard implements OnscreenKeyboard {
     }
 
     void TextField::setText (const std::string& text) {
-        final BitmapFont font = style.font;
-
         if (text == null) throw new IllegalArgumentException("text must not be null");
+
+        BitmapFont font = style.font;
+
         this.text = text;
         this.cursor = 0;
         this.hasSelection = false;
         font.computeGlyphAdvancesAndPositions(text, this.glyphAdvances, this.glyphPositions);
-        invalidateHierarchy();
+
+        textBounds.set(font.getBounds(text));
+        textBounds.height -= font.getDescent() * 2;
+        font.computeGlyphAdvancesAndPositions(text, glyphAdvances, glyphPositions);
     }
 
     std::string& TextField::getText () {
         return text;
+    }
+
+    float TextField::getPrefWidth () {
+        return 150;
+    }
+
+    float TextField::getPrefHeight () {
+        NinePatch background = style.background;
+        return background.getBottomHeight() + background.getTopHeight() + textBounds.height;
     }
 
     OnscreenKeyboard& TextField::getOnscreenKeyboard () {
@@ -408,5 +422,28 @@ public static class DefaultOnscreenKeyboard implements OnscreenKeyboard {
 
     void TextField::setClipboard (const gdx_cpp::scenes::scene2d::ui::utils::Clipboard& clipboard) {
         this.clipboard = clipboard;
+    }
+
+    TextField::TextField (const Skin& skin) {
+        this("", skin.getStyle(TextFieldStyle.class), null);
+    }
+
+    TextField::TextField (const std::string& text,const Skin& skin) {
+        this(text, skin.getStyle(TextFieldStyle.class), null);
+    }
+
+    TextField::TextField (const TextFieldStyle& style) {
+        this("", style, null);
+    }
+
+    TextField::TextField (const std::string& text,const TextFieldStyle& style) {
+        this(text, style, null);
+    }
+
+    TextField::TextField (const std::string& text,const TextFieldStyle& style,const std::string& name) {
+        super(name);
+        setStyle(style);
+        this.clipboard = Clipboard.getDefaultClipboard();
+        setText(text);
     }
 

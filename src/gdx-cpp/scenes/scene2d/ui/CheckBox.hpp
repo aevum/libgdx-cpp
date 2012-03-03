@@ -28,26 +28,16 @@ namespace ui {
 
 class CheckBox {
 public:
-    void layout ();
-    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
-    bool touchDown (float x,float y,int pointer);
-    bool touchUp (float x,float y,int pointer);
-    bool touchDragged (float x,float y,int pointer);
-    gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
-    void checked (const CheckBox& checkBox,bool isChecked);
-    CheckBox& setCheckedListener (const CheckedListener& listener);
-    void setChecked (bool isChecked);
-    bool isChecked ();
-    BitmapFont font;
-    Color fontColor;
-    TextureRegion checked;
-    TextureRegion unchecked;
+    void click ();
+    CheckBox (const std::string& text,const CheckBoxStyle& style);
+    CheckBox (const std::string& text,const Skin& skin);
+    CheckBox (const std::string& text,const CheckBoxStyle& style,const std::string& name);
 
 protected:
 
 
 private:
-
+    Image image ;
 };
 
 } // namespace gdx_cpp

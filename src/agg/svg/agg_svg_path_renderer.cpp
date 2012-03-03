@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include "agg_svg_path_renderer.h"
+#include <iostream>
 
 namespace agg
 {
@@ -65,7 +66,7 @@ namespace svg
         {
             throw exception("end_path : The path was not begun");
         }
-        path_attributes attr = cur_attr();
+        path_attributes& attr = cur_attr();
         unsigned idx = m_attr_storage[m_attr_storage.size() - 1].index;
         attr.index = idx;
         m_attr_storage[m_attr_storage.size() - 1] = attr;
@@ -204,7 +205,11 @@ namespace svg
     void path_renderer::fill(const rgba8& f)
     {
         path_attributes& attr = cur_attr();
+        int32u alpha = (f.a * attr.fill_color.a ) / 255;
+        
         attr.fill_color = f;
+        attr.fill_color.a = alpha;
+        
         attr.fill_flag = true;
     }
 
@@ -243,7 +248,8 @@ namespace svg
     //------------------------------------------------------------------------
     void path_renderer::fill_opacity(double op)
     {
-        cur_attr().fill_color.opacity(op);
+        double alpha = cur_attr().fill_color.opacity() * op;
+        cur_attr().fill_color.opacity(alpha);
     }
 
     //------------------------------------------------------------------------
@@ -277,83 +283,14 @@ namespace svg
     }
 
     //------------------------------------------------------------------------
-    void path_renderer::parse_path(path_tokenizer& tok)
+    void path_renderer::fill_gradient(svg_gradient& gradient)
     {
-        while(tok.next())
-        {
-            double arg[10];
-            char cmd = tok.last_command();
-            unsigned i;
-            switch(cmd)
-            {
-                case 'M': case 'm':
-                    arg[0] = tok.last_number();
-                    arg[1] = tok.next(cmd);
-                    move_to(arg[0], arg[1], cmd == 'm');
-                    break;
-
-                case 'L': case 'l':
-                    arg[0] = tok.last_number();
-                    arg[1] = tok.next(cmd);
-                    line_to(arg[0], arg[1], cmd == 'l');
-                    break;
-
-                case 'V': case 'v':
-                    vline_to(tok.last_number(), cmd == 'v');
-                    break;
-
-                case 'H': case 'h':
-                    hline_to(tok.last_number(), cmd == 'h');
-                    break;
-                
-                case 'Q': case 'q':
-                    arg[0] = tok.last_number();
-                    for(i = 1; i < 4; i++)
-                    {
-                        arg[i] = tok.next(cmd);
-                    }
-                    curve3(arg[0], arg[1], arg[2], arg[3], cmd == 'q');
-                    break;
-
-                case 'T': case 't':
-                    arg[0] = tok.last_number();
-                    arg[1] = tok.next(cmd);
-                    curve3(arg[0], arg[1], cmd == 't');
-                    break;
-
-                case 'C': case 'c':
-                    arg[0] = tok.last_number();
-                    for(i = 1; i < 6; i++)
-                    {
-                        arg[i] = tok.next(cmd);
-                    }
-                    curve4(arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], cmd == 'c');
-                    break;
-
-                case 'S': case 's':
-                    arg[0] = tok.last_number();
-                    for(i = 1; i < 4; i++)
-                    {
-                        arg[i] = tok.next(cmd);
-                    }
-                    curve4(arg[0], arg[1], arg[2], arg[3], cmd == 's');
-                    break;
-
-                case 'A': case 'a':
-                    throw exception("parse_path: Command A: NOT IMPLEMENTED YET");
-
-                case 'Z': case 'z':
-                    close_subpath();
-                    break;
-
-                default:
-                {
-                    char buf[100];
-                    sprintf(buf, "parse_path: Invalid Command %c", cmd);
-                    throw exception(buf);
-                }
-            }
+        path_attributes& cur = cur_attr();
+        if (cur.gradient != NULL) {
+            delete cur.gradient;
         }
+
+        cur.gradient = gradient.clone();
     }
 
 }

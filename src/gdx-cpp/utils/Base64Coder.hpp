@@ -21,28 +21,31 @@
 #ifndef GDX_CPP_UTILS_BASE64CODER_HPP_
 #define GDX_CPP_UTILS_BASE64CODER_HPP_
 
+#include <string>
+#include <vector>
+
+#include "gdx-cpp/Gdx.hpp"
+
 namespace gdx_cpp {
 namespace utils {
 
 class Base64Coder {
 public:
-    static std::string& encodeString (const std::string& s);
-    static std::string& encodeLines ();
-    static std::string& encodeLines (int iOff,int iLen,int lineLen,const std::string& lineSeparator);
-    static char* encode ();
-    static char* encode (int iLen);
-    static char* encode (int iOff,int iLen);
-    static std::string& decodeString (const std::string& s);
-    static char* decodeLines (const std::string& s);
-    static char* decode (const std::string& s);
-    static char* decode ();
-    static char* decode (int iOff,int iLen);
+    static std::string encodeString (const std::string& s);
+    static std::string encodeLines (char* bytes, int iLen, int iOff = 0, int lineLen = 76, char lineSeparator = gdx_cpp::Gdx::system->getSeparator());
+    static std::vector< char > encode (const char *in, int length, int iOff = 0);
 
-protected:
-
+    static std::string decodeString (const std::string& s);
+    static std::vector< char > decodeLines (const std::string& s);
+    static std::vector< char > decode (const std::string& s);
+    static std::vector< char > decode (const char* bytes, int iLen, int iOff = 0);
 
 private:
-
+    struct static_impl;
+    static static_impl* staticImpl;
+    
+    static char map1[64];
+    static char map2[128];
 };
 
 } // namespace gdx_cpp

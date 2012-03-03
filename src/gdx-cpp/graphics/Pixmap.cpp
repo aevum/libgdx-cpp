@@ -93,7 +93,7 @@ const Pixmap::Format& Pixmap::Format::fromGdx2DPixmapFormat(int format) {
 //     this->pixmap = pixmap;
 // }
 
-Pixmap::ptr Pixmap::newFromFile(const gdx_cpp::Files::fhandle_ptr& file)
+Pixmap::ptr Pixmap::newFromFile(const gdx_cpp::files::FileHandle::ptr file)
 {
     return Pixmap::ptr(gdx_cpp::Gdx::graphics->resolvePixmap(file));
 }

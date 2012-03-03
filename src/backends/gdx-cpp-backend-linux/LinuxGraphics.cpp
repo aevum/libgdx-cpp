@@ -31,8 +31,6 @@
 #include <iostream>
 #include <gdx-cpp/Application.hpp>
 
-#define GL_GLEXT_PROTOTYPES
-#include <GLES/gl.h>
 #include <gdx-cpp/graphics/Texture.hpp>
 
 #include <gdx-cpp/graphics/g2d/Gdx2DPixmap.hpp>
@@ -233,32 +231,7 @@ bool gdx_cpp::backends::nix::LinuxGraphics::setDisplayMode(int width, int height
         throw std::runtime_error("Failed to initialize SDL video");
     }
 
-    const GLubyte* version = glGetString(GL_VERSION);
-
-    if (version) {
-        
-        int major = atoi((const char*) version);
-        int minor = atoi((const char*) &version[2]);
-
-        if (false && major >= 2) {
-
-
-        } else {
-            if (major == 1 && minor < 5) {
-                glCommon = gl10 = new LinuxGL10;
-            } else {
-                glCommon = gl10 = gl11 = new LinuxGL11;
-            }
-        }
-
-        SDL_WM_SetCaption(this->title.c_str(), NULL);
-        glCommon->glViewport(0, 0, width, height);
-
-        return true;
-    } else {
-        Gdx::app->error("LinuxGraphics", "Failed to recover the GL_VERSION, aborting");
-        return false;
-    } 
+    return setupGLModes();
 }
 
 void gdx_cpp::backends::nix::LinuxGraphics::update()
@@ -266,7 +239,7 @@ void gdx_cpp::backends::nix::LinuxGraphics::update()
     SDL_GL_SwapBuffers();
 }
 
-TextureData::ptr backends::nix::LinuxGraphics::resolveTextureData(Files::fhandle_ptr fileHandle,
+TextureData::ptr backends::nix::LinuxGraphics::resolveTextureData(files::FileHandle::ptr fileHandle,
                                                                   Pixmap::ptr preloadedPixmap,
                                                                   const gdx_cpp::graphics::Pixmap::Format* format,
                                                                   bool useMipMaps)
@@ -292,15 +265,45 @@ Pixmap* backends::nix::LinuxGraphics::resolvePixmap(const gdx_cpp::graphics::Pix
     } 
 }
 
-Pixmap* backends::nix::LinuxGraphics::resolvePixmap(const Files::fhandle_ptr& file)
+Pixmap* backends::nix::LinuxGraphics::resolvePixmap(const files::FileHandle::ptr& file)
 {
     std::string extension = file->extension();
     
     if (extension == "png" || extension == "jpg" || extension == "tga" || extension == "bmp")
-        return g2d::Gdx2DPixmap::newPixmap(*file->read(), 0);
+        return g2d::Gdx2DPixmap::newPixmapFromFile(file, 0);
     else if (extension == "svg") {
         return g2d::svg::AggSvgPixmap::newFromFile(file);        
     } else {
         throw std::runtime_error("unsupported image format: " + extension);
+    }
+}
+
+bool gdx_cpp::backends::nix::LinuxGraphics::setupGLModes()
+{
+    std::string version =  LinuxGL10().glGetString(GL10::GL_VERSION);
+
+    if (!version.empty()) {
+
+        int major = atoi((const char*) version.c_str());
+        int minor = atoi((const char*) &version.c_str()[2]);
+
+        if (false && major >= 2) {
+
+
+        } else {
+            if (major == 1 && minor < 5) {
+                glCommon = gl10 = new LinuxGL10;
+            } else {
+                glCommon = gl10 = gl11 = new LinuxGL11;
+            }
+        }
+
+        SDL_WM_SetCaption(this->title.c_str(), NULL);
+        glCommon->glViewport(0, 0, width, height);
+
+        return true;
+    } else {
+        Gdx::app->error("LinuxGraphics", "Failed to recover the GL_VERSION, aborting");
+        return false;
     }
 }

@@ -47,10 +47,16 @@ public:
     Matrix3& trn(const Vector3& vector);
     Matrix3& trn(float x, float y);
     float* getValues();
+    void translate(float x, float y);
+    void rotate(float angle);
+    void scale(float scaleX, float scaleY);
 
-
+    
     const static int length = 9;
     float vals[length];
+private:
+    void mul(float* mata,float* matb);
+    float tmp[9];
 };
 
 }

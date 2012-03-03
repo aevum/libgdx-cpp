@@ -35,7 +35,7 @@ gdx_cpp::backends::nix::LinuxInput::LinuxInput()
         ,processor(0)
         ,deltaX(0)
         ,deltaY(0)
-{
+{    
 }
 
 void gdx_cpp::backends::nix::LinuxInput::cancelVibrate()
@@ -213,13 +213,28 @@ void gdx_cpp::backends::nix::LinuxInput::vibrate(long int* pattern, int repeat)
 
 void gdx_cpp::backends::nix::LinuxInput::processEvents(SDL_Event& evt)
 {
+    static struct transalte_button {
+        int operator()(int sdl_button) {
+            switch(sdl_button) {
+                case 1:
+                    return gdx_cpp::Input::Button::LEFT;
+                case 2:
+                    return gdx_cpp::Input::Button::MIDDLE;
+                case 3:
+                    return gdx_cpp::Input::Button::RIGHT;
+                default:
+                    return sdl_button;
+            }
+        }
+    }tb;
+    
     if (evt.type == SDL_MOUSEMOTION) {
         if (processor) {
             deltaX = evt.motion.xrel;
             deltaY = evt.motion.yrel;
 
             if (this->touching) {
-                this->processor->touchDragged(evt.motion.x, evt.motion.y, evt.button.button);
+                this->processor->touchDragged(evt.motion.x, evt.motion.y, tb(evt.button.button));
             } else {
                 this->processor->touchMoved(evt.motion.x, evt.motion.y);
             }
@@ -233,7 +248,7 @@ void gdx_cpp::backends::nix::LinuxInput::processEvents(SDL_Event& evt)
         this->_justTouched = true;
 
         if (this->processor) {
-            this->processor->touchDown(evt.motion.x, evt.motion.y, 0, evt.button.button);
+            this->processor->touchDown(evt.motion.x, evt.motion.y, 0, tb(evt.button.button));
         }
 
     } else if (evt.type == SDL_MOUSEBUTTONUP) {
@@ -241,7 +256,7 @@ void gdx_cpp::backends::nix::LinuxInput::processEvents(SDL_Event& evt)
         touchY =touchX = 0;
 
         if (this->processor) {
-            this->processor->touchUp(evt.motion.x, evt.motion.y, 0, evt.button.button);
+            this->processor->touchUp(evt.motion.x, evt.motion.y, 0, tb(evt.button.button));
         }
     }
     else if (evt.type == SDL_KEYDOWN) {
@@ -734,6 +749,11 @@ int gdx_cpp::backends::nix::LinuxInput::getGdxEventKey(SDL_Event& eventkey) {
     default:
       return gdx_cpp::Input::Keys::UNKNOWN;
     }
+}
+
+void gdx_cpp::backends::nix::LinuxInput::setKeyboardRepeat(int delay, int repeatInterval)
+{
+    SDL_EnableKeyRepeat(delay, repeatInterval);
 }
 
 

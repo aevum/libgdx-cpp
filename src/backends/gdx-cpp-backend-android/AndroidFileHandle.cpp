@@ -19,33 +19,46 @@
  */
 
 #include "AndroidFileHandle.hpp"
+#include <gdx-cpp/Gdx.hpp>
 #include <cassert>
+#include <jni.h>
+#include "AndroidApplication.hpp"
+#include <string.h>
 
 using namespace gdx_cpp::backends::android;
 
-AndroidFileHandle::AndroidFileHandle(AAssetManager* mngr, const std::string& fileName, gdx_cpp::Files::FileType type)
+AndroidFileHandle::AndroidFileHandle(const std::string& fileName, gdx_cpp::Files::FileType type)
     : FileHandle(fileName, type)
-    , manager(mngr)
 {
 }
 
-int gdx_cpp::backends::android::AndroidFileHandle::readBytes(gdx_cpp::files::FileHandle::char_ptr& c)
+int gdx_cpp::backends::android::AndroidFileHandle::readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) const
 {
-    AAsset* asset = AAssetManager_open(this->manager, this->file.getPath().c_str(), AASSET_MODE_UNKNOWN);
+    JNIEnv* env = static_cast<AndroidApplication*>(Gdx::app)->getJniEnv();    
+    jstring strpath = env->NewStringUTF(this->file.getPath().c_str());
 
-    assert(asset);
+    jclass managerClass = env->FindClass("com/aevumlab/gdxcpp/ApplicationManager");
+
+    assert(managerClass);
     
-    off_t bufferSize = AAsset_getLength(asset);
+    jmethodID mid = env->GetStaticMethodID(managerClass, "readFile", "(Ljava/lang/String;I)[B");
 
-    char* buffer = new char[bufferSize];
+    assert(mid);
 
-    int numBytesRead = AAsset_read(asset, buffer, bufferSize); 
+    jbyteArray result = (jbyteArray) env->CallStaticObjectMethod(managerClass, mid, strpath, this->getType());
 
-    char_ptr new_ptr = char_ptr(buffer, shared_ptr_array_deleter());
-    c.swap(new_ptr);
+    jbyte* buffer = env->GetByteArrayElements(result, NULL);
+    jsize size = env->GetArrayLength(result);
+
+    assert(buffer);
+    assert(size);
     
-    AAsset_close(asset);
+    char* sbuffer = new char[size];
+    memcpy(sbuffer, buffer, size);
 
-    return numBytesRead;
+    gdx_cpp::files::FileHandle::buffer_ptr swapable(sbuffer, shared_ptr_array_deleter());
+    c.swap(swapable);
+
+    return size;
 }
 

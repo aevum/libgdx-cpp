@@ -27,13 +27,9 @@ namespace scene2d {
 
 class Interpolator {
 public:
-
-
-protected:
-
-
-private:
-
+    virtual float getInterpolation (float input) = 0;
+    virtual void finished () = 0;
+    virtual Interpolator* copy () = 0;
 };
 
 } // namespace gdx_cpp

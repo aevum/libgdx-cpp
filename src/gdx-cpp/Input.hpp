@@ -263,6 +263,11 @@ public:
 
     virtual Orientation getNativeOrientation () = 0;
 
+    /**Sets up the keyboard repeat interval
+      * @param delay: the delay, in msecs, before the repeat triggers
+      * @param repeatInterval: after the repeat triggers, the interval in wich it will happen
+      */
+    virtual void setKeyboardRepeat(int delay, int repeatInterval) = 0;
 
     virtual void setCursorCatched (bool catched) = 0;
 

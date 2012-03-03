@@ -22,6 +22,7 @@
 #define GDX_CPP_GRAPHICS_G2D_SVG_SVGPARSER_HPP
 
 #include "gdx-cpp/utils/XmlReader.hpp"
+#include "gdx-cpp/utils/SvgRendererHandler.hpp"
 #include "gdx-cpp/graphics/Color.hpp"
 
 namespace gdx_cpp {
@@ -43,43 +44,44 @@ class SvgPixmapInterface;
  */
 class SvgParser
 {
-public:
-    SvgParser(SvgPixmapInterface& iface);
-    
+public:   
+    SvgParser();
     /**
     * iterate's over an svg xml element and fills the pixmap interface
     * @param iface The pixmap interface to be rendered
     * @param svg The parsed svg element pointer
     */
-    void render(utils::XmlReader::Element* const svg);
+    static void render(utils::XmlReader::Element* const svg, utils::SvgRendererHandler* handler = NULL);
 private:
-
     ///Initiate the current element parsing
-    void beginElement(gdx_cpp::utils::XmlReader::Element*const currentNode);
+    static void beginElement(gdx_cpp::utils::XmlReader::Element*const currentNode);
 
     ///End's the current element parsing    
-    void endElement(utils::XmlReader::Element* currentNode);
+    static void endElement(utils::XmlReader::Element* currentNode);
 
-    void parse_line(utils::XmlReader::Element* node);
-    void parse_poly(gdx_cpp::utils::XmlReader::Element* node, bool close);
-    void parse_rect(utils::XmlReader::Element* node);
-    void parse_path(utils::XmlReader::Element* node);    
-    void parse_attr(utils::XmlReader::Element* node);
-    bool parse_attr(const std::string& name, const std::string& value);
-    void parse_transform(const std::string& transform);
-    void parse_style(const std::string& style);
-    std::string::size_type parse_scale(std::string scaleArgs);
-    std::string::size_type parse_translate(std::string translateArgs);
-    std::string::size_type parse_matrix(std::string matrixArgs);
-    std::string::size_type parse_rotate(std::string rotateArgs);
-    std::string::size_type parse_skew_x(std::string skewXargs);
-    std::string::size_type parse_skew_y(std::string skewYargs);
-    graphics::Color parse_color(const std::string& colorValue);
+    static void parse_line(utils::XmlReader::Element* node);
+    static void parse_poly(gdx_cpp::utils::XmlReader::Element* node, bool close);
+    static void parse_rect(utils::XmlReader::Element* node);
+    static void parse_path(utils::XmlReader::Element* node);    
+    static void parse_attr(utils::XmlReader::Element* node);
+    static bool parse_attr(const std::string& name, const std::string& value);
+    static void parse_transform(const std::string& transform_string, utils::SvgRendererHandler::transform& transform);
+    static std::vector< std::pair< std::string , std::string > > parse_style(const std::string& style);
+    static std::string::size_type parse_scale(std::string scaleArgs, utils::SvgRendererHandler::transform& transform);
+    static std::string::size_type parse_translate(std::string translateArgs, utils::SvgRendererHandler::transform& transform);
+    static std::string::size_type parse_matrix(std::string matrixArgs, utils::SvgRendererHandler::transform& result);
+    static std::string::size_type parse_rotate(std::string rotateArgs, utils::SvgRendererHandler::transform& transform);
+    static std::string::size_type parse_skew_x(std::string skewXargs, utils::SvgRendererHandler::transform& transform);
+    static std::string::size_type parse_skew_y(std::string skewYargs, utils::SvgRendererHandler::transform& transform);
+    static graphics::Color parse_color(const std::string& colorValue);
+    static void parse_gradient(const std::string& gradient);
+    static void fetchStopData(gdx_cpp::utils::XmlReader::Element* node , std::vector< gdx_cpp::utils::SvgRendererHandler::GradientStopData >& stopData);
     
-    bool m_titleFlag;
-    bool m_pathFlag;
+    static bool m_titleFlag;
+    static bool m_pathFlag;
 
-    SvgPixmapInterface& pixmap;
+    static utils::SvgRendererHandler* handler;
+    static utils::XmlReader::Element* defsElement;
 };
 
 }

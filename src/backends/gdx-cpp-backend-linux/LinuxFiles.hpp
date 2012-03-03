@@ -36,19 +36,19 @@ namespace nix {
   {
     public:
         //Override
-        gdx_cpp::Files::fhandle_ptr getFileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
+        gdx_cpp::files::FileHandle::ptr getFileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
 
         //Override
-        gdx_cpp::Files::fhandle_ptr internal (const std::string &path);
+        gdx_cpp::files::FileHandle::ptr internal (const std::string &path);
 
         //Override
-        gdx_cpp::Files::fhandle_ptr external (const std::string &path);
+        gdx_cpp::files::FileHandle::ptr external (const std::string &path);
 
         //Override
-        gdx_cpp::Files::fhandle_ptr absolute (const std::string &path);
+        gdx_cpp::files::FileHandle::ptr absolute (const std::string &path);
 
         //Override
-        std::string& getExternalStoragePath ();
+        std::string getExternalStoragePath ();
 
         //Override
         bool isExternalStorageAvailable ();

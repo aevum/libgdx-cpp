@@ -22,106 +22,22 @@
 
 using namespace gdx_cpp::scenes::scene2d::ui;
 
-void CheckBox::layout () {
-    final BitmapFont font = style.font;
-    final TextureRegion checkedRegion = style.checked;
-    final TextureRegion uncheckedRegion = style.unchecked;
-
-    textBounds.set(font.getBounds(label));
-    textBounds.height -= font.getDescent();
-    checkWidth = Math.max(checkedRegion.getRegionWidth(), uncheckedRegion.getRegionWidth());
-    checkHeight = Math.max(checkedRegion.getRegionHeight(), uncheckedRegion.getRegionHeight());
-    if (textBounds.height > checkHeight) {
-        prefHeight = textBounds.height;
-        boxPos.y = (int)((textBounds.height - checkedRegion.getRegionHeight()) / 2);
-        textPos.y = textBounds.height;
-    } else {
-        prefHeight = checkHeight;
-        boxPos.y = 0;
-        textPos.y = (int)((checkHeight - textBounds.height) / 2) + textBounds.height;
-    }
-
-    boxPos.x = 0;
-    textPos.x = checkWidth + 5;
-    prefWidth = checkWidth + 5 + textBounds.width;
-    invalidated = false;
+void CheckBox::click () {
+    super.click();
+    image.setRegion(isChecked ? ((CheckBoxStyle)style).checkboxOn : ((CheckBoxStyle)style).checkboxOff);
 }
 
-void CheckBox::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
-    final BitmapFont font = style.font;
-    final TextureRegion checkedRegion = style.checked;
-    final TextureRegion uncheckedRegion = style.unchecked;
-    final Color fontColor = style.fontColor;
-
-    if (invalidated) layout();
-
-    batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-    if (isChecked)
-        batch.draw(checkedRegion, x + boxPos.x, y + boxPos.y);
-    else
-        batch.draw(uncheckedRegion, x + boxPos.x, y + boxPos.y);
-
-    font.setColor(fontColor.r, fontColor.g, fontColor.b, fontColor.a * parentAlpha);
-    font.draw(batch, label, x + textPos.x, y + textPos.y);
+CheckBox::CheckBox (const std::string& text,const CheckBoxStyle& style) {
+    this(text, style, null);
 }
 
-bool CheckBox::touchDown (float x,float y,int pointer) {
-    return false;
+CheckBox::CheckBox (const std::string& text,const Skin& skin) {
+    this(text, skin.getStyle(CheckBoxStyle.class), null);
 }
 
-bool CheckBox::touchUp (float x,float y,int pointer) {
-    if (x >= 0 && x < width && y >= 0 && y < height) {
-        isChecked = !isChecked;
-        if (listener != null) listener.checked(this, isChecked);
-    }
-    return false;
+CheckBox::CheckBox (const std::string& text,const CheckBoxStyle& style,const std::string& name) {
+    super(style, name);
+    add(image = new Image(style.checkboxOff));
+    add(new Label(text, style));
 }
-
-bool CheckBox::touchDragged (float x,float y,int pointer) {
-    return false;
-}
-
-gdx_cpp::scenes::scene2d::Actor& CheckBox::hit (float x,float y) {
-    return x > 0 && x < width && y > 0 && y < height ? this : null;
-}
-
-void CheckBox::checked (const CheckBox& checkBox,bool isChecked);
-}
-
-/** Sets the {@link CheckedListener}
- * @param listener the listener or null
- * @return this CheckBox for chaining */
-public CheckBox setCheckedListener (CheckedListener listener) {
-    this.listener = listener;
-    return this;
-}
-
-/** Defines a check box style, see {@link CheckBox}
- * @author mzechner */
-public static class CheckBoxStyle {
-    public final BitmapFont font;
-    public final Color fontColor;
-    public final TextureRegion checked;
-    public final TextureRegion unchecked;
-
-    public CheckBoxStyle (BitmapFont font, Color fontColor, TextureRegion checked, TextureRegion unchecked) {
-        this.font = font;
-        this.fontColor = fontColor;
-        this.checked = checked;
-        this.unchecked = unchecked;
-    }
-
-    CheckBox& CheckBox::setCheckedListener (const CheckedListener& listener) {
-        this.listener = listener;
-        return this;
-    }
-
-    void CheckBox::setChecked (bool isChecked) {
-        this.isChecked = isChecked;
-        invalidateHierarchy();
-    }
-
-    bool CheckBox::isChecked () {
-        return isChecked;
-    }
 

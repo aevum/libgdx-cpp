@@ -28,15 +28,18 @@ namespace ui {
 
 class Widget {
 public:
-    float getPrefWidth ();
-    float getPrefHeight ();
+    float getMinWidth ();
+    float getMinHeight ();
+    float getMaxWidth ();
+    float getMaxHeight ();
     void invalidate ();
     void invalidateHierarchy ();
     gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
-    void setPrefSize (int prefWidth,int prefHeight);
+    Widget ();
+    Widget (const std::string& name);
 
 protected:
-
+    boolean invalidated = true;
 
 private:
 

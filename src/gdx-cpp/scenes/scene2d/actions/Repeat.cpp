@@ -22,37 +22,35 @@
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-Repeat& Repeat::newObject () {
-    return new Repeat();
-}
+ActionResetingPool<Repeat> Repeat::pool = ActionResetingPool<Repeat>(4, 100);
 
-Repeat& Repeat::$ (const gdx_cpp::scenes::scene2d::Action& action,int times) {
-    Repeat repeat = pool.obtain();
-    repeat.action = action;
-    repeat.times = times;
+Repeat* Repeat::build (gdx_cpp::scenes::scene2d::Action* action,int times) {
+    Repeat* repeat = pool.obtain();
+    repeat->action = action;
+    repeat->times = times;
     return repeat;
 }
 
 void Repeat::reset () {
-    super.reset();
+    TemporalAction::reset();
     finishedTimes = 0;
-    listener = null;
+    listener = NULL;
 }
 
-void Repeat::setTarget (const gdx_cpp::scenes::scene2d::Actor& actor) {
-    action.setTarget(actor);
+void Repeat::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+    action->setTarget(actor);
     target = actor;
 }
 
 void Repeat::act (float delta) {
-    action.act(delta);
-    if (action.isDone()) {
+    action->act(delta);
+    if (action->isDone()) {
         finishedTimes++;
         if (finishedTimes < times) {
-            Action oldAction = action;
-            action = action.copy();
-            oldAction.finish();
-            action.setTarget(target);
+            Action* oldAction = action;
+            action = action->copy();
+            oldAction->finish();
+            action->setTarget(target);
         } else {
             callActionCompletedListener();
         }
@@ -65,15 +63,14 @@ bool Repeat::isDone () {
 
 void Repeat::finish () {
     pool.free(this);
-    action.finish();
-    super.finish();
+    action->finish();
+    TemporalAction::finish();
 }
 
-gdx_cpp::scenes::scene2d::Action& Repeat::copy () {
-    return $(action.copy(), times);
+gdx_cpp::scenes::scene2d::Action* Repeat::copy () {
+    return Repeat::build(action->copy(), times);
 }
 
-gdx_cpp::scenes::scene2d::Actor& Repeat::getTarget () {
+gdx_cpp::scenes::scene2d::Actor* Repeat::getTarget () {
     return target;
 }
-

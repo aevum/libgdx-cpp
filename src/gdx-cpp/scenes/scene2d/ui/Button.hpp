@@ -26,24 +26,27 @@ namespace scenes {
 namespace scene2d {
 namespace ui {
 
-class Button {
+class Button: public gdx_cpp::scenes::scene2d::ui::tablelayout::Table {
 public:
-    void layout ();
-    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
-    bool touchDown (float x,float y,int pointer);
-    bool touchUp (float x,float y,int pointer);
-    bool touchDragged (float x,float y,int pointer);
-    void click (const Button& button);
+    void click (const gdx_cpp::scenes::scene2d::Actor& actor);
+    void setStyle (const ButtonStyle& style);
+    void setClickListener (const ClickListener& listener);
     void setText (const std::string& text);
     std::string& getText ();
-    Button& setClickListener (const ClickListener& listener);
-    NinePatch down;
-    NinePatch up;
-    BitmapFont font;
-    Color fontColor;
+    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
+    Button (const Skin& skin);
+    Button (const ButtonStyle& style);
+    Button (const gdx_cpp::scenes::scene2d::Actor& child,const Skin& skin);
+    Button (const gdx_cpp::scenes::scene2d::Actor& child,const ButtonStyle& style);
+    Button (const std::string& text,const Skin& skin);
+    Button (const std::string& text,const ButtonStyle& style);
+    Button (const std::string& text,const ButtonStyle& style,const std::string& name);
+    Button (const ButtonStyle& style,const std::string& name);
+    ButtonStyle style ;
+    boolean isChecked ;
 
 protected:
-
+    ClickListener listener ;
 
 private:
 

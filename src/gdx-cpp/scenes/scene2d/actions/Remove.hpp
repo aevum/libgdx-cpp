@@ -21,6 +21,9 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTIONS_REMOVE_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTIONS_REMOVE_HPP_
 
+#include "gdx-cpp/scenes/scene2d/Action.hpp"
+#include "ActionResetingPool.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
@@ -28,16 +31,20 @@ namespace actions {
 
 class Remove: public gdx_cpp::scenes::scene2d::Action {
 public:
-    Remove& $ ();
-    void setTarget (const gdx_cpp::scenes::scene2d::Actor& actor);
+    static Remove* build ();
+    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
     void act (float delta);
     bool isDone ();
-    gdx_cpp::scenes::scene2d::Action& copy ();
-    gdx_cpp::scenes::scene2d::Actor& getTarget ();
+    Action* copy ();
+    Actor* getTarget ();
+    Remove();
+    
+protected:    
+    Actor* target;
+    bool removed;
 
-protected:
-    Remove& newObject ();
-
+    static ActionResetingPool<Remove> pool;
+    
 private:
 
 };

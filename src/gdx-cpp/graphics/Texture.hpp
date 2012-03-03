@@ -27,7 +27,8 @@
 #include "gdx-cpp/Application.hpp"
 #include "TextureData.hpp"
 
-#include <tr1/unordered_map>s
+#include <tr1/unordered_map>
+#include <tr1/memory>
 #include <list>
 #include "gdx-cpp/assets/Asset.hpp"
 
@@ -48,6 +49,7 @@ class Texture
       public std::tr1::enable_shared_from_this<Texture> {
 public:
     typedef ref_ptr_maker<Texture>::type ptr;
+    typedef ref_ptr_maker<Texture>::weak_type weak_ptr;
     
     class TextureFilter {
     public:
@@ -114,7 +116,7 @@ public:
     int getTextureObjectHandle ();
     void setWrap (const TextureWrap& u, const TextureWrap& v);
     void setFilter (const gdx_cpp::graphics::Texture::TextureFilter& minFilter, const gdx_cpp::graphics::Texture::TextureFilter& magFilter);
-    void dispose ();
+    
     void setEnforcePotImages (bool enforcePotImages);
     static void clearAllTextures (gdx_cpp::Application* app);
     static void invalidateAllTextures (gdx_cpp::Application* app);
@@ -122,10 +124,14 @@ public:
     std::string getManagedStatus ();
     static int createGLHandle ();
 
-    static ptr fromFile(const gdx_cpp::files::FileHandle::ptr file,
+    static ptr newFromFile(const gdx_cpp::files::FileHandle::ptr file,
                         const gdx_cpp::graphics::Pixmap::Format* format = NULL,
                         bool useMipMaps = false);
+
+    virtual ~Texture();
+
 protected:
+    void dispose ();
     void initialize(const gdx_cpp::files::FileHandle::ptr file, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps);
     Texture ();
     
@@ -136,7 +142,7 @@ private:
     static void addManagedTexture (gdx_cpp::Application* app, const gdx_cpp::graphics::Texture::ptr texture);
     static assets::AssetManager* assetManager;
 
-    typedef std::list< Texture::ptr > textureList;
+    typedef std::list< Texture::weak_ptr > textureList;
     typedef std::tr1::unordered_map< Application* , textureList > managedTextureMap;
     
     static managedTextureMap managedTextures;

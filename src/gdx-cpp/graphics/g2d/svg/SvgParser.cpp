@@ -55,17 +55,27 @@ std::vector<T> splitArgs(const std::string& item, const char* delimiters, std::s
     return result;
 }
 
-gdx_cpp::graphics::g2d::svg::SvgParser::SvgParser(SvgPixmapInterface& iface)
-        : pixmap(iface), m_pathFlag(false), m_titleFlag(false)
-{
-}
+gdx_cpp::utils::SvgRendererHandler* SvgParser::handler = NULL;
+bool SvgParser::m_titleFlag = false;
+bool SvgParser::m_pathFlag = false;
+gdx_cpp::utils::XmlReader::Element* SvgParser::defsElement = NULL;
 
-void SvgParser::render(gdx_cpp::utils::XmlReader::Element* const svg)
+void SvgParser::render(gdx_cpp::utils::XmlReader::Element*const svg, gdx_cpp::utils::SvgRendererHandler* p_handler)
 {
+    m_pathFlag = false;
+    m_titleFlag = false;
+        
+    if (p_handler) {
+        handler = p_handler;
+        defsElement = NULL;
+    }
+
+    assert(handler != NULL);
+    
     beginElement(svg);
 
     for (int i = 0; i < svg->getChildCount(); ++i) {
-        render(svg->getChild(i));
+        SvgParser::render(svg->getChild(i));
     }
 
     endElement(svg);
@@ -74,48 +84,51 @@ void SvgParser::render(gdx_cpp::utils::XmlReader::Element* const svg)
 void SvgParser::beginElement(XmlReader::Element* const currentNode)
 {
     std::string name = currentNode->getName();
-    if (name == "svg") {
+    
+    if (name == "svg" || name == "svg:svg") {
         int width = from_string<float>(currentNode->getAttribute("width"));
         int height = from_string<float>(currentNode->getAttribute("height"));
 
-        pixmap.setImageDimension(width, height);
+        handler->setImageDimension(width, height);
     }
-    if (name == "title")
+    if (name == "title" || name == "svg:title")
     {
         m_titleFlag = true;
     }
-    else if (name == "g")
+    else if (name == "g" || name == "svg:g")
     {
-        pixmap.begin();
+        handler->begin();
         parse_attr(currentNode);
     }
-    else if (name == "path")
+    else if (name == "path" || name == "svg:path")
     {
         if (m_pathFlag)
         {
             throw std::runtime_error("start_element: Nested path");
         }
 
-        pixmap.beginPath();
+        handler->beginPath();
         parse_path(currentNode);
-        pixmap.endPath();
+        handler->endPath();
         m_pathFlag = true;
     }
-    else if (name == "rect")
+    else if (name == "rect" || name == "svg:rect")
     {
         parse_rect(currentNode);
     }
-    else if (name == "line")
+    else if (name == "line" || name == "svg:line")
     {
         parse_line(currentNode);
     }
-    else if (name == "polyline")
+    else if (name == "polyline" || name == "svg:polyline")
     {
         parse_poly(currentNode, false);
     }
-    else if (name == "polygon")
+    else if (name == "polygon" ||  name == "svg:polygon")
     {
         parse_poly(currentNode, true);
+    } else if (name == "defs" || name == "svg:defs") {
+        defsElement = currentNode;
     }
 }
 
@@ -123,15 +136,15 @@ void SvgParser::endElement(utils::XmlReader::Element* currentNode)
 {
     std::string name = currentNode->getName();
 
-    if (name == "title")
+    if (name == "title" || name == "svg:title")
     {
         m_titleFlag = false;
     }
-    else if (name == "g")
+    else if (name == "g" || name == "svg:g")
     {
-        pixmap.end();
+        handler->end();
     }
-    else if (name == "path")
+    else if (name == "path" || name == "svg:path")
     {
         m_pathFlag = false;
     }
@@ -144,84 +157,97 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_attr(gdx_cpp::utils::XmlReade
 
     for (; it != end; ++it) {
         if (it->first == "style") {
-            parse_style(it->second);
+            std::vector< std::pair< std::string , std::string > > res = parse_style(it->second);
+            for (unsigned int i = 0; i < res.size(); ++i) {
+                parse_attr(res[i].first, res[i].second);
+            }
         } else {
             parse_attr(it->first, it->second);
         }
     }
 }
 
-void gdx_cpp::graphics::g2d::svg::SvgParser::parse_style(const std::string& style)
+std::vector< std::pair< std::string , std::string > > gdx_cpp::graphics::g2d::svg::SvgParser::parse_style(const std::string& style)
 {
     std::string::size_type result = 0;
     std::vector<std::string> res =  splitArgs<std::string>(style, ":;", result);
-
+    std::vector< std::pair< std::string , std::string > > ret;
+    
     for (int i = 0; i < res.size(); i += 2) {
         std::remove(res[i].begin(), res[i].end(), ' ');
         std::remove(res[i+1].begin(), res[i+1].end(), ' ');
-        parse_attr(res[i], res[i+1]);
+        ret.push_back( std::make_pair(res[i], res[i+1]) );
     }
+
+    return ret;
 }
 
 bool gdx_cpp::graphics::g2d::svg::SvgParser::parse_attr(const std::string& name, const std::string& value)
 {
     if (name == "style")
     {
-        parse_style(value);
+        std::vector< std::pair< std::string , std::string > > res = parse_style(value);
+        for (int i = 0; i < res.size(); ++i) {
+            parse_attr(res[i].first, res[i].second);
+        }
     }
     else if (name == "fill")
     {
         if (value == "none")
         {
-            pixmap.fillNone();
+            handler->fillNone();
         }
         else
         {
-            pixmap.fill(parse_color(value));
+            if (value.find("url") != std::string::npos) {
+                parse_gradient(value);
+            } else {
+                handler->fill(parse_color(value));
+            }
         }
     }
-    else if (name == "fill-opacity")
+    else if (name == "fill-opacity" || name == "opacity")
     {
-        pixmap.fillOpacity(utils::from_string<double>(value));
+        handler->fillOpacity(utils::from_string<double>(value));
     }
     else  if (name == "stroke")
     {
         if (value == "none")
         {
-            pixmap.strokeNone();
+            handler->strokeNone();
         }
         else
         {
-            pixmap.stroke(parse_color(value));
+            handler->stroke(parse_color(value));
         }
     }
     else if (name == "stroke-width")
     {
-        pixmap.setStrokeWidth(utils::from_string<float>(value));
+        handler->setStrokeWidth(utils::from_string<float>(value));
     }
     else if (name == "stroke-linecap")
     {
-        if (value == "butt")        pixmap.setLineCap(SvgPixmapInterface::ButtLineCap);
-        else if (value == "round")  pixmap.setLineCap(SvgPixmapInterface::RoundLineCap);
-        else if (value == "square") pixmap.setLineCap(SvgPixmapInterface::SquareLineCap);
+        if (value == "butt")        handler->setLineCap(SvgPixmapInterface::ButtLineCap);
+        else if (value == "round")  handler->setLineCap(SvgPixmapInterface::RoundLineCap);
+        else if (value == "square") handler->setLineCap(SvgPixmapInterface::SquareLineCap);
     }
     else if (name == "stroke-linejoin")
     {
-        if (value == "miter")      pixmap.setLineJoin(SvgPixmapInterface::MiterJoin);
-        else if (value == "round") pixmap.setLineJoin(SvgPixmapInterface::RoundJoin);
-        else if (value == "bevel") pixmap.setLineJoin(SvgPixmapInterface::BevelJoin);
+        if (value == "miter")      handler->setLineJoin(SvgPixmapInterface::MiterJoin);
+        else if (value == "round") handler->setLineJoin(SvgPixmapInterface::RoundJoin);
+        else if (value == "bevel") handler->setLineJoin(SvgPixmapInterface::BevelJoin);
     }
     else if (name == "stroke-miterlimit")
     {
-        pixmap.setMiterLimit(utils::from_string<double>(value));
+        handler->setMiterLimit(utils::from_string<double>(value));
     }
     else if (name == "stroke-opacity")
     {
-        pixmap.setStrokeOpacity(utils::from_string<double>(value));
+        handler->setStrokeOpacity(utils::from_string<double>(value));
     }
     else if (name == "transform")
     {
-        parse_transform(value);
+        parse_transform(value, *handler->currentTransform());
     }
     //else
     //if(strcmp(el, "<OTHER_ATTRIBUTES>") == 0)
@@ -235,13 +261,14 @@ bool gdx_cpp::graphics::g2d::svg::SvgParser::parse_attr(const std::string& name,
     return true;
 }
 
-void gdx_cpp::graphics::g2d::svg::SvgParser::parse_transform(const std::string& transform)
+void gdx_cpp::graphics::g2d::svg::SvgParser::parse_transform(const std::string& transform_string,
+                                                             utils::SvgRendererHandler::transform& transform)
 {
     std::string::size_type pos = 0, last = 0;
 
     struct delegates {
        const char* name;
-       std::string::size_type (SvgParser::*func)(std::string);
+       std::string::size_type (*func)(std::string, utils::SvgRendererHandler::transform& applier );
     };
 
     static delegates transform_parsers[] = {
@@ -255,10 +282,10 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_transform(const std::string& 
     
     while (pos != std::string::npos && last != std::string::npos) {
         for (int i = 0; i < 6; ++i) {
-            pos = transform.find(transform_parsers[i].name, last);
+            pos = transform_string.find(transform_parsers[i].name, last);
             if (pos != std::string::npos) {
                 pos += strlen(transform_parsers[i].name);
-                last = (this->*transform_parsers[i].func)(transform.substr(pos, transform.length() - last - 1));
+                last = (*transform_parsers[i].func)(transform_string.substr(pos, transform_string.length() - last - 1), transform);
                 break;
             }
         }
@@ -266,27 +293,28 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_transform(const std::string& 
 }
 
 
-std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_matrix(std::string matrixArgs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_matrix(std::string matrixArgs,
+                                                                            gdx_cpp::utils::SvgRendererHandler::transform& transform)
 {
     std::string::size_type result = 0;
     std::vector<float> res = splitArgs<float>(matrixArgs, "(,)", result);
-
+   
     assert(res.size() == 6);
-
-    pixmap.transAffine(res);
+    
+    transform.affine(res);
 
     return result;
 }
 
-std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_rotate(std::string rotateArgs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_rotate(std::string rotateArgs, utils::SvgRendererHandler::transform& transform)
 {
     std::string::size_type result = 0;
     std::vector<float> res = splitArgs<float>(rotateArgs, "(,)", result);
 
     if (res.size() == 1) {
-        pixmap.setRotation(math::utils::toRadians(res[0]));
+        transform.rotate(math::utils::toRadians(res[0]));
     } else if (res.size() == 3) {
-        pixmap.setRotationTranslation(math::utils::toRadians(res[0]), res[1], res[2]);
+        transform.rotate_trasnlate(math::utils::toRadians(res[0]), res[1], res[2]);
     } else {
         throw std::runtime_error("SvgParser::parse_rotate: invalid number of arguments");
     }
@@ -294,7 +322,8 @@ std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_rotate(std:
     return result;
 }
 
-std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_scale(std::string scaleArgs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_scale(std::string scaleArgs,
+                                                                           utils::SvgRendererHandler::transform& transform)
 {
     std::string::size_type result = 0;
     std::vector<float> res = splitArgs<float>(scaleArgs, "(,)", result);
@@ -304,36 +333,38 @@ std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_scale(std::
     if (res.size() == 1) {
         res.push_back(res[0]);
     }
-
-    pixmap.setScaling(res[0], res[1]);
+    
+    transform.scale(res[0], res[1]);
 
     return result;
 }
 
-std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_skew_x(std::string skewXargs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_skew_x(std::string skewXargs,
+                                                                            utils::SvgRendererHandler::transform& transform)
 {
     std::string::size_type result = 0;    
     std::vector<float> res = splitArgs<float>(skewXargs, "(,)", result);
 
     assert(res.size() == 1);
 
-    pixmap.setSkew(res[0], 0.0f);
+    transform.skew_x(res[0]);
+    
     return result;
 }
 
-std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_skew_y(std::string skewYargs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_skew_y(std::string skewYargs, utils::SvgRendererHandler::transform& transform)
 {
     std::string::size_type result = 0;
     std::vector<float> res = splitArgs<float>(skewYargs, "(,)", result);
 
     assert(res.size() == 1);
 
-    pixmap.setSkew( 0.0f, res[0]);
+    transform.skew_y(res[0]);
 
     return result;
 }
 
-std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_translate(std::string translateArgs)
+std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_translate(std::string translateArgs, utils::SvgRendererHandler::transform& transform)
 {
     std::string::size_type result = 0;
     std::vector<float> res = splitArgs<float>(translateArgs, "(,)", result);
@@ -341,7 +372,7 @@ std::string::size_type gdx_cpp::graphics::g2d::svg::SvgParser::parse_translate(s
     assert(res.size() >= 1);
     if (res.size() == 1) res.push_back(0);
 
-    pixmap.setTranslation(res[0], res[1]);
+    transform.translate(res[0], res[1]);
     return result;
 }
 
@@ -362,21 +393,21 @@ gdx_cpp::graphics::Color gdx_cpp::graphics::g2d::svg::SvgParser::parse_color(con
 
 void gdx_cpp::graphics::g2d::svg::SvgParser::parse_line(gdx_cpp::utils::XmlReader::Element* node)
 {
-    pixmap.beginPath();
+    handler->beginPath();
 
     parse_attr(node);
 
-    pixmap.moveTo(utils::from_string<float>(node->getAttribute("x1")),
+    handler->moveTo(utils::from_string<float>(node->getAttribute("x1")),
                   utils::from_string<float>(node->getAttribute("y1")));
-    pixmap.lineTo(utils::from_string<float>(node->getAttribute("x2")),
+    handler->lineTo(utils::from_string<float>(node->getAttribute("x2")),
                   utils::from_string<float>(node->getAttribute("y2")));
 
-    pixmap.endPath();
+    handler->endPath();
 }
 
 void gdx_cpp::graphics::g2d::svg::SvgParser::parse_poly(gdx_cpp::utils::XmlReader::Element* node, bool close)
 {
-    pixmap.beginPath();
+    handler->beginPath();
 
     parse_attr(node);
     
@@ -386,22 +417,22 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_poly(gdx_cpp::utils::XmlReade
 
     for (unsigned int i = 0; i < points.size(); i += 2) {
         if (i % 2 == 0) {
-            pixmap.lineTo(points[i], points[i+1]);
+            handler->lineTo(points[i], points[i+1]);
         } else {
-            pixmap.moveTo(points[i], points[i+1]);
+            handler->moveTo(points[i], points[i+1]);
         }
     }
 
     if (close) {
-        pixmap.closeSubPath();
+        handler->closeSubPath();
     }
 
-    pixmap.endPath();
+    handler->endPath();
 }
 
 void gdx_cpp::graphics::g2d::svg::SvgParser::parse_rect(gdx_cpp::utils::XmlReader::Element* node)
 {
-    pixmap.beginPath();
+    handler->beginPath();
     parse_attr(node);
 
     float x = utils::from_string< float >(node->getAttribute("x")),
@@ -422,14 +453,14 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_rect(gdx_cpp::utils::XmlReade
             throw std::runtime_error(buffer);
         }
 
-        pixmap.moveTo(x,  y);
-        pixmap.lineTo(x + w, y);
-        pixmap.lineTo(x + w, y + h);
-        pixmap.lineTo(x,     y + h);
-        pixmap.closeSubPath();
+        handler->moveTo(x,  y);
+        handler->lineTo(x + w, y);
+        handler->lineTo(x + w, y + h);
+        handler->lineTo(x,     y + h);
+        handler->closeSubPath();
     }
 
-    pixmap.endPath();
+    handler->endPath();
 }
 
 void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReader::Element* node)
@@ -437,6 +468,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
     parse_attr(node);
 
     std::string path = node->getAttribute("d");
+
     std::string::size_type result = 0;
     std::vector<std::string> paths = splitArgs<std::string>(path, " ,", result);
     static const char commands[]   = "MmZzLlHhVvCcSsQqTtAaFfPp";
@@ -444,7 +476,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
     unsigned int i = 0;
 
     char cmd = paths[0][0];
-
+    
     while (i < paths.size()) {
         int j = 0;
         for (;j < strlen(commands) && commands[j] != paths[i][0]; ++j)
@@ -452,31 +484,32 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
 
         if (j < strlen(commands)) {
             cmd = paths[i++][0];
-        }        
-
+        }
+        
         switch(cmd) {
             case 'M': case 'm':
-                pixmap.moveTo(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 'm');
+                handler->moveTo(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 'm');
+                cmd = cmd == 'm' ? 'l' : 'L';                
                 i += 2;
                 break;
                 
             case 'L': case 'l':
-                pixmap.lineTo(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 'l');
+                handler->lineTo(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 'l');
                 i += 2;
                 break;
                 
             case 'V': case 'v':
-                pixmap.verticalLineTo(utils::from_string<float>(paths[i]), cmd == 'v');
+                handler->verticalLineTo(utils::from_string<float>(paths[i]), cmd == 'v');
                 i += 1;
                 break;
                 
             case 'H': case 'h':
-                pixmap.horizontalLineTo(utils::from_string<float>(paths[i]), cmd == 'h');
+                handler->horizontalLineTo(utils::from_string<float>(paths[i]), cmd == 'h');
                 i += 1;
                 break;
                 
             case 'Q': case 'q':
-                pixmap.curve3(utils::from_string<float>(paths[i]),
+                handler->curve3(utils::from_string<float>(paths[i]),
                               utils::from_string<float>(paths[i+1]),
                               utils::from_string<float>(paths[i+2]),
                               utils::from_string<float>(paths[i+3]),
@@ -485,12 +518,12 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
                 break;
                 
             case 'T': case 't':
-                pixmap.curve3(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 't');
+                handler->curve3(utils::from_string<float>(paths[i]), utils::from_string<float>(paths[i+1]), cmd == 't');
                 i += 2;
                 break;
                 
             case 'C': case 'c':                            
-                pixmap.curve4(utils::from_string<float>(paths[i]),
+                handler->curve4(utils::from_string<float>(paths[i]),
                               utils::from_string<float>(paths[i+1]),
                               utils::from_string<float>(paths[i+2]),
                               utils::from_string<float>(paths[i+3]),
@@ -501,7 +534,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
                 break;
                 
             case 'S': case 's':
-                pixmap.curve4(utils::from_string<float>(paths[i]),
+                handler->curve4(utils::from_string<float>(paths[i]),
                               utils::from_string<float>(paths[i+1]),
                               utils::from_string<float>(paths[i+2]),
                               utils::from_string<float>(paths[i+3]),
@@ -513,7 +546,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
                 throw std::runtime_error("parse_path: Command A: NOT IMPLEMENTED YET");
                 
             case 'Z': case 'z':
-                pixmap.closeSubPath();
+                handler->closeSubPath();
                 break;
                 
             default:
@@ -526,6 +559,110 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
     }
     
 }
+
+void gdx_cpp::graphics::g2d::svg::SvgParser::fetchStopData(gdx_cpp::utils::XmlReader::Element* node , std::vector< SvgRendererHandler::GradientStopData >& stopData) {
+    for( int i = 0; i < node->getChildCount(); ++i) {
+        gdx_cpp::utils::XmlReader::Element* child = node->getChild(i);
+        if (child->getName() == "svg:stop" || child->getName() == "stop") {
+            SvgRendererHandler::GradientStopData stop;
+            stop.offset = from_string< float >(child->getAttribute("offset"));
+
+            std::vector< std::pair< std::string , std::string > > res = parse_style(child->getAttribute("style"));
+            
+            for (int i = 0; i < res.size(); ++i) {
+                if (res[i].first == "stop-color") {
+                    stop.color = parse_color(res[i].second);
+                } else if (res[i].first == "stop-opacity") {
+                    stop.opacity = from_string< float >(res[i].second);
+                }
+            }
+
+            stopData.push_back(stop);
+        }
+    }
+
+    if (node->hasAttribute("xlink:href")) {
+        std::string nodeName =  node->getAttribute("xlink:href").substr(1);
+
+        for (int i = 0; i < defsElement->getChildCount(); ++i) {
+            if (defsElement->getChild(i)->getAttribute("id") == nodeName) {
+                fetchStopData(defsElement->getChild(i), stopData); 
+                break;
+            }
+        }
+    }
+}
+
+bool sortByStop(const SvgRendererHandler::GradientStopData& a,const SvgRendererHandler::GradientStopData& b) {
+    return a.offset < b.offset;
+}
+
+void gdx_cpp::graphics::g2d::svg::SvgParser::parse_gradient(const std::string& gradient)
+{
+    std::string::size_type result = 0;
+    std::vector< std::string > url = splitArgs<std::string>(gradient, "()", result);
+
+    assert(defsElement != NULL);
+
+    std::string gradientNodeUrl = url[1].substr(1);
+    
+    gdx_cpp::utils::XmlReader::Element* gradientDef = NULL;
+
+    for (int i = 0; i < defsElement->getChildCount(); ++i) {
+        if (defsElement->getChild(i)->getAttribute("id") == gradientNodeUrl) {
+            gradientDef = defsElement->getChild(i);
+            break;
+        }
+    }
+
+    assert(gradientDef);
+
+    if ( gradientDef->getName() == "svg:linearGradient" || gradientDef->getName() == "linearGradient") {
+        SvgRendererHandler::LinearGradient gradientData;
+
+        fetchStopData(gradientDef, gradientData.stops);
+
+        std::sort(gradientData.stops.begin(), gradientData.stops.end(), sortByStop);
+
+        gradientData.x1 = from_string< float >(gradientDef->getAttribute("x1"));
+        gradientData.y1 = from_string< float >(gradientDef->getAttribute("y1"));
+        gradientData.x2 = from_string< float >(gradientDef->getAttribute("x2"));
+        gradientData.y2 = from_string< float >(gradientDef->getAttribute("y2"));
+
+        if (gradientDef->hasAttribute("gradientTransform")) {
+            gradientData.gradient_transform = handler->createTransform();
+            std::string gradientTransform = gradientDef->getAttribute("gradientTransform");
+            parse_transform(gradientTransform, *gradientData.gradient_transform);
+        }
+
+        handler->fillLinearGradient(gradientData);
+    } else if ( gradientDef->getName() == "svg:radialGradient" || gradientDef->getName() == "radialGradient") {
+        SvgRendererHandler::RadialGradient gradientData;
+        
+        fetchStopData(gradientDef, gradientData.stops);
+        
+        std::sort(gradientData.stops.begin(), gradientData.stops.end(), sortByStop);
+        
+        gradientData.cx = from_string< float >(gradientDef->getAttribute("cx"));
+        gradientData.cy = from_string< float >(gradientDef->getAttribute("cy"));
+        gradientData.fx = from_string< float >(gradientDef->getAttribute("fx"));
+        gradientData.fy = from_string< float >(gradientDef->getAttribute("fy"));
+        gradientData.r = from_string< float >(gradientDef->getAttribute("r"));
+        
+        if (gradientDef->hasAttribute("gradientTransform")) {
+            gradientData.gradient_transform = handler->createTransform();
+            std::string gradientTransform = gradientDef->getAttribute("gradientTransform");
+            parse_transform(gradientTransform, *gradientData.gradient_transform);
+        }
+        
+        handler->fillRadialGradient(gradientData);
+    }
+}
+
+
+
+
+
 
 
 

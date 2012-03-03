@@ -22,46 +22,85 @@
 
 using namespace gdx_cpp::scenes::scene2d::ui;
 
-void Label::layout () {
-    final BitmapFont font = style.font;
+void Label::setStyle (const LabelStyle& style) {
+    this.style = style;
+    cache = new BitmapFontCache(style.font);
+    cache.setColor(style.fontColor);
+    setText(text);
+}
 
-    bounds.set(font.getMultiLineBounds(label));
-    bounds.height -= font.getDescent();
+void Label::setText (const std::string& text) {
+    this.text = text;
+    TextBounds bounds = style.font.getMultiLineBounds(text);
+    cache.setMultiLineText(text, 0, bounds.height);
     prefWidth = bounds.width;
-    prefHeight = bounds.height;
-    textPos.x = 0;
-    textPos.y = prefHeight;
-    invalidated = false;
+    prefHeight = bounds.height - style.font.getDescent() * 2;
+}
+
+std::string& Label::getText () {
+    return text;
+}
+
+void Label::setColor (float color) {
+    cache.setColor(color);
+}
+
+void Label::setColor (const gdx_cpp::graphics::Color& tint) {
+    cache.setColor(tint);
+}
+
+void Label::setColor (float r,float g,float b,float a) {
+    cache.setColor(r, g, b, a);
+}
+
+gdx_cpp::graphics::Color& Label::getColor () {
+    return cache.getColor();
+}
+
+void Label::layout () {
 }
 
 void Label::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
-    final BitmapFont font = style.font;
-    final Color fontColor = style.fontColor;
-
-    if (invalidated) layout();
-    font.setColor(fontColor.r, fontColor.g, fontColor.b, fontColor.a * parentAlpha);
-    font.drawMultiLine(batch, label, x + textPos.x, y + height);
+    cache.setColor(color);
+    cache.setPosition(x, y - style.font.getDescent());
+    cache.draw(batch, parentAlpha);
 }
 
 bool Label::touchDown (float x,float y,int pointer) {
     return false;
 }
 
-bool Label::touchUp (float x,float y,int pointer) {
-    return false;
+void Label::touchUp (float x,float y,int pointer) {
 }
 
-bool Label::touchDragged (float x,float y,int pointer) {
-    return false;
+void Label::touchDragged (float x,float y,int pointer) {
 }
 
 gdx_cpp::scenes::scene2d::Actor& Label::hit (float x,float y) {
     return null;
 }
 
-void Label::setText (const std::string& text) {
-    this.label = text;
-    layout();
-    invalidateHierarchy();
+float Label::getPrefWidth () {
+    return prefWidth;
+}
+
+float Label::getPrefHeight () {
+    return prefHeight;
+}
+
+Label::Label (const std::string& text,const Skin& skin) {
+    this(text, skin.getStyle(LabelStyle.class), null);
+}
+
+Label::Label (const std::string& text,const LabelStyle& style) {
+    this(text, style, null);
+}
+
+Label::Label (const std::string& text,const LabelStyle& style,const std::string& name) {
+    super(name);
+    this.text = text;
+    setStyle(style);
+
+    touchable = false;
 }
 

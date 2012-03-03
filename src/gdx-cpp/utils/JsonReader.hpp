@@ -21,37 +21,43 @@
 #ifndef GDX_CPP_UTILS_JSONREADER_HPP_
 #define GDX_CPP_UTILS_JSONREADER_HPP_
 
+#include "JsonValue.hpp"
+
+#include <string>
+#include <list>
+#include "gdx-cpp/files/FileHandle.hpp"
+
 namespace gdx_cpp {
 namespace utils {
 
 class JsonReader {
 public:
-    Object& parse (const std::string& json);
-    Object& parse (const Reader& reader);
-    Object& parse (const InputStream& input);
-    Object& parse (const gdx_cpp::files::FileHandle& file);
-    Object& parse (int offset,int length);
+    JsonReader();
+    
+    static JsonValue::ptr parse (const std::string& json);
+    static JsonValue::ptr parse (const gdx_cpp::files::FileHandle& file);
+    static JsonValue::ptr parse (const char* data, int offset, int length);
 
 protected:
-    void startObject (const std::string& name);
-    void startArray (const std::string& name);
-    void pop ();
-    void string (const std::string& name,const std::string& value);
-    void number (const std::string& name,const std::string& value);
+    static void startObject (const std::string& name);
+    static void startArray (const std::string& name);
 
-private:
-    static char* init__json_actions_0 ();
-    static short* init__json_key_offsets_0 ();
-    static char* init__json_trans_keys_0 ();
-    static char* init__json_single_lengths_0 ();
-    static char* init__json_range_lengths_0 ();
-    static short* init__json_index_offsets_0 ();
-    static char* init__json_indicies_0 ();
-    static char* init__json_trans_targs_0 ();
-    static char* init__json_trans_actions_0 ();
-    static char* init__json_eof_actions_0 ();
-    void set (const std::string& name,const Object& value);
-    std::string& unescape (const std::string& value);
+    static void pop ();
+
+    static void string (const std::string& name,  const std::string& value);
+    static void number (const std::string& name,  float value);
+    static void number (const std::string& name,  int value);
+    static void boolean (const std::string& name, bool value);
+
+private:    
+    static void set (const std::string& name, gdx_cpp::utils::JsonValue::ptr value);
+    
+    static std::string unescape (const std::string& value);
+
+    static JsonValue::ptr root;
+    static JsonValue::ptr current;
+
+    static std::list< JsonValue::ptr > elements;
 };
 
 } // namespace gdx_cpp

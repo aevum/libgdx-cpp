@@ -22,10 +22,10 @@
 #define GDX_CPP_BACKENDS_ANDROID_FILES_H
 
 #include <gdx-cpp/Files.hpp>
+#include <jni.h>
 
 #include <sys/types.h>
-#include <android/asset_manager.h>
-#include <android/asset_manager_jni.h>
+#include <gdx-cpp/files/FileHandle.hpp>
 namespace gdx_cpp {
 
 namespace files {
@@ -39,21 +39,21 @@ namespace android {
 class AndroidFiles : public gdx_cpp::Files
 {
 public:
-    fhandle_ptr getFileHandle (const std::string& path, gdx_cpp::Files::FileType type);
+    AndroidFiles();
+    
+    files::FileHandle::ptr getFileHandle (const std::string& path, gdx_cpp::Files::FileType type);
         
-    fhandle_ptr internal (const std::string& path);
+    files::FileHandle::ptr internal (const std::string& path);
     
-    fhandle_ptr external (const std::string& path);
+    files::FileHandle::ptr external (const std::string& path);
     
-    fhandle_ptr absolute (const std::string& path);
+    files::FileHandle::ptr absolute (const std::string& path);
     
-    std::string& getExternalStoragePath ();
+    std::string getExternalStoragePath ();
     
-    bool isExternalStorageAvailable ();
-
-    void setAndroidAssetManager(AAssetManager* mngr);
+    bool isExternalStorageAvailable ();    
+    
 protected:
-    AAssetManager* mngr;
     std::string externalPath;
 };
 

@@ -28,22 +28,36 @@ namespace ui {
 
 class List {
 public:
+    void setStyle (const ListStyle& style);
     void layout ();
     void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
     bool touchDown (float x,float y,int pointer);
-    bool touchUp (float x,float y,int pointer);
-    bool touchDragged (float x,float y,int pointer);
+    void touchUp (float x,float y,int pointer);
+    void touchDragged (float x,float y,int pointer);
     gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
     void selected (const std::list<& list,int selectedIndex,const std::string& selection);
     int getSelectedIndex ();
+    void setSelectedIndex (int index);
     std::string& getSelection ();
-    void setEntries ();
+    void setSelection (int index);
+    int setSelection (const std::string& item);
+    void setItems ();
+    std::string* getItems ();
+    float getPrefWidth ();
+    float getPrefHeight ();
     void setSelectionListener (const SelectionListener& listener);
-    BitmapFont font;
-    NinePatch selectedPatch;
+    List (const Skin& skin);
+    List (const ListStyle& style);
+    List (const ListStyle& style,const std::string& name);
 
 protected:
-
+    ListStyle style ;
+    String[] items ;
+    float itemHeight = 0;
+    float textOffsetX = 0;
+    float textOffsetY = 0;
+    int selected = 0;
+    SelectionListener listener ;
 
 private:
 

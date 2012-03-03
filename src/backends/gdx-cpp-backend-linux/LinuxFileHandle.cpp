@@ -19,6 +19,8 @@
  */
 
 #include "LinuxFileHandle.hpp"
+#include <cassert>
+#include <sys/stat.h>
 
 using namespace gdx_cpp::backends::nix;
 
@@ -32,21 +34,63 @@ LinuxFileHandle::LinuxFileHandle (const gdx_cpp::files::File &file, gdx_cpp::Fil
 {
 }
 
-gdx_cpp::Files::fhandle_ptr LinuxFileHandle::child (const std::string &name)
+int LinuxFileHandle::readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) const
 {
-    if (file.getPath().length() == 0) return gdx_cpp::Files::fhandle_ptr (new LinuxFileHandle(gdx_cpp::files::File(name), this->type));
-    return gdx_cpp::Files::fhandle_ptr (new LinuxFileHandle(gdx_cpp::files::File(file, name), this->type));
-}
+    int buffer_length = length();
+    char* buf = (char*) malloc(buffer_length);
+
+    std::string filepath;
+    if (type == gdx_cpp::Files::Internal && !file.exists()) {
+        int found;
+        filepath = "/" + file.getPath();
         
-gdx_cpp::Files::fhandle_ptr LinuxFileHandle::parent ()
-{
-    gdx_cpp::files::File parent = file.getParentFile();
-    if (parent.getPath() == "")
-    {
-        if (type == gdx_cpp::Files::Absolute)
-            parent = gdx_cpp::files::File("/");
-        else
-            parent = gdx_cpp::files::File("");
+        while((found = filepath.find("//")) != filepath.npos)
+            filepath.replace(found, 2, "/");
+    } else {
+        filepath = file.getPath();
     }
-    return gdx_cpp::Files::fhandle_ptr (new LinuxFileHandle(parent, type));
+
+    FILE* f = fopen(filepath.c_str(), "r");
+
+    assert(f);
+    
+    int position = 0;
+    if (f) {
+        
+        int readed = 0;
+        while ((readed = fread(buf + position, 1, buffer_length - position, f)) > 0)
+        {
+            position += readed;
+        }
+
+        fclose(f);
+    }    
+    
+    buffer_ptr new_ptr = buffer_ptr(buf, shared_ptr_free_deleter());
+    c.swap(new_ptr);
+    return position;
 }
+
+int LinuxFileHandle::write( const char* data, int lenght, bool append)
+{
+    return gdx_cpp::files::FileHandle::write(data, lenght, append);
+}
+
+void LinuxFileHandle::copyTo(gdx_cpp::files::FileHandle& dest)
+{
+    gdx_cpp::files::FileHandle::copyTo(dest);
+}
+
+int64_t LinuxFileHandle::length() const
+{
+    struct stat st;
+    int res = stat(file.getPath().c_str(), &st);
+
+    if (res) {
+
+    }
+    
+    return st.st_size;
+}
+
+

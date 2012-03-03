@@ -19,6 +19,9 @@
 */
 
 #include "Actor.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "Group.hpp"
+#include "Action.hpp"
 
 using namespace gdx_cpp::scenes::scene2d;
 
@@ -42,34 +45,34 @@ bool Actor::keyTyped (char character) {
     return false;
 }
 
-void Actor::toLocalCoordinates (const gdx_cpp::math::Vector2& point) {
-    if (parent == null) {
+void Actor::toLocalCoordinates (gdx_cpp::math::Vector2& point) {
+    if (parent == NULL) {
         return;
     }
 
-    parent.toLocalCoordinates(point);
-    Group.toChildCoordinates(this, point.x, point.y, point);
+    parent->toLocalCoordinates(point);
+    Group::toChildCoordinates(this, point.x, point.y, point);
 }
 
 void Actor::remove () {
-    parent.removeActor(this);
+    parent->removeActor(this);
 }
 
 void Actor::act (float delta) {
     actions.iter();
-    Action action;
 
-    while ((action = actions.next()) != null) {
-        action.act(delta);
-        if (action.isDone()) {
-            action.finish();
+    Action* action = 0;
+    while ((action = actions.next()) != NULL) {
+        action->act(delta);
+        if (action->isDone()) {
+            action->finish();
             actions.remove();
         }
     }
 }
 
-void Actor::action (const Action& action) {
-    action.setTarget(this);
+void Actor::action (Action* const action) {
+    action->setTarget(this);
     actions.add(action);
 }
 
@@ -77,16 +80,43 @@ void Actor::clearActions () {
     actions.clear();
 }
 
-std::string& Actor::toString () {
-    return name + ": [x=" + x + ", y=" + y + ", refX=" + originX + ", refY=" + originY + ", width=" + width + ", height="
-           + height + "]";
+std::string Actor::toString () const {
+    char buffer[1024];
+    sprintf(buffer, "%s: [x= %f, y= %f, refX= %f, refY= %f, width= %f, height=%f]", name.c_str(), x, y, originX, originY, width, height);
+            
+    return std::string(buffer);
 }
 
-void Actor::markToRemove (const final& boolean) {
+void Actor::markToRemove (bool remove) {
     toRemove = remove;
 }
 
 bool Actor::isMarkedToRemove () {
     return toRemove;
+}
+
+Actor::Actor ()
+ : toRemove(false)
+ , color(1,1,1,1)
+ , touchable(true)
+ , visible(true)
+ , parent(NULL)
+ , actions(10)
+ , scaleX(1)
+ ,scaleY(1)
+{    
+}
+
+Actor::Actor (const std::string& name)
+: toRemove(false)
+, color(1,1,1,1)
+, touchable(true)
+, visible(true)
+, parent(NULL)
+, actions(10)
+, scaleX(1)
+, scaleY(1)
+{
+    this->name = name;
 }
 

@@ -47,7 +47,7 @@ Mesh::MeshMap Mesh::meshes;
 Mesh::Mesh(bool isStatic, int maxVertices, int maxIndices, const std::vector< VertexAttribute >& attributes)
 : vertices(0)
 , autoBind(true)
-, refCount(0)
+, disposed(false)
 {
     if (gdx_cpp::Gdx::gl20 != NULL || gdx_cpp::Gdx::gl11 != NULL || Mesh::forceVBO) {
         vertices = new glutils::VertexBufferObject(isStatic, maxVertices, attributes);
@@ -61,7 +61,6 @@ Mesh::Mesh(bool isStatic, int maxVertices, int maxIndices, const std::vector< Ve
     
     addManagedMesh(gdx_cpp::Gdx::app, this);
 }
-
 
 void Mesh::setVertices (const std::vector<float>& vertices) {
     this->vertices->setVertices(&vertices[0], 0, vertices.size());
@@ -217,25 +216,24 @@ void Mesh::render (gdx_cpp::graphics::glutils::ShaderProgram& shader,int primiti
 }
 
 void Mesh::dispose () {
-    refCount--;
-    if (refCount > 0) return;
-    if (meshes.count(Gdx::app) > 0) meshes[Gdx::app].erase(this);
-    vertices->dispose();
-    indices->dispose();
+    if (!disposed) {
+        if (meshes.count(Gdx::app) > 0 && meshes[Gdx::app].count(this))
+            meshes[Gdx::app].erase(this);
+        vertices->dispose();
+        indices->dispose();
+    }
 }
 
-VertexAttribute& Mesh::getVertexAttribute (int usage) {
+VertexAttribute* const Mesh::getVertexAttribute (int usage) {
     VertexAttributes& attributes = vertices->getAttributes();
     int len = attributes.size();
     for (int i = 0; i < len; i++) {
         if (attributes.get(i).usage == usage){
-            return attributes.get(i);
+            return &attributes.get(i);
         }
     }
 
-    std::stringstream ss;
-    ss << "vertex attribute not found: " << usage;
-    throw std::runtime_error(ss.str());
+    return NULL;
 }
 
 VertexAttributes& Mesh::getVertexAttributes () {
@@ -252,7 +250,7 @@ void Mesh::calculateBoundingBox (gdx_cpp::math::collision::BoundingBox& bbox) {
 
     utils::float_buffer verts = vertices->getBuffer();
     bbox.inf();
-    VertexAttribute& posAttrib = getVertexAttribute(VertexAttributes::Usage::Position);
+    VertexAttribute& posAttrib = *getVertexAttribute(VertexAttributes::Usage::Position);
     int offset = posAttrib.offset / 4;
     int vertexSize = vertices->getAttributes().vertexSize / 4;
     int idx = offset;
@@ -319,7 +317,7 @@ std::string Mesh::getManagedStatus () {
 }
 
 void Mesh::scale (float scaleX,float scaleY,float scaleZ) {
-    VertexAttribute& posAttr = getVertexAttribute(VertexAttributes::Usage::Position);
+    VertexAttribute& posAttr = *getVertexAttribute(VertexAttributes::Usage::Position);
     int offset = posAttr.offset / 4;
     int numComponents = posAttr.numComponents;
     int numVertices = getNumVertices();
@@ -358,7 +356,7 @@ void Mesh::scale (float scaleX,float scaleY,float scaleZ) {
 Mesh::Mesh(int type, bool isStatic, int maxVertices, int maxIndices, const std::vector< VertexAttribute >& attributes)
 : vertices(0)
 , autoBind(true)
-, refCount(0)
+, disposed(false)
 {
     if (type == VertexDataType::VertexArray && Gdx::graphics->isGL20Available())
         type = VertexDataType::VertexBufferObject;
@@ -383,3 +381,9 @@ void Mesh::setVertices(const float* vertices, int size) {
     this->vertices->setVertices(vertices, 0, size);
 }
 
+Mesh::~Mesh()
+{
+    dispose();
+    delete vertices;
+    delete indices;
+}

@@ -26,9 +26,11 @@ namespace utils {
 
 class JsonWriter {
 public:
+    void setOutputType (const OutputType& outputType);
+    JsonWriter& name (const std::string& name);
     JsonWriter& object ();
     JsonWriter& array ();
-    JsonWriter& add (const Object& value);
+    JsonWriter& value (const Object& value);
     JsonWriter& object (const std::string& name);
     JsonWriter& array (const std::string& name);
     JsonWriter& set (const std::string& name,const Object& value);
@@ -36,12 +38,18 @@ public:
     void write (int off,int len);
     void flush ();
     void close ();
+    std::string& quoteValue (const std::string& value);
+    std::string& quoteName (const std::string& value);
+    JsonWriter (const Writer& writer);
 
 protected:
-
+    Writer writer ;
 
 private:
-
+    Array<JsonObject> stack = new Array();
+    JsonObject current ;
+    boolean named ;
+    OutputType outputType = OutputType.json;
 };
 
 } // namespace gdx_cpp

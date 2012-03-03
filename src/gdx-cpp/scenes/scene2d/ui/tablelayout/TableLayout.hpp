@@ -29,7 +29,6 @@ namespace tablelayout {
 
 class TableLayout {
 public:
-    void parse (const gdx_cpp::files::FileHandle& file);
     gdx_cpp::scenes::scene2d::Actor& register (const gdx_cpp::scenes::scene2d::Actor& actor);
     gdx_cpp::scenes::scene2d::Actor& registerImage (const std::string& name);
     gdx_cpp::scenes::scene2d::Actor& getWidget (const std::string& name);
@@ -37,12 +36,18 @@ public:
     void invalidate ();
     void invalidateHierarchy ();
     void drawDebug (const gdx_cpp::graphics::g2d::SpriteBatch& batch);
+    TableLayout ();
+    TableLayout (const LibgdxToolkit& toolkit);
+    TextureAtlas atlas ;
 
 protected:
-
+    OR SERVICES ;
+    OR PROFITS ;
+    boolean needsLayout = true;
+    Array<DebugRect> debugRects ;
 
 private:
-
+    ImmediateModeRenderer debugRenderer ;
 };
 
 } // namespace gdx_cpp

@@ -22,44 +22,50 @@
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-FadeTo& FadeTo::newObject () {
-    return new FadeTo();
-}
+ActionResetingPool<FadeTo> FadeTo::pool = ActionResetingPool<FadeTo>(4, 100);
 
-FadeTo& FadeTo::$ (float alpha,float duration) {
-    FadeTo action = pool.obtain();
-    action.toAlpha = Math.min(Math.max(alpha, 0.0f), 1.0f);
-    action.duration = duration;
-    action.invDuration = 1 / duration;
+FadeTo* FadeTo::build (float alpha,float duration) {
+    FadeTo* action = pool.obtain();
+    action->toAlpha = std::min(std::max(alpha, 0.0f), 1.0f);
+    action->duration = duration;
+    action->invDuration = 1 / duration;
     return action;
 }
 
-void FadeTo::setTarget (const gdx_cpp::scenes::scene2d::Actor& actor) {
-    this.target = actor;
-    this.startAlpha = this.target.color.a;
-    this.deltaAlpha = toAlpha - this.target.color.a;
-    this.taken = 0;
-    this.done = false;
+void FadeTo::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+    this->target = actor;
+    this->startAlpha = this->target->color.a;
+    this->deltaAlpha = toAlpha - this->target->color.a;
+    this->taken = 0;
+    this->done = false;
 }
 
 void FadeTo::act (float delta) {
     float alpha = createInterpolatedAlpha(delta);
     if (done) {
-        target.color.a = toAlpha;
+        target->color.a = toAlpha;
     } else {
         float val = startAlpha + deltaAlpha * alpha;
-        target.color.a = Math.min(Math.max(val, 0.0f), 1.0f);
+        target->color.a = std::min(std::max(val, 0.0f), 1.0f);
     }
 }
 
 void FadeTo::finish () {
-    super.finish();
+    AnimationAction::finish();
     pool.free(this);
 }
 
-gdx_cpp::scenes::scene2d::Action& FadeTo::copy () {
-    FadeTo fadeTo = $(toAlpha, duration);
-    if (interpolator != null) fadeTo.setInterpolator(interpolator.copy());
+gdx_cpp::scenes::scene2d::Action* FadeTo::copy () {
+    FadeTo* fadeTo = FadeTo::build(toAlpha, duration);
+    if (interpolator != NULL) fadeTo->setInterpolator(interpolator->copy());
     return fadeTo;
+}
+
+gdx_cpp::scenes::scene2d::actions::FadeTo::FadeTo()
+ : toAlpha(0),
+startAlpha(0),
+deltaAlpha(0)
+{
+
 }
 

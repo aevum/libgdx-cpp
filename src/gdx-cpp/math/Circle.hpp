@@ -38,6 +38,8 @@ public:
     virtual bool operator==(const Circle& other) const;
     bool contains (const Vector2& point);
     bool contains (float x, float y);
+    void set(float x, float y, float radius);
+    
     float x, y;
     float radius;
 };

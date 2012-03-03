@@ -1,13 +1,15 @@
 file(GLOB GDX_HEADERS
 Files.hpp
 Input.hpp
-# scenes/scene2d/Group.hpp
-# scenes/scene2d/Stage.hpp
-# scenes/scene2d/CompositeAction.hpp
-# scenes/scene2d/TemporalAction.hpp
-# scenes/scene2d/AnimationAction.hpp
-# scenes/scene2d/OnActionCompleted.hpp
-# scenes/scene2d/Interpolator.hpp
+scenes/scene2d/Group.hpp
+scenes/scene2d/Stage.hpp
+scenes/scene2d/CompositeAction.hpp
+scenes/scene2d/TemporalAction.hpp
+scenes/scene2d/AnimationAction.hpp
+scenes/scene2d/OnActionCompleted.hpp
+scenes/scene2d/Interpolator.hpp
+scenes/scene2d/Action.hpp
+scenes/scene2d/Actor.hpp
 # scenes/scene2d/actors/Label.hpp
 # scenes/scene2d/actors/FastImage.hpp
 # scenes/scene2d/actors/Image.hpp
@@ -54,21 +56,21 @@ Input.hpp
 # scenes/scene2d/ui/Pane.hpp
 # scenes/scene2d/Actor.hpp
 # scenes/scene2d/Action.hpp
-# scenes/scene2d/actions/Delay.hpp
-# scenes/scene2d/actions/Remove.hpp
-# scenes/scene2d/actions/FadeIn.hpp
-# scenes/scene2d/actions/FadeTo.hpp
-# scenes/scene2d/actions/FadeOut.hpp
-# scenes/scene2d/actions/Sequence.hpp
-# scenes/scene2d/actions/RotateBy.hpp
-# scenes/scene2d/actions/ActionResetingPool.hpp
-# scenes/scene2d/actions/Parallel.hpp
-# scenes/scene2d/actions/Forever.hpp
-# scenes/scene2d/actions/RotateTo.hpp
-# scenes/scene2d/actions/ScaleTo.hpp
-# scenes/scene2d/actions/Repeat.hpp
-# scenes/scene2d/actions/MoveTo.hppMessage
-# scenes/scene2d/actions/MoveBy.hpp
+scenes/scene2d/actions/Delay.hpp
+scenes/scene2d/actions/Remove.hpp
+scenes/scene2d/actions/FadeIn.hpp
+scenes/scene2d/actions/FadeTo.hpp
+scenes/scene2d/actions/FadeOut.hpp
+scenes/scene2d/actions/Sequence.hpp
+scenes/scene2d/actions/RotateBy.hpp
+scenes/scene2d/actions/ActionResetingPool.hpp
+scenes/scene2d/actions/Parallel.hpp
+scenes/scene2d/actions/Forever.hpp
+scenes/scene2d/actions/RotateTo.hpp
+scenes/scene2d/actions/ScaleTo.hpp
+scenes/scene2d/actions/Repeat.hpp
+scenes/scene2d/actions/MoveTo.hpp
+scenes/scene2d/actions/MoveBy.hpp
 ApplicationListener.hpp
 # audio/analysis/kissfft/kiss_fft.h
 # audio/analysis/kissfft/kiss_fftr.h
@@ -91,7 +93,6 @@ audio/AudioRecorder.hpp
 Screen.hpp
 Graphics.hpp
 files/FileHandle.hpp
-files/FileHandleStream.hpp
 files/File.hpp
 Gdx.hpp
 implementation/MutexFactory.hpp
@@ -129,6 +130,7 @@ graphics/Mesh.hpp
 graphics/Camera.hpp
 graphics/PerspectiveCamera.hpp
 graphics/glutils/ImmediateModeRenderer20.hpp
+graphics/glutils/ShapeRenderer.hpp
 graphics/glutils/VertexArray.hpp
 graphics/glutils/IndexBufferObject.hpp
 graphics/glutils/MipMapGenerator.hpp
@@ -179,11 +181,11 @@ graphics/g3d/keyframed/Keyframe.hpp
 graphics/g3d/keyframed/KeyframeAnimator.hpp
 graphics/g3d/keyframed/KeyframedModel.hpp
 graphics/g3d/keyframed/KeyframeAnimation.hpp
-# graphics/g2d/BitmapFontCache.hpp
+graphics/g2d/BitmapFontCache.hpp
 graphics/g2d/Animation.hpp
 graphics/g2d/detail/gdx2d.h
 graphics/g2d/detail/stb_truetype.h
-# graphics/g2d/BitmapFont.hpp
+graphics/g2d/BitmapFont.hpp
 graphics/g2d/TextureRegion.hpp
 graphics/g2d/SpriteCache.hpp
 graphics/g2d/ParticleEffect.hpp
@@ -213,7 +215,7 @@ Game.hpp
 InputProcessor.hpp
 # utils/LittleEndianInputStream.hpp
 # utils/TimSort.hpp
-# utils/Base64Coder.hpp
+# utils/Coder.hpp
 # utils/Buffer.hpp
 # utils/BufferUtils.hpp
 # utils/PooledLinkedList.hpp
@@ -223,6 +225,9 @@ InputProcessor.hpp
 # utils/Sort.hpp
 # utils/AtomicQueue.hpp
 # utils/Json.hpp
+utils/Base64Coder.hpp
+utils/JsonValue.hpp
+utils/JsonReader.hpp
 # utils/IntArray.hpp
 # utils/IdentityMap.hpp
 # utils/Runnable.hpp
@@ -241,7 +246,7 @@ utils/Pool.hpp
 # utils/Logger.hpp
 # utils/ArrayBase.hpp
 utils/XmlReader.hpp
-# utils/XmlWriter.hpp
+utils/XmlWriter.hpp
 # utils/gzstream.hpp
 # utils/ObjectMap.hpp
 # utils/NumberUtils.hpp
@@ -276,9 +281,13 @@ Version.cpp
 # assets/loaders/TextureAtlasParameter.cpp
 assets/AssetType.cpp
 # assets/AssetDescriptor.cpp
+# scenes/scene2d/Group.cpp
 # scenes/scene2d/Stage.cpp
-# scenes/scene2d/Action.cpp
+# scenes/scene2d/CompositeAction.cpp
 # scenes/scene2d/TemporalAction.cpp
+# scenes/scene2d/AnimationAction.cpp
+# scenes/scene2d/Action.cpp
+# scenes/scene2d/Actor.cpp
 # scenes/scene2d/actors/Image.cpp
 # scenes/scene2d/actors/LinearGroup.cpp
 # scenes/scene2d/actors/Button.cpp
@@ -323,21 +332,20 @@ assets/AssetType.cpp
 # scenes/scene2d/ui/Stack.cpp
 # scenes/scene2d/ui/ImageButton.cpp
 # scenes/scene2d/ui/ComboBox.cpp
-# scenes/scene2d/actions/ActionResetingPool.cpp
-# scenes/scene2d/actions/Parallel.cpp
-# scenes/scene2d/actions/Forever.cpp
-# scenes/scene2d/actions/MoveTo.cpp
-# scenes/scene2d/actions/MoveBy.cpp
+# scenes/scene2d/actions/Delay.cpp
 # scenes/scene2d/actions/Remove.cpp
 # scenes/scene2d/actions/FadeIn.cpp
 # scenes/scene2d/actions/FadeTo.cpp
-# scenes/scene2d/actions/ScaleTo.cpp
-# scenes/scene2d/actions/RotateTo.cpp
-# scenes/scene2d/actions/Sequence.cpp
 # scenes/scene2d/actions/FadeOut.cpp
-# scenes/scene2d/actions/Repeat.cpp
-# scenes/scene2d/actions/Delay.cpp
+# scenes/scene2d/actions/Sequence.cpp
 # scenes/scene2d/actions/RotateBy.cpp
+# scenes/scene2d/actions/Parallel.cpp
+# scenes/scene2d/actions/Forever.cpp
+# scenes/scene2d/actions/RotateTo.cpp
+# scenes/scene2d/actions/ScaleTo.cpp
+# scenes/scene2d/actions/Repeat.cpp
+# scenes/scene2d/actions/MoveTo.cpp
+# scenes/scene2d/actions/MoveBy.cpp
 # scenes/scene2d/Actor.cpp
 # scenes/scene2d/CompositeAction.cpp
 # audio/analysis/kissfft/kiss_fft.c
@@ -355,7 +363,6 @@ InputMultiplexer.cpp
 # input/RemoteSender.cpp
 # input/RemoteInput.cpp
 files/FileHandle.cpp
-files/FileHandleStream.cpp
 files/File.cpp
 math/MathUtils.cpp
 math/Circle.cpp
@@ -381,6 +388,7 @@ graphics/Color.cpp
 graphics/VertexAttributes.cpp
 graphics/Mesh.cpp
 graphics/VertexAttribute.cpp
+graphics/GLCommon.cpp
 graphics/GL10.cpp
 graphics/GL11.cpp
 graphics/GL20.cpp
@@ -395,8 +403,9 @@ graphics/glutils/PixmapTextureData.cpp
 graphics/glutils/ShaderProgram.cpp
 graphics/glutils/IndexBufferObject.cpp
 graphics/glutils/VertexBufferObjectSubData.cpp
+graphics/glutils/ShapeRenderer.cpp
 # graphics/glutils/ETC1.cpp
-# graphics/glutils/ImmediateModeRenderer20.cpp
+graphics/glutils/ImmediateModeRenderer20.cpp
 # graphics/glutils/ETC1TextureData.cpp
 graphics/glutils/VertexArray.cpp
 # graphics/TextureDict.cpp
@@ -428,8 +437,8 @@ graphics/Pixmap.cpp
 # graphics/g3d/keyframed/KeyframedModel.cpp
 # graphics/g3d/keyframed/KeyframeAnimator.cpp
 # graphics/g3d/Animator.cpp
-# graphics/g2d/BitmapFont.cpp
-# # graphics/g2d/BitmapFontCache.cpp
+graphics/g2d/BitmapFont.cpp
+graphics/g2d/BitmapFontCache.cpp
 graphics/g2d/detail/gdx2d.c
 graphics/g2d/detail/stb_image.c
 graphics/g2d/EmptyNinePatch.cpp
@@ -457,12 +466,14 @@ graphics/TextureData.cpp
 graphics/OrthographicCamera.cpp
 # graphics/TextureRef.cpp
 graphics/Camera.cpp
+utils/JsonValue.cpp
+utils/JsonReader.cpp
 # utils/Sort.cpp
 utils/gzstream.cpp
 # utils/LongMap.cpp
 # utils/LongArray.cpp
 # utils/JsonReader.cpp
-# utils/XmlWriter.cpp
+utils/XmlWriter.cpp
 # utils/FloatArray.cpp
 # utils/JsonWriter.cpp
 # utils/AtomicQueue.cpp
@@ -470,7 +481,7 @@ utils/gzstream.cpp
 # utils/GdxRuntimeException.cpp
 # utils/PauseableThread.cpp
 # utils/PooledLinkedList.cpp
-# utils/Base64Coder.cpp
+utils/Base64Coder.cpp
 # utils/ObjectMap.cpp
 # utils/Logger.cpp
 # utils/SortedIntList.cpp
@@ -491,21 +502,17 @@ Game.cpp
 InputAdapter.cpp
 Gdx.cpp)
 
-if (${SVG_BACKEND_ANTIGRAIN})
-    include_directories(../agg/include ../agg/svg)
-    list(APPEND GDX_HEADERS graphics/g2d/svg/AggSvgPixmap.hpp)
-endif()
-
 install(DIRECTORY . DESTINATION include/gdx-cpp
           FILES_MATCHING PATTERN "*.hpp")
 
-add_library(gdx-cpp ${GDX_HEADERS} ${GDX_SRC})
-
-if (${BUILD_BOX2D})
-    add_subdirectory(physics/box2d)
+if (UNIX)
+	add_library(gdx-cpp SHARED ${GDX_HEADERS} ${GDX_SRC})
+else()
+	add_library(gdx-cpp STATIC ${GDX_HEADERS} ${GDX_SRC})
 endif()
 
 target_link_libraries(gdx-cpp z)
 
 install(TARGETS gdx-cpp
+    LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib)

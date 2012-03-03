@@ -40,6 +40,7 @@ protected:
 
 private:
     static void fix (const gdx_cpp::math::Rectangle& rect);
+    static Array<Rectangle> scissors = new Array<Rectangle>();
 };
 
 } // namespace gdx_cpp

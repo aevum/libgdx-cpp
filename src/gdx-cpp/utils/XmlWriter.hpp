@@ -21,27 +21,38 @@
 #ifndef GDX_CPP_UTILS_XMLWRITER_HPP_
 #define GDX_CPP_UTILS_XMLWRITER_HPP_
 
+#include <string>
+#include <fstream>
+#include <list>
+
+#include "XmlReader.hpp"
+
 namespace gdx_cpp {
 namespace utils {
 
 class XmlWriter {
 public:
+    XmlWriter(std::ofstream& writer);
+    
     XmlWriter& element (const std::string& name);
-    XmlWriter& element (const std::string& name,const Object& text);
-    XmlWriter& attribute (const std::string& name,const Object& value);
-    XmlWriter& text (const Object& text);
+    XmlWriter& element (const std::string& name, const gdx_cpp::utils::XmlReader::Element* text);
+    XmlWriter& attribute (const std::string& name, const gdx_cpp::utils::XmlReader::Element* value);
+    XmlWriter& text (const gdx_cpp::utils::XmlReader::Element* text);
     XmlWriter& pop ();
     void close ();
-    void write (int off,int len);
+    void write (const char* cbuf, int off, int len);
     void flush ();
 
-protected:
-
+    int indent;
 
 private:
-    void indent ();
+    void _indent ();
     bool startElementContent ();
-    Writer writer;
+    std::ofstream& writer;
+
+    std::list<std::string> stack;
+    std::string currentElement;
+    bool indentNextClose;
 };
 
 } // namespace gdx_cpp

@@ -21,6 +21,12 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTIONS_PARALLEL_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTIONS_PARALLEL_HPP_
 
+#include "gdx-cpp/scenes/scene2d/CompositeAction.hpp"
+#include "gdx-cpp/scenes/scene2d/Action.hpp"
+#include "ActionResetingPool.hpp"
+
+#include <vector>
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
@@ -28,19 +34,33 @@ namespace actions {
 
 class Parallel: public gdx_cpp::scenes::scene2d::CompositeAction {
 public:
-    static Parallel& $ ();
-    void setTarget (const gdx_cpp::scenes::scene2d::Actor& actor);
+    template < Action*, int size >
+    static Parallel* build(Action* (&actions)[size]) {
+        Parallel* parallel = pool.obtain();
+        parallel->actions.clear();
+        if (parallel->finished.empty() || parallel->finished.size() < size)
+            parallel->finished.resize(size);
+        
+        for (int i = 0; i < size; i++) {
+            parallel->finished[i] = false;
+            parallel->actions.push_back(actions[i]);
+        }
+        
+        return parallel;
+    }
+    
+    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
     void act (float delta);
     bool isDone ();
     void finish ();
-    gdx_cpp::scenes::scene2d::Action& copy ();
-    gdx_cpp::scenes::scene2d::Actor& getTarget ();
+    Action* copy ();
+    Actor* getTarget ();
 
 protected:
-    Parallel& newObject ();
+    std::vector<bool> finished;
+    Actor* target;
 
-private:
-
+    static ActionResetingPool<Parallel> pool;
 };
 
 } // namespace gdx_cpp

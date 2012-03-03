@@ -120,11 +120,11 @@ inline float atan2 (float y, float x) {
 
 /** Returns a random number between 0 (inclusive) and the specified value (inclusive). */
 inline int random (int range) {
-    return std::rand() % range + 1;
+    return std::rand() % (range + 1);
 }
 
 inline int random (int start, int end) {
-    return start + random(end - start + 1);
+    return start + random(end - start);
 }
 
 inline bool randomBoolean () {

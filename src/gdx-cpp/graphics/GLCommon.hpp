@@ -23,12 +23,14 @@
 
 #include <string>
 
+#undef GL_GENERATE_MIPMAP
+
 namespace gdx_cpp {
 namespace graphics {
 
 class GLCommon {
 public:
-    static const int GL_GENERATE_MIPMAP = 0x8191;
+    static const int GL_GENERATE_MIPMAP;
   
     virtual void glActiveTexture (int texture) const = 0;
     virtual void glBindTexture (int target,int texture) const = 0;

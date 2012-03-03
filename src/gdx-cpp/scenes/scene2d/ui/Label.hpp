@@ -28,16 +28,29 @@ namespace ui {
 
 class Label {
 public:
+    void setStyle (const LabelStyle& style);
+    void setText (const std::string& text);
+    std::string& getText ();
+    void setColor (float color);
+    void setColor (const gdx_cpp::graphics::Color& tint);
+    void setColor (float r,float g,float b,float a);
+    gdx_cpp::graphics::Color& getColor ();
     void layout ();
     void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
     bool touchDown (float x,float y,int pointer);
-    bool touchUp (float x,float y,int pointer);
-    bool touchDragged (float x,float y,int pointer);
+    void touchUp (float x,float y,int pointer);
+    void touchDragged (float x,float y,int pointer);
     gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
-    void setText (const std::string& text);
+    float getPrefWidth ();
+    float getPrefHeight ();
+    Label (const std::string& text,const Skin& skin);
+    Label (const std::string& text,const LabelStyle& style);
+    Label (const std::string& text,const LabelStyle& style,const std::string& name);
 
 protected:
-
+    LabelStyle style ;
+    BitmapFontCache cache ;
+    String text ;
 
 private:
 

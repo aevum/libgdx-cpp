@@ -22,16 +22,16 @@
 
 using namespace gdx_cpp::scenes::scene2d::ui;
 
+void Slider::setStyle (const SliderStyle& style) {
+    this.style = style;
+}
+
 void Slider::layout () {
-    prefHeight = Math.max(style.knob.getRegionHeight(), style.slider.getTotalHeight());
-    invalidated = false;
 }
 
 void Slider::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
     final TextureRegion knob = style.knob;
     final NinePatch slider = style.slider;
-
-    if (invalidated) layout();
 
     batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
     sliderPos = (value - min) / (max - min) * (width - knob.getRegionWidth());
@@ -45,31 +45,16 @@ void Slider::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parent
 
 bool Slider::touchDown (float x,float y,int pointer) {
     if (pointer != 0) return false;
-    if (hit(x, y) != null) {
-        calculateSliderPosAndValue(x);
-        parent.focus(this, pointer);
-        return true;
-    }
-    return false;
+    calculateSliderPosAndValue(x);
+    return true;
 }
 
-bool Slider::touchUp (float x,float y,int pointer) {
-    if (pointer != 0) return false;
-    if (parent.focusedActor[0] == this) {
-        calculateSliderPosAndValue(x);
-        parent.focus(null, pointer);
-        return true;
-    }
-    return false;
+void Slider::touchUp (float x,float y,int pointer) {
+    calculateSliderPosAndValue(x);
 }
 
-bool Slider::touchDragged (float x,float y,int pointer) {
-    if (pointer != 0) return false;
-    if (parent.focusedActor[0] == this) {
-        calculateSliderPosAndValue(x);
-        return true;
-    }
-    return false;
+void Slider::touchDragged (float x,float y,int pointer) {
+    calculateSliderPosAndValue(x);
 }
 
 void Slider::calculateSliderPosAndValue (float x) {
@@ -107,5 +92,32 @@ void Slider::setRange (float min,float max) {
     this.max = max;
     this.value = min;
     if (listener != null) listener.changed(this, getValue());
+}
+
+float Slider::getPrefWidth () {
+    return 140;
+}
+
+float Slider::getPrefHeight () {
+    return Math.max(style.knob.getRegionHeight(), style.slider.getTotalHeight());
+}
+
+Slider::Slider (float min,float max,float steps,const Skin& skin) {
+    this(min, max, steps, skin.getStyle(SliderStyle.class), null);
+}
+
+Slider::Slider (float min,float max,float steps,const SliderStyle& style) {
+    this(min, max, steps, style, null);
+}
+
+Slider::Slider (float min,float max,float steps,const SliderStyle& style,const std::string& name) {
+    super(name);
+    setStyle(style);
+    if (min > max) throw new IllegalArgumentException("min must be > max");
+    if (steps < 0) throw new IllegalArgumentException("unit must be > 0");
+    this.min = min;
+    this.max = max;
+    this.steps = steps;
+    this.value = min;
 }
 

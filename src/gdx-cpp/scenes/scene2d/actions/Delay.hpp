@@ -21,6 +21,9 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTIONS_DELAY_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTIONS_DELAY_HPP_
 
+#include "gdx-cpp/scenes/scene2d/Action.hpp"
+#include "ActionResetingPool.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
@@ -28,20 +31,21 @@ namespace actions {
 
 class Delay: public gdx_cpp::scenes::scene2d::Action {
 public:
-    static Delay& $ (const gdx_cpp::scenes::scene2d::Action& action,float duration);
+    static Delay* build (gdx_cpp::scenes::scene2d::Action* action,float duration);
     void reset ();
-    void setTarget (const gdx_cpp::scenes::scene2d::Actor& actor);
+    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
     void act (float delta);
     bool isDone ();
     void finish ();
-    gdx_cpp::scenes::scene2d::Action& copy ();
-    gdx_cpp::scenes::scene2d::Actor& getTarget ();
+    gdx_cpp::scenes::scene2d::Action* copy ();
+    gdx_cpp::scenes::scene2d::Actor* getTarget ();
 
 protected:
-    Delay& newObject ();
+    float taken;
+    float duration;
+    Action* action;
 
-private:
-
+    static ActionResetingPool<Delay> pool;
 };
 
 } // namespace gdx_cpp

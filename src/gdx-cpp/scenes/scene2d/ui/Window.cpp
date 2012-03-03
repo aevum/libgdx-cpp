@@ -22,6 +22,10 @@
 
 using namespace gdx_cpp::scenes::scene2d::ui;
 
+void Window::setStyle (const WindowStyle& style) {
+    this.style = style;
+}
+
 void Window::calculateBoundsAndScissors (const gdx_cpp::math::Matrix4& transform) {
     final NinePatch background = style.background;
     final BitmapFont titleFont = style.titleFont;
@@ -44,8 +48,8 @@ void Window::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parent
     final BitmapFont titleFont = style.titleFont;
     final Color titleFontColor = style.titleFontColor;
 
-    setupTransform(batch);
     layout();
+    applyTransform(batch);
     calculateBoundsAndScissors(batch.getTransformMatrix());
 
     batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
@@ -65,40 +69,27 @@ void Window::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parent
 
 bool Window::touchDown (float x,float y,int pointer) {
     if (pointer != 0) return false;
-    if (hit(x, y) != null) {
-        if (parent.getActors().size() > 1) parent.swapActor(this, parent.getActors().get(parent.getActors().size() - 1));
-        if (titleBounds.contains(x, y)) {
-            focus(this, 0);
-            if (isMovable) {
-                move = true;
-            }
-            initial.set(x, y);
-        } else if (!super.touchDown(x, y, pointer)) {
-            focus(this, 0);
-        }
-        return true;
-    } else {
-        if (isModal && parent.getActors().size() > 1)
-            parent.swapActor(this, parent.getActors().get(parent.getActors().size() - 1));
-        return isModal;
-    }
+    if (parent.getActors().size() > 1) parent.swapActor(this, parent.getActors().get(parent.getActors().size() - 1));
+    if (titleBounds.contains(x, y)) {
+        if (isMovable) move = true;
+        initial.set(x, y);
+    } else
+        super.touchDown(x, y, pointer);
+    return true;
 }
 
-bool Window::touchUp (float x,float y,int pointer) {
-    if (pointer != 0) return false;
-    if (parent.focusedActor[0] == this) focus(null, 0);
+void Window::touchUp (float x,float y,int pointer) {
     move = false;
-    return super.touchUp(x, y, pointer) || isModal;
+    if (parent.focusedActor[0] != this) super.touchUp(x, y, pointer);
 }
 
-bool Window::touchDragged (float x,float y,int pointer) {
+void Window::touchDragged (float x,float y,int pointer) {
     if (move) {
         this.x += (x - initial.x);
         this.y += (y - initial.y);
-        return true;
+        return;
     }
-    if (parent.focusedActor[0] == this) return true;
-    return super.touchDragged(x, y, pointer) || isModal;
+    if (parent.focusedActor[0] != this) super.touchDragged(x, y, pointer);
 }
 
 gdx_cpp::scenes::scene2d::Actor& Window::hit (float x,float y) {
@@ -127,5 +118,31 @@ void Window::setModal (bool isModal) {
 
 bool Window::isModal () {
     return isModal;
+}
+
+Window::Window (const std::string& title,const gdx_cpp::scenes::scene2d::Stage& stage,const Skin& skin) {
+    this(null, title, stage, skin.getStyle(WindowStyle.class), 0, 0);
+}
+
+Window::Window (const std::string& title,const gdx_cpp::scenes::scene2d::Stage& stage,const WindowStyle& style) {
+    this(null, title, stage, style, 0, 0);
+}
+
+Window::Window (const std::string& name,const std::string& title,const gdx_cpp::scenes::scene2d::Stage& stage,const WindowStyle& style,int prefWidth,int prefHeight) {
+    super(name);
+    this.stage = stage;
+    this.title = title;
+    width = prefWidth;
+    height = prefHeight;
+    setStyle(style);
+
+    transform = true;
+
+    final NinePatch background = style.background;
+    TableLayout layout = getTableLayout();
+    layout.padBottom(Integer.toString((int)(background.getBottomHeight()) + 1));
+    layout.padTop(Integer.toString((int)(background.getTopHeight()) + 1));
+    layout.padLeft(Integer.toString((int)(background.getLeftWidth()) + 1));
+    layout.padRight(Integer.toString((int)(background.getRightWidth()) + 1));
 }
 

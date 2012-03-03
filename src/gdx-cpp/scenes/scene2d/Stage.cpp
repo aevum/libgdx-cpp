@@ -19,46 +19,48 @@
 */
 
 #include "Stage.hpp"
+#include "gdx-cpp/graphics/OrthographicCamera.hpp"
 
 using namespace gdx_cpp::scenes::scene2d;
+using namespace gdx_cpp;
 
-void Stage::setViewport (float width,float height,bool stretch) {
+void Stage::setViewport (float width, float height, bool stretch) {
     if (!stretch) {
-        if (width > height && width / (float)Gdx.graphics.getWidth() <= height / (float)Gdx.graphics.getHeight()) {
-            float toDeviceSpace = Gdx.graphics.getHeight() / height;
-            float toViewportSpace = height / Gdx.graphics.getHeight();
+        if (width > height && width / (float)Gdx::graphics->getWidth() <= height / (float)Gdx::graphics->getHeight()) {
+            float toDeviceSpace = Gdx::graphics->getHeight() / height;
+            float toViewportSpace = height / Gdx::graphics->getHeight();
 
             float deviceWidth = width * toDeviceSpace;
-            this.width = width + (Gdx.graphics.getWidth() - deviceWidth) * toViewportSpace;
-            this.height = height;
+            this->_width = width + (Gdx::graphics->getWidth() - deviceWidth) * toViewportSpace;
+            this->_height = height;
         } else {
-            float toDeviceSpace = Gdx.graphics.getWidth() / width;
-            float toViewportSpace = width / Gdx.graphics.getWidth();
+            float toDeviceSpace = Gdx::graphics->getWidth() / width;
+            float toViewportSpace = width / Gdx::graphics->getWidth();
 
             float deviceHeight = height * toDeviceSpace;
-            this.height = height + (Gdx.graphics.getHeight() - deviceHeight) * toViewportSpace;
-            this.width = width;
+            this->_height = height + (Gdx::graphics->getHeight() - deviceHeight) * toViewportSpace;
+            this->_width = width;
         }
     } else {
-        this.width = width;
-        this.height = height;
+        this->_width = width;
+        this->_height = height;
     }
 
-    this.stretch = stretch;
-    centerX = width / 2;
-    centerY = height / 2;
+    this->stretch = stretch;
+    _centerX = this->_width / 2;
+    _centerY = this->_height / 2;
 
-    camera.position.set(centerX, centerY, 0);
-    camera.viewportWidth = this.width;
-    camera.viewportHeight = this.height;
+    camera->position.set(_centerX, _centerY, 0);
+    camera->viewportWidth = this->_width;
+    camera->viewportHeight = this->_height;
 }
 
 float Stage::width () {
-    return width;
+    return _width;
 }
 
 float Stage::height () {
-    return height;
+    return _height;
 }
 
 int Stage::left () {
@@ -66,11 +68,11 @@ int Stage::left () {
 }
 
 float Stage::right () {
-    return width - 1;
+    return _width - 1;
 }
 
 float Stage::top () {
-    return height - 1;
+    return _height - 1;
 }
 
 float Stage::bottom () {
@@ -78,50 +80,62 @@ float Stage::bottom () {
 }
 
 float Stage::centerX () {
-    return centerX;
+    return _centerX;
 }
 
 float Stage::centerY () {
-    return centerY;
+    return _centerY;
 }
 
 bool Stage::isStretched () {
     return stretch;
 }
 
-Actor& Stage::findActor (const std::string& name) {
+Actor* Stage::findActor (const std::string& name) {
     return root.findActor(name);
 }
 
-std::list<Actor>& Stage::getActors () {
+Group::ActorList Stage::getActors () {
     return root.getActors();
 }
 
-std::list<Group>& Stage::getGroups () {
+std::list<Group*> Stage::getGroups () {
     return root.getGroups();
 }
 
 bool Stage::touchDown (int x,int y,int pointer,int button) {
     toStageCoordinates(x, y, coords);
-    Group.toChildCoordinates(root, coords.x, coords.y, point);
+    Group::toChildCoordinates(&root, coords.x, coords.y, point);
     return root.touchDown(point.x, point.y, pointer);
 }
 
 bool Stage::touchUp (int x,int y,int pointer,int button) {
+    Actor* actor = root.focusedActor[pointer];
+    if (actor == NULL) return false;
     toStageCoordinates(x, y, coords);
-    Group.toChildCoordinates(root, coords.x, coords.y, point);
-    return root.touchUp(point.x, point.y, pointer);
+    Group::toChildCoordinates(&root, coords.x, coords.y, point);
+    root.touchUp(point.x, point.y, pointer);
+    return true;
 }
 
 bool Stage::touchDragged (int x,int y,int pointer) {
+    bool foundFocusedActor = false;
+    for (int i = 0, n = 20; i < n; i++) {
+        if (root.focusedActor[i] != NULL) {
+            foundFocusedActor = true;
+            break;
+        }
+    }
+    if (!foundFocusedActor) return false;
     toStageCoordinates(x, y, coords);
-    Group.toChildCoordinates(root, coords.x, coords.y, point);
-    return root.touchDragged(point.x, point.y, pointer);
+    Group::toChildCoordinates(&root, coords.x, coords.y, point);
+    root.touchDragged(point.x, point.y, pointer);
+    return true;
 }
 
 bool Stage::touchMoved (int x,int y) {
     toStageCoordinates(x, y, coords);
-    Group.toChildCoordinates(root, coords.x, coords.y, point);
+    Group::toChildCoordinates(&root, coords.x, coords.y, point);
     return root.touchMoved(point.x, point.y);
 }
 
@@ -146,68 +160,71 @@ void Stage::act (float delta) {
 }
 
 void Stage::draw () {
-    camera.update();
-    batch.setProjectionMatrix(camera.combined);
-    batch.begin();
-    root.draw(batch, 1);
-    batch.end();
+    camera->update();
+    batch->setProjectionMatrix(camera->combined);
+    batch->begin();
+    root.draw(*batch, 1);
+    batch->end();
 }
 
 void Stage::dispose () {
-    batch.dispose();
+    batch->dispose();
 }
 
-void Stage::addActor (const Actor& actor) {
+void Stage::addActor (Actor* const actor) {
     root.addActor(actor);
 }
 
-std::string& Stage::graphToString () {
-    StringBuilder buffer = new StringBuilder();
-    graphToString(buffer, root, 0);
-    return buffer.toString();
+std::string Stage::graphToString () {
+    std::stringstream buffer;
+    graphToString(buffer, &root, 0);
+    return buffer.str();
 }
 
-void Stage::graphToString (const StringBuilder& buffer,const Actor& actor,int level) {
+void Stage::graphToString (std::stringstream& buffer, const Actor* actor,int level) {
     for (int i = 0; i < level; i++)
-        buffer.append(' ');
+        buffer << ' ';
 
-    buffer.append(actor);
-    buffer.append("\n");
+    buffer << actor->toString() << std::endl;
+    
+    if (actor->getType() == Actor::Actor_Group) {
+        Group* group = (Group*)actor;
 
-    if (actor instanceof Group) {
-        Group group = (Group)actor;
-        for (int i = 0; i < group.getActors().size(); i++)
-            graphToString(buffer, group.getActors().get(i), level + 1);
+        Group::ActorList::iterator it = group->getActors().begin();
+        Group::ActorList::iterator end = group->getActors().end();
+        
+        for (;it != end;++it)
+            graphToString(buffer, *it, level + 1);
     }
 }
 
-Group& Stage::getRoot () {
+scenes::scene2d::Group& Stage::getRoot () {
     return root;
 }
 
-gdx_cpp::graphics::g2d::SpriteBatch& Stage::getSpriteBatch () {
+gdx_cpp::graphics::g2d::SpriteBatch* Stage::getSpriteBatch () {
     return batch;
 }
 
-gdx_cpp::graphics::Camera& Stage::getCamera () {
+gdx_cpp::graphics::Camera* const Stage::getCamera () {
     return camera;
 }
 
-void Stage::setCamera (const gdx_cpp::graphics::Camera& camera) {
-    this.camera = camera;
+void Stage::setCamera (gdx_cpp::graphics::Camera* camera) {
+    this->camera = camera;
 }
 
-Actor& Stage::getLastTouchedChild () {
+Actor* Stage::getLastTouchedChild () {
     return root.lastTouchedChild;
 }
 
-Actor& Stage::hit (float x,float y) {
-    Group.toChildCoordinates(root, x, y, point);
+Actor* Stage::hit (float x,float y) {
+    Group::toChildCoordinates(&root, x, y, point);
     return root.hit(point.x, point.y);
 }
 
-void Stage::toStageCoordinates (int x,int y,const gdx_cpp::math::Vector2& out) {
-    camera.unproject(tmp.set(x, y, 0));
+void Stage::toStageCoordinates (int x,int y,gdx_cpp::math::Vector2& out) {
+    camera->unproject(tmp.set(x, y, 0));
     out.x = tmp.x;
     out.y = tmp.y;
 }
@@ -216,11 +233,30 @@ void Stage::clear () {
     root.clear();
 }
 
-void Stage::removeActor (const Actor& actor) {
+void Stage::removeActor (Actor* actor) {
     root.removeActorRecursive(actor);
 }
 
 void Stage::unfocusAll () {
     root.unfocusAll();
 }
+
+Stage::Stage (float width, float height, bool stretch)
+: _width(width)
+ ,_height(height)
+ ,stretch(stretch)
+ ,root("root")
+ ,camera(new graphics::OrthographicCamera)
+ ,batch(new graphics::g2d::SpriteBatch)
+{
+    setViewport(width, height, stretch);
+}
+
+scenes::scene2d::Stage::~Stage()
+{
+    batch->dispose();
+    delete batch;
+    delete camera;
+}
+
 

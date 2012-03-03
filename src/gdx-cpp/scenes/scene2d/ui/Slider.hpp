@@ -28,20 +28,32 @@ namespace ui {
 
 class Slider {
 public:
+    void setStyle (const SliderStyle& style);
     void layout ();
     void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
     bool touchDown (float x,float y,int pointer);
-    bool touchUp (float x,float y,int pointer);
-    bool touchDragged (float x,float y,int pointer);
+    void touchUp (float x,float y,int pointer);
+    void touchDragged (float x,float y,int pointer);
     gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
     void changed (const Slider& slider,float value);
     Slider& setValueChangedListener (const ValueChangedListener& listener);
     float getValue ();
     void setValue (float value);
     void setRange (float min,float max);
+    float getPrefWidth ();
+    float getPrefHeight ();
+    Slider (float min,float max,float steps,const Skin& skin);
+    Slider (float min,float max,float steps,const SliderStyle& style);
+    Slider (float min,float max,float steps,const SliderStyle& style,const std::string& name);
 
 protected:
-
+    SliderStyle style ;
+    float min ;
+    float max ;
+    float steps ;
+    float value ;
+    float sliderPos ;
+    ValueChangedListener listener = null;
 
 private:
     void calculateSliderPosAndValue (float x);

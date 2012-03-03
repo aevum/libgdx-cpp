@@ -23,7 +23,7 @@
 using namespace gdx_cpp::graphics::g2d;
 
 void BitmapFontCache::setPosition (float x,float y) {
-    translate(x - this.x, y - this.y);
+    translate(x - this->x, y - this->y);
 }
 
 void BitmapFontCache::translate (float xAmount,float yAmount) {
@@ -34,37 +34,46 @@ void BitmapFontCache::translate (float xAmount,float yAmount) {
     }
     x += xAmount;
     y += yAmount;
-    float[] vertices = this.vertices;
+    
     for (int i = 0, n = idx; i < n; i += 5) {
         vertices[i] += xAmount;
         vertices[i + 1] += yAmount;
     }
 }
 
+void BitmapFontCache::setColor (float color) {
+    if (color == this->color) return;
+    this->color = color;
+    
+    for (int i = 2, n = idx; i < n; i += 5)
+        vertices[i] = color;
+}
+
 void BitmapFontCache::setColor (const gdx_cpp::graphics::Color& tint) {
-    final float color = tint.toFloatBits();
-    if (color == this.color) return;
-    this.color = color;
-    float[] vertices = this.vertices;
+    float color = tint.toFloatBits();
+    if (color == this->color) return;
+    this->color = color;
+
     for (int i = 2, n = idx; i < n; i += 5)
         vertices[i] = color;
 }
 
 void BitmapFontCache::setColor (float r,float g,float b,float a) {
     int intBits = ((int)(255 * a) << 24) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r));
-    float color = NumberUtils.intBitsToFloat((intBits & 0xfeffffff));
-    if (color == this.color) return;
-    this.color = color;
-    float[] vertices = this.vertices;
-    for (int i = 2, n = idx; i < n; i += 5)
+    float color = gdx_cpp::utils::NumberUtils::intBitsToFloat((intBits & 0xfeffffff));
+    if (color == this->color) return;
+    this->color = color;
+
+    for (int i = 2, n = idx; i < n; i += 5) {
         vertices[i] = color;
+    }
 }
 
-void BitmapFontCache::draw (const SpriteBatch& spriteBatch) {
-    spriteBatch.draw(font.getRegion().getTexture(), vertices, 0, idx);
+void BitmapFontCache::draw (SpriteBatch& spriteBatch) {
+    spriteBatch.draw(*font->getRegion()->getTexture(), &vertices[0], vertices.size(), 0, idx);
 }
 
-void BitmapFontCache::draw (const SpriteBatch& spriteBatch,float alphaModulation) {
+void BitmapFontCache::draw (SpriteBatch& spriteBatch,float alphaModulation) {
     Color color = getColor();
     float oldAlpha = color.a;
     color.a *= alphaModulation;
@@ -76,13 +85,13 @@ void BitmapFontCache::draw (const SpriteBatch& spriteBatch,float alphaModulation
 
 gdx_cpp::graphics::Color& BitmapFontCache::getColor () {
     float floatBits = color;
-    int intBits = NumberUtils.floatToRawIntBits(color);
-    Color color = tmpColor;
-    color.r = (intBits & 0xff) / 255f;
-    color.g = ((intBits >>> 8) & 0xff) / 255f;
-    color.b = ((intBits >>> 16) & 0xff) / 255f;
-    color.a = ((intBits >>> 24) & 0xff) / 255f;
-    return color;
+    int intBits = gdx_cpp::utils::NumberUtils::floatToRawIntBits(color);
+    
+    tmpColor.r = (intBits & 0xff) / 255.f;
+    tmpColor.g = ((intBits >> 8) & 0xff) / 255.f;
+    tmpColor.b = ((intBits >> 16) & 0xff) / 255.f;
+    tmpColor.a = ((intBits >> 24) & 0xff) / 255.f;
+    return tmpColor;
 }
 
 void BitmapFontCache::reset (int glyphCount) {
@@ -91,212 +100,186 @@ void BitmapFontCache::reset (int glyphCount) {
     idx = 0;
 
     int vertexCount = glyphCount * 20;
-    if (vertices == null || vertices.length < vertexCount) vertices = new float[vertexCount];
+    if (vertices.empty() || vertices.size() < vertexCount) vertices.resize(vertexCount);
 }
 
-float BitmapFontCache::addToCache (const CharSequence& str,float x,float y,int start,int end) {
+float BitmapFontCache::addToCache (const std::string& str,float x,float y,int start,int end) {
     float startX = x;
-    BitmapFont font = this.font;
-    Glyph lastGlyph = null;
-    if (font.data.scaleX == 1 && font.data.scaleY == 1) {
+    BitmapFont::Glyph* lastGlyph = NULL;
+    if (font->data->scaleX == 1 && font->data->scaleY == 1) {
         while (start < end) {
-            lastGlyph = font.data.getGlyph(str.charAt(start++));
-            if (lastGlyph != null) {
-                addGlyph(lastGlyph, x + lastGlyph.xoffset, y + lastGlyph.yoffset, lastGlyph.width, lastGlyph.height);
-                x += lastGlyph.xadvance;
+            lastGlyph = font->data->getGlyph(str[start++]);
+            if (lastGlyph != NULL) {
+                addGlyph(lastGlyph, x + lastGlyph->xoffset, y + lastGlyph->yoffset, lastGlyph->width, lastGlyph->height);
+                x += lastGlyph->xadvance;
                 break;
             }
         }
         while (start < end) {
-            char ch = str.charAt(start++);
-            Glyph g = font.data.getGlyph(ch);
-            if (g != null) {
-                x += lastGlyph.getKerning(ch);
+            char ch = str[start++];
+            BitmapFont::Glyph* g = font->data->getGlyph(ch);
+            if (g != NULL) {
+                x += lastGlyph->getKerning(ch);
                 lastGlyph = g;
-                addGlyph(lastGlyph, x + g.xoffset, y + g.yoffset, g.width, g.height);
-                x += g.xadvance;
+                addGlyph(lastGlyph, x + g->xoffset, y + g->yoffset, g->width, g->height);
+                x += g->xadvance;
             }
         }
     } else {
-        float scaleX = font.data.scaleX, scaleY = font.data.scaleY;
+        float scaleX = font->data->scaleX, scaleY = font->data->scaleY;
         while (start < end) {
-            lastGlyph = font.data.getGlyph(str.charAt(start++));
-            if (lastGlyph != null) {
+            lastGlyph = font->data->getGlyph(str[start++]);
+            if (lastGlyph != NULL) {
                 addGlyph(lastGlyph, //
-                         x + lastGlyph.xoffset * scaleX, //
-                         y + lastGlyph.yoffset * scaleY, //
-                         lastGlyph.width * scaleX, //
-                         lastGlyph.height * scaleY);
-                x += lastGlyph.xadvance * scaleX;
+                         x + lastGlyph->xoffset * scaleX, //
+                         y + lastGlyph->yoffset * scaleY, //
+                         lastGlyph->width * scaleX, //
+                         lastGlyph->height * scaleY);
+                x += lastGlyph->xadvance * scaleX;
                 break;
             }
         }
         while (start < end) {
-            char ch = str.charAt(start++);
-            Glyph g = font.data.getGlyph(ch);
-            if (g != null) {
-                x += lastGlyph.getKerning(ch) * scaleX;
+            char ch = str[start++];
+            BitmapFont::Glyph* g = font->data->getGlyph(ch);
+            if (g != NULL) {
+                x += lastGlyph->getKerning(ch) * scaleX;
                 lastGlyph = g;
                 addGlyph(lastGlyph, //
-                         x + g.xoffset * scaleX, //
-                         y + g.yoffset * scaleY, //
-                         g.width * scaleX, //
-                         g.height * scaleY);
-                x += g.xadvance * scaleX;
+                         x + g->xoffset * scaleX, //
+                         y + g->yoffset * scaleY, //
+                         g->width * scaleX, //
+                         g->height * scaleY);
+                x += g->xadvance * scaleX;
             }
         }
     }
     return x - startX;
 }
 
-void BitmapFontCache::addGlyph (const gdx_cpp::graphics::g2d::BitmapFont::Glyph& glyph,float x,float y,float width,float height) {
-    final float x2 = x + width;
-    final float y2 = y + height;
-    final float u = glyph.u;
-    final float u2 = glyph.u2;
-    final float v = glyph.v;
-    final float v2 = glyph.v2;
+void BitmapFontCache::addGlyph (gdx_cpp::graphics::g2d::BitmapFont::Glyph* glyph, float x, float y, float width, float height) {
+    float x2 = x + width;
+    float y2 = y + height;
+    float u = glyph->u;
+    float u2 = glyph->u2;
+    float v = glyph->v;
+    float v2 = glyph->v2;
 
-    final float[] vertices = this.vertices;
-    if (!integer) {
-        vertices[idx++] = x;
-        vertices[idx++] = y;
-        vertices[idx++] = color;
-        vertices[idx++] = u;
-        vertices[idx++] = v;
-
-        vertices[idx++] = x;
-        vertices[idx++] = y2;
-        vertices[idx++] = color;
-        vertices[idx++] = u;
-        vertices[idx++] = v2;
-
-        vertices[idx++] = x2;
-        vertices[idx++] = y2;
-        vertices[idx++] = color;
-        vertices[idx++] = u2;
-        vertices[idx++] = v2;
-
-        vertices[idx++] = x2;
-        vertices[idx++] = y;
-        vertices[idx++] = color;
-        vertices[idx++] = u2;
-        vertices[idx++] = v;
-    } else {
-        vertices[idx++] = (int)x;
-        vertices[idx++] = (int)y;
-        vertices[idx++] = color;
-        vertices[idx++] = u;
-        vertices[idx++] = v;
-
-        vertices[idx++] = (int)x;
-        vertices[idx++] = (int)y2;
-        vertices[idx++] = color;
-        vertices[idx++] = u;
-        vertices[idx++] = v2;
-
-        vertices[idx++] = (int)x2;
-        vertices[idx++] = (int)y2;
-        vertices[idx++] = color;
-        vertices[idx++] = u2;
-        vertices[idx++] = v2;
-
-        vertices[idx++] = (int)x2;
-        vertices[idx++] = (int)y;
-        vertices[idx++] = color;
-        vertices[idx++] = u2;
-        vertices[idx++] = v;
+    if (integer) {
+        x = (int)x;
+        y = (int)y;
+        x2 = (int)x2;
+        y2 = (int)y2;
     }
+
+    vertices[idx++] = x;
+    vertices[idx++] = y;
+    vertices[idx++] = color;
+    vertices[idx++] = u;
+    vertices[idx++] = v;
+
+    vertices[idx++] = x;
+    vertices[idx++] = y2;
+    vertices[idx++] = color;
+    vertices[idx++] = u;
+    vertices[idx++] = v2;
+
+    vertices[idx++] = x2;
+    vertices[idx++] = y2;
+    vertices[idx++] = color;
+    vertices[idx++] = u2;
+    vertices[idx++] = v2;
+
+    vertices[idx++] = x2;
+    vertices[idx++] = y;
+    vertices[idx++] = color;
+    vertices[idx++] = u2;
+    vertices[idx++] = v;
 }
 
-gdx_cpp::graphics::g2d::BitmapFont::TextBounds& BitmapFontCache::setText (const CharSequence& str,float x,float y) {
+gdx_cpp::graphics::g2d::BitmapFont::TextBounds& BitmapFontCache::setText (const std::string& str,float x,float y) {
     return setText(str, x, y, 0, str.length());
 }
 
-gdx_cpp::graphics::g2d::BitmapFont::TextBounds& BitmapFontCache::setText (const CharSequence& str,float x,float y,int start,int end) {
+gdx_cpp::graphics::g2d::BitmapFont::TextBounds& BitmapFontCache::setText (const std::string& str,float x,float y,int start,int end) {
     reset(end - start);
-    y += font.data.ascent;
+    y += font->data->ascent;
     textBounds.width = addToCache(str, x, y, start, end);
-    textBounds.height = font.data.capHeight;
+    textBounds.height = font->data->capHeight;
     return textBounds;
 }
 
-gdx_cpp::graphics::g2d::BitmapFont::TextBounds& BitmapFontCache::setMultiLineText (const CharSequence& str,float x,float y) {
-    return setMultiLineText(str, x, y, 0, HAlignment.LEFT);
+gdx_cpp::graphics::g2d::BitmapFont::TextBounds& BitmapFontCache::setMultiLineText (const std::string& str,float x,float y) {
+    return setMultiLineText(str, x, y, 0, BitmapFont::HALIGNMENT_LEFT);
 }
 
-gdx_cpp::graphics::g2d::BitmapFont::TextBounds& BitmapFontCache::setMultiLineText (const CharSequence& str,float x,float y,float alignmentWidth,const gdx_cpp::graphics::g2d::BitmapFont::HAlignment& alignment) {
-    BitmapFont font = this.font;
-
+gdx_cpp::graphics::g2d::BitmapFont::TextBounds& BitmapFontCache::setMultiLineText (const std::string& str,float x,float y,float alignmentWidth,const gdx_cpp::graphics::g2d::BitmapFont::HAlignment& alignment) {
     int length = str.length();
     reset(length);
 
-    y += font.data.ascent;
-    float down = font.data.down;
+    y += font->data->ascent;
+    float down = font->data->down;
 
     float maxWidth = 0;
-    float startY = y;
     int start = 0;
     int numLines = 0;
     while (start < length) {
-        int lineEnd = BitmapFont.indexOf(str, '\n', start);
+        int lineEnd = BitmapFont::indexOf(str, '\n', start);
         float xOffset = 0;
-        if (alignment != HAlignment.LEFT) {
-            float lineWidth = font.getBounds(str, start, lineEnd).width;
+        if (alignment != BitmapFont::HALIGNMENT_LEFT) {
+            float lineWidth = font->getBounds(str, start, lineEnd).width;
             xOffset = alignmentWidth - lineWidth;
-            if (alignment == HAlignment.CENTER) xOffset /= 2;
+            if (alignment == BitmapFont::HALIGNMENT_CENTER) xOffset /= 2;
         }
         float lineWidth = addToCache(str, x + xOffset, y, start, lineEnd);
-        maxWidth = Math.max(maxWidth, lineWidth);
+        maxWidth = std::max(maxWidth, lineWidth);
         start = lineEnd + 1;
         y += down;
         numLines++;
     }
     textBounds.width = maxWidth;
-    textBounds.height = font.data.capHeight + (numLines - 1) * font.data.lineHeight;
+    textBounds.height = font->data->capHeight + (numLines - 1) * font->data->lineHeight;
     return textBounds;
 }
 
-gdx_cpp::graphics::g2d::BitmapFont::TextBounds& BitmapFontCache::setWrappedText (const CharSequence& str,float x,float y,float wrapWidth) {
-    return setWrappedText(str, x, y, wrapWidth, HAlignment.LEFT);
+gdx_cpp::graphics::g2d::BitmapFont::TextBounds& BitmapFontCache::setWrappedText (const std::string& str,float x,float y,float wrapWidth) {
+    return setWrappedText(str, x, y, wrapWidth, BitmapFont::HALIGNMENT_LEFT);
 }
 
-gdx_cpp::graphics::g2d::BitmapFont::TextBounds& BitmapFontCache::setWrappedText (const CharSequence& str,float x,float y,float wrapWidth,const gdx_cpp::graphics::g2d::BitmapFont::HAlignment& alignment) {
-    BitmapFont font = this.font;
-
+gdx_cpp::graphics::g2d::BitmapFont::TextBounds& BitmapFontCache::setWrappedText (const std::string& str,float x,float y,float wrapWidth,const gdx_cpp::graphics::g2d::BitmapFont::HAlignment& alignment) {
     int length = str.length();
     reset(length);
 
-    y += font.data.ascent;
-    float down = font.data.down;
+    y += font->data->ascent;
+    float down = font->data->down;
 
     float maxWidth = 0;
     int start = 0;
     int numLines = 0;
     while (start < length) {
-        int lineEnd = start + font.computeVisibleGlyphs(str, start, BitmapFont.indexOf(str, '\n', start), wrapWidth);
+        int lineEnd = start + font->computeVisibleGlyphs(str, start, BitmapFont::indexOf(str, '\n', start), wrapWidth);
         if (lineEnd < length) {
             while (lineEnd > start) {
-                char ch = str.charAt(lineEnd);
+                char ch = str[lineEnd];
                 if (ch == ' ' || ch == '\n') break;
                 lineEnd--;
             }
         }
         if (lineEnd == start) lineEnd++;
         float xOffset = 0;
-        if (alignment != HAlignment.LEFT) {
-            float lineWidth = font.getBounds(str, start, lineEnd).width;
+        if (alignment != BitmapFont::HALIGNMENT_LEFT) {
+            float lineWidth = font->getBounds(str, start, lineEnd).width;
             xOffset = wrapWidth - lineWidth;
-            if (alignment == HAlignment.CENTER) xOffset /= 2;
+            if (alignment == BitmapFont::HALIGNMENT_CENTER) xOffset /= 2;
         }
         float lineWidth = addToCache(str, x + xOffset, y, start, lineEnd);
-        maxWidth = Math.max(maxWidth, lineWidth);
+        maxWidth = std::max(maxWidth, lineWidth);
         start = lineEnd + 1;
         y += down;
         numLines++;
     }
     textBounds.width = maxWidth;
-    textBounds.height = font.data.capHeight + (numLines - 1) * font.data.lineHeight;
+    textBounds.height = font->data->capHeight + (numLines - 1) * font->data->lineHeight;
     return textBounds;
 }
 
@@ -312,19 +295,30 @@ float BitmapFontCache::getY () {
     return y;
 }
 
-BitmapFont& BitmapFontCache::getFont () {
+BitmapFont* BitmapFontCache::getFont () {
     return font;
 }
 
 void BitmapFontCache::dispose () {
-    font.dispose();
+    font->dispose();
 }
 
 void BitmapFontCache::setUseIntegerPositions (bool use) {
-    this.integer = use;
+    this->integer = use;
 }
 
 bool BitmapFontCache::usesIntegerPositions () {
     return integer;
+}
+
+BitmapFontCache::BitmapFontCache (gdx_cpp::graphics::g2d::BitmapFont* font, bool integer)
+: color(gdx_cpp::graphics::Color::WHITE.toFloatBits()),
+tmpColor(gdx_cpp::graphics::Color::WHITE),
+idx(0),
+x(0),
+y(0),
+font(font),
+integer(integer)
+{
 }
 

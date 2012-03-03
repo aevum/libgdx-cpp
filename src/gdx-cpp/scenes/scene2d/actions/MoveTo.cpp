@@ -22,48 +22,46 @@
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-MoveTo& MoveTo::newObject () {
-    return new MoveTo();
-}
+ActionResetingPool<MoveTo> MoveTo::pool = ActionResetingPool<MoveTo>(4, 100);
 
-MoveTo& MoveTo::$ (float x,float y,float duration) {
-    MoveTo action = pool.obtain();
-    action.x = x;
-    action.y = y;
-    action.duration = duration;
-    action.invDuration = 1 / duration;
+MoveTo* MoveTo::build (float x,float y,float duration) {
+    MoveTo* action = pool.obtain();
+    action->x = x;
+    action->y = y;
+    action->duration = duration;
+    action->invDuration = 1 / duration;
     return action;
 }
 
-void MoveTo::setTarget (const gdx_cpp::scenes::scene2d::Actor& actor) {
-    this.target = actor;
-    this.startX = target.x;
-    this.startY = target.y;
-    this.deltaX = x - target.x;
-    this.deltaY = y - target.y;
-    this.taken = 0;
-    this.done = false;
+void MoveTo::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+    this->target = actor;
+    this->startX = target->x;
+    this->startY = target->y;
+    this->deltaX = x - target->x;
+    this->deltaY = y - target->y;
+    this->taken = 0;
+    this->done = false;
 }
 
 void MoveTo::act (float delta) {
     float alpha = createInterpolatedAlpha(delta);
     if (done) {
-        target.x = x;
-        target.y = y;
+        target->x = x;
+        target->y = y;
     } else {
-        target.x = startX + deltaX * alpha;
-        target.y = startY + deltaY * alpha;
+        target->x = startX + deltaX * alpha;
+        target->y = startY + deltaY * alpha;
     }
 }
 
 void MoveTo::finish () {
-    super.finish();
+    AnimationAction::finish();
     pool.free(this);
 }
 
-gdx_cpp::scenes::scene2d::Action& MoveTo::copy () {
-    MoveTo moveTo = $(x, y, duration);
-    if (interpolator != null) moveTo.setInterpolator(interpolator.copy());
+gdx_cpp::scenes::scene2d::Action* MoveTo::copy () {
+    MoveTo* moveTo = MoveTo::build(x, y, duration);
+    if (interpolator != NULL) moveTo->setInterpolator(interpolator->copy());
     return moveTo;
 }
 

@@ -22,26 +22,12 @@
 
 using namespace gdx_cpp::scenes::scene2d::ui;
 
+void List::setStyle (const ListStyle& style) {
+    this.style = style;
+    if (items != null) setItems(items);
+}
+
 void List::layout () {
-    final BitmapFont font = style.font;
-    final NinePatch selectedPatch = style.selectedPatch;
-    prefWidth = 0;
-    prefHeight = 0;
-
-    for (int i = 0; i < entries.length; i++) {
-        String entry = entries[i];
-        TextBounds bounds = font.getBounds(entry);
-        prefWidth = Math.max(bounds.width, prefWidth);
-
-    }
-
-    entryHeight = font.getLineHeight() - font.getDescent();
-    entryHeight += selectedPatch.getTopHeight() + selectedPatch.getBottomHeight();
-    prefWidth += selectedPatch.getLeftWidth() + selectedPatch.getRightWidth();
-    prefHeight = entries.length * entryHeight;
-    textOffsetX = selectedPatch.getLeftWidth();
-    textOffsetY = selectedPatch.getTopHeight() - font.getDescent();
-    invalidated = false;
 }
 
 void List::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
@@ -50,63 +36,155 @@ void List::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAl
     final Color fontColorSelected = style.fontColorSelected;
     final Color fontColorUnselected = style.fontColorUnselected;
 
-    if (invalidated) layout();
     batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
 
     float posY = height;
-    for (int i = 0; i < entries.length; i++) {
+    for (int i = 0; i < items.length; i++) {
         if (selected == i) {
-            selectedPatch.draw(batch, x, y + posY - entryHeight, Math.max(prefWidth, width), entryHeight);
+            selectedPatch.draw(batch, x, y + posY - itemHeight, Math.max(prefWidth, width), itemHeight);
             font.setColor(fontColorSelected.r, fontColorSelected.g, fontColorSelected.b, fontColorSelected.a * parentAlpha);
         } else {
             font.setColor(fontColorUnselected.r, fontColorUnselected.g, fontColorUnselected.b, fontColorUnselected.a
                           * parentAlpha);
         }
-        font.draw(batch, entries[i], x + textOffsetX, y + posY - textOffsetY);
-        posY -= entryHeight;
+        font.draw(batch, items[i], x + textOffsetX, y + posY - textOffsetY);
+        posY -= itemHeight;
     }
 }
 
 bool List::touchDown (float x,float y,int pointer) {
     if (pointer != 0) return false;
-    if (hit(x, y) != null) {
-        selected = (int)((height - y) / entryHeight);
-        selected = Math.max(0, selected);
-        selected = Math.min(entries.length - 1, selected);
-        if (listener != null) listener.selected(this, selected, entries[selected]);
-        return true;
-    }
-    return false;
+    selected = (int)((height - y) / itemHeight);
+    selected = Math.max(0, selected);
+    selected = Math.min(items.length - 1, selected);
+    if (listener != null) listener.selected(this, selected, items[selected]);
+    return true;
 }
 
-bool List::touchUp (float x,float y,int pointer) {
-    return false;
+void List::touchUp (float x,float y,int pointer) {
 }
 
-bool List::touchDragged (float x,float y,int pointer) {
-    return false;
+void List::touchDragged (float x,float y,int pointer) {
 }
 
 gdx_cpp::scenes::scene2d::Actor& List::hit (float x,float y) {
-    return x >= 0 && x < Math.max(prefWidth, width) && y >= 0 && y < prefHeight ? this : null;
+    return x >= 0 && x < width && y >= 0 && y < height ? this : null;
 }
 
-int List::getSelectedIndex () {
+void List::selected (const std::list<& list,int selectedIndex,const std::string& selection);
+}
+
+/** @return the index of the currently selected item. The top item has an index of 0. */
+public int getSelectedIndex () {
     return selected;
 }
 
-std::string& List::getSelection () {
-    return entries[selected];
+public void setSelectedIndex (int index) {
+    selected = index;
 }
 
-void List::setEntries () {
-    if (entries == null) throw new IllegalArgumentException("entries must not be null");
-    this.entries = entries;
-    selected = 0;
-    invalidateHierarchy();
+/** @return the text of the currently selected item or null if the list is empty */
+public String getSelection () {
+    if (items.length == 0) return null;
+    return items[selected];
 }
 
-void List::setSelectionListener (const SelectionListener& listener) {
-    this.listener = listener;
+/** @param index sets the selected item */
+public void setSelection (int index) {
+    if (index < 0 || index >= items.length) throw new GdxRuntimeException("Index must be > 0 and < #items");
+    selected = index;
 }
+
+public int setSelection (String item) {
+    selected = -1;
+    for (int i = 0, n = items.length; i < n; i++) {
+        if (items[i].equals(item)) {
+            selected = i;
+            break;
+        }
+    }
+
+    int List::getSelectedIndex () {
+        return selected;
+    }
+
+    void List::setSelectedIndex (int index) {
+        selected = index;
+    }
+
+    std::string& List::getSelection () {
+        if (items.length == 0) return null;
+        return items[selected];
+    }
+
+    void List::setSelection (int index) {
+        if (index < 0 || index >= items.length) throw new GdxRuntimeException("Index must be > 0 and < #items");
+        selected = index;
+    }
+
+    int List::setSelection (const std::string& item) {
+        selected = -1;
+        for (int i = 0, n = items.length; i < n; i++) {
+            if (items[i].equals(item)) {
+                selected = i;
+                break;
+            }
+        }
+        return selected;
+    }
+
+    void List::setItems () {
+        if (items == null) throw new IllegalArgumentException("items cannot be null.");
+        this.items = items;
+        selected = 0;
+
+        final BitmapFont font = style.font;
+        final NinePatch selectedPatch = style.selectedPatch;
+        prefWidth = 0;
+        prefHeight = 0;
+
+        for (int i = 0; i < items.length; i++) {
+            String item = items[i];
+            TextBounds bounds = font.getBounds(item);
+            prefWidth = Math.max(bounds.width, prefWidth);
+        }
+
+        itemHeight = font.getCapHeight() - font.getDescent() * 2;
+        itemHeight += selectedPatch.getTopHeight() + selectedPatch.getBottomHeight();
+        prefWidth += selectedPatch.getLeftWidth() + selectedPatch.getRightWidth();
+        prefHeight = items.length * itemHeight;
+        textOffsetX = selectedPatch.getLeftWidth();
+        textOffsetY = selectedPatch.getTopHeight() - font.getDescent();
+    }
+
+    std::string* List::getItems () {
+        return items;
+    }
+
+    float List::getPrefWidth () {
+        return prefWidth;
+    }
+
+    float List::getPrefHeight () {
+        return prefHeight;
+    }
+
+    void List::setSelectionListener (const SelectionListener& listener) {
+        this.listener = listener;
+    }
+
+    List::List (const Skin& skin) {
+        this(items, skin.getStyle(ListStyle.class), null);
+    }
+
+    List::List (const ListStyle& style) {
+        this(items, style, null);
+    }
+
+    List::List (const ListStyle& style,const std::string& name) {
+        super(name);
+        setStyle(style);
+        setItems(items);
+        layout();
+    }
 

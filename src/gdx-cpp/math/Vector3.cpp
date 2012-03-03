@@ -158,11 +158,10 @@ float Vector3::dst(const Vector3& vector) {
 }
 
 Vector3& Vector3::nor() {
-    float len = this->len();
-    if (len == 0) {
+    if (this->len() == 0) {
         return *this;
     } else {
-        return this->div(len);
+        return this->div(len());
     }
 }
 

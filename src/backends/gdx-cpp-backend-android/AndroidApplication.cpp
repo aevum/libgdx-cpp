@@ -23,6 +23,7 @@
 #include <gdx-cpp/implementation/System.hpp>
 #include <android/log.h>
 #include <stdexcept>
+#include <cassert>
 
 
 using namespace gdx_cpp::backends::android;
@@ -41,6 +42,8 @@ gdx_cpp::backends::android::AndroidApplication::AndroidApplication(gdx_cpp::Appl
         , logLevel(gdx_cpp::Application::LOG_INFO)
         , files(NULL)
         , audio(NULL)
+        , vm(NULL)
+        , env(NULL)
 {
     initialize();
 }
@@ -172,3 +175,24 @@ void gdx_cpp::backends::android::AndroidApplication::setLogLevel(int logLevel)
 {
     this->logLevel = logLevel;
 }
+
+JavaVM*const AndroidApplication::getJavaVM()
+{
+    return this->vm;
+}
+
+void AndroidApplication::setJavaVM(JavaVM* _vm)
+{
+    this->vm = _vm;
+}
+
+JNIEnv* AndroidApplication::getJniEnv()
+{
+    JNIEnv* env;
+    assert(this->vm);
+
+    this->vm->GetEnv((void**)&env, JNI_VERSION_1_2);
+
+    return env;
+}
+

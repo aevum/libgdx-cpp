@@ -46,7 +46,7 @@ gdx_cpp::audio::AudioRecorder* gdx_cpp::backends::android::AndroidAudio::newAudi
 {
 }
 
-gdx_cpp::audio::Music* gdx_cpp::backends::android::AndroidAudio::newMusic(const gdx_cpp::Files::fhandle_ptr file)
+gdx_cpp::audio::Music* gdx_cpp::backends::android::AndroidAudio::newMusic(const gdx_cpp::files::FileHandle::ptr file)
 {
     jstring strpath = env->NewStringUTF(file->path().c_str());
     jobject jobjMusic = env->CallObjectMethod(androidAudioObj, newMusicJNI, strpath, Files::Internal);
@@ -60,7 +60,7 @@ gdx_cpp::audio::Music* gdx_cpp::backends::android::AndroidAudio::newMusic(const 
     throw std::runtime_error("Could not load file: " + file->path());
 }
 
-gdx_cpp::audio::Sound* gdx_cpp::backends::android::AndroidAudio::newSound(const gdx_cpp::Files::fhandle_ptr fileHandle)
+gdx_cpp::audio::Sound* gdx_cpp::backends::android::AndroidAudio::newSound(const gdx_cpp::files::FileHandle::ptr fileHandle)
 {
     jstring strpath = env->NewStringUTF(fileHandle->path().c_str());
     jobject jobjSound = env->CallObjectMethod(androidAudioObj, newSoundJNI, strpath, Files::Internal);

@@ -31,32 +31,31 @@ namespace utils {
 template < class T >
 class Pool {
 public:
-    int max;
+    unsigned int max;
 
     Pool (int initialCapacity=16, int _max=std::numeric_limits<int>::max(), bool alocate = false) : max(max)
     {
         create(initialCapacity, max, alocate);
     }
 
-    T& obtain () {
-      if (freeObjects.size() == 0)
-      {
-        return *newObject();
-      } else {
-        T * ret = freeObjects.back();
-        freeObjects.pop_back();
-        return *ret;
-      }
-        
+    T* obtain () {
+        if (freeObjects.size() == 0)
+        {
+            return newObject();
+        } else {
+            T * ret = freeObjects.back();
+            freeObjects.pop_back();
+            return ret;
+        }
+
     }
 
-    void free (T* object) {
+    void free (T* const object) {
         if (object == NULL) throw std::runtime_error("object cannot be null.");
         if (freeObjects.size() < max)
         {
             freeObjects.push_back(object);
-        } else
-        {
+        } else {
             delete object;
         }
     }
@@ -82,8 +81,9 @@ private:
             }
         }
     }
+
     T* newObject () {
-        return new T();
+        return new T;
     }
 };
 

@@ -27,14 +27,14 @@ bool AnimationAction::isDone () {
 }
 
 void AnimationAction::finish () {
-    super.finish();
-    if (interpolator != null) {
-        interpolator.finished();
+    Action::finish();
+    if (interpolator != NULL) {
+        interpolator->finished();
     }
 }
 
-AnimationAction& AnimationAction::setInterpolator (const Interpolator& interpolator) {
-    this.interpolator = interpolator;
+AnimationAction* AnimationAction::setInterpolator (Interpolator* interpolator) {
+    this->interpolator = interpolator;
     return this;
 }
 
@@ -44,20 +44,25 @@ float AnimationAction::createInterpolatedAlpha (float delta) {
         taken = duration;
         done = true;
         return taken;
-    } else if (interpolator == null) {
+    } else if (interpolator == NULL) {
         return taken * invDuration;
     } else {
-        float interpolatedTime = interpolator.getInterpolation(taken / duration) * duration;
+        float interpolatedTime = interpolator->getInterpolation(taken / duration) * duration;
         return interpolatedTime * invDuration;
     }
 }
 
-Actor& AnimationAction::getTarget () {
+gdx_cpp::scenes::scene2d::Actor* AnimationAction::getTarget () {
     return target;
 }
 
 void AnimationAction::reset () {
-    super.reset();
-    interpolator = null;
+    Action::reset();
+    interpolator = NULL;
 }
 
+AnimationAction::AnimationAction()
+ : target(0)
+{
+
+}

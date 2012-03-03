@@ -27,6 +27,13 @@
 
 using namespace gdx_cpp::math;
 
+#define CONCAVE 1
+#define CONVEX - 1
+
+EarClippingTriangulator::EarClippingTriangulator() : concaveVertexCount(0)
+{
+}
+
 std::vector<Vector2> EarClippingTriangulator::computeTriangles (const std::vector<Vector2>& polygon) {
     std::vector<Vector2> triangles;
     std::vector<Vector2> vertices(polygon);

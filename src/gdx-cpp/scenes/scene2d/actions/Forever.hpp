@@ -21,6 +21,9 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTIONS_FOREVER_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTIONS_FOREVER_HPP_
 
+#include "gdx-cpp/scenes/scene2d/TemporalAction.hpp"
+#include "ActionResetingPool.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
@@ -28,19 +31,16 @@ namespace actions {
 
 class Forever: public gdx_cpp::scenes::scene2d::TemporalAction {
 public:
-    static Forever& $ (const gdx_cpp::scenes::scene2d::Action& action);
-    void setTarget (const gdx_cpp::scenes::scene2d::Actor& actor);
+    static Forever* build (gdx_cpp::scenes::scene2d::Action* action);
+    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
     void act (float delta);
     bool isDone ();
     void finish ();
-    gdx_cpp::scenes::scene2d::Action& copy ();
-    gdx_cpp::scenes::scene2d::Actor& getTarget ();
-
-protected:
-    Forever& newObject ();
+    Action* copy ();
+    Actor* getTarget ();
 
 private:
-
+    static ActionResetingPool<Forever> pool;
 };
 
 } // namespace gdx_cpp

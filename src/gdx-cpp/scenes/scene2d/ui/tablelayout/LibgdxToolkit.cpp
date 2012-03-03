@@ -27,7 +27,11 @@ gdx_cpp::scenes::scene2d::Actor& LibgdxToolkit::wrap (const Object& object) {
         if (defaultFont == null) throw new IllegalStateException("No default font has been set.");
         return new Label(null, defaultFont, (String)object);
     }
-    if (object == null) return new Group();
+    if (object == null) {
+        Group group = new Group();
+        group.transform = false;
+        return group;
+    }
     return super.wrap(object);
 }
 
@@ -36,7 +40,6 @@ gdx_cpp::scenes::scene2d::Actor& LibgdxToolkit::newWidget (const TableLayout& la
         AtlasRegion region = layout.atlas.findRegion(className);
         if (region != null) return new Image(className, region);
     }
-    if (className.equals("button")) return new Button(null);
     return super.newWidget(layout, className);
 }
 
@@ -71,12 +74,12 @@ void LibgdxToolkit::removeChild (const gdx_cpp::scenes::scene2d::Actor& parent,c
 }
 
 int LibgdxToolkit::getMinWidth (const gdx_cpp::scenes::scene2d::Actor& actor) {
-    if (actor instanceof Layout) return (int)((Layout)actor).getPrefWidth();
+    if (actor instanceof Layout) return (int)((Layout)actor).getMinWidth();
     return (int)actor.width;
 }
 
 int LibgdxToolkit::getMinHeight (const gdx_cpp::scenes::scene2d::Actor& actor) {
-    if (actor instanceof Layout) return (int)((Layout)actor).getPrefHeight();
+    if (actor instanceof Layout) return (int)((Layout)actor).getMinHeight();
     return (int)actor.height;
 }
 
@@ -91,10 +94,12 @@ int LibgdxToolkit::getPrefHeight (const gdx_cpp::scenes::scene2d::Actor& actor) 
 }
 
 int LibgdxToolkit::getMaxWidth (const gdx_cpp::scenes::scene2d::Actor& actor) {
+    if (actor instanceof Layout) return (int)((Layout)actor).getMaxWidth();
     return 0;
 }
 
 int LibgdxToolkit::getMaxHeight (const gdx_cpp::scenes::scene2d::Actor& actor) {
+    if (actor instanceof Layout) return (int)((Layout)actor).getMaxHeight();
     return 0;
 }
 

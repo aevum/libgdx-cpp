@@ -136,7 +136,7 @@ void SpriteCache::beginCache () {
         throw std::runtime_error("endCache must be called before begin.");
     
     int verticesPerImage = mesh->getNumIndices() > 0 ? 4 : 6;
-    currentCache = new Cache(caches.size(), mesh->getNumVertices() / verticesPerImage * 6);
+    currentCache = new Cache(caches.size(), mesh->getVerticesBuffer().limit());
     caches.push_back(currentCache);
     mesh->getVerticesBuffer().compact();
 }
@@ -146,7 +146,9 @@ void SpriteCache::beginCache (unsigned int cacheID) {
         throw std::runtime_error("endCache must be called before begin.");
     
     if (cacheID == caches.size() - 1) {
+        Cache* oldCache = caches[cacheID];
         caches.erase(caches.begin() + cacheID);
+        mesh->getVerticesBuffer().limit(oldCache->offset);
         beginCache();
         return;
     }
@@ -841,7 +843,10 @@ void SpriteCache::draw (int cacheID) {
         throw std::runtime_error("SpriteCache.begin must be called before draw.");
 
     Cache* cache = caches[cacheID];
-    int offset = cache->offset;
+    
+    int verticesPerImage = mesh->getNumIndices() > 0 ? 4 : 6;
+    int offset = cache->offset  / (verticesPerImage * Sprite::VERTEX_SIZE) * 6;
+    
     std::vector<Texture::ptr>& textures = cache->textures;
     std::vector<int>& counts = cache->counts;
 

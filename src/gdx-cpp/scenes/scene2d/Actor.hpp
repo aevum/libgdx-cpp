@@ -21,37 +21,69 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTOR_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTOR_HPP_
 
+#include "gdx-cpp/graphics/Color.hpp"
+#include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
+#include "gdx-cpp/utils/PooledLinkedList.hpp"
+#include "gdx-cpp/math/Vector2.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
 
+class Group;
+class Action;
+
 class Actor {
 public:
-    virtual   void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) = 0;
-    virtual   bool touchDown (float x,float y,int pointer) = 0;
-    virtual   bool touchUp (float x,float y,int pointer) = 0;
-    virtual   bool touchDragged (float x,float y,int pointer) = 0;
+    enum ActorType {
+        Actor_Actor,
+        Actor_Group
+    };
+
+    virtual ActorType getType() const { return Actor_Actor; }
+    
+    virtual void draw (gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) = 0;
+    virtual bool touchDown (float x,float y,int pointer) = 0;
+    virtual void touchUp (float x,float y,int pointer) = 0;
+    virtual void touchDragged (float x,float y,int pointer) = 0;
+    
     bool touchMoved (float x,float y);
     bool scrolled (int amount);
     bool keyDown (int keycode);
     bool keyUp (int keycode);
     bool keyTyped (char character);
-    virtual   Actor& hit (float x,float y) = 0;
-    void toLocalCoordinates (const gdx_cpp::math::Vector2& point);
+    virtual Actor* hit (float x,float y) = 0;
+    void toLocalCoordinates (gdx_cpp::math::Vector2& point);
     void remove ();
     void act (float delta);
-    void action (const Action& action);
+    void action (gdx_cpp::scenes::scene2d::Action*const action);
     void clearActions ();
-    std::string& toString ();
-    void markToRemove (const final& boolean);
+    std::string toString () const;
+    void markToRemove (bool boolean);
     bool isMarkedToRemove ();
-    String name;
+    Actor ();
+    Actor (const std::string& name);
+    Group* parent ;
+    std::string name ;
+    bool touchable;
+    bool visible;
+    float x ;
+    float y ;
+    float width ;
+    float height ;
+    float originX ;
+    float originY ;
+    float scaleX;
+    float scaleY;
+    float rotation ;
+    
+    gdx_cpp::graphics::Color color;
 
 protected:
-
+    utils::PooledLinkedList<Action> actions;
 
 private:
-
+    bool toRemove ;
 };
 
 } // namespace gdx_cpp

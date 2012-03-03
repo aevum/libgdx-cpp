@@ -21,18 +21,19 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_COMPOSITEACTION_HPP_
 #define GDX_CPP_SCENES_SCENE2D_COMPOSITEACTION_HPP_
 
+#include <vector>
+#include "Action.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
 
-class CompositeAction {
+class CompositeAction : public Action {
 public:
-    ArrayList<Action>& getActions ();
+    std::vector<Action*> getActions ();
 
 protected:
-
-
-private:
+    std::vector<Action*> actions;
 
 };
 

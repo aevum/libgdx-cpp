@@ -612,9 +612,9 @@ namespace agg
         typedef path_base<VertexContainer> self_type;
 
         //--------------------------------------------------------------------
-        path_base() : m_vertices(), m_iterator(0) {}
-        void remove_all() { m_vertices.remove_all(); m_iterator = 0; }
-        void free_all()   { m_vertices.free_all();   m_iterator = 0; }
+        path_base() : m_vertices(), m_iterator(0), m_last_move_to(0) {}
+        void remove_all() { m_vertices.remove_all(); m_iterator = 0; m_last_move_to = 0; }
+        void free_all()   { m_vertices.free_all();   m_iterator = 0; m_last_move_to = 0; }
 
         // Make path functions
         //--------------------------------------------------------------------
@@ -842,6 +842,7 @@ namespace agg
 
         VertexContainer m_vertices;
         unsigned        m_iterator;
+        unsigned        m_last_move_to;
     };
 
     //------------------------------------------------------------------------
@@ -877,6 +878,7 @@ namespace agg
     template<class VC> 
     inline void path_base<VC>::move_to(double x, double y)
     {
+        m_last_move_to = total_vertices();
         m_vertices.add_vertex(x, y, path_cmd_move_to);
     }
 
@@ -885,6 +887,7 @@ namespace agg
     inline void path_base<VC>::move_rel(double dx, double dy)
     {
         rel_to_abs(&dx, &dy);
+        m_last_move_to = total_vertices();
         m_vertices.add_vertex(dx, dy, path_cmd_move_to);
     }
 
@@ -1115,8 +1118,8 @@ namespace agg
     {
         if(is_vertex(m_vertices.last_command()))
         {
-            double x1,y1;
-            last_vertex(&x1, &y1);
+            double x1 = 0, y1 = 0;
+            m_vertices.vertex(m_last_move_to, &x1, &y1);
             m_vertices.add_vertex(x1, y1, path_cmd_end_poly | flags);
         }
     }

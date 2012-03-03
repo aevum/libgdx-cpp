@@ -26,7 +26,6 @@
 #include "gdx-cpp/graphics/Mesh.hpp"
 #include "gdx-cpp/graphics/VertexAttribute.hpp"
 #include "gdx-cpp/graphics/GL20.hpp"
-#include "gdx-cpp/Graphics.hpp"
 #include "gdx-cpp/Gdx.hpp"
 #include "Sprite.hpp"
 #include "gdx-cpp/utils/NumberUtils.hpp"
@@ -41,21 +40,21 @@ using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
 
 gdx_cpp::graphics::g2d::SpriteBatch::SpriteBatch(int size) :
-  color(Color::WHITE.toFloatBits())
-  , maxSpritesInBatch(0)
-  , renderCalls(0)
-  , tempColor(1,1,1,1)
-  , blendSrcFunc(GL10::GL_SRC_ALPHA)
-  , blendDstFunc(GL10::GL_ONE_MINUS_SRC_ALPHA)
-  , blendingDisabled(false)
-  , drawing(false)
-  , currBufferIdx(0)
-  , idx(0)
-  , invTexWidth(0)
-  , invTexHeight(0)
-  , mesh(0)
-  , shader(0)
-  , customShader(0)
+        color(Color::WHITE.toFloatBits())
+        , maxSpritesInBatch(0)
+        , renderCalls(0)
+        , tempColor(1,1,1,1)
+        , blendSrcFunc(GL10::GL_SRC_ALPHA)
+        , blendDstFunc(GL10::GL_ONE_MINUS_SRC_ALPHA)
+        , blendingDisabled(false)
+        , drawing(false)
+        , currBufferIdx(0)
+        , idx(0)
+        , invTexWidth(0)
+        , invTexHeight(0)
+        , mesh(0)
+        , shader(0)
+        , customShader(0)
 {
 
     std::vector<VertexAttribute> attributes;
@@ -68,15 +67,15 @@ gdx_cpp::graphics::g2d::SpriteBatch::SpriteBatch(int size) :
                                      size * 4,
                                      size * 6,
                                      attributes));
-    
+
     projectionMatrix.setToOrtho2D(0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
-    
+
     vertices = new float[size * Sprite::SPRITE_SIZE];
     verticesSize  = size * Sprite::SPRITE_SIZE;
-    
+
     int len = size * 6;
     std::vector<short> indices(len);
-    
+
     short j = 0;
     for (int i = 0; i < len; i += 6, j += 4) {
         indices[i + 0] = (j + 0);
@@ -88,35 +87,35 @@ gdx_cpp::graphics::g2d::SpriteBatch::SpriteBatch(int size) :
     }
     buffers[0]->setIndices(indices);
     mesh = buffers[0];
-    
+
     if (Gdx::graphics->isGL20Available()) createShader();
 }
 
 
 void SpriteBatch::createShader () {
-    std::string vertexShader = "attribute vec4 " + ShaderProgram::POSITION_ATTRIBUTE + ";\n" 
-                          "attribute vec4 " + ShaderProgram::COLOR_ATTRIBUTE + ";\n" //
-                          "attribute vec2 " + ShaderProgram::TEXCOORD_ATTRIBUTE + "0;\n" //
-                          "uniform mat4 u_projectionViewMatrix;\n" //
-                          "varying vec4 v_color;\n" //
-                          "varying vec2 v_texCoords;\n" //
-                          "\n" //
-                          "void main()\n" //
-                          "{\n" //
-                          "   v_color = " + ShaderProgram::COLOR_ATTRIBUTE + ";\n" //
-                          "   v_texCoords = " + ShaderProgram::TEXCOORD_ATTRIBUTE + "0;\n" //
-                          "   gl_Position =  u_projectionViewMatrix * " + ShaderProgram::POSITION_ATTRIBUTE + ";\n" //
-                          "}\n";
+    std::string vertexShader = "attribute vec4 " + ShaderProgram::POSITION_ATTRIBUTE + ";\n"
+                               "attribute vec4 " + ShaderProgram::COLOR_ATTRIBUTE + ";\n" //
+                               "attribute vec2 " + ShaderProgram::TEXCOORD_ATTRIBUTE + "0;\n" //
+                               "uniform mat4 u_projectionViewMatrix;\n" //
+                               "varying vec4 v_color;\n" //
+                               "varying vec2 v_texCoords;\n" //
+                               "\n" //
+                               "void main()\n" //
+                               "{\n" //
+                               "   v_color = " + ShaderProgram::COLOR_ATTRIBUTE + ";\n" //
+                               "   v_texCoords = " + ShaderProgram::TEXCOORD_ATTRIBUTE + "0;\n" //
+                               "   gl_Position =  u_projectionViewMatrix * " + ShaderProgram::POSITION_ATTRIBUTE + ";\n" //
+                               "}\n";
     std::string fragmentShader = "#ifdef GL_ES\n" //
-                            "precision mediump float;\n" //
-                            "#endif\n" //
-                            "varying vec4 v_color;\n" //
-                            "varying vec2 v_texCoords;\n" //
-                            "uniform sampler2D u_texture;\n" //
-                            "void main()\n"//
-                            "{\n" //
-                            "  gl_FragColor = v_color * texture2D(u_texture, v_texCoords);\n" //
-                            "}";
+                                 "precision mediump float;\n" //
+                                 "#endif\n" //
+                                 "varying vec4 v_color;\n" //
+                                 "varying vec2 v_texCoords;\n" //
+                                 "uniform sampler2D u_texture;\n" //
+                                 "void main()\n"//
+                                 "{\n" //
+                                 "  gl_FragColor = v_color * texture2D(u_texture, v_texCoords);\n" //
+                                 "}";
 
     shader = new ShaderProgram(vertexShader, fragmentShader);
     if (shader->isCompiled() == false)
@@ -126,38 +125,18 @@ void SpriteBatch::createShader () {
 void SpriteBatch::begin () {
     if (drawing)
         throw new std::runtime_error("you have to call SpriteBatch.end() first");
-    
+
     renderCalls = 0;
+    Gdx::gl->glDepthMask(false);
+    Gdx::gl->glEnable(GL10::GL_TEXTURE_2D);
 
-    if (Gdx::graphics->isGL20Available() == false) {
-        GL10& gl = *Gdx::gl10;
-
-        gl.glDepthMask(false);
-        gl.glEnable(GL10::GL_TEXTURE_2D);
-
-        gl.glMatrixMode(GL10::GL_PROJECTION);
-        gl.glLoadMatrixf(projectionMatrix.val);
-        gl.glMatrixMode(GL10::GL_MODELVIEW);
-        gl.glLoadMatrixf(transformMatrix.val);
-    } else {
-        combinedMatrix.set(projectionMatrix).mul(transformMatrix);
-
-        GL20& gl = *Gdx::gl20;
-        gl.glDepthMask(false);
-        gl.glEnable(GL20::GL_TEXTURE_2D);
-
-        if (customShader != NULL) {
+    if (Gdx::graphics->isGL20Available()) {
+        if (customShader != NULL)
             customShader->begin();
-            customShader->setUniformMatrix("u_proj", projectionMatrix);
-            customShader->setUniformMatrix("u_trans", transformMatrix);
-            customShader->setUniformMatrix("u_projTrans", combinedMatrix);
-            customShader->setUniformi("u_texture", 0);
-        } else {
-            shader->begin();
-            shader->setUniformMatrix("u_projectionViewMatrix", combinedMatrix);
-            shader->setUniformi("u_texture", 0);
-        }
+        else shader->begin();
     }
+    
+    setupMatrices();
 
     idx = 0;
     lastTexture = NULL;
@@ -887,7 +866,7 @@ void SpriteBatch::renderMesh () {
     if (spritesInBatch > maxSpritesInBatch) maxSpritesInBatch = spritesInBatch;
 
     lastTexture->bind();
-    
+
     mesh->setVertices(vertices, idx);
 
     if (Gdx::graphics->isGL20Available()) {
@@ -975,21 +954,21 @@ bool SpriteBatch::isBlendingEnabled () {
 }
 
 SpriteBatch::SpriteBatch(int size, int buffers) :
-color(Color::WHITE.toFloatBits())
-, maxSpritesInBatch(0)
-, renderCalls(0)
-, tempColor(1,1,1,1)
-, blendSrcFunc(GL10::GL_SRC_ALPHA)
-, blendDstFunc(GL10::GL_ONE_MINUS_SRC_ALPHA)
-, blendingDisabled(false)
-, drawing(false)
-, currBufferIdx(0)
-, idx(0)
-, invTexWidth(0)
-, invTexHeight(0)
-, mesh(0)
-, shader(0)
-, customShader(0)
+        color(Color::WHITE.toFloatBits())
+        , maxSpritesInBatch(0)
+        , renderCalls(0)
+        , tempColor(1,1,1,1)
+        , blendSrcFunc(GL10::GL_SRC_ALPHA)
+        , blendDstFunc(GL10::GL_ONE_MINUS_SRC_ALPHA)
+        , blendingDisabled(false)
+        , drawing(false)
+        , currBufferIdx(0)
+        , idx(0)
+        , invTexWidth(0)
+        , invTexHeight(0)
+        , mesh(0)
+        , shader(0)
+        , customShader(0)
 {
     this->buffers.reserve(buffers);
 
@@ -997,7 +976,7 @@ color(Color::WHITE.toFloatBits())
     attributes.push_back(VertexAttribute(VertexAttributes::Usage::Position, 2, ShaderProgram::POSITION_ATTRIBUTE));
     attributes.push_back(VertexAttribute(VertexAttributes::Usage::ColorPacked, 4, ShaderProgram::COLOR_ATTRIBUTE));
     attributes.push_back(VertexAttribute(VertexAttributes::Usage::TextureCoordinates, 2, ShaderProgram::TEXCOORD_ATTRIBUTE + "0"));
-    
+
     for (int i = 0; i < buffers; i++) {
         this->buffers[i] = new Mesh(false, size * 4, size * 6, attributes);
     }
@@ -1010,7 +989,7 @@ color(Color::WHITE.toFloatBits())
     int len = size * 6;
     std::vector<short> indices(len);
     short j = 0;
-    
+
     for (int i = 0; i < len; i += 6, j += 4) {
         indices[i + 0] = (short)(j + 0);
         indices[i + 1] = (short)(j + 1);
@@ -1019,7 +998,7 @@ color(Color::WHITE.toFloatBits())
         indices[i + 4] = (short)(j + 3);
         indices[i + 5] = (short)(j + 0);
     }
-    
+
     for (int i = 0; i < buffers; i++) {
         this->buffers[i]->setIndices(indices);
     }
@@ -1031,19 +1010,18 @@ color(Color::WHITE.toFloatBits())
 
 SpriteBatch::~SpriteBatch()
 {
-    if (mesh) {
-        delete mesh;
-    }
-
     if (shader) {
+        shader->dispose();
         delete shader;
     }
 
     if (customShader) {
+        customShader->dispose();
         delete customShader;
     }
 
-    for (int i = 0; i < buffers.size(); ++i) {
+    for (unsigned int i = 0; i < buffers.size(); ++i) {
+        buffers[i]->dispose();
         delete buffers[i];
     }
 
@@ -1060,11 +1038,78 @@ void SpriteBatch::draw(const Texture& texture, float* const spriteVertices, int 
         invTexWidth = 1.0f / texture.getWidth();
         invTexHeight = 1.0f / texture.getHeight();
     } else if (idx + length >= verticesSize ) renderMesh();
-       
-    memcpy(&vertices[idx], &spriteVertices[offset], sizeof(float) * length);
-    
-    idx += length;
+
+    int remainingVertices = verticesSize - idx;
+
+    if (remainingVertices == 0) {
+        renderMesh();
+        remainingVertices = verticesSize;
+    }
+
+    int vertexCount = std::min(remainingVertices, length - offset);
+
+    memcpy(&vertices[idx], &spriteVertices[offset], sizeof(float) * vertexCount);
+
+    offset += vertexCount;
+    idx += vertexCount;
+
+    while (offset < length) {
+        renderMesh();
+        vertexCount =  std::min(verticesSize, length - offset);
+        memcpy(&vertices[0], &spriteVertices[offset], sizeof(float) * vertexCount);
+        offset += vertexCount;
+        idx += vertexCount;
+    }
 }
+
+void SpriteBatch::setupMatrices()
+{
+    if (!Gdx::graphics->isGL20Available()) {
+        GL10& gl = *Gdx::gl10;
+        gl.glMatrixMode(GL10::GL_PROJECTION);
+        gl.glLoadMatrixf(projectionMatrix.val);
+        gl.glMatrixMode(GL10::GL_MODELVIEW);
+        gl.glLoadMatrixf(transformMatrix.val);
+    } else {
+        combinedMatrix.set(projectionMatrix).mul(transformMatrix);
+        if (customShader != NULL) {
+            customShader->setUniformMatrix("u_proj", projectionMatrix);
+            customShader->setUniformMatrix("u_trans", transformMatrix);
+            customShader->setUniformMatrix("u_projTrans", combinedMatrix);
+            customShader->setUniformi("u_texture", 0);
+        } else {
+            shader->setUniformMatrix("u_projectionViewMatrix", combinedMatrix);
+            shader->setUniformi("u_texture", 0);
+        }
+    }
+}
+
+void SpriteBatch::setTransformMatrix(math::Matrix4& transform)
+{
+    if (drawing) {
+        flush();
+    }
+    
+    transformMatrix.set(transform);
+
+    if (drawing) {
+        setupMatrices();
+    }
+}
+
+void SpriteBatch::setProjectionMatrix(math::Matrix4& projection)
+{
+    if (drawing) {
+        flush();
+    }
+
+    projectionMatrix.set(projection);
+
+    if (drawing) {
+        setupMatrices();
+    }
+}
+
 
 
 

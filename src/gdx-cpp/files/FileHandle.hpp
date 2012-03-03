@@ -19,14 +19,15 @@
 
 #ifndef GDX_CPP_FILES_FILEHANDLE_HPP_
 #define GDX_CPP_FILES_FILEHANDLE_HPP_
-#include "gdx-cpp/Files.hpp"
-#include "gdx-cpp/Gdx.hpp"
-#include "gdx-cpp/Application.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <cstdio>
 #include <string>
 #include <sys/types.h>
+
+#include "gdx-cpp/Files.hpp"
+#include "gdx-cpp/Application.hpp"
 #include "gdx-cpp/files/File.hpp"
 #include "gdx-cpp/utils/Aliases.hpp"
 
@@ -45,23 +46,22 @@ class File;
 class FileHandle {
 public:
     typedef ref_ptr_maker<FileHandle>::type ptr;
-    typedef ref_ptr_maker< std::ifstream >::type ifstream_ptr;
-    typedef ref_ptr_maker< std::ofstream >::type ofstream_ptr;
-    typedef ref_ptr_maker< char >::type char_ptr;
-    FileHandle ();
+    typedef ref_ptr_maker< char >::type buffer_ptr;
+
+    FileHandle();
     FileHandle (const std::string &fileName);
     FileHandle (const gdx_cpp::files::File &file);
+    
     const std::string& path () const;
     std::string name () const;
     std::string extension () const;
     std::string nameWithoutExtension () const;
-    std::string typetoString ();
-    gdx_cpp::Files::FileType& getType ();
-    ifstream_ptr read ();
-    std::string readString ();
-    std::string readString (const std::string& charset);
-    virtual int readBytes (char_ptr &c);
-    ofstream_ptr write (bool append);
+    std::string typetoString () const;
+    gdx_cpp::Files::FileType getType () const;
+
+    virtual int readBytes (gdx_cpp::files::FileHandle::buffer_ptr& c) const;
+    virtual int write ( const char* data, int lenght, bool append);
+    
     void list (std::vector<FileHandle> &handles);
     void list (const std::string& suffix, std::vector<FileHandle> &handles);
     bool isDirectory ();
@@ -71,19 +71,20 @@ public:
     bool exists ();
     bool deleteFile ();
     bool deleteDirectory ();
-    void copyTo (FileHandle& dest);
+    virtual void copyTo (FileHandle& dest);
     void moveTo (FileHandle& dest);
-    int64_t length ();
-    std::string toString ();
+    virtual int64_t length () const;
+    std::string toString () const;
     FileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
     FileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type);
-    
+
+    virtual ~FileHandle() {};
 protected:
     gdx_cpp::files::File file;
     gdx_cpp::Files::FileType type;
 
 private:
-    gdx_cpp::files::File getFile();
+    gdx_cpp::files::File getFile() const;
     static bool deleteDirectory (File &file);
 };
 

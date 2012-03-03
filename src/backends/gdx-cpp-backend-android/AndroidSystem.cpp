@@ -80,11 +80,9 @@ public:
     }
 
     void join() {
-        std::cout << "antes do join" << std::endl;
         if( pthread_join(thread, NULL) != 0) {
             throw std::runtime_error("pthread_join failed");
         }
-        std::cout << "depois do join" << std::endl;
     }
 
     void sleep(long int millis) {

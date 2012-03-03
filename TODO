@@ -1,5 +1,20 @@
 * Audio decoding
-* Box2d integration (DONE)
-* Android support
-* IOs support
 * Verify the possibility of using only the Androi native wrapper, without Jni's
+
+Missing to translate:
+
+ShapeRenderer
+ImmediateModeRenderer2
+
+all scene2d classes
+all assetManager classes
+all g3d classes
+
+BitmapFont* classes
+TextureAtlas* classes
+
+Tiled* stuff
+
+Json Writter and Reader
+
+Update Box2dDebugRenderer to use ShapeRenderer

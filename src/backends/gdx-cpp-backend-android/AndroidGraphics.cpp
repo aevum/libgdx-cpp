@@ -248,12 +248,11 @@ void backends::android::AndroidGraphics::resize(int width, int height)
     glCommon->glViewport(0, 0, width, height);
 }
 
-TextureData::ptr backends::android::AndroidGraphics::resolveTextureData(Files::fhandle_ptr fileHandle,
+TextureData::ptr backends::android::AndroidGraphics::resolveTextureData(files::FileHandle::ptr fileHandle,
                                                                         graphics::Pixmap::ptr preloadedPixmap,
                                                                         const gdx_cpp::graphics::Pixmap::Format* format,
                                                                         bool useMipMaps)
 {
-    
     return TextureData::ptr(new glutils::FileTextureData(fileHandle, preloadedPixmap, format, useMipMaps));
 }
 
@@ -272,16 +271,21 @@ graphics::Pixmap* backends::android::AndroidGraphics::resolvePixmap(const gdx_cp
     switch(other.getType()) {
         case graphics::Pixmap::Gdx2d:
             return new g2d::Gdx2DPixmap((g2d::Gdx2DPixmap&)other);
+        case graphics::Pixmap::Svg:
+        default:
+            throw std::runtime_error("Pixmap of type Svg doesnt provide a copy constructor");
     } 
 }
 
-graphics::Pixmap* backends::android::AndroidGraphics::resolvePixmap(const gdx_cpp::Files::fhandle_ptr& file)
+graphics::Pixmap* backends::android::AndroidGraphics::resolvePixmap(const gdx_cpp::files::FileHandle::ptr& file)
 {
     std::string extension = file->extension();
-
-    if (extension == "png" || extension == "jpg" || extension == "tga" || extension == "bmp")
-        return g2d::Gdx2DPixmap::newPixmap(*file->read(), 0);
-    else if (extension == "svg") {
+    
+    if (extension == "png" || extension == "jpg" || extension == "tga" || extension == "bmp") {
+        gdx_cpp::files::FileHandle::buffer_ptr data;
+        int len = file->readBytes(data);
+        return g2d::Gdx2DPixmap::newPixmapFromBuffer((unsigned char*) data.get(), len, 0);
+    } else if (extension == "svg") {
         return g2d::svg::AggSvgPixmap::newFromFile(file);
     } else {
         throw std::runtime_error("unsupported image format: " + extension);

@@ -22,43 +22,41 @@
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-RotateBy& RotateBy::newObject () {
-    return new RotateBy();
-}
+ActionResetingPool<RotateBy> RotateBy::pool = ActionResetingPool<RotateBy>(4, 100);
 
-RotateBy& RotateBy::$ (float rotation,float duration) {
-    RotateBy action = pool.obtain();
-    action.rotation = rotation;
-    action.duration = duration;
-    action.invDuration = 1 / duration;
+RotateBy* RotateBy::build (float rotation,float duration) {
+    RotateBy* action = pool.obtain();
+    action->rotation = rotation;
+    action->duration = duration;
+    action->invDuration = 1 / duration;
     return action;
 }
 
-void RotateBy::setTarget (const gdx_cpp::scenes::scene2d::Actor& actor) {
-    this.target = actor;
-    this.startRotation = target.rotation;
-    this.deltaRotation = rotation;
-    this.taken = 0;
-    this.done = false;
+void RotateBy::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+    this->target = actor;
+    this->startRotation = target->rotation;
+    this->deltaRotation = rotation;
+    this->taken = 0;
+    this->done = false;
 }
 
 void RotateBy::act (float delta) {
     float alpha = createInterpolatedAlpha(delta);
     if (done) {
-        target.rotation = startRotation + rotation;
+        target->rotation = startRotation + rotation;
     } else {
-        target.rotation = startRotation + deltaRotation * alpha;
+        target->rotation = startRotation + deltaRotation * alpha;
     }
 }
 
 void RotateBy::finish () {
-    super.finish();
+    AnimationAction::finish();
     pool.free(this);
 }
 
-gdx_cpp::scenes::scene2d::Action& RotateBy::copy () {
-    RotateBy rotateBy = $(rotation, duration);
-    if (interpolator != null) rotateBy.setInterpolator(interpolator.copy());
+gdx_cpp::scenes::scene2d::Action* RotateBy::copy () {
+    RotateBy* rotateBy = RotateBy::build(rotation, duration);
+    if (interpolator != NULL) rotateBy->setInterpolator(interpolator->copy());
     return rotateBy;
 }
 

@@ -25,15 +25,11 @@ namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
 
+class Action;
+
 class OnActionCompleted {
 public:
-    virtual   void completed (const Action& action) = 0;
-
-protected:
-
-
-private:
-
+    virtual   void completed (Action* const action) = 0;
 };
 
 } // namespace gdx_cpp

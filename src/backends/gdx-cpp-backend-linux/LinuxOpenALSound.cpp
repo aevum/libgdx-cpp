@@ -48,12 +48,7 @@ void LinuxOpenALSound::play (float volume) {
     alSourcei(sourceID, AL_BUFFER, bufferID);
     alSourcei(sourceID, AL_LOOPING, AL_FALSE);
     alSourcef(sourceID, AL_GAIN, volume);
-    alSourcePlay(sourceID);
-
-    ALenum state;
-
-    alGetSourcei(sourceID, AL_SOURCE_STATE, &state);
-    std::cout << "state" << state << std::endl;
+    alSourcePlay(sourceID);    
 }
 
 void LinuxOpenALSound::loop () {

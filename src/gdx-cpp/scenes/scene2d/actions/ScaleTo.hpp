@@ -21,6 +21,9 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTIONS_SCALETO_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTIONS_SCALETO_HPP_
 
+#include "gdx-cpp/scenes/scene2d/AnimationAction.hpp"
+#include "ActionResetingPool.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
@@ -28,17 +31,21 @@ namespace actions {
 
 class ScaleTo: public gdx_cpp::scenes::scene2d::AnimationAction {
 public:
-    static ScaleTo& $ (float scaleX,float scaleY,float duration);
-    void setTarget (const gdx_cpp::scenes::scene2d::Actor& actor);
+    static ScaleTo* build (float scaleX,float scaleY,float duration);
+    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
     void act (float delta);
     void finish ();
-    gdx_cpp::scenes::scene2d::Action& copy ();
+    Action* copy ();
 
 protected:
-    ScaleTo& newObject ();
+    float scaleX;
+    float scaleY;
+    float startScaleX;
+    float startScaleY;
+    float deltaScaleX;
+    float deltaScaleY;
 
-private:
-
+    static ActionResetingPool<ScaleTo> pool;
 };
 
 } // namespace gdx_cpp

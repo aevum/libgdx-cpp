@@ -34,7 +34,7 @@ public class AndroidFileHandle extends FileHandle {
 	// The asset manager, or null if this is not an internal file.
 	final AssetManager assets;
 
-	AndroidFileHandle (AssetManager assets, String fileName, FileType type) {
+	public AndroidFileHandle (AssetManager assets, String fileName, FileType type) {
 		super(fileName, type);
 		this.assets = assets;
 	}

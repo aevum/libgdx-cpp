@@ -52,6 +52,7 @@ public:
     NinePatch (Texture::ptr texture, int left, int right, int top, int bottom);
     NinePatch (TextureRegion::ptr texture, int left, int right, int top, int bottom);
     NinePatch (std::vector< TextureRegion::ptr >& _patches);
+    NinePatch(TextureRegion::ptr region);
     
     void draw (gdx_cpp::graphics::g2d::SpriteBatch& batch, float x, float y, float width, float height);
     float getLeftWidth ();
@@ -61,12 +62,13 @@ public:
     float getTotalHeight ();
     float getTotalWidth ();
 
-protected:
-    std::vector<TextureRegion::ptr> patches;
+    std::vector<TextureRegion::ptr> getPatches();
     
 private:
+    std::vector<TextureRegion::ptr> patches;
     void initialize(TextureRegion::ptr region, int left, int right, int top, int bottom);
     void checkValidity ();
+    NinePatch();
 };
 
 } // namespace gdx_cpp

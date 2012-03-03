@@ -45,7 +45,7 @@ public:
     void uploadCompressedData ();
 
 private:
-    Files::fhandle_ptr file;
+    files::FileHandle::ptr file;
     int width;
     int height;
     const Pixmap::Format* format;

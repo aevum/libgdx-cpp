@@ -22,48 +22,46 @@
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-ScaleTo& ScaleTo::newObject () {
-    return new ScaleTo();
-}
+ActionResetingPool<ScaleTo> ScaleTo::pool = ActionResetingPool<ScaleTo>(4, 100);
 
-ScaleTo& ScaleTo::$ (float scaleX,float scaleY,float duration) {
-    ScaleTo action = pool.obtain();
-    action.scaleX = scaleX;
-    action.scaleY = scaleY;
-    action.duration = duration;
-    action.invDuration = 1 / duration;
+ScaleTo* ScaleTo::build (float scaleX,float scaleY,float duration) {
+    ScaleTo* action = pool.obtain();
+    action->scaleX = scaleX;
+    action->scaleY = scaleY;
+    action->duration = duration;
+    action->invDuration = 1 / duration;
     return action;
 }
 
-void ScaleTo::setTarget (const gdx_cpp::scenes::scene2d::Actor& actor) {
-    this.target = actor;
-    this.startScaleX = target.scaleX;
-    this.deltaScaleX = scaleX - target.scaleX;
-    this.startScaleY = target.scaleY;
-    this.deltaScaleY = scaleY - target.scaleY;
-    this.taken = 0;
-    this.done = false;
+void ScaleTo::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+    this->target = actor;
+    this->startScaleX = target->scaleX;
+    this->deltaScaleX = scaleX - target->scaleX;
+    this->startScaleY = target->scaleY;
+    this->deltaScaleY = scaleY - target->scaleY;
+    this->taken = 0;
+    this->done = false;
 }
 
 void ScaleTo::act (float delta) {
     float alpha = createInterpolatedAlpha(delta);
     if (done) {
-        target.scaleX = scaleX;
-        target.scaleY = scaleY;
+        target->scaleX = scaleX;
+        target->scaleY = scaleY;
     } else {
-        target.scaleX = startScaleX + deltaScaleX * alpha;
-        target.scaleY = startScaleY + deltaScaleY * alpha;
+        target->scaleX = startScaleX + deltaScaleX * alpha;
+        target->scaleY = startScaleY + deltaScaleY * alpha;
     }
 }
 
 void ScaleTo::finish () {
-    super.finish();
+    AnimationAction::finish();
     pool.free(this);
 }
 
-gdx_cpp::scenes::scene2d::Action& ScaleTo::copy () {
-    ScaleTo scaleTo = $(scaleX, scaleY, duration);
-    if (interpolator != null) scaleTo.setInterpolator(interpolator.copy());
+gdx_cpp::scenes::scene2d::Action* ScaleTo::copy () {
+    ScaleTo* scaleTo = ScaleTo::build(scaleX, scaleY, duration);
+    if (interpolator != NULL) scaleTo->setInterpolator(interpolator->copy());
     return scaleTo;
 }
 

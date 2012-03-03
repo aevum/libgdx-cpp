@@ -21,6 +21,9 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTIONS_REPEAT_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTIONS_REPEAT_HPP_
 
+#include "gdx-cpp/scenes/scene2d/TemporalAction.hpp"
+#include "ActionResetingPool.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
@@ -28,20 +31,21 @@ namespace actions {
 
 class Repeat: public gdx_cpp::scenes::scene2d::TemporalAction {
 public:
-    static Repeat& $ (const gdx_cpp::scenes::scene2d::Action& action,int times);
+    static Repeat* build (gdx_cpp::scenes::scene2d::Action* action, int times);
+    
     void reset ();
-    void setTarget (const gdx_cpp::scenes::scene2d::Actor& actor);
+    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
     void act (float delta);
     bool isDone ();
     void finish ();
-    gdx_cpp::scenes::scene2d::Action& copy ();
-    gdx_cpp::scenes::scene2d::Actor& getTarget ();
+    gdx_cpp::scenes::scene2d::Action* copy ();
+    gdx_cpp::scenes::scene2d::Actor* getTarget ();
 
 protected:
-    Repeat& newObject ();
+    int times;
+    int finishedTimes;
 
-private:
-
+    static ActionResetingPool<Repeat> pool;
 };
 
 } // namespace gdx_cpp

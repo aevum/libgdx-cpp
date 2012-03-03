@@ -21,6 +21,9 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_ACTORS_IMAGE_HPP_
 #define GDX_CPP_SCENES_SCENE2D_ACTORS_IMAGE_HPP_
 
+#include "gdx-cpp/scenes/scene2d/Actor.hpp"
+#include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
+
 namespace gdx_cpp {
 namespace scenes {
 namespace scene2d {
@@ -28,11 +31,16 @@ namespace actors {
 
 class Image: public gdx_cpp::scenes::scene2d::Actor {
 public:
-    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
+    void draw (gdx_cpp::graphics::g2d::SpriteBatch& batch, float parentAlpha);
     bool touchDown (float x,float y,int pointer);
-    bool touchUp (float x,float y,int pointer);
-    bool touchDragged (float x,float y,int pointer);
-    gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
+    void touchUp (float x,float y,int pointer);
+    void touchDragged (float x,float y,int pointer);
+    Actor* hit (float x, float y);
+    Image (const std::string& name);
+    Image (const std::string& name,const gdx_cpp::graphics::Texture& texture);
+    Image (const std::string& name,const gdx_cpp::graphics::g2d::TextureRegion& region);
+    
+    graphics::g2d::TextureRegion::ptr region;
 
 protected:
 

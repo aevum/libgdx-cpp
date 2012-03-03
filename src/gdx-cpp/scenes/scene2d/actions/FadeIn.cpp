@@ -22,45 +22,49 @@
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-FadeIn& FadeIn::newObject () {
-    return new FadeIn();
-}
+ActionResetingPool<FadeIn> FadeIn::pool = ActionResetingPool<FadeIn>(4, 100);
 
-FadeIn& FadeIn::$ (float duration) {
-    FadeIn action = pool.obtain();
-    action.duration = duration;
-    action.invDuration = 1 / duration;
+FadeIn* FadeIn::build(float duration)
+{
+    FadeIn* action = pool.obtain();
+    action->duration = duration;
+    action->invDuration = 1 / duration;
     return action;
 }
 
-void FadeIn::setTarget (const gdx_cpp::scenes::scene2d::Actor& actor) {
-    this.target = actor;
-    this.startAlpha = this.target.color.a;
-    this.deltaAlpha = 1 - this.target.color.a;
-    this.taken = 0;
-    this.done = false;
-
+void FadeIn::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+    this->target = actor;
+    this->startAlpha = this->target->color.a;
+    this->deltaAlpha = 1 - this->target->color.a;
+    this->taken = 0;
+    this->done = false;
 }
 
 void FadeIn::act (float delta) {
     float alpha = createInterpolatedAlpha(delta);
     if (done) {
-        target.color.a = 1.0f;
+        target->color.a = 1.0f;
     } else {
-        target.color.a = startAlpha + deltaAlpha * alpha;
+        target->color.a = startAlpha + deltaAlpha * alpha;
     }
 }
 
 void FadeIn::finish () {
-    pool.free(this);
-    if (listener != null) {
-        listener.completed(this);
+    if (listener != NULL) {
+        listener->completed(this);
     }
+    pool.free(this);
 }
 
-gdx_cpp::scenes::scene2d::Action& FadeIn::copy () {
-    FadeIn fadeIn = $(duration);
-    if (interpolator != null) fadeIn.setInterpolator(interpolator.copy());
+gdx_cpp::scenes::scene2d::Action* FadeIn::copy () {
+    FadeIn* fadeIn = FadeIn::build(duration);
+    if (interpolator != NULL) fadeIn->setInterpolator(interpolator->copy());
     return fadeIn;
 }
 
+FadeIn::FadeIn()
+: startAlpha(0)
+, deltaAlpha(0)
+, target(0)
+{
+}

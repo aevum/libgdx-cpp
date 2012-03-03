@@ -22,22 +22,26 @@
 
 using namespace gdx_cpp::scenes::scene2d::ui;
 
+void SplitPane::setStyle (const SplitPaneStyle& style) {
+    this.style = style;
+}
+
 void SplitPane::layout () {
+    if (!invalidated) return;
+    invalidated = false;
+
     if (firstWidget instanceof Layout) {
         Layout layout = (Layout)firstWidget;
         layout.layout();
         firstWidget.width = layout.getPrefWidth();
         firstWidget.height = layout.getPrefHeight();
     }
-
     if (secondWidget instanceof Layout) {
         Layout layout = (Layout)secondWidget;
         layout.layout();
         secondWidget.width = layout.getPrefWidth();
         secondWidget.height = layout.getPrefHeight();
     }
-
-    invalidated = false;
 }
 
 void SplitPane::invalidate () {
@@ -47,11 +51,27 @@ void SplitPane::invalidate () {
 }
 
 float SplitPane::getPrefWidth () {
-    return prefHeight;
+    return 150;
 }
 
 float SplitPane::getPrefHeight () {
-    return prefWidth;
+    return 150;
+}
+
+float SplitPane::getMinWidth () {
+    return 0;
+}
+
+float SplitPane::getMinHeight () {
+    return 0;
+}
+
+float SplitPane::getMaxWidth () {
+    return 0;
+}
+
+float SplitPane::getMaxHeight () {
+    return 0;
 }
 
 void SplitPane::calculateBoundsAndPositions (const gdx_cpp::math::Matrix4& transform) {
@@ -124,7 +144,7 @@ void SplitPane::calculateVertBoundsAndPositions () {
 void SplitPane::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
     NinePatch handle = style.handle;
 
-    setupTransform(batch);
+    applyTransform(batch);
     calculateBoundsAndPositions(batch.getTransformMatrix());
     for (int i = 0; i < children.size(); i++) {
         ScissorStack.pushScissors(scissors[i]);
@@ -143,26 +163,22 @@ bool SplitPane::touchDown (float x,float y,int pointer) {
         touchDrag = true;
         lastPoint.set(x, y);
         handlePos.set(handleBounds.x, handleBounds.y);
-        focus(this, 0);
         return true;
     }
     return super.touchDown(x, y, pointer);
 }
 
-bool SplitPane::touchUp (float x,float y,int pointer) {
-    if (pointer != 0) return false;
+void SplitPane::touchUp (float x,float y,int pointer) {
     if (touchDrag) {
-        focus(null, 0);
         touchDrag = false;
-        return true;
+        return;
     }
-    return super.touchUp(x, y, pointer);
+    super.touchUp(x, y, pointer);
 }
 
-bool SplitPane::touchDragged (float x,float y,int pointer) {
+void SplitPane::touchDragged (float x,float y,int pointer) {
     NinePatch handle = style.handle;
 
-    if (pointer != 0) return false;
     if (touchDrag) {
         if (!vertical) {
             float delta = x - lastPoint.x;
@@ -189,9 +205,8 @@ bool SplitPane::touchDragged (float x,float y,int pointer) {
             invalidate();
             lastPoint.set(x, y);
         }
-        return true;
     } else
-        return super.touchDragged(x, y, pointer);
+        super.touchDragged(x, y, pointer);
 }
 
 gdx_cpp::scenes::scene2d::Actor& SplitPane::hit (float x,float y) {
@@ -229,5 +244,25 @@ void SplitPane::setWidgets (const gdx_cpp::scenes::scene2d::Actor& firstWidget,c
     this.addActor(firstWidget);
     this.addActor(secondWidget);
     invalidate();
+}
+
+SplitPane::SplitPane (const gdx_cpp::scenes::scene2d::Actor& firstWidget,const gdx_cpp::scenes::scene2d::Actor& secondWidget,bool vertical,const gdx_cpp::scenes::scene2d::Stage& stage,const Skin& skin) {
+    this(firstWidget, secondWidget, vertical, stage, skin.getStyle(SplitPaneStyle.class), null);
+}
+
+SplitPane::SplitPane (const gdx_cpp::scenes::scene2d::Actor& firstWidget,const gdx_cpp::scenes::scene2d::Actor& secondWidget,bool vertical,const gdx_cpp::scenes::scene2d::Stage& stage,const SplitPaneStyle& style) {
+    this(firstWidget, secondWidget, vertical, stage, style, null);
+}
+
+SplitPane::SplitPane (const gdx_cpp::scenes::scene2d::Actor& firstWidget,const gdx_cpp::scenes::scene2d::Actor& secondWidget,bool vertical,const gdx_cpp::scenes::scene2d::Stage& stage,const SplitPaneStyle& style,const std::string& name) {
+    super(name);
+    this.stage = stage;
+    setStyle(style);
+    this.firstWidget = firstWidget;
+    this.secondWidget = secondWidget;
+    this.vertical = vertical;
+
+    this.addActor(firstWidget);
+    this.addActor(secondWidget);
 }
 

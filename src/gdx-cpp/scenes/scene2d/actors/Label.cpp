@@ -89,14 +89,10 @@ bool Label::touchDown (float x,float y,int pointer) {
     return x > 0 && y > 0 && x < width && y < height;
 }
 
-bool Label::touchUp (float x,float y,int pointer) {
-    if (!touchable) return false;
-    return x > 0 && y > 0 && x < width && y < height;
+void Label::touchUp (float x,float y,int pointer) {
 }
 
-bool Label::touchDragged (float x,float y,int pointer) {
-    if (!touchable) return false;
-    return x > 0 && y > 0 && x < width && y < height;
+void Label::touchDragged (float x,float y,int pointer) {
 }
 
 gdx_cpp::scenes::scene2d::Actor& Label::hit (float x,float y) {
@@ -132,5 +128,31 @@ float Label::getPrefHeight () {
     case wrapped:
     }
     return 0;
+}
+
+float Label::getMinWidth () {
+    return 0;
+}
+
+float Label::getMinHeight () {
+    return 0;
+}
+
+float Label::getMaxWidth () {
+    return 0;
+}
+
+float Label::getMaxHeight () {
+    return 0;
+}
+
+Label::Label (const std::string& name,const gdx_cpp::graphics::g2d::BitmapFont& font) {
+    super(name);
+    cache = new BitmapFontCache(font);
+}
+
+Label::Label (const std::string& name,const gdx_cpp::graphics::g2d::BitmapFont& font,const std::string& text) {
+    this(name, font);
+    setText(text);
 }
 

@@ -23,27 +23,27 @@
 
 using namespace gdx_cpp::backends::nix;
 
-gdx_cpp::Files::fhandle_ptr LinuxFiles::getFileHandle (const std::string &fileName, gdx_cpp::Files::FileType type)
+gdx_cpp::files::FileHandle::ptr LinuxFiles::getFileHandle (const std::string &fileName, gdx_cpp::Files::FileType type)
 {
-    return gdx_cpp::Files::fhandle_ptr(new LinuxFileHandle(fileName, type));
+    return gdx_cpp::files::FileHandle::ptr(new LinuxFileHandle(fileName, type));
 }
 
-gdx_cpp::Files::fhandle_ptr LinuxFiles::internal (const std::string &path)
+gdx_cpp::files::FileHandle::ptr LinuxFiles::internal (const std::string &path)
 {
-    return gdx_cpp::Files::fhandle_ptr(new LinuxFileHandle(path, gdx_cpp::Files::Internal));
+    return gdx_cpp::files::FileHandle::ptr(new LinuxFileHandle(path, gdx_cpp::Files::Internal));
 }
 
-gdx_cpp::Files::fhandle_ptr LinuxFiles::external (const std::string &path)
+gdx_cpp::files::FileHandle::ptr LinuxFiles::external (const std::string &path)
 {
-    return gdx_cpp::Files::fhandle_ptr(new LinuxFileHandle(path, gdx_cpp::Files::External));
+    return gdx_cpp::files::FileHandle::ptr(new LinuxFileHandle(path, gdx_cpp::Files::External));
 }
 
-gdx_cpp::Files::fhandle_ptr LinuxFiles::absolute (const std::string &path)
+gdx_cpp::files::FileHandle::ptr LinuxFiles::absolute (const std::string &path)
 {
-    return gdx_cpp::Files::fhandle_ptr(new LinuxFileHandle(path, gdx_cpp::Files::Absolute));
+    return gdx_cpp::files::FileHandle::ptr(new LinuxFileHandle(path, gdx_cpp::Files::Absolute));
 }
 
-std::string &LinuxFiles::getExternalStoragePath ()
+std::string LinuxFiles::getExternalStoragePath ()
 {
     if(externalPath != "") return externalPath;
     char buffer[36768];

@@ -51,7 +51,8 @@ namespace glutils {
 
 class Mesh: public gdx_cpp::utils::Disposable {
 public:
-
+    typedef ref_ptr_maker<Mesh>::type ptr;
+    
     struct VertexDataType {
         static const int VertexArray = 0;
         static const int VertexBufferObject = 1;
@@ -60,8 +61,6 @@ public:
 
     Mesh (int type, bool isStatic, int maxVertices, int maxIndices, const std::vector< gdx_cpp::graphics::VertexAttribute >& attributes) ;
     Mesh (bool isStatic, int maxVertices, int maxIndices, const std::vector<VertexAttribute>& attributes);
-
-
     
     void setVertices(const float* length, int size);    
     void setVertices (const std::vector< float >& vertices);
@@ -85,7 +84,7 @@ public:
     void render (gdx_cpp::graphics::glutils::ShaderProgram& shader, int primitiveType);
     void render (gdx_cpp::graphics::glutils::ShaderProgram& shader, int primitiveType, int offset, int count);
     void dispose ();
-    VertexAttribute& getVertexAttribute (int usage);
+    VertexAttribute* const getVertexAttribute (int usage);
     VertexAttributes& getVertexAttributes ();
     utils::float_buffer& getVerticesBuffer ();
     void calculateBoundingBox (gdx_cpp::math::collision::BoundingBox& bbox);
@@ -96,15 +95,15 @@ public:
     void scale (float scaleX,float scaleY,float scaleZ);
 
     static bool forceVBO;
+
+    ~Mesh();
     
 protected:
     glutils::VertexData* vertices;
     glutils::IndexData* indices;
     bool autoBind;
     bool isVertexArray;
-    
-    int refCount;
-    
+    bool disposed;
 private:
     typedef std::tr1::unordered_map<gdx_cpp::Application*, std::set<Mesh*> > MeshMap;
     static MeshMap meshes;

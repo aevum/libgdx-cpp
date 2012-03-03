@@ -25,6 +25,7 @@
 #include "graphics/GL20.hpp"
 #include "graphics/GLCommon.hpp"
 #include "graphics/GLU.hpp"
+#include <cassert>
 
 using namespace gdx_cpp;
 

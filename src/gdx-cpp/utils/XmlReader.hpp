@@ -22,6 +22,7 @@
 #define GDX_CPP_UTILS_XMLREADER_HPP_
 
 #include <string>
+#include <sstream>
 #include <fstream>
 #include <tr1/unordered_map>
 #include <vector>
@@ -77,8 +78,8 @@ public:
         void addChild (gdx_cpp::utils::XmlReader::Element* element) ;
         const std::string& getText () ;
         void setText (const std::string& text) ;
-        std::string toString ();
-        std::string toString (const std::string& indent) ;
+        std::string toString () const;
+        std::string toString (const std::string& indent) const ;
         Element* const getChildByName (const std::string& name);
         Element* const getChildByNameRecursive (const std::string& name);
         std::vector<Element*> getChildrenByName (const std::string& name);

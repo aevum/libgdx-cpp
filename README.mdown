@@ -1,4 +1,39 @@
-# Libgdx-cpp: libgdx C++ port
+# gdx++: libgdx C++ port
+
+# changelog
+
+22/01/2012 : Updated the intialization method names to gdxcpp_init, gdxcpp_create_application
+
+
+## Instalation guide
+
+1. Build gdx++
+2. Change your install prefix to /usr
+3. sudo make install
+
+### Use guide
+
+I've provided a nice finder that hopefully would suffice the needs for a newbie-in-c++ developer:
+
+1. If you installed libgdx, you can just use:
+
+    find_package(GdxCpp)
+
+2. When running cmake, if everything is ok, you should have two variables now, so use them!
+
+    include_directories(${GDXCPP_INCLUDE_DIR})
+    target_link_libraries(<your-app> ${GDXCPP_LIBRARIES})
+
+3. It will try to figure out witch libraries you'll want to use (in example, differ from android/linux build automagically)
+4. There are some flags you can set prior running the find_package:
+4.1. To enable Box2D and it's dependencies:
+
+    SET(GdxCpp_USE_BOX2D TRUE)
+
+4.2 To enable OpenGL instead of OpenGLES
+
+    SET(GdxCpp_BUILD_GRAPHICS_OPENGL TRUE)
+
 
 ## Build guide
 
@@ -10,6 +45,10 @@ These are the requirements to compile libgdx-cpp over linux(ubuntu):
 * libgles1-mesa-dev
 * libgles2-mesa-dev
 * libopenal-dev
+* libvorbis-dev
+* libopenal
+* libvorbisfile-dev
+* zlib1g-dev
 
 #### Step-by-step (Ohhh baby)
 
@@ -28,7 +67,7 @@ Libraries will be generated under the lib folder, binaries under the bin folder
 
 ### Android
 
-LibgdxCpp uses the cmake toolset from [android-cmake](http://code.google.com/p/android-cmake/ "android-cmake").
+gdx++ uses the cmake toolset from [android-cmake](http://code.google.com/p/android-cmake/ "android-cmake").
 Sadly, currently cmake doesn't support multiple toolsets under the same build directory, so you'll have to create another build folder.
 
 Requirements:
@@ -72,7 +111,7 @@ Libraries will be generated under the lib folder, binaries under the bin folder
 This is because C++ contruction blocks us to use shared_pointers, so we had to make it two-phase-like. So instead of calling the constructor,
 you'll have to call, for example:
 
-    Texture::fromFile()
+    Texture::newFromFile()
 
 with the same parameters that you would expect on the constructor.
 
@@ -88,13 +127,20 @@ Analogically, the calls to create an PixMap now are:
 The gdx_cpp::Graphics interface now have to handle the TextureData and Pixmap resolution and creation. This was made to decouple the texture class from determining
 how to load and create TextureData (etc1, wich is not supported in all platforms per example).
 
-## What's working
+## For GDX++ developers
+
+I've specified a variable called GDX_ROOT that should be useful when developing the library on a non-root folder.
+Just run:
+
+cmake -DGDX_ROOT=PATH_TO_GDX_INSTALATION PATH_TO_GDX_SOURCE
+
+### What's working
 
 * The linux backend has file,input and audio working
 * The android backend has input, file and audio working
 * SVG support through AntiGrainGeometry
 
-## What has to be done
+### What has to be done
 
 * Backend polishing. Seriously, it's working, but there is a lot of stuff that is ugly and in a haste.
 * iOs support

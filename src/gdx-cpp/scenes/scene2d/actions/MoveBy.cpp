@@ -22,50 +22,48 @@
 
 using namespace gdx_cpp::scenes::scene2d::actions;
 
-MoveBy& MoveBy::newObject () {
-    return new MoveBy();
-}
+ActionResetingPool<MoveBy> MoveBy::pool = ActionResetingPool<MoveBy>(4, 100);
 
-MoveBy& MoveBy::$ (float x,float y,float duration) {
-    MoveBy action = pool.obtain();
-    action.x = action.initialX = x;
-    action.y = action.initialY = y;
-    action.duration = duration;
-    action.invDuration = 1 / duration;
+MoveBy* MoveBy::build(float x,float y,float duration) {
+    MoveBy* action = pool.obtain();
+    action->x = action->initialX = x;
+    action->y = action->initialY = y;
+    action->duration = duration;
+    action->invDuration = 1 / duration;
     return action;
 }
 
-void MoveBy::setTarget (const gdx_cpp::scenes::scene2d::Actor& actor) {
-    this.target = actor;
-    this.startX = target.x;
-    this.startY = target.y;
-    this.deltaX = x;
-    this.deltaY = y;
-    this.x = target.x + x;
-    this.y = target.y + y;
-    this.taken = 0;
-    this.done = false;
+void MoveBy::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+    this->target = actor;
+    this->startX = target->x;
+    this->startY = target->y;
+    this->deltaX = x;
+    this->deltaY = y;
+    this->x = target->x + x;
+    this->y = target->y + y;
+    this->taken = 0;
+    this->done = false;
 }
 
 void MoveBy::act (float delta) {
     float alpha = createInterpolatedAlpha(delta);
     if (done) {
-        target.x = x;
-        target.y = y;
+        target->x = x;
+        target->y = y;
     } else {
-        target.x = startX + deltaX * alpha;
-        target.y = startY + deltaY * alpha;
+        target->x = startX + deltaX * alpha;
+        target->y = startY + deltaY * alpha;
     }
 }
 
 void MoveBy::finish () {
-    super.finish();
+    AnimationAction::finish();
     pool.free(this);
 }
 
-gdx_cpp::scenes::scene2d::Action& MoveBy::copy () {
-    MoveBy moveBy = $(initialX, initialY, duration);
-    if (interpolator != null) moveBy.setInterpolator(interpolator.copy());
+gdx_cpp::scenes::scene2d::Action* MoveBy::copy () {
+    MoveBy* moveBy = MoveBy::build(initialX, initialY, duration);
+    if (interpolator != NULL) moveBy->setInterpolator(interpolator->copy());
     return moveBy;
 }
 

@@ -22,16 +22,12 @@
 
 namespace gdx_cpp {
 
-namespace files
-{
-  class FileHandle;
+namespace files {
+    class FileHandle;
 }
-  
+    
 class Files {
 public:
-
-  typedef ref_ptr_maker< files::FileHandle >::type fhandle_ptr;
-
     enum FileType {
         ///Not used on libgdx-cpp, its here to interoperability
         ClassPath_UNUSED,
@@ -48,15 +44,15 @@ public:
         Absolute
     };
 
-    virtual fhandle_ptr getFileHandle (const std::string& path, FileType type) = 0;
+    virtual ref_ptr_maker<files::FileHandle>::type getFileHandle (const std::string& path, FileType type) = 0;
 
-    virtual fhandle_ptr internal (const std::string& path) = 0;
+    virtual ref_ptr_maker<files::FileHandle>::type internal (const std::string& path) = 0;
 
-    virtual fhandle_ptr external (const std::string& path) = 0;
+    virtual ref_ptr_maker<files::FileHandle>::type external (const std::string& path) = 0;
 
-    virtual fhandle_ptr absolute (const std::string& path) = 0;
+    virtual ref_ptr_maker<files::FileHandle>::type absolute (const std::string& path) = 0;
 
-    virtual std::string& getExternalStoragePath () = 0;
+    virtual std::string getExternalStoragePath () = 0;
 
     virtual bool isExternalStorageAvailable () = 0;
 };

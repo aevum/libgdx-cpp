@@ -87,6 +87,9 @@ public:
     void setShader (gdx_cpp::graphics::glutils::ShaderProgram* shader);
 
 private:
+    SpriteCache(const SpriteCache& other);
+    SpriteCache& operator = (const SpriteCache& other);
+    
     static float tempVertices[Sprite::VERTEX_SIZE * 6];
 
     Mesh* mesh;

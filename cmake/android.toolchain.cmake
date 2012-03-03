@@ -276,8 +276,8 @@ set( CMAKE_FIND_ROOT_PATH_MODE_PROGRAM ONLY )
 set( CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY )
 set( CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY )
 
-set( CMAKE_CXX_FLAGS "-fPIC -DANDROID -Wno-psabi -fsigned-char" )
-set( CMAKE_C_FLAGS "-fPIC -DANDROID -Wno-psabi -fsigned-char" )
+set( CMAKE_CXX_FLAGS "-fPIC -DANDROID -Wno-psabi -ffunction-sections -funwind-tables -D__ARM_ARCH_5__ -D__ARM_ARCH_5T__ -D__ARM_ARCH_5E__ -D__ARM_ARCH_5TE__ -Wa,--noexecstack -fexceptions -frtti" )
+set( CMAKE_C_FLAGS "-fPIC -DANDROID -Wno-psabi -ffunction-sections -funwind-tables -D__ARM_ARCH_5__ -D__ARM_ARCH_5T__ -D__ARM_ARCH_5E__ -D__ARM_ARCH_5TE__ -Wa,--noexecstack -fexceptions -frtti" )
 
 set( FORCE_ARM OFF CACHE BOOL "Use 32-bit ARM instructions instead of Thumb-1" )
 if( NOT FORCE_ARM )
