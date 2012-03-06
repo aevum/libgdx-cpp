@@ -22,9 +22,9 @@
 #include <gdx-cpp/ApplicationListener.hpp>
 #include <string>
 
-void init();
-void createApplication(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int width, int height);
-void initializeGdxApplication();
-void createListener();
+extern "C" void gdxcpp_init(int argc, char** argv);
+extern "C" void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int width, int height);
+extern "C" void gdxcpp_initialize_application();
+extern "C" void gdxcpp_create_listener();
 
 #endif //GDX_CPP_BACKENDS_IOS_INIT_CPP

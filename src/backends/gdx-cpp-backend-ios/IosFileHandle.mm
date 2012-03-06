@@ -27,7 +27,7 @@ IosFileHandle::IosFileHandle(const std::string& fileName, gdx_cpp::Files::FileTy
 {	
 }
 
-int IosFileHandle::readBytes(char_ptr& c) {
+int IosFileHandle::readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) {
 	if (this->type == Files::Internal) {		
 		NSString *filePath = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String: file.nameWithoutExtension().c_str()] 
 															 ofType:[NSString stringWithUTF8String: file.extension().c_str()]
@@ -40,7 +40,7 @@ int IosFileHandle::readBytes(char_ptr& c) {
 				Byte *byteData = new Byte[len];
 				memcpy(byteData, [data bytes], len);
 				
-				char_ptr new_ptr = char_ptr((char*) byteData, shared_ptr_array_deleter());
+				gdx_cpp::files::FileHandle::buffer_ptr new_ptr((char*) byteData, shared_ptr_array_deleter());
 				c.swap(new_ptr);
 				
 				return len;

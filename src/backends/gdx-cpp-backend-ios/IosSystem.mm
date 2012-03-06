@@ -30,7 +30,6 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <sys/dir.h>
 
 #import <mach/mach.h>
 #import <mach/mach_time.h>
@@ -152,27 +151,9 @@ bool IosSystem::isAbsolute(const gdx_cpp::files::File& f)
 
 void IosSystem::list(const gdx_cpp::files::File& f, std::vector< std::string > &paths)
 {
-    paths.resize(0);
-    if(!f.isDirectory()) return;
-    int count;
-    std::string fname;
-    struct direct **files;
-    count = scandir(f.getCanonicalPath().c_str(), &files, NULL, NULL);
-    if(count == -1) throw std::runtime_error("Cannot retrieve fileList in directory " + f.getCanonicalPath());
-    for(int i=0;i<count; ++i)
-    {
-        fname = std::string(files[i]->d_name);
-        if(fname != "." && fname != "..") paths.push_back(fname);
-        free(files[i]);
-    }
-    free(files);
+    throw std::runtime_error("Not implemented");
 }
 
-    /* A normal Uios pathname contains no duplicate slashes and does not end
-       with a slash.  It may be the empty string. */
-
-    /* Normalize the given pathname, whose length is len, starting at the given
-       offset; everything before this offset is already normal. */
 std::string IosSystem::normalize(const std::string &pathname, const int &len, const int &off)
 {
      if (len == 0) return pathname;

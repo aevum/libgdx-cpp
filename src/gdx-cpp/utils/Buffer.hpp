@@ -216,7 +216,7 @@ struct buffer : public buffer_base {
     }
 
     buffer<T>& mark() {
-        mark = _position;
+        _mark = _position;
         return *this;
     }
 

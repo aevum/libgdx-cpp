@@ -505,10 +505,10 @@ Gdx.cpp)
 install(DIRECTORY . DESTINATION include/gdx-cpp
           FILES_MATCHING PATTERN "*.hpp")
 
-if (UNIX)
-	add_library(gdx-cpp SHARED ${GDX_HEADERS} ${GDX_SRC})
+if (APPLE)
+	add_library(gdx-cpp STATIC ${GDX_HEADERS} ${GDX_SRC})	
 else()
-	add_library(gdx-cpp STATIC ${GDX_HEADERS} ${GDX_SRC})
+    add_library(gdx-cpp SHARED ${GDX_HEADERS} ${GDX_SRC})
 endif()
 
 target_link_libraries(gdx-cpp z)

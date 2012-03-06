@@ -232,3 +232,8 @@ void gdx_cpp::backends::ios::IosInput::handleTouchUp(float x, float y, int butto
         this->processor->touchUp(x, y, 0 , button);
     }
 }
+
+
+void IosInput::setKeyboardRepeat(int delay, int repeatInterval) {
+    
+}

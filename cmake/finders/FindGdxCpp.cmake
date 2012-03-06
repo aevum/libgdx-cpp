@@ -47,7 +47,15 @@ macro(find_libraries)
     endforeach()
 endmacro()
 
-if (UNIX)
+
+if (APPLE) 
+	find_libraries(gdx-cpp)
+	if (GdxCpp_USE_BOX2D)
+        find_libraries("Box2D;gdx-cpp-box2d-layer")
+    endif()
+    
+    find_libraries("gdx-cpp-backend-ios;gdx-cpp-agg-svg;")
+elseif (UNIX)
     find_libraries(gdx-cpp)
 
     if (GdxCpp_USE_BOX2D)

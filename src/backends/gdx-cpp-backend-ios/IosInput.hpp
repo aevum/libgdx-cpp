@@ -95,6 +95,8 @@ public:
     bool isCursorCatched () ;
 
     void setCursorPosition (int x, int y) ;
+    
+   virtual void setKeyboardRepeat(int delay, int repeatInterval);
 
 //     void processEvents(SDL_Event& evt);
     void reset();

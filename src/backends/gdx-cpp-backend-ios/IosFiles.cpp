@@ -21,27 +21,27 @@
 
 using namespace gdx_cpp::backends::ios;
 
-gdx_cpp::Files::fhandle_ptr IosFiles::getFileHandle (const std::string &fileName, gdx_cpp::Files::FileType type)
+gdx_cpp::files::FileHandle::ptr IosFiles::getFileHandle (const std::string &fileName, gdx_cpp::Files::FileType type)
 {
-    return gdx_cpp::Files::fhandle_ptr(new IosFileHandle(fileName, type));
+    return gdx_cpp::files::FileHandle::ptr(new IosFileHandle(fileName, type));
 }
 
-gdx_cpp::Files::fhandle_ptr IosFiles::internal (const std::string &path)
+gdx_cpp::files::FileHandle::ptr IosFiles::internal (const std::string &path)
 {
-    return gdx_cpp::Files::fhandle_ptr(new IosFileHandle(path, gdx_cpp::Files::Internal));
+    return gdx_cpp::files::FileHandle::ptr(new IosFileHandle(path, gdx_cpp::Files::Internal));
 }
 
-gdx_cpp::Files::fhandle_ptr IosFiles::external (const std::string &path)
+gdx_cpp::files::FileHandle::ptr IosFiles::external (const std::string &path)
 {
-    return gdx_cpp::Files::fhandle_ptr(new IosFileHandle(path, gdx_cpp::Files::External));
+    return gdx_cpp::files::FileHandle::ptr(new IosFileHandle(path, gdx_cpp::Files::External));
 }
 
-gdx_cpp::Files::fhandle_ptr IosFiles::absolute (const std::string &path)
+gdx_cpp::files::FileHandle::ptr IosFiles::absolute (const std::string &path)
 {
-    return gdx_cpp::Files::fhandle_ptr(new IosFileHandle(path, gdx_cpp::Files::Absolute));
+    return gdx_cpp::files::FileHandle::ptr(new IosFileHandle(path, gdx_cpp::Files::Absolute));
 }
 
-std::string &IosFiles::getExternalStoragePath ()
+std::string IosFiles::getExternalStoragePath ()
 {
     if(externalPath != "") return externalPath;
     char buffer[36768];

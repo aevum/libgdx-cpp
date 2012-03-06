@@ -29,17 +29,17 @@
 
 static gdx_cpp::ApplicationListener* g_Listener = 0;
 
-void createApplication(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, 
+void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, 
 					   int width, int height) {
 	g_Listener = listener;
 }
 
-void initializeGdxApplication(){
-	init();
+void gdxcpp_initialize_application(){
+	gdxcpp_init(0, NULL);
 	new gdx_cpp::backends::ios::IosApplication(g_Listener);
 }
 
-void createListener() {
+void gdxcpp_create_listener() {
 	g_Listener->create();		
 }
 

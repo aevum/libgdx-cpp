@@ -61,9 +61,9 @@
 	window.rootViewController = viewController;
 	[window makeKeyAndVisible];
 	
-	initializeGdxApplication();	
+	gdxcpp_initialize_application();	
 	gdx_cpp::Gdx::graphics->setDisplayMode(glView.viewWidth, glView.viewHeight, true);
-	createListener();
+	gdxcpp_create_listener();
 	
 	return YES;
 }

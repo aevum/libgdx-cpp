@@ -243,7 +243,7 @@ void gdx_cpp::backends::ios::IosGraphics::update()
 {
 }
 
-TextureData::ptr backends::ios::IosGraphics::resolveTextureData(Files::fhandle_ptr fileHandle,
+TextureData::ptr backends::ios::IosGraphics::resolveTextureData(gdx_cpp::files::FileHandle::ptr fileHandle,
                                                                   Pixmap::ptr preloadedPixmap,
                                                                   const gdx_cpp::graphics::Pixmap::Format* format,
                                                                   bool useMipMaps)
@@ -259,6 +259,7 @@ Pixmap* backends::ios::IosGraphics::resolvePixmap(int width, int height, const g
         case Pixmap::Svg:
             return new g2d::svg::AggSvgPixmap(width, height);
     }
+    return NULL;
 }
 
 Pixmap* backends::ios::IosGraphics::resolvePixmap(const gdx_cpp::graphics::Pixmap& other)
@@ -269,14 +270,15 @@ Pixmap* backends::ios::IosGraphics::resolvePixmap(const gdx_cpp::graphics::Pixma
 		case Pixmap::Svg:
 			break;			
     } 
+    return NULL;
 }
 
-Pixmap* backends::ios::IosGraphics::resolvePixmap(const Files::fhandle_ptr& file)
+Pixmap* backends::ios::IosGraphics::resolvePixmap(const gdx_cpp::files::FileHandle::ptr& file)
 {
     std::string extension = file->extension();
     
     if (extension == "png" || extension == "jpg" || extension == "tga" || extension == "bmp") {
-		gdx_cpp::files::FileHandle::char_ptr buffer;
+		gdx_cpp::files::FileHandle::buffer_ptr buffer;
 		int length = file->readBytes(buffer);
 		return g2d::Gdx2DPixmap::pixmapFromByteArray((unsigned char*) buffer.get(), length, 0);
 	}

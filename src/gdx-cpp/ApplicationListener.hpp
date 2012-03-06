@@ -12,6 +12,8 @@ public:
     virtual void resize (int width, int height) = 0;
     virtual void pause () = 0;
     virtual void dispose () = 0;
+    
+    virtual ~ApplicationListener() { }
 };
 
 }
