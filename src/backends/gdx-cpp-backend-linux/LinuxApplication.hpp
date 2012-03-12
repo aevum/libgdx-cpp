@@ -57,6 +57,9 @@ public:
     void onRunnableStop();
     virtual void initialize();
 
+    virtual void pause();
+    virtual void update();
+
 protected:
     virtual void run();
     virtual void processEvents();

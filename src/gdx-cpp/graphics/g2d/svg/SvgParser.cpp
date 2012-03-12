@@ -75,7 +75,7 @@ void SvgParser::render(gdx_cpp::utils::XmlReader::Element*const svg, gdx_cpp::ut
     beginElement(svg);
 
     for (int i = 0; i < svg->getChildCount(); ++i) {
-        SvgParser::render(svg->getChild(i));
+        SvgParser::render(svg->getChild(i).get());
     }
 
     endElement(svg);
@@ -562,7 +562,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path(gdx_cpp::utils::XmlReade
 
 void gdx_cpp::graphics::g2d::svg::SvgParser::fetchStopData(gdx_cpp::utils::XmlReader::Element* node , std::vector< SvgRendererHandler::GradientStopData >& stopData) {
     for( int i = 0; i < node->getChildCount(); ++i) {
-        gdx_cpp::utils::XmlReader::Element* child = node->getChild(i);
+        gdx_cpp::utils::XmlReader::Element::ptr child = node->getChild(i);
         if (child->getName() == "svg:stop" || child->getName() == "stop") {
             SvgRendererHandler::GradientStopData stop;
             stop.offset = from_string< float >(child->getAttribute("offset"));
@@ -586,7 +586,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::fetchStopData(gdx_cpp::utils::XmlRe
 
         for (int i = 0; i < defsElement->getChildCount(); ++i) {
             if (defsElement->getChild(i)->getAttribute("id") == nodeName) {
-                fetchStopData(defsElement->getChild(i), stopData); 
+                fetchStopData(defsElement->getChild(i).get(), stopData); 
                 break;
             }
         }
@@ -606,7 +606,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_gradient(const std::string& g
 
     std::string gradientNodeUrl = url[1].substr(1);
     
-    gdx_cpp::utils::XmlReader::Element* gradientDef = NULL;
+    gdx_cpp::utils::XmlReader::Element::ptr gradientDef;
 
     for (int i = 0; i < defsElement->getChildCount(); ++i) {
         if (defsElement->getChild(i)->getAttribute("id") == gradientNodeUrl) {
@@ -620,7 +620,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_gradient(const std::string& g
     if ( gradientDef->getName() == "svg:linearGradient" || gradientDef->getName() == "linearGradient") {
         SvgRendererHandler::LinearGradient gradientData;
 
-        fetchStopData(gradientDef, gradientData.stops);
+        fetchStopData(gradientDef.get(), gradientData.stops);
 
         std::sort(gradientData.stops.begin(), gradientData.stops.end(), sortByStop);
 
@@ -639,7 +639,7 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_gradient(const std::string& g
     } else if ( gradientDef->getName() == "svg:radialGradient" || gradientDef->getName() == "radialGradient") {
         SvgRendererHandler::RadialGradient gradientData;
         
-        fetchStopData(gradientDef, gradientData.stops);
+        fetchStopData(gradientDef.get(), gradientData.stops);
         
         std::sort(gradientData.stops.begin(), gradientData.stops.end(), sortByStop);
         

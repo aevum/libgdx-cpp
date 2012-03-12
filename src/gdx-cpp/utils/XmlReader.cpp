@@ -43,8 +43,6 @@ const int XmlReader::xml_en_elementBody = 15;
 const int XmlReader::xml_en_main = 1;
 
 gdx_cpp::utils::XmlReader::XmlReader()
-    : root(0)
-    , current(0)
 {
 }
 
@@ -310,23 +308,22 @@ _match:
             if (data[i] == '\n') lineNumber++;
         throw std::runtime_error("Error parsing XML on line " + to_string(lineNumber) + " near: " + std::string(&data[p], std::min(32, pe - p)));
     } else if (elements.size() != 0) {
-        Element* element = elements.back();
+        Element::ptr element = elements.back();
         elements.clear();
         throw std::runtime_error("Error parsing XML, unclosed element: " + element->getName());
     }
 
-    Element* root = this->root;
-    this->root = NULL;
+    Element::ptr root = this->root;
+    this->root.reset();
     
-    return Element::ptr(root);
+    return root;
 }
 
 void XmlReader::open (const std::string& name) {
-    Element* child = new Element(name);
-    Element* parent = current;
+    Element::ptr child = Element::ptr(new Element(name));
 
-    if (parent != NULL)
-        parent->addChild(child);
+    if (current != NULL)
+        current->addChild(child);
     
     elements.push_back(child);
     current = child;
@@ -354,7 +351,7 @@ void XmlReader::text (std::string text) {
 void XmlReader::close () {
     root = elements.back();
     elements.pop_back();
-    current = elements.size() > 0 ? elements.back() : NULL;
+    current = elements.size() > 0 ? elements.back() : null_shared_ptr();
 }
 
 XmlReader::Element::Element(const std::string& name) {
@@ -393,12 +390,12 @@ int XmlReader::Element::getChildCount() {
     return children.size();;
 }
 
-gdx_cpp::utils::XmlReader::Element*const XmlReader::Element::getChild(int i) {
+XmlReader::Element::ptr const XmlReader::Element::getChild(int i) {
     if (children.size() == 0) throw std::runtime_error("Element has no children: " + name);
     return children[i];
 }
 
-void XmlReader::Element::addChild(XmlReader::Element* element) {
+void XmlReader::Element::addChild(const XmlReader::Element::ptr& element) {
     children.push_back(element);
 }
 
@@ -449,39 +446,41 @@ std::string XmlReader::Element::toString(const std::string& indent) const {
     return buffer.str();
 }
 
-gdx_cpp::utils::XmlReader::Element*const XmlReader::Element::getChildByName(const std::string& name) {
+XmlReader::Element::ptr const XmlReader::Element::getChildByName(const std::string& name) {
     if (children.empty())
-        return NULL;
+        return null_shared_ptr();
 
     for (unsigned int i = 0; i < children.size(); i++) {
-        Element* element = children[i];
+        Element::ptr& element = children[i];
         if (element->name == name)
             return element;
     }
-    return NULL;
+    
+    return null_shared_ptr();
 }
 
-gdx_cpp::utils::XmlReader::Element*const XmlReader::Element::getChildByNameRecursive(const std::string& name) {
+XmlReader::Element::ptr const XmlReader::Element::getChildByNameRecursive(const std::string& name) {
     if (children.empty())
-        return NULL;
+        return null_shared_ptr();
 
     for (unsigned int i = 0; i < children.size(); i++) {
-        Element* element = children[i];
+        const Element::ptr& element = children[i];
 
         if (element->name == name)
             return element;
 
-        Element* found = element->getChildByNameRecursive(name);
+        const Element::ptr& found = element->getChildByNameRecursive(name);
         if (found != NULL) return found;
     }
-    return NULL;
+    
+    return null_shared_ptr();
 }
 
-std::vector< XmlReader::Element* > XmlReader::Element::getChildrenByName(const std::string& name) {
-    std::vector< XmlReader::Element* > chld;
+std::vector< gdx_cpp::utils::XmlReader::Element::ptr > XmlReader::Element::getChildrenByName(const std::string& name) {
+    ElementVector chld;
 
     for (unsigned int i = 0; i < children.size(); i++) {
-        Element* child = children[i];
+        Element::ptr& child = children[i];
         if (child->name ==  name) chld.push_back(child);
     }
 
@@ -532,7 +531,7 @@ std::string XmlReader::Element::get(const std::string& name, const std::string& 
         return attributes[name];
     }
     
-    Element* child = getChildByName(name);
+    Element::ptr child = getChildByName(name);
     if (child == NULL)
         return defaultValue;
     const std::string& value = child->getText();

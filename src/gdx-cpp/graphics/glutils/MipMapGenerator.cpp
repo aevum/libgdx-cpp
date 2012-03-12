@@ -87,7 +87,7 @@ void MipMapGenerator::generateMipMapCPU (Pixmap::ptr pixmap,int textureWidth,int
     Gdx::gl->glTexImage2D(GL10::GL_TEXTURE_2D, 0, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
                         pixmap->getGLFormat(), pixmap->getGLType(), pixmap->getPixels());
     if ((Gdx::gl20 == NULL) && textureWidth != textureHeight) { 
-        std::runtime_error("texture width and height must be square when using mipmapping.");
+        throw std::runtime_error("texture width and height must be square when using mipmapping.");
     }
     
     int width = pixmap->getWidth() / 2;

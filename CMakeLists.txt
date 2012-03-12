@@ -2,10 +2,9 @@ project(gdx-cpp)
 
 cmake_minimum_required(VERSION 2.8)
 
-set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
-set(GDX_BINARY_ROOT_DIR ${PROJECT_BINARY_DIR})
+include(cmake/gdx.cmake)
 
-LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/finders)
+set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 include_directories(src)
 
@@ -56,38 +55,8 @@ if (BUILD_BOX2D)
     add_subdirectory(src/gdx-cpp/physics/box2d)
 endif()
 
-if (${GDX_BACKEND} STREQUAL "IOS")   
-    SET(SDKVER "5.0")
-    
-    execute_process(COMMAND xcode-select -print-path OUTPUT_VARIABLE _output OUTPUT_STRIP_TRAILING_WHITESPACE)
-	set(CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos;-iphonesimulator")
-
-	SET(DEVROOT "${_output}/iPhoneOS.platform/Developer")
-	SET(SDKROOT "${DEVROOT}/SDKs/iPhoneOS${SDKVER}.sdk")
-	SET(CMAKE_OSX_SYSROOT "${SDKROOT}")
-
-	SET (CMAKE_OSX_ARCHITECTURES "$(ARCHS_UNIVERSAL_IPHONE_OS)")
-   
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -x objective-c++ -mno-thumb")
-    set(CMAKE_EXE_LINKER_FLAGS "-framework Foundation -framework AudioToolbox -framework CoreGraphics -framework QuartzCore -framework UIKit -framework OpenGLES")
-
-    set(BACKEND-IOS-DEPENDENCIES gdx-cpp-agg-svg)
+if (${GDX_BACKEND} STREQUAL "IOS")
     add_subdirectory(src/backends/gdx-cpp-backend-ios)
-    
-    set_target_properties(gdx-cpp-backend-ios PROPERTIES
-  			MACOSX_BUNDLE_GUI_IDENTIFIER "com.aevumlab.\${PRODUCT_NAME:identifier}"
- 			MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in
- 			RESOURCE "${RESOURCES}"
-  			XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer"
-  			XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym"
- 			XCODE_ATTRIBUTE_GCC_PRECOMPILE_PREFIX_HEADER YES  		
-            XCODE_ATTRIBUTE_INFOPLIST_PREPROCESS YES
-  			XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET 4.3 # minimum deployment target
-  			XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2" # target both iPhone and iPad
-  			XCODE_ATTRIBUTE_SKIP_INSTALL NO # needed for archive to actually show up in organizer
-  			XCODE_ATTRIBUTE_INSTALL_PATH "/Application" # Archiving doesn't work with an empty path
-	)
-	
 elseif(${GDX_BACKEND} STREQUAL "ANDROID")
     add_subdirectory(src/backends/gdx-cpp-backend-android)    
 elseif(${GDX_BACKEND} STREQUAL "WIN32")
@@ -109,6 +78,9 @@ elseif(${GDX_BACKEND} STREQUAL "LINUX")
 endif()
 
 install(FILES cmake/finders/FindGdxCpp.cmake
-        DESTINATION share/cmake-2.8/Modules)
+        DESTINATION share/gdx/cmake)
+
+install(FILES cmake/gdx.cmake
+        DESTINATION share/gdx/cmake)
 
 add_subdirectory(src/gdx-cpp)

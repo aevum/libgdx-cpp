@@ -183,3 +183,14 @@ void gdx_cpp::backends::nix::LinuxApplication::processEvents()
         }
     }
 }
+
+void LinuxApplication::pause()
+{
+
+}
+
+void LinuxApplication::update()
+{
+
+}
+

@@ -44,9 +44,9 @@ public:
      * HURRAY!
      */
     class Element {
-    public:
-        typedef std::vector<Element*> ElementVector;
+    public:        
         typedef ref_ptr_maker<Element>::type ptr;
+        typedef std::vector<Element::ptr> ElementVector;
         typedef std::tr1::unordered_map<std::string, std::string> AttributesMap;
         
         bool operator==(const Element& other) {
@@ -60,13 +60,7 @@ public:
         Element() {
         }
 
-        ~Element() {
-            ElementVector::iterator it = children.begin();
-            ElementVector::iterator end = children.end();
-            for(;it != end; ++it) {
-                delete *it;
-            }
-        }
+        virtual ~Element() {}
         
         Element (const std::string& name) ;
         std::string getName () ;
@@ -74,15 +68,15 @@ public:
         std::string getAttribute (const std::string& name, const std::string& defaultValue) ;
         void setAttribute (const std::string& name, const std::string& value) ;
         int getChildCount () ;
-        Element* const getChild (int i) ;
-        void addChild (gdx_cpp::utils::XmlReader::Element* element) ;
+        Element::ptr const getChild (int i) ;
+        void addChild (const gdx_cpp::utils::XmlReader::Element::ptr& element) ;
         const std::string& getText () ;
         void setText (const std::string& text) ;
         std::string toString () const;
         std::string toString (const std::string& indent) const ;
-        Element* const getChildByName (const std::string& name);
-        Element* const getChildByNameRecursive (const std::string& name);
-        std::vector<Element*> getChildrenByName (const std::string& name);
+        Element::ptr const getChildByName (const std::string& name);
+        Element::ptr const getChildByNameRecursive (const std::string& name);
+        std::vector<Element::ptr> getChildrenByName (const std::string& name);
         float getFloatAttribute (const std::string& name);
         float getFloatAttribute (const std::string& name, float defaultValue);
         int getIntAttribute (const std::string& name) ;
@@ -145,7 +139,8 @@ private:
     static const int xml_en_elementBody;
     static const int xml_en_main;
 
-    Element *root, *current;
+    Element::ptr root;
+    Element::ptr current;
     std::string name;
     std::stringstream textBuffer;
     Element::ElementVector elements;

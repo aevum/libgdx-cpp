@@ -14,13 +14,13 @@ ENDIF(GDXCPP_LIBRARIES AND GDXCPP_INCLUDE_DIR)
 FIND_PATH(GDXCPP_INCLUDE_DIR
 gdx-cpp/Gdx.hpp
 PATHS
+${GDX_ROOT}/include
 /usr/local/include
 /usr/include
 /sw/include
 /opt/local/include
 /opt/csw/include
 /opt/include
-${GDX_ROOT}/include
 )
 
 macro(find_libraries)
@@ -47,8 +47,7 @@ macro(find_libraries)
     endforeach()
 endmacro()
 
-
-if (APPLE) 
+if (APPLE)
 	find_libraries(gdx-cpp)
 	if (GdxCpp_USE_BOX2D)
         find_libraries("Box2D;gdx-cpp-box2d-layer")
@@ -56,24 +55,24 @@ if (APPLE)
     
     find_libraries("gdx-cpp-backend-ios;gdx-cpp-agg-svg;")
 elseif (UNIX)
-    find_libraries(gdx-cpp)
-
     if (GdxCpp_USE_BOX2D)
         find_libraries("Box2D;gdx-cpp-box2d-layer")
     endif()
     
     if (ANDROID_NDK)
+         set(GDXCPP_LIBRARIES "dl;log;GLESv1_CM;GLESv2;")
         find_libraries("gdx-cpp-backend-android;gdx-cpp-agg-svg;")
-         set(GDXCPP_LIBRARIES "${GDXCPP_LIBRARIES};dl;log;GLESv1_CM;GLESv2;")
     else(ANDROID_NDK)
-        find_libraries("gdx-cpp-backend-linux;gdx-cpp-agg-svg;vorbis;vorbisfile;openal;ogg;SDL;GLU;")
-
         if (GdxCpp_BUILD_GRAPHICS_OPENGL)
             find_libraries("GL")
         else()
             find_libraries("GLESv1_CM;GLESv2")
         endif()
+
+        find_libraries("vorbis;vorbisfile;openal;ogg;SDL;GLU;gdx-cpp-backend-linux;gdx-cpp-agg-svg;")
     endif()
+
+    find_libraries(gdx-cpp)
 endif()
 
 if(GDXCPP_INCLUDE_DIR)

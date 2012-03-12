@@ -11,7 +11,7 @@ LinuxGL20.hpp LinuxFiles.hpp LinuxFileHandle.hpp LinuxGL11.hpp LinuxGLU.hpp Linu
 LinuxOpenALAudio.hpp LinuxOpenALSound.hpp LinuxOgg.hpp LinuxOggInputStream.hpp LinuxOpenALMusic.hpp
 )
 
-add_library(gdx-cpp-backend-linux SHARED ${GDX_CPP_BACKEND_LINUX_SRC} ${GDX_CPP_BACKEND_LINUX_HEADERS})
+gdx_setup_library_target(gdx-cpp-backend-linux "${GDX_CPP_BACKEND_LINUX_SRC};${GDX_CPP_BACKEND_LINUX_HEADERS}")
 
 install(DIRECTORY . DESTINATION include/gdx-cpp/backends/gdx-cpp-backend-linux
           FILES_MATCHING PATTERN "*.hpp")
@@ -19,4 +19,3 @@ install(DIRECTORY . DESTINATION include/gdx-cpp/backends/gdx-cpp-backend-linux
 install(TARGETS gdx-cpp-backend-linux
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)
-
