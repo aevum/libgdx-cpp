@@ -26,6 +26,7 @@
 #include <list>
 #include <stdexcept>
 
+#include "IosAudio.hpp"
 #include "IosGraphics.hpp"
 #include "IosFiles.hpp"
 #include "IosInput.hpp"
@@ -50,12 +51,12 @@ void IosApplication::initialize() {
 	graphics = new IosGraphics();
 	input = new IosInput();
 	files = new IosFiles();
-//	audio = new LinuxOpenALAudio();
+	audio = new IosAudio();
 	
 	graphics->initialize();
 	graphics->setDisplayMode(width, height, false);
 	
-	Gdx::initialize(this, graphics, NULL, input, files);
+	Gdx::initialize(this, graphics, audio, input, files);
 }
 
 void IosApplication::onRunnableStop()
@@ -118,8 +119,7 @@ void IosApplication::exit()
 
 Audio* IosApplication::getAudio()
 {
-	throw std::runtime_error("not implemented yet");
-	//return audio;
+    return audio;
 }
 
 Files* IosApplication::getFiles()
