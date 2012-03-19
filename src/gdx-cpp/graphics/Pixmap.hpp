@@ -111,6 +111,9 @@ public:
     virtual const unsigned char* getPixels () = 0;
     virtual const Format& getFormat () = 0;
     virtual void setScale(float scaleX, float scaleY) = 0;
+
+
+    virtual ~Pixmap() { }
 };
 
 } // namespace gdx_cpp

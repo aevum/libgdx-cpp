@@ -20,6 +20,7 @@
 
 #include "LinuxFileHandle.hpp"
 #include <cassert>
+#include <stdexcept>
 #include <sys/stat.h>
 
 using namespace gdx_cpp::backends::nix;
@@ -52,8 +53,10 @@ int LinuxFileHandle::readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) const
 
     FILE* f = fopen(filepath.c_str(), "r");
 
-    assert(f);
-    
+    if (f == NULL) {
+        throw std::runtime_error("File not found: " + path());
+    }
+
     int position = 0;
     if (f) {
         

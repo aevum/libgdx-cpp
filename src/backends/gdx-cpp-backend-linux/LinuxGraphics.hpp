@@ -69,6 +69,8 @@ public:
     graphics::Pixmap* resolvePixmap(int width, int height, const gdx_cpp::graphics::Pixmap::Format& format, int pixType);
     graphics::Pixmap* resolvePixmap(const gdx_cpp::graphics::Pixmap& other);
     graphics::Pixmap* resolvePixmap(const gdx_cpp::files::FileHandle::ptr& file);
+
+    virtual ~LinuxGraphics();
     
 protected:
     virtual bool setupGLModes();

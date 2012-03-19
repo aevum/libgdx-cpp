@@ -414,14 +414,18 @@ void AggSvgPixmap::setStrokeWidth(int width) {
 AggSvgPixmap::~AggSvgPixmap() {
     delete [] data;
     delete pimpl;
+
+    data = NULL;
+    pimpl = NULL;
 }
 
 SvgPixmapInterface::transform* AggSvgPixmap::createTransform() {
     return new AggTransform();
 }
 
-SvgPixmapInterface::transform* const AggSvgPixmap::currentTransform() {
-    return new AggTransform(pimpl->renderer.transform());
+SvgPixmapInterface::transform& AggSvgPixmap::currentTransform() {
+    pimpl->transform = AggTransform(pimpl->renderer.transform());
+    return pimpl->transform;
 }
 
 

@@ -59,6 +59,8 @@ public:
         virtual void rotate_trasnlate(float radians, float x, float y) = 0;
         virtual void scale(float scale_x, float scale_y) = 0;
         virtual void skew(float x, float y) = 0;
+
+        virtual ~transform() { }
     };
     
     struct GradientStopData {
@@ -67,6 +69,8 @@ public:
         float offset;
         GradientStopData() : color(1,1,1,1), opacity(1), offset(0) {
         }
+
+        virtual ~GradientStopData() { }
     };
 
     struct LinearGradient {
@@ -75,7 +79,7 @@ public:
         std::vector< GradientStopData > stops;
 
         LinearGradient() : x1(0), x2(0), y1(0), y2(0), gradient_transform(NULL) { }
-        ~LinearGradient() { delete gradient_transform; }
+        virtual ~LinearGradient() { delete gradient_transform; }
     };
 
     struct RadialGradient {
@@ -84,7 +88,7 @@ public:
         std::vector< GradientStopData > stops;
         
         RadialGradient() : cx(0), cy(0), fx(0), fy(0), r(0), gradient_transform(NULL) { }
-        ~RadialGradient() { delete gradient_transform; }
+        virtual ~RadialGradient() { delete gradient_transform; }
     };
     
     virtual void setImageDimension(int width, int height) = 0;
@@ -111,7 +115,7 @@ public:
     virtual void fillRadialGradient(const RadialGradient&) = 0;
     
     virtual transform* createTransform() = 0;
-    virtual transform* const currentTransform() = 0;
+    virtual transform& currentTransform() = 0;
     
     virtual void closeSubPath() = 0;
     virtual void verticalLineTo(float y, bool relative = false) = 0;

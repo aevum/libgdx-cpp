@@ -247,7 +247,7 @@ bool gdx_cpp::graphics::g2d::svg::SvgParser::parse_attr(const std::string& name,
     }
     else if (name == "transform")
     {
-        parse_transform(value, *handler->currentTransform());
+        parse_transform(value, handler->currentTransform());
     }
     //else
     //if(strcmp(el, "<OTHER_ATTRIBUTES>") == 0)

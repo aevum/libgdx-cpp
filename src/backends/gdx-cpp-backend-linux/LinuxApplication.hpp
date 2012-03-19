@@ -60,9 +60,11 @@ public:
     virtual void pause();
     virtual void update();
 
+    virtual ~LinuxApplication();
+
 protected:
     virtual void run();
-    virtual void processEvents();
+    virtual bool processEvents();
 
     bool useGL20iFAvailable;
     std::string title;

@@ -27,7 +27,7 @@ namespace utils {
 class Disposable {
 public:
     virtual void dispose () = 0;
-
+    virtual ~Disposable() { }
 };
 
 } // namespace gdx_cpp

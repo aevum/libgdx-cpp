@@ -65,7 +65,7 @@ private:
     static void parse_path(utils::XmlReader::Element* node);    
     static void parse_attr(utils::XmlReader::Element* node);
     static bool parse_attr(const std::string& name, const std::string& value);
-    static void parse_transform(const std::string& transform_string, utils::SvgRendererHandler::transform& transform);
+    static void parse_transform(const std::string& transform_string, gdx_cpp::utils::SvgRendererHandler::transform& transform);
     static std::vector< std::pair< std::string , std::string > > parse_style(const std::string& style);
     static std::string::size_type parse_scale(std::string scaleArgs, utils::SvgRendererHandler::transform& transform);
     static std::string::size_type parse_translate(std::string translateArgs, utils::SvgRendererHandler::transform& transform);

@@ -37,6 +37,12 @@ extern "C" void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener
     title = applicationName;
 }
 
+void deinitialize_system() {
+    applicationListener->dispose();
+    delete applicationListener;    
+}
+
 int main(int argc, char** argv) {
+    atexit(deinitialize_system);
     return gdxcpp_main_selector::selector(argc, argv);
 }

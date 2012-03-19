@@ -21,6 +21,9 @@ if(APPLE)
     
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/agg/include ${CMAKE_CURRENT_SOURCE_DIR}/src/agg/svg)
     add_subdirectory(src/agg)
+
+    set(BOX2D_BUILD_STATIC TRUE)
+    set(BOX2D_BUILD_SHARED FALSE)
 elseif (UNIX)
     SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wall")
 
@@ -29,10 +32,15 @@ elseif (UNIX)
         message("ANDROID_NDK Found. Setting the backend to ANDROID")
         SET(GDX_BACKEND ANDROID)
         SET(GDX_BACKEND_LIB gdx-cpp-backend-android)
+        set(BOX2D_BUILD_STATIC FALSE)
+        set(BOX2D_BUILD_SHARED TRUE)
     else()
         message("Linux found. Setting the backend to LINUX")
         SET(GDX_BACKEND LINUX)
         SET(GDX_BACKEND_LIB gdx-cpp-backend-linux)
+
+        set(BOX2D_BUILD_STATIC TRUE)
+        set(BOX2D_BUILD_SHARED FALSE)
     endif()
 
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/agg/include ${CMAKE_CURRENT_SOURCE_DIR}/src/agg/svg)
@@ -47,8 +55,6 @@ option(BUILD_BOX2D "Builds Box2D" TRUE)
 option(BUILD_AS_SHARED_LIBRARIES "Build libraries as shared libraries instead of static" FALSE)
 
 if (BUILD_BOX2D)
-    set(BOX2D_BUILD_STATIC NOT ${BUILD_AS_SHARED_LIBRARIES})
-    set(BOX2D_BUILD_SHARED ${BUILD_AS_SHARED_LIBRARIES})
     set(BOX2D_INSTALL TRUE)
 
     add_subdirectory(src/Box2D)

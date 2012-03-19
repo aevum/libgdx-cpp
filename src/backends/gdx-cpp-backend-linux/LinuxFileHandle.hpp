@@ -43,6 +43,8 @@ public:
     virtual int write(const char* data, int lenght, bool append);
     virtual void copyTo(FileHandle& dest);
     virtual int64_t length() const;
+private:
+    void runtime_error(const char* arg1);
 };
 
 }

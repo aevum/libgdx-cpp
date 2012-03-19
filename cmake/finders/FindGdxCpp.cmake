@@ -48,8 +48,9 @@ macro(find_libraries)
 endmacro()
 
 if (APPLE)
-	find_libraries(gdx-cpp)
-	if (GdxCpp_USE_BOX2D)
+    find_libraries(gdx-cpp)
+
+    if (GdxCpp_USE_BOX2D)
         find_libraries("Box2D;gdx-cpp-box2d-layer")
     endif()
     
@@ -60,7 +61,7 @@ elseif (UNIX)
     endif()
     
     if (ANDROID_NDK)
-         set(GDXCPP_LIBRARIES "dl;log;GLESv1_CM;GLESv2;")
+         set(GDXCPP_LIBRARIES "${GDXCPP_LIBRARIES};dl;log;GLESv1_CM;GLESv2;")
         find_libraries("gdx-cpp-backend-android;gdx-cpp-agg-svg;")
     else(ANDROID_NDK)
         if (GdxCpp_BUILD_GRAPHICS_OPENGL)

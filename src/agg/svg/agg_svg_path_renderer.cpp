@@ -67,9 +67,15 @@ namespace svg
             throw exception("end_path : The path was not begun");
         }
         path_attributes& attr = cur_attr();
+
         unsigned idx = m_attr_storage[m_attr_storage.size() - 1].index;
         attr.index = idx;
         m_attr_storage[m_attr_storage.size() - 1] = attr;
+        
+        if(attr.gradient) {
+            m_attr_storage[m_attr_storage.size() - 1].gradient  = attr.gradient->clone();
+        }
+        
         pop_attr();
     }
 

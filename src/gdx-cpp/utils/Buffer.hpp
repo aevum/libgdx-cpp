@@ -63,7 +63,7 @@ public:
 template <typename T>
 struct buffer : public buffer_base {
     buffer(int mark, int pos, int lim , int capacity)
-            : buffer_base(buffer_base::char_ptr(new char[capacity]), capacity, pos, mark, lim)
+        : buffer_base(buffer_base::char_ptr(new char[capacity], shared_ptr_array_deleter()), capacity, pos, mark, lim)
     {
 #ifdef DEBUG
         T* debug_buffer = (T*) bf.get();

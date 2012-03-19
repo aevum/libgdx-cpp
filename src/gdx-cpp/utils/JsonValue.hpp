@@ -59,110 +59,50 @@ public:
     JsonValue(const std::string& val) ;
     JsonValue(std::string* val) ;
     JsonValue(const item_map& val) ;
-    JsonValue(item_map* val) : item_val(std::tr1::shared_ptr<void>( val )),item_type(json_json) {}
+    JsonValue(item_map* val) ;
     JsonValue(const array& val) ;
-    JsonValue(array* val) : item_val(std::tr1::shared_ptr<void>( val )), item_type(json_list) {}
+    JsonValue(array* val) ;
     JsonValue(const JsonValue& other) : item_val(other.item_val), item_type(other.item_type)
     {
     }
    
-    JsonValue& operator = (const std::string& other) {
-        if (item_type == json_null) {
-            this->item_val = std::tr1::shared_ptr<void>(new std::string(other));
-            this->item_type = json_string;
-        } else {
-            this->as_string() = other;
-        }
-        return *this;
-    }
+    JsonValue& operator = (const std::string& other) ;
 
-    JsonValue& operator = (const char* other) {
-        if (item_type == json_null) {
-            this->item_val = std::tr1::shared_ptr<void>(new std::string(other));
-            this->item_type = json_string;
-        } else {
-            this->as_string() = other;
-        }
-        return *this;
-    }
+    JsonValue& operator = (const char* other) ;
     
-    JsonValue& operator = (int other) {
-        if (item_type == json_null) {
-            this->item_val = std::tr1::shared_ptr<void>(new int(other));
-            this->item_type = json_int;
-        } else {
-            this->as_int() = other;
-        }
-        return *this;
-    }
+    JsonValue& operator = (int other) ;
 
-    JsonValue& operator = (bool other) {
-        if (item_type == json_null) {
-            this->item_val = std::tr1::shared_ptr<void>(new bool(other));
-            this->item_type = json_bool;
-        } else {
-            this->as_bool() = other;
-        }
-        return *this;
-    }
+    JsonValue& operator = (bool other) ;
 
-    JsonValue& operator = (float other) {
-        if (item_type == json_null) {
-            this->item_val = std::tr1::shared_ptr<void>(new float(other));
-            this->item_type = json_float;
-        } else {
-            this->as_float() = other;
-        }
-        return *this;
-    }
+    JsonValue& operator = (float other) ;
 
-    JsonValue& operator = (const array& other) {
-        if (item_type == json_null) {
-            this->item_val = std::tr1::shared_ptr<void>(new array(other));
-            this->item_type = json_list;
-        } else {
-            this->as_array() = other;
-        }
-        return *this;
-    }
+    JsonValue& operator = (const array& other) ;
 
-    JsonValue& operator = (const JsonValue& other) {
-        this->item_type = other.item_type;
-        this->item_val = other.item_val;
+    JsonValue& operator = (const JsonValue& other) ;
 
-        return *this;
-    }
+    JsonValue& operator = (const ptr& other) ;
 
-    JsonValue& operator = (const ptr& other) {
-        this->item_type = other->item_type;
-        this->item_val = other->item_val;
-        
-        return *this;
-    }
-
-    JsonValue& operator + (const JsonValue& other) {
-        return *this += other;
-    }
+    JsonValue& operator + (const JsonValue& other) ;
 
     JsonValue& operator += (const JsonValue& other) ;
    
-    int& as_int()       { build_from_null<int>(); assert(item_type == json_int); return *(int*)item_val.get(); }
-    const int& as_int() const { assert(item_type == json_int); return *(int*)item_val.get(); }
+    int& as_int();
+    const int& as_int() const;
 
-    bool& as_bool()       { build_from_null<bool>(); assert(item_type == json_bool); return *(bool*)item_val.get(); }
-    const bool& as_bool() const { assert(item_type == json_bool); return *(bool*)item_val.get(); }
+    bool& as_bool();
+    const bool& as_bool() const;
 
-    float& as_float()       { build_from_null<float>(); assert(item_type == json_float); return *(float*)item_val.get(); }
-    const float& as_float() const { assert(item_type == json_float); return *(float*)item_val.get(); }
+    float& as_float();
+    const float& as_float() const;
 
-    std::string& as_string()       { build_from_null<std::string>(); assert(item_type == json_string); return *(std::string*)item_val.get(); }
-    const std::string& as_string() const { assert(item_type == json_string); return *(std::string*)item_val.get(); }
+    std::string& as_string();
+    const std::string& as_string() const;
 
-    array& as_array()       { build_from_null<array>(); assert(item_type == json_list); return *(array*)item_val.get(); }
-    const array& as_array() const { assert(item_type == json_list); return *(array*)item_val.get(); }
+    array& as_array();
+    const array& as_array() const ;
     
-    item_map& as_item_map()       { build_from_null<item_map>(); assert(item_type == json_json); return *(item_map*)item_val.get(); }
-    const item_map& as_item_map() const { assert(item_type == json_json); return *(item_map*)item_val.get(); }
+    item_map& as_item_map();
+    const item_map& as_item_map() const ;
     
     const JsonValue& operator[](const std::string& name) const;
     JsonValue& operator[](const std::string& name);
@@ -224,8 +164,6 @@ private:
         }
     }
 
-
-    
     void toString(std::ostream& out, bool prettyPrint, int ident) const;
     
     friend class JsonReader;

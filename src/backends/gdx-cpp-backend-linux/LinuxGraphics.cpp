@@ -303,7 +303,12 @@ bool gdx_cpp::backends::nix::LinuxGraphics::setupGLModes()
 
         return true;
     } else {
-        Gdx::app->error("LinuxGraphics", "Failed to recover the GL_VERSION, aborting");
+        std::cerr << "Failed to recover the GL_VERSION, aborting" << std::endl;
         return false;
     }
+}
+
+LinuxGraphics::~LinuxGraphics()
+{
+    SDL_Quit();
 }

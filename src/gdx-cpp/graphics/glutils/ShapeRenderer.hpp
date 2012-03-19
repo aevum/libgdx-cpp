@@ -74,6 +74,7 @@ public:
     void dispose ();
     ShapeRenderer ();
 
+    virtual ~ShapeRenderer();
 protected:
     ImmediateModeRenderer* renderer;
     bool matrixDirty;

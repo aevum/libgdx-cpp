@@ -45,7 +45,7 @@ public:
     virtual int getMaxVertices () = 0;
 
     virtual void dispose() = 0;
-
+    virtual ~ImmediateModeRenderer() { } 
 };
 
 } // namespace gdx_cpp

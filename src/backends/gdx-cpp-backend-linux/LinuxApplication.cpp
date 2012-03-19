@@ -71,7 +71,9 @@ void backends::nix::LinuxApplication::run()
     while (true) {
         graphics->updateTime();
 
-        processEvents();
+        if (!processEvents()) {
+            return;
+        }
 
         {
             lock_holder hnd = synchronize();
@@ -108,7 +110,7 @@ void LinuxApplication::error(const std::string& tag, const char* format, ...)
 
 void gdx_cpp::backends::nix::LinuxApplication::exit()
 {
-    ::exit(0);
+
 }
 
 Audio* gdx_cpp::backends::nix::LinuxApplication::getAudio()
@@ -170,27 +172,34 @@ void gdx_cpp::backends::nix::LinuxApplication::setLogLevel(int logLevel)
     logLevel = logLevel;
 }
 
-void gdx_cpp::backends::nix::LinuxApplication::processEvents()
+bool gdx_cpp::backends::nix::LinuxApplication::processEvents()
 {
     static SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             this->exit();
-            return;
+            return false;
         } else {
             this->input->processEvents(event);
         }
     }
+
+    return true;
 }
 
 void LinuxApplication::pause()
 {
-
 }
 
 void LinuxApplication::update()
 {
-
 }
 
+LinuxApplication::~LinuxApplication()
+{
+    delete graphics;
+    delete audio;
+    delete files;
+    delete input;    
+}

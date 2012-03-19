@@ -161,9 +161,11 @@ public:
 
     virtual transform* createTransform() ;
 
-    virtual transform* const currentTransform() ;
+    virtual transform& currentTransform() ;
 
 private:
+    AggSvgPixmap(const AggSvgPixmap& other);
+    
     struct impl;
     impl* pimpl;
 

@@ -101,6 +101,8 @@ public:
             transform(other.transform)
     {
     }
+
+    virtual ~svg_gradient() { }
 };
 
 struct linear_gradient : public svg_gradient {
@@ -304,10 +306,8 @@ struct path_attributes
     {
     }
 
-    ~path_attributes() {
-        if (gradient) {
-            delete gradient;
-        }
+    ~path_attributes() {        
+        delete gradient;
     }
 };
 

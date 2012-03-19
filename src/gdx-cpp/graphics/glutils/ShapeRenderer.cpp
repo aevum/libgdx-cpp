@@ -282,5 +282,9 @@ ShapeRenderer::ShapeType::ShapeType(int glType) {
     this->glType = glType;
 }
 
+ShapeRenderer::~ShapeRenderer()
+{
+    delete renderer;
+}
 
 

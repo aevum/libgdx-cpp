@@ -40,7 +40,7 @@ class SvgPixmapInterface : public Pixmap, public virtual utils::SvgRendererHandl
 {
 public:
     virtual void fill(graphics::Color color) = 0;    
-    virtual void setStrokeWidth(float) = 0;
+    virtual void setStrokeWidth(int) = 0;
 };
 
 }
