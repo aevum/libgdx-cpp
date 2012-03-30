@@ -1,5 +1,8 @@
 package com.aevumlab.gdxcpp;
 
+import java.util.HashMap;
+import java.util.Stack;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -17,6 +20,15 @@ import com.badlogic.gdx.backends.android.AndroidFiles;
 import com.badlogic.gdx.files.FileHandle;
 
 public class ApplicationManager {
+	static HashMap<Integer, Integer> pointerIdToButton = new HashMap<Integer, Integer>();
+	static Stack<Integer> pendingIds = new Stack<Integer>();
+
+	static {
+		for (int i = 20; i > 0; --i) {
+			pendingIds.push(i);
+		}
+	}
+		
 	static native void nativeInitSystem();
 
 	static native void nativeInitialize(AssetManager manager, int width, int height);
@@ -30,19 +42,21 @@ public class ApplicationManager {
 	static native void nativeResume();
 
 	static native void nativeResize(int widht, int height);
-	
+
 	static native void nativeTouchDownEvent(float x, float y, int button);
+
 	static native void nativeTouchUpEvent(float x, float y, int button);
+
 	static native void nativeTouchDragEvent(float x, float y, int button);
-	
-	InputHandler handler = new InputHandler();	
+
+	InputHandler handler = new InputHandler();
 	Activity activity;
 	static AndroidFiles files;
 	private AndroidAudio audio;
-	
+
 	class NativeSurfaceRenderer implements GLSurfaceView.Renderer {
 		boolean created;
-		
+
 		@Override
 		public void onDrawFrame(GL10 gl) {
 			ApplicationManager.nativeUpdate();
@@ -52,7 +66,7 @@ public class ApplicationManager {
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
 			ApplicationManager.nativeResize(width, height);
 			if (!created) {
-				ApplicationManager.nativeCreate();				
+				ApplicationManager.nativeCreate();
 				created = true;
 			}
 		}
@@ -86,7 +100,7 @@ public class ApplicationManager {
 			final int height = View.MeasureSpec.getSize(heightMeasureSpec);
 
 			setMeasuredDimension(width, height);
-		}		
+		}
 	}
 
 	public GLSurfaceView createView(Context context) {
@@ -95,14 +109,13 @@ public class ApplicationManager {
 
 	public void initializeWithSharedLib(String library, AssetManager assetManager) {
 		files = new AndroidFiles(assetManager);
-		
+
 		System.loadLibrary(library);
 		nativeInitSystem();
 	}
 
 	public void initialize(Activity activity) {
 		this.activity = activity;
-		System.loadLibrary("gdx-cpp");
 	}
 
 	public void update() {
@@ -123,26 +136,45 @@ public class ApplicationManager {
 	}
 
 	public static void onTouchEvent(MotionEvent evt) {
-		switch(evt.getAction()) {
-		case MotionEvent.ACTION_DOWN:
-			nativeTouchDownEvent(evt.getX(), evt.getY(), evt.getAction() & MotionEvent.ACTION_POINTER_ID_MASK >> MotionEvent.ACTION_POINTER_ID_SHIFT);
-			break;
-		case MotionEvent.ACTION_UP:
-			nativeTouchUpEvent(evt.getX(), evt.getY(), evt.getAction() & MotionEvent.ACTION_POINTER_ID_MASK >> MotionEvent.ACTION_POINTER_ID_SHIFT);
-			break;
-		case MotionEvent.ACTION_MOVE:
-			nativeTouchDragEvent(evt.getX(), evt.getY(), evt.getAction() & MotionEvent.ACTION_POINTER_ID_MASK >> MotionEvent.ACTION_POINTER_ID_SHIFT);
-			break;
-		}		
+		final int action = evt.getAction() & MotionEvent.ACTION_MASK;
+		int pointerIndex = (evt.getAction() & MotionEvent.ACTION_POINTER_ID_MASK) >> MotionEvent.ACTION_POINTER_ID_SHIFT;
+		
+		synchronized (pointerIdToButton) {
+			switch (action) {
+			case MotionEvent.ACTION_DOWN:
+			case MotionEvent.ACTION_POINTER_DOWN:{
+					int pointerId = evt.getPointerId(pointerIndex);
+					pointerIdToButton.put(pointerId, pendingIds.pop());
+
+					nativeTouchDownEvent(evt.getX(), evt.getY(), pointerIdToButton.get(pointerId)); 
+				}
+				break;
+			case MotionEvent.ACTION_POINTER_UP:
+			case MotionEvent.ACTION_UP:
+				int pointerId = evt.getPointerId(pointerIndex);
+				int button = pointerIdToButton.get(pointerId);
+				
+				nativeTouchUpEvent(evt.getX(), evt.getY(), button);
+				
+				pendingIds.push(button);
+				pointerIdToButton.remove(pointerId);
+				break;
+			case MotionEvent.ACTION_MOVE:
+				for (int i = 0; i < evt.getPointerCount(); i++) {
+					nativeTouchDragEvent(evt.getX(i), evt.getY(i), pointerIdToButton.get(evt.getPointerId(i)));
+				}
+				break;
+			}
+		}
 	}
-			
+
 	static byte[] readFile(String filename, int fileType) {
 		FileHandle handle = files.getFileHandle(filename, FileType.values()[fileType]);
-		
-		if (handle != null) {			
+
+		if (handle != null) {
 			return handle.readBytes();
 		}
-		
+
 		return null;
 	}
 }
