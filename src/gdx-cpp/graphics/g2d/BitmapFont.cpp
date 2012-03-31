@@ -300,7 +300,7 @@ BitmapFont::TextBounds& BitmapFont::getBounds (const std::string& str) {
 }
 
 BitmapFont::TextBounds& BitmapFont::getBounds (const std::string& str,int start,int end) {
-    int width = 0;
+    float width = 0;
     Glyph* lastGlyph = NULL;
     while (start < end) {
         lastGlyph = data->getGlyph(str[start++]);
