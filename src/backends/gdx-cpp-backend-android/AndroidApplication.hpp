@@ -81,7 +81,6 @@ protected:
 
     gdx_cpp::implementation::Thread::ptr mainLoopThread;
 
-    JavaVM* vm;
     JNIEnv* env;
     
     void initialize();

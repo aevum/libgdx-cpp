@@ -32,6 +32,7 @@
 #include <sys/types.h>
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/Application.hpp>
+#include <cassert>
 
 #include <android/log.h>
 
@@ -315,4 +316,28 @@ std::string gdx_cpp::backends::android::AndroidSystem::resolve(const gdx_cpp::fi
     char buffer[2048];
     if(getcwd(buffer, 2048) == NULL) throw std::runtime_error("Error trying to resolve path: " + f.getPath());
     return resolve(std::string(buffer), f.getPath());
+}
+
+JavaVM* const gdx_cpp::backends::android::AndroidSystem::getJavaVM()
+{
+    return this->vm;
+}
+
+void gdx_cpp::backends::android::AndroidSystem::setJavaVM(JavaVM* _vm)
+{
+    this->vm = _vm;
+}
+
+JNIEnv* gdx_cpp::backends::android::AndroidSystem::getJniEnv()
+{
+    JNIEnv* env;
+    assert(this->vm);
+    
+    this->vm->GetEnv((void**)&env, JNI_VERSION_1_2);
+    
+    return env;
+}
+
+AndroidSystem::AndroidSystem() : vm(NULL)
+{
 }

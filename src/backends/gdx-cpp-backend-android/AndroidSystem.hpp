@@ -23,6 +23,7 @@
 
 #include <gdx-cpp/implementation/System.hpp>
 #include <gdx-cpp/implementation/ThreadFactory.hpp>
+#include <jni.h>
 
 class Runnable;
 
@@ -46,6 +47,8 @@ public:
 
 public:
     uint64_t nanoTime();
+
+    AndroidSystem();
 
     AndroidThreadFactory* getThreadFactory() {
         return &threadFactory;
@@ -74,10 +77,17 @@ public:
     bool renameFile(files::File& f1, const gdx_cpp::files::File& f2);
     std::string resolve(const std::string& parent, const std::string& child);
     std::string resolve(const gdx_cpp::files::File& f);
+
+    void setJavaVM(JavaVM* vm);
+    
+    JavaVM* const getJavaVM();
+    JNIEnv* getJniEnv();
     
 private:
     AndroidThreadFactory threadFactory;
     AndroidMutexFactory mutexFactory;
+
+    JavaVM* vm;
 };
 
 }

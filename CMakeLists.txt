@@ -10,9 +10,7 @@ include_directories(src)
 
 link_directories(${LIBRARY_OUTPUT_PATH})
 
-if($ENV{ANDROID_NDK})
-    SET(ANDROID_NDK $ENV{ANDROID_NDK})
-endif()
+set(ANDROID_NDK $ENV{ANDROID_NDK})
 
 if(APPLE)
     message("MacOSX (iOS) found. Setting the backend to IOS")
@@ -27,9 +25,9 @@ if(APPLE)
 elseif (UNIX)
     SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wall")
 
-    if (ANDROID_NDK)
-        
+    if (ANDROID_NDK)        
         message("ANDROID_NDK Found. Setting the backend to ANDROID")
+
         SET(GDX_BACKEND ANDROID)
         SET(GDX_BACKEND_LIB gdx-cpp-backend-android)
         set(BOX2D_BUILD_STATIC FALSE)

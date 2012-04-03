@@ -22,7 +22,7 @@
 #include <gdx-cpp/Gdx.hpp>
 #include <cassert>
 #include <jni.h>
-#include "AndroidApplication.hpp"
+#include "AndroidSystem.hpp"
 #include <string.h>
 
 using namespace gdx_cpp::backends::android;
@@ -34,7 +34,7 @@ AndroidFileHandle::AndroidFileHandle(const std::string& fileName, gdx_cpp::Files
 
 int gdx_cpp::backends::android::AndroidFileHandle::readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) const
 {
-    JNIEnv* env = static_cast<AndroidApplication*>(Gdx::app)->getJniEnv();    
+    JNIEnv* env = static_cast<AndroidSystem*>(Gdx::system)->getJniEnv();
     jstring strpath = env->NewStringUTF(this->file.getPath().c_str());
 
     jclass managerClass = env->FindClass("com/aevumlab/gdxcpp/ApplicationManager");

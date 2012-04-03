@@ -27,13 +27,13 @@ extern "C" void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener
 extern "C" {  
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitSystem(JNIEnv* env) {        
         Gdx::initializeSystem(new AndroidSystem);
+        static_cast<AndroidSystem*>(Gdx::system)->setJavaVM(vm);
         gdxcpp_init(1, NULL);
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitialize(JNIEnv* env, jclass clazz, jobject assetManager, int width, int height) {
         assert(applicationListener);
         app = new AndroidApplication(applicationListener, "gdx-android", width, height, false);
-        app->setJavaVM(vm);
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeCreate(JNIEnv* env) {

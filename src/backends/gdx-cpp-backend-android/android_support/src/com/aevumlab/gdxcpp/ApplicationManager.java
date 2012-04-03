@@ -51,6 +51,8 @@ public class ApplicationManager {
 
 	InputHandler handler = new InputHandler();
 	Activity activity;
+	Runnable onBeforeCreate;
+	
 	static AndroidFiles files;
 	private AndroidAudio audio;
 
@@ -66,6 +68,9 @@ public class ApplicationManager {
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
 			ApplicationManager.nativeResize(width, height);
 			if (!created) {
+				if (onBeforeCreate != null) {
+					onBeforeCreate.run();
+				}
 				ApplicationManager.nativeCreate();
 				created = true;
 			}
@@ -114,8 +119,9 @@ public class ApplicationManager {
 		nativeInitSystem();
 	}
 
-	public void initialize(Activity activity) {
+	public void initialize(Activity activity, Runnable beforeCreate) {
 		this.activity = activity;
+		this.onBeforeCreate = beforeCreate;
 	}
 
 	public void update() {
