@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include "agg_svg_path_renderer.h"
 #include <iostream>
+#include <stdexcept>
 
 namespace agg
 {
@@ -64,7 +65,7 @@ namespace svg
 
         if(m_attr_storage.size() == 0) 
         {
-            throw exception("end_path : The path was not begun");
+            throw std::runtime_error("end_path : The path was not begun");
         }
         path_attributes& attr = cur_attr();
 
@@ -183,7 +184,7 @@ namespace svg
     {
         if(m_attr_stack.size() == 0)
         {
-            throw exception("cur_attr : Attribute stack is empty");
+            throw std::runtime_error("cur_attr : Attribute stack is empty");
         }
 
         return m_attr_stack[m_attr_stack.size() - 1];
@@ -202,7 +203,7 @@ namespace svg
     {        
         if(m_attr_stack.size() == 0)
         {
-            throw exception("pop_attr : Attribute stack is empty");
+            throw std::runtime_error("pop_attr : Attribute stack is empty");
         }
         m_attr_stack.remove_last();
     }

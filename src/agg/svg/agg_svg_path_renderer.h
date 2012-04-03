@@ -28,7 +28,6 @@
 #include "agg_renderer_scanline.h"
 #include "agg_bounding_rect.h"
 #include "agg_rasterizer_scanline_aa.h"
-#include "agg_svg_path_tokenizer.h"
 #include "agg_span_interpolator_linear.h"
 #include "agg_span_allocator.h"
 #include "agg_span_gradient.h"
@@ -336,8 +335,7 @@ public:
     // begin_path() when the XML tag <path> comes ("start_element" handler)
     // parse_path() on "d=" tag attribute
     // end_path() when parsing of the entire tag is done.
-    void begin_path();
-    void parse_path(path_tokenizer& tok);
+    void begin_path();    
     void end_path();
 
     // The following functions are essentially a "reflection" of
@@ -413,8 +411,6 @@ public:
         agg::conv_transform<agg::path_storage> trans(m_storage, m_transform);
         agg::bounding_rect(trans, *this, 0, m_attr_storage.size(), x1, y1, x2, y2);
     }
-
-
 
     // Rendering. One can specify two additional parameters:
     // trans_affine and opacity. They can be used to transform the whole

@@ -457,6 +457,7 @@ graphics/g2d/Gdx2DPixmap.cpp
 # graphics/g2d/tiled/TiledObjectGroup.cpp
 # graphics/g2d/tiled/TiledLayer.cpp
 graphics/g2d/svg/SvgParser.cpp
+graphics/g2d/svg/SvgPathParser.cpp
 graphics/g2d/TextureRegion.cpp
 graphics/g2d/ParticleEffect.cpp
 graphics/g2d/Animation.cpp

@@ -11,6 +11,7 @@
 #include <gdx-cpp/files/FileHandle.hpp>
 #include "AndroidAudio.hpp"
 
+#include <unistd.h>
 using namespace gdx_cpp;
 using namespace gdx_cpp::backends::android;
 
@@ -96,7 +97,8 @@ extern "C" {
     };
     
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeTouchDownEvent(JNIEnv* env, jobject object, jfloat x, jfloat y, int button ) {
-        assert(applicationListener);        
+        assert(applicationListener);
+        Gdx::app->log("Android", "Touch down button: %d", button);
         Gdx::app->postRunnable(Runnable::ptr(new EventRunnable(x, y, button, MOUSE_DOWN)));
     }
 

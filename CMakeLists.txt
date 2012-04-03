@@ -39,8 +39,8 @@ elseif (UNIX)
         SET(GDX_BACKEND LINUX)
         SET(GDX_BACKEND_LIB gdx-cpp-backend-linux)
 
-        set(BOX2D_BUILD_STATIC TRUE)
-        set(BOX2D_BUILD_SHARED FALSE)
+        set(BOX2D_BUILD_STATIC NOT ${BUILD_AS_SHARED_LIBRARIES})
+        set(BOX2D_BUILD_SHARED ${BUILD_AS_SHARED_LIBRARIES})
     endif()
 
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/agg/include ${CMAKE_CURRENT_SOURCE_DIR}/src/agg/svg)

@@ -67,7 +67,7 @@ public:
         gdx_cpp::graphics::Color color;
         float opacity;
         float offset;
-        GradientStopData() : color(1,1,1,1), opacity(1), offset(0) {
+        GradientStopData() : color(0, 0, 0,1), opacity(1), offset(0) {
         }
 
         virtual ~GradientStopData() { }
@@ -111,6 +111,7 @@ public:
     virtual void curve3(float x, float y, bool relative = false) = 0;
     virtual void curve3(float x, float y, float x1, float y1, bool relative = false) = 0;
 
+    virtual void boundingRect(float& x1, float& y1, float& x2, float& y2) = 0;
     virtual void fillLinearGradient(const LinearGradient&) = 0;
     virtual void fillRadialGradient(const RadialGradient&) = 0;
     

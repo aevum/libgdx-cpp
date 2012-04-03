@@ -28,6 +28,7 @@
 #include "gdx-cpp/Files.hpp"
 #include "gdx-cpp/utils/XmlReader.hpp"
 #include "SvgParser.hpp"
+#include "gdx-cpp/Gdx.hpp"
 
 
 namespace gdx_cpp {
@@ -47,8 +48,14 @@ public:
     static AggSvgPixmap* newFromFile(const files::FileHandle::ptr& file) {
         static utils::XmlReader reader;
 
+        gdx_cpp::Gdx::app->log("WreckingBaller", "%s", file->path().c_str());
+        
         AggSvgPixmap* pix = new AggSvgPixmap;
+        uint64_t before = gdx_cpp::Gdx::system->nanoTime();
         SvgParser::render(reader.parse(*file).get(), pix);
+        uint64_t after = gdx_cpp::Gdx::system->nanoTime();
+
+        gdx_cpp::Gdx::app->log("WreckingBaller", "%s, took %f us", file->path().c_str(), (after - before) / 1000.0);
 
         return pix;
     }
@@ -144,6 +151,8 @@ public:
     const unsigned char* getPixels() ;
 
     void setColor(float r, float g, float b, float a) ;
+
+    virtual void boundingRect(float& x1, float& y1, float& x2, float& y2);
 
     virtual void fillRadialGradient(const gdx_cpp::utils::SvgRendererHandler::RadialGradient& gradient) ;
 

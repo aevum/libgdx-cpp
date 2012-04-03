@@ -141,8 +141,6 @@ if(BOX2D_BUILD_SHARED)
 	)
 	set_target_properties(Box2D_shared PROPERTIES
 		OUTPUT_NAME "Box2D"
-		CLEAN_DIRECT_OUTPUT 1
-		VERSION "2.1.0"
 	)
 endif()
 

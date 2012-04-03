@@ -86,6 +86,7 @@ public:
     }
 
     virtual void translate(float x, float y) {
+        //std::cout << "translate: " << x << " " << y << std::endl;
         transform->premultiply(agg::trans_affine_translation(x, y));
     }
 
@@ -121,10 +122,12 @@ AggSvgPixmap::AggSvgPixmap(int width, int height)
 }
 
 void AggSvgPixmap::curve3(float x, float y, bool relative) {
+    //std::cout << "curve3: "  << x << " " << y << " relative: " << relative << std::endl;
     pimpl->renderer.curve3(x, y, relative);
 }
 
 void AggSvgPixmap::closeSubPath() {
+    //std::cout << "close subpath" << std::endl;
     pimpl->renderer.close_subpath();
 }
 
@@ -150,10 +153,12 @@ void AggSvgPixmap::curve3(float x, float y, float x1, float y1, bool relative) {
 }
 
 void AggSvgPixmap::curve4(float x2, float y2, float x, float y, bool relative) {
+    //std::cout << "curve4: "  << x2 << " " << y2 << " " << x << " " << y <<" relative: " << relative << std::endl;
     pimpl->renderer.curve4(x2, y2, x, y, relative);
 }
 
 void AggSvgPixmap::curve4(float x1, float y1, float x2, float y2, float x, float y, bool relative) {
+    //std::cout << "curve4.1: "  << x1 << " " << y1 << " " << x2 << " " << y2 << " " << x << " " << y <<" relative: " << relative << std::endl;
     pimpl->renderer.curve4(x1, y1, x2, y2, x, y, relative);
 }
 
@@ -178,14 +183,18 @@ void AggSvgPixmap::fillOpacity(float opactiy) {
 }
 
 void AggSvgPixmap::horizontalLineTo(float x, bool relative) {
+    //std::cout << "hlineto: "  << x << " relative: " << relative << std::endl;
     pimpl->renderer.hline_to(x, relative);
 }
 
 void AggSvgPixmap::lineTo(float x, float y, bool relative) {
+    //std::cout << "lineto: "  << x << " " << y << " relative: " << relative << std::endl;
     pimpl->renderer.line_to(x, y, relative);
 }
 
 void AggSvgPixmap::moveTo(float x, float y, bool relative) {
+    //std::cout << "moveto: "  << x << " " << y << " relative: " << relative << std::endl;
+    
     pimpl->renderer.move_to(x, y, relative);
 }
 
@@ -222,6 +231,7 @@ void AggSvgPixmap::strokeNone() {
 }
 
 void AggSvgPixmap::verticalLineTo(float y, bool relative) {
+    //std::cout << "Vertical line to: " << y << std::endl;
     pimpl->renderer.vline_to(y, relative);
 }
 
@@ -308,12 +318,12 @@ const unsigned char* AggSvgPixmap::getPixels() {
 
     if (!data || (strlen((char*) data) !=  scaledWidth * scaledHeight * 4)) {
         delete [] data;
-        data = new unsigned char[scaledWidth * scaledHeight * 4];
+        data = new unsigned char[(scaledWidth + 1) * (scaledHeight + 1) * 4];
     }
 
     agg::rendering_buffer rbuf(data,
-                               scaledWidth,
-                               scaledHeight,
+                               scaledWidth + 1,
+                               scaledHeight + 1,
                                scaledWidth * 4);
 
     pixfmt pixf(rbuf);
@@ -412,6 +422,7 @@ void AggSvgPixmap::setStrokeWidth(int width) {
 }
 
 AggSvgPixmap::~AggSvgPixmap() {
+
     delete [] data;
     delete pimpl;
 
@@ -428,4 +439,6 @@ SvgPixmapInterface::transform& AggSvgPixmap::currentTransform() {
     return pimpl->transform;
 }
 
-
+void AggSvgPixmap::boundingRect(float& x1, float& y1, float& x2, float& y2) {
+    pimpl->renderer.bounding_rect((double*)&x1, (double*)&y1, (double*)&x2, (double*)&y2);
+}

@@ -211,6 +211,9 @@ void gdx_cpp::backends::android::AndroidInput::reset()
 
 void gdx_cpp::backends::android::AndroidInput::handleTouchDrag(float x, float y, int button)
 {
+    deltaX = x - touchX;
+    deltaY = y - touchY;
+    
     if (this->processor) {
         this->processor->touchDragged(x, y, 0);
     }
@@ -230,6 +233,8 @@ void gdx_cpp::backends::android::AndroidInput::handleTouchDown(float x, float y,
 void gdx_cpp::backends::android::AndroidInput::handleTouchUp(float x, float y, int button)
 {
     touching = false;
+    deltaX = 0;
+    deltaY = 0;
     if (this->processor) {
         this->processor->touchUp(x, y, 0 , button);
     }
