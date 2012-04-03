@@ -54,7 +54,7 @@ public:
     static void render(utils::XmlReader::Element* const svg, utils::SvgRendererHandler* handler = NULL);
 private:
     ///Initiate the current element parsing
-    static void beginElement(gdx_cpp::utils::XmlReader::Element*const currentNode);
+    static bool beginElement(gdx_cpp::utils::XmlReader::Element*const currentNode);
 
     ///End's the current element parsing    
     static void endElement(utils::XmlReader::Element* currentNode);
@@ -62,7 +62,8 @@ private:
     static void parse_line(utils::XmlReader::Element* node);
     static void parse_poly(gdx_cpp::utils::XmlReader::Element* node, bool close);
     static void parse_rect(utils::XmlReader::Element* node);
-    static void parse_path(utils::XmlReader::Element* node);    
+    static void parse_path(utils::XmlReader::Element* node);
+    static void parse_path_data(const char* data, int length);
     static void parse_attr(utils::XmlReader::Element* node);
     static bool parse_attr(const std::string& name, const std::string& value);
     static void parse_transform(const std::string& transform_string, gdx_cpp::utils::SvgRendererHandler::transform& transform);
@@ -76,6 +77,7 @@ private:
     static graphics::Color parse_color(const std::string& colorValue);
     static void parse_gradient(const std::string& gradient);
     static void fetchStopData(gdx_cpp::utils::XmlReader::Element* node , std::vector< gdx_cpp::utils::SvgRendererHandler::GradientStopData >& stopData);
+    static void fetchStopElement(gdx_cpp::utils::XmlReader::Element* node, gdx_cpp::utils::SvgRendererHandler::GradientStopData& stop );
     
     static bool m_titleFlag;
     static bool m_pathFlag;
