@@ -271,6 +271,24 @@ struct path_attributes
     {
     }
 
+    path_attributes& operator=(const path_attributes& other) {
+        this->index = other.index;
+        this->fill_color = other.fill_color;
+        this->stroke_color = other.stroke_color;
+        this->fill_flag = other.fill_flag;
+        this->stroke_flag = other.stroke_flag;
+        this->even_odd_flag = other.even_odd_flag;
+        this->line_join = other.line_join;
+        this->line_cap = other.line_cap;
+        this->miter_limit = other.miter_limit;
+        this->stroke_width = other.stroke_width;
+        this->transform = other.transform;
+
+        this->gradient = other.gradient ? other.gradient->clone() : NULL;
+
+        return *this;
+    }
+
     // Copy constructor
     path_attributes(const path_attributes& attr) :
             index(attr.index),
@@ -305,17 +323,17 @@ struct path_attributes
     {
     }
 
-    ~path_attributes() {        
+    ~path_attributes() {
         delete gradient;
+        gradient = NULL;
     }
 };
 
 
 //============================================================================
 // Path container and renderer.
-class path_renderer
+struct path_renderer
 {
-public:
     typedef pod_bvector<path_attributes>   attr_storage;
 
     typedef conv_curve<path_storage>       curved;
