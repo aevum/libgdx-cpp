@@ -14,5 +14,6 @@ else()
 endif()
 
 add_dependencies(gdx-cpp-box2d-layer Box2D)
+target_link_libraries(gdx-cpp-box2d-layer gdx-cpp Box2D)
 
 install(TARGETS gdx-cpp-box2d-layer ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)

@@ -509,6 +509,11 @@ install(DIRECTORY . DESTINATION include/gdx-cpp
 gdx_setup_library_target(gdx-cpp "${GDX_HEADERS};${GDX_SRC}")
 target_link_libraries(gdx-cpp z)
 
+if (ANDROID_NDK)
+    #OpenGLEs is a dependency now
+    target_link_libraries(gdx-cpp GLESv1_CM GLESv2)
+endif()
+
 install(TARGETS gdx-cpp
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib)

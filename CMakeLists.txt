@@ -31,7 +31,7 @@ elseif (UNIX)
         SET(GDX_BACKEND ANDROID)
         SET(GDX_BACKEND_LIB gdx-cpp-backend-android)
         set(BOX2D_BUILD_STATIC FALSE)
-        set(BOX2D_BUILD_SHARED TRUE)
+        set(BOX2D_BUILD_SHARED TRUE)        
     else()
         message("Linux found. Setting the backend to LINUX")
         SET(GDX_BACKEND LINUX)
@@ -59,10 +59,12 @@ if (BUILD_BOX2D)
     add_subdirectory(src/gdx-cpp/physics/box2d)
 endif()
 
+add_subdirectory(src/gdx-cpp)
+
 if (${GDX_BACKEND} STREQUAL "IOS")
     add_subdirectory(src/backends/gdx-cpp-backend-ios)
 elseif(${GDX_BACKEND} STREQUAL "ANDROID")
-    add_subdirectory(src/backends/gdx-cpp-backend-android)    
+    add_subdirectory(src/backends/gdx-cpp-backend-android) 
 elseif(${GDX_BACKEND} STREQUAL "WIN32")
     add_subdirectory(src/backends/windows)
 elseif(${GDX_BACKEND} STREQUAL "LINUX")
@@ -87,4 +89,5 @@ install(FILES cmake/finders/FindGdxCpp.cmake
 install(FILES cmake/gdx.cmake
         DESTINATION share/gdx/cmake)
 
-add_subdirectory(src/gdx-cpp)
+
+
