@@ -6,21 +6,21 @@ using namespace gdx_cpp::math::utils;
 detail::detail() {
     for (int i = 0; i < ATAN2_DIM; i++) {
         for (int j = 0; j < ATAN2_DIM; j++) {
-            float x0 = (float)i / detail::ATAN2_DIM;
-            float y0 = (float)j / detail::ATAN2_DIM;
+            double x0 = (double)i / detail::ATAN2_DIM;
+            double y0 = (double)j / detail::ATAN2_DIM;
             detail::_atan2[j * detail::ATAN2_DIM + i] = (float)std::atan2(y0, x0);
         }
     }
 
     for (int i = 0; i < SIN_COUNT; ++i) {
-        float a = (i + 0.5f) / SIN_COUNT * radFull;
+        double a = (i + 0.5f) / SIN_COUNT * radFull;
         _sin[i] = (float) std::sin(a);
         _cos[i] = (float) std::cos(a);
     }
     
     for (int i = 0; i < 360; i += 90) {
-        _sin[(int)(i * degToIndex) & SIN_MASK] = (float) std::sin(i * degreesToRadians);
-        _cos[(int)(i * degToIndex) & SIN_MASK] = (float) std::cos(i * degreesToRadians);
+        _sin[(int)(i * degToIndex) & SIN_MASK] = (float) std::sin((double)(i * degreesToRadians));
+        _cos[(int)(i * degToIndex) & SIN_MASK] = (float) std::cos((double)(i * degreesToRadians));
     }
 }
 
