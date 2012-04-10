@@ -165,6 +165,9 @@ size_t JsonValue::count() const
 
 bool JsonValue::contains(const std::string& name) const
 {
+    if (item_type == json_null) {
+        return false;
+    }
     assert(item_type == json_json);
     return this->as_item_map().count(name) > 0;
 }
