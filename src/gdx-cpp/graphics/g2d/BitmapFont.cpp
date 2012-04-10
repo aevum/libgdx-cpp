@@ -382,7 +382,7 @@ void BitmapFont::computeGlyphAdvancesAndPositions (const std::string& str,
     glyphPositions.clear();
     int index = 0;
     int end = str.length();
-    int width = 0;
+    float width = 0;
     Glyph* lastGlyph = NULL;
     
     if (data->scaleX == 1) {
@@ -421,7 +421,7 @@ void BitmapFont::computeGlyphAdvancesAndPositions (const std::string& str,
 
 int BitmapFont::computeVisibleGlyphs (const std::string& str, int start, int end, float availableWidth) {
     int index = start;
-    int width = 0;
+    float width = 0;
     Glyph* lastGlyph = NULL;
     if (data->scaleX == 1) {
         for (; index < end; index++) {
