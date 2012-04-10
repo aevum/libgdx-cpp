@@ -24,6 +24,7 @@
 #include "gdx-cpp/graphics/GL20.hpp"
 #include "gdx-cpp/graphics/GL11.hpp"
 #include "gdx-cpp/graphics/GL10.hpp"
+#include "gdx-cpp/gl.hpp"
 
 using namespace gdx_cpp;
 using namespace gdx_cpp::graphics;
@@ -32,15 +33,15 @@ using namespace gdx_cpp::graphics::glutils;
 int IndexBufferObjectSubData::createBufferObject () {
     if (Gdx::gl20 != NULL) {
         Gdx::gl20->glGenBuffers(1, &tmpHandle);
-        Gdx::gl20->glBindBuffer(GL20::GL_ELEMENT_ARRAY_BUFFER, tmpHandle);
-        Gdx::gl20->glBufferData(GL20::GL_ELEMENT_ARRAY_BUFFER, byteBuffer.capacity(), NULL, usage);
-        Gdx::gl20->glBindBuffer(GL20::GL_ELEMENT_ARRAY_BUFFER, 0);
+        Gdx::gl20->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, tmpHandle);
+        Gdx::gl20->glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteBuffer.capacity(), NULL, usage);
+        Gdx::gl20->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         return tmpHandle;
     } else if (Gdx::gl11 != NULL) {
         Gdx::gl11->glGenBuffers(1, &tmpHandle);
-        Gdx::gl11->glBindBuffer(GL11::GL_ELEMENT_ARRAY_BUFFER, tmpHandle);
-        Gdx::gl11->glBufferData(GL11::GL_ELEMENT_ARRAY_BUFFER, byteBuffer.capacity(), NULL, usage);
-        Gdx::gl11->glBindBuffer(GL11::GL_ELEMENT_ARRAY_BUFFER, 0);
+        Gdx::gl11->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, tmpHandle);
+        Gdx::gl11->glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteBuffer.capacity(), NULL, usage);
+        Gdx::gl11->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         return tmpHandle;
     }
 
@@ -66,14 +67,14 @@ void IndexBufferObjectSubData::setIndices (const std::vector<short>& indices, in
     if (isBound) {
         if (Gdx::gl11 != NULL) {
             GL11& gl = *Gdx::gl11;
-// gl.glBufferData(GL11::GL_ELEMENT_ARRAY_BUFFER, byteBuffer
+// gl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteBuffer
 // .limit(), byteBuffer, usage);
-            gl.glBufferSubData(GL11::GL_ELEMENT_ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
+            gl.glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
         } else if (Gdx::gl11 != NULL) {
             GL20& gl = *Gdx::gl20;
-// gl.glBufferData(GL20::GL_ELEMENT_ARRAY_BUFFER, byteBuffer
+// gl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteBuffer
 // .limit(), byteBuffer, usage);
-            gl.glBufferSubData(GL20::GL_ELEMENT_ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
+            gl.glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
 
         }
         isDirty = false;
@@ -90,22 +91,22 @@ void IndexBufferObjectSubData::bind () {
 
     if (Gdx::gl11 != NULL) {
         GL11& gl = *Gdx::gl11;
-        gl.glBindBuffer(GL11::GL_ELEMENT_ARRAY_BUFFER, bufferHandle);
+        gl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferHandle);
         if (isDirty) {
-// gl.glBufferData(GL11::GL_ELEMENT_ARRAY_BUFFER, byteBuffer
+// gl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteBuffer
 // .limit(), byteBuffer, usage);
             byteBuffer.limit(buffer.limit() * 2);
-            gl.glBufferSubData(GL11::GL_ELEMENT_ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
+            gl.glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
             isDirty = false;
         }
     } else {
         GL20& gl = *Gdx::gl20;
-        gl.glBindBuffer(GL20::GL_ELEMENT_ARRAY_BUFFER, bufferHandle);
+        gl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferHandle);
         if (isDirty) {
-// gl.glBufferData(GL20::GL_ELEMENT_ARRAY_BUFFER, byteBuffer
+// gl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteBuffer
 // .limit(), byteBuffer, usage);
             byteBuffer.limit(buffer.limit() * 2);
-            gl.glBufferSubData(GL20::GL_ELEMENT_ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
+            gl.glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
             isDirty = false;
         }
     }
@@ -114,9 +115,9 @@ void IndexBufferObjectSubData::bind () {
 
 void IndexBufferObjectSubData::unbind () {
     if (Gdx::gl11 != NULL) {
-        Gdx::gl11->glBindBuffer(GL11::GL_ELEMENT_ARRAY_BUFFER, 0);
+        Gdx::gl11->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     } else if (Gdx::gl20 != NULL) {
-        Gdx::gl20->glBindBuffer(GL11::GL_ELEMENT_ARRAY_BUFFER, 0);
+        Gdx::gl20->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
     isBound = false;
 }
@@ -130,13 +131,13 @@ void IndexBufferObjectSubData::dispose () {
     if (Gdx::gl20 != NULL) {
         tmpHandle = bufferHandle;
         GL20& gl = *Gdx::gl20;
-        gl.glBindBuffer(GL20::GL_ELEMENT_ARRAY_BUFFER, 0);
+        gl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         gl.glDeleteBuffers(1, &tmpHandle);
         bufferHandle = 0;
     } else if (Gdx::gl11 != NULL) {
         tmpHandle = bufferHandle;
         GL11& gl = *Gdx::gl11;
-        gl.glBindBuffer(GL11::GL_ELEMENT_ARRAY_BUFFER, 0);
+        gl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         gl.glDeleteBuffers(1, &tmpHandle);
         bufferHandle = 0;
     }
@@ -151,7 +152,7 @@ tmpHandle(0)
 , isDirect(true)
 , isDirty(true)
 , isBound(false)
-, usage(isStatic ? GL11::GL_STATIC_DRAW : GL11::GL_DYNAMIC_DRAW)
+, usage(isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW)
 {
     // if (Gdx.app.getType() == ApplicationType.Android
     // && Gdx.app.getVersion() < 5) {
@@ -174,7 +175,7 @@ tmpHandle(0)
 , isDirect(true)
 , isDirty(true)
 , isBound(false)
-, usage(GL11::GL_STATIC_DRAW)
+, usage(GL_STATIC_DRAW)
 {
     buffer.flip();
     byteBuffer.flip();

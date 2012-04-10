@@ -24,17 +24,18 @@
 #include "gdx-cpp/Gdx.hpp"
 #include "ImmediateModeRenderer10.hpp"
 #include "ImmediateModeRenderer20.hpp"
+#include "gdx-cpp/gl.hpp"
 
 #include <stdexcept>
 
 using namespace gdx_cpp::graphics::glutils;
 using namespace gdx_cpp;
 
-const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Point(GL10::GL_POINT);
-const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Line(GL10::GL_LINES);
-const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Rectangle(GL10::GL_LINES);
-const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::FilledRectangle(GL10::GL_TRIANGLES);
-const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Box(GL10::GL_LINES);
+const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Point(GL_POINTS);
+const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Line(GL_LINES);
+const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Rectangle(GL_LINES);
+const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::FilledRectangle(GL_TRIANGLES);
+const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Box(GL_LINES);
 
 int ShapeRenderer::getGlType () {
     return glType;
@@ -88,9 +89,9 @@ void ShapeRenderer::begin (const ShapeType& type) {
     }
     
     if(renderer->getRendererType() == ImmediateModeRenderer::IMMEDIATE_GLES10) {
-        Gdx::gl10->glMatrixMode(GL10::GL_PROJECTION);
+        Gdx::gl10->glMatrixMode(GL_PROJECTION);
         Gdx::gl10->glLoadMatrixf(combined.val);
-        Gdx::gl10->glMatrixMode(GL10::GL_MODELVIEW);
+        Gdx::gl10->glMatrixMode(GL_MODELVIEW);
         Gdx::gl10->glLoadIdentity();
         ((ImmediateModeRenderer10*)renderer)->begin(currType->getGlType());
     } else {

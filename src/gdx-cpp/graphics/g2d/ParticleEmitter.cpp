@@ -20,8 +20,11 @@
 
 #include "ParticleEmitter.hpp"
 #include "gdx-cpp/math/MathUtils.hpp"
-#include <cmath>
 #include "gdx-cpp/graphics/GL10.hpp"
+#include "gdx-cpp/gl.hpp"
+
+#include <cmath>
+
 #include "SpriteBatch.hpp"
 #include <iostream>
 #include <stdexcept>
@@ -210,7 +213,7 @@ void ParticleEmitter::update (float delta) {
 }
 
 void ParticleEmitter::draw (SpriteBatch& spriteBatch) {
-    if (additive) spriteBatch.setBlendFunction(gdx_cpp::graphics::GL10::GL_SRC_ALPHA, gdx_cpp::graphics::GL10::GL10::GL_ONE);
+    if (additive) spriteBatch.setBlendFunction(GL_SRC_ALPHA, GL_ONE);
 
     for (unsigned index = 0; index < active.size(); index++) {
         if (active[index])
@@ -219,7 +222,7 @@ void ParticleEmitter::draw (SpriteBatch& spriteBatch) {
         }
     }
 
-    if (additive) spriteBatch.setBlendFunction(gdx_cpp::graphics::GL10::GL_SRC_ALPHA, gdx_cpp::graphics::GL10::GL_ONE_MINUS_SRC_ALPHA);
+    if (additive) spriteBatch.setBlendFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void ParticleEmitter::draw (SpriteBatch& spriteBatch,float delta) {
@@ -231,7 +234,7 @@ void ParticleEmitter::draw (SpriteBatch& spriteBatch,float delta) {
     int deltaMillis = (int)accumulator;
     accumulator -= deltaMillis;
 
-    if (additive) spriteBatch.setBlendFunction(gdx_cpp::graphics::GL10::GL_SRC_ALPHA, gdx_cpp::graphics::GL10::GL_ONE);
+    if (additive) spriteBatch.setBlendFunction(GL_SRC_ALPHA, GL_ONE);
 
     for (unsigned int index = 0; index < active.size(); index++) {
         if (active[index])
@@ -248,7 +251,7 @@ void ParticleEmitter::draw (SpriteBatch& spriteBatch,float delta) {
         }
     }
 
-    if (additive) spriteBatch.setBlendFunction(gdx_cpp::graphics::GL10::GL_SRC_ALPHA, gdx_cpp::graphics::GL10::GL_ONE_MINUS_SRC_ALPHA);
+    if (additive) spriteBatch.setBlendFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     if (delayTimer < delay) {
         delayTimer += deltaMillis;

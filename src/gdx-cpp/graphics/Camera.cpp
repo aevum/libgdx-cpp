@@ -24,6 +24,7 @@ using namespace gdx_cpp::graphics;
 
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/Graphics.hpp"
+#include "gdx-cpp/gl.hpp"
 
 gdx_cpp::graphics::Camera::Camera()
 : direction(0, 0, -1)
@@ -46,9 +47,9 @@ gdx_cpp::graphics::Camera::Camera(float viewportHeight, float viewportWidth, flo
 }
 
 void Camera::apply (const gdx_cpp::graphics::GL10& gl) {
-    gl.glMatrixMode(gdx_cpp::graphics::GL10::GL_PROJECTION);
+    gl.glMatrixMode(GL_PROJECTION);
     gl.glLoadMatrixf(projection.val);
-    gl.glMatrixMode(gdx_cpp::graphics::GL10::GL_MODELVIEW);
+    gl.glMatrixMode(GL_MODELVIEW);
     gl.glLoadMatrixf(view.val);
 }
 

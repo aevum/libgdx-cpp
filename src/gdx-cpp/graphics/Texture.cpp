@@ -28,6 +28,7 @@
 #include "gdx-cpp/assets/AssetLoaderParameters.hpp"
 #include "gdx-cpp/assets/loaders/TextureParameter.hpp"
 #include "gdx-cpp/graphics/glutils/PixmapTextureData.hpp"
+#include "gdx-cpp/gl.hpp"
 
 #include <list>
 #include <sstream>
@@ -37,19 +38,19 @@
 using namespace gdx_cpp::graphics;
 using namespace gdx_cpp;
 
-const Texture::TextureWrap Texture::TextureWrap::ClampToEdge = Texture::TextureWrap(GL10::GL_CLAMP_TO_EDGE);
-const Texture::TextureWrap Texture::TextureWrap::Repeat = Texture::TextureWrap(GL10::GL_REPEAT);
+const Texture::TextureWrap Texture::TextureWrap::ClampToEdge = Texture::TextureWrap(GL_CLAMP_TO_EDGE);
+const Texture::TextureWrap Texture::TextureWrap::Repeat = Texture::TextureWrap(GL_REPEAT);
 
-const Texture::TextureFilter Texture::TextureFilter::Nearest = Texture::TextureFilter(GL10::GL_NEAREST);
-const Texture::TextureFilter Texture::TextureFilter::Linear = Texture::TextureFilter(GL10::GL_LINEAR);
-const Texture::TextureFilter Texture::TextureFilter::MipMap = Texture::TextureFilter(GL10::GL_LINEAR_MIPMAP_LINEAR);
-const Texture::TextureFilter Texture::TextureFilter::MipMapNearestNearest = Texture::TextureFilter(GL10::GL_NEAREST_MIPMAP_NEAREST);
-const Texture::TextureFilter Texture::TextureFilter::MipMapLinearNearest = Texture::TextureFilter(GL10::GL_LINEAR_MIPMAP_NEAREST);
-const Texture::TextureFilter Texture::TextureFilter::MipMapNearestLinear = Texture::TextureFilter(GL10::GL_NEAREST_MIPMAP_LINEAR);
-const Texture::TextureFilter Texture::TextureFilter::MipMapLinearLinear = Texture::TextureFilter(GL10::GL_LINEAR_MIPMAP_LINEAR);
+const Texture::TextureFilter Texture::TextureFilter::Nearest = Texture::TextureFilter(GL_NEAREST);
+const Texture::TextureFilter Texture::TextureFilter::Linear = Texture::TextureFilter(GL_LINEAR);
+const Texture::TextureFilter Texture::TextureFilter::MipMap = Texture::TextureFilter(GL_LINEAR_MIPMAP_LINEAR);
+const Texture::TextureFilter Texture::TextureFilter::MipMapNearestNearest = Texture::TextureFilter(GL_NEAREST_MIPMAP_NEAREST);
+const Texture::TextureFilter Texture::TextureFilter::MipMapLinearNearest = Texture::TextureFilter(GL_LINEAR_MIPMAP_NEAREST);
+const Texture::TextureFilter Texture::TextureFilter::MipMapNearestLinear = Texture::TextureFilter(GL_NEAREST_MIPMAP_LINEAR);
+const Texture::TextureFilter Texture::TextureFilter::MipMapLinearLinear = Texture::TextureFilter(GL_LINEAR_MIPMAP_LINEAR);
 
 Texture::managedTextureMap Texture::managedTextures;
-int Texture::buffer = 0;
+unsigned int Texture::buffer = 0;
 assets::AssetManager* Texture::assetManager = 0;
 
 Texture::ptr Texture::newFromFile(const gdx_cpp::files::FileHandle::ptr file,
@@ -97,7 +98,7 @@ void Texture::load (const TextureData::ptr& data) {
     }
 
     if (data->getType() == TextureData::TextureDataType::Compressed) {
-        Gdx::gl->glBindTexture(GL10::GL_TEXTURE_2D, glHandle);
+        Gdx::gl->glBindTexture(GL_TEXTURE_2D, glHandle);
         data->uploadCompressedData();
         setFilter(minFilter, magFilter);
         setWrap(uWrap, vWrap);
@@ -121,12 +122,12 @@ void Texture::uploadImageData (const gdx_cpp::graphics::Pixmap::ptr& pixmap) {
         disposePixmap = true;
     }
 
-    Gdx::gl->glBindTexture(GL10::GL_TEXTURE_2D, glHandle);
-    Gdx::gl->glPixelStorei(GL10::GL_UNPACK_ALIGNMENT, 1);
+    Gdx::gl->glBindTexture(GL_TEXTURE_2D, glHandle);
+    Gdx::gl->glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     if (data->useMipMaps()) {
         glutils::MipMapGenerator::generateMipMap(tmp, tmp->getWidth(), tmp->getHeight(), disposePixmap);
     } else {
-        Gdx::gl->glTexImage2D(GL10::GL_TEXTURE_2D, 0, tmp->getGLInternalFormat(), tmp->getWidth(), tmp->getHeight(), 0,
+        Gdx::gl->glTexImage2D(GL_TEXTURE_2D, 0, tmp->getGLInternalFormat(), tmp->getWidth(), tmp->getHeight(), 0,
                             tmp->getGLFormat(), tmp->getGLType(), tmp->getPixels());
 
         if (disposePixmap) tmp->dispose();
@@ -143,12 +144,12 @@ void Texture::reload () {
 }
 
 void Texture::bind () {
-    Gdx::gl->glBindTexture(GL10::GL_TEXTURE_2D, glHandle);
+    Gdx::gl->glBindTexture(GL_TEXTURE_2D, glHandle);
 }
 
 void Texture::bind (int unit) {
-    Gdx::gl->glActiveTexture(GL10::GL_TEXTURE0 + unit);
-    Gdx::gl->glBindTexture(GL10::GL_TEXTURE_2D, glHandle);
+    Gdx::gl->glActiveTexture(GL_TEXTURE0 + unit);
+    Gdx::gl->glBindTexture(GL_TEXTURE_2D, glHandle);
 }
 
 void Texture::draw (Pixmap& pixmap,int x,int y) {
@@ -156,8 +157,8 @@ void Texture::draw (Pixmap& pixmap,int x,int y) {
         gdx_cpp::Gdx::app->error(__FILE__ , "can't draw to a managed texture");
     }
 
-    Gdx::gl->glBindTexture(GL10::GL_TEXTURE_2D, glHandle);
-    Gdx::gl->glTexSubImage2D(GL10::GL_TEXTURE_2D, 0, x, y, pixmap.getWidth(), pixmap.getHeight(), pixmap.getGLFormat(),
+    Gdx::gl->glBindTexture(GL_TEXTURE_2D, glHandle);
+    Gdx::gl->glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, pixmap.getWidth(), pixmap.getHeight(), pixmap.getGLFormat(),
                            pixmap.getGLType(), (const unsigned char*) pixmap.getPixels());
 }
 
@@ -201,16 +202,16 @@ void Texture::setWrap (const gdx_cpp::graphics::Texture::TextureWrap& u, const g
     this->uWrap = u;
     this->vWrap = v;
     bind();
-    Gdx::gl->glTexParameterf(GL10::GL_TEXTURE_2D, GL10::GL_TEXTURE_WRAP_S, u.getGLEnum());
-    Gdx::gl->glTexParameterf(GL10::GL_TEXTURE_2D, GL10::GL_TEXTURE_WRAP_T, v.getGLEnum());
+    Gdx::gl->glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, u.getGLEnum());
+    Gdx::gl->glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, v.getGLEnum());
 }
 
 void Texture::setFilter (const gdx_cpp::graphics::Texture::TextureFilter& minFilter, const gdx_cpp::graphics::Texture::TextureFilter& magFilter) {
     this->minFilter = minFilter;
     this->magFilter = magFilter;
     bind();
-    Gdx::gl->glTexParameterf(GL10::GL_TEXTURE_2D, GL10::GL_TEXTURE_MIN_FILTER, minFilter.getGLEnum());
-    Gdx::gl->glTexParameterf(GL10::GL_TEXTURE_2D, GL10::GL_TEXTURE_MAG_FILTER, magFilter.getGLEnum());
+    Gdx::gl->glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter.getGLEnum());
+    Gdx::gl->glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter.getGLEnum());
 }
 
 void Texture::dispose () {
@@ -363,4 +364,10 @@ Texture::~Texture()
 {
     dispose();
 }
+
+bool Texture::TextureFilter::isMipMap() {
+    return glEnum != GL_NEAREST && glEnum != GL_LINEAR;
+}
+
+
 

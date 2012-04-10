@@ -63,9 +63,7 @@ public:
         
         int glEnum;
 
-        bool isMipMap () {
-            return glEnum != gdx_cpp::graphics::GL10::GL_NEAREST && glEnum != GL10::GL_LINEAR;
-        }
+        bool isMipMap () ;
 
         int getGLEnum () const {
             return glEnum;
@@ -147,7 +145,7 @@ private:
     
     static managedTextureMap managedTextures;
 
-    static int buffer;
+    static unsigned int buffer;
 
     TextureFilter minFilter;
     TextureFilter magFilter;
@@ -156,7 +154,7 @@ private:
     
     TextureData::ptr data;
 
-    int glHandle;
+    unsigned int glHandle;
     
     bool enforcePotImages;
     bool useHWMipMap;

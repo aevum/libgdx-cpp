@@ -19,247 +19,232 @@
 
 #include "GL10.hpp"
 
+#include <gdx-cpp/gl.hpp>
+
 using namespace gdx_cpp::graphics;
 
 
- const int GL10::GL_OES_VERSION_1_0 = 1;
- const int GL10::GL_OES_read_format = 1;
- const int GL10::GL_OES_compressed_paletted_texture = 1;
- const int GL10::GL_DEPTH_BUFFER_BIT = 0x00000100;
- const int GL10::GL_STENCIL_BUFFER_BIT = 0x00000400;
- const int GL10::GL_COLOR_BUFFER_BIT = 0x00004000;
- const int GL10::GL_FALSE = 0;
- const int GL10::GL_TRUE = 1;
- const int GL10::GL_POINTS = 0x0000;
- const int GL10::GL_LINES = 0x0001;
- const int GL10::GL_LINE_LOOP = 0x0002;
- const int GL10::GL_LINE_STRIP = 0x0003;
- const int GL10::GL_TRIANGLES = 0x0004;
- const int GL10::GL_TRIANGLE_STRIP = 0x0005;
- const int GL10::GL_TRIANGLE_FAN = 0x0006;
- const int GL10::GL_NEVER = 0x0200;
- const int GL10::GL_LESS = 0x0201;
- const int GL10::GL_EQUAL = 0x0202;
- const int GL10::GL_LEQUAL = 0x0203;
- const int GL10::GL_GREATER = 0x0204;
- const int GL10::GL_NOTEQUAL = 0x0205;
- const int GL10::GL_GEQUAL = 0x0206;
- const int GL10::GL_ALWAYS = 0x0207;
- const int GL10::GL_ZERO = 0;
- const int GL10::GL_ONE = 1;
- const int GL10::GL_SRC_COLOR = 0x0300;
- const int GL10::GL_ONE_MINUS_SRC_COLOR = 0x0301;
- const int GL10::GL_SRC_ALPHA = 0x0302;
- const int GL10::GL_ONE_MINUS_SRC_ALPHA = 0x0303;
- const int GL10::GL_DST_ALPHA = 0x0304;
- const int GL10::GL_ONE_MINUS_DST_ALPHA = 0x0305;
- const int GL10::GL_DST_COLOR = 0x0306;
- const int GL10::GL_ONE_MINUS_DST_COLOR = 0x0307;
- const int GL10::GL_SRC_ALPHA_SATURATE = 0x0308;
- const int GL10::GL_FRONT = 0x0404;
- const int GL10::GL_BACK = 0x0405;
- const int GL10::GL_FRONT_AND_BACK = 0x0408;
- const int GL10::GL_FOG = 0x0B60;
- const int GL10::GL_LIGHTING = 0x0B50;
- const int GL10::GL_TEXTURE_2D = 0x0DE1;
- const int GL10::GL_CULL_FACE = 0x0B44;
- const int GL10::GL_ALPHA_TEST = 0x0BC0;
- const int GL10::GL_BLEND = 0x0BE2;
- const int GL10::GL_COLOR_LOGIC_OP = 0x0BF2;
- const int GL10::GL_DITHER = 0x0BD0;
- const int GL10::GL_STENCIL_TEST = 0x0B90;
- const int GL10::GL_DEPTH_TEST = 0x0B71;
- const int GL10::GL_POINT_SMOOTH = 0x0B10;
- const int GL10::GL_LINE_SMOOTH = 0x0B20;
- const int GL10::GL_SCISSOR_TEST = 0x0C11;
- const int GL10::GL_COLOR_MATERIAL = 0x0B57;
- const int GL10::GL_NORMALIZE = 0x0BA1;
- const int GL10::GL_RESCALE_NORMAL = 0x803A;
- const int GL10::GL_POLYGON_OFFSET_FILL = 0x8037;
- const int GL10::GL_VERTEX_ARRAY = 0x8074;
- const int GL10::GL_NORMAL_ARRAY = 0x8075;
- const int GL10::GL_COLOR_ARRAY = 0x8076;
- const int GL10::GL_TEXTURE_COORD_ARRAY = 0x8078;
- const int GL10::GL_MULTISAMPLE = 0x809D;
- const int GL10::GL_SAMPLE_ALPHA_TO_COVERAGE = 0x809E;
- const int GL10::GL_SAMPLE_ALPHA_TO_ONE = 0x809F;
- const int GL10::GL_SAMPLE_COVERAGE = 0x80A0;
- const int GL10::GL_NO_ERROR = 0;
- const int GL10::GL_INVALID_ENUM = 0x0500;
- const int GL10::GL_INVALID_VALUE = 0x0501;
- const int GL10::GL_INVALID_OPERATION = 0x0502;
- const int GL10::GL_STACK_OVERFLOW = 0x0503;
- const int GL10::GL_STACK_UNDERFLOW = 0x0504;
- const int GL10::GL_OUT_OF_MEMORY = 0x0505;
- const int GL10::GL_EXP = 0x0800;
- const int GL10::GL_EXP2 = 0x0801;
- const int GL10::GL_FOG_DENSITY = 0x0B62;
- const int GL10::GL_FOG_START = 0x0B63;
- const int GL10::GL_FOG_END = 0x0B64;
- const int GL10::GL_FOG_MODE = 0x0B65;
- const int GL10::GL_FOG_COLOR = 0x0B66;
- const int GL10::GL_CW = 0x0900;
- const int GL10::GL_CCW = 0x0901;
- const int GL10::GL_SMOOTH_POINT_SIZE_RANGE = 0x0B12;
- const int GL10::GL_SMOOTH_LINE_WIDTH_RANGE = 0x0B22;
- const int GL10::GL_ALIASED_POINT_SIZE_RANGE = 0x846D;
- const int GL10::GL_ALIASED_LINE_WIDTH_RANGE = 0x846E;
- const int GL10::GL_IMPLEMENTATION_COLOR_READ_TYPE_OES = 0x8B9A;
- const int GL10::GL_IMPLEMENTATION_COLOR_READ_FORMAT_OES = 0x8B9B;
- const int GL10::GL_MAX_LIGHTS = 0x0D31;
- const int GL10::GL_MAX_TEXTURE_SIZE = 0x0D33;
- const int GL10::GL_MAX_MODELVIEW_STACK_DEPTH = 0x0D36;
- const int GL10::GL_MAX_PROJECTION_STACK_DEPTH = 0x0D38;
- const int GL10::GL_MAX_TEXTURE_STACK_DEPTH = 0x0D39;
- const int GL10::GL_MAX_VIEWPORT_DIMS = 0x0D3A;
- const int GL10::GL_MAX_ELEMENTS_VERTICES = 0x80E8;
- const int GL10::GL_MAX_ELEMENTS_INDICES = 0x80E9;
- const int GL10::GL_MAX_TEXTURE_UNITS = 0x84E2;
- const int GL10::GL_NUM_COMPRESSED_TEXTURE_FORMATS = 0x86A2;
- const int GL10::GL_COMPRESSED_TEXTURE_FORMATS = 0x86A3;
- const int GL10::GL_SUBPIXEL_BITS = 0x0D50;
- const int GL10::GL_RED_BITS = 0x0D52;
- const int GL10::GL_GREEN_BITS = 0x0D53;
- const int GL10::GL_BLUE_BITS = 0x0D54;
- const int GL10::GL_ALPHA_BITS = 0x0D55;
- const int GL10::GL_DEPTH_BITS = 0x0D56;
- const int GL10::GL_STENCIL_BITS = 0x0D57;
- const int GL10::GL_DONT_CARE = 0x1100;
- const int GL10::GL_FASTEST = 0x1101;
- const int GL10::GL_NICEST = 0x1102;
- const int GL10::GL_PERSPECTIVE_CORRECTION_HINT = 0x0C50;
- const int GL10::GL_POINT_SMOOTH_HINT = 0x0C51;
- const int GL10::GL_LINE_SMOOTH_HINT = 0x0C52;
- const int GL10::GL_POLYGON_SMOOTH_HINT = 0x0C53;
- const int GL10::GL_FOG_HINT = 0x0C54;
- const int GL10::GL_LIGHT_MODEL_AMBIENT = 0x0B53;
- const int GL10::GL_LIGHT_MODEL_TWO_SIDE = 0x0B52;
- const int GL10::GL_AMBIENT = 0x1200;
- const int GL10::GL_DIFFUSE = 0x1201;
- const int GL10::GL_SPECULAR = 0x1202;
- const int GL10::GL_POSITION = 0x1203;
- const int GL10::GL_SPOT_DIRECTION = 0x1204;
- const int GL10::GL_SPOT_EXPONENT = 0x1205;
- const int GL10::GL_SPOT_CUTOFF = 0x1206;
- const int GL10::GL_CONSTANT_ATTENUATION = 0x1207;
- const int GL10::GL_LINEAR_ATTENUATION = 0x1208;
- const int GL10::GL_QUADRATIC_ATTENUATION = 0x1209;
- const int GL10::GL_BYTE = 0x1400;
- const int GL10::GL_UNSIGNED_BYTE = 0x1401;
- const int GL10::GL_SHORT = 0x1402;
- const int GL10::GL_UNSIGNED_SHORT = 0x1403;
- const int GL10::GL_FLOAT = 0x1406;
- const int GL10::GL_CLEAR = 0x1500;
- const int GL10::GL_AND = 0x1501;
- const int GL10::GL_AND_REVERSE = 0x1502;
- const int GL10::GL_COPY = 0x1503;
- const int GL10::GL_AND_INVERTED = 0x1504;
- const int GL10::GL_NOOP = 0x1505;
- const int GL10::GL_XOR = 0x1506;
- const int GL10::GL_OR = 0x1507;
- const int GL10::GL_NOR = 0x1508;
- const int GL10::GL_EQUIV = 0x1509;
- const int GL10::GL_INVERT = 0x150A;
- const int GL10::GL_OR_REVERSE = 0x150B;
- const int GL10::GL_COPY_INVERTED = 0x150C;
- const int GL10::GL_OR_INVERTED = 0x150D;
- const int GL10::GL_NAND = 0x150E;
- const int GL10::GL_SET = 0x150F;
- const int GL10::GL_EMISSION = 0x1600;
- const int GL10::GL_SHININESS = 0x1601;
- const int GL10::GL_AMBIENT_AND_DIFFUSE = 0x1602;
- const int GL10::GL_MODELVIEW = 0x1700;
- const int GL10::GL_PROJECTION = 0x1701;
- const int GL10::GL_TEXTURE = 0x1702;
- const int GL10::GL_ALPHA = 0x1906;
- const int GL10::GL_RGB = 0x1907;
- const int GL10::GL_RGBA = 0x1908;
- const int GL10::GL_LUMINANCE = 0x1909;
- const int GL10::GL_LUMINANCE_ALPHA = 0x190A;
- const int GL10::GL_UNPACK_ALIGNMENT = 0x0CF5;
- const int GL10::GL_PACK_ALIGNMENT = 0x0D05;
- const int GL10::GL_UNSIGNED_SHORT_4_4_4_4 = 0x8033;
- const int GL10::GL_UNSIGNED_SHORT_5_5_5_1 = 0x8034;
- const int GL10::GL_UNSIGNED_SHORT_5_6_5 = 0x8363;
- const int GL10::GL_FLAT = 0x1D00;
- const int GL10::GL_SMOOTH = 0x1D01;
- const int GL10::GL_KEEP = 0x1E00;
- const int GL10::GL_REPLACE = 0x1E01;
- const int GL10::GL_INCR = 0x1E02;
- const int GL10::GL_DECR = 0x1E03;
- const int GL10::GL_VENDOR = 0x1F00;
- const int GL10::GL_RENDERER = 0x1F01;
- const int GL10::GL_VERSION = 0x1F02;
- const int GL10::GL_EXTENSIONS = 0x1F03;
- const int GL10::GL_MODULATE = 0x2100;
- const int GL10::GL_DECAL = 0x2101;
- const int GL10::GL_ADD = 0x0104;
- const int GL10::GL_TEXTURE_ENV_MODE = 0x2200;
- const int GL10::GL_TEXTURE_ENV_COLOR = 0x2201;
- const int GL10::GL_TEXTURE_ENV = 0x2300;
- const int GL10::GL_NEAREST = 0x2600;
- const int GL10::GL_LINEAR = 0x2601;
- const int GL10::GL_NEAREST_MIPMAP_NEAREST = 0x2700;
- const int GL10::GL_LINEAR_MIPMAP_NEAREST = 0x2701;
- const int GL10::GL_NEAREST_MIPMAP_LINEAR = 0x2702;
- const int GL10::GL_LINEAR_MIPMAP_LINEAR = 0x2703;
- const int GL10::GL_TEXTURE_MAG_FILTER = 0x2800;
- const int GL10::GL_TEXTURE_MIN_FILTER = 0x2801;
- const int GL10::GL_TEXTURE_WRAP_S = 0x2802;
- const int GL10::GL_TEXTURE_WRAP_T = 0x2803;
- const int GL10::GL_TEXTURE0 = 0x84C0;
- const int GL10::GL_TEXTURE1 = 0x84C1;
- const int GL10::GL_TEXTURE2 = 0x84C2;
- const int GL10::GL_TEXTURE3 = 0x84C3;
- const int GL10::GL_TEXTURE4 = 0x84C4;
- const int GL10::GL_TEXTURE5 = 0x84C5;
- const int GL10::GL_TEXTURE6 = 0x84C6;
- const int GL10::GL_TEXTURE7 = 0x84C7;
- const int GL10::GL_TEXTURE8 = 0x84C8;
- const int GL10::GL_TEXTURE9 = 0x84C9;
- const int GL10::GL_TEXTURE10 = 0x84CA;
- const int GL10::GL_TEXTURE11 = 0x84CB;
- const int GL10::GL_TEXTURE12 = 0x84CC;
- const int GL10::GL_TEXTURE13 = 0x84CD;
- const int GL10::GL_TEXTURE14 = 0x84CE;
- const int GL10::GL_TEXTURE15 = 0x84CF;
- const int GL10::GL_TEXTURE16 = 0x84D0;
- const int GL10::GL_TEXTURE17 = 0x84D1;
- const int GL10::GL_TEXTURE18 = 0x84D2;
- const int GL10::GL_TEXTURE19 = 0x84D3;
- const int GL10::GL_TEXTURE20 = 0x84D4;
- const int GL10::GL_TEXTURE21 = 0x84D5;
- const int GL10::GL_TEXTURE22 = 0x84D6;
- const int GL10::GL_TEXTURE23 = 0x84D7;
- const int GL10::GL_TEXTURE24 = 0x84D8;
- const int GL10::GL_TEXTURE25 = 0x84D9;
- const int GL10::GL_TEXTURE26 = 0x84DA;
- const int GL10::GL_TEXTURE27 = 0x84DB;
- const int GL10::GL_TEXTURE28 = 0x84DC;
- const int GL10::GL_TEXTURE29 = 0x84DD;
- const int GL10::GL_TEXTURE30 = 0x84DE;
- const int GL10::GL_TEXTURE31 = 0x84DF;
- const int GL10::GL_REPEAT = 0x2901;
- const int GL10::GL_CLAMP_TO_EDGE = 0x812F;
- const int GL10::GL_PALETTE4_RGB8_OES = 0x8B90;
- const int GL10::GL_PALETTE4_RGBA8_OES = 0x8B91;
- const int GL10::GL_PALETTE4_R5_G6_B5_OES = 0x8B92;
- const int GL10::GL_PALETTE4_RGBA4_OES = 0x8B93;
- const int GL10::GL_PALETTE4_RGB5_A1_OES = 0x8B94;
- const int GL10::GL_PALETTE8_RGB8_OES = 0x8B95;
- const int GL10::GL_PALETTE8_RGBA8_OES = 0x8B96;
- const int GL10::GL_PALETTE8_R5_G6_B5_OES = 0x8B97;
- const int GL10::GL_PALETTE8_RGBA4_OES = 0x8B98;
- const int GL10::GL_PALETTE8_RGB5_A1_OES = 0x8B99;
- const int GL10::GL_LIGHT0 = 0x4000;
- const int GL10::GL_LIGHT1 = 0x4001;
- const int GL10::GL_LIGHT2 = 0x4002;
- const int GL10::GL_LIGHT3 = 0x4003;
- const int GL10::GL_LIGHT4 = 0x4004;
- const int GL10::GL_LIGHT5 = 0x4005;
- const int GL10::GL_LIGHT6 = 0x4006;
- const int GL10::GL_LIGHT7 = 0x4007;
 
- const int GL10::GL_POINT = 0x1B00;
- const int GL10::GL_LINE = 0x1B01;
- const int GL10::GL_FILL = 0x1B02;
+
+
+void GL10::glAlphaFunc(int func, float ref) const {
+    ::glAlphaFunc(func, ref);
+}
+
+void GL10::glFogfv(int pname, const float* params) const
+{
+    ::glFogfv(pname, params);
+}
+void GL10::glClientActiveTexture(int texture) const {
+    ::glClientActiveTexture(texture);
+}
+void GL10::glColor4f(float red, float green, float blue, float alpha) const {
+    ::glColor4f(red, green, blue, alpha);
+}
+void GL10::glColorPointer(int size, int type, int stride, const void* pointer) {
+    if (last_color_pointer != pointer) {
+        last_color_pointer = pointer;
+        ::glColorPointer(size, type, stride, pointer);
+    }
+}
+
+void GL10::glDisableClientState(int array) {
+    unsigned char state = 0;
+    switch(array) {
+        case GL_COLOR_ARRAY:
+            state = VERTEX_STATE_GL_COLOR_ARRAY;
+            break;
+
+#ifdef GL_VERSION_1_3
+        case GL_EDGE_FLAG_ARRAY:
+            state = VERTEX_STATE_GL_EDGE_FLAG_ARRAY;
+            break;
+            
+        case GL_FOG_COORD_ARRAY:
+            state = VERTEX_STATE_GL_FOG_COORD_ARRAY;
+            break;
+            
+        case GL_INDEX_ARRAY:
+            state = VERTEX_STATE_GL_INDEX_ARRAY;
+            break;            
+
+        case GL_SECONDARY_COLOR_ARRAY:
+            state = VERTEX_STATE_GL_SECONDARY_COLOR_ARRAY;
+            break;
+#endif
+        case GL_NORMAL_ARRAY:
+            state = VERTEX_STATE_GL_NORMAL_ARRAY;
+            break;
+            
+        case GL_TEXTURE_COORD_ARRAY:
+            state = VERTEX_STATE_GL_TEXTURE_COORD_ARRAY;
+            break;
+        case GL_VERTEX_ARRAY:
+            state = VERTEX_STATE_GL_VERTEX_ARRAY;
+            break;
+    }
+    
+    if (array == GL_TEXTURE_COORD_ARRAY || (state & vertex_states)) {
+        vertex_states &= ~state;
+        ::glDisableClientState(array);
+    }
+}
+void GL10::glEnableClientState(int array) {
+    unsigned char state = 0;
+    switch(array) {
+        case GL_COLOR_ARRAY:
+            state = VERTEX_STATE_GL_COLOR_ARRAY;
+            break;
+#ifdef GL_VERSION_1_3
+        case GL_EDGE_FLAG_ARRAY:
+            state = VERTEX_STATE_GL_EDGE_FLAG_ARRAY;
+            break;
+            
+        case GL_FOG_COORD_ARRAY:
+            state = VERTEX_STATE_GL_FOG_COORD_ARRAY;
+            break;
+            
+        case GL_INDEX_ARRAY:
+            state = VERTEX_STATE_GL_INDEX_ARRAY;
+            break;
+            
+        case GL_SECONDARY_COLOR_ARRAY:
+            state = VERTEX_STATE_GL_SECONDARY_COLOR_ARRAY;
+            break;
+#endif
+        case GL_NORMAL_ARRAY:
+            state = VERTEX_STATE_GL_NORMAL_ARRAY;
+            break;
+        case GL_TEXTURE_COORD_ARRAY:
+            state = VERTEX_STATE_GL_TEXTURE_COORD_ARRAY;
+            break;
+        case GL_VERTEX_ARRAY:
+            state = VERTEX_STATE_GL_VERTEX_ARRAY;
+            break;
+    }
+    
+    if (array == GL_TEXTURE_COORD_ARRAY || (vertex_states & state) == 0) {
+        vertex_states |= state;
+        ::glEnableClientState(array);
+    }
+}
+void GL10::glFogf(int pname, float param) const {
+    ::glFogf(pname, param);
+}
+
+void GL10::glFrustumf(float left, float right, float bottom, float top, float zNear, float zFar) const {
+    #ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
+    ::glFrustum(left, right,bottom,top, zNear, zFar);
+    #else
+    ::glFrustumf(left, right,bottom,top, zNear, zFar);
+    #endif
+}
+
+
+
+void GL10::glLightf(int light, int pname, float param) const {
+    ::glLightf(light, pname, param);
+}
+
+void GL10::glLightfv(int light, int pname, const float* params) const {
+    ::glLightfv(light,pname,params);
+}
+
+void GL10::glLightModelf(int pname, float param) const {
+    :: glLightModelf(pname, param);
+}
+
+void GL10::glLightModelfv(int pname, const float* params) const {
+    ::glLightModelfv(pname, params);
+}
+
+void GL10::glLoadIdentity() const {
+    ::glLoadIdentity();
+}
+
+void GL10::glLoadMatrixf(const float* m) const {
+    ::glLoadMatrixf(m);
+}
+
+void GL10::glLogicOp(int opcode) const {
+    ::glLogicOp(opcode);
+}
+
+void GL10::glMaterialf(int face, int pname, float param) const {
+    ::glMaterialf(face,pname, param);
+}
+
+void GL10::glMaterialfv(int face, int pname, const float* params) const {
+    ::glMaterialfv(face,pname, params);
+}
+void GL10::glMatrixMode(int mode) const {
+    ::glMatrixMode(mode);
+}
+void GL10::glMultiTexCoord4f(int target, float s, float t, float r, float q) const {
+    ::glMultiTexCoord4f(target, s, t, r, q);
+}
+void GL10::glMultMatrixf(const float* m) const {
+    ::glMultMatrixf(m);
+}
+void GL10::glNormal3f(float nx, float ny, float nz) const {
+    ::glNormal3f(nx,ny,nz);
+}
+void GL10::glNormalPointer(int type, int stride, const void* pointer) const {
+    ::glNormalPointer(type, stride, pointer);
+}
+void GL10::glOrthof(float left, float right, float bottom, float top, float zNear, float zFar) const {
+    #ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
+    ::glOrtho(left,right,bottom,top,zNear,zFar);
+    #else
+    ::glOrthof(left,right,bottom,top,zNear,zFar);
+    #endif
+}
+
+void GL10::glPointSize(float size) const {
+    ::glPointSize(size);
+}
+
+void GL10::glPolygonMode(int face, int mode) const {
+    //     ::glPolygonMode(face, mode);
+}
+
+void GL10::glPopMatrix() const {
+    ::glPopMatrix();
+}
+void GL10::glPushMatrix() const {
+    ::glPushMatrix();
+}
+
+void GL10::glRotatef(float angle, float x, float y, float z) const {
+    ::glRotatef(angle, x, y, z);
+}
+void GL10::glSampleCoverage(float value, bool invert) const {
+    ::glSampleCoverage(value, invert);
+}
+void GL10::glScalef(float x, float y, float z) const {
+    ::glScalef(x,y,z);
+}
+void GL10::glShadeModel(int mode) const {
+    ::glShadeModel(mode);
+}
+void GL10::glTexCoordPointer(int size, int type, int stride, const void* pointer) {
+    if (last_tex_coord_pointer != pointer) {
+        last_tex_coord_pointer = pointer;
+        ::glTexCoordPointer(size, type, stride, pointer);
+    }
+}
+void GL10::glTexEnvf(int target, int pname, float param) const {
+    ::glTexEnvf(target,pname,param);
+}
+void GL10::glTexEnvfv(int target, int pname, const float* params) const {
+    ::glTexEnvfv(target, pname, params);
+}
+void GL10::glTranslatef(float x, float y, float z) const {
+    ::glTranslatef(x,y , z);
+}
+void GL10::glVertexPointer(int size, int type, int stride, const void* pointer) {
+    if (pointer != last_vertex_pointer) {
+        last_vertex_pointer = pointer;
+        ::glVertexPointer(size, type, stride,  pointer);
+    }
+}

@@ -24,6 +24,7 @@
 #include "gdx-cpp/graphics/GL10.hpp"
 #include "gdx-cpp/graphics/GL11.hpp"
 #include "gdx-cpp/Application.hpp"
+#include "gdx-cpp/gl.hpp"
 
 using namespace gdx_cpp::graphics::glutils;
 using namespace gdx_cpp::graphics;
@@ -61,38 +62,33 @@ void VertexArray::bind () {
 
         switch (attribute.usage) {
         case VertexAttributes::Usage::Position:
-            byteBuffer.position(attribute.offset);
-            gl.glEnableClientState(GL11::GL_VERTEX_ARRAY);
-            gl.glVertexPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, (unsigned char*) byteBuffer + attribute.offset);
+            gl.glEnableClientState(GL_VERTEX_ARRAY);
+            gl.glVertexPointer(attribute.numComponents, GL_FLOAT, attributes.vertexSize, (unsigned char*) byteBuffer + attribute.offset);
             break;
 
         case VertexAttributes::Usage::Color:
         case VertexAttributes::Usage::ColorPacked:
         {
-            int colorType = GL10::GL_FLOAT;
-            if (attribute.usage == VertexAttributes::Usage::ColorPacked) colorType = GL11::GL_UNSIGNED_BYTE;
-            byteBuffer.position(attribute.offset);
-            gl.glEnableClientState(GL10::GL_COLOR_ARRAY);
+            int colorType = GL_FLOAT;
+            if (attribute.usage == VertexAttributes::Usage::ColorPacked) colorType = GL_UNSIGNED_BYTE;
+            gl.glEnableClientState(GL_COLOR_ARRAY);
             gl.glColorPointer(attribute.numComponents, colorType, attributes.vertexSize, (unsigned char*) byteBuffer + attribute.offset);
             break;
         }
         case VertexAttributes::Usage::Normal:
-            byteBuffer.position(attribute.offset);
-            gl.glEnableClientState(GL10::GL_NORMAL_ARRAY);
-            gl.glNormalPointer(GL10::GL_FLOAT, attributes.vertexSize, (unsigned char*) byteBuffer + attribute.offset);
+            gl.glEnableClientState(GL_NORMAL_ARRAY);
+            gl.glNormalPointer(GL_FLOAT, attributes.vertexSize, (unsigned char*) byteBuffer + attribute.offset);
             break;
 
         case VertexAttributes::Usage::TextureCoordinates:
-            gl.glClientActiveTexture(GL10::GL_TEXTURE0 + textureUnit);
-            gl.glEnableClientState(GL10::GL_TEXTURE_COORD_ARRAY);
-            byteBuffer.position(attribute.offset);
-            gl.glTexCoordPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, (unsigned char*) byteBuffer + attribute.offset);
+            gl.glClientActiveTexture(GL_TEXTURE0 + textureUnit);
+            gl.glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+            gl.glTexCoordPointer(attribute.numComponents, GL_FLOAT, attributes.vertexSize, (unsigned char*) byteBuffer + attribute.offset);
             textureUnit++;
             break;
 
         default:
-            break;
-            // throw new GdxRuntimeException("unkown vertex attribute type: " + attribute.usage);
+            throw std::runtime_error("unkown vertex attribute type");
         }
     }
 
@@ -112,14 +108,14 @@ void VertexArray::unbind () {
             break; // no-op, we also need a position bound in gles
         case VertexAttributes::Usage::Color:
         case VertexAttributes::Usage::ColorPacked:
-            gl.glDisableClientState(GL11::GL_COLOR_ARRAY);
+            gl.glDisableClientState(GL_COLOR_ARRAY);
             break;
         case VertexAttributes::Usage::Normal:
-            gl.glDisableClientState(GL11::GL_NORMAL_ARRAY);
+            gl.glDisableClientState(GL_NORMAL_ARRAY);
             break;
         case VertexAttributes::Usage::TextureCoordinates:
-            gl.glClientActiveTexture(GL11::GL_TEXTURE0 + textureUnit);
-            gl.glDisableClientState(GL11::GL_TEXTURE_COORD_ARRAY);
+            gl.glClientActiveTexture(GL_TEXTURE0 + textureUnit);
+            gl.glDisableClientState(GL_TEXTURE_COORD_ARRAY);
             textureUnit++;
             break;
         default:

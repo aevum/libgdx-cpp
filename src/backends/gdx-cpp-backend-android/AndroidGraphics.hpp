@@ -20,6 +20,7 @@
 
 #include <gdx-cpp/Graphics.hpp>
 #include <gdx-cpp/graphics/Pixmap.hpp>
+#include <stdint.h>
 
 namespace gdx_cpp {
 

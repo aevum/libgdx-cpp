@@ -33,6 +33,7 @@
 #include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
 #include "gdx-cpp/graphics/Mesh.hpp"
 #include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
+#include "gdx-cpp/gl.hpp"
 
 using namespace gdx_cpp::graphics::glutils;
 using namespace gdx_cpp::graphics::g2d;
@@ -44,8 +45,8 @@ gdx_cpp::graphics::g2d::SpriteBatch::SpriteBatch(int size) :
         , maxSpritesInBatch(0)
         , renderCalls(0)
         , tempColor(1,1,1,1)
-        , blendSrcFunc(GL10::GL_SRC_ALPHA)
-        , blendDstFunc(GL10::GL_ONE_MINUS_SRC_ALPHA)
+        , blendSrcFunc(GL_SRC_ALPHA)
+        , blendDstFunc(GL_ONE_MINUS_SRC_ALPHA)
         , blendingDisabled(false)
         , drawing(false)
         , currBufferIdx(0)
@@ -128,7 +129,7 @@ void SpriteBatch::begin () {
 
     renderCalls = 0;
     Gdx::gl->glDepthMask(false);
-    Gdx::gl->glEnable(GL10::GL_TEXTURE_2D);
+    Gdx::gl->glEnable(GL_TEXTURE_2D);
 
     if (Gdx::graphics->isGL20Available()) {
         if (customShader != NULL)
@@ -153,8 +154,8 @@ void SpriteBatch::end () {
 
     GLCommon& gl = *Gdx::gl;
     gl.glDepthMask(true);
-    if (isBlendingEnabled()) gl.glDisable(GL10::GL_BLEND);
-    gl.glDisable(GL10::GL_TEXTURE_2D);
+    if (isBlendingEnabled()) gl.glDisable(GL_BLEND);
+    gl.glDisable(GL_TEXTURE_2D);
 
     if (Gdx::graphics->isGL20Available()) {
         if (customShader != NULL)
@@ -871,26 +872,26 @@ void SpriteBatch::renderMesh () {
 
     if (Gdx::graphics->isGL20Available()) {
         if (blendingDisabled) {
-            Gdx::gl20->glDisable(GL20::GL_BLEND);
+            Gdx::gl20->glDisable(GL_BLEND);
         } else {
             GL20& gl20 = *Gdx::gl20;
-            gl20.glEnable(GL20::GL_BLEND);
+            gl20.glEnable(GL_BLEND);
             gl20.glBlendFunc(blendSrcFunc, blendDstFunc);
         }
 
         if (customShader != NULL)
-            mesh->render(*customShader, GL10::GL_TRIANGLES, 0, spritesInBatch * 6);
+            mesh->render(*customShader, GL_TRIANGLES, 0, spritesInBatch * 6);
         else
-            mesh->render(*shader, GL10::GL_TRIANGLES, 0, spritesInBatch * 6);
+            mesh->render(*shader, GL_TRIANGLES, 0, spritesInBatch * 6);
     } else {
         if (blendingDisabled) {
-            Gdx::gl10->glDisable(GL10::GL_BLEND);
+            Gdx::gl10->glDisable(GL_BLEND);
         } else {
             GL10& gl10 = *Gdx::gl10;
-            gl10.glEnable(GL10::GL_BLEND);
+            gl10.glEnable(GL_BLEND);
             gl10.glBlendFunc(blendSrcFunc, blendDstFunc);
         }
-        mesh->render(GL10::GL_TRIANGLES, 0, spritesInBatch * 6);
+        mesh->render(GL_TRIANGLES, 0, spritesInBatch * 6);
     }
 
     idx = 0;
@@ -958,8 +959,8 @@ SpriteBatch::SpriteBatch(int size, int buffers) :
         , maxSpritesInBatch(0)
         , renderCalls(0)
         , tempColor(1,1,1,1)
-        , blendSrcFunc(GL10::GL_SRC_ALPHA)
-        , blendDstFunc(GL10::GL_ONE_MINUS_SRC_ALPHA)
+        , blendSrcFunc(GL_SRC_ALPHA)
+        , blendDstFunc(GL_ONE_MINUS_SRC_ALPHA)
         , blendingDisabled(false)
         , drawing(false)
         , currBufferIdx(0)
@@ -1066,9 +1067,9 @@ void SpriteBatch::setupMatrices()
 {
     if (!Gdx::graphics->isGL20Available()) {
         GL10& gl = *Gdx::gl10;
-        gl.glMatrixMode(GL10::GL_PROJECTION);
+        gl.glMatrixMode(GL_PROJECTION);
         gl.glLoadMatrixf(projectionMatrix.val);
-        gl.glMatrixMode(GL10::GL_MODELVIEW);
+        gl.glMatrixMode(GL_MODELVIEW);
         gl.glLoadMatrixf(transformMatrix.val);
     } else {
         combinedMatrix.set(projectionMatrix).mul(transformMatrix);

@@ -17,10 +17,6 @@
 
 #include "AndroidGraphics.hpp"
 
-#include "AndroidGL10.hpp"
-#include "AndroidGL11.hpp"
-#include "AndroidGL20.hpp"
-#include "AndroidGLU.hpp"
 #include <stdexcept>
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/Graphics.hpp>
@@ -34,6 +30,14 @@
 
 #include <gdx-cpp/graphics/g2d/Gdx2DPixmap.hpp>
 #include <gdx-cpp/graphics/g2d/svg/AggSvgPixmap.hpp>
+
+#include <gdx-cpp/graphics/GL10.hpp>
+#include <gdx-cpp/graphics/GL11.hpp>
+#include <gdx-cpp/graphics/GLCommon.hpp>
+#include <gdx-cpp/graphics/GL20.hpp>
+#include <gdx-cpp/graphics/GLU.hpp>
+#include <gdx-cpp/gl.hpp>
+#include "AndroidGLU.hpp"
 
 using namespace gdx_cpp::backends::android;
 using namespace gdx_cpp::graphics;
@@ -209,7 +213,7 @@ bool gdx_cpp::backends::android::AndroidGraphics::supportsExtension(const std::s
 
 void gdx_cpp::backends::android::AndroidGraphics::initialize()
 {
-    const GLubyte* version = glGetString(GL_VERSION);
+    const GLubyte* version = ::glGetString(GL_VERSION);
     int major = atoi((const char*) version);
     int minor = atoi((const char*) &version[2]);
     
@@ -218,9 +222,9 @@ void gdx_cpp::backends::android::AndroidGraphics::initialize()
         
     } else {
         if (major == 1 && minor < 5) {
-            glCommon = gl10 = new AndroidGL10;
+            glCommon = gl10 = new GL10;
         } else {
-            glCommon = gl10 = gl11 = new AndroidGL11;
+            glCommon = gl10 = gl11 = new GL11;
         }
     }
 

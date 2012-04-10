@@ -3,7 +3,8 @@
 # changelog
 
 22/01/2012 : Updated the intialization method names to gdxcpp_init, gdxcpp_create_application
-
+10/04/2012 : Removed all class inheritance mechanism from the GL10/GL11 backends. This means that we use raw calls now, which enables
+             us to do some optimization on redundant OpenGL call states
 
 ## Instalation guide
 
@@ -78,7 +79,7 @@ Requirements:
 #### Step-by-step guide
 
 1. create a build dir somewhere on your home partition
-2. cmake -DCMAKE_TOOLCHAIN_FILE=PATH-TO-CLONED-LIBGDXCPP/cmake/android.toolchain.cmake PATH-TO-CLONED-LIBGDXCPP
+2. cmake -DCMAKE_TOOLCHAIN_FILE=PATH-TO-CLONED-LIBGDXCPP/cmake/android.toolchain.cmake PATH-TO-CLONED-LIBGDXCPP -DANDROID_NO_UNDEFINED=FALSE
 3. ccmake .
 4. Edit your configuration as needed
 5. make

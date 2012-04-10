@@ -26,8 +26,7 @@
 #include <agg_pixfmt_rgb.h>
 #include <agg_scanline_p.h>
 
-#undef GL_RGBA
-#undef GL_UNSIGNED_BYTE
+#include <gdx-cpp/gl.hpp>
 
 using namespace gdx_cpp::graphics::g2d::svg;
 using namespace gdx_cpp::utils;
@@ -290,13 +289,13 @@ const gdx_cpp::graphics::Pixmap::Format& AggSvgPixmap::getFormat() {
     return Pixmap::Format::RGBA8888;
 }
 int AggSvgPixmap::getGLFormat() const {
-    return GL10::GL_RGBA;
+    return GL_RGBA;
 }
 int AggSvgPixmap::getGLInternalFormat() const {
-    return GL10::GL_RGBA;
+    return GL_RGBA;
 }
 int AggSvgPixmap::getGLType() const {
-    return GL10::GL_UNSIGNED_BYTE;
+    return GL_UNSIGNED_BYTE;
 }
 int AggSvgPixmap::getHeight() const {
     return height * scaleX;

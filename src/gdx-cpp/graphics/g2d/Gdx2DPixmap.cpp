@@ -22,6 +22,8 @@
 
 #include "gdx-cpp/graphics/GL10.hpp"
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/gl.hpp"
+
 #include <cassert>
 #include <fstream>
 #include <cstdlib>
@@ -246,15 +248,15 @@ int Gdx2DPixmap::getGLInternalFormat () const {
 
     switch (pixData->format) {
     case GDX2D_FORMAT_ALPHA:
-        return GL10::GL_ALPHA;
+        return GL_ALPHA;
     case GDX2D_FORMAT_LUMINANCE_ALPHA:
-        return GL10::GL_LUMINANCE_ALPHA;
+        return GL_LUMINANCE_ALPHA;
     case GDX2D_FORMAT_RGB888:
     case GDX2D_FORMAT_RGB565:
-        return GL10::GL_RGB;
+        return GL_RGB;
     case GDX2D_FORMAT_RGBA8888:
     case GDX2D_FORMAT_RGBA4444:
-        return GL10::GL_RGBA;
+        return GL_RGBA;
     default:
     {
         std::stringstream ss;
@@ -275,11 +277,11 @@ int Gdx2DPixmap::getGLType () const {
     case GDX2D_FORMAT_LUMINANCE_ALPHA:
     case GDX2D_FORMAT_RGB888:
     case GDX2D_FORMAT_RGBA8888:
-        return GL10::GL_UNSIGNED_BYTE;
+        return GL_UNSIGNED_BYTE;
     case GDX2D_FORMAT_RGB565:
-        return GL10::GL_UNSIGNED_SHORT_5_6_5;
+        return GL_UNSIGNED_SHORT_5_6_5;
     case GDX2D_FORMAT_RGBA4444:
-        return GL10::GL_UNSIGNED_SHORT_4_4_4_4;
+        return GL_UNSIGNED_SHORT_4_4_4_4;
     default:
     {
         std::stringstream ss;

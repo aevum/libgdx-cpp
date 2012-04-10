@@ -17,9 +17,6 @@
 
 #include "LinuxGraphics.hpp"
 
-#include "LinuxGL10.hpp"
-#include "LinuxGL11.hpp"
-#include "LinuxGL20.hpp"
 #include "LinuxGLU.hpp"
 #include <stdexcept>
 
@@ -35,6 +32,12 @@
 
 #include <gdx-cpp/graphics/g2d/Gdx2DPixmap.hpp>
 #include <gdx-cpp/graphics/g2d/svg/AggSvgPixmap.hpp>
+
+#include <gdx-cpp/graphics/GL10.hpp>
+#include <gdx-cpp/graphics/GL20.hpp>
+#include <gdx-cpp/graphics/GL11.hpp>
+
+#include <gdx-cpp/gl.hpp>
 
 using namespace gdx_cpp::backends::nix;
 using namespace gdx_cpp::graphics;
@@ -281,7 +284,7 @@ Pixmap* backends::nix::LinuxGraphics::resolvePixmap(const files::FileHandle::ptr
 
 bool gdx_cpp::backends::nix::LinuxGraphics::setupGLModes()
 {
-    std::string version =  LinuxGL10().glGetString(GL10::GL_VERSION);
+    std::string version =  (const char*) ::glGetString(GL_VERSION);
 
     if (!version.empty()) {
 
@@ -293,9 +296,9 @@ bool gdx_cpp::backends::nix::LinuxGraphics::setupGLModes()
 
         } else {
             if (major == 1 && minor < 5) {
-                glCommon = gl10 = new LinuxGL10;
+                glCommon = gl10 = new GL10;
             } else {
-                glCommon = gl10 = gl11 = new LinuxGL11;
+                glCommon = gl10 = gl11 = new GL11;
             }
         }
 

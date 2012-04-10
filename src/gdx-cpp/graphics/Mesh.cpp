@@ -33,6 +33,7 @@
 #include "gdx-cpp/graphics/glutils/IndexBufferObjectSubData.hpp"
 #include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
 #include "gdx-cpp/math/collision/BoundingBox.hpp"
+#include "gdx-cpp/gl.hpp"
 
 #include <stdexcept>
 #include <iostream>
@@ -181,7 +182,7 @@ void Mesh::render (int primitiveType,int offset,int count) {
             int oldLimit = buffer.limit();
             buffer.position(offset);
             buffer.limit(offset + count);
-            Gdx::gl10->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, (void *) ((char*)buffer + offset));
+            Gdx::gl10->glDrawElements(primitiveType, count, GL_UNSIGNED_SHORT, (void *) ((char*)buffer + offset));
             buffer.position(oldPosition);
             buffer.limit(oldLimit);
         } else
@@ -189,7 +190,7 @@ void Mesh::render (int primitiveType,int offset,int count) {
     } else {
         if (indices->getNumIndices() > 0) {
             int newoffset = offset * 2;
-            Gdx::gl11->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, (void *) newoffset );
+            Gdx::gl11->glDrawElements(primitiveType, count, GL_UNSIGNED_SHORT, (void *) newoffset );
         }
         else
             Gdx::gl11->glDrawArrays(primitiveType, offset, count);
@@ -208,7 +209,7 @@ void Mesh::render (gdx_cpp::graphics::glutils::ShaderProgram& shader,int primiti
     if (autoBind) bind(shader);
 
     if (indices->getNumIndices() > 0)
-        Gdx::gl20->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, offset * 2);
+        Gdx::gl20->glDrawElements(primitiveType, count, GL_UNSIGNED_SHORT, offset * 2);
     else
         Gdx::gl20->glDrawArrays(primitiveType, offset, count);
 
