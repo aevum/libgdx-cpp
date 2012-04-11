@@ -59,8 +59,6 @@ if (BUILD_BOX2D)
     add_subdirectory(src/gdx-cpp/physics/box2d)
 endif()
 
-add_subdirectory(src/gdx-cpp)
-
 if (${GDX_BACKEND} STREQUAL "IOS")
     add_subdirectory(src/backends/gdx-cpp-backend-ios)
 elseif(${GDX_BACKEND} STREQUAL "ANDROID")
@@ -68,13 +66,7 @@ elseif(${GDX_BACKEND} STREQUAL "ANDROID")
 elseif(${GDX_BACKEND} STREQUAL "WIN32")
     add_subdirectory(src/backends/windows)
 elseif(${GDX_BACKEND} STREQUAL "LINUX")
-  OPTION(GDX_USE_OPENGL "Builds the linux backend with OpenGL" FALSE)
-  OPTION(GDX_USE_OPENGLES "Builds the linux backend with OpenGL ES" TRUE)
-
-  if (GDX_USE_OPENGL)
-    set(GdxCpp_BUILD_GRAPHICS_OPENGL TRUE)
-    add_definitions(-DLIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES)
-  endif()
+  add_definitions(-DLIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES)
 
   if(CMAKE_COMPILER_IS_GNUCXX)
     SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wdouble-promotion")
@@ -82,6 +74,9 @@ elseif(${GDX_BACKEND} STREQUAL "LINUX")
 
   add_subdirectory(src/backends/gdx-cpp-backend-linux)
 endif()
+
+
+add_subdirectory(src/gdx-cpp)
 
 install(FILES cmake/finders/FindGdxCpp.cmake
         DESTINATION share/gdx/cmake)

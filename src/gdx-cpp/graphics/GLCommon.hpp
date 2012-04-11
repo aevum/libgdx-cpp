@@ -75,6 +75,9 @@ public:
     virtual void glTexSubImage2D (int target,int level,int xoffset,int yoffset,int width,int height,int format,int type,const unsigned char* pixels) const;
     virtual void glViewport (int x,int y,int width,int height) const;
 
+
+    GLCommon();
+    
 protected:
     unsigned char vertex_states;
     const void* last_vertex_pointer;
