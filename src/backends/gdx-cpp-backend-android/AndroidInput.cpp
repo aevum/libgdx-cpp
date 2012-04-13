@@ -213,7 +213,8 @@ void gdx_cpp::backends::android::AndroidInput::handleTouchDrag(float x, float y,
 {
     deltaX = x - touchX;
     deltaY = y - touchY;
-    
+    touchX = x;
+    touchY = y;
     if (this->processor) {
         this->processor->touchDragged(x, y, 0);
     }
