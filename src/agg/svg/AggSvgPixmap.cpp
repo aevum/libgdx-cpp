@@ -298,7 +298,7 @@ int AggSvgPixmap::getGLType() const {
     return GL_UNSIGNED_BYTE;
 }
 int AggSvgPixmap::getHeight() const {
-    return height * scaleX;
+    return height * scaleY;
 }
 int AggSvgPixmap::getPixel(int x, int y) const {
     return 0;
@@ -413,7 +413,7 @@ Pixmap::PixmapType AggSvgPixmap::getType() const {
 }
 
 int AggSvgPixmap::getWidth() const {
-    return width * scaleY;
+    return width * scaleX;
 }
 
 void AggSvgPixmap::setStrokeWidth(int width) {
