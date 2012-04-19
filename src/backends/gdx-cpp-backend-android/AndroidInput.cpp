@@ -163,6 +163,7 @@ bool gdx_cpp::backends::android::AndroidInput::isTouched()
 
 bool gdx_cpp::backends::android::AndroidInput::isTouched(int pointer)
 {
+    //TODO 
     return pointer == 0 && touching;
 }
 
@@ -209,35 +210,35 @@ void gdx_cpp::backends::android::AndroidInput::reset()
     this->_justTouched = false;
 }
 
-void gdx_cpp::backends::android::AndroidInput::handleTouchDrag(float x, float y, int button)
+void gdx_cpp::backends::android::AndroidInput::handleTouchDrag(float x, float y, int pointer)
 {
     deltaX = x - touchX;
     deltaY = y - touchY;
     touchX = x;
     touchY = y;
     if (this->processor) {
-        this->processor->touchDragged(x, y, 0);
+        this->processor->touchDragged(x, y, pointer);
     }
 }
 
-void gdx_cpp::backends::android::AndroidInput::handleTouchDown(float x, float y, int button)
+void gdx_cpp::backends::android::AndroidInput::handleTouchDown(float x, float y, int pointer)
 {
     touchX = x;
     touchY = y;
     touching = true;
     
     if (this->processor) {
-        this->processor->touchDown(x, y, 0, button);
+        this->processor->touchDown(x, y, pointer, 0);
     }
 }
 
-void gdx_cpp::backends::android::AndroidInput::handleTouchUp(float x, float y, int button)
+void gdx_cpp::backends::android::AndroidInput::handleTouchUp(float x, float y, int pointer)
 {
     touching = false;
     deltaX = 0;
     deltaY = 0;
     if (this->processor) {
-        this->processor->touchUp(x, y, 0 , button);
+        this->processor->touchUp(x, y, pointer , 0);
     }
 }
 
