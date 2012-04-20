@@ -205,6 +205,9 @@ int SpriteCache::endCache () {
 }
 
 void SpriteCache::clear () {
+    for (int i = 0; i < caches.size(); ++i) {
+	delete caches[i];
+    }
     caches.clear();
     mesh->getVerticesBuffer().clear().flip();
 }
