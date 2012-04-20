@@ -46,15 +46,10 @@ int gdx_cpp::backends::android::AndroidFileHandle::readBytes(gdx_cpp::files::Fil
     assert(mid);
 
     jbyteArray result = (jbyteArray) env->CallStaticObjectMethod(managerClass, mid, strpath, this->getType());
-
-    jbyte* buffer = env->GetByteArrayElements(result, NULL);
     jsize size = env->GetArrayLength(result);
-
-    assert(buffer);
-    assert(size);
-    
     char* sbuffer = new char[size];
-    memcpy(sbuffer, buffer, size);
+ 
+    env->GetByteArrayRegion(result, 0, size, (jbyte*) sbuffer);
 
     gdx_cpp::files::FileHandle::buffer_ptr swapable(sbuffer, shared_ptr_array_deleter());
     c.swap(swapable);
