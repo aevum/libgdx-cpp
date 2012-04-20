@@ -261,11 +261,17 @@ void gdx_cpp::backends::nix::LinuxInput::processEvents(SDL_Event& evt)
     }
     else if (evt.type == SDL_KEYDOWN) {
         if (this->processor) {
-            this->processor->keyDown(getGdxEventKey(evt));
+	    if (gdx_cpp::Input::Keys::ESCAPE == getGdxEventKey(evt)) {
+		this->processor->onBackPressed();
+	    } else {
+		this->processor->keyDown(getGdxEventKey(evt));
+	    }
         }
     } else if (evt.type == SDL_KEYUP) {
         if (this->processor) {
-            this->processor->keyUp(getGdxEventKey(evt));
+	    if (gdx_cpp::Input::Keys::ESCAPE != getGdxEventKey(evt)) {
+		this->processor->keyUp(getGdxEventKey(evt));
+	    }
         }
     }
     

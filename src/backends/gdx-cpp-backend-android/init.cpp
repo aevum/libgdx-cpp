@@ -59,7 +59,8 @@ extern "C" {
     enum EventType {
         MOUSE_DOWN,
         MOUSE_DRAG,
-        MOUSE_UP
+        MOUSE_UP,
+        BACK_PRESSED
     };
 
 
@@ -69,6 +70,11 @@ extern "C" {
         x(_x),
         y(_y),
         button(_button),
+        type(_type)
+        {
+        }
+        
+        EventRunnable(char _type) :
         type(_type)
         {
         }
@@ -88,6 +94,9 @@ extern "C" {
                 case MOUSE_UP:
                     static_cast<AndroidInput*>(Gdx::app->getInput())->handleTouchUp(x, y, button);
                     return;
+                case BACK_PRESSED:
+                    static_cast<AndroidInput*>(Gdx::app->getInput())->backPressed();
+                    return;
             }            
         }
         
@@ -100,6 +109,12 @@ extern "C" {
         assert(applicationListener);
         Gdx::app->log("Android", "Touch down button: %d", button);
         Gdx::app->postRunnable(Runnable::ptr(new EventRunnable(x, y, button, MOUSE_DOWN)));
+    }
+    
+    void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeBackPressed(JNIEnv* env, jobject object) {
+        assert(applicationListener);
+        Gdx::app->log("Android", "Back Pressed");
+        Gdx::app->postRunnable(Runnable::ptr(new EventRunnable(BACK_PRESSED)));
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeTouchUpEvent(JNIEnv* env, jobject object, jfloat x, jfloat y, int button ) {

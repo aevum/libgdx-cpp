@@ -48,6 +48,8 @@ public class ApplicationManager {
 	static native void nativeTouchUpEvent(float x, float y, int button);
 
 	static native void nativeTouchDragEvent(float x, float y, int button);
+	
+	static native void nativeBackPressed();
 
 	InputHandler handler = new InputHandler();
 	Activity activity;
@@ -139,6 +141,10 @@ public class ApplicationManager {
 
 	public void unload() {
 		audio.dispose();
+	}
+	
+	public void backPressed() {
+		nativeBackPressed();
 	}
 
 	public static void onTouchEvent(MotionEvent evt) {
