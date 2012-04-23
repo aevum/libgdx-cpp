@@ -30,7 +30,8 @@ using namespace gdx_cpp;
 
 const char BitmapFont::xChars[] = {'x', 'e', 'a', 'o', 'n', 's', 'r', 'c', 'u', 'm', 'v', 'w', 'z'};
 const char BitmapFont::capChars[] = {'M', 'N', 'B', 'D', 'C', 'E', 'F', 'K', 'A', 'G', 'H', 'I', 'J', 'L', 'O', 'P', 'Q', 'R', 'S',
-'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+                                     'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+                                    };
 
 void BitmapFont::BitmapFontData::setGlyph (int ch, graphics::g2d::BitmapFont::Glyph* glyph) {
     Glyph** page = glyphs[ch / PAGE_SIZE];
@@ -39,26 +40,26 @@ void BitmapFont::BitmapFontData::setGlyph (int ch, graphics::g2d::BitmapFont::Gl
         glyphs[ch / PAGE_SIZE] = page = new Glyph*[PAGE_SIZE];
         memset(page, 0, sizeof(Glyph**) * PAGE_SIZE);
     }
-    
+
     page[ch & (PAGE_SIZE - 1)] = glyph;
 }
 
 BitmapFont::Glyph* BitmapFont::BitmapFontData::getFirstGlyph () {
     for (int i = 0; i < PAGES; ++i) {
-            Glyph** page = glyphs[i];
+        Glyph** page = glyphs[i];
 
-            if (page == NULL) {
+        if (page == NULL) {
+            continue;
+        }
+
+        for (int j = 0; j < PAGE_SIZE; ++j) {
+            Glyph* glyph = page[j];
+
+            if (glyph == NULL) {
                 continue;
             }
-            
-            for (int j = 0; j < PAGE_SIZE; ++j) {
-                Glyph* glyph = page[j];
 
-                if (glyph == NULL) {
-                    continue;
-                }
-                
-                return glyph;
+            return glyph;
         }
     }
     throw new std::runtime_error("No glyphs found!");
@@ -66,7 +67,7 @@ BitmapFont::Glyph* BitmapFont::BitmapFontData::getFirstGlyph () {
 
 BitmapFont::Glyph* BitmapFont::BitmapFontData::getGlyph (char ch) {
     Glyph** page = glyphs[ch / PAGE_SIZE];
-    
+
     if (page != NULL) return page[ch & (PAGE_SIZE - 1)];
 
     return NULL;
@@ -88,18 +89,18 @@ void BitmapFont::load (BitmapFontData* data) {
 
     for (int i = 0; i < PAGES; i++) {
         Glyph** page = data->glyphs[i];
-        
+
         if (page == NULL)
             continue;
-        for (int j = 0; j < PAGE_SIZE;++j) {
+        for (int j = 0; j < PAGE_SIZE; ++j) {
             Glyph* glyph = page[j];
-            
+
             if (glyph == NULL)
                 continue;
-            
+
             glyph->u = u + glyph->srcX * invTexWidth;
             glyph->u2 = u + (glyph->srcX + glyph->width) * invTexWidth;
-            
+
             if (data->flipped) {
                 glyph->v = v + glyph->srcY * invTexHeight;
                 glyph->v2 = v + (glyph->srcY + glyph->height) * invTexHeight;
@@ -123,13 +124,13 @@ BitmapFont::TextBounds& BitmapFont::draw (SpriteBatch& spriteBatch,const std::st
     float startX = x;
 
     Glyph* lastGlyph = NULL;
-    
+
     if (data->scaleX == 1 && data->scaleY == 1) {
         if (integer) {
             y = (int)y;
             x = (int)x;
         }
-        
+
         while (start < end) {
             lastGlyph = data->getGlyph(str[start++]);
             if (lastGlyph != NULL) {
@@ -207,7 +208,7 @@ BitmapFont::TextBounds& BitmapFont::draw (SpriteBatch& spriteBatch,const std::st
         }
     }
     spriteBatch.setColor(batchColor);
-    
+
     textBounds.width = x - startX;
     textBounds.height = data->capHeight;
 
@@ -376,15 +377,15 @@ BitmapFont::TextBounds& BitmapFont::getWrappedBounds (const std::string& str,flo
 }
 
 void BitmapFont::computeGlyphAdvancesAndPositions (const std::string& str,
-                                                   std::vector<float>& glyphAdvances,
-                                                   std::vector<float>& glyphPositions) {
+        std::vector<float>& glyphAdvances,
+        std::vector<float>& glyphPositions) {
     glyphAdvances.clear();
     glyphPositions.clear();
     int index = 0;
     int end = str.length();
     float width = 0;
     Glyph* lastGlyph = NULL;
-    
+
     if (data->scaleX == 1) {
         for (; index < end; index++) {
             char ch = str[index];
@@ -570,12 +571,12 @@ BitmapFont::BitmapFontData* BitmapFont::getData () {
 }
 
 BitmapFont::BitmapFont (graphics::g2d::BitmapFont::BitmapFontData* p_data, graphics::g2d::TextureRegion::ptr p_region, bool p_integer)
-: data(p_data),
-region(p_region),
-integer(p_integer),
-flipped(p_data->flipped),
-color(graphics::Color::WHITE.toFloatBits()),
-tempColor(1,1,1,1)
+    : data(p_data),
+      region(p_region),
+      integer(p_integer),
+      flipped(p_data->flipped),
+      color(graphics::Color::WHITE.toFloatBits()),
+      tempColor(1,1,1,1)
 {
     if (region == NULL) {
         region = TextureRegion::newFromTexture(graphics::Texture::newFromFile(Gdx::files->internal(data->imagePath), NULL, false));
@@ -596,24 +597,24 @@ BitmapFont* BitmapFont::fromFiles(files::FileHandle::ptr fontFile, files::FileHa
 }
 
 BitmapFont::BitmapFontData::BitmapFontData(files::FileHandle::ptr fontFile, bool flip)
- : fontFile(fontFile),
- flipped(flip),
- capHeight(1),
- scaleX(1),
- scaleY(1),
- ascent(0),
- descent(0),
- down(0),
- spaceWidth(0),
- xHeight(1)
+    : fontFile(fontFile),
+      flipped(flip),
+      capHeight(1),
+      scaleX(1),
+      scaleY(1),
+      ascent(0),
+      descent(0),
+      down(0),
+      spaceWidth(0),
+      xHeight(1)
 {
     glyphs = new Glyph**[PAGES];
     memset(glyphs, 0, sizeof(Glyph*) * PAGES);
-    
+
     files::FileHandle::buffer_ptr buffer;
     fontFile->readBytes(buffer);
     char* line_r = NULL;
-    
+
     try {
         char* line = strtok_r(buffer.get(), "\n", &line_r);
 
@@ -622,11 +623,11 @@ BitmapFont::BitmapFontData::BitmapFontData(files::FileHandle::ptr fontFile, bool
         }
 
         char* common = strtok(line, " ");
-                
+
         if (sscanf(strtok(NULL, " "), "lineHeight=%f", &lineHeight) != 1) {
             throw std::runtime_error("Invalid font file: " + fontFile->toString());
         }
-        
+
         int baseLine = 0;
         if (sscanf(strtok(NULL, " "), "base=%d", &baseLine) != 1) {
             throw std::runtime_error("Invalid font file: " + fontFile->toString());
@@ -648,28 +649,28 @@ BitmapFont::BitmapFontData::BitmapFontData(files::FileHandle::ptr fontFile, bool
         char unquoted[1024];
         strncpy(unquoted, file + 1, strlen(file) - 2);
         unquoted[strlen(file) - 2] = 0;
-        
+
         imagePath = unquoted;
         descent = 0;
 
         while (true) {
             line = strtok_r(NULL, "\n", &line_r);
-            
+
             if (line == NULL) {
                 break;
             }
-            
+
             if (strstr(line, "kernings ") != NULL) break;
             if (strstr(line, "char ") == NULL) continue;
 
             Glyph* glyph = new Glyph();
 
             int ch = 0;
-            
+
             if (sscanf(line, "char id=%d x=%d y=%d width=%d height=%d xoffset=%d yoffset=%d xadvance=%d page=%* chnl=%*",
-                &ch, &glyph->srcX, &glyph->srcY, &glyph->width, &glyph->height, &glyph->xoffset, &glyph->yoffset, &glyph->xadvance) != 8) {
-                
-                delete glyph;            
+                       &ch, &glyph->srcX, &glyph->srcY, &glyph->width, &glyph->height, &glyph->xoffset, &glyph->yoffset, &glyph->xadvance) != 8) {
+
+                delete glyph;
                 throw std::runtime_error("Invalid font file: " + fontFile->toString());
             }
 
@@ -680,11 +681,11 @@ BitmapFont::BitmapFontData::BitmapFontData(files::FileHandle::ptr fontFile, bool
                 delete glyph;
                 continue;
             }
-            
+
             if (!flip) {
                 glyph->yoffset = -(glyph->height + glyph->yoffset);
             }
-            
+
             descent = std::min((float)(baseLine + glyph->yoffset), descent);
         }
 
@@ -693,7 +694,7 @@ BitmapFont::BitmapFontData::BitmapFontData(files::FileHandle::ptr fontFile, bool
             if (line == NULL) {
                 break;
             }
-            
+
             if (strstr(line, "kerning ") == NULL) break;
 
             int first = 0, second = 0, amount = 0;
@@ -704,7 +705,7 @@ BitmapFont::BitmapFontData::BitmapFontData(files::FileHandle::ptr fontFile, bool
 
             if (first < 0 || first > 0xffff || second < 0 || second > 0xffff)
                 continue;
-            
+
             Glyph* glyph = getGlyph((char)first);
             glyph->setKerning(second, amount);
         }
@@ -760,14 +761,14 @@ void BitmapFont::Glyph::setKerning(int ch, int value) {
         kerning = new char*[PAGES];
         memset(kerning, 0, sizeof(char*) * PAGES);
     }
-    
+
     char* page = kerning[ch >> LOG2_PAGE_SIZE];
 
     if (page == NULL) {
         kerning[ch >> LOG2_PAGE_SIZE] = page = new char[PAGE_SIZE];
         memset(kerning, 0, sizeof(char) * PAGE_SIZE);
     }
-    
+
     page[ch & (PAGE_SIZE - 1)] = (char) value;
 }
 
@@ -778,7 +779,7 @@ int BitmapFont::Glyph::getKerning(char ch) {
             return page[ch & (PAGE_SIZE - 1)];
         }
     }
-    
+
     return 0;
 }
 
@@ -793,7 +794,7 @@ graphics::g2d::BitmapFont::BitmapFontData::~BitmapFontData()
 
                 if (glyph != NULL) {
                     delete glyph;
-                }                
+                }
             }
 
             delete [] page;
@@ -805,15 +806,22 @@ graphics::g2d::BitmapFont::BitmapFontData::~BitmapFontData()
 
 graphics::g2d::BitmapFont::Glyph::~Glyph()
 {
-    for (int  i = 0; i < PAGES; ++i) {
-        char* _kerning = kerning[i];
-        
-        if (_kerning != NULL) {           
-            delete [] _kerning;
+    if (kerning) {
+        for (int  i = 0; i < PAGES; ++i) {
+            char* _kerning = kerning[i];
+
+            if (_kerning != NULL) {
+                delete [] _kerning;
+            }
         }
+
+        delete [] kerning;
     }
-    
-    delete [] kerning;
 }
 
 
+BitmapFont::Glyph::Glyph() : srcX(0) , srcY(0) , width(0) , height(0)
+, u(0) , v(0), u2(0), v2(0), xoffset(0),
+yoffset(0), xadvance(0), kerning(NULL)
+{
+}

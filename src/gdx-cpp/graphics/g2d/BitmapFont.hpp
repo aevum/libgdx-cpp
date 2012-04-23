@@ -36,20 +36,20 @@ namespace g2d {
 class BitmapFontCache;
 
 class BitmapFont: public gdx_cpp::utils::Disposable {
-friend class BitmapFontCache;
+    friend class BitmapFontCache;
 protected:
     static const int LOG2_PAGE_SIZE = 9;
     static const int PAGE_SIZE = 1 << LOG2_PAGE_SIZE;
     static const int PAGES = 0x10000 / PAGE_SIZE;
-    
+
 public:
     typedef ref_ptr_maker<BitmapFont>::type ptr;
-    
+
     enum HAlignment {
         HALIGNMENT_LEFT, HALIGNMENT_CENTER, HALIGNMENT_RIGHT
     };
-    
-    struct Glyph {    
+
+    struct Glyph {
         int srcX;
         int srcY;
         int width, height;
@@ -57,16 +57,17 @@ public:
         int xoffset, yoffset;
         int xadvance;
         char** kerning;
-        
-        int getKerning (char ch);        
+
+        int getKerning (char ch);
         void setKerning (int ch, int value);
 
+        Glyph();
         ~Glyph();
     };
-    
+
     class BitmapFontData {
-    friend class BitmapFont;
-    friend class BitmapFontCache;
+        friend class BitmapFont;
+        friend class BitmapFontCache;
     protected:
         std::string imagePath;
         files::FileHandle::ptr fontFile;
@@ -79,13 +80,13 @@ public:
         float scaleX , scaleY;
 
         Glyph*** glyphs;
-        
+
         float spaceWidth;
         float xHeight;
 
     public:
         ~BitmapFontData();
-        
+
         BitmapFontData (gdx_cpp::files::FileHandle::ptr fontFile, bool flip);
         Glyph* getGlyph (char ch);
         std::string getImagePath ();
@@ -99,13 +100,13 @@ public:
     struct TextBounds {
         float width;
         float height;
-        
+
         TextBounds () ;
-        
+
         TextBounds (const TextBounds& bounds) {
             set(bounds);
         }
-        
+
         void set (const TextBounds& bounds) ;
     };
 
@@ -150,24 +151,24 @@ public:
     BitmapFontData* getData ();
 
     static BitmapFont* fromFiles (gdx_cpp::files::FileHandle::ptr fontFile,
-                      gdx_cpp::files::FileHandle::ptr imageFile = null_shared_ptr(),
-                      bool flip = false,
-                      bool integer = true);
+                                  gdx_cpp::files::FileHandle::ptr imageFile = null_shared_ptr(),
+                                  bool flip = false,
+                                  bool integer = true);
 
     static int indexOf (const std::string& text, char ch, int start) {
         int n = text.length();
         for (; start < n; start++)
             if (text[start] == ch) return start;
-            return n;
+        return n;
     }
-    
-protected:  
-    
+
+protected:
+
     BitmapFont (BitmapFontData* data, TextureRegion::ptr region, bool integer);
-    
+
     static const char xChars[];
     static const char capChars[];
-    
+
     graphics::g2d::TextureRegion::ptr region;
     TextBounds textBounds;
     float color;
@@ -175,8 +176,8 @@ protected:
     bool flipped;
     bool integer;
     BitmapFontData* data;
-    
-private:    
+
+private:
     void load (BitmapFontData* data);
 };
 
