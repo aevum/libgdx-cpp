@@ -15,22 +15,22 @@ int main(int argc, char** argv);
 
 extern "C" int default_main(int argc, char** argv) {
     Gdx::initializeSystem(new LinuxSystem);
-    
+
     gdxcpp_init(argc, argv);
-    
+
     assert(applicationListener);
-    
+
     gdx_cpp::backends::nix::LinuxApplication app(applicationListener, title, width, height, false);
     app.initialize();
 
-    return 0;   
+    return 0;
 }
 
 gdx_main gdxcpp_main_selector::selector = default_main;
 
 extern "C" void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener,
-                                          const std::string& applicationName,
-                                          int p_width, int p_height) {
+        const std::string& applicationName,
+        int p_width, int p_height) {
     applicationListener = listener;
     width = p_width;
     height = p_height;
@@ -38,8 +38,6 @@ extern "C" void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener
 }
 
 void deinitialize_system() {
-    applicationListener->dispose();
-    delete applicationListener;    
 }
 
 int main(int argc, char** argv) {

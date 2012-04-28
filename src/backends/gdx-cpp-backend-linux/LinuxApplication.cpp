@@ -28,15 +28,15 @@ using namespace gdx_cpp;
 gdx_cpp::backends::nix::LinuxApplication::LinuxApplication(gdx_cpp::ApplicationListener* listener,
         const std::string& title, int width, int height,
         bool useGL20IfAvailable)
-        :  Synchronizable(Gdx::system->getMutexFactory())
-        , width(width)
-        , height(height)
-        , title(title)
-        , useGL20iFAvailable(useGL20IfAvailable)
-        , listener(listener)
-        , graphics(0)
-        , input(0)
-        , logLevel(gdx_cpp::Application::LOG_INFO)
+    :  Synchronizable(Gdx::system->getMutexFactory())
+    , width(width)
+    , height(height)
+    , title(title)
+    , useGL20iFAvailable(useGL20IfAvailable)
+    , listener(listener)
+    , graphics(0)
+    , input(0)
+    , logLevel(gdx_cpp::Application::LOG_INFO)
 {
 }
 
@@ -52,7 +52,7 @@ void LinuxApplication::initialize() {
     graphics->setDisplayMode(width, height, false);
 
     SDL_EnableKeyRepeat(1, SDL_DEFAULT_REPEAT_INTERVAL);
-    
+
     Gdx::initialize(this, graphics, audio, input, files);
 
     this->run();
@@ -81,7 +81,7 @@ void backends::nix::LinuxApplication::run()
             std::list < Runnable::ptr >::iterator it = runnables.begin();
             std::list < Runnable::ptr >::iterator end = runnables.end();
 
-            for (;it != end; ++it) {
+            for (; it != end; ++it) {
                 (*it)->run();
             }
 
@@ -110,12 +110,16 @@ void LinuxApplication::error(const std::string& tag, const char* format, ...)
 
 void gdx_cpp::backends::nix::LinuxApplication::exit()
 {
-
+    if (listener) {
+        this->listener->dispose();
+        delete listener;
+        listener = NULL;
+    }
 }
 
 Audio* gdx_cpp::backends::nix::LinuxApplication::getAudio()
 {
-
+    return this->audio;
 }
 
 Files* gdx_cpp::backends::nix::LinuxApplication::getFiles()
@@ -190,6 +194,7 @@ bool gdx_cpp::backends::nix::LinuxApplication::processEvents()
 
 void LinuxApplication::pause()
 {
+    this->listener->pause();
 }
 
 void LinuxApplication::update()
@@ -201,5 +206,5 @@ LinuxApplication::~LinuxApplication()
     delete graphics;
     delete audio;
     delete files;
-    delete input;    
+    delete input;
 }

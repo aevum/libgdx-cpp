@@ -40,7 +40,7 @@ class LinuxApplication : public Application, public Runnable, public Synchroniza
 public:
     LinuxApplication(gdx_cpp::ApplicationListener* listener, const std::string& title,
                      int width, int height, bool useGL20IfAvailable);
-    
+
     void error(const std::string& tag, const char* format, ...);
     void exit();
     Audio* getAudio();
@@ -75,11 +75,11 @@ protected:
     LinuxInput* input;
     LinuxFiles* files;
     LinuxOpenALAudio* audio;
-    
+
     std::list< Runnable::ptr > runnables;
 
     gdx_cpp::implementation::Thread::ptr mainLoopThread;
-    
+
     int logLevel;
 };
 

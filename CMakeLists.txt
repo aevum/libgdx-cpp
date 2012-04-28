@@ -12,11 +12,14 @@ link_directories(${LIBRARY_OUTPUT_PATH})
 
 set(ANDROID_NDK $ENV{ANDROID_NDK})
 
+option(BUILD_BOX2D "Builds Box2D" TRUE)
+option(BUILD_AS_SHARED_LIBRARIES "Build libraries as shared libraries instead of static" FALSE)
+
 if(APPLE)
     message("MacOSX (iOS) found. Setting the backend to IOS")
     SET(GDX_BACKEND IOS)
     SET(GDX_BACKEND_LIB gdx-cpp-backend-ios)
-    
+
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/agg/include ${CMAKE_CURRENT_SOURCE_DIR}/src/agg/svg)
     add_subdirectory(src/agg)
 
@@ -37,8 +40,13 @@ elseif (UNIX)
         SET(GDX_BACKEND LINUX)
         SET(GDX_BACKEND_LIB gdx-cpp-backend-linux)
 
-        set(BOX2D_BUILD_STATIC NOT ${BUILD_AS_SHARED_LIBRARIES})
-        set(BOX2D_BUILD_SHARED ${BUILD_AS_SHARED_LIBRARIES})
+        if (BUILD_AS_SHARED_LIBRARIES)
+            set(BOX2D_BUILD_STATIC FALSE)
+            set(BOX2D_BUILD_SHARED TRUE)
+        else()
+            set(BOX2D_BUILD_STATIC FALSE)
+            set(BOX2D_BUILD_SHARED TRUE)
+        endif()
     endif()
 
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/agg/include ${CMAKE_CURRENT_SOURCE_DIR}/src/agg/svg)
@@ -48,9 +56,6 @@ elseif(WIN32)
     SET(GDX_BACKEND WIN32)
     SET(GDX_BACKEND_LIB gdx-cpp-backend-win32)
 endif()
-
-option(BUILD_BOX2D "Builds Box2D" TRUE)
-option(BUILD_AS_SHARED_LIBRARIES "Build libraries as shared libraries instead of static" FALSE)
 
 if (BUILD_BOX2D)
     set(BOX2D_INSTALL TRUE)

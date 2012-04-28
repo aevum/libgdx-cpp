@@ -49,7 +49,7 @@ public:
         static utils::XmlReader reader;
 
         gdx_cpp::Gdx::app->log("WreckingBaller", "%s", file->path().c_str());
-        
+
         AggSvgPixmap* pix = new AggSvgPixmap;
         uint64_t before = gdx_cpp::Gdx::system->nanoTime();
         SvgParser::render(reader.parse(*file).get(), pix);

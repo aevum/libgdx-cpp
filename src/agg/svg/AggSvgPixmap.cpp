@@ -337,7 +337,7 @@ const unsigned char* AggSvgPixmap::getPixels() {
 
     mtx *= agg::trans_affine_scaling(scaleX, scaleY);
     
-    pimpl->renderer.expand(0.01);
+    pimpl->renderer.expand(0.001);
     pimpl->renderer.render(ras, sl, ren, mtx, rb, rb.clip_box(), 1.0);
 
     return rbuf.buf();
