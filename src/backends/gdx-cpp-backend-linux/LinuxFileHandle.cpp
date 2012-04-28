@@ -26,12 +26,12 @@
 using namespace gdx_cpp::backends::nix;
 
 LinuxFileHandle::LinuxFileHandle (const std::string &fileName, gdx_cpp::Files::FileType type)
-  : FileHandle(fileName, type)
+    : FileHandle(fileName, type)
 {
 }
 
 LinuxFileHandle::LinuxFileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type)
-  : FileHandle(file, type)
+    : FileHandle(file, type)
 {
 }
 
@@ -44,7 +44,7 @@ int LinuxFileHandle::readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) const
     if (type == gdx_cpp::Files::Internal && !file.exists()) {
         int found;
         filepath = "/" + file.getPath();
-        
+
         while((found = filepath.find("//")) != filepath.npos)
             filepath.replace(found, 2, "/");
     } else {
@@ -59,7 +59,7 @@ int LinuxFileHandle::readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) const
 
     int position = 0;
     if (f) {
-        
+
         int readed = 0;
         while ((readed = fread(buf + position, 1, buffer_length - position, f)) > 0)
         {
@@ -67,16 +67,27 @@ int LinuxFileHandle::readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) const
         }
 
         fclose(f);
-    }    
-    
+    }
+
     buffer_ptr new_ptr = buffer_ptr(buf, shared_ptr_free_deleter());
     c.swap(new_ptr);
     return position;
 }
 
-int LinuxFileHandle::write(const char* data, int lenght, bool append)
+int LinuxFileHandle::write(const char* data, int length, bool append)
 {
-    return 0;//gdx_cpp::files::FileHandle::write(data, lenght, append);
+    FILE* f = fopen(file.getPath().c_str(), append ? "a" : "w");
+
+    if (f == NULL) {
+        throw std::runtime_error("File not found: " + path());
+    }
+
+    int written =fwrite(data, 1, length, f);
+    fclose(f);
+
+    assert(written == length);
+
+    return written;
 }
 
 void LinuxFileHandle::copyTo(gdx_cpp::files::FileHandle& dest)
@@ -92,7 +103,7 @@ int64_t LinuxFileHandle::length() const
     if (res) {
 
     }
-    
+
     return st.st_size;
 }
 

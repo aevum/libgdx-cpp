@@ -40,7 +40,7 @@ public:
     LinuxFileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type);
 
     virtual int readBytes(buffer_ptr& c) const;
-    virtual int write(const char* data, int lenght, bool append);
+    virtual int write(const char* data, int length, bool append);
     virtual void copyTo(FileHandle& dest);
     virtual int64_t length() const;
 private:
