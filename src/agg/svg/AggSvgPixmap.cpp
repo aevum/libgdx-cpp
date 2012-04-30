@@ -241,7 +241,10 @@ void AggSvgPixmap::setScale(float scaleX, float scaleY) {
 
 void AggSvgPixmap::dispose() {
     delete [] data;
+    delete pimpl;
+
     data = NULL;
+    pimpl = NULL;
 }
 
 void AggSvgPixmap::drawCircle(int x, int y, int radius) {
@@ -421,12 +424,7 @@ void AggSvgPixmap::setStrokeWidth(int width) {
 }
 
 AggSvgPixmap::~AggSvgPixmap() {
-
-    delete [] data;
-    delete pimpl;
-
-    data = NULL;
-    pimpl = NULL;
+    dispose();
 }
 
 SvgPixmapInterface::transform* AggSvgPixmap::createTransform() {

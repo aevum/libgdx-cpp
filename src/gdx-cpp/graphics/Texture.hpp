@@ -38,19 +38,19 @@
 namespace gdx_cpp {
 
 namespace files {
-    class FileHandle;
+class FileHandle;
 }
-    
+
 namespace graphics {
 
 class Texture
     : public gdx_cpp::utils::Disposable,
-      public gdx_cpp::assets::Asset,
+  public gdx_cpp::assets::Asset,
       public std::tr1::enable_shared_from_this<Texture> {
 public:
     typedef ref_ptr_maker<Texture>::type ptr;
     typedef ref_ptr_maker<Texture>::weak_type weak_ptr;
-    
+
     class TextureFilter {
     public:
         const static TextureFilter Nearest;
@@ -60,7 +60,7 @@ public:
         const static TextureFilter MipMapLinearNearest;
         const static TextureFilter MipMapNearestLinear;
         const static TextureFilter MipMapLinearLinear;
-        
+
         int glEnum;
 
         bool isMipMap () ;
@@ -79,14 +79,14 @@ public:
     public:
         static const TextureWrap ClampToEdge;
         static const TextureWrap Repeat;
-       
+
         int getGLEnum () const {
             return glEnum;
         }
 
         int glEnum;
 
-      private:
+    private:
         TextureWrap (int glEnum) {
             this->glEnum = glEnum;
         }
@@ -114,7 +114,7 @@ public:
     int getTextureObjectHandle ();
     void setWrap (const TextureWrap& u, const TextureWrap& v);
     void setFilter (const gdx_cpp::graphics::Texture::TextureFilter& minFilter, const gdx_cpp::graphics::Texture::TextureFilter& magFilter);
-    
+
     void setEnforcePotImages (bool enforcePotImages);
     static void clearAllTextures (gdx_cpp::Application* app);
     static void invalidateAllTextures (gdx_cpp::Application* app);
@@ -123,8 +123,8 @@ public:
     static int createGLHandle ();
 
     static ptr newFromFile(const gdx_cpp::files::FileHandle::ptr file,
-                        const gdx_cpp::graphics::Pixmap::Format* format = NULL,
-                        bool useMipMaps = false);
+                           const gdx_cpp::graphics::Pixmap::Format* format = NULL,
+                           bool useMipMaps = false);
 
     virtual ~Texture();
 
@@ -132,7 +132,7 @@ protected:
     void dispose ();
     void initialize(const gdx_cpp::files::FileHandle::ptr file, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps);
     Texture ();
-    
+
 private:
     void create (gdx_cpp::graphics::TextureData::ptr data);
     void uploadImageData (const gdx_cpp::graphics::Pixmap::ptr& pixmap);
@@ -142,7 +142,7 @@ private:
 
     typedef std::list< Texture::weak_ptr > textureList;
     typedef std::tr1::unordered_map< Application* , textureList > managedTextureMap;
-    
+
     static managedTextureMap managedTextures;
 
     static unsigned int buffer;
@@ -151,11 +151,11 @@ private:
     TextureFilter magFilter;
     TextureWrap uWrap;
     TextureWrap vWrap;
-    
+
     TextureData::ptr data;
 
     unsigned int glHandle;
-    
+
     bool enforcePotImages;
     bool useHWMipMap;
 };
