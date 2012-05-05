@@ -41,72 +41,73 @@ public:
 
     static const int GDX2D_SCALE_LINEAR = 1;
 
-    static void setBlending (const Blending& blending);
-    static void setFilter (const Filter& filter);
+    static void setBlending ( const Blending& blending );
+    static void setFilter ( const Filter& filter );
     static Blending getBlending ();
-    
-    Gdx2DPixmap (files::FileHandle::ptr fhandle, int requestedFormat);
-    Gdx2DPixmap (int width, int height, int format);
-    Gdx2DPixmap (const Gdx2DPixmap& other);
-    Gdx2DPixmap (unsigned char* encodedData, int offset, int len, int requestedFormat);
 
-	static Gdx2DPixmap* pixmapFromByteArray (unsigned char* buffer, unsigned int size, int requestedFormat);
-    static Gdx2DPixmap* newPixmap (int width,int height,int format);
-    static Gdx2DPixmap* newPixmapFromFile (files::FileHandle::ptr fhandle, int requestedFormat);
-    static Gdx2DPixmap* newPixmapFromBuffer (unsigned char* data, int len, int requestedFormat);
-    
-    void setColor(float r, float g, float b, float a);
-    void setColor(const gdx_cpp::graphics::Color& color);
-    
+    Gdx2DPixmap ( files::FileHandle::ptr fhandle, int requestedFormat );
+    Gdx2DPixmap ( int width, int height, int format );
+    Gdx2DPixmap ( const Gdx2DPixmap& other );
+    Gdx2DPixmap ( unsigned char* encodedData, int offset, int len, int requestedFormat );
+
+    static Gdx2DPixmap* pixmapFromByteArray ( unsigned char* buffer, unsigned int size, int requestedFormat );
+    static Gdx2DPixmap* newPixmap ( int width,int height,int format );
+    static Gdx2DPixmap* newPixmapFromFile ( files::FileHandle::ptr fhandle, int requestedFormat );
+    static Gdx2DPixmap* newPixmapFromBuffer ( unsigned char* data, int len, int requestedFormat );
+
+    void setColor ( float r, float g, float b, float a );
+    void setColor ( const gdx_cpp::graphics::Color& color );
+
     void dispose ();
     void fill ();
-    void drawPixel (int x,int y);
-    int getPixel (int x,int y) const;
-    void drawLine (int x, int y, int x2, int y2);
-    void drawRectangle (int x, int y, int width, int height);
-    void drawCircle (int x, int y, int radius);
-    void fillRectangle (int x, int y, int width, int height);
-    void fillCircle (int x, int y, int radius);
-    void drawPixmap (const gdx_cpp::graphics::Pixmap& src, int srcX, int srcY, int dstX, int dstY, int width);
-    void drawPixmap (const graphics::Pixmap& src,int srcX,int srcY,int srcWidth,int srcHeight,int dstX,int dstY,int dstWidth,int dstHeight);    
-    void drawPixmap(const gdx_cpp::graphics::Pixmap& pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight);
-    void setStrokeWidth(int width);
-    
-    PixmapType getType() const { return Pixmap::Gdx2d; }
-    
+    void drawPixel ( int x,int y );
+    int getPixel ( int x,int y ) const;
+    void drawLine ( int x, int y, int x2, int y2 );
+    void drawRectangle ( int x, int y, int width, int height );
+    void drawCircle ( int x, int y, int radius );
+    void fillRectangle ( int x, int y, int width, int height );
+    void fillCircle ( int x, int y, int radius );
+    void drawPixmap ( const gdx_cpp::graphics::Pixmap& src, int srcX, int srcY, int dstX, int dstY, int width );
+    void drawPixmap ( const graphics::Pixmap& src,int srcX,int srcY,int srcWidth,int srcHeight,int dstX,int dstY,int dstWidth,int dstHeight );
+    void drawPixmap ( const gdx_cpp::graphics::Pixmap& pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight );
+    void setStrokeWidth ( int width );
+
+    PixmapType getType() const {
+        return Pixmap::Gdx2d;
+    }
+
     const unsigned char* getPixels ();
     int getHeight () const;
     int getWidth () const;
     const Pixmap::Format& getFormat ();
-    
+
     int getGLInternalFormat () const;
     int getGLFormat () const;
     int getGLType () const;
-    void setScale(float scaleX, float scaleY);
-    
+    void setScale ( float scaleX, float scaleY );
+
     const std::string getFormatString ();
-    
-    static void setBlend (int blend);
-    static void setScale (int scale);
-    
+
+    static void setBlend ( int blend );
+    static void setScale ( int scale );
+
     static struct init {
-      init()
-      {
-        Gdx2DPixmap::setBlend(GDX2D_BLEND_SRC_OVER);
-        Gdx2DPixmap::setScale(GDX2D_SCALE_LINEAR);
-      }
-      
+        init() {
+            Gdx2DPixmap::setBlend ( GDX2D_BLEND_SRC_OVER );
+            Gdx2DPixmap::setScale ( GDX2D_SCALE_LINEAR );
+        }
+
     } init;
 
     virtual ~Gdx2DPixmap();
-    
+
 protected:
-  int width;
-  int height;
-  int format;
-  int color;
-  
-  gdx2d_pixmap* pixData;
+    int width;
+    int height;
+    int format;
+    int color;
+
+    gdx2d_pixmap* pixData;
 
 private:
     static Blending blending;
