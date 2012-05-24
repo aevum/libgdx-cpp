@@ -372,7 +372,7 @@ BitmapFont::TextBounds& BitmapFont::getWrappedBounds ( const std::string& str,fl
         numLines++;
     }
     textBounds.width = maxWidth;
-    textBounds.height = data->capHeight + ( numLines - 1 ) * data->lineHeight;
+    textBounds.height = data->capHeight + ( numLines - 1 ) * (data->lineHeight * data->scaleY);
     return textBounds;
 }
 
