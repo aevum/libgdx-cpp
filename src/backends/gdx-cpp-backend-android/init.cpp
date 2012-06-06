@@ -50,6 +50,11 @@ extern "C" {
         assert(applicationListener);
         app->pause();
     }
+    
+    void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeResume(JNIEnv* env) {
+        assert(applicationListener);
+        app->resume();
+    }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeResize(JNIEnv* env, jobject object, jint width, jint height) {
         assert(applicationListener);

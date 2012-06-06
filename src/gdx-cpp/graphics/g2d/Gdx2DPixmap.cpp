@@ -322,7 +322,7 @@ void graphics::g2d::Gdx2DPixmap::setColor(const gdx_cpp::graphics::Color& color)
 
 void graphics::g2d::Gdx2DPixmap::setScale(float scaleX, float scaleY)
 {
-    throw std::runtime_error("Unsupported operation");
+    throw std::runtime_error("Gdx2DPixmap::setScale: unsupported operation");
 }
 
 Gdx2DPixmap* Gdx2DPixmap::newPixmapFromBuffer(unsigned char* data, int len, int requestedFormat)

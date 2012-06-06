@@ -223,7 +223,6 @@ void gdx_cpp::utils::JsonValue::toString(std::ostream& out, bool prettyPrint, in
         }
 
         out << "]";
-        if (prettyPrint) out << std::endl;
     }
     break;
     case json_json: {

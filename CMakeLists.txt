@@ -37,7 +37,6 @@ elseif (UNIX)
         set(BOX2D_BUILD_SHARED TRUE)        
     else()
         message("Linux found. Setting the backend to LINUX")
-        
         set(LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES ON)        
 
         SET(GDX_BACKEND LINUX)
@@ -47,8 +46,8 @@ elseif (UNIX)
             set(BOX2D_BUILD_STATIC FALSE)
             set(BOX2D_BUILD_SHARED TRUE)
         else()
-            set(BOX2D_BUILD_STATIC FALSE)
-            set(BOX2D_BUILD_SHARED TRUE)
+            set(BOX2D_BUILD_STATIC TRUE)
+            set(BOX2D_BUILD_SHARED FALSE)
         endif()
     endif()
 
@@ -70,8 +69,11 @@ endif()
 
 if (${GDX_BACKEND} STREQUAL "IOS")
     add_subdirectory(src/backends/gdx-cpp-backend-ios)
+    SET(BUILD_AGG TRUE)
 elseif(${GDX_BACKEND} STREQUAL "ANDROID")
-    add_subdirectory(src/backends/gdx-cpp-backend-android) 
+    add_subdirectory(src/backends/gdx-cpp-backend-android)
+
+    SET(BUILD_AGG TRUE)
 elseif(${GDX_BACKEND} STREQUAL "WIN32")
     add_subdirectory(src/backends/windows)
 elseif(${GDX_BACKEND} STREQUAL "LINUX")
@@ -79,10 +81,15 @@ elseif(${GDX_BACKEND} STREQUAL "LINUX")
     SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wdouble-promotion")
   endif()
 
+  SET(BUILD_AGG TRUE)
+    add_subdirectory(src/backends/gdx-cpp-backend-linux)
+endif()
+
+if (BUILD_AGG)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/agg/include ${CMAKE_CURRENT_SOURCE_DIR}/src/agg/svg)
   add_subdirectory(src/agg)
-  add_subdirectory(src/backends/gdx-cpp-backend-linux)  
 endif()
+
 
 add_subdirectory(src/gdx-cpp)
 
