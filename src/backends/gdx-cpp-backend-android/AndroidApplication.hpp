@@ -58,6 +58,7 @@ public:
     void update();
     void pause();
     void create();
+    void resume();
 
     void setJavaVM(JavaVM* vm);
 

@@ -133,8 +133,13 @@ gdx_cpp::Application::ApplicationType gdx_cpp::backends::android::AndroidApplica
 
 void backends::android::AndroidApplication::pause()
 {
-
+    listener->pause();
 }
+
+void AndroidApplication::resume() {
+    listener->resume();
+}
+
 
 void backends::android::AndroidApplication::update()
 {
