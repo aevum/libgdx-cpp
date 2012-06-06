@@ -372,7 +372,7 @@ BitmapFont::TextBounds& BitmapFont::getWrappedBounds (const std::string& str,flo
         numLines++;
     }
     textBounds.width = maxWidth;
-    textBounds.height = data->capHeight + (numLines - 1) * data->lineHeight;
+    textBounds.height = data->capHeight + (numLines - 1) * data->lineHeight * data->scaleY;
     return textBounds;
 }
 
@@ -443,7 +443,7 @@ int BitmapFont::computeVisibleGlyphs (const std::string& str, int start, int end
             if (g != NULL) {
                 if (lastGlyph != NULL) width += lastGlyph->getKerning(ch) * scaleX;
                 lastGlyph = g;
-                if (width + g->xadvance * scaleX > availableWidth) break;
+                if ((width + g->xadvance * scaleX) - availableWidth > 0.000001f ) break;
                 width += g->xadvance * scaleX;
             }
         }

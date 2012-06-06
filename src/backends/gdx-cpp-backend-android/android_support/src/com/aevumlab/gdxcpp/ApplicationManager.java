@@ -158,7 +158,7 @@ public class ApplicationManager {
 					int pointerId = evt.getPointerId(pointerIndex);
 					pointerIdToButton.put(pointerId, pendingIds.pop());
 
-					nativeTouchDownEvent(evt.getX(), evt.getY(), pointerIdToButton.get(pointerId)); 
+					nativeTouchDownEvent(evt.getX(pointerIndex), evt.getY(pointerIndex), pointerIdToButton.get(pointerId)); 
 				}
 				break;
 			case MotionEvent.ACTION_POINTER_UP:
@@ -166,7 +166,7 @@ public class ApplicationManager {
 				int pointerId = evt.getPointerId(pointerIndex);
 				int button = pointerIdToButton.get(pointerId);
 				
-				nativeTouchUpEvent(evt.getX(), evt.getY(), button);
+				nativeTouchUpEvent(evt.getX(pointerIndex), evt.getY(pointerIndex), button);
 				
 				pendingIds.push(button);
 				pointerIdToButton.remove(pointerId);
