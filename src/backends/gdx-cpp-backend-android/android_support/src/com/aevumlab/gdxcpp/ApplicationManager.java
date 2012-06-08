@@ -99,6 +99,7 @@ public class ApplicationManager {
 			setFocusable(true);
 			setFocusableInTouchMode(true);
 			setRenderer(new NativeSurfaceRenderer());
+			setKeepScreenOn(true);
 		}
 
 		@Override
