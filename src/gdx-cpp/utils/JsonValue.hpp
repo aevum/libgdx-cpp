@@ -112,7 +112,8 @@ public:
     
     JsonValue& at(unsigned int idx);
     const JsonValue& at(unsigned int index) const;
-    
+
+    void removeChild(const std::string& childName);
     JsonValue() ;
 
     void toString(std::ostream& out, bool prettyPrint = false) const;

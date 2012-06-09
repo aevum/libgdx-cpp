@@ -444,3 +444,8 @@ const JsonValue::item_map& JsonValue::as_item_map() const {
     assert(item_type == json_json);
     return *(item_map*)item_val.get();
 }
+
+void JsonValue::removeChild ( const std::string& childName ) {
+    assert(item_type == json_json);
+    this->as_item_map().erase(childName);
+}
