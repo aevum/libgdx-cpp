@@ -135,8 +135,8 @@ public class ApplicationManager {
 	}
 
 	public void resume() {
-		nativeResume();
 		audio.resume();
+		nativeResume();
 	}
 
 	public void unload() {
