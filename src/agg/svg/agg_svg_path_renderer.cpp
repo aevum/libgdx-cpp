@@ -72,11 +72,14 @@ namespace svg
         unsigned idx = m_attr_storage[m_attr_storage.size() - 1].index;
         attr.index = idx;
         m_attr_storage[m_attr_storage.size() - 1] = attr;
-        
+
         if(attr.gradient) {
+            if (m_attr_storage[m_attr_storage.size() - 1].gradient) {
+                delete m_attr_storage[m_attr_storage.size() - 1].gradient;
+            }
             m_attr_storage[m_attr_storage.size() - 1].gradient  = attr.gradient->clone();
         }
-        
+
         pop_attr();
     }
 

@@ -284,6 +284,10 @@ struct path_attributes
         this->stroke_width = other.stroke_width;
         this->transform = other.transform;
 
+        if (this->gradient) {
+            delete this->gradient;
+        }
+
         this->gradient = other.gradient ? other.gradient->clone() : NULL;
 
         return *this;
