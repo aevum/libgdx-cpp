@@ -20,6 +20,7 @@
 
 #include "LinuxFiles.hpp"
 #include "LinuxFileHandle.hpp"
+#include <unistd.h>
 
 using namespace gdx_cpp::backends::nix;
 

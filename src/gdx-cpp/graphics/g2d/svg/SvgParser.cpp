@@ -627,6 +627,9 @@ bool sortByStop(const SvgRendererHandler::GradientStopData& a,const SvgRendererH
 
 void gdx_cpp::graphics::g2d::svg::SvgParser::parse_gradient(const std::string& gradient)
 {
+    float x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+    handler->boundingRect(x1, y1, x2, y2);
+    
     std::string::size_type result = 0;
     std::vector< std::string > url = splitArgs<std::string>(gradient, "()", result);
 
@@ -644,16 +647,13 @@ void gdx_cpp::graphics::g2d::svg::SvgParser::parse_gradient(const std::string& g
     }
 
     assert(gradientDef);
-
+    
     if ( gradientDef->getName() == "svg:linearGradient" || gradientDef->getName() == "linearGradient") {
         SvgRendererHandler::LinearGradient gradientData;
 
         fetchStopData(gradientDef.get(), gradientData.stops);
 
         std::sort(gradientData.stops.begin(), gradientData.stops.end(), sortByStop);
-
-        float x1,y1,x2,y2;
-        handler->boundingRect(x1, y1, x2, y2);
 
         if (gradientDef->hasAttribute("x1")) {
             gradientData.x1 = from_string< float >(gradientDef->getAttribute("x1"));
