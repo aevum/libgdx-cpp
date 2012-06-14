@@ -86,6 +86,7 @@ public:
     void setTransformMatrix (const gdx_cpp::math::Matrix4& transform);
     void setShader (gdx_cpp::graphics::glutils::ShaderProgram* shader);
 
+    void disposeCache(int cacheID);
 private:
     SpriteCache(const SpriteCache& other);
     SpriteCache& operator = (const SpriteCache& other);
