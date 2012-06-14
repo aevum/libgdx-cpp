@@ -963,7 +963,7 @@ void SpriteCache::add ( Texture::ptr texture, float* vertices, int size, int off
 
 void SpriteCache::disposeCache ( int cacheID ) {
     for ( int i = 0; i < caches.size(); ++i ) {
-        if ( caches[i]->id == cacheID ) {
+        if ( caches[i] != NULL && caches[i]->id == cacheID ) {
             delete caches[i];
             caches[i] = NULL;
             break;
