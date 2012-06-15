@@ -79,8 +79,9 @@ std::vector<char> Base64Coder::encode (const char* in, int length, int iOff) {
     int oLen = ((length + 2) / 3) * 4; // output length including padding
     std::vector<char> out;
 
-    out.resize(oLen);
-
+    out.resize(oLen + 1);
+    out[oLen] = 0;
+    
     int ip = iOff;
     int iEnd = iOff + length;
     int op = 0;
