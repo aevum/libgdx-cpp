@@ -19,15 +19,15 @@
  */
 
 #include "AndroidMusic.hpp"
+#include "AndroidSystem.hpp"
 #include <cassert>
 #include <gdx-cpp/Gdx.hpp>
 
 using namespace gdx_cpp::backends::android;
 
 
-gdx_cpp::backends::android::AndroidMusic::AndroidMusic(JNIEnv* env, jobject musicObj)
-    : env(env)
-    , jniMusicObj(musicObj)
+gdx_cpp::backends::android::AndroidMusic::AndroidMusic(jobject musicObj)
+    : jniMusicObj(musicObj)
     , disposeJNI(NULL)
     , getPositionJNI(NULL)
     , isLoopingJNI(NULL)
@@ -38,6 +38,8 @@ gdx_cpp::backends::android::AndroidMusic::AndroidMusic(JNIEnv* env, jobject musi
     , setVolumeJNI(NULL)
     , stopJNI(NULL)
 { 
+    
+    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
     jclass cls = env->GetObjectClass(jniMusicObj);
 
     disposeJNI = env->GetMethodID(cls, "dispose", "()V");
@@ -63,47 +65,56 @@ gdx_cpp::backends::android::AndroidMusic::AndroidMusic(JNIEnv* env, jobject musi
 
 void gdx_cpp::backends::android::AndroidMusic::dispose()
 {
+    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
     env->CallVoidMethod(jniMusicObj, disposeJNI);
     env->DeleteGlobalRef(jniMusicObj);
 }
 
 float gdx_cpp::backends::android::AndroidMusic::getPosition()
 {
+    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
     return env->CallFloatMethod(jniMusicObj, getPositionJNI);
 }
 
 bool gdx_cpp::backends::android::AndroidMusic::isLooping()
 {
+    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
     return env->CallBooleanMethod(jniMusicObj, isLoopingJNI);
 }
 
 bool gdx_cpp::backends::android::AndroidMusic::isPlaying()
 {
+    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
     return env->CallBooleanMethod(jniMusicObj, isPlayingJNI);
 }
 
 void gdx_cpp::backends::android::AndroidMusic::pause()
 {
+    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
     env->CallVoidMethod(jniMusicObj, pauseJNI);
 }
 
 void gdx_cpp::backends::android::AndroidMusic::play()
 {
+    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
     env->CallVoidMethod(jniMusicObj, playJNI);
 }
 
 void gdx_cpp::backends::android::AndroidMusic::setLooping(bool isLooping)
 {
+    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
     env->CallVoidMethod(jniMusicObj, setLoopingJNI, isLooping);
 }
 
 void gdx_cpp::backends::android::AndroidMusic::setVolume(float volume)
 {
+    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
     env->CallVoidMethod(jniMusicObj, setVolumeJNI, volume);
 }
 
 void gdx_cpp::backends::android::AndroidMusic::stop()
 {
+    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
     env->CallVoidMethod(jniMusicObj, stopJNI);
 }
 

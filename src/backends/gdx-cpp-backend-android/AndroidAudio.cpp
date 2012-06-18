@@ -28,13 +28,13 @@
 #include <gdx-cpp/files/FileHandle.hpp>
 #include "AndroidSound.hpp"
 #include "AndroidMusic.hpp"
+#include "AndroidSystem.hpp"
 #include <stdexcept>
 
 using namespace gdx_cpp::backends::android;
 
 
 gdx_cpp::backends::android::AndroidAudio::AndroidAudio()
-: env(NULL)
 {    
 }
 
@@ -48,13 +48,14 @@ gdx_cpp::audio::AudioRecorder* gdx_cpp::backends::android::AndroidAudio::newAudi
 
 gdx_cpp::audio::Music* gdx_cpp::backends::android::AndroidAudio::newMusic(const gdx_cpp::files::FileHandle::ptr file)
 {
+    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
     jstring strpath = env->NewStringUTF(file->path().c_str());
     jobject jobjMusic = env->CallObjectMethod(androidAudioObj, newMusicJNI, strpath, Files::Internal);
 
     if (jobjMusic != NULL) {
         jobjMusic = env->NewGlobalRef(jobjMusic);
 
-        return new AndroidMusic(env, jobjMusic);
+        return new AndroidMusic(jobjMusic);
     }
     
     throw std::runtime_error("Could not load file: " + file->path());
@@ -62,21 +63,23 @@ gdx_cpp::audio::Music* gdx_cpp::backends::android::AndroidAudio::newMusic(const 
 
 gdx_cpp::audio::Sound* gdx_cpp::backends::android::AndroidAudio::newSound(const gdx_cpp::files::FileHandle::ptr fileHandle)
 {
+    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
     jstring strpath = env->NewStringUTF(fileHandle->path().c_str());
     jobject jobjSound = env->CallObjectMethod(androidAudioObj, newSoundJNI, strpath, Files::Internal);
 
     if (jobjSound != NULL) {
         jobjSound = env->NewGlobalRef(jobjSound);
 
-        return new AndroidSound(env, jobjSound);
+        return new AndroidSound(jobjSound);
     }
 
     throw std::runtime_error("Could not load file: " + fileHandle->path());
 }
 
-void gdx_cpp::backends::android::AndroidAudio::setupJNI(JNIEnv* env, jobject androidAudioObj)
+void gdx_cpp::backends::android::AndroidAudio::setupJNI(jobject androidAudioObj)
 {
-    this->env = env;
+    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
+    env = env;
     this->androidAudioObj = androidAudioObj;
     env->NewGlobalRef(androidAudioObj);
 
@@ -95,6 +98,7 @@ void gdx_cpp::backends::android::AndroidAudio::setupJNI(JNIEnv* env, jobject and
 
 gdx_cpp::backends::android::AndroidAudio::~AndroidAudio()
 {
+    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
     env->DeleteGlobalRef(androidAudioObj);
 }
 

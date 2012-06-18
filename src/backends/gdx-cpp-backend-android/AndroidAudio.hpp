@@ -49,11 +49,10 @@ public:
     audio::Music* newMusic(const files::FileHandle::ptr file);
     audio::Sound* newSound(const files::FileHandle::ptr fileHandle);
 
-    void setupJNI(JNIEnv* env, jobject androidAudioObj);
+    void setupJNI( jobject androidAudioObj );
 
     ~AndroidAudio();
 private:
-    JNIEnv* env;
     jobject androidAudioObj;
     
     jmethodID newAudioDeviceJNI;

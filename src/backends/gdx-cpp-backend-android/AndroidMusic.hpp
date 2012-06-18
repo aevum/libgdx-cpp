@@ -33,7 +33,7 @@ namespace android {
 class AndroidMusic : public audio::Music
 {
 public:
-    AndroidMusic(JNIEnv* env, jobject musicObj);
+    AndroidMusic(jobject musicObj);
     void dispose();
     float getPosition();
     bool isLooping();
@@ -47,7 +47,6 @@ public:
     ~AndroidMusic();
     
 protected:
-    JNIEnv* env;
     jobject jniMusicObj;
     
     jmethodID disposeJNI;

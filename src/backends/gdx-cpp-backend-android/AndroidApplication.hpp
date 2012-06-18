@@ -81,8 +81,6 @@ protected:
     std::list< Runnable::ptr > runnables;
 
     gdx_cpp::implementation::Thread::ptr mainLoopThread;
-
-    JNIEnv* env;
     
     void initialize();
 

@@ -134,7 +134,7 @@ extern "C" {
 
     void Java_com_badlogic_gdx_backends_android_AndroidAudio_registerAudioEngine(JNIEnv* env, jclass clazz, jobject object) {
         assert(applicationListener);
-        static_cast<AndroidAudio*>(Gdx::app->getAudio())->setupJNI(env, object);
+        static_cast<AndroidAudio*>(Gdx::app->getAudio())->setupJNI(object);
     }
     
     JNIEXPORT jint JNICALL

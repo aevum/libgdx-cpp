@@ -33,7 +33,7 @@ namespace android {
 class AndroidSound : public audio::Sound
 {
 public:
-    AndroidSound(JNIEnv* env, jobject jniSound);
+    AndroidSound(jobject jniSound);
     
     void dispose();
     void play();
@@ -43,7 +43,6 @@ public:
     ~AndroidSound();
 private:
     jobject jniSound;
-    JNIEnv* env;
 
     jmethodID disposeJNI;
     jmethodID playJNI;
