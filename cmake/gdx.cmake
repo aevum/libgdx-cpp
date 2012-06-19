@@ -1,6 +1,6 @@
 macro(gdx_setup_target target_type target_name sources)
     if (APPLE)
-        SET(SDKVER "5.0")
+        SET(SDKVER "5.1")
 
         execute_process(COMMAND xcode-select -print-path OUTPUT_VARIABLE _output OUTPUT_STRIP_TRAILING_WHITESPACE)
                 set(CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos;-iphonesimulator")
@@ -14,6 +14,12 @@ macro(gdx_setup_target target_type target_name sources)
         set(CMAKE_CXX_FLAGS "-x objective-c++ -mno-thumb")
         set(CMAKE_EXE_LINKER_FLAGS "-framework Foundation -framework AudioToolbox -framework CoreGraphics -framework QuartzCore -framework UIKit -framework OpenGLES -framework AVFoundation")
 
+        if (${target_type} STREQUAL "application")
+            add_executable(${target_name} MACOSX_BUNDLE ${sources})
+        else()
+            add_library(${target_name} ${sources})
+        endif()
+
         set_target_properties(${target_name} PROPERTIES
                         MACOSX_BUNDLE_GUI_IDENTIFIER "\${PRODUCT_NAME:identifier}"
                         RESOURCE "${RESOURCES}"
@@ -25,13 +31,6 @@ macro(gdx_setup_target target_type target_name sources)
                         XCODE_ATTRIBUTE_SKIP_INSTALL NO # needed for archive to actually show up in organizer
                         XCODE_ATTRIBUTE_INSTALL_PATH "/Application" # Archiving doesn't work with an empty path
         )
-
-        if (${target_type} STREQUAL "application")
-            add_executable(${target_name} MACOSX_BUNDLE ${sources})
-        else()
-            add_library(${target_name} ${sources})
-        endif()
-
     elseif (ANDROID_NDK)
         add_library(${target_name} SHARED ${sources})
 

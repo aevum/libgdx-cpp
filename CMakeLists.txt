@@ -19,10 +19,7 @@ if(APPLE)
     message("MacOSX (iOS) found. Setting the backend to IOS")
     SET(GDX_BACKEND IOS)
     SET(GDX_BACKEND_LIB gdx-cpp-backend-ios)
-
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/agg/include ${CMAKE_CURRENT_SOURCE_DIR}/src/agg/svg)
-    add_subdirectory(src/agg)
-
+    
     set(BOX2D_BUILD_STATIC TRUE)
     set(BOX2D_BUILD_SHARED FALSE)
 elseif (UNIX)
