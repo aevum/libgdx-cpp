@@ -191,7 +191,7 @@ struct buffer : public buffer_base {
         int rem = (pos <= lim ? lim - pos : 0);
 
         //rem << 2? wtf?
-        memmove(bf.get(), bf.get() + position(), rem << 2);
+        memmove(bf.get(), ((T*) bf.get()) + position(), rem * sizeof(T));
 
         position(rem);
         limit(capacity());

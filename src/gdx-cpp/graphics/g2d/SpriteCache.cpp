@@ -958,7 +958,22 @@ void SpriteCache::add ( Texture::ptr texture, float* vertices, int size, int off
     } else
         counts[lastIndex] = counts[lastIndex] + count;
 
-    mesh->getVerticesBuffer().put ( vertices, size, offset, length );
+    utils::float_buffer& buffer = mesh->getVerticesBuffer();
+    if (buffer.capacity() - (buffer.position() + size) < 0) {
+        int pos = -1;
+        for (int i=0; i<caches.size(); i++) {
+            if (caches[i] != NULL) {
+                if (pos == -1) {
+                    pos = caches[i]->offset;
+                }
+                caches[i]->offset -= pos;
+            }
+        }
+        buffer.position(pos);
+        buffer.compact();
+         
+    }
+    buffer.put ( vertices, size, offset, length );
 }
 
 void SpriteCache::disposeCache ( int cacheID ) {
