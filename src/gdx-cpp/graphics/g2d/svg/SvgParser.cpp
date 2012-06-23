@@ -627,12 +627,12 @@ bool sortByStop(const SvgRendererHandler::GradientStopData& a,const SvgRendererH
 
 void gdx_cpp::graphics::g2d::svg::SvgParser::parse_gradient(const std::string& gradient)
 {
+    std::string::size_type result = 0;
+    std::vector< std::string > url = splitArgs<std::string>(gradient, "()", result);
+    
     float x1 = 0, y1 = 0, x2 = 0, y2 = 0;
     handler->boundingRect(x1, y1, x2, y2);
     
-    std::string::size_type result = 0;
-    std::vector< std::string > url = splitArgs<std::string>(gradient, "()", result);
-
     assert(defsElement != NULL);
 
     std::string gradientNodeUrl = url[1].substr(1);

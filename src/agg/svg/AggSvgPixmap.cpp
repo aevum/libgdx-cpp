@@ -437,5 +437,10 @@ SvgPixmapInterface::transform& AggSvgPixmap::currentTransform() {
 }
 
 void AggSvgPixmap::boundingRect(float& x1, float& y1, float& x2, float& y2) {
-    pimpl->renderer.bounding_rect((double*)&x1, (double*)&y1, (double*)&x2, (double*)&y2);
+    double a,b,c,d;
+    pimpl->renderer.bounding_rect(&a, &b, &c, &d);
+    x1 = a;
+    y1 = b;
+    x2 = c;
+    y2 = d;
 }
