@@ -34,7 +34,7 @@ elseif (UNIX)
         set(BOX2D_BUILD_SHARED TRUE)        
     else()
         message("Linux found. Setting the backend to LINUX")
-        set(LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES ON)        
+        add_definitions(-DLIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES)        
 
         SET(GDX_BACKEND_LINUX ON)
         SET(GDX_BACKEND_LIB gdx-cpp-backend-linux)

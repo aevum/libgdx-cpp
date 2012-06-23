@@ -36,10 +36,21 @@ void GL10::glFogfv(int pname, const float* params) const
     ::glFogfv(pname, params);
 }
 void GL10::glClientActiveTexture(int texture) const {
-    ::glClientActiveTexture(texture);
+    static unsigned int lastTexture = -1;
+    if (texture != lastTexture) {
+        ::glClientActiveTexture(texture);
+        lastTexture = texture;
+    }
 }
 void GL10::glColor4f(float red, float green, float blue, float alpha) const {
-    ::glColor4f(red, green, blue, alpha);
+    static float lastRed = -1, lastGreen = -1, lastBlue = -1, lastAlpha = -1;
+    if (red != lastRed && green != lastGreen && blue != lastBlue && alpha != lastAlpha) {
+        ::glColor4f(red, green, blue, alpha);
+        lastRed = red;
+        lastGreen = green;
+        lastBlue = blue;
+        lastAlpha = alpha;
+    }
 }
 void GL10::glColorPointer(int size, int type, int stride, const void* pointer) {
     if (last_color_pointer != pointer) {
