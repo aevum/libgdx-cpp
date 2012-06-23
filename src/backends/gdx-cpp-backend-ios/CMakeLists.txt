@@ -3,8 +3,8 @@ project(gdx-cpp-backend-ios)
 include_directories(${GDXCPP_INCLUDE_DIR} ${SVG_BACKEND_ANTIGRAIN_INCLUDES})
 
 set(GDX_CPP_BACKEND_IOS_SRC 
-init.cpp
-IosApplication.cpp
+init.mm
+IosApplication.mm
 AppController.mm
 IosGdxViewController.mm
 EAGLView.mm
@@ -15,6 +15,7 @@ IosGraphics.cpp
 IosFileHandle.mm
 IosFiles.cpp
 IosSystem.mm
+IosAudio.mm
 IosInput.cpp
 )
 set(GDX_CPP_BACKEND_IOS_HEADERS init.hpp IosApplication.hpp AppController.h 
@@ -29,6 +30,7 @@ IosGraphics.hpp
 IosFileHandle.hpp
 IosFiles.hpp
 IosInput.hpp
+IosAudio.hpp
 )
 
 add_library(gdx-cpp-backend-ios ${GDX_CPP_BACKEND_IOS_SRC} ${GDX_CPP_BACKEND_IOS_HEADERS})

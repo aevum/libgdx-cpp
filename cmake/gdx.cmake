@@ -1,6 +1,8 @@
 macro(gdx_setup_target target_type target_name sources)
     if (APPLE)
-        SET(SDKVER "5.1")
+        if (NOT SDKVER)
+            message(FATAL_ERROR "Missing SDKVER variable. Please define it with the latest version of the ios SDK")
+        endif()
 
         execute_process(COMMAND xcode-select -print-path OUTPUT_VARIABLE _output OUTPUT_STRIP_TRAILING_WHITESPACE)
                 set(CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos;-iphonesimulator")
@@ -12,6 +14,8 @@ macro(gdx_setup_target target_type target_name sources)
         SET (CMAKE_OSX_ARCHITECTURES "$(ARCHS_UNIVERSAL_IPHONE_OS)")
 
         set(CMAKE_CXX_FLAGS "-x objective-c++ -mno-thumb")
+        set(CMAKE_C_FLAGS "-x objective-c++ -mno-thumb")
+
         set(CMAKE_EXE_LINKER_FLAGS "-framework Foundation -framework AudioToolbox -framework CoreGraphics -framework QuartzCore -framework UIKit -framework OpenGLES -framework AVFoundation")
 
         if (${target_type} STREQUAL "application")
