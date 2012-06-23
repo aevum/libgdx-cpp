@@ -68,7 +68,7 @@ public:
     FileHandle child (const std::string &name);
     FileHandle parent ();
     void mkdirs ();
-    bool exists ();
+    virtual bool exists () const;
     bool deleteFile ();
     bool deleteDirectory ();
     virtual void copyTo (FileHandle& dest);

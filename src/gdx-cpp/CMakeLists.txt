@@ -501,7 +501,7 @@ utils/NumberUtils.cpp
 # utils/Json.cpp
 Game.cpp
 InputAdapter.cpp
-Gdx.cpp)
+Gdx.cpp)		
 
 install(DIRECTORY . DESTINATION include/gdx-cpp
           FILES_MATCHING PATTERN "*.hpp")

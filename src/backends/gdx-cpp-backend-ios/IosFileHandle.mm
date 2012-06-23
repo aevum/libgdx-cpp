@@ -17,7 +17,7 @@
  */
 
 #include "IosFileHandle.hpp"
-#include <UIKit/UIKit.h>
+#import <UIKit/UIKit.h>
 #include <stdexcept>
 
 using namespace gdx_cpp::backends::ios;
@@ -27,7 +27,7 @@ IosFileHandle::IosFileHandle(const std::string& fileName, gdx_cpp::Files::FileTy
 {	
 }
 
-int IosFileHandle::readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) {
+int IosFileHandle::readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) const {
 	if (this->type == Files::Internal) {		
 		NSString *filePath = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String: file.nameWithoutExtension().c_str()] 
 															 ofType:[NSString stringWithUTF8String: file.extension().c_str()]
@@ -49,4 +49,8 @@ int IosFileHandle::readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) {
 		throw std::runtime_error("Failed to load contents of file: " + this->file.getAbsolutePath());
 	}
 	throw std::runtime_error("Not implemented yet");
+}
+
+bool IosFileHandle::exists() const {
+    return[[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String: file.getName().c_str()] ofType:[NSString stringWithUTF8String:file.extension().c_str()]];
 }

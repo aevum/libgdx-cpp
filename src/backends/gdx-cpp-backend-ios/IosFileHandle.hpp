@@ -33,7 +33,9 @@ class IosFileHandle : public gdx_cpp::files::FileHandle
 {	
 public:
 	IosFileHandle(const std::string& fileName, gdx_cpp::Files::FileType type);
-	virtual int readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c);
+	virtual int readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) const;
+    
+    bool exists() const;
 };
 
 }

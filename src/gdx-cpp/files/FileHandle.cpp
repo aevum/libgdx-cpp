@@ -213,7 +213,7 @@ void FileHandle::mkdirs () {
     getFile().mkdirs();
 }
 
-bool FileHandle::exists () {
+bool FileHandle::exists () const {
     switch (type) {
     case gdx_cpp::Files::Internal:
         if (file.exists()) return true;

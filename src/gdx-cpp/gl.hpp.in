@@ -1,18 +1,26 @@
 #ifndef GDX_GL_H
 #define GDX_GL_H
 
-#cmakedefine LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
+#cmakedefine GDX_BACKEND_IOS
+#cmakedefine GDX_BACKEND_LINUX
+#cmakedefine GDX_BACKEND_ANDROID
+#cmakedefine GDX_BACKEND_WIN32
 
-#ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
-
+#ifdef GDX_BACKEND_LINUX
 #define GL_GLEXT_PROTOTYPES
 
 #include <GL/gl.h>
 #include <GL/glext.h>
 
-#else
+#elif defined GDX_BACKEND_ANDROID
 
 #include <GLES/gl.h>
+
+#elif defined GDX_BACKEND_IOS
+
+#include <OpenGLES/ES1/gl.h>
+
+#else 
 
 #endif
 

@@ -19,8 +19,7 @@
 
 #include "init.hpp"
 
-#import <UIKit/UIKit.h>
-#import <gdx-cpp/Gdx.hpp>
+#import <gdx-cpp/Gdx.hpp>		
 #import "IosApplication.hpp"
 #import "IosSystem.hpp"
 #import "AppController.h"
