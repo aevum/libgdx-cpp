@@ -17,9 +17,6 @@
 
 #include "IosGraphics.hpp"
 
-#include "IosGL10.hpp"
-#include "IosGL11.hpp"
-#include "IosGL20.hpp"
 #include "IosGLU.hpp"
 #include <stdexcept>
 
@@ -35,6 +32,10 @@
 
 #include <gdx-cpp/graphics/g2d/Gdx2DPixmap.hpp>
 #include <gdx-cpp/graphics/g2d/svg/AggSvgPixmap.hpp>
+
+#include <gdx-cpp/graphics/GL10.hpp>
+#include <gdx-cpp/graphics/GL11.hpp>
+#include <gdx-cpp/graphics/GL20.hpp>
 
 #include "IosGLU.hpp"
 
@@ -219,9 +220,9 @@ void gdx_cpp::backends::ios::IosGraphics::initialize()
 			
         } else {
             if (major == 1 && minor < 5) {
-                glCommon = gl10 = new IosGL10;
+                glCommon = gl10 = new GL10;
             } else {
-                glCommon = gl10 = gl11 = new IosGL11;
+                glCommon = gl10 = gl11 = new GL11;
             }
         }
 		

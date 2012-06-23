@@ -8,9 +8,6 @@ IosApplication.mm
 AppController.mm
 IosGdxViewController.mm
 EAGLView.mm
-IosGL10.cpp
-IosGL11.cpp
-IosGL20.cpp
 IosGraphics.cpp
 IosFileHandle.mm
 IosFiles.cpp
@@ -21,9 +18,6 @@ IosInput.cpp
 set(GDX_CPP_BACKEND_IOS_HEADERS init.hpp IosApplication.hpp AppController.h 
 EAGLView.h
 IosGdxViewController.h
-IosGL10.hpp
-IosGL11.hpp
-IosGL20.hpp
 IosGLU.hpp
 IosSystem.hpp
 IosGraphics.hpp

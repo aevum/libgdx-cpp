@@ -65,6 +65,8 @@
 	gdx_cpp::Gdx::graphics->setDisplayMode(glView.viewWidth, glView.viewHeight, true);
 	gdxcpp_create_listener();
 	
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+    
 	return YES;
 }
 
