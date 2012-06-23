@@ -29,11 +29,23 @@ void GLCommon::glActiveTexture(int texture) const
 }
 
 void GLCommon::glBindTexture(int target, int texture) const {
-    ::glBindTexture ( target, texture);
+    static unsigned int lastTarget = -1, lastTexture = -1;
+    
+    if (target != lastTarget && texture != lastTexture) {
+        ::glBindTexture ( target, texture);
+//         lastTarget = target;
+//         lastTexture = texture;
+    }
 }
 
 void GLCommon::glBlendFunc(int sfactor, int dfactor) const {
-    ::glBlendFunc ( sfactor, dfactor);
+    static int lastSfactor = -1, lastDfactor = -1;
+    
+    if (lastSfactor != sfactor && lastDfactor != dfactor) {
+        ::glBlendFunc ( sfactor, dfactor);
+        lastDfactor = dfactor;
+        lastSfactor = sfactor;
+    }
 }
 
 void GLCommon::glClear(int mask) const {
