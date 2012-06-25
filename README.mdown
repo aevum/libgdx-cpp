@@ -29,7 +29,7 @@ make install
 
 cd ../../android/gdx
 
-cmake ../../../libgdx-cpp -DCMAKE_TOOLCHAIN_FILE=../../../libgdx-cpp/cmake/android.toolchain.cmake -DANDROID_NDK=ANDROID_NDK_HOME -DCAMEK_BUILD_TYPE=Release
+cmake ../../../libgdx-cpp -DCMAKE_TOOLCHAIN_FILE=../../../libgdx-cpp/cmake/android.toolchain.cmake -DANDROID_NDK=ANDROID_NDK_HOME -DCMAKE_BUILD_TYPE=Release
 
 make install
 ```
