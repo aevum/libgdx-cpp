@@ -20,7 +20,7 @@
 
 #include "Image.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui;
+using namespace gdx::ui;
 
 void Image::layout () {
     if (!invalidated) return;
@@ -86,7 +86,7 @@ void Image::layout () {
         imageY = (int)(height / 2 - imageHeight / 2);
 }
 
-void Image::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void Image::draw (const gdx::SpriteBatch& batch,float parentAlpha) {
     if (invalidated) layout();
     batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
     if (patch != null)
@@ -95,13 +95,13 @@ void Image::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentA
         batch.draw(region, x + imageX, y + imageY, imageWidth, imageHeight);
 }
 
-void Image::setRegion (const gdx_cpp::graphics::g2d::TextureRegion& region) {
+void Image::setRegion (const gdx::TextureRegion& region) {
     this.region = region;
     patch = null;
     invalidate();
 }
 
-void Image::setPatch (const gdx_cpp::graphics::g2d::NinePatch& patch) {
+void Image::setPatch (const gdx::NinePatch& patch) {
     this.patch = patch;
     region = null;
     invalidate();
@@ -133,45 +133,45 @@ void Image::touchUp (float x,float y,int pointer) {
 void Image::touchDragged (float x,float y,int pointer) {
 }
 
-Image::Image (const gdx_cpp::graphics::g2d::TextureRegion& region) {
+Image::Image (const gdx::TextureRegion& region) {
     this(region, Scaling.none, null);
 }
 
-Image::Image (const gdx_cpp::graphics::g2d::TextureRegion& region,const Scaling& scaling) {
+Image::Image (const gdx::TextureRegion& region,const Scaling& scaling) {
     this(region, scaling, null);
 }
 
-Image::Image (const gdx_cpp::graphics::g2d::TextureRegion& region,const Scaling& scaling,int align) {
+Image::Image (const gdx::TextureRegion& region,const Scaling& scaling,int align) {
     this(region, scaling, align, null);
 }
 
-Image::Image (const gdx_cpp::graphics::g2d::TextureRegion& region,const Scaling& scaling,const std::string& name) {
+Image::Image (const gdx::TextureRegion& region,const Scaling& scaling,const std::string& name) {
     this(region, scaling, Align.CENTER, null);
 }
 
-Image::Image (const gdx_cpp::graphics::g2d::TextureRegion& region,const Scaling& scaling,int align,const std::string& name) {
+Image::Image (const gdx::TextureRegion& region,const Scaling& scaling,int align,const std::string& name) {
     setRegion(region);
     this.scaling = scaling;
     this.align = align;
 }
 
-Image::Image (const gdx_cpp::graphics::g2d::NinePatch& patch) {
+Image::Image (const gdx::NinePatch& patch) {
     this(patch, Scaling.none, null);
 }
 
-Image::Image (const gdx_cpp::graphics::g2d::NinePatch& patch,const Scaling& scaling) {
+Image::Image (const gdx::NinePatch& patch,const Scaling& scaling) {
     this(patch, scaling, null);
 }
 
-Image::Image (const gdx_cpp::graphics::g2d::NinePatch& patch,const Scaling& scaling,int align) {
+Image::Image (const gdx::NinePatch& patch,const Scaling& scaling,int align) {
     this(patch, scaling, align, null);
 }
 
-Image::Image (const gdx_cpp::graphics::g2d::NinePatch& patch,const Scaling& scaling,const std::string& name) {
+Image::Image (const gdx::NinePatch& patch,const Scaling& scaling,const std::string& name) {
     this(patch, scaling, Align.CENTER, null);
 }
 
-Image::Image (const gdx_cpp::graphics::g2d::NinePatch& patch,const Scaling& scaling,int align,const std::string& name) {
+Image::Image (const gdx::NinePatch& patch,const Scaling& scaling,int align,const std::string& name) {
     setPatch(patch);
     this.scaling = scaling;
     this.align = align;

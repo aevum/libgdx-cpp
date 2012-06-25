@@ -20,9 +20,9 @@
 
 #include "Table.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui::tablelayout;
+using namespace gdx::ui::tablelayout;
 
-void Table::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void Table::draw (const gdx::SpriteBatch& batch,float parentAlpha) {
     if (!visible) return;
     if (layout.needsLayout) layout.layout();
 
@@ -40,7 +40,7 @@ void Table::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentA
         super.draw(batch, parentAlpha);
 }
 
-void Table::calculateScissors (const gdx_cpp::math::Matrix4& transform) {
+void Table::calculateScissors (const gdx::Matrix4& transform) {
     tableBounds.x = 0;
     tableBounds.y = 0;
     tableBounds.width = width;
@@ -91,7 +91,7 @@ float Table::getMaxHeight () {
     return 0;
 }
 
-void Table::setBackground (const gdx_cpp::graphics::g2d::NinePatch& background) {
+void Table::setBackground (const gdx::NinePatch& background) {
     this.backgroundPatch = background;
     if (background != null) {
         padBottom((int)background.getBottomHeight() + 1);
@@ -101,13 +101,13 @@ void Table::setBackground (const gdx_cpp::graphics::g2d::NinePatch& background) 
     }
 }
 
-void Table::enableClipping (const gdx_cpp::scenes::scene2d::Stage& stage) {
+void Table::enableClipping (const gdx::Stage& stage) {
     this.stage = stage;
     transform = true;
     invalidate();
 }
 
-void Table::setClickListener (const gdx_cpp::scenes::scene2d::ui::ClickListener& listener) {
+void Table::setClickListener (const gdx::ui::ClickListener& listener) {
     this.listener = listener;
 }
 
@@ -128,7 +128,7 @@ void Table::click () {
     if (listener != null) listener.click(this);
 }
 
-gdx_cpp::scenes::scene2d::Actor& Table::hit (float x,float y) {
+gdx::Actor& Table::hit (float x,float y) {
     Actor child = super.hit(x, y);
     if (child != null) return child;
     return x > 0 && x < width && y > 0 && y < height ? this : null;
@@ -143,11 +143,11 @@ void Table::clear () {
     layout.clear();
 }
 
-gdx_cpp::scenes::scene2d::Actor& Table::register (const std::string& name,const gdx_cpp::scenes::scene2d::Actor& widget) {
+gdx::Actor& Table::register (const std::string& name,const gdx::Actor& widget) {
     return layout.register(name, widget);
 }
 
-Cell& Table::add (const gdx_cpp::scenes::scene2d::Actor& actor) {
+Cell& Table::add (const gdx::Actor& actor) {
     return layout.add(actor);
 }
 
@@ -159,7 +159,7 @@ Cell& Table::row () {
     return layout.row();
 }
 
-void Table::parse (const gdx_cpp::files::FileHandle& tableDescriptionFile) {
+void Table::parse (const gdx::FileHandle& tableDescriptionFile) {
     layout.parse(tableDescriptionFile.readString());
 }
 
@@ -191,7 +191,7 @@ void Table::reset () {
     layout.reset();
 }
 
-gdx_cpp::scenes::scene2d::Actor& Table::getWidget (const std::string& name) {
+gdx::Actor& Table::getWidget (const std::string& name) {
     return layout.getWidget(name);
 }
 
@@ -203,7 +203,7 @@ std::list<Actor>& Table::getWidgets (const std::string& namePrefix) {
     return layout.getWidgets(namePrefix);
 }
 
-Cell& Table::getCell (const gdx_cpp::scenes::scene2d::Actor& actor) {
+Cell& Table::getCell (const gdx::Actor& actor) {
     return layout.getCell(actor);
 }
 
@@ -223,7 +223,7 @@ std::list<Cell>& Table::getCells () {
     return layout.getCells();
 }
 
-void Table::setActor (const std::string& name,const gdx_cpp::scenes::scene2d::Actor& actor) {
+void Table::setActor (const std::string& name,const gdx::Actor& actor) {
     layout.setWidget(name, actor);
 }
 
@@ -395,11 +395,11 @@ int Table::getAlign () {
     return layout.getAlign();
 }
 
-void Table::drawDebug (const gdx_cpp::scenes::scene2d::Stage& stage) {
+void Table::drawDebug (const gdx::Stage& stage) {
     drawDebug(stage.getActors(), stage.getSpriteBatch());
 }
 
-void Table::drawDebug (std::list<Actor>& actors,const gdx_cpp::graphics::g2d::SpriteBatch& batch) {
+void Table::drawDebug (std::list<Actor>& actors,const gdx::SpriteBatch& batch) {
     for (int i = 0, n = actors.size(); i < n; i++) {
         Actor actor = actors.get(i);
         if (actor instanceof Table) ((Table)actor).layout.drawDebug(batch);

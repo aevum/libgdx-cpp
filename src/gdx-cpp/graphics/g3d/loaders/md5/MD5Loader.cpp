@@ -20,7 +20,7 @@
 
 #include "MD5Loader.hpp"
 
-using namespace gdx_cpp::graphics::g3d::loaders::md5;
+using namespace gdx::g3d::md5;
 
 MD5Model& MD5Loader::loadModel (const InputStream& in,bool allocateNormals) {
     BufferedReader reader = new BufferedReader(new InputStreamReader(in), 1024);

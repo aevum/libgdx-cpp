@@ -24,7 +24,7 @@
 #include <cmath>
 #include <stdexcept>
 
-using namespace gdx_cpp::audio::analysis;
+using namespace gdx;
 
 DFT::DFT(int ts, float sr): FourierTransform(ts, sr)
 {

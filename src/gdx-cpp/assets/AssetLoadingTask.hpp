@@ -21,8 +21,7 @@
 #ifndef GDX_CPP_ASSETS_ASSETLOADINGTASK_HPP_
 #define GDX_CPP_ASSETS_ASSETLOADINGTASK_HPP_
 
-namespace gdx_cpp {
-namespace assets {
+namespace gdx {
 
 class AssetLoadingTask {
 public:
@@ -40,7 +39,6 @@ private:
     void handleAsyncLoader ();
 };
 
-} // namespace gdx_cpp
-} // namespace assets
+} // namespace gdx
 
 #endif // GDX_CPP_ASSETS_ASSETLOADINGTASK_HPP_

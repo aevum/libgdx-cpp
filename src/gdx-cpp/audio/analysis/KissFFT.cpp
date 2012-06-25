@@ -27,7 +27,7 @@
 
 #define MAX_SHORT 32767.0f //TODO check this
 
-using namespace gdx_cpp::audio::analysis;
+using namespace gdx;
 
 
 

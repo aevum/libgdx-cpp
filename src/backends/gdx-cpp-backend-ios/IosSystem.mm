@@ -36,7 +36,7 @@
 
 #import <UIKit/UIKit.h>
 
-using namespace gdx_cpp::backends::ios;
+using namespace gdx::ios;
 
 std::string IosSystem::canonicalize(const std::string& path)    
 {
@@ -73,20 +73,20 @@ void IosSystem::checkRead(const std::string& path)
     throw std::runtime_error("Read permission denied on file: " + path);
 }
 
-bool IosSystem::createDirectory(const gdx_cpp::files::File& f)
+bool IosSystem::createDirectory(const gdx::File& f)
 {
     if(mkdir(f.getAbsolutePath().c_str(), S_IWUSR | S_IRUSR) == -1) return false;
     return true;
 }
 
-bool IosSystem::deleteFile(gdx_cpp::files::File& f)
+bool IosSystem::deleteFile(gdx::File& f)
 {
     std::string cmd;
     if(remove(f.getCanonicalPath().c_str()) == -1) return false;
     return true;
 }
 
-int IosSystem::getBooleanAttributes(const gdx_cpp::files::File& f)
+int IosSystem::getBooleanAttributes(const gdx::File& f)
 {
     int attribs = 0;
     struct stat fileStat;
@@ -125,7 +125,7 @@ std::string IosSystem::getDefaultParent()
     return "/";
 }
 
-int64_t IosSystem::getLength(gdx_cpp::files::File f)
+int64_t IosSystem::getLength(gdx::File f)
 {
     std::ifstream test(f.getPath().c_str(), std::ios::in| std::ios::binary | std::ios::ate);
     std::ifstream::pos_type size;
@@ -144,12 +144,12 @@ char IosSystem::getSeparator()
     return '/';
 }
 
-bool IosSystem::isAbsolute(const gdx_cpp::files::File& f)
+bool IosSystem::isAbsolute(const gdx::File& f)
 {
     return (f.getPrefixLength() != 0);
 }
 
-void IosSystem::list(const gdx_cpp::files::File& f, std::vector< std::string > &paths)
+void IosSystem::list(const gdx::File& f, std::vector< std::string > &paths)
 {
     throw std::runtime_error("Not implemented");
 }
@@ -196,7 +196,7 @@ int IosSystem::prefixLength(const std::string& path)
     return (path[0] == '/') ? 1 : 0;
 }
 
-bool IosSystem::renameFile(gdx_cpp::files::File& f1, const gdx_cpp::files::File& f2)
+bool IosSystem::renameFile(gdx::File& f1, const gdx::File& f2)
 {
     std::string to;
     if(f2.exists()) to = f2.getCanonicalPath();
@@ -205,7 +205,7 @@ bool IosSystem::renameFile(gdx_cpp::files::File& f1, const gdx_cpp::files::File&
     return true;
 }
 
-std::string IosSystem::resolve(const gdx_cpp::files::File& f)
+std::string IosSystem::resolve(const gdx::File& f)
 {
     if (isAbsolute(f)) return f.getPath();
 	NSString *filePath = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String: f.getName().c_str()] ofType:[NSString stringWithUTF8String:f.extension().c_str()]];
@@ -238,7 +238,7 @@ void IosSystem::checkWrite(const std::string& path)
      throw std::runtime_error("Write permission denied on file: " + path);
 }
 
-class IosMutex : public gdx_cpp::implementation::Mutex {
+class IosMutex : public gdx::Mutex {
 public:
     IosMutex()
     {
@@ -263,7 +263,7 @@ void* run_runnable(void* runnable) {
     return NULL;
 }
 
-class IosThread : public gdx_cpp::implementation::Thread {
+class IosThread : public gdx::Thread {
 public:
     IosThread(Runnable* theRunnable)
         : runnable(theRunnable)
@@ -306,17 +306,17 @@ private:
     pthread_t thread;
 };
 
-gdx_cpp::implementation::Thread::ptr gdx_cpp::backends::ios::IosSystem::IosThreadFactory::createThread(Runnable* t)
+gdx::Thread::ptr gdx::ios::IosSystem::IosThreadFactory::createThread(Runnable* t)
 {
-    return gdx_cpp::implementation::Thread::ptr(new IosThread(t));
+    return gdx::Thread::ptr(new IosThread(t));
 }
 
-gdx_cpp::implementation::Mutex::ptr gdx_cpp::backends::ios::IosSystem::IosMutexFactory::createMutex()
+gdx::Mutex::ptr gdx::ios::IosSystem::IosMutexFactory::createMutex()
 {
-    return gdx_cpp::implementation::Mutex::ptr(new IosMutex);
+    return gdx::Mutex::ptr(new IosMutex);
 }
 
-uint64_t gdx_cpp::backends::ios::IosSystem::nanoTime()
+uint64_t gdx::ios::IosSystem::nanoTime()
 {
 	static struct mach_timebase_info timebase_info;
 	mach_timebase_info(&timebase_info);

@@ -20,9 +20,9 @@
 
 #include "MD5Renderer.hpp"
 
-using namespace gdx_cpp::graphics::g3d::loaders::md5;
+using namespace gdx::g3d::md5;
 
-gdx_cpp::math::collision::BoundingBox& MD5Renderer::getBBox () {
+gdx::BoundingBox& MD5Renderer::getBBox () {
     return mBBox;
 }
 
@@ -34,7 +34,7 @@ short* MD5Renderer::getIndices (int idx) {
     return indices[idx];
 }
 
-gdx_cpp::graphics::Mesh& MD5Renderer::getMesh () {
+gdx::Mesh& MD5Renderer::getMesh () {
     return mesh;
 }
 

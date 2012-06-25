@@ -20,13 +20,13 @@
 
 #include "DefaultGroupStrategy.hpp"
 
-using namespace gdx_cpp::graphics::g3d::decals;
+using namespace gdx::g3d::decals;
 
 int DefaultGroupStrategy::decideGroup (const Decal& decal) {
     return decal.getMaterial().isOpaque() ? GROUP_OPAQUE : GROUP_BLEND;
 }
 
-void DefaultGroupStrategy::beforeGroup (int group,gdx_cpp::utils::ArrayDecal>& contents) {
+void DefaultGroupStrategy::beforeGroup (int group,gdx::ArrayDecal>& contents) {
     if (group == GROUP_BLEND) {
         Gdx.gl10.glEnable(GL10.GL_BLEND);
     }
@@ -46,7 +46,7 @@ void DefaultGroupStrategy::afterGroups () {
     Gdx.gl10.glDisable(GL10.GL_TEXTURE_2D);
 }
 
-gdx_cpp::graphics::glutils::ShaderProgram& DefaultGroupStrategy::getGroupShader (int group) {
+gdx::ShaderProgram& DefaultGroupStrategy::getGroupShader (int group) {
     return null;
 }
 

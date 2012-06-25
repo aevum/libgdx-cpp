@@ -24,8 +24,7 @@
 #include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
 #include "TextureRegion.hpp"
 
-using namespace gdx_cpp::graphics::g2d;
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
 NinePatch::NinePatch (Texture::ptr texture, int left, int right, int top, int bottom) {
     TextureRegion::ptr t(new TextureRegion(texture));
@@ -166,12 +165,12 @@ float NinePatch::getTotalWidth () {
     return totalWidth;
 }
 
-std::vector< gdx_cpp::graphics::g2d::TextureRegion::ptr > gdx_cpp::graphics::g2d::NinePatch::getPatches()
+std::vector< TextureRegion::ptr > NinePatch::getPatches()
 {
     return patches;
 }
 
-gdx_cpp::graphics::g2d::NinePatch::NinePatch(gdx_cpp::graphics::g2d::TextureRegion::ptr region)
+NinePatch::NinePatch(TextureRegion::ptr region)
 {
     patches.push_back(null_shared_ptr());
     patches.push_back(null_shared_ptr());

@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_UI_STACK_HPP_
 #define GDX_CPP_SCENES_SCENE2D_UI_STACK_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace ui {
@@ -29,7 +29,7 @@ namespace ui {
 class Stack {
 public:
     void layout ();
-    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
+    void draw (const gdx::SpriteBatch& batch,float parentAlpha);
     void invalidate ();
     float getPrefWidth ();
     float getPrefHeight ();
@@ -48,7 +48,7 @@ private:
     boolean needsLayout = true;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace ui

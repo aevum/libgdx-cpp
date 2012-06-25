@@ -21,9 +21,7 @@
 #ifndef GDX_CPP_UTILS_JSONWRITER_HPP_
 #define GDX_CPP_UTILS_JSONWRITER_HPP_
 
-namespace gdx_cpp {
-namespace utils {
-
+namespace gdx {
 class JsonWriter {
 public:
     void setOutputType (const OutputType& outputType);
@@ -52,7 +50,6 @@ private:
     OutputType outputType = OutputType.json;
 };
 
-} // namespace gdx_cpp
-} // namespace utils
+} // namespace gdx
 
 #endif // GDX_CPP_UTILS_JSONWRITER_HPP_

@@ -20,9 +20,9 @@
 
 #include "TextureAtlasLoader.hpp"
 
-using namespace gdx_cpp::assets::loaders;
+using namespace gdx;
 
-gdx_cpp::graphics::g2d::TextureAtlas& TextureAtlasLoader::load (const gdx_cpp::assets::AssetManager& assetManager,const std::string& fileName,const TextureAtlasParameter& parameter) {
+TextureAtlas& TextureAtlasLoader::load (const AssetManager& assetManager,const std::string& fileName,const TextureAtlasParameter& parameter) {
 for (Page page : data.getPages()) {
         Texture texture = assetManager.get(page.textureFile.path().replaceAll("\\\\", "/"), Texture.class);
         page.texture = texture;
@@ -31,7 +31,7 @@ for (Page page : data.getPages()) {
     return new TextureAtlas(data);
 }
 
-gdx_cpp::utils::ArrayAssetDescriptor>& TextureAtlasLoader::getDependencies (const std::string& fileName,const TextureAtlasParameter& parameter) {
+ArrayAssetDescriptor& TextureAtlasLoader::getDependencies (const std::string& fileName,const TextureAtlasParameter& parameter) {
     FileHandle atlasFile = resolve(fileName);
     FileHandle imgDir = atlasFile.parent();
 

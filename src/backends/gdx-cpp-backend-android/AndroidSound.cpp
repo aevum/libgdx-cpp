@@ -23,13 +23,13 @@
 #include <gdx-cpp/Gdx.hpp>
 #include <cassert>
 
-using namespace gdx_cpp::backends::android;
+using namespace gdx::android;
 
-gdx_cpp::backends::android::AndroidSound::AndroidSound( jobject p_jniSound )
+gdx::android::AndroidSound::AndroidSound( jobject p_jniSound )
  : jniSound(p_jniSound)
 {
     
-    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
+    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::Gdx::system)->getJniEnv();
     jclass cls = env->GetObjectClass(p_jniSound);
     
     disposeJNI = env->GetMethodID(cls, "dispose", "()V");
@@ -43,32 +43,32 @@ gdx_cpp::backends::android::AndroidSound::AndroidSound( jobject p_jniSound )
     assert(stopJNI);
 }
 
-void gdx_cpp::backends::android::AndroidSound::dispose()
+void gdx::android::AndroidSound::dispose()
 {
-    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
+    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::Gdx::system)->getJniEnv();
     env->CallVoidMethod(jniSound, disposeJNI);
     env->DeleteGlobalRef(jniSound);
 }
 
-void gdx_cpp::backends::android::AndroidSound::play()
+void gdx::android::AndroidSound::play()
 {
-    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
+    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::Gdx::system)->getJniEnv();
     env->CallVoidMethod(jniSound, playJNI);
 }
 
-void gdx_cpp::backends::android::AndroidSound::play(float volume)
+void gdx::android::AndroidSound::play(float volume)
 {
-    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
+    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::Gdx::system)->getJniEnv();
     env->CallVoidMethod(jniSound, playFloatJNI, volume);
 }
 
-void gdx_cpp::backends::android::AndroidSound::stop()
+void gdx::android::AndroidSound::stop()
 {
-    JNIEnv* env = static_cast<gdx_cpp::backends::android::AndroidSystem*>(gdx_cpp::Gdx::system)->getJniEnv();
+    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::Gdx::system)->getJniEnv();
     env->CallVoidMethod(jniSound, stopJNI);
 }
 
-gdx_cpp::backends::android::AndroidSound::~AndroidSound()
+gdx::android::AndroidSound::~AndroidSound()
 {
     dispose();
 }

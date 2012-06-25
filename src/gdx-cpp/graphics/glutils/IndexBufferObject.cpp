@@ -24,9 +24,7 @@
 #include "gdx-cpp/graphics/GL11.hpp"
 #include "gdx-cpp/gl.hpp"
 
-using namespace gdx_cpp::graphics::glutils;
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp;
+using namespace gdx;
 
 
 int IndexBufferObject::createBufferObject () {
@@ -69,7 +67,7 @@ void IndexBufferObject::setIndices (const std::vector< short int >& indices, int
     }
 }
 
-utils::short_buffer& IndexBufferObject::getBuffer () {
+short_buffer& IndexBufferObject::getBuffer () {
     isDirty = true;
     return buffer;
 }

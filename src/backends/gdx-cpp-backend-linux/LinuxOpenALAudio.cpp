@@ -28,7 +28,7 @@
 #include <iostream>
 #include "LinuxOgg.hpp"
 
-using namespace gdx_cpp::backends::nix;
+using namespace gdx::nix;
 
 LinuxOpenALAudio::LinuxOpenALAudio (int simultaneousSources)
 {
@@ -61,7 +61,7 @@ void LinuxOpenALAudio::createAl() {
     alcMakeContextCurrent(context);
 }
 
-gdx_cpp::audio::Sound * LinuxOpenALAudio::newSound (const ref_ptr_maker< gdx_cpp::files::FileHandle >::type file) {
+gdx::Sound * LinuxOpenALAudio::newSound (const ref_ptr_maker< gdx::FileHandle >::type file) {
 //     if (file == NULL) throw std::runtime_error("file cannot be null.");
     std::string extension = file->extension();
     if (extension == "ogg")
@@ -73,7 +73,7 @@ gdx_cpp::audio::Sound * LinuxOpenALAudio::newSound (const ref_ptr_maker< gdx_cpp
     }
 }
 
-gdx_cpp::audio::Music * LinuxOpenALAudio::newMusic (const ref_ptr_maker< gdx_cpp::files::FileHandle >::type file) {
+gdx::Music * LinuxOpenALAudio::newMusic (const ref_ptr_maker< gdx::FileHandle >::type file) {
     std::string extension = file->extension();
     if (extension == "ogg")
       return new LinuxOggMusic(this, file);
@@ -158,11 +158,11 @@ void LinuxOpenALAudio::dispose () {
     }
 }
 
-gdx_cpp::audio::AudioDevice* LinuxOpenALAudio::newAudioDevice (int samplingRate, bool isMono) {
+gdx::AudioDevice* LinuxOpenALAudio::newAudioDevice (int samplingRate, bool isMono) {
     // BOZO - Write OpenAL device.
     return NULL;//new JavaSoundAudioDevice(samplingRate, isMono);
 }
 
-gdx_cpp::audio::AudioRecorder* LinuxOpenALAudio::newAudioRecoder (int samplingRate, bool isMono) {
+gdx::AudioRecorder* LinuxOpenALAudio::newAudioRecoder (int samplingRate, bool isMono) {
     return NULL;//new JavaSoundAudioRecorder(samplingRate, isMono);
 }

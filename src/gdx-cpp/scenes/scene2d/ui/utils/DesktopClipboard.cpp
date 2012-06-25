@@ -20,7 +20,7 @@
 
 #include "DesktopClipboard.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui::utils;
+using namespace gdx::ui::utils;
 
 std::string& DesktopClipboard::getContents () {
     String result = "";

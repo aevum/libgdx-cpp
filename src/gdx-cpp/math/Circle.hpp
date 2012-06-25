@@ -22,9 +22,8 @@
 #ifndef GDX_CPP_MATH_CIRCLE_HPP
 #define GDX_CPP_MATH_CIRCLE_HPP
 
-namespace gdx_cpp {
+namespace gdx {
 
-namespace math {
 class Vector2;
 
 class Circle
@@ -43,8 +42,6 @@ public:
     float x, y;
     float radius;
 };
-
-}
 
 }
 

@@ -20,7 +20,7 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
-using namespace gdx_cpp::backends::ios;
+using namespace gdx::ios;
 
 void IosGL20::glAttachShader (int program,int shader) const {
     ::glAttachShader (program,shader);

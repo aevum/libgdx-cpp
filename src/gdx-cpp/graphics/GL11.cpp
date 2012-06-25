@@ -21,7 +21,7 @@
 
 #include <gdx-cpp/gl.hpp>
 
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
 void GL11::glClipPlanef(int plane, const float* equation) const {
 #ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES

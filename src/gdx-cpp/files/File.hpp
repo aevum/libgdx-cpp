@@ -5,8 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace gdx_cpp {
-namespace files {
+namespace gdx {
 
 class File
 {
@@ -44,7 +43,7 @@ public:
     void listFiles(std::vector< File > &fileList);
     bool mkdir();
     bool mkdirs();
-    bool renameTo(const gdx_cpp::files::File& dest);
+    bool renameTo(const gdx::File& dest);
     std::string toString();
         
 private:
@@ -56,6 +55,5 @@ private:
     File(const std::string& child, const File &parent);  
 };
 
-}
 }
 #endif

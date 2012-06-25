@@ -20,7 +20,7 @@
 
 #include "TextField.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui;
+using namespace gdx::ui;
 
 void TextField::setStyle (const TextFieldStyle& style) {
     this.style = style;
@@ -90,7 +90,7 @@ void TextField::calculateOffsets () {
     }
 }
 
-void TextField::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void TextField::draw (const gdx::SpriteBatch& batch,float parentAlpha) {
     final BitmapFont font = style.font;
     final Color fontColor = style.fontColor;
     final NinePatch background = style.background;
@@ -292,7 +292,7 @@ bool TextField::keyTyped (char character) {
         return false;
 }
 
-gdx_cpp::scenes::scene2d::Actor& TextField::hit (float x,float y) {
+gdx::Actor& TextField::hit (float x,float y) {
     return x > 0 && x < width && y > 0 && y < height ? this : null;
 }
 
@@ -420,7 +420,7 @@ public static class DefaultOnscreenKeyboard implements OnscreenKeyboard {
         Gdx.input.setOnscreenKeyboardVisible(visible);
     }
 
-    void TextField::setClipboard (const gdx_cpp::scenes::scene2d::ui::utils::Clipboard& clipboard) {
+    void TextField::setClipboard (const gdx::ui::Clipboard& clipboard) {
         this.clipboard = clipboard;
     }
 

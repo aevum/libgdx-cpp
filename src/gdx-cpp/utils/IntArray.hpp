@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_UTILS_INTARRAY_HPP_
 #define GDX_CPP_UTILS_INTARRAY_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace utils {
 
 class IntArray {
@@ -55,7 +55,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace utils
 
 #endif // GDX_CPP_UTILS_INTARRAY_HPP_

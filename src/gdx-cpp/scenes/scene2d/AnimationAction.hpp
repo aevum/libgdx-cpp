@@ -24,7 +24,7 @@
 #include "Action.hpp"
 #include "Interpolator.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 
@@ -34,7 +34,7 @@ class AnimationAction: public Action {
 public:
     bool isDone ();
     void finish ();
-    AnimationAction* setInterpolator (gdx_cpp::scenes::scene2d::Interpolator* interpolator);
+    AnimationAction* setInterpolator (gdx::Interpolator* interpolator);
     Actor* getTarget ();
     void reset ();
     AnimationAction();
@@ -49,7 +49,7 @@ protected:
     Interpolator* interpolator;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 

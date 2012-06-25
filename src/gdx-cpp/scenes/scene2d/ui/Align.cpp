@@ -20,7 +20,7 @@
 
 #include "Align.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui;
+using namespace gdx::ui;
 
 
 

@@ -24,23 +24,20 @@
 #include "gdx-cpp/scenes/scene2d/Actor.hpp"
 #include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
 
-namespace gdx_cpp {
-namespace scenes {
-namespace scene2d {
-namespace actors {
+namespace gdx {
 
-class Image: public gdx_cpp::scenes::scene2d::Actor {
+class Image: public Actor {
 public:
-    void draw (gdx_cpp::graphics::g2d::SpriteBatch& batch, float parentAlpha);
+    void draw (SpriteBatch& batch, float parentAlpha);
     bool touchDown (float x,float y,int pointer);
     void touchUp (float x,float y,int pointer);
     void touchDragged (float x,float y,int pointer);
     Actor* hit (float x, float y);
     Image (const std::string& name);
-    Image (const std::string& name,const gdx_cpp::graphics::Texture& texture);
-    Image (const std::string& name,const gdx_cpp::graphics::g2d::TextureRegion& region);
+    Image (const std::string& name,const Texture& texture);
+    Image (const std::string& name,const TextureRegion& region);
     
-    graphics::g2d::TextureRegion::ptr region;
+    TextureRegion::ptr region;
 
 protected:
 
@@ -49,9 +46,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace scenes
-} // namespace scene2d
-} // namespace actors
+} // namespace gdx
 
 #endif // GDX_CPP_SCENES_SCENE2D_ACTORS_IMAGE_HPP_

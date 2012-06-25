@@ -20,7 +20,7 @@
 
 #include "Animator.hpp"
 
-using namespace gdx_cpp::graphics::g3d;
+using namespace gdx;
 
 void Animator::setAnimation (const Animation& anim,const WrapMode& mode) {
     mCurrentAnim = anim;

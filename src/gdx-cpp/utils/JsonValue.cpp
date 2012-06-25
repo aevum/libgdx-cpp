@@ -23,7 +23,7 @@
 #include <cassert>
 #include <algorithm>
 
-using namespace gdx_cpp::utils;
+using namespace gdx;
 
 template <typename T>
 struct json_deleter {
@@ -72,7 +72,7 @@ JsonValue::JsonValue(const array& val) : item_type(json_list) {
 JsonValue::JsonValue(bool val) : item_val(std::tr1::shared_ptr<void>(new bool(val), json_deleter<bool>())), item_type(json_bool) {
 }
 
-gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(unsigned int idx)
+JsonValue& JsonValue::at(unsigned int idx)
 {
     if (this->item_type == json_null) {
         array* new_array = new array;
@@ -100,7 +100,7 @@ gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(unsigned int idx)
 #endif
 }
 
-const gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(unsigned int index) const
+const JsonValue& JsonValue::at(unsigned int index) const
 {
     assert(item_type == json_list);
     const array& thisAsArray = this->as_array();
@@ -109,7 +109,7 @@ const gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::at(unsigned int inde
     return *thisAsArray[index];
 }
 
-const gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::operator[](const std::string& name) const
+const JsonValue& JsonValue::operator[](const std::string& name) const
 {
     return operator[](name.c_str());
 }
@@ -119,7 +119,7 @@ JsonValue& JsonValue::operator[](const std::string& name)
     return operator[](name.c_str());
 }
 
-const gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::operator[](const char* name) const
+const JsonValue& JsonValue::operator[](const char* name) const
 {
     assert(item_type == json_json);
     
@@ -132,7 +132,7 @@ const gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::operator[](const cha
     return *found->second;
 }
 
-gdx_cpp::utils::JsonValue& gdx_cpp::utils::JsonValue::operator[](const char* name)
+JsonValue& JsonValue::operator[](const char* name)
 {
     if (this->item_type == json_null) {
         this->item_val = std::tr1::shared_ptr<void>(new item_map, json_deleter<item_map>());
@@ -189,7 +189,7 @@ JsonValue::JsonValue() : item_type(json_null)
 {
 }
 
-void gdx_cpp::utils::JsonValue::toString(std::ostream& out, bool prettyPrint, int ident) const
+void JsonValue::toString(std::ostream& out, bool prettyPrint, int ident) const
 {
     std::string identLevel(ident, '\t');
 
@@ -261,16 +261,16 @@ void gdx_cpp::utils::JsonValue::toString(std::ostream& out, bool prettyPrint, in
 }
 
 
-void gdx_cpp::utils::JsonValue::toString(std::ostream& out, bool prettyPrint) const
+void JsonValue::toString(std::ostream& out, bool prettyPrint) const
 {
     toString(out, prettyPrint, 1);
 }
 
 //sob... c++ sucks A LOT sometimes...
-namespace gdx_cpp {
+namespace gdx {
 namespace utils {
 
-std::ostream& operator<< (std::ostream& out, const gdx_cpp::utils::JsonValue& item) {
+std::ostream& operator<< (std::ostream& out, const JsonValue& item) {
     item.toString(out);
     return out;
 }
@@ -278,7 +278,7 @@ std::ostream& operator<< (std::ostream& out, const gdx_cpp::utils::JsonValue& it
 }
 }
 
-JsonValue& JsonValue::operator+=(const gdx_cpp::utils::JsonValue& other) {
+JsonValue& JsonValue::operator+=(const JsonValue& other) {
     assert(item_type == json_json && other.item_type == json_json);
 
     item_map& thisAsMap = this->as_item_map();

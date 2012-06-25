@@ -20,18 +20,18 @@
 
 #include "TableLayout.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui::tablelayout;
+using namespace gdx::ui::tablelayout;
 
-gdx_cpp::scenes::scene2d::Actor& TableLayout::register (const gdx_cpp::scenes::scene2d::Actor& actor) {
+gdx::Actor& TableLayout::register (const gdx::Actor& actor) {
     if (actor.name == null) throw new IllegalArgumentException("Actor must have a name: " + actor.getClass());
     return register(actor.name, actor);
 }
 
-gdx_cpp::scenes::scene2d::Actor& TableLayout::registerImage (const std::string& name) {
+gdx::Actor& TableLayout::registerImage (const std::string& name) {
     return register(new Image(name, atlas.findRegion(name)));
 }
 
-gdx_cpp::scenes::scene2d::Actor& TableLayout::getWidget (const std::string& name) {
+gdx::Actor& TableLayout::getWidget (const std::string& name) {
     Actor actor = super.getWidget(name);
     if (actor == null) actor = getTable().findActor(name);
     return actor;
@@ -78,7 +78,7 @@ void TableLayout::invalidateHierarchy () {
     }
 }
 
-void TableLayout::drawDebug (const gdx_cpp::graphics::g2d::SpriteBatch& batch) {
+void TableLayout::drawDebug (const gdx::SpriteBatch& batch) {
     if (getDebug() == DEBUG_NONE || debugRects == null) return;
     if (debugRenderer == null) {
         if (Gdx.graphics.isGL20Available())

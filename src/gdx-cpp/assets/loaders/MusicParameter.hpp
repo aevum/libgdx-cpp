@@ -21,9 +21,7 @@
 #ifndef GDX_CPP_ASSETS_LOADERS_MUSICPARAMETER_HPP_
 #define GDX_CPP_ASSETS_LOADERS_MUSICPARAMETER_HPP_
 
-namespace gdx_cpp {
-namespace assets {
-namespace loaders {
+namespace gdx {
 
 class MusicParameter {
 public:
@@ -36,8 +34,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace assets
-} // namespace loaders
+} // namespace gdx
 
 #endif // GDX_CPP_ASSETS_LOADERS_MUSICPARAMETER_HPP_

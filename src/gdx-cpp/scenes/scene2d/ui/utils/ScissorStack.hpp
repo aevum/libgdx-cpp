@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_UI_UTILS_SCISSORSTACK_HPP_
 #define GDX_CPP_SCENES_SCENE2D_UI_UTILS_SCISSORSTACK_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace ui {
@@ -29,21 +29,21 @@ namespace utils {
 
 class ScissorStack {
 public:
-    static void pushScissors (const gdx_cpp::math::Rectangle& scissor);
+    static void pushScissors (const gdx::Rectangle& scissor);
     static void popScissors ();
-    static void calculateScissors (const gdx_cpp::graphics::Camera& camera,const gdx_cpp::math::Matrix4& batchTransform,const gdx_cpp::math::Rectangle& area,const gdx_cpp::math::Rectangle& scissor);
-    static gdx_cpp::math::Rectangle& getViewport ();
-    static void toWindowCoordinates (const gdx_cpp::graphics::Camera& camera,const gdx_cpp::math::Matrix4& transformMatrix,const gdx_cpp::math::Vector2& point);
+    static void calculateScissors (const gdx::Camera& camera,const gdx::Matrix4& batchTransform,const gdx::Rectangle& area,const gdx::Rectangle& scissor);
+    static gdx::Rectangle& getViewport ();
+    static void toWindowCoordinates (const gdx::Camera& camera,const gdx::Matrix4& transformMatrix,const gdx::Vector2& point);
 
 protected:
 
 
 private:
-    static void fix (const gdx_cpp::math::Rectangle& rect);
+    static void fix (const gdx::Rectangle& rect);
     static Array<Rectangle> scissors = new Array<Rectangle>();
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace ui

@@ -26,13 +26,12 @@
 
 #include "gdx-cpp/Gdx.hpp"
 
-namespace gdx_cpp {
-namespace utils {
+namespace gdx {
 
 class Base64Coder {
 public:
     static std::string encodeString (const std::string& s);
-    static std::string encodeLines (char* bytes, int iLen, int iOff = 0, int lineLen = 76, char lineSeparator = gdx_cpp::Gdx::system->getSeparator());
+    static std::string encodeLines (char* bytes, int iLen, int iOff = 0, int lineLen = 76, char lineSeparator = gdx::Gdx::system->getSeparator());
     static std::vector< char > encode (const char *in, int length, int iOff = 0);
 
     static std::string decodeString (const std::string& s);
@@ -48,7 +47,6 @@ private:
     static char map2[128];
 };
 
-} // namespace gdx_cpp
-} // namespace utils
+} // namespace gdx
 
 #endif // GDX_CPP_UTILS_BASE64CODER_HPP_

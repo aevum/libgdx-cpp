@@ -20,11 +20,11 @@
 
 #include "Delay.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::actions;
+using namespace gdx;
 
 ActionResetingPool<Delay> Delay::pool = ActionResetingPool<Delay>(4, 100);
 
-Delay* Delay::build (gdx_cpp::scenes::scene2d::Action* action, float duration) {
+Delay* Delay::build (Action* action, float duration) {
     Delay* delay = pool.obtain();
     delay->duration = duration;
     delay->action = action;
@@ -35,7 +35,7 @@ void Delay::reset () {
     Action::reset();
 }
 
-void Delay::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+void Delay::setTarget (Actor* actor) {
     action->setTarget(actor);
     this->taken = 0;
 }
@@ -59,11 +59,11 @@ void Delay::finish () {
     Action::finish();
 }
 
-gdx_cpp::scenes::scene2d::Action* Delay::copy () {
+Action* Delay::copy () {
     return Delay::build(action->copy(), duration);
 }
 
-gdx_cpp::scenes::scene2d::Actor* Delay::getTarget () {
+Actor* Delay::getTarget () {
     return action->getTarget();
 }
 

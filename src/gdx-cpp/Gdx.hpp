@@ -29,19 +29,15 @@
 #include "implementation/System.hpp"
 #include "backend.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 
-namespace graphics {
-    class GLCommon;
-    class GL10;
-    class GL11;
-    class GL20;
-    class GLU;
-}
+class GLCommon;
+class GL10;
+class GL11;
+class GL20;
+class GLU;
 
-namespace implementation {
-    class System;
-}
+class System;
 
 class Gdx {
 public:
@@ -50,19 +46,19 @@ public:
     static Audio* audio;
     static Input* input;
     static Files* files;
-    static graphics::GLCommon* gl;
-    static graphics::GL10* gl10;
-    static graphics::GL11* gl11;
-    static graphics::GL20* gl20;
-    static graphics::GLU* glu;
+    static GLCommon* gl;
+    static GL10* gl10;
+    static GL11* gl11;
+    static GL20* gl20;
+    static GLU* glu;
 
-    static implementation::System* system;
+    static System* system;
 
-    static void initializeSystem(implementation::System* system);
+    static void initializeSystem(System* system);
     static void initialize(Application* application, Graphics* graphics,
                            Audio* audio, Input* input, Files* files);
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 
 #endif // GDX_CPP_GDX_HPP_

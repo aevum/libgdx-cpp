@@ -20,9 +20,7 @@
 
 #include "gdx-cpp/utils/Aliases.hpp"
 
-namespace gdx_cpp {
-
-namespace implementation {
+namespace gdx {
 
 class Mutex
 {
@@ -32,8 +30,6 @@ public:
     virtual void lock() = 0;
     virtual void unlock() = 0;
 };
-
-}
 
 }
 

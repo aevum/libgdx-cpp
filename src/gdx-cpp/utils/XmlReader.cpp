@@ -24,7 +24,7 @@
 #include "StringConvertion.hpp"
 #include "gdx-cpp/Gdx.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx;
 
 const char XmlReader::_xml_actions[26] = { 0, 1, 0, 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 1, 7, 2, 0, 6, 2, 1, 4, 2, 2, 4}; 
 const char XmlReader::_xml_key_offsets[36] = {0, 0, 4, 9, 14, 20, 26, 30, 35, 36, 37, 42, 46, 50, 51, 52, 56, 57, 62, 67, 73, 79, 83, 88, 89, 90, 95,99, 103, 104, 108, 109, 110, 111, 112, 115};
@@ -42,15 +42,15 @@ const int XmlReader::xml_error = 0;
 const int XmlReader::xml_en_elementBody = 15;
 const int XmlReader::xml_en_main = 1;
 
-gdx_cpp::utils::XmlReader::XmlReader()
+XmlReader::XmlReader()
 {
 }
 
-gdx_cpp::utils::XmlReader::Element::ptr XmlReader::parse (const std::string& xml) {
+XmlReader::Element::ptr XmlReader::parse (const std::string& xml) {
     return parse(xml.c_str(), 0, xml.length());
 }
 
-gdx_cpp::utils::XmlReader::Element::ptr XmlReader::parse (std::ifstream& reader) {
+XmlReader::Element::ptr XmlReader::parse (std::ifstream& reader) {
     reader.seekg (0, std::ios::end);
     int length = reader.tellg();
     reader.seekg (0, std::ios::beg);
@@ -61,13 +61,13 @@ gdx_cpp::utils::XmlReader::Element::ptr XmlReader::parse (std::ifstream& reader)
     return parse(&buffer[0], 0, length);
 }
 
-gdx_cpp::utils::XmlReader::Element::ptr XmlReader::parse (gdx_cpp::files::FileHandle& file) {
-    gdx_cpp::files::FileHandle::buffer_ptr buffer;
+XmlReader::Element::ptr XmlReader::parse (FileHandle& file) {
+    FileHandle::buffer_ptr buffer;
     int size = file.readBytes(buffer);
     return parse(buffer.get(), 0 , size);
 }
 
-gdx_cpp::utils::XmlReader::Element::ptr XmlReader::parse (const char* data, int offset, int length) {
+XmlReader::Element::ptr XmlReader::parse (const char* data, int offset, int length) {
     int cs, p = offset, pe = length;
 
     int s = 0;
@@ -476,7 +476,7 @@ XmlReader::Element::ptr const XmlReader::Element::getChildByNameRecursive(const 
     return null_shared_ptr();
 }
 
-std::vector< gdx_cpp::utils::XmlReader::Element::ptr > XmlReader::Element::getChildrenByName(const std::string& name) {
+std::vector< XmlReader::Element::ptr > XmlReader::Element::getChildrenByName(const std::string& name) {
     ElementVector chld;
 
     for (unsigned int i = 0; i < children.size(); i++) {
@@ -589,22 +589,22 @@ bool XmlReader::Element::getBoolean(const std::string& name, bool defaultValue) 
     return from_string< bool >(value);
 }
 
-bool gdx_cpp::utils::XmlReader::Element::hasAttribute(const std::string& attributeName)
+bool XmlReader::Element::hasAttribute(const std::string& attributeName)
 {
     return attributes.count(attributeName);
 }
 
-int gdx_cpp::utils::XmlReader::Element::getAttributeCount() const
+int XmlReader::Element::getAttributeCount() const
 {
     return attributes.size();
 }
 
-XmlReader::Element::AttributesMap::const_iterator gdx_cpp::utils::XmlReader::Element::getAttributesEnd()
+XmlReader::Element::AttributesMap::const_iterator XmlReader::Element::getAttributesEnd()
 {
     return attributes.end();
 }
 
-XmlReader::Element::AttributesMap::const_iterator gdx_cpp::utils::XmlReader::Element::getAttributesBegin()
+XmlReader::Element::AttributesMap::const_iterator XmlReader::Element::getAttributesBegin()
 {
     return attributes.begin();
 }

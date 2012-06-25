@@ -240,7 +240,7 @@
 	int i = 0;
 	for (UITouch *touch in touches) {
 		CGPoint pos = [touch locationInView:self];
-		((gdx_cpp::backends::ios::IosInput*)gdx_cpp::Gdx::input)->handleTouchDown(pos.x, pos.y, i++);
+		((gdx::ios::IosInput*)gdx::Gdx::input)->handleTouchDown(pos.x, pos.y, i++);
 	}
 }
 
@@ -248,7 +248,7 @@
 	int i = 0;
 	for (UITouch *touch in touches) {
 		CGPoint pos = [touch locationInView:self];
-		((gdx_cpp::backends::ios::IosInput*)gdx_cpp::Gdx::input)->handleTouchDrag(pos.x, pos.y, i++);
+		((gdx::ios::IosInput*)gdx::Gdx::input)->handleTouchDrag(pos.x, pos.y, i++);
 	}
 }
 
@@ -256,7 +256,7 @@
 	int i = 0;
 	for (UITouch *touch in touches) {
 		CGPoint pos = [touch locationInView:self];
-		((gdx_cpp::backends::ios::IosInput*)gdx_cpp::Gdx::input)->handleTouchUp(pos.x, pos.y, i++);
+		((gdx::ios::IosInput*)gdx::Gdx::input)->handleTouchUp(pos.x, pos.y, i++);
 	}
 }
 
@@ -264,7 +264,7 @@
 	int i = 0;
 	for (UITouch *touch in touches) {
 		CGPoint pos = [touch locationInView:self];
-		((gdx_cpp::backends::ios::IosInput*)gdx_cpp::Gdx::input)->handleTouchUp(pos.x, pos.y, i++);
+		((gdx::ios::IosInput*)gdx::Gdx::input)->handleTouchUp(pos.x, pos.y, i++);
 	}
 }
 

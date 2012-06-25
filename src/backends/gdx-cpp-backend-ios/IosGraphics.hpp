@@ -21,7 +21,7 @@
 #include <gdx-cpp/Graphics.hpp>
 #include <gdx-cpp/graphics/Pixmap.hpp>
 
-namespace gdx_cpp {
+namespace gdx {
 
 namespace backends {
 
@@ -35,11 +35,11 @@ public:
     void initialize();
     bool isGL11Available ();
     bool isGL20Available ();
-    graphics::GLCommon* getGLCommon ();
-    graphics::GL10* getGL10 ();
-    graphics::GL11* getGL11 ();
-    graphics::GL20* getGL20 ();
-    graphics::GLU* getGLU ();
+    GLCommon* getGLCommon ();
+    GL10* getGL10 ();
+    GL11* getGL11 ();
+    GL20* getGL20 ();
+    GLU* getGLU ();
     int getWidth ();
     int getHeight ();
     float getDeltaTime ();
@@ -56,29 +56,29 @@ public:
     bool setDisplayMode (DisplayMode displayMode);
     bool setDisplayMode (int width, int height, bool fullscreen);
     void setTitle (const std::string& title);
-    void setIcon (gdx_cpp::graphics::Pixmap::ptr pixmap);
+    void setIcon (gdx::Pixmap::ptr pixmap);
     void setVSync (bool vsync);
     BufferFormat getBufferFormat ();
     bool supportsExtension (const std::string& extension);
     void update();
     void updateTime();
 
-    graphics::TextureData::ptr resolveTextureData(gdx_cpp::files::FileHandle::ptr fileHandle, graphics::Pixmap::ptr preloadedPixmap, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps);
+    TextureData::ptr resolveTextureData(gdx::FileHandle::ptr fileHandle, Pixmap::ptr preloadedPixmap, const gdx::Pixmap::Format* format, bool useMipMaps);
 
-    graphics::Pixmap* resolvePixmap(int width, int height, const gdx_cpp::graphics::Pixmap::Format& format, int pixType);
-    graphics::Pixmap* resolvePixmap(const gdx_cpp::graphics::Pixmap& other);
-    graphics::Pixmap* resolvePixmap(const gdx_cpp::files::FileHandle::ptr& file);
+    Pixmap* resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, int pixType);
+    Pixmap* resolvePixmap(const gdx::Pixmap& other);
+    Pixmap* resolvePixmap(const gdx::FileHandle::ptr& file);
     
 protected:
     bool vsync;    
     int window;
     int width, height;
-    graphics::GL10* gl10;
-    graphics::GL11* gl11;
-    graphics::GL20* gl20;
-    graphics::GLU* glu;
-    graphics::GLCommon* glCommon;
-    graphics::Pixmap::ptr iconPixmap;
+    GL10* gl10;
+    GL11* gl11;
+    GL20* gl20;
+    GLU* glu;
+    GLCommon* glCommon;
+    Pixmap::ptr iconPixmap;
     
     uint64_t lastTime;
     uint64_t frames;

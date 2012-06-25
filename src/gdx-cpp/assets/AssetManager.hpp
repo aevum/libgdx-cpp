@@ -38,20 +38,16 @@
 #include <list>
 #include <cassert>
 
-namespace gdx_cpp {
+namespace gdx {
 
-namespace utils {
 class Logger;
-}
-
-namespace assets {
 
 class AssetLoadingTask;
 class AssetErrorListener;
 class AssetErrorListener;
 class AssetDescriptor;
 
-class AssetManager: public gdx_cpp::utils::Disposable
+class AssetManager: public Disposable
             , public Synchronizable
 {
     typedef ref_ptr_maker<AssetDescriptor>::type AssetDescriptorPtr;
@@ -62,7 +58,7 @@ class AssetManager: public gdx_cpp::utils::Disposable
 public:
     AssetManager();
 
-    implementation::Thread::ptr newThread (const Runnable& r);
+    Thread::ptr newThread (const Runnable& r);
     void remove (const std::string& fileName);
     bool isLoaded (const std::string& fileName);
     bool update ();
@@ -72,7 +68,7 @@ public:
     void setErrorListener (const AssetErrorListener& listener);
     void dispose ();
     void clear ();
-    gdx_cpp::utils::Logger& getLogger ();
+    Logger& getLogger ();
     std::string& getDiagonistics ();
 
     template <typename T>
@@ -80,7 +76,7 @@ public:
         Synchronizable::lock_holder hnd(synchronize());
 
         if (assets.count(type) == 0) {
-            gdx_cpp::Gdx::app->error("AssetManager.hpp", "Asset '%s' not loaded", filename.c_str());
+            gdx::Gdx::app->error("AssetManager.hpp", "Asset '%s' not loaded", filename.c_str());
         }
 
         const AssetMap& assetsByType = assets[type];
@@ -94,11 +90,11 @@ public:
     bool getAssetFileName (const Asset& asset, std::string& result) ;
     void preload (const std::string& fileName, const AssetType& type, AssetLoaderParameters::ptr parameter) ;
     void preload (const std::string& fileName, const AssetType& type) ;
-    void setLoader (AssetType& type, loaders::AssetLoader* loader) ;
+    void setLoader (AssetType& type, AssetLoader* loader) ;
 
 protected:
 
-    //std::tr1::unordered_map<AssetType, loaders::AssetLoader* > loaders;
+    //std::tr1::unordered_map<AssetType, AssetLoader* > loaders;
     std::tr1::unordered_map<int, AssetMap > assets;
 
     AssetTypeMap assetTypes;
@@ -120,7 +116,6 @@ private:
     //void handleTaskError (const Throwable& t);
 };
 
-} // namespace gdx_cpp
-} // namespace assets
+} // namespace gdx
 
 #endif // GDX_CPP_ASSETS_ASSETMANAGER_HPP_

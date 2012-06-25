@@ -21,8 +21,7 @@
 #ifndef GDX_CPP_UTILS_FLOATARRAY_HPP_
 #define GDX_CPP_UTILS_FLOATARRAY_HPP_
 
-namespace gdx_cpp {
-namespace utils {
+namespace gdx {
 
 class FloatArray {
 public:
@@ -55,7 +54,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace utils
+} // namespace gdx
 
 #endif // GDX_CPP_UTILS_FLOATARRAY_HPP_

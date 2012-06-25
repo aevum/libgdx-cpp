@@ -22,9 +22,7 @@
 #include "gdx-cpp/ApplicationListener.hpp"
 #include <cassert>
 
-namespace gdx_cpp {
-
-namespace utils {
+namespace gdx {
 
 /**Simple decorator to delay the ApplicationListener creation.
 This is useful if you don't want to use some early system-dependant classes
@@ -76,8 +74,6 @@ public:
 protected:
     RealApplication* app;
 };
-
-}
 
 }
 

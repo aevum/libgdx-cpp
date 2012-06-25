@@ -20,7 +20,7 @@
 
 #include "MoveTo.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::actions;
+using namespace gdx::actions;
 
 ActionResetingPool<MoveTo> MoveTo::pool = ActionResetingPool<MoveTo>(4, 100);
 
@@ -33,7 +33,7 @@ MoveTo* MoveTo::build (float x,float y,float duration) {
     return action;
 }
 
-void MoveTo::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+void MoveTo::setTarget (gdx::Actor* actor) {
     this->target = actor;
     this->startX = target->x;
     this->startY = target->y;
@@ -59,7 +59,7 @@ void MoveTo::finish () {
     pool.free(this);
 }
 
-gdx_cpp::scenes::scene2d::Action* MoveTo::copy () {
+gdx::Action* MoveTo::copy () {
     MoveTo* moveTo = MoveTo::build(x, y, duration);
     if (interpolator != NULL) moveTo->setInterpolator(interpolator->copy());
     return moveTo;

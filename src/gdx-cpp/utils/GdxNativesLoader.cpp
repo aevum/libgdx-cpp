@@ -20,7 +20,7 @@
 
 #include "GdxNativesLoader.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx::utils;
 
 std::string& GdxNativesLoader::crc (const std::string& nativeFile) {
     InputStream input = GdxNativesLoader.class.getResourceAsStream("/" + nativeFile);

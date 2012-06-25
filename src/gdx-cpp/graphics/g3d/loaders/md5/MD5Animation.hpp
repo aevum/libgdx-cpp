@@ -21,13 +21,13 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_LOADERS_MD5_MD5ANIMATION_HPP_
 #define GDX_CPP_GRAPHICS_G3D_LOADERS_MD5_MD5ANIMATION_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace loaders {
 namespace md5 {
 
-class MD5Animation: public gdx_cpp::graphics::g3d::Animation {
+class MD5Animation: public gdx::g3d::Animation {
 public:
     void write (const DataOutputStream& out);
     void read (const DataInputStream& in);
@@ -42,7 +42,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace loaders

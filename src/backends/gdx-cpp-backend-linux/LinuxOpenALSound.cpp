@@ -21,7 +21,7 @@
 #include "LinuxOpenALAudio.hpp"
 #include "gdx-cpp/utils/Buffer.hpp"
 
-using namespace gdx_cpp::backends::nix;
+using namespace gdx::nix;
 
 class LinuxOpenALAudio;
 

@@ -20,9 +20,7 @@
 
 #include "Mutex.hpp"
 
-namespace gdx_cpp {
-
-namespace implementation {
+namespace gdx {
 
 class MutexFactory
 {
@@ -31,8 +29,6 @@ public:
     typedef Mutex mutex_t;
     virtual Mutex::ptr createMutex() = 0;
 };
-
-}
 
 }
 

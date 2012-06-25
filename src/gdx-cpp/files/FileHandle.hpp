@@ -35,11 +35,9 @@
 #include <string>
 #include <vector>
 
-namespace gdx_cpp {
+namespace gdx {
 
 class Files;
-
-namespace files {
 
 class File;
   
@@ -50,16 +48,16 @@ public:
 
     FileHandle();
     FileHandle (const std::string &fileName);
-    FileHandle (const gdx_cpp::files::File &file);
+    FileHandle (const gdx::File &file);
     
     const std::string& path () const;
     std::string name () const;
     std::string extension () const;
     std::string nameWithoutExtension () const;
     std::string typetoString () const;
-    gdx_cpp::Files::FileType getType () const;
+    gdx::Files::FileType getType () const;
 
-    virtual int readBytes (gdx_cpp::files::FileHandle::buffer_ptr& c) const;
+    virtual int readBytes (gdx::FileHandle::buffer_ptr& c) const;
     virtual int write ( const char* data, int lenght, bool append);
     
     void list (std::vector<FileHandle> &handles);
@@ -75,20 +73,19 @@ public:
     void moveTo (FileHandle& dest);
     virtual int64_t length () const;
     std::string toString () const;
-    FileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
-    FileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type);
+    FileHandle (const std::string &fileName, gdx::Files::FileType type);
+    FileHandle (const gdx::File &file, gdx::Files::FileType type);
 
     virtual ~FileHandle() {};
 protected:
-    gdx_cpp::files::File file;
-    gdx_cpp::Files::FileType type;
+    gdx::File file;
+    gdx::Files::FileType type;
 
 private:
-    gdx_cpp::files::File getFile() const;
+    gdx::File getFile() const;
     static bool deleteDirectory (File &file);
 };
 
-} // namespace gdx_cpp
-} // namespace files
+} // namespace gdx
 
 #endif // GDX_CPP_FILES_FILEHANDLE_HPP_

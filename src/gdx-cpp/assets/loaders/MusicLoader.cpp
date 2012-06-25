@@ -20,13 +20,13 @@
 
 #include "MusicLoader.hpp"
 
-using namespace gdx_cpp::assets::loaders;
+using namespace gdx;
 
-gdx_cpp::audio::Music& MusicLoader::load (const gdx_cpp::assets::AssetManager& assetManager,const std::string& fileName,const MusicParameter& parameter) {
+Music& MusicLoader::load (const AssetManager& assetManager,const std::string& fileName,const MusicParameter& parameter) {
     return Gdx.audio.newMusic(resolve(fileName));
 }
 
-gdx_cpp::utils::ArrayAssetDescriptor>& MusicLoader::getDependencies (const std::string& fileName,const MusicParameter& parameter) {
+ArrayAssetDescriptor& MusicLoader::getDependencies (const std::string& fileName,const MusicParameter& parameter) {
     return null;
 }
 

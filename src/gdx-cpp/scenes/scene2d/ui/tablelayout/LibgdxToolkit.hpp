@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_UI_TABLELAYOUT_LIBGDXTOOLKIT_HPP_
 #define GDX_CPP_SCENES_SCENE2D_UI_TABLELAYOUT_LIBGDXTOOLKIT_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace ui {
@@ -29,23 +29,23 @@ namespace tablelayout {
 
 class LibgdxToolkit {
 public:
-    gdx_cpp::scenes::scene2d::Actor& wrap (const Object& object);
-    gdx_cpp::scenes::scene2d::Actor& newWidget (const TableLayout& layout,const std::string& className);
+    gdx::Actor& wrap (const Object& object);
+    gdx::Actor& newWidget (const TableLayout& layout,const std::string& className);
     TableLayout& getLayout (const Table& table);
-    gdx_cpp::scenes::scene2d::Actor& newStack ();
-    void setProperty (const TableLayout& layout,const gdx_cpp::scenes::scene2d::Actor& object,const std::string& name,std::list<String>& values);
-    void addChild (const gdx_cpp::scenes::scene2d::Actor& parent,const gdx_cpp::scenes::scene2d::Actor& child,const std::string& layoutString);
-    void removeChild (const gdx_cpp::scenes::scene2d::Actor& parent,const gdx_cpp::scenes::scene2d::Actor& child);
-    int getMinWidth (const gdx_cpp::scenes::scene2d::Actor& actor);
-    int getMinHeight (const gdx_cpp::scenes::scene2d::Actor& actor);
-    int getPrefWidth (const gdx_cpp::scenes::scene2d::Actor& actor);
-    int getPrefHeight (const gdx_cpp::scenes::scene2d::Actor& actor);
-    int getMaxWidth (const gdx_cpp::scenes::scene2d::Actor& actor);
-    int getMaxHeight (const gdx_cpp::scenes::scene2d::Actor& actor);
+    gdx::Actor& newStack ();
+    void setProperty (const TableLayout& layout,const gdx::Actor& object,const std::string& name,std::list<String>& values);
+    void addChild (const gdx::Actor& parent,const gdx::Actor& child,const std::string& layoutString);
+    void removeChild (const gdx::Actor& parent,const gdx::Actor& child);
+    int getMinWidth (const gdx::Actor& actor);
+    int getMinHeight (const gdx::Actor& actor);
+    int getPrefWidth (const gdx::Actor& actor);
+    int getPrefHeight (const gdx::Actor& actor);
+    int getMaxWidth (const gdx::Actor& actor);
+    int getMaxHeight (const gdx::Actor& actor);
     void clearDebugRectangles (const TableLayout& layout);
     void addDebugRectangle (const TableLayout& layout,int type,int x,int y,int w,int h);
-    void registerFont (const std::string& name,const gdx_cpp::graphics::g2d::BitmapFont& font);
-    gdx_cpp::graphics::g2d::BitmapFont& getFont (const std::string& name);
+    void registerFont (const std::string& name,const gdx::BitmapFont& font);
+    gdx::BitmapFont& getFont (const std::string& name);
     LibgdxToolkit instance = new LibgdxToolkit();
     BitmapFont defaultFont ;
 
@@ -57,7 +57,7 @@ private:
     HashMap<String, BitmapFont> fonts = new HashMap();
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace ui

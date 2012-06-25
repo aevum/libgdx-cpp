@@ -20,7 +20,7 @@
 #ifndef GDXCPP_INPUT_PROCESSOR_H
 #define GDXCPP_INPUT_PROCESSOR_H
 
-namespace gdx_cpp {
+namespace gdx {
   
 class InputProcessor {
 public:

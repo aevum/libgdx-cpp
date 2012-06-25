@@ -28,7 +28,7 @@
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/Application.hpp"
 
-using namespace gdx_cpp::audio::io;
+using namespace gdx;
 
 struct OggFile
 {
@@ -43,7 +43,7 @@ VorbisDecoder::VorbisDecoder (std::string filename) {
     handle = openFile(filename);
     if (handle == NULL)
     {
-      gdx_cpp::Gdx::app->error("GDX-CPP::AUDIO::IO VorbisDecoder.cpp") << "couldn't open file '" << filename << "'";
+      gdx::Gdx::app->error("GDX-CPP::AUDIO::IO VorbisDecoder.cpp") << "couldn't open file '" << filename << "'";
     }
 }
 

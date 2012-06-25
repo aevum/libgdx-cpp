@@ -26,34 +26,30 @@
 
 #include "gdx-cpp/math/Vector3.hpp"
 
-namespace gdx_cpp {
-namespace math {
-
-  class Vector3;
-  
-namespace collision {
+namespace gdx {
+class Vector3;
 
 class BoundingBox {
 public:
    BoundingBox (const BoundingBox& bounds);
    
-    gdx_cpp::math::Vector3& getCenter ();
+    Vector3& getCenter ();
     const std::vector< Vector3 >& getCorners ();
-    gdx_cpp::math::Vector3& getDimensions ();
-    gdx_cpp::math::Vector3& getMin ();
-    gdx_cpp::math::Vector3& getMax ();
+    Vector3& getDimensions ();
+    Vector3& getMin ();
+    Vector3& getMax ();
     BoundingBox& set (const BoundingBox& bounds);
-    BoundingBox& set (const gdx_cpp::math::Vector3& minimum,const gdx_cpp::math::Vector3& maximum);
+    BoundingBox& set (const Vector3& minimum,const Vector3& maximum);
     BoundingBox& set ();
     BoundingBox& set (const std::vector<Vector3>& points);
     BoundingBox& inf ();
-    BoundingBox& ext (const gdx_cpp::math::Vector3& point);
+    BoundingBox& ext (const Vector3& point);
     BoundingBox& clr ();
     bool isValid ();
     BoundingBox& ext (const BoundingBox& a_bounds);
-    BoundingBox& mul (const gdx_cpp::math::Matrix4& matrix);
+    BoundingBox& mul (const Matrix4& matrix);
     bool contains (const BoundingBox& bounds);
-    bool contains (const gdx_cpp::math::Vector3& v);
+    bool contains (const Vector3& v);
     std::string toString ();
     BoundingBox& ext (float x,float y,float z);
 
@@ -80,8 +76,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace math
-} // namespace collision
+} // namespace gdx
 
 #endif // GDX_CPP_MATH_COLLISION_BOUNDINGBOX_HPP_

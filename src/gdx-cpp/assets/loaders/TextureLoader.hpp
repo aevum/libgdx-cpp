@@ -21,15 +21,13 @@
 #ifndef GDX_CPP_ASSETS_LOADERS_TEXTURELOADER_HPP_
 #define GDX_CPP_ASSETS_LOADERS_TEXTURELOADER_HPP_
 
-namespace gdx_cpp {
-namespace assets {
-namespace loaders {
+namespace gdx {
 
 class TextureLoader {
 public:
-    void loadAsync (const gdx_cpp::assets::AssetManager& manager,const std::string& fileName,const TextureParameter& parameter);
-    gdx_cpp::graphics::Texture& loadSync ();
-    gdx_cpp::utils::ArrayAssetDescriptor>& getDependencies (const std::string& fileName,const TextureParameter& parameter);
+    void loadAsync (const AssetManager& manager,const std::string& fileName,const TextureParameter& parameter);
+    Texture& loadSync ();
+    ArrayAssetDescriptor& getDependencies (const std::string& fileName,const TextureParameter& parameter);
     void incRefCount ();
     int getRefCount ();
     void dispose ();
@@ -41,8 +39,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace assets
-} // namespace loaders
+} // namespace gdx
 
 #endif // GDX_CPP_ASSETS_LOADERS_TEXTURELOADER_HPP_

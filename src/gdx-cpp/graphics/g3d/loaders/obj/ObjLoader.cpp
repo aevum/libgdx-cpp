@@ -20,13 +20,13 @@
 
 #include "ObjLoader.hpp"
 
-using namespace gdx_cpp::graphics::g3d::loaders::obj;
+using namespace gdx::g3d::obj;
 
-gdx_cpp::graphics::Mesh& ObjLoader::loadObj (const InputStream& in) {
+gdx::Mesh& ObjLoader::loadObj (const InputStream& in) {
     return loadObj(in, false);
 }
 
-gdx_cpp::graphics::Mesh& ObjLoader::loadObj (const InputStream& in,bool flipV) {
+gdx::Mesh& ObjLoader::loadObj (const InputStream& in,bool flipV) {
     String line = "";
 
     try {
@@ -47,11 +47,11 @@ gdx_cpp::graphics::Mesh& ObjLoader::loadObj (const InputStream& in,bool flipV) {
     return loadObjFromString(line, flipV);
 }
 
-gdx_cpp::graphics::Mesh& ObjLoader::loadObjFromString (const std::string& obj) {
+gdx::Mesh& ObjLoader::loadObjFromString (const std::string& obj) {
     return loadObjFromString(obj, false);
 }
 
-gdx_cpp::graphics::Mesh& ObjLoader::loadObjFromString (const std::string& obj,bool flipV) {
+gdx::Mesh& ObjLoader::loadObjFromString (const std::string& obj,bool flipV) {
     String[] lines = obj.split("\n");
     float[] vertices = new float[lines.length * 3];
     float[] normals = new float[lines.length * 3];

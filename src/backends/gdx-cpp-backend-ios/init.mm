@@ -26,16 +26,16 @@
 
 #include <iostream>
 
-static gdx_cpp::ApplicationListener* g_Listener = 0;
+static gdx::ApplicationListener* g_Listener = 0;
 
-void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener, const std::string& applicationName,
+void gdxcpp_create_application(gdx::ApplicationListener* listener, const std::string& applicationName,
                                int width, int height) {
     g_Listener = listener;
 }
 
 void gdxcpp_initialize_application() {
     gdxcpp_init(0, NULL);
-    new gdx_cpp::backends::ios::IosApplication(g_Listener);
+    new gdx::ios::IosApplication(g_Listener);
 }
 
 void gdxcpp_create_listener() {
@@ -44,7 +44,7 @@ void gdxcpp_create_listener() {
 
 int main(int argc, char** argv) {
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-    gdx_cpp::Gdx::initializeSystem(new gdx_cpp::backends::ios::IosSystem);
+    gdx::Gdx::initializeSystem(new gdx::ios::IosSystem);
     int retVal = UIApplicationMain(argc, argv, nil, NSStringFromClass([AppController class]));
     [pool release];
     return retVal;

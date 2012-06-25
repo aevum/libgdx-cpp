@@ -21,8 +21,7 @@
 #ifndef GDX_CPP_UTILS_DISPOSABLE_HPP_
 #define GDX_CPP_UTILS_DISPOSABLE_HPP_
 
-namespace gdx_cpp {
-namespace utils {
+namespace gdx {
 
 class Disposable {
 public:
@@ -30,7 +29,6 @@ public:
     virtual ~Disposable() { }
 };
 
-} // namespace gdx_cpp
-} // namespace utils
+} // namespace gdx
 
 #endif // GDX_CPP_UTILS_DISPOSABLE_HPP_

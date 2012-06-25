@@ -20,7 +20,7 @@
 
 #include "MD5Jni.hpp"
 
-using namespace gdx_cpp::graphics::g3d::loaders::md5;
+using namespace gdx::g3d::md5;
 
 
 

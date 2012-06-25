@@ -21,7 +21,7 @@
 #include "InputMultiplexer.hpp"
 #include "InputProcessor.hpp"
 
-using namespace gdx_cpp;
+using namespace gdx;
 
 InputMultiplexer::InputMultiplexer()
  : processors(4)

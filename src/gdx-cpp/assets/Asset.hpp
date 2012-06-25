@@ -21,9 +21,7 @@
 #include "gdx-cpp/utils/Aliases.hpp"
 #include "AssetType.hpp"
 
-namespace gdx_cpp {
-
-namespace assets {
+namespace gdx {
 
 class Asset
 {
@@ -35,8 +33,6 @@ public:
         return true;
     }
 };
-
-}
 
 }
 

@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_LOADERS_MD5_MD5ANIMATIONINFO_HPP_
 #define GDX_CPP_GRAPHICS_G3D_LOADERS_MD5_MD5ANIMATIONINFO_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace loaders {
@@ -43,7 +43,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace loaders

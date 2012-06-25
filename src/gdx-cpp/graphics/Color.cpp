@@ -21,7 +21,7 @@
 #include "Color.hpp"
 #include "gdx-cpp/utils/NumberUtils.hpp"
 
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
 const Color Color::WHITE = Color(1, 1, 1, 1);
 const Color Color::BLACK = Color(0, 0, 0, 1);
@@ -109,10 +109,10 @@ bool Color::equals (const Color& o) {
 }
 
 int Color::hashCode () {
-    int result = (r != +0.0f ? gdx_cpp::utils::NumberUtils::floatToIntBits(r) : 0);
-    result = 31 * result + (g != + 0.0f ? gdx_cpp::utils::NumberUtils::floatToIntBits(g) : 0);
-    result = 31 * result + (b != + 0.0f ? gdx_cpp::utils::NumberUtils::floatToIntBits(b) : 0);
-    result = 31 * result + (a != + 0.0f ? gdx_cpp::utils::NumberUtils::floatToIntBits(a) : 0);
+    int result = (r != +0.0f ? NumberUtils::floatToIntBits(r) : 0);
+    result = 31 * result + (g != + 0.0f ? NumberUtils::floatToIntBits(g) : 0);
+    result = 31 * result + (b != + 0.0f ? NumberUtils::floatToIntBits(b) : 0);
+    result = 31 * result + (a != + 0.0f ? NumberUtils::floatToIntBits(a) : 0);
     return result;
 }
 
@@ -121,14 +121,14 @@ const std::string Color::toString () {
     return "FIXME";//;Integer.toHexString(toIntBits());
 }
 
-gdx_cpp::graphics::Color gdx_cpp::graphics::Color::fromRgb(unsigned int val)
+Color Color::fromRgb(unsigned int val)
 {
     return Color(((val >> 16) & 0xFF) / 255.f, ((val >> 8) & 0xFF) / 255.f, (val & 0xFF) / 255.f, 1);
 }
 
 float Color::toFloatBits (int r,int g,int b,int a) {
     int color = (a << 24) | (b << 16) | (g << 8) | r;
-    float floatColor = gdx_cpp::utils::NumberUtils::intBitsToFloat(color & 0xfeffffff);
+    float floatColor = NumberUtils::intBitsToFloat(color & 0xfeffffff);
     return floatColor;
 }
 
@@ -138,7 +138,7 @@ int Color::toIntBits (int r,int g,int b,int a) {
 
 float Color::toFloatBits () const {
     int color = ((int)(255 * a) << 24) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r));
-    return gdx_cpp::utils::NumberUtils::intBitsToFloat(color & 0xfeffffff);
+    return NumberUtils::intBitsToFloat(color & 0xfeffffff);
 }
 
 int Color::toIntBits () const {
@@ -148,7 +148,7 @@ int Color::toIntBits () const {
 
 float Color::toFloatBits (float r,float g,float b,float a) {
     int color = ((int)(255 * a) << 24) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r));
-    return gdx_cpp::utils::NumberUtils::intBitsToFloat(color & 0xfeffffff);
+    return NumberUtils::intBitsToFloat(color & 0xfeffffff);
 }
 
 int Color::alpha (float alpha) {

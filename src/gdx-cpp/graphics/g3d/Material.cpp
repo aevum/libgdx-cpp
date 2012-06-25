@@ -20,7 +20,7 @@
 
 #include "Material.hpp"
 
-using namespace gdx_cpp::graphics::g3d;
+using namespace gdx;
 
 void Material::setTmpArray (float r,float g,float b,float a) {
     tmp[0] = r;

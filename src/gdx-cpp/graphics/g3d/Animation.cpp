@@ -20,7 +20,7 @@
 
 #include "Animation.hpp"
 
-using namespace gdx_cpp::graphics::g3d;
+using namespace gdx;
 
 
 

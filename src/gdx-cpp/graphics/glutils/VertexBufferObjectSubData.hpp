@@ -24,10 +24,7 @@
 #include "VertexData.hpp"
 
 class tm;
-namespace gdx_cpp {
-namespace graphics {
-namespace glutils {
-
+namespace gdx {
 class ShaderProgram;
 
 
@@ -36,24 +33,24 @@ public:
 
     VertexBufferObjectSubData (bool isStatic, int numVertices, const std::vector<VertexAttribute>& attributes) ;
         
-    gdx_cpp::graphics::VertexAttributes& getAttributes ();
+    VertexAttributes& getAttributes ();
     int getNumVertices ();
     int getNumMaxVertices ();
     void setVertices(const float* vertices, int offset,int count);
 
-    utils::float_buffer& getBuffer();
+    float_buffer& getBuffer();
     void bind ();
-    void bind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
+    void bind (ShaderProgram& shader);
     void unbind ();
-    void unbind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
+    void unbind (ShaderProgram& shader);
     void invalidate ();
     void dispose ();
     int getBufferHandle ();
 
 protected:
     VertexAttributes attributes;
-    utils::float_buffer buffer;
-    utils::byte_buffer byteBuffer;
+    float_buffer buffer;
+    byte_buffer byteBuffer;
     
     int bufferHandle;
     bool isDirect;
@@ -66,8 +63,6 @@ private:
     int createBufferObject ();
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace glutils
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GLUTILS_VERTEXBUFFEROBJECTSUBDATA_HPP_

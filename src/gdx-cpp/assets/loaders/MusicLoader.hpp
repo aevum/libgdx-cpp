@@ -21,14 +21,12 @@
 #ifndef GDX_CPP_ASSETS_LOADERS_MUSICLOADER_HPP_
 #define GDX_CPP_ASSETS_LOADERS_MUSICLOADER_HPP_
 
-namespace gdx_cpp {
-namespace assets {
-namespace loaders {
+namespace gdx {
 
 class MusicLoader {
 public:
-    gdx_cpp::audio::Music& load (const gdx_cpp::assets::AssetManager& assetManager,const std::string& fileName,const MusicParameter& parameter);
-    gdx_cpp::utils::ArrayAssetDescriptor>& getDependencies (const std::string& fileName,const MusicParameter& parameter);
+    Music& load (const AssetManager& assetManager,const std::string& fileName,const MusicParameter& parameter);
+    ArrayAssetDescriptor& getDependencies (const std::string& fileName,const MusicParameter& parameter);
 
 protected:
 
@@ -37,8 +35,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace assets
-} // namespace loaders
+} // namespace gdx
 
 #endif // GDX_CPP_ASSETS_LOADERS_MUSICLOADER_HPP_

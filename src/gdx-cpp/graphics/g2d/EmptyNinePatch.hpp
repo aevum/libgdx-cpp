@@ -24,9 +24,7 @@
 #include "NinePatch.hpp"
 #include <vector>
 
-namespace gdx_cpp {
-namespace graphics {
-namespace g2d {
+namespace gdx {
 
 class EmptyNinePatch : public NinePatch {
 public:
@@ -52,8 +50,6 @@ private:
   
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g2d
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_G2D_EMPTYNINEPATCH_HPP_

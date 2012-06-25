@@ -20,9 +20,9 @@
 
 #include "ScrollPane.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui;
+using namespace gdx::ui;
 
-void ScrollPane::calculateBoundsAndPositions (const gdx_cpp::math::Matrix4& batchTransform) {
+void ScrollPane::calculateBoundsAndPositions (const gdx::Matrix4& batchTransform) {
     final NinePatch background = style.background;
     final NinePatch hScrollKnob = style.hScrollKnob;
     final NinePatch vScrollKnob = style.vScrollKnob;
@@ -105,7 +105,7 @@ void ScrollPane::calculateBoundsAndPositions (const gdx_cpp::math::Matrix4& batc
     ScissorStack.calculateScissors(stage.getCamera(), batchTransform, widgetAreaBounds, scissorBounds);
 }
 
-void ScrollPane::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void ScrollPane::draw (const gdx::SpriteBatch& batch,float parentAlpha) {
     final NinePatch background = style.background;
     final NinePatch hScrollKnob = style.hScrollKnob;
     final NinePatch hScroll = style.hScroll;
@@ -237,7 +237,7 @@ void ScrollPane::touchDragged (float x,float y,int pointer) {
         super.touchDragged(x, y, pointer);
 }
 
-gdx_cpp::scenes::scene2d::Actor& ScrollPane::hit (float x,float y) {
+gdx::Actor& ScrollPane::hit (float x,float y) {
     return x > 0 && x < width && y > 0 && y < height ? this : null;
 }
 
@@ -249,7 +249,7 @@ void ScrollPane::setHScrollAmount (float hScrollAmount) {
     this.hScrollAmount = hScrollAmount;
 }
 
-void ScrollPane::setWidget (const gdx_cpp::scenes::scene2d::Actor& widget) {
+void ScrollPane::setWidget (const gdx::Actor& widget) {
     if (widget == null) throw new IllegalArgumentException("widget must not be null");
     this.removeActor(this.widget);
     this.widget = widget;
@@ -257,15 +257,15 @@ void ScrollPane::setWidget (const gdx_cpp::scenes::scene2d::Actor& widget) {
     invalidate();
 }
 
-ScrollPane::ScrollPane (const gdx_cpp::scenes::scene2d::Actor& widget,const gdx_cpp::scenes::scene2d::Stage& stage,const Skin& skin) {
+ScrollPane::ScrollPane (const gdx::Actor& widget,const gdx::Stage& stage,const Skin& skin) {
     this(widget, stage, skin.getStyle(ScrollPaneStyle.class), null);
 }
 
-ScrollPane::ScrollPane (const gdx_cpp::scenes::scene2d::Actor& widget,const gdx_cpp::scenes::scene2d::Stage& stage,const ScrollPaneStyle& style) {
+ScrollPane::ScrollPane (const gdx::Actor& widget,const gdx::Stage& stage,const ScrollPaneStyle& style) {
     this(widget, stage, style, null);
 }
 
-ScrollPane::ScrollPane (const gdx_cpp::scenes::scene2d::Actor& widget,const gdx_cpp::scenes::scene2d::Stage& stage,const ScrollPaneStyle& style,const std::string& name) {
+ScrollPane::ScrollPane (const gdx::Actor& widget,const gdx::Stage& stage,const ScrollPaneStyle& style,const std::string& name) {
     super(name);
     this.widget = widget;
     this.stage = stage;

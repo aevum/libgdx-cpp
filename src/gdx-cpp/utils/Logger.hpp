@@ -21,8 +21,7 @@
 #ifndef GDX_CPP_UTILS_LOGGER_HPP_
 #define GDX_CPP_UTILS_LOGGER_HPP_
 
-namespace gdx_cpp {
-namespace utils {
+namespace gdx {
 
 class Logger {
 public:
@@ -36,7 +35,6 @@ private:
     String tag;
 };
 
-} // namespace gdx_cpp
-} // namespace utils
+} // namespace gdx
 
 #endif // GDX_CPP_UTILS_LOGGER_HPP_

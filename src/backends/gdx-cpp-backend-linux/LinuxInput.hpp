@@ -24,13 +24,11 @@
 #include <gdx-cpp/Input.hpp>
 #include <SDL/SDL_events.h>
 
-namespace gdx_cpp {
-
-namespace backends {
+namespace gdx {
 
 namespace nix {
 
-class LinuxInput : public gdx_cpp::Input
+class LinuxInput : public gdx::Input
 {
 public:
     LinuxInput();
@@ -84,7 +82,7 @@ public:
 
     void setCatchMenuKey (bool catchMenu) ;
 
-    void setInputProcessor (gdx_cpp::InputProcessor* processor) ;
+    void setInputProcessor (gdx::InputProcessor* processor) ;
 
     bool isPeripheralAvailable (int peripheral) ;
 
@@ -107,7 +105,7 @@ public:
     void setKeyboardRepeat(int delay, int repeatInterval);
     
 protected:
-    gdx_cpp::InputProcessor* processor;
+    gdx::InputProcessor* processor;
 
     bool _justTouched;
     bool touching;
@@ -115,8 +113,6 @@ protected:
     int touchY, deltaY;
     
 };
-
-}
 
 }
 

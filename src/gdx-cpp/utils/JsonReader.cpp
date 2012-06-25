@@ -29,8 +29,7 @@
 
 #include "gdx-cpp/Gdx.hpp"
 
-using namespace gdx_cpp::utils;
-using namespace gdx_cpp;
+using namespace gdx;
 
 
 JsonValue::ptr JsonReader::root;
@@ -59,9 +58,9 @@ JsonValue::ptr JsonReader::parse (const std::string& json) {
     return parse(json.c_str(), 0, json.length());
 }
 
-JsonValue::ptr JsonReader::parse (const gdx_cpp::files::FileHandle& file) {
+JsonValue::ptr JsonReader::parse (const FileHandle& file) {
     try {
-        gdx_cpp::files::FileHandle::buffer_ptr buffer;
+        FileHandle::buffer_ptr buffer;
         int size = file.readBytes(buffer);
 
         return parse(buffer.get(), 0, size);
@@ -354,9 +353,9 @@ tr145:
                         if (debug) Gdx::app->log("JsonReader","number: %s = %s", name.c_str(), value.c_str());
 
                         if (value.find(".") != std::string::npos) {
-                            number(name, utils::from_string<float>(value));
+                            number(name, from_string<float>(value));
                         } else {
-                            number(name, utils::from_string<int>(value));
+                            number(name, from_string<int>(value));
                         }
                 }
 	goto st71;
@@ -1024,9 +1023,9 @@ tr62:
                         if (debug) Gdx::app->log("JsonReader","number: %s = %s", name.c_str(), value.c_str());
 
                         if (value.find(".") != std::string::npos) {
-                            number(name, utils::from_string<float>(value));
+                            number(name, from_string<float>(value));
                         } else {
-                            number(name, utils::from_string<int>(value));
+                            number(name, from_string<int>(value));
                         }
                 }
 	goto st16;
@@ -1117,9 +1116,9 @@ tr63:
                         if (debug) Gdx::app->log("JsonReader","number: %s = %s", name.c_str(), value.c_str());
 
                         if (value.find(".") != std::string::npos) {
-                            number(name, utils::from_string<float>(value));
+                            number(name, from_string<float>(value));
                         } else {
-                            number(name, utils::from_string<int>(value));
+                            number(name, from_string<int>(value));
                         }
                 }
 	goto st17;
@@ -1258,9 +1257,9 @@ tr66:
                         if (debug) Gdx::app->log("JsonReader","number: %s = %s", name.c_str(), value.c_str());
 
                         if (value.find(".") != std::string::npos) {
-                            number(name, utils::from_string<float>(value));
+                            number(name, from_string<float>(value));
                         } else {
-                            number(name, utils::from_string<int>(value));
+                            number(name, from_string<int>(value));
                         }
                 }
 /* #line 180 "JsonReader.rl" */
@@ -1899,9 +1898,9 @@ tr115:
                         if (debug) Gdx::app->log("JsonReader","number: %s = %s", name.c_str(), value.c_str());
 
                         if (value.find(".") != std::string::npos) {
-                            number(name, utils::from_string<float>(value));
+                            number(name, from_string<float>(value));
                         } else {
-                            number(name, utils::from_string<int>(value));
+                            number(name, from_string<int>(value));
                         }
                 }
 	goto st46;
@@ -1992,9 +1991,9 @@ tr116:
                         if (debug) Gdx::app->log("JsonReader","number: %s = %s", name.c_str(), value.c_str());
 
                         if (value.find(".") != std::string::npos) {
-                            number(name, utils::from_string<float>(value));
+                            number(name, from_string<float>(value));
                         } else {
-                            number(name, utils::from_string<int>(value));
+                            number(name, from_string<int>(value));
                         }
                 }
 	goto st47;
@@ -2143,9 +2142,9 @@ tr119:
                         if (debug) Gdx::app->log("JsonReader","number: %s = %s", name.c_str(), value.c_str());
 
                         if (value.find(".") != std::string::npos) {
-                            number(name, utils::from_string<float>(value));
+                            number(name, from_string<float>(value));
                         } else {
-                            number(name, utils::from_string<int>(value));
+                            number(name, from_string<int>(value));
                         }
                 }
 /* #line 200 "JsonReader.rl" */
@@ -2728,9 +2727,9 @@ case 70:
                         if (debug) Gdx::app->log("JsonReader","number: %s = %s", name.c_str(), value.c_str());
 
                         if (value.find(".") != std::string::npos) {
-                            number(name, utils::from_string<float>(value));
+                            number(name, from_string<float>(value));
                         } else {
-                            number(name, utils::from_string<int>(value));
+                            number(name, from_string<int>(value));
                         }
                 }
 	break;
@@ -2798,7 +2797,7 @@ case 70:
         int lineNumber = 1;
         for (char* aux = p; aux < pe; aux++)
             if (*aux == '\n') lineNumber++;
-        throw std::runtime_error("Error parsing JSON on line " + utils::to_string(lineNumber) + " near: " + std::string(p, pe - p));
+        throw std::runtime_error("Error parsing JSON on line " + to_string(lineNumber) + " near: " + std::string(p, pe - p));
     } else if (elements.size() != 0) {
         int element_type = elements.front()->item_type;
 
@@ -2817,7 +2816,7 @@ case 70:
 }
 
 
-void JsonReader::set (const std::string& name, gdx_cpp::utils::JsonValue::ptr value) {
+void JsonReader::set (const std::string& name, JsonValue::ptr value) {
     switch (current->item_type) {
         case json_json:
             current->as_item_map()[name] = value;
@@ -2883,7 +2882,7 @@ std::string JsonReader::unescape (const std::string& value) {
         if (i == length) break;
         c = value[i++];
         if (c == 'u') {
-            buffer << utils::from_string< int >(value.substr(i, i + 4));
+            buffer << from_string< int >(value.substr(i, i + 4));
             i += 4;
             continue;
         }

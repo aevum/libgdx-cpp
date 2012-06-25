@@ -20,9 +20,9 @@
 
 #include "SimpleTileAtlas.hpp"
 
-using namespace gdx_cpp::graphics::g2d::tiled;
+using namespace gdx;
 
-gdx_cpp::graphics::g2d::TextureRegion* SimpleTileAtlas::split (const gdx_cpp::graphics::Texture& texture,int totalWidth,int totalHeight,int width,int height,int spacing,int margin) {
+TextureRegion* SimpleTileAtlas::split (const Texture& texture,int totalWidth,int totalHeight,int width,int height,int spacing,int margin) {
     // TODO add padding support
     int xSlices = (totalWidth - margin) / (width + spacing);
     int ySlices = (totalHeight - margin) / (height + spacing);

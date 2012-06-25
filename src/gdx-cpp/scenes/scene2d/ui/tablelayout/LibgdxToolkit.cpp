@@ -20,9 +20,9 @@
 
 #include "LibgdxToolkit.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui::tablelayout;
+using namespace gdx::ui::tablelayout;
 
-gdx_cpp::scenes::scene2d::Actor& LibgdxToolkit::wrap (const Object& object) {
+gdx::Actor& LibgdxToolkit::wrap (const Object& object) {
     if (object instanceof String) {
         if (defaultFont == null) throw new IllegalStateException("No default font has been set.");
         return new Label(null, defaultFont, (String)object);
@@ -35,7 +35,7 @@ gdx_cpp::scenes::scene2d::Actor& LibgdxToolkit::wrap (const Object& object) {
     return super.wrap(object);
 }
 
-gdx_cpp::scenes::scene2d::Actor& LibgdxToolkit::newWidget (const TableLayout& layout,const std::string& className) {
+gdx::Actor& LibgdxToolkit::newWidget (const TableLayout& layout,const std::string& className) {
     if (layout.atlas != null) {
         AtlasRegion region = layout.atlas.findRegion(className);
         if (region != null) return new Image(className, region);
@@ -47,11 +47,11 @@ TableLayout& LibgdxToolkit::getLayout (const Table& table) {
     return table.getTableLayout();
 }
 
-gdx_cpp::scenes::scene2d::Actor& LibgdxToolkit::newStack () {
+gdx::Actor& LibgdxToolkit::newStack () {
     return new Stack();
 }
 
-void LibgdxToolkit::setProperty (const TableLayout& layout,const gdx_cpp::scenes::scene2d::Actor& object,const std::string& name,std::list<String>& values) {
+void LibgdxToolkit::setProperty (const TableLayout& layout,const gdx::Actor& object,const std::string& name,std::list<String>& values) {
     if (object instanceof Label) {
         Label label = ((Label)object);
         String value = values.get(0);
@@ -64,41 +64,41 @@ void LibgdxToolkit::setProperty (const TableLayout& layout,const gdx_cpp::scenes
     super.setProperty(layout, object, name, values);
 }
 
-void LibgdxToolkit::addChild (const gdx_cpp::scenes::scene2d::Actor& parent,const gdx_cpp::scenes::scene2d::Actor& child,const std::string& layoutString) {
+void LibgdxToolkit::addChild (const gdx::Actor& parent,const gdx::Actor& child,const std::string& layoutString) {
     if (child.parent != null) child.remove();
     ((Group)parent).addActor(child);
 }
 
-void LibgdxToolkit::removeChild (const gdx_cpp::scenes::scene2d::Actor& parent,const gdx_cpp::scenes::scene2d::Actor& child) {
+void LibgdxToolkit::removeChild (const gdx::Actor& parent,const gdx::Actor& child) {
     ((Group)parent).removeActor(child);
 }
 
-int LibgdxToolkit::getMinWidth (const gdx_cpp::scenes::scene2d::Actor& actor) {
+int LibgdxToolkit::getMinWidth (const gdx::Actor& actor) {
     if (actor instanceof Layout) return (int)((Layout)actor).getMinWidth();
     return (int)actor.width;
 }
 
-int LibgdxToolkit::getMinHeight (const gdx_cpp::scenes::scene2d::Actor& actor) {
+int LibgdxToolkit::getMinHeight (const gdx::Actor& actor) {
     if (actor instanceof Layout) return (int)((Layout)actor).getMinHeight();
     return (int)actor.height;
 }
 
-int LibgdxToolkit::getPrefWidth (const gdx_cpp::scenes::scene2d::Actor& actor) {
+int LibgdxToolkit::getPrefWidth (const gdx::Actor& actor) {
     if (actor instanceof Layout) return (int)((Layout)actor).getPrefWidth();
     return (int)actor.width;
 }
 
-int LibgdxToolkit::getPrefHeight (const gdx_cpp::scenes::scene2d::Actor& actor) {
+int LibgdxToolkit::getPrefHeight (const gdx::Actor& actor) {
     if (actor instanceof Layout) return (int)((Layout)actor).getPrefHeight();
     return (int)actor.height;
 }
 
-int LibgdxToolkit::getMaxWidth (const gdx_cpp::scenes::scene2d::Actor& actor) {
+int LibgdxToolkit::getMaxWidth (const gdx::Actor& actor) {
     if (actor instanceof Layout) return (int)((Layout)actor).getMaxWidth();
     return 0;
 }
 
-int LibgdxToolkit::getMaxHeight (const gdx_cpp::scenes::scene2d::Actor& actor) {
+int LibgdxToolkit::getMaxHeight (const gdx::Actor& actor) {
     if (actor instanceof Layout) return (int)((Layout)actor).getMaxHeight();
     return 0;
 }
@@ -112,12 +112,12 @@ void LibgdxToolkit::addDebugRectangle (const TableLayout& layout,int type,int x,
     layout.debugRects.add(new DebugRect(type, x, y, w, h));
 }
 
-void LibgdxToolkit::registerFont (const std::string& name,const gdx_cpp::graphics::g2d::BitmapFont& font) {
+void LibgdxToolkit::registerFont (const std::string& name,const gdx::BitmapFont& font) {
     fonts.put(name, font);
     if (defaultFont == null) defaultFont = font;
 }
 
-gdx_cpp::graphics::g2d::BitmapFont& LibgdxToolkit::getFont (const std::string& name) {
+gdx::BitmapFont& LibgdxToolkit::getFont (const std::string& name) {
     BitmapFont font = fonts.get(name);
     if (font == null) throw new IllegalArgumentException("Font not found: " + name);
     return font;

@@ -21,13 +21,13 @@
 
 #include <gdx-cpp/Input.hpp>
 
-namespace gdx_cpp {
+namespace gdx {
 
 namespace backends {
 
 namespace ios {
 
-class IosInput : public gdx_cpp::Input
+class IosInput : public gdx::Input
 {
 public:
     IosInput();
@@ -81,7 +81,7 @@ public:
 
     void setCatchMenuKey (bool catchMenu) ;
 
-    void setInputProcessor (gdx_cpp::InputProcessor* processor) ;
+    void setInputProcessor (gdx::InputProcessor* processor) ;
 
     bool isPeripheralAvailable (int peripheral) ;
 
@@ -105,7 +105,7 @@ public:
     void handleTouchUp(float arg1, float arg2, int button);
     
 protected:
-    gdx_cpp::InputProcessor* processor;
+    gdx::InputProcessor* processor;
 
     bool _justTouched;
     bool touching;

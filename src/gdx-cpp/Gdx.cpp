@@ -27,19 +27,19 @@
 #include "graphics/GLU.hpp"
 #include <cassert>
 
-using namespace gdx_cpp;
+using namespace gdx;
 
 Application* Gdx::app = 0;
 Graphics* Gdx::graphics = 0;
 Audio* Gdx::audio = 0;
 Input* Gdx::input = 0;
 Files* Gdx::files = 0;
-graphics::GLCommon* Gdx::gl = 0;
-graphics::GL10* Gdx::gl10 = 0;
-graphics::GL11* Gdx::gl11 = 0;
-graphics::GL20* Gdx::gl20 = 0;
-graphics::GLU* Gdx::glu = 0;
-implementation::System* Gdx::system = 0;
+GLCommon* Gdx::gl = 0;
+GL10* Gdx::gl10 = 0;
+GL11* Gdx::gl11 = 0;
+GL20* Gdx::gl20 = 0;
+GLU* Gdx::glu = 0;
+System* Gdx::system = 0;
 
 void Gdx::initialize(Application* application,
                      Graphics* graphics, Audio* audio, Input*  input , Files* files)
@@ -56,7 +56,7 @@ void Gdx::initialize(Application* application,
     Gdx::glu = Gdx::graphics->getGLU();
 }
 
-void Gdx::initializeSystem(implementation::System* system)
+void Gdx::initializeSystem(System* system)
 {
     Gdx::system = system;
 }

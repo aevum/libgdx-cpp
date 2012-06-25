@@ -20,10 +20,7 @@
 
 #include <string>
 
-namespace gdx_cpp {
-
-namespace assets {
-
+namespace gdx {
 class AssetType {
 public:
     const static AssetType BitmapFont;
@@ -51,8 +48,6 @@ private:
 
     std::string simpleName;
 };
-
-}
 
 }
 

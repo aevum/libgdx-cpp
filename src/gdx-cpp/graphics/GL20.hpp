@@ -332,8 +332,7 @@
 // Extensions
 #undef GL_COVERAGE_BUFFER_BIT_NV
 
-namespace gdx_cpp {
-namespace graphics {
+namespace gdx {
 
 class GL20 : virtual public GLCommon {
 public:
@@ -756,7 +755,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GL20_HPP_

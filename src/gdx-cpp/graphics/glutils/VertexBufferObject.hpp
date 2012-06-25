@@ -24,27 +24,25 @@
 #include "VertexData.hpp"
 #include "gdx-cpp/graphics/VertexAttributes.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
-namespace glutils {
+namespace gdx {
 
 class ShaderProgram;
 
 class VertexBufferObject : public VertexData {
 public:
 
-    VertexBufferObject (bool isStatic, int numVertices, const gdx_cpp::graphics::VertexAttributes& attributes);
-    VertexBufferObject (bool isStatic, int numVertices, const std::vector< gdx_cpp::graphics::VertexAttribute >& attributes);
+    VertexBufferObject (bool isStatic, int numVertices, const VertexAttributes& attributes);
+    VertexBufferObject (bool isStatic, int numVertices, const std::vector< VertexAttribute >& attributes);
     
-    gdx_cpp::graphics::VertexAttributes& getAttributes ();
+    VertexAttributes& getAttributes ();
     int getNumVertices ();
     int getNumMaxVertices ();
-    utils::float_buffer& getBuffer ();
+    float_buffer& getBuffer ();
     void setVertices (const float* vertices, int offset, int count);
     void bind ();
-    void bind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
+    void bind (ShaderProgram& shader);
     void unbind ();
-    void unbind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
+    void unbind (ShaderProgram& shader);
     void invalidate ();
     void dispose ();
 
@@ -56,18 +54,16 @@ protected:
     bool isDirect;
     int usage;
     bool isDirty;
-    graphics::VertexAttributes attributes;
+    VertexAttributes attributes;
     bool isBound;
     bool isStatic;
-    utils::byte_buffer byteBuffer;
-    utils::float_buffer buffer;
+    byte_buffer byteBuffer;
+    float_buffer buffer;
     
 private:
     int createBufferObject ();
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace glutils
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GLUTILS_VERTEXBUFFEROBJECT_HPP_

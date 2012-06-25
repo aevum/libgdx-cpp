@@ -20,7 +20,7 @@
 
 #include "Array<T>.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx;
 
 void Array<T>::add (const T& value) {
     T[] items = this.items;

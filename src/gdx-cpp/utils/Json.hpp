@@ -28,23 +28,22 @@
 
 #include "JsonItem.hpp"
 
-namespace gdx_cpp {
-namespace utils {
+namespace gdx {
 
 class Json {
 public:
 
     
     void setIgnoreUnknownFields (bool ignoreUnknownFields);
-    void setOutputType (const gdx_cpp::utils::JsonWriter::OutputType& outputType);
+    void setOutputType (const JsonWriter::OutputType& outputType);
     void addClassTag (const std::string& tag,const Class& type);
     void setTypeName (const std::string& typeName);
     void setUsePrototypes (bool usePrototypes);
     void setElementType (const Class& type,const std::string& fieldName,const Class& elementType);
     std::string& toJson (const JsonValue& object);
-    void toJson (const JsonValue& object,const gdx_cpp::files::FileHandle& file);
-    void toJson (const JsonValue& object,const Class& knownType,const gdx_cpp::files::FileHandle& file);
-    void toJson (const JsonValue& object,const Class& knownType,const Class& elementType,const gdx_cpp::files::FileHandle& file);
+    void toJson (const JsonValue& object,const FileHandle& file);
+    void toJson (const JsonValue& object,const Class& knownType,const FileHandle& file);
+    void toJson (const JsonValue& object,const Class& knownType,const Class& elementType,const FileHandle& file);
     void toJson (const JsonValue& object,const Writer& writer);
     void toJson (const JsonValue& object,const Class& knownType,const Writer& writer);
     void toJson (const JsonValue& object,const Class& knownType,const Class& elementType,const Writer& writer);
@@ -71,7 +70,7 @@ public:
     void readField (const JsonValue& object,const std::string& name,const JsonValue& jsonData);
     void readField (const JsonValue& object,const std::string& name, const Class& elementType,const JsonValue& jsonData);
     void readField (const JsonValue& object,const std::string& fieldName,const std::string& jsonName,const JsonValue& jsonData);
-    void readField (const gdx_cpp::utils::Json::json_item& object, const std::string& fieldName, const std::string& jsonName, const gdx_cpp::utils::Json::json_item& jsonData);
+    void readField (const Json::json_item& object, const std::string& fieldName, const std::string& jsonName, const Json::json_item& jsonData);
     void readFields (const JsonValue& object,const JsonValue& jsonData);
     std::string& prettyPrint (const JsonValue& object);
     std::string& prettyPrint (const std::string& json);
@@ -83,7 +82,7 @@ public:
     void read (const Json& json,const ObjectMap<String, Object>& jsonData);
 
     Json ();
-    Json (const gdx_cpp::utils::JsonWriter::OutputType& outputType);
+    Json (const JsonWriter::OutputType& outputType);
 
 protected:
     bool debug = false;
@@ -108,7 +107,6 @@ private:
     boolean ignoreUnknownFields ;
 };
 
-} // namespace gdx_cpp
-} // namespace utils
+} // namespace gdx
 
 #endif // GDX_CPP_UTILS_JSON_HPP_

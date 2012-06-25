@@ -23,21 +23,19 @@
 
 #include <gdx-cpp/files/FileHandle.hpp>
 
-namespace gdx_cpp {
+namespace gdx {
 
 class Files;
 
-namespace backends {
-
 namespace nix {
 
-class LinuxFileHandle : public gdx_cpp::files::FileHandle
+class LinuxFileHandle : public gdx::FileHandle
 {
 
 public:
 
-    LinuxFileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
-    LinuxFileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type);
+    LinuxFileHandle (const std::string &fileName, gdx::Files::FileType type);
+    LinuxFileHandle (const gdx::File &file, gdx::Files::FileType type);
 
     virtual int readBytes(buffer_ptr& c) const;
     virtual int write(const char* data, int length, bool append);
@@ -46,8 +44,6 @@ public:
 private:
     void runtime_error(const char* arg1);
 };
-
-}
 
 }
 

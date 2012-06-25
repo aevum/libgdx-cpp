@@ -24,9 +24,7 @@
 
 #include "TextureRegion.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
-namespace g2d {
+namespace gdx {
 
 class Animation {
 public:
@@ -43,8 +41,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g2d
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_G2D_ANIMATION_HPP_

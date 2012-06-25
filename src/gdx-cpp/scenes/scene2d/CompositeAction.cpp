@@ -20,7 +20,7 @@
 
 #include "CompositeAction.hpp"
 
-using namespace gdx_cpp::scenes::scene2d;
+using namespace gdx::scene2d;
 
 std::vector< Action* > CompositeAction::getActions () {
     return actions;

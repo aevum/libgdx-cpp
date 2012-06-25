@@ -20,7 +20,7 @@
 
 #include "TextureData.hpp"
 
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
 const TextureData::TextureDataType TextureData::TextureDataType::Pixmap = TextureData::TextureDataType();
 const TextureData::TextureDataType TextureData::TextureDataType::Compressed = TextureData::TextureDataType();

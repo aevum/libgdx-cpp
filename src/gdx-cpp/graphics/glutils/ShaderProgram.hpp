@@ -28,17 +28,11 @@
 #include <gdx-cpp/Application.hpp>
 #include <gdx-cpp/utils/Buffer.hpp>
 
-namespace gdx_cpp {
-namespace math
-{
+namespace gdx {
 class Matrix4;
 class Matrix3;
-}
 
-namespace graphics {
-namespace glutils {
-
-class ShaderProgram: public gdx_cpp::utils::Disposable {
+class ShaderProgram: public Disposable {
 public:
     /** default name for position attributes **/
     const static std::string POSITION_ATTRIBUTE;
@@ -71,19 +65,19 @@ public:
     void setUniform2fv (const std::string& name, float* values, int offset, int length);
     void setUniform3fv (const std::string& name, float* values, int offset, int length);
     void setUniform4fv (const std::string& name, float* values, int offset, int length);
-    void setUniformMatrix (const std::string& name, const gdx_cpp::math::Matrix4& matrix);
-    void setUniformMatrix (const std::string& name, const gdx_cpp::math::Matrix4& matrix, bool transpose);
-    void setUniformMatrix (const std::string& name, gdx_cpp::math::Matrix3& matrix);
-    void setUniformMatrix (const std::string& name, gdx_cpp::math::Matrix3& matrix, bool transpose);
-    void setVertexAttribute (const std::string& name, int size, int type, bool normalize, int stride, gdx_cpp::utils::buffer< float >* buffer);
+    void setUniformMatrix (const std::string& name, const Matrix4& matrix);
+    void setUniformMatrix (const std::string& name, const Matrix4& matrix, bool transpose);
+    void setUniformMatrix (const std::string& name, Matrix3& matrix);
+    void setUniformMatrix (const std::string& name, Matrix3& matrix, bool transpose);
+    void setVertexAttribute (const std::string& name, int size, int type, bool normalize, int stride, buffer< float >* buffer);
     void setVertexAttribute (const std::string& name, int size, int type, bool normalize, int stride, int offset);
     void begin ();
     void end ();
     void dispose ();
     void disableVertexAttribute (const std::string& name);
     void enableVertexAttribute (const std::string& name);
-    static void invalidateAllShaderPrograms (gdx_cpp::Application* app);
-    static void clearAllShaderPrograms (gdx_cpp::Application* app);
+    static void invalidateAllShaderPrograms (Application* app);
+    static void clearAllShaderPrograms (Application* app);
     std::string getManagedStatus ();
     void setAttributef (std::string& name, float value1, float value2, float value3, float value4);
     bool hasAttribute (const std::string& name);
@@ -107,12 +101,12 @@ private:
     int fetchAttributeLocation (const std::string& name);
     int fetchUniformLocation (const std::string& name);
     void checkManaged ();
-    void addManagedShader (gdx_cpp::Application* app, gdx_cpp::graphics::glutils::ShaderProgram* shaderProgram);
+    void addManagedShader (Application* app, ShaderProgram* shaderProgram);
     void ensureBufferCapacity (int numBytes);
     void fetchUniforms ();
     void fetchAttributes ();
 
-    static std::tr1::unordered_map <gdx_cpp::Application *, std::set< ShaderProgram* > * > shaders;
+    static std::tr1::unordered_map <Application *, std::set< ShaderProgram* > * > shaders;
 
     std::string log;
     bool isCompiledVar;
@@ -131,21 +125,19 @@ private:
     int program;
     int vertexShaderHandle;
     int fragmentShaderHandle;
-    utils::float_buffer matrix;
+    float_buffer matrix;
     std::string vertexShaderSource;
     std::string fragmentShaderSource;
     bool invalidated;
 
-    gdx_cpp::utils::byte_buffer buffer;
-    gdx_cpp::utils::float_buffer floatBuffer;
-    gdx_cpp::utils::int_buffer intBuffer;
+    byte_buffer buffer;
+    float_buffer floatBuffer;
+    int_buffer intBuffer;
 
     int refCount;
 
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace glutils
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GLUTILS_SHADERPROGRAM_HPP_

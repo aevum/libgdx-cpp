@@ -20,7 +20,7 @@
 
 #include "DecalMaterial.hpp"
 
-using namespace gdx_cpp::graphics::g3d::decals;
+using namespace gdx::g3d::decals;
 
 void DecalMaterial::set () {
     textureRegion.getTexture().bind();

@@ -24,10 +24,9 @@
 #include "gdx-cpp/utils/Disposable.hpp"
 
 
-namespace gdx_cpp {
-namespace audio {
+namespace gdx {
 
-class Music: public gdx_cpp::utils::Disposable {
+class Music: public Disposable {
 public:
     virtual   void play () = 0;
     virtual   void pause () = 0;
@@ -46,7 +45,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace audio
+} // namespace gdx
 
 #endif // GDX_CPP_AUDIO_MUSIC_HPP_

@@ -20,7 +20,7 @@
 
 #include "FloatArray.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx;
 
 void FloatArray::add (float value) {
     float[] items = this.items;

@@ -23,14 +23,13 @@
 #include "gdx-cpp/graphics/Texture.hpp"
 #include "TextureRegion.hpp"
 
-using namespace gdx_cpp::graphics::g2d;
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
 EmptyNinePatch* EmptyNinePatch::instance = 0;
 TextureRegion::ptr EmptyNinePatch::region;
 std::vector<TextureRegion::ptr> EmptyNinePatch::emptyPatches;
 
-gdx_cpp::graphics::g2d::EmptyNinePatch::EmptyNinePatch() : NinePatch(emptyPatches)
+EmptyNinePatch::EmptyNinePatch() : NinePatch(emptyPatches)
 {
 }
 
@@ -55,7 +54,7 @@ public :
 EmptyNinePatch& EmptyNinePatch::getInstance () {
     if (instance == NULL) {
         // This is kind of gross...
-        Texture::ptr texture(new gdx_cpp::graphics::Texture(2, 2, gdx_cpp::graphics::Pixmap::Format::RGBA8888, Pixmap::Gdx2d));
+        Texture::ptr texture(new Texture(2, 2, Pixmap::Format::RGBA8888, Pixmap::Gdx2d));
  
 
         region = TextureRegion::ptr(new EmpytTextureRegion(texture));

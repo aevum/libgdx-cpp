@@ -24,9 +24,7 @@
 #include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
 #include <assets/AssetManager.hpp>
 
-using namespace gdx_cpp::files;
-using namespace gdx_cpp::assets;
-using namespace gdx_cpp::assets::loaders;
+using namespace gdx;
 
 std::vector<AssetDescriptor> BitmapFontLoader::getDependencies (const std::string& fileName,const Parameter* parameter) {
     FileHandle handle = resolve(fileName);
@@ -38,16 +36,16 @@ std::vector<AssetDescriptor> BitmapFontLoader::getDependencies (const std::strin
     return deps;
 }
 
-void BitmapFontLoader::loadAsync (const gdx_cpp::assets::AssetManager* manager,
+void BitmapFontLoader::loadAsync (const gdx::AssetManager* manager,
                                   const std::string& fileName,
                                   const BitmapFontParameter& parameter) {
     this->manager = manager;
     this->fileName = fileName;
 }
 
-gdx_cpp::graphics::g2d::BitmapFont& BitmapFontLoader::loadSync () {
+BitmapFont& BitmapFontLoader::loadSync () {
     const FileHandle& handle = resolve(fileName);
-    graphics::gd2::TextureRegion region = TextureRegion::ptr(new TextureRegion(manager.get(data->getImageFile(), AssetManager::Texture)));
+    TextureRegion region = TextureRegion::ptr(new TextureRegion(manager.get(data->getImageFile(), AssetManager::Texture)));
     return new BitmapFont(data, region, true);
 }
 

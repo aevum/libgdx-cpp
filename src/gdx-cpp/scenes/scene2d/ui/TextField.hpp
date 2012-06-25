@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_UI_TEXTFIELD_HPP_
 #define GDX_CPP_SCENES_SCENE2D_UI_TEXTFIELD_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace ui {
@@ -30,13 +30,13 @@ class TextField {
 public:
     void setStyle (const TextFieldStyle& style);
     void layout ();
-    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
+    void draw (const gdx::SpriteBatch& batch,float parentAlpha);
     bool touchDown (float x,float y,int pointer);
     void touchUp (float x,float y,int pointer);
     void touchDragged (float x,float y,int pointer);
     bool keyDown (int keycode);
     bool keyTyped (char character);
-    gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
+    gdx::Actor& hit (float x,float y);
     void keyTyped (const TextField& textField,char key);
     void setTextFieldListener (const TextFieldListener& listener);
     void setText (const std::string& text);
@@ -47,7 +47,7 @@ public:
     void setOnscreenKeyboard (const OnscreenKeyboard& keyboard);
     void show (bool visible);
     void show (bool visible);
-    void setClipboard (const gdx_cpp::scenes::scene2d::ui::utils::Clipboard& clipboard);
+    void setClipboard (const gdx::ui::Clipboard& clipboard);
     TextField (const Skin& skin);
     TextField (const std::string& text,const Skin& skin);
     TextField (const TextFieldStyle& style);
@@ -84,7 +84,7 @@ private:
     void calculateOffsets ();
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace ui

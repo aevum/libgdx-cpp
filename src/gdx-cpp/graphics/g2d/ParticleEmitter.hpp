@@ -24,9 +24,7 @@
 #include "Sprite.hpp"
 #include <string>
 
-namespace gdx_cpp {
-namespace graphics {
-namespace g2d {
+namespace gdx {
 
 class ParticleEmitter {
 public:
@@ -176,8 +174,8 @@ public:
     void addParticle ();
     void addParticles (int count);
     void update (float delta);
-    void draw (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch);
-    void draw (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, float delta);
+    void draw (gdx::SpriteBatch& spriteBatch);
+    void draw (gdx::SpriteBatch& spriteBatch, float delta);
     void start ();
     void reset ();
     void setPosition (float x,float y);
@@ -298,8 +296,6 @@ private:
     bool additive;
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g2d
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_G2D_PARTICLEEMITTER_HPP_

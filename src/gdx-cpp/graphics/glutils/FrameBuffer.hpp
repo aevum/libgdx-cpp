@@ -29,12 +29,10 @@
 
 #include <set>
 
-namespace gdx_cpp {
-namespace graphics {
-namespace glutils {
+namespace gdx {
 
 class FrameBuffer:
-    public gdx_cpp::utils::Disposable,
+    public Disposable,
     public std::tr1::enable_shared_from_this<FrameBuffer> {
 public:
     typedef ref_ptr_maker<FrameBuffer>::type ptr;
@@ -44,18 +42,18 @@ public:
     void dispose ();
     void begin ();
     void end ();
-    static void invalidateAllFrameBuffers (gdx_cpp::Application* app);
-    static void clearAllFrameBuffers (gdx_cpp::Application* app);
+    static void invalidateAllFrameBuffers (Application* app);
+    static void clearAllFrameBuffers (Application* app);
     std::string getManagedStatus ();
     Texture::ptr getColorBufferTexture ();
     int getHeight ();
     int getWidth ();
 
 private:
-    typedef std::tr1::unordered_map<gdx_cpp::Application*, std::set < FrameBuffer* > > buffer_map;
+    typedef std::tr1::unordered_map<Application*, std::set < FrameBuffer* > > buffer_map;
     static buffer_map buffers;
     void build ();
-    void addManagedFrameBuffer (gdx_cpp::Application* app, gdx_cpp::graphics::glutils::FrameBuffer* frameBuffer);
+    void addManagedFrameBuffer (Application* app, FrameBuffer* frameBuffer);
     Texture::ptr colorTexture;  
     int framebufferHandle;
     int depthbufferHandle;
@@ -65,8 +63,6 @@ private:
     Pixmap::Format format;
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace glutils
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GLUTILS_FRAMEBUFFER_HPP_

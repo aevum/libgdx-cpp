@@ -38,9 +38,7 @@
 #include <stdexcept>
 #include <iostream>
 
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp;
-using namespace gdx_cpp::graphics::glutils;
+using namespace gdx;
 
 bool Mesh::forceVBO = false;
 Mesh::MeshMap Mesh::meshes;
@@ -50,17 +48,17 @@ Mesh::Mesh(bool isStatic, int maxVertices, int maxIndices, const std::vector< Ve
 , autoBind(true)
 , disposed(false)
 {
-    if (gdx_cpp::Gdx::gl20 != NULL || gdx_cpp::Gdx::gl11 != NULL || Mesh::forceVBO) {
-        vertices = new glutils::VertexBufferObject(isStatic, maxVertices, attributes);
-        indices = new glutils::IndexBufferObject(isStatic, maxIndices);
+    if (Gdx::gl20 != NULL || Gdx::gl11 != NULL || Mesh::forceVBO) {
+        vertices = new VertexBufferObject(isStatic, maxVertices, attributes);
+        indices = new IndexBufferObject(isStatic, maxIndices);
         isVertexArray = false;
     } else {
-        vertices = new glutils::VertexArray(maxVertices, attributes);
-        indices = new glutils::IndexBufferObject(maxIndices);
+        vertices = new VertexArray(maxVertices, attributes);
+        indices = new IndexBufferObject(maxIndices);
         isVertexArray = true;
     }
     
-    addManagedMesh(gdx_cpp::Gdx::app, this);
+    addManagedMesh(Gdx::app, this);
 }
 
 void Mesh::setVertices (const std::vector<float>& vertices) {
@@ -105,7 +103,7 @@ void Mesh::getIndices (std::vector<short>& indices) {
         throw std::runtime_error(ss.str());
     }
 
-    utils::short_buffer& indices_buffer = getIndicesBuffer();
+    short_buffer& indices_buffer = getIndicesBuffer();
     int pos = indices_buffer.position();
     
     indices_buffer.position(0);
@@ -151,7 +149,7 @@ void Mesh::unbind () {
     if (!isVertexArray && indices->getNumIndices() > 0) indices->unbind();
 }
 
-void Mesh::bind (glutils::ShaderProgram& shader) {
+void Mesh::bind (ShaderProgram& shader) {
     if (!Gdx::graphics->isGL20Available())
         throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
 
@@ -159,7 +157,7 @@ void Mesh::bind (glutils::ShaderProgram& shader) {
     if (indices->getNumIndices() > 0) indices->bind();
 }
 
-void Mesh::unbind (gdx_cpp::graphics::glutils::ShaderProgram& shader) {
+void Mesh::unbind (ShaderProgram& shader) {
     if (!Gdx::graphics->isGL20Available()) throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
 
     ((VertexBufferObject*)vertices)->unbind(shader);
@@ -177,7 +175,7 @@ void Mesh::render (int primitiveType,int offset,int count) {
 
     if (isVertexArray) {
         if (indices->getNumIndices() > 0) {
-            utils::short_buffer& buffer = indices->getBuffer();
+            short_buffer& buffer = indices->getBuffer();
             int oldPosition = buffer.position();
             int oldLimit = buffer.limit();
             buffer.position(offset);
@@ -199,11 +197,11 @@ void Mesh::render (int primitiveType,int offset,int count) {
     if (autoBind) unbind();
 }
 
-void Mesh::render (gdx_cpp::graphics::glutils::ShaderProgram& shader,int primitiveType) {
+void Mesh::render (ShaderProgram& shader,int primitiveType) {
     render(shader, primitiveType, 0, indices->getNumMaxIndices() > 0 ? getNumIndices() : getNumVertices());
 }
 
-void Mesh::render (gdx_cpp::graphics::glutils::ShaderProgram& shader,int primitiveType,int offset,int count) {
+void Mesh::render (ShaderProgram& shader,int primitiveType,int offset,int count) {
     if (!Gdx::graphics->isGL20Available()) throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
 
     if (autoBind) bind(shader);
@@ -241,15 +239,15 @@ VertexAttributes& Mesh::getVertexAttributes () {
     return vertices->getAttributes();
 }
 
-utils::float_buffer& Mesh::getVerticesBuffer () {
+float_buffer& Mesh::getVerticesBuffer () {
     return vertices->getBuffer();
 }
 
-void Mesh::calculateBoundingBox (gdx_cpp::math::collision::BoundingBox& bbox) {
+void Mesh::calculateBoundingBox (BoundingBox& bbox) {
     int numVertices = getNumVertices();
     if (numVertices == 0) throw std::runtime_error("No vertices defined");
 
-    utils::float_buffer verts = vertices->getBuffer();
+    float_buffer verts = vertices->getBuffer();
     bbox.inf();
     VertexAttribute& posAttrib = *getVertexAttribute(VertexAttributes::Usage::Position);
     int offset = posAttrib.offset / 4;
@@ -278,15 +276,15 @@ void Mesh::calculateBoundingBox (gdx_cpp::math::collision::BoundingBox& bbox) {
     }
 }
 
-utils::short_buffer& Mesh::getIndicesBuffer () {
+short_buffer& Mesh::getIndicesBuffer () {
     return indices->getBuffer();
 }
 
-void Mesh::addManagedMesh (gdx_cpp::Application* app, gdx_cpp::graphics::Mesh* mesh) {
+void Mesh::addManagedMesh (Application* app, Mesh* mesh) {
     meshes[app].insert(mesh);
 }
 
-void Mesh::invalidateAllMeshes (gdx_cpp::Application* app) {
+void Mesh::invalidateAllMeshes (Application* app) {
     MeshMap::value_type::second_type::iterator it = meshes[app].begin();
     MeshMap::value_type::second_type::iterator end = meshes[app].end();
     
@@ -298,7 +296,7 @@ void Mesh::invalidateAllMeshes (gdx_cpp::Application* app) {
     }
 }
 
-void Mesh::clearAllMeshes (gdx_cpp::Application* app) {
+void Mesh::clearAllMeshes (Application* app) {
     meshes.erase(app);
 }
 

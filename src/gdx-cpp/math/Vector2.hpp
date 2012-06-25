@@ -20,9 +20,7 @@
 
 #include <string>
 
-namespace gdx_cpp {
-
-namespace math {
+namespace gdx {
 
 class Matrix3;
   
@@ -66,7 +64,6 @@ private:
     static Vector2 _tmp;
 };
 
-}
 }
 
 #endif // GDX_CPP_MATH_VECTOR2_H

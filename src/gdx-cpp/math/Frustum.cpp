@@ -26,7 +26,7 @@
 
 #include <string.h>
 
-using namespace gdx_cpp::math;
+using namespace gdx;
 
 
 Vector3 Frustum::clipSpacePlanePoints[] = { Vector3(-1, -1, -1), Vector3(1, -1, -1),
@@ -42,7 +42,7 @@ Frustum::Frustum()
     }
 }
 
-gdx_cpp::math::Frustum::~Frustum()
+Frustum::~Frustum()
 {
   for (int i = 0; i < 6; i++) {
     delete planes[i];
@@ -91,7 +91,7 @@ bool Frustum::sphereInFrustumWithoutNearFar (const Vector3& center,float radius)
     return true;
 }
 
-bool Frustum::boundsInFrustum (gdx_cpp::math::collision::BoundingBox& bounds) {
+bool Frustum::boundsInFrustum (BoundingBox& bounds) {
     const std::vector<Vector3>& corners = bounds.getCorners();
     int len = corners.size();
 

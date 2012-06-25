@@ -20,11 +20,11 @@
 
 #include "Parallel.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::actions;
+using namespace gdx::actions;
 
 ActionResetingPool<Parallel> Parallel::pool = ActionResetingPool<Parallel>(4, 100);
 
-void Parallel::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+void Parallel::setTarget (gdx::Actor* actor) {
     this->target = actor;
     int len = actions.size();
     for (int i = 0; i < len; i++)
@@ -69,7 +69,7 @@ void Parallel::finish () {
     CompositeAction::finish();
 }
 
-gdx_cpp::scenes::scene2d::Action* Parallel::copy () {
+gdx::Action* Parallel::copy () {
     Parallel* parallel = pool.obtain();
     parallel->actions.clear();
     if (parallel->finished.empty() || parallel->finished.size() < actions.size())
@@ -84,7 +84,7 @@ gdx_cpp::scenes::scene2d::Action* Parallel::copy () {
     return parallel;
 }
 
-gdx_cpp::scenes::scene2d::Actor* Parallel::getTarget () {
+gdx::Actor* Parallel::getTarget () {
     return target;
 }
 

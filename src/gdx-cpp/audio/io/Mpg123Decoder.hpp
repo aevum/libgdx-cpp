@@ -26,9 +26,7 @@
 #include "Decoder.hpp"
 
 struct Mp3File;
-namespace gdx_cpp {
-namespace audio {
-namespace io {
+namespace gdx {
 
 class Mpg123Decoder : public Decoder {
 public:
@@ -55,8 +53,6 @@ private:
     void closeFile (Mp3File* mp3);
 };
 
-} // namespace gdx_cpp
-} // namespace audio
-} // namespace io
+} // namespace gdx
 
 #endif // GDX_CPP_AUDIO_IO_MPG123DECODER_HPP_

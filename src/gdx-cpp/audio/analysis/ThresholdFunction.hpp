@@ -24,9 +24,7 @@
 #include "gdx-cpp/utils/Aliases.hpp"
 #include <vector>
 
-namespace gdx_cpp {
-namespace audio {
-namespace analysis {
+namespace gdx {
 
 class ThresholdFunction {
 public:
@@ -42,8 +40,6 @@ private:
     float multiplier;
 };
 
-} // namespace gdx_cpp
-} // namespace audio
-} // namespace analysis
+} // namespace gdx
 
 #endif // GDX_CPP_AUDIO_ANALYSIS_THRESHOLDFUNCTION_HPP_

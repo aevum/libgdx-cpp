@@ -29,16 +29,14 @@
 #include "AndroidFiles.hpp"
 #include "AndroidAudio.hpp"
 
-namespace gdx_cpp {
-
-namespace backends {
+namespace gdx {
 
 namespace android {
 
 class AndroidApplication : public Application, public Runnable, public Synchronizable
 {
 public:
-    AndroidApplication(gdx_cpp::ApplicationListener* listener, const std::string& title, int width, int height, bool useGL20IfAvailable);
+    AndroidApplication(gdx::ApplicationListener* listener, const std::string& title, int width, int height, bool useGL20IfAvailable);
     
     void error(const std::string& tag, const char* format, ...);
     void exit();
@@ -80,14 +78,12 @@ protected:
     
     std::list< Runnable::ptr > runnables;
 
-    gdx_cpp::implementation::Thread::ptr mainLoopThread;
+    gdx::Thread::ptr mainLoopThread;
     
     void initialize();
 
     int logLevel;
 };
-
-}
 
 }
 

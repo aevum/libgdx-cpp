@@ -21,17 +21,17 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_LOADERS_MD5_MD5ANIMATOR_HPP_
 #define GDX_CPP_GRAPHICS_G3D_LOADERS_MD5_MD5ANIMATOR_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace loaders {
 namespace md5 {
 
-class MD5Animator: public gdx_cpp::graphics::g3d::Animator {
+class MD5Animator: public gdx::g3d::Animator {
 public:
     void setSkeleton (const MD5Joints& skeleton);
     MD5Joints& getSkeleton ();
-    void setAnimation (const gdx_cpp::graphics::g3d::Animation& anim,const WrapMode& wrapMode);
+    void setAnimation (const gdx::g3d::Animation& anim,const WrapMode& wrapMode);
 
 protected:
     void setInterpolationFrames ();
@@ -41,7 +41,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace loaders

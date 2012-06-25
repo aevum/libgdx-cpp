@@ -23,7 +23,7 @@
 #include "Group.hpp"
 #include "Action.hpp"
 
-using namespace gdx_cpp::scenes::scene2d;
+using namespace gdx::scene2d;
 
 bool Actor::touchMoved (float x,float y) {
     return false;
@@ -45,7 +45,7 @@ bool Actor::keyTyped (char character) {
     return false;
 }
 
-void Actor::toLocalCoordinates (gdx_cpp::math::Vector2& point) {
+void Actor::toLocalCoordinates (gdx::Vector2& point) {
     if (parent == NULL) {
         return;
     }

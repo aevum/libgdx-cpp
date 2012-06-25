@@ -5,7 +5,7 @@
 #include <gdx-cpp/Gdx.hpp>
 #include <stdexcept>
 
-using namespace gdx_cpp::files;
+using namespace gdx;
 
 int File::getPrefixLength() const
 {
@@ -15,9 +15,9 @@ int File::getPrefixLength() const
 static bool initialized = false;
 
 static void initializeFiles() {
-    File::separatorChar = gdx_cpp::Gdx::system->getSeparator();
+    File::separatorChar = gdx::Gdx::system->getSeparator();
     File::separator = std::string("") + File::separatorChar;
-    File::pathSeparatorChar = gdx_cpp::Gdx::system->getPathSeparator();
+    File::pathSeparatorChar = gdx::Gdx::system->getPathSeparator();
     File::pathSeparator = std::string("") + File::pathSeparatorChar;
 }
 
@@ -52,7 +52,7 @@ File::File(const std::string& child, const File &parent)
         initialized = true;
     }
     assert(parent.path != "");
-    this->path = gdx_cpp::Gdx::system->resolve(parent.path, child);
+    this->path = gdx::Gdx::system->resolve(parent.path, child);
     this->prefixLength = parent.prefixLength;
 }
 
@@ -63,8 +63,8 @@ File::File(const std::string& pathname)
         initializeFiles();
         initialized = true;
     }
-    this->path = gdx_cpp::Gdx::system->normalize(pathname);
-    this->prefixLength = gdx_cpp::Gdx::system->prefixLength(this->path);
+    this->path = gdx::Gdx::system->normalize(pathname);
+    this->prefixLength = gdx::Gdx::system->prefixLength(this->path);
 }
 
 File::File(const std::string& parent, const std::string& child)
@@ -76,13 +76,13 @@ File::File(const std::string& parent, const std::string& child)
     
     if(parent == "")
     {
-        this->path = gdx_cpp::Gdx::system->resolve(gdx_cpp::Gdx::system->getDefaultParent(), gdx_cpp::Gdx::system->normalize(child));
+        this->path = gdx::Gdx::system->resolve(gdx::Gdx::system->getDefaultParent(), gdx::Gdx::system->normalize(child));
     }
     else
     {
-        this->path = gdx_cpp::Gdx::system->resolve(gdx_cpp::Gdx::system->normalize(parent), gdx_cpp::Gdx::system->normalize(child));
+        this->path = gdx::Gdx::system->resolve(gdx::Gdx::system->normalize(parent), gdx::Gdx::system->normalize(child));
     }
-    this->prefixLength = gdx_cpp::Gdx::system->prefixLength(this->path);
+    this->prefixLength = gdx::Gdx::system->prefixLength(this->path);
 }
 
 File::File(const File &parent, const std::string& child)
@@ -93,12 +93,12 @@ File::File(const File &parent, const std::string& child)
     }
     
     if(parent.path == ""){
-        this->path = gdx_cpp::Gdx::system->resolve(gdx_cpp::Gdx::system->getDefaultParent(), gdx_cpp::Gdx::system->normalize(child));
+        this->path = gdx::Gdx::system->resolve(gdx::Gdx::system->getDefaultParent(), gdx::Gdx::system->normalize(child));
     }
     else{
-        this->path = gdx_cpp::Gdx::system->resolve(parent.path, gdx_cpp::Gdx::system->normalize(child));
+        this->path = gdx::Gdx::system->resolve(parent.path, gdx::Gdx::system->normalize(child));
     }
-    this->prefixLength = gdx_cpp::Gdx::system->prefixLength(this->path);
+    this->prefixLength = gdx::Gdx::system->prefixLength(this->path);
 }
 
 //File(URI uri);
@@ -137,30 +137,30 @@ const std::string &File::getPath() const
 
 bool File::isAbsolute() const
 {
-    return gdx_cpp::Gdx::system->isAbsolute(*this);
+    return gdx::Gdx::system->isAbsolute(*this);
 }
 
 std::string File::getAbsolutePath() const
 {
-    return gdx_cpp::Gdx::system->resolve(*this);
+    return gdx::Gdx::system->resolve(*this);
 }
 
 File File::getAbsoluteFile() const
 {
     std::string absPath = getAbsolutePath();
-    return File(absPath, gdx_cpp::Gdx::system->prefixLength(absPath));
+    return File(absPath, gdx::Gdx::system->prefixLength(absPath));
 }
 
 std::string File::getCanonicalPath() const //throws Runtime-Error
 {
-    std::string p = gdx_cpp::Gdx::system->resolve(*this);
-    return gdx_cpp::Gdx::system->canonicalize(p);
+    std::string p = gdx::Gdx::system->resolve(*this);
+    return gdx::Gdx::system->canonicalize(p);
 }
 
 File File::getCanonicalFile() const //throws Runtime-Error
 {
     std::string canonPath = getCanonicalPath();
-    int prefix = gdx_cpp::Gdx::system->prefixLength(canonPath);
+    int prefix = gdx::Gdx::system->prefixLength(canonPath);
     return File(canonPath, prefix);
 }
 //public URL(); throw MalformedURLException
@@ -170,22 +170,22 @@ File File::getCanonicalFile() const //throws Runtime-Error
 
 bool File::exists() const
 {
-    gdx_cpp::Gdx::system->checkRead(getAbsolutePath());
-    return ((gdx_cpp::Gdx::system->getBooleanAttributes(*this) & gdx_cpp::Gdx::system->BA_EXISTS) != 0);
+    gdx::Gdx::system->checkRead(getAbsolutePath());
+    return ((gdx::Gdx::system->getBooleanAttributes(*this) & gdx::Gdx::system->BA_EXISTS) != 0);
 }
 
 bool File::isDirectory() const
 {
-    gdx_cpp::Gdx::system->checkRead(getAbsolutePath());
-    return ((gdx_cpp::Gdx::system->getBooleanAttributes(*this) & gdx_cpp::Gdx::system->BA_DIRECTORY) != 0);
+    gdx::Gdx::system->checkRead(getAbsolutePath());
+    return ((gdx::Gdx::system->getBooleanAttributes(*this) & gdx::Gdx::system->BA_DIRECTORY) != 0);
 }
 
 //bool gotParent();
 
 bool File::isFile() const
 {
-    gdx_cpp::Gdx::system->checkRead(getAbsolutePath());
-    return ((gdx_cpp::Gdx::system->getBooleanAttributes(*this) & gdx_cpp::Gdx::system->BA_REGULAR) != 0);
+    gdx::Gdx::system->checkRead(getAbsolutePath());
+    return ((gdx::Gdx::system->getBooleanAttributes(*this) & gdx::Gdx::system->BA_REGULAR) != 0);
 }
 
 //bool isHidden();
@@ -193,24 +193,24 @@ bool File::isFile() const
 
 int64_t File::length () const
 {
-    gdx_cpp::Gdx::system->checkRead(getCanonicalPath());  
-    return gdx_cpp::Gdx::system->getLength(*this);
+    gdx::Gdx::system->checkRead(getCanonicalPath());  
+    return gdx::Gdx::system->getLength(*this);
 }
 
 //bool createNewFile();  //throw IOException()
 
 bool File::deleteFile()
 {
-    gdx_cpp::Gdx::system->checkDelete(getCanonicalPath());
-    return gdx_cpp::Gdx::system->deleteFile(*this);
+    gdx::Gdx::system->checkDelete(getCanonicalPath());
+    return gdx::Gdx::system->deleteFile(*this);
 }
 
 //void deleteOnExit();
 
 void File::list(std::vector<std::string> &relativePaths)
 {
-    gdx_cpp::Gdx::system->checkRead(getCanonicalPath());
-    gdx_cpp::Gdx::system->list(*this, relativePaths);
+    gdx::Gdx::system->checkRead(getCanonicalPath());
+    gdx::Gdx::system->list(*this, relativePaths);
 }
 
 //void list(std::vector<std::string> &relativePath, FilenameFilter filter);
@@ -232,8 +232,8 @@ void File::listFiles(std::vector<File> &fileList)
 
 bool File::mkdir()
 {
-    gdx_cpp::Gdx::system->checkWrite(getAbsolutePath());
-    return gdx_cpp::Gdx::system->createDirectory(*this);
+    gdx::Gdx::system->checkWrite(getAbsolutePath());
+    return gdx::Gdx::system->createDirectory(*this);
 }
 
 bool File::mkdirs()
@@ -254,9 +254,9 @@ bool File::mkdirs()
 
 bool File::renameTo(const File &dest)   
 {
-    gdx_cpp::Gdx::system->checkWrite(getCanonicalPath());
-    gdx_cpp::Gdx::system->checkWrite(dest.getAbsolutePath());
-    if(gdx_cpp::Gdx::system->renameFile(*this, dest))
+    gdx::Gdx::system->checkWrite(getCanonicalPath());
+    gdx::Gdx::system->checkWrite(dest.getAbsolutePath());
+    if(gdx::Gdx::system->renameFile(*this, dest))
     {
         this->path = dest.getPath();
         this->prefixLength = dest.prefixLength;

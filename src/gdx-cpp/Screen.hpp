@@ -18,7 +18,7 @@
 #ifndef GDX_CPP_SCREEN_H
 #define GDX_CPP_SCREEN_H
 
-namespace gdx_cpp {
+namespace gdx {
 
 class Screen {
 public:

@@ -20,10 +20,9 @@
 
 #include "Image.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::actors;
-using namespace gdx_cpp;
+using namespace gdx;
 
-void Image::draw (gdx_cpp::graphics::g2d::SpriteBatch& batch, float parentAlpha) {
+void Image::draw (SpriteBatch& batch, float parentAlpha) {
     if (region->getTexture() != NULL) {
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
         if (scaleX == 1 && scaleY == 1 && rotation == 0)
@@ -43,7 +42,7 @@ void Image::touchUp (float x,float y,int pointer) {
 void Image::touchDragged (float x,float y,int pointer) {
 }
 
-gdx_cpp::scenes::scene2d::Actor* Image::hit (float x,float y) {
+Actor* Image::hit (float x,float y) {
     if (x > 0 && x < width) if (y > 0 && y < height)
         return this;
 
@@ -55,23 +54,23 @@ Image::Image (const std::string& name)
 {    
 }
 
-Image::Image (const std::string& name,const gdx_cpp::graphics::Texture& texture)
+Image::Image (const std::string& name,const Texture& texture)
 : Actor(name)
 , originX(texture.getWidth() / 2.0f)
 , originY(originY = texture.getHeight() / 2.0f)
 , width(texture.getWidth())
 , height(texture.getHeight())
-, region(graphics::g2d::TextureRegion::newFromTexture(texture))
+, region(TextureRegion::newFromTexture(texture))
 {
 }
 
-Image::Image (const std::string& name,const gdx_cpp::graphics::g2d::TextureRegion& region)
+Image::Image (const std::string& name,const TextureRegion& region)
 : Actor(name)
 , originX(texture.getWidth() / 2.0f)
 , originY(originY = texture.getHeight() / 2.0f)
 , width(texture.getWidth())
 , height(texture.getHeight())
-, region(graphics::g2d::TextureRegion::newFromRegion(region))
+, region(TextureRegion::newFromRegion(region))
 {
     super(name);
     width = Math.abs(region.getRegionWidth());

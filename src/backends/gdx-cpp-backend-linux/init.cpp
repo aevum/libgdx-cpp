@@ -4,10 +4,10 @@
 #include "LinuxApplication.hpp"
 #include "LinuxSystem.hpp"
 
-using namespace gdx_cpp;
-using namespace gdx_cpp::backends::nix;
+using namespace gdx;
+using namespace gdx::nix;
 
-gdx_cpp::ApplicationListener* applicationListener = 0;
+gdx::ApplicationListener* applicationListener = 0;
 int width,height = 0;
 std::string title;
 
@@ -20,7 +20,7 @@ extern "C" int default_main(int argc, char** argv) {
 
     assert(applicationListener);
 
-    gdx_cpp::backends::nix::LinuxApplication app(applicationListener, title, width, height, false);
+    gdx::nix::LinuxApplication app(applicationListener, title, width, height, false);
     app.initialize();
 
     return 0;
@@ -28,7 +28,7 @@ extern "C" int default_main(int argc, char** argv) {
 
 gdx_main gdxcpp_main_selector::selector = default_main;
 
-extern "C" void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener,
+extern "C" void gdxcpp_create_application(gdx::ApplicationListener* listener,
         const std::string& applicationName,
         int p_width, int p_height) {
     applicationListener = listener;

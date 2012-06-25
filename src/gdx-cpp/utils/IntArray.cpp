@@ -20,7 +20,7 @@
 
 #include "IntArray.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx::utils;
 
 void IntArray::add (int value) {
     int[] items = this.items;

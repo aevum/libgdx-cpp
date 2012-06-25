@@ -21,7 +21,7 @@
 #include "WindowedMean.hpp"
 #include <cmath>
 
-using namespace gdx_cpp::math;
+using namespace gdx;
 
 WindowedMean::WindowedMean (int window_size)
 {

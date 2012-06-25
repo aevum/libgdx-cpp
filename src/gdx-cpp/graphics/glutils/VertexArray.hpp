@@ -23,36 +23,32 @@
 
 #include "VertexData.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
-namespace glutils {
+namespace gdx {
 
 class VertexArray : public VertexData {
 public:
 
-    VertexArray (int numVertices, const gdx_cpp::graphics::VertexAttributes& attributes) ;
+    VertexArray (int numVertices, const VertexAttributes& attributes) ;
     
     void dispose ();
-    utils::float_buffer& getBuffer ();
+    float_buffer& getBuffer ();
     int getNumVertices ();
     int getNumMaxVertices ();
     void setVertices (const float* vertices, int offset, int count);
     void bind ();
     void unbind ();
-    gdx_cpp::graphics::VertexAttributes& getAttributes ();
+    VertexAttributes& getAttributes ();
 
 protected:
 
     VertexAttributes attributes;
-    utils::float_buffer buffer;
-    utils::byte_buffer byteBuffer;
+    float_buffer buffer;
+    byte_buffer byteBuffer;
     bool isBound;
 private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace glutils
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GLUTILS_VERTEXARRAY_HPP_

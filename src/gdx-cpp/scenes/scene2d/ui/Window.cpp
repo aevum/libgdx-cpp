@@ -20,13 +20,13 @@
 
 #include "Window.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui;
+using namespace gdx::ui;
 
 void Window::setStyle (const WindowStyle& style) {
     this.style = style;
 }
 
-void Window::calculateBoundsAndScissors (const gdx_cpp::math::Matrix4& transform) {
+void Window::calculateBoundsAndScissors (const gdx::Matrix4& transform) {
     final NinePatch background = style.background;
     final BitmapFont titleFont = style.titleFont;
 
@@ -43,7 +43,7 @@ void Window::calculateBoundsAndScissors (const gdx_cpp::math::Matrix4& transform
     textBounds.height -= titleFont.getDescent();
 }
 
-void Window::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void Window::draw (const gdx::SpriteBatch& batch,float parentAlpha) {
     final NinePatch backgroundPatch = style.background;
     final BitmapFont titleFont = style.titleFont;
     final Color titleFontColor = style.titleFontColor;
@@ -92,7 +92,7 @@ void Window::touchDragged (float x,float y,int pointer) {
     if (parent.focusedActor[0] != this) super.touchDragged(x, y, pointer);
 }
 
-gdx_cpp::scenes::scene2d::Actor& Window::hit (float x,float y) {
+gdx::Actor& Window::hit (float x,float y) {
     return (x > 0 && x < width && y > 0 && y < height) || isModal ? this : null;
 }
 
@@ -120,15 +120,15 @@ bool Window::isModal () {
     return isModal;
 }
 
-Window::Window (const std::string& title,const gdx_cpp::scenes::scene2d::Stage& stage,const Skin& skin) {
+Window::Window (const std::string& title,const gdx::Stage& stage,const Skin& skin) {
     this(null, title, stage, skin.getStyle(WindowStyle.class), 0, 0);
 }
 
-Window::Window (const std::string& title,const gdx_cpp::scenes::scene2d::Stage& stage,const WindowStyle& style) {
+Window::Window (const std::string& title,const gdx::Stage& stage,const WindowStyle& style) {
     this(null, title, stage, style, 0, 0);
 }
 
-Window::Window (const std::string& name,const std::string& title,const gdx_cpp::scenes::scene2d::Stage& stage,const WindowStyle& style,int prefWidth,int prefHeight) {
+Window::Window (const std::string& name,const std::string& title,const gdx::Stage& stage,const WindowStyle& style,int prefWidth,int prefHeight) {
     super(name);
     this.stage = stage;
     this.title = title;

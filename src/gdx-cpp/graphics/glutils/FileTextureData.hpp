@@ -24,28 +24,25 @@
 #include "gdx-cpp/graphics/TextureData.hpp"
 #include "gdx-cpp/files/FileHandle.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 
-namespace graphics {
-namespace glutils {
-
-class FileTextureData: public gdx_cpp::graphics::TextureData {
+class FileTextureData: public gdx::TextureData {
 public:
-    FileTextureData (files::FileHandle::ptr file, gdx_cpp::graphics::Pixmap::ptr preloadedPixmap, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps) ;
+    FileTextureData (FileHandle::ptr file, gdx::Pixmap::ptr preloadedPixmap, const gdx::Pixmap::Format* format, bool useMipMaps) ;
     
-    gdx_cpp::graphics::Pixmap::ptr getPixmap ();
+    gdx::Pixmap::ptr getPixmap ();
     bool disposePixmap ();
     int getWidth ();
     int getHeight ();
-    const gdx_cpp::graphics::Pixmap::Format* getFormat ();
+    const gdx::Pixmap::Format* getFormat ();
     bool useMipMaps ();
     bool isManaged ();
-    files::FileHandle::ptr getFileHandle ();
-    const gdx_cpp::graphics::TextureData::TextureDataType& getType ();
+    FileHandle::ptr getFileHandle ();
+    const gdx::TextureData::TextureDataType& getType ();
     void uploadCompressedData ();
 
 private:
-    files::FileHandle::ptr file;
+    FileHandle::ptr file;
     int width;
     int height;
     const Pixmap::Format* format;
@@ -53,8 +50,6 @@ private:
     bool _useMipMaps;
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace glutils
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GLUTILS_FILETEXTUREDATA_HPP_

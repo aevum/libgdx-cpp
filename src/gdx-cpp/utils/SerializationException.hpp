@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_UTILS_SERIALIZATIONEXCEPTION_HPP_
 #define GDX_CPP_UTILS_SERIALIZATIONEXCEPTION_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace utils {
 
 class SerializationException {
@@ -37,7 +37,7 @@ private:
     bool causedBy (const Throwable& ex,const Class& type);
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace utils
 
 #endif // GDX_CPP_UTILS_SERIALIZATIONEXCEPTION_HPP_

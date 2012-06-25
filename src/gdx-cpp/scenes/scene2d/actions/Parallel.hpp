@@ -27,12 +27,12 @@
 
 #include <vector>
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace actions {
 
-class Parallel: public gdx_cpp::scenes::scene2d::CompositeAction {
+class Parallel: public gdx::CompositeAction {
 public:
     template < Action*, int size >
     static Parallel* build(Action* (&actions)[size]) {
@@ -49,7 +49,7 @@ public:
         return parallel;
     }
     
-    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
+    void setTarget (gdx::Actor* actor);
     void act (float delta);
     bool isDone ();
     void finish ();
@@ -63,7 +63,7 @@ protected:
     static ActionResetingPool<Parallel> pool;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace actions

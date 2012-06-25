@@ -25,13 +25,8 @@
 #include "gdx-cpp/utils/SvgRendererHandler.hpp"
 #include "gdx-cpp/graphics/Color.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 
-namespace graphics {
-
-namespace g2d {
-
-namespace svg {
 
 class SvgPixmapInterface;
 
@@ -51,44 +46,40 @@ public:
     * @param iface The pixmap interface to be rendered
     * @param svg The parsed svg element pointer
     */
-    static void render(utils::XmlReader::Element* const svg, utils::SvgRendererHandler* handler = NULL);
+    static void render(XmlReader::Element* const svg, SvgRendererHandler* handler = NULL);
 private:
     ///Initiate the current element parsing
-    static bool beginElement(gdx_cpp::utils::XmlReader::Element*const currentNode);
+    static bool beginElement(gdx::XmlReader::Element*const currentNode);
 
     ///End's the current element parsing    
-    static void endElement(utils::XmlReader::Element* currentNode);
+    static void endElement(XmlReader::Element* currentNode);
 
-    static void parse_line(utils::XmlReader::Element* node);
-    static void parse_poly(gdx_cpp::utils::XmlReader::Element* node, bool close);
-    static void parse_rect(utils::XmlReader::Element* node);
-    static void parse_path(utils::XmlReader::Element* node);
+    static void parse_line(XmlReader::Element* node);
+    static void parse_poly(gdx::XmlReader::Element* node, bool close);
+    static void parse_rect(XmlReader::Element* node);
+    static void parse_path(XmlReader::Element* node);
     static void parse_path_data(const char* data, int length);
-    static void parse_attr(utils::XmlReader::Element* node);
+    static void parse_attr(XmlReader::Element* node);
     static bool parse_attr(const std::string& name, const std::string& value);
-    static void parse_transform(const std::string& transform_string, gdx_cpp::utils::SvgRendererHandler::transform& transform);
+    static void parse_transform(const std::string& transform_string, gdx::SvgRendererHandler::transform& transform);
     static std::vector< std::pair< std::string , std::string > > parse_style(const std::string& style);
-    static std::string::size_type parse_scale(std::string scaleArgs, utils::SvgRendererHandler::transform& transform);
-    static std::string::size_type parse_translate(std::string translateArgs, utils::SvgRendererHandler::transform& transform);
-    static std::string::size_type parse_matrix(std::string matrixArgs, utils::SvgRendererHandler::transform& result);
-    static std::string::size_type parse_rotate(std::string rotateArgs, utils::SvgRendererHandler::transform& transform);
-    static std::string::size_type parse_skew_x(std::string skewXargs, utils::SvgRendererHandler::transform& transform);
-    static std::string::size_type parse_skew_y(std::string skewYargs, utils::SvgRendererHandler::transform& transform);
-    static graphics::Color parse_color(const std::string& colorValue);
+    static std::string::size_type parse_scale(std::string scaleArgs, SvgRendererHandler::transform& transform);
+    static std::string::size_type parse_translate(std::string translateArgs, SvgRendererHandler::transform& transform);
+    static std::string::size_type parse_matrix(std::string matrixArgs, SvgRendererHandler::transform& result);
+    static std::string::size_type parse_rotate(std::string rotateArgs, SvgRendererHandler::transform& transform);
+    static std::string::size_type parse_skew_x(std::string skewXargs, SvgRendererHandler::transform& transform);
+    static std::string::size_type parse_skew_y(std::string skewYargs, SvgRendererHandler::transform& transform);
+    static Color parse_color(const std::string& colorValue);
     static void parse_gradient(const std::string& gradient);
-    static void fetchStopData(gdx_cpp::utils::XmlReader::Element* node , std::vector< gdx_cpp::utils::SvgRendererHandler::GradientStopData >& stopData);
-    static void fetchStopElement(gdx_cpp::utils::XmlReader::Element* node, gdx_cpp::utils::SvgRendererHandler::GradientStopData& stop );
+    static void fetchStopData(gdx::XmlReader::Element* node , std::vector< gdx::SvgRendererHandler::GradientStopData >& stopData);
+    static void fetchStopElement(gdx::XmlReader::Element* node, gdx::SvgRendererHandler::GradientStopData& stop );
     
     static bool m_titleFlag;
     static bool m_pathFlag;
 
-    static utils::SvgRendererHandler* handler;
-    static utils::XmlReader::Element* defsElement;
+    static SvgRendererHandler* handler;
+    static XmlReader::Element* defsElement;
 };
-
-}
-}
-}
 
 }
 

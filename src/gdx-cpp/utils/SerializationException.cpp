@@ -20,7 +20,7 @@
 
 #include "SerializationException.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx::utils;
 
 bool SerializationException::causedBy (const Class& type) {
     return causedBy(this, type);

@@ -27,7 +27,7 @@
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/Application.hpp"
 
-using namespace gdx_cpp::audio::io;
+using namespace gdx;
 
 
 struct Mp3File
@@ -46,7 +46,7 @@ Mpg123Decoder::Mpg123Decoder (std::string filename) {
     handle = openFile(filename);
     if (handle == NULL)
     {
-      gdx_cpp::Gdx::app->error("GDX-CPP::AUDIO::IO Mpg123Decoder.cpp") << "couldn't open file '" << filename << "'";
+      gdx::Gdx::app->error("GDX-CPP::AUDIO::IO Mpg123Decoder.cpp") << "couldn't open file '" << filename << "'";
     }
 }
 

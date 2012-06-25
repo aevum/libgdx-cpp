@@ -23,9 +23,9 @@
 
 #include <stdexcept>
 
-using namespace gdx_cpp::utils;
+using namespace gdx;
 
-gdx_cpp::utils::XmlWriter::XmlWriter(std::ofstream& _writer)
+XmlWriter::XmlWriter(std::ofstream& _writer)
  : writer(_writer)
 {
 }

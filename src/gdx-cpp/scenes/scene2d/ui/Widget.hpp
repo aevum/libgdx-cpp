@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_UI_WIDGET_HPP_
 #define GDX_CPP_SCENES_SCENE2D_UI_WIDGET_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace ui {
@@ -34,7 +34,7 @@ public:
     float getMaxHeight ();
     void invalidate ();
     void invalidateHierarchy ();
-    gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
+    gdx::Actor& hit (float x,float y);
     Widget ();
     Widget (const std::string& name);
 
@@ -45,7 +45,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace ui

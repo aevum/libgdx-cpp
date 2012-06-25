@@ -13,9 +13,7 @@
 
 #define BUFFER_SIZE (4096 * 4)
 
-namespace gdx_cpp {
-namespace backends {
-
+namespace gdx {
 namespace nix {
 
 
@@ -44,8 +42,6 @@ private:
 
 
 };
-
-}
 
 }
 

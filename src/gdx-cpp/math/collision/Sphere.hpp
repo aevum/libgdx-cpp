@@ -22,9 +22,7 @@
 #define GDX_CPP_MATH_COLLISION_SPHERE_HPP_
 #include "gdx-cpp/math/Vector3.hpp"
 
-namespace gdx_cpp {
-namespace math {
-namespace collision {
+namespace gdx {
 
 class Sphere {
 public:
@@ -41,8 +39,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace math
-} // namespace collision
+} // namespace gdx
 
 #endif // GDX_CPP_MATH_COLLISION_SPHERE_HPP_

@@ -21,13 +21,13 @@
 #ifndef GDX_CPP_UTILS_SCREENUTILS_HPP_
 #define GDX_CPP_UTILS_SCREENUTILS_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace utils {
 
 class ScreenUtils {
 public:
-    static gdx_cpp::graphics::g2d::TextureRegion& getFrameBufferTexture ();
-    static gdx_cpp::graphics::g2d::TextureRegion& getFrameBufferTexture (int x,int y,int w,int h);
+    static gdx::TextureRegion& getFrameBufferTexture ();
+    static gdx::TextureRegion& getFrameBufferTexture (int x,int y,int w,int h);
     static char* getFrameBufferPixels (bool flipY);
     static char* getFrameBufferPixels (int x,int y,int w,int h,bool flipY);
 
@@ -38,7 +38,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace utils
 
 #endif // GDX_CPP_UTILS_SCREENUTILS_HPP_

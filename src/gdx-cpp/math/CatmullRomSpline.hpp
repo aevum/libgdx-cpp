@@ -25,9 +25,7 @@
 #include "Vector3.hpp"
 #include "gdx-cpp/utils/Aliases.hpp"
 
-namespace gdx_cpp {
-namespace math {
-
+namespace gdx {
 class Vector3;
   
 class CatmullRomSpline {
@@ -54,7 +52,6 @@ private:
   std::vector<Vector3> controlPoints;
 };
 
-} // namespace gdx_cpp
-} // namespace math
+} // namespace gdx
 
 #endif // GDX_CPP_MATH_CATMULLROMSPLINE_HPP_

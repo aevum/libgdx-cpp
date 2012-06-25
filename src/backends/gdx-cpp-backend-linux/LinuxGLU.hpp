@@ -24,23 +24,19 @@
 #include <gdx-cpp/graphics/GL10.hpp>
 #include <gdx-cpp/graphics/GLU.hpp>
 
-namespace gdx_cpp {
-
-namespace backends {
+namespace gdx {
 
 namespace nix {
 
-class LinuxGLU : public gdx_cpp::graphics::GLU
+class LinuxGLU : public gdx::GLU
 {
 public:
-    void gluLookAt (const graphics::GL10& gl,float eyeX,float eyeY,float eyeZ,float centerX,float centerY,float centerZ,float upX,float upY,float upZ) const;
-    void gluOrtho2D (const graphics::GL10& gl,float left,float right,float bottom,float top) const ;
-    void gluPerspective (const graphics::GL10& gl,float fovy,float aspect,float zNear,float zFar) const ;
+    void gluLookAt (const GL10& gl,float eyeX,float eyeY,float eyeZ,float centerX,float centerY,float centerZ,float upX,float upY,float upZ) const;
+    void gluOrtho2D (const GL10& gl,float left,float right,float bottom,float top) const ;
+    void gluPerspective (const GL10& gl,float fovy,float aspect,float zNear,float zFar) const ;
     bool gluProject (float objX,float objY,float objZ, float* model, float* projection, int* view, float* winX, float* winY, float* winZ) const ;
     bool gluUnProject (float winX,float winY,float winZ,float* model,float* proj, int* view,float* objX,float* objY,float* objZ) const ;
 };
-
-}
 
 }
 

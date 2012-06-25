@@ -20,7 +20,7 @@
 
 #include "List.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui;
+using namespace gdx::ui;
 
 void List::setStyle (const ListStyle& style) {
     this.style = style;
@@ -30,7 +30,7 @@ void List::setStyle (const ListStyle& style) {
 void List::layout () {
 }
 
-void List::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void List::draw (const gdx::SpriteBatch& batch,float parentAlpha) {
     final BitmapFont font = style.font;
     final NinePatch selectedPatch = style.selectedPatch;
     final Color fontColorSelected = style.fontColorSelected;
@@ -67,7 +67,7 @@ void List::touchUp (float x,float y,int pointer) {
 void List::touchDragged (float x,float y,int pointer) {
 }
 
-gdx_cpp::scenes::scene2d::Actor& List::hit (float x,float y) {
+gdx::Actor& List::hit (float x,float y) {
     return x >= 0 && x < width && y >= 0 && y < height ? this : null;
 }
 

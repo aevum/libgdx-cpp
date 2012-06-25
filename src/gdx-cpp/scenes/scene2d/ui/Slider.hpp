@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_UI_SLIDER_HPP_
 #define GDX_CPP_SCENES_SCENE2D_UI_SLIDER_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace ui {
@@ -30,11 +30,11 @@ class Slider {
 public:
     void setStyle (const SliderStyle& style);
     void layout ();
-    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
+    void draw (const gdx::SpriteBatch& batch,float parentAlpha);
     bool touchDown (float x,float y,int pointer);
     void touchUp (float x,float y,int pointer);
     void touchDragged (float x,float y,int pointer);
-    gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
+    gdx::Actor& hit (float x,float y);
     void changed (const Slider& slider,float value);
     Slider& setValueChangedListener (const ValueChangedListener& listener);
     float getValue ();
@@ -59,7 +59,7 @@ private:
     void calculateSliderPosAndValue (float x);
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace ui

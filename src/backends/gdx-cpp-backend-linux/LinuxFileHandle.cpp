@@ -23,25 +23,25 @@
 #include <stdexcept>
 #include <sys/stat.h>
 
-using namespace gdx_cpp::backends::nix;
+using namespace gdx::nix;
 
-LinuxFileHandle::LinuxFileHandle (const std::string &fileName, gdx_cpp::Files::FileType type)
+LinuxFileHandle::LinuxFileHandle (const std::string &fileName, gdx::Files::FileType type)
     : FileHandle(fileName, type)
 {
 }
 
-LinuxFileHandle::LinuxFileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type)
+LinuxFileHandle::LinuxFileHandle (const gdx::File &file, gdx::Files::FileType type)
     : FileHandle(file, type)
 {
 }
 
-int LinuxFileHandle::readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) const
+int LinuxFileHandle::readBytes(gdx::FileHandle::buffer_ptr& c) const
 {
     int buffer_length = length();
     char* buf = (char*) malloc(buffer_length);
 
     std::string filepath;
-    if (type == gdx_cpp::Files::Internal && !file.exists()) {
+    if (type == gdx::Files::Internal && !file.exists()) {
         int found;
         filepath = "/" + file.getPath();
 
@@ -90,9 +90,9 @@ int LinuxFileHandle::write(const char* data, int length, bool append)
     return written;
 }
 
-void LinuxFileHandle::copyTo(gdx_cpp::files::FileHandle& dest)
+void LinuxFileHandle::copyTo(gdx::FileHandle& dest)
 {
-    gdx_cpp::files::FileHandle::copyTo(dest);
+    gdx::FileHandle::copyTo(dest);
 }
 
 int64_t LinuxFileHandle::length() const

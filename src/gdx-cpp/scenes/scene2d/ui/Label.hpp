@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_UI_LABEL_HPP_
 #define GDX_CPP_SCENES_SCENE2D_UI_LABEL_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace ui {
@@ -32,15 +32,15 @@ public:
     void setText (const std::string& text);
     std::string& getText ();
     void setColor (float color);
-    void setColor (const gdx_cpp::graphics::Color& tint);
+    void setColor (const gdx::Color& tint);
     void setColor (float r,float g,float b,float a);
-    gdx_cpp::graphics::Color& getColor ();
+    gdx::Color& getColor ();
     void layout ();
-    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
+    void draw (const gdx::SpriteBatch& batch,float parentAlpha);
     bool touchDown (float x,float y,int pointer);
     void touchUp (float x,float y,int pointer);
     void touchDragged (float x,float y,int pointer);
-    gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
+    gdx::Actor& hit (float x,float y);
     float getPrefWidth ();
     float getPrefHeight ();
     Label (const std::string& text,const Skin& skin);
@@ -56,7 +56,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace ui

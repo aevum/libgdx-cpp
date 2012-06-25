@@ -24,9 +24,7 @@
 
 #include <stdexcept>
 
-using namespace gdx_cpp::graphics::glutils;
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp;
+using namespace gdx;
 
 FrameBuffer::buffer_map FrameBuffer::buffers;
 
@@ -114,12 +112,12 @@ void FrameBuffer::end () {
     Gdx::gl20->glBindFramebuffer(GL20::GL_FRAMEBUFFER, 0);
 }
 
-void FrameBuffer::addManagedFrameBuffer (gdx_cpp::Application* app,
-                                         gdx_cpp::graphics::glutils::FrameBuffer* frameBuffer) {
+void FrameBuffer::addManagedFrameBuffer (Application* app,
+                                         FrameBuffer* frameBuffer) {
     buffers[app].insert(frameBuffer);
 }
 
-void FrameBuffer::invalidateAllFrameBuffers (gdx_cpp::Application* app) {
+void FrameBuffer::invalidateAllFrameBuffers (Application* app) {
     if (Gdx::gl20 == NULL) return;
 
     buffer_map::value_type::second_type::iterator it = buffers[app].begin();
@@ -157,7 +155,7 @@ std::string FrameBuffer::getManagedStatus () {
     return builder.str();
 }
 
-gdx_cpp::graphics::Texture::ptr FrameBuffer::getColorBufferTexture () {
+Texture::ptr FrameBuffer::getColorBufferTexture () {
     return colorTexture;
 }
 
@@ -169,7 +167,7 @@ int FrameBuffer::getWidth () {
     return colorTexture->getWidth();
 }
 
-FrameBuffer::FrameBuffer(const gdx_cpp::graphics::Pixmap::Format& format, int width, int height, bool hasDepth)
+FrameBuffer::FrameBuffer(const Pixmap::Format& format, int width, int height, bool hasDepth)
  :
  width(width)
  ,height(height)

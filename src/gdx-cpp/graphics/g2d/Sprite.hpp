@@ -27,9 +27,7 @@
 #include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
 #include "gdx-cpp/utils/Aliases.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
-namespace g2d {
+namespace gdx {
 
 class SpriteBatch;
 
@@ -40,7 +38,7 @@ public:
   
     Sprite();
     Sprite(ptr);
-    Sprite (graphics::Texture::ptr texture) ;
+    Sprite (Texture::ptr texture) ;
     Sprite (Texture::ptr texture, int srcWidth, int srcHeight) ;
     Sprite (Texture::ptr texture, int srcX, int srcY, int srcWidth, int srcHeight) ;
     Sprite (const TextureRegion& region) ;
@@ -51,7 +49,7 @@ public:
     void setSize (float width,float height);
     void setPosition (float x,float y);
     void translate (float xAmount,float yAmount);
-    void setColor (const gdx_cpp::graphics::Color& tint);
+    void setColor (const Color& tint);
     void setColor (float r,float g,float b,float a);
     void setOrigin (float originX,float originY);
     void setRotation (float degrees);
@@ -61,9 +59,9 @@ public:
     void setScale (float scaleX,float scaleY);
     void scale (float amount);
     float* const getVertices ();
-    const gdx_cpp::math::Rectangle& getBoundingRectangle ();
-    void draw (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch);
-    void draw (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, float alphaModulation);
+    const Rectangle& getBoundingRectangle ();
+    void draw (SpriteBatch& spriteBatch);
+    void draw (SpriteBatch& spriteBatch, float alphaModulation);
     float getX ();
     float getY ();
     float getWidth ();
@@ -73,7 +71,7 @@ public:
     float getRotation ();
     float getScaleX ();
     float getScaleY ();
-    const gdx_cpp::graphics::Color& getColor ();
+    const Color& getColor ();
     void setRegion (float u,float v,float u2,float v2);
     void setU (float u);
     void setV (float v);
@@ -110,19 +108,17 @@ protected:
     float vertices[20];
     
 private:   
-    graphics::Color color;
+    Color color;
     float x, y;
     float width, height;
     float originX, originY;
     float rotation;
     float scaleX, scaleY;
     bool dirty;
-    math::Rectangle bounds;   
+    Rectangle bounds;   
     void initialize(Texture::ptr arg1, int arg2, int arg3, int arg4, int arg5);
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g2d
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_G2D_SPRITE_HPP_

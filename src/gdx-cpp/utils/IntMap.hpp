@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_UTILS_INTMAP<V>_HPP_
 #define GDX_CPP_UTILS_INTMAP<V>_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace utils {
 
 class IntMap {
@@ -65,7 +65,7 @@ private:
     int hash3 (int h);
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace utils
 
 #endif // GDX_CPP_UTILS_INTMAP<V>_HPP_

@@ -20,8 +20,7 @@
 
 #include "Segment.hpp"
 
-using namespace gdx_cpp::math::collision;
-using namespace gdx_cpp::math;
+using namespace gdx;
 
 Segment::Segment (const Vector3& a, const Vector3& b)
 : a(a)

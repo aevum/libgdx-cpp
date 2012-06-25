@@ -23,29 +23,22 @@
 
 #include "gdx-cpp/utils/Pool.hpp"
 
-namespace gdx_cpp {
-namespace scenes {
-namespace scene2d {
-namespace actions {
-
+namespace gdx {
 template <typename T>
-class ActionResetingPool : public utils::Pool<T> {
+class ActionResetingPool : public Pool<T> {
 public:
     ActionResetingPool (int initialCapacity, int max)
-        : utils::Pool<T>(initialCapacity, max)
+        : Pool<T>(initialCapacity, max)
     {        
     }
     
     T* obtain () {
-        T* elem = utils::Pool<T>::obtain();
+        T* elem = Pool<T>::obtain();
         elem->reset();
         return elem;
     }
 };
 
-} // namespace gdx_cpp
-} // namespace scenes
-} // namespace scene2d
-} // namespace actions
+} // namespace gdx
 
 #endif // GDX_CPP_SCENES_SCENE2D_ACTIONS_ACTIONRESETINGPOOL<T EXTENDS ACTION>_HPP_

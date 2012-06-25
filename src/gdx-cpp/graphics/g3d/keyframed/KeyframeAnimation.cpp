@@ -20,7 +20,7 @@
 
 #include "KeyframeAnimation.hpp"
 
-using namespace gdx_cpp::graphics::g3d::keyframed;
+using namespace gdx::g3d::keyframed;
 
 float KeyframeAnimation::getLength () {
     return length;

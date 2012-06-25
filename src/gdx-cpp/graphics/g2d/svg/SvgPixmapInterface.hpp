@@ -26,28 +26,16 @@
 #include <vector>
 #include "gdx-cpp/utils/SvgRendererHandler.hpp"
 
-namespace gdx_cpp {
-
-namespace graphics {
-
-namespace g2d {
-
-namespace svg {
+namespace gdx {
 
 /** Pixmap + SvgRendererHandler glue code :)
  */
-class SvgPixmapInterface : public Pixmap, public virtual utils::SvgRendererHandler
+class SvgPixmapInterface : public Pixmap, public virtual SvgRendererHandler
 {
 public:
-    virtual void fill(graphics::Color color) = 0;    
+    virtual void fill(Color color) = 0;    
     virtual void setStrokeWidth(int) = 0;
 };
-
-}
-
-}
-
-}
 
 }
 

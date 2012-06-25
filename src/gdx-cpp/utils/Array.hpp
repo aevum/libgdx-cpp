@@ -21,9 +21,7 @@
 #ifndef GDX_CPP_UTILS_ARRAY<T>_HPP_
 #define GDX_CPP_UTILS_ARRAY<T>_HPP_
 
-namespace gdx_cpp {
-namespace utils {
-
+namespace gdx {
 class Array {
 public:
     void add (const T& value);
@@ -63,7 +61,6 @@ private:
     Array<T> array;
 };
 
-} // namespace gdx_cpp
-} // namespace utils
+} // namespace gdx
 
 #endif // GDX_CPP_UTILS_ARRAY<T>_HPP_

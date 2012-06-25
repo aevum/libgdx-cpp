@@ -20,7 +20,7 @@
 
 #include "LongMap<V>.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx::utils;
 
 V& LongMap<V>::put (long key,const V& value) {
     if (key == 0) {

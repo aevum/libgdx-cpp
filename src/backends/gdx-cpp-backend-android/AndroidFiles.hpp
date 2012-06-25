@@ -26,28 +26,24 @@
 
 #include <sys/types.h>
 #include <gdx-cpp/files/FileHandle.hpp>
-namespace gdx_cpp {
+namespace gdx {
 
-namespace files {
 class FileHandle;
-}
-
-namespace backends {
 
 namespace android {
 
-class AndroidFiles : public gdx_cpp::Files
+class AndroidFiles : public gdx::Files
 {
 public:
     AndroidFiles();
     
-    files::FileHandle::ptr getFileHandle (const std::string& path, gdx_cpp::Files::FileType type);
+    FileHandle::ptr getFileHandle (const std::string& path, gdx::Files::FileType type);
         
-    files::FileHandle::ptr internal (const std::string& path);
+    FileHandle::ptr internal (const std::string& path);
     
-    files::FileHandle::ptr external (const std::string& path);
+    FileHandle::ptr external (const std::string& path);
     
-    files::FileHandle::ptr absolute (const std::string& path);
+    FileHandle::ptr absolute (const std::string& path);
     
     std::string getExternalStoragePath ();
     
@@ -56,8 +52,6 @@ public:
 protected:
     std::string externalPath;
 };
-
-}
 
 }
 

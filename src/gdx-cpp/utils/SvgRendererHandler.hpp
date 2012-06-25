@@ -25,9 +25,7 @@
 #include <vector>
 #include <list>
 
-namespace gdx_cpp {
-
-namespace utils {
+namespace gdx {
 
 /** Base handler for svg images. This interface is used to interpret Svg Specification data
  *
@@ -64,7 +62,7 @@ public:
     };
     
     struct GradientStopData {
-        gdx_cpp::graphics::Color color;
+        gdx::Color color;
         float opacity;
         float offset;
         GradientStopData() : color(0, 0, 0,1), opacity(1), offset(0) {
@@ -97,10 +95,10 @@ public:
     virtual void endPath() = 0;
     virtual void end() = 0;
     virtual void fillNone() = 0;
-    virtual void fill(gdx_cpp::graphics::Color color) = 0;
+    virtual void fill(gdx::Color color) = 0;
     virtual void fillOpacity(float opactiy) = 0;
     virtual void strokeNone() = 0;
-    virtual void stroke(gdx_cpp::graphics::Color color) = 0;
+    virtual void stroke(gdx::Color color) = 0;
     virtual void setStrokeWidth(float width) = 0;
     virtual void setStrokeOpacity(float opacit) = 0;
     virtual void setLineJoin(LineJoin join) = 0;
@@ -124,8 +122,6 @@ public:
     virtual void curve4(float x1, float y1, float x2, float y2, float x, float y, bool relative = false) = 0;
     virtual void curve4(float x2, float y2, float x, float y, bool relative = false) = 0;
 };
-
-}
 
 }
 

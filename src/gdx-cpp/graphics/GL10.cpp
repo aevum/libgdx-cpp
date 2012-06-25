@@ -21,7 +21,7 @@
 
 #include <gdx-cpp/gl.hpp>
 
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
 
 

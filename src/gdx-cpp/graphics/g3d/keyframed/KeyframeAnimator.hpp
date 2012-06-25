@@ -21,12 +21,12 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_KEYFRAMED_KEYFRAMEANIMATOR_HPP_
 #define GDX_CPP_GRAPHICS_G3D_KEYFRAMED_KEYFRAMEANIMATOR_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace keyframed {
 
-class KeyframeAnimator: public gdx_cpp::graphics::g3d::Animator {
+class KeyframeAnimator: public gdx::g3d::Animator {
 public:
     Keyframe& getInterpolatedKeyframe ();
     void setKeyframeDimensions (int idx,int numVertices,int numIndices);
@@ -41,7 +41,7 @@ private:
     void interpolateJoints (float t);
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace keyframed

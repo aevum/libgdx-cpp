@@ -20,13 +20,13 @@
 
 #include "SimpleOrthoGroupStrategy.hpp"
 
-using namespace gdx_cpp::graphics::g3d::decals;
+using namespace gdx::g3d::decals;
 
 int SimpleOrthoGroupStrategy::decideGroup (const Decal& decal) {
     return decal.getMaterial().isOpaque() ? GROUP_OPAQUE : GROUP_BLEND;
 }
 
-void SimpleOrthoGroupStrategy::beforeGroup (int group,gdx_cpp::utils::ArrayDecal>& contents) {
+void SimpleOrthoGroupStrategy::beforeGroup (int group,gdx::ArrayDecal>& contents) {
     if (group == GROUP_BLEND) {
         Sort.instance().sort(contents, comparator);
         Gdx.gl10.glEnable(GL10.GL_BLEND);
@@ -57,7 +57,7 @@ int SimpleOrthoGroupStrategy::compare (const Decal& a,const Decal& b) {
     return a.getZ() - b.getZ() < 0 ? -1 : 1;
 }
 
-gdx_cpp::graphics::glutils::ShaderProgram& SimpleOrthoGroupStrategy::getGroupShader (int group) {
+gdx::ShaderProgram& SimpleOrthoGroupStrategy::getGroupShader (int group) {
     return null;
 }
 

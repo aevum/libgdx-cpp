@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_UTILS_GDXNATIVESLOADER_HPP_
 #define GDX_CPP_UTILS_GDXNATIVESLOADER_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace utils {
 
 class GdxNativesLoader {
@@ -37,7 +37,7 @@ private:
     std::string& crc (const std::string& nativeFile);
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace utils
 
 #endif // GDX_CPP_UTILS_GDXNATIVESLOADER_HPP_

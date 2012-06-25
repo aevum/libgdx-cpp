@@ -20,9 +20,9 @@
 
 #include "CatmullRomSpline.hpp"
 
-using namespace gdx_cpp::math;
+using namespace gdx;
 
-gdx_cpp::math::CatmullRomSpline::CatmullRomSpline()
+CatmullRomSpline::CatmullRomSpline()
 {
 }
 

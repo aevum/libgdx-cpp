@@ -61,7 +61,7 @@ protected:
 
 template <typename T>
 struct gdx_sync {
-    typedef synchronized<T, gdx_cpp::implementation::Mutex> type;
+    typedef synchronized<T, gdx::Mutex> type;
 };
 
 template <typename MutexFactory>
@@ -86,9 +86,9 @@ private:
     typename MutexFactory::mutex_ptr mutex;
 };
 
-namespace gdx_cpp {
+namespace gdx {
     
-typedef Synchronizable<implementation::MutexFactory> Synchronizable;
+typedef Synchronizable<MutexFactory> Synchronizable;
 
 }
 #endif

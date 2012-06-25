@@ -26,10 +26,10 @@
 #include <cassert>
 
 
-using namespace gdx_cpp::backends::android;
-using namespace gdx_cpp;
+using namespace gdx::android;
+using namespace gdx;
 
-gdx_cpp::backends::android::AndroidApplication::AndroidApplication(gdx_cpp::ApplicationListener* listener,
+gdx::android::AndroidApplication::AndroidApplication(gdx::ApplicationListener* listener,
         const std::string& title, int width, int height, bool useGL20IfAvailable)
         :  Synchronizable(Gdx::system->getMutexFactory())
         , title(title)
@@ -39,7 +39,7 @@ gdx_cpp::backends::android::AndroidApplication::AndroidApplication(gdx_cpp::Appl
         , listener(listener)
         , graphics(NULL)
         , input(NULL)
-        , logLevel(gdx_cpp::Application::LOG_INFO)
+        , logLevel(gdx::Application::LOG_INFO)
         , files(NULL)
         , audio(NULL)
 {
@@ -59,12 +59,12 @@ void AndroidApplication::initialize() {
     Gdx::initialize(this, graphics, audio, input, files);
 }
 
-void backends::android::AndroidApplication::onRunnableStop()
+void android::AndroidApplication::onRunnableStop()
 {
     //DUMMY
 }
 
-void backends::android::AndroidApplication::run()
+void android::AndroidApplication::run()
 {
     graphics->updateTime();
 
@@ -96,42 +96,42 @@ void AndroidApplication::error(const std::string& tag, const char* format, ...)
 #endif
 }
 
-void gdx_cpp::backends::android::AndroidApplication::exit()
+void gdx::android::AndroidApplication::exit()
 {
     ::exit(0);
 }
 
-Audio* gdx_cpp::backends::android::AndroidApplication::getAudio()
+Audio* gdx::android::AndroidApplication::getAudio()
 {
     return audio;
 }
 
-Files* gdx_cpp::backends::android::AndroidApplication::getFiles()
+Files* gdx::android::AndroidApplication::getFiles()
 {
     return files;
 }
 
-Graphics* gdx_cpp::backends::android::AndroidApplication::getGraphics()
+Graphics* gdx::android::AndroidApplication::getGraphics()
 {    
     return graphics;
 }
 
-Input* gdx_cpp::backends::android::AndroidApplication::getInput()
+Input* gdx::android::AndroidApplication::getInput()
 {
     return input;
 }
 
-Preferences* gdx_cpp::backends::android::AndroidApplication::getPreferences(std::string& name)
+Preferences* gdx::android::AndroidApplication::getPreferences(std::string& name)
 {
     throw std::runtime_error("not implemented");
 }
 
-gdx_cpp::Application::ApplicationType gdx_cpp::backends::android::AndroidApplication::getType()
+gdx::Application::ApplicationType gdx::android::AndroidApplication::getType()
 {
-    return gdx_cpp::Application::Desktop;
+    return gdx::Application::Desktop;
 }
 
-void backends::android::AndroidApplication::pause()
+void android::AndroidApplication::pause()
 {
     listener->pause();
 }
@@ -141,21 +141,21 @@ void AndroidApplication::resume() {
 }
 
 
-void backends::android::AndroidApplication::update()
+void android::AndroidApplication::update()
 {
     run();
 }
 
-void backends::android::AndroidApplication::create()
+void android::AndroidApplication::create()
 {
     listener->create();
     listener->resize(graphics->getWidth(), graphics->getHeight());
 }
 
 
-void gdx_cpp::backends::android::AndroidApplication::log(const std::string& tag, const char* format, ...)
+void gdx::android::AndroidApplication::log(const std::string& tag, const char* format, ...)
 {
-    if (logLevel == gdx_cpp::Application::LOG_NONE)
+    if (logLevel == gdx::Application::LOG_NONE)
         return;
     
     va_list list;
@@ -163,18 +163,18 @@ void gdx_cpp::backends::android::AndroidApplication::log(const std::string& tag,
     __android_log_vprint(ANDROID_LOG_INFO, tag.c_str(),format, list);
 }
 
-int gdx_cpp::backends::android::AndroidApplication::getVersion()
+int gdx::android::AndroidApplication::getVersion()
 {
     return 0.1;
 }
 
-void gdx_cpp::backends::android::AndroidApplication::postRunnable(Runnable::ptr runnable)
+void gdx::android::AndroidApplication::postRunnable(Runnable::ptr runnable)
 {
     lock_holder hnd = synchronize();
     runnables.push_back(runnable);
 }
 
-void gdx_cpp::backends::android::AndroidApplication::setLogLevel(int logLevel)
+void gdx::android::AndroidApplication::setLogLevel(int logLevel)
 {
     this->logLevel = logLevel;
 }

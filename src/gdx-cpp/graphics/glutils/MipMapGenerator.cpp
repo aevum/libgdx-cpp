@@ -30,9 +30,7 @@
 
 #include <stdexcept>
 
-using namespace gdx_cpp;
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp::graphics::glutils;
+using namespace gdx;
 
 bool MipMapGenerator::useHWMipMap = true;
 
@@ -40,14 +38,14 @@ void MipMapGenerator::setUseHardwareMipMap (bool useHWMipMap) {
     MipMapGenerator::useHWMipMap = useHWMipMap;
 }
 
-void MipMapGenerator::generateMipMap (gdx_cpp::graphics::Pixmap::ptr pixmap,int textureWidth,int textureHeight,bool disposePixmap) {
+void MipMapGenerator::generateMipMap (Pixmap::ptr pixmap,int textureWidth,int textureHeight,bool disposePixmap) {
     if (!useHWMipMap) {
         generateMipMapCPU(pixmap, textureWidth, textureHeight, disposePixmap);
         return;
     }
 
-    if (gdx_cpp::Gdx::app->getType() == gdx_cpp::Application::Android) {
-        if (gdx_cpp::Gdx::graphics->isGL20Available())
+    if (Gdx::app->getType() == Application::Android) {
+        if (Gdx::graphics->isGL20Available())
             generateMipMapGLES20(pixmap, disposePixmap);
         else
             generateMipMapCPU(pixmap, textureWidth, textureHeight, disposePixmap);
@@ -56,14 +54,14 @@ void MipMapGenerator::generateMipMap (gdx_cpp::graphics::Pixmap::ptr pixmap,int 
     }
 }
 
-void MipMapGenerator::generateMipMapGLES20 (gdx_cpp::graphics::Pixmap::ptr pixmap,bool disposePixmap) {
+void MipMapGenerator::generateMipMapGLES20 (Pixmap::ptr pixmap,bool disposePixmap) {
     Gdx::gl->glTexImage2D(GL_TEXTURE_2D, 0, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
                         pixmap->getGLFormat(), pixmap->getGLType(), pixmap->getPixels());
     Gdx::gl20->glGenerateMipmap(GL_TEXTURE_2D);
     if (disposePixmap) pixmap->dispose();
 }
 
-void MipMapGenerator::generateMipMapDesktop (gdx_cpp::graphics::Pixmap::ptr pixmap,int textureWidth,int textureHeight,bool disposePixmap) {
+void MipMapGenerator::generateMipMapDesktop (Pixmap::ptr pixmap,int textureWidth,int textureHeight,bool disposePixmap) {
     if (Gdx::graphics->isGL20Available()
             && (Gdx::graphics->supportsExtension("GL_ARB_framebuffer_object") || Gdx::graphics
                 ->supportsExtension("GL_EXT_framebuffer_object"))) {

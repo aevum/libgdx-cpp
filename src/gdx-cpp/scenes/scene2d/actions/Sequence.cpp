@@ -21,11 +21,11 @@
 #include "Sequence.hpp"
 #include <cstdarg>
 
-using namespace gdx_cpp::scenes::scene2d::actions;
+using namespace gdx::actions;
 
 ActionResetingPool<Sequence> Sequence::pool = ActionResetingPool<Sequence>(4, 100);
 
-void Sequence::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+void Sequence::setTarget (gdx::Actor* actor) {
     this->target = actor;
     if (actions.size() > 0) actions[0]->setTarget(target);
     this->currAction = 0;
@@ -60,7 +60,7 @@ void Sequence::finish () {
     CompositeAction::finish();
 }
 
-gdx_cpp::scenes::scene2d::Action* Sequence::copy () {
+gdx::Action* Sequence::copy () {
     Sequence* action = pool.obtain();
 
     action->actions.clear();
@@ -75,7 +75,7 @@ gdx_cpp::scenes::scene2d::Action* Sequence::copy () {
     return action;
 }
 
-gdx_cpp::scenes::scene2d::Actor* Sequence::getTarget () {
+gdx::Actor* Sequence::getTarget () {
     return target;
 }
 

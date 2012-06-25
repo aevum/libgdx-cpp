@@ -23,9 +23,9 @@
 #include <cstdlib>
 #include <cassert>
 
-using namespace gdx_cpp::backends::nix;
+using namespace gdx::nix;
 
-LinuxOggSound::LinuxOggSound(gdx_cpp::backends::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx_cpp::files::FileHandle >::type file): LinuxOpenALSound(audio)
+LinuxOggSound::LinuxOggSound(gdx::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx::FileHandle >::type file): LinuxOpenALSound(audio)
 {
     LinuxOggInputStream input;
     input.open(file->path());
@@ -49,7 +49,7 @@ LinuxOggSound::LinuxOggSound(gdx_cpp::backends::nix::LinuxOpenALAudio* audio, co
 }
 
 
-LinuxOggMusic::LinuxOggMusic(gdx_cpp::backends::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx_cpp::files::FileHandle >::type file):
+LinuxOggMusic::LinuxOggMusic(gdx::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx::FileHandle >::type file):
         LinuxOpenALMusic(audio, file)
 {
     input = new LinuxOggInputStream();

@@ -26,8 +26,7 @@
 #include <limits>
 #include <stdexcept>
 
-namespace gdx_cpp {
-namespace utils {
+namespace gdx {
 template < class T >
 class Pool {
 public:
@@ -87,7 +86,6 @@ private:
     }
 };
 
-} // namespace gdx_cpp
-} // namespace utils
+} // namespace gdx
 
 #endif // GDX_CPP_UTILS_POOL<T>_HPP_

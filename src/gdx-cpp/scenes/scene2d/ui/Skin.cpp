@@ -20,7 +20,7 @@
 
 #include "Skin.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui;
+using namespace gdx::ui;
 
 void Skin::dispose () {
     data.texture.dispose();
@@ -28,15 +28,15 @@ for (Object object : data.resources.values())
         if (object instanceof Disposable) ((Disposable)object).dispose();
 }
 
-void Skin::setTexture (const gdx_cpp::graphics::Texture& texture) {
+void Skin::setTexture (const gdx::Texture& texture) {
     data.texture = texture;
 }
 
-gdx_cpp::graphics::Texture& Skin::getTexture () {
+gdx::Texture& Skin::getTexture () {
     return data.texture;
 }
 
-void Skin::save (const gdx_cpp::files::FileHandle& skinFile) {
+void Skin::save (const gdx::FileHandle& skinFile) {
     String text = getJsonLoader(null).prettyPrint(this, true);
     Writer writer = skinFile.writer(false);
     try {
@@ -46,7 +46,7 @@ void Skin::save (const gdx_cpp::files::FileHandle& skinFile) {
     }
 }
 
-gdx_cpp::utils::Json& Skin::getJsonLoader (const final& FileHandle) {
+gdx::Json& Skin::getJsonLoader (const final& FileHandle) {
     final Skin skin = this;
 
     Json json = new Json();
@@ -177,7 +177,7 @@ for (Entry<String, ObjectMap> valueEntry : valueMap.entries()) {
     return json;
 }
 
-void Skin::write (const gdx_cpp::utils::Json& json,const Object& object,const Class& valueType) {
+void Skin::write (const gdx::Json& json,const Object& object,const Class& valueType) {
     for (Entry<String, ?> entry : map.entries()) {
         if (entry.value.equals(object)) {
             json.writeValue(entry.key);
@@ -187,7 +187,7 @@ void Skin::write (const gdx_cpp::utils::Json& json,const Object& object,const Cl
     throw new SerializationException(object.getClass().getSimpleName() + " not found: " + object);
 }
 
-Object& Skin::read (const gdx_cpp::utils::Json& json,const Object& jsonData,const Class& type) {
+Object& Skin::read (const gdx::Json& json,const Object& jsonData,const Class& type) {
     String name = (String)jsonData;
     Object object = map.get(name);
     if (object == null) {
@@ -203,7 +203,7 @@ Object& Skin::read (const gdx_cpp::utils::Json& json,const Object& jsonData,cons
     return object;
 }
 
-void Skin::write (const gdx_cpp::utils::Json& json,const Skin& skin,const Class& valueType) {
+void Skin::write (const gdx::Json& json,const Skin& skin,const Class& valueType) {
     json.writeObjectStart();
     json.writeValue("resources", skin.data.resources);
 for (Entry<Class, ObjectMap<String, Object>> entry : data.resources.entries())
@@ -212,7 +212,7 @@ for (Entry<Class, ObjectMap<String, Object>> entry : data.resources.entries())
     json.writeObjectEnd();
 }
 
-Skin& Skin::read (const gdx_cpp::utils::Json& json,const Object& jsonData,const Class& ignored) {
+Skin& Skin::read (const gdx::Json& json,const Object& jsonData,const Class& ignored) {
     ObjectMap map = (ObjectMap)jsonData;
     readTypeMap(json, (ObjectMap)map.get("resources"), true);
 for (Entry<Class, ObjectMap<String, Object>> entry : data.resources.entries())
@@ -221,7 +221,7 @@ for (Entry<Class, ObjectMap<String, Object>> entry : data.resources.entries())
     return skin;
 }
 
-void Skin::readTypeMap (const gdx_cpp::utils::Json& json,gdx_cpp::utils::ObjectMapString, ObjectMap>& typeToValueMap,bool isResource) {
+void Skin::readTypeMap (const gdx::Json& json,gdx::ObjectMapString, ObjectMap>& typeToValueMap,bool isResource) {
     if (typeToValueMap == null)
         throw new SerializationException("Skin file is missing a \"" + (isResource ? "resources" : "styles")
                                          + "\" section.");
@@ -246,7 +246,7 @@ for (Entry<String, ObjectMap> valueEntry : valueMap.entries()) {
     }
 }
 
-void Skin::write (const gdx_cpp::utils::Json& json,const gdx_cpp::graphics::g2d::TextureRegion& region,const Class& valueType) {
+void Skin::write (const gdx::Json& json,const gdx::TextureRegion& region,const Class& valueType) {
     json.writeObjectStart();
     json.writeValue("x", region.getRegionX());
     json.writeValue("y", region.getRegionY());
@@ -255,7 +255,7 @@ void Skin::write (const gdx_cpp::utils::Json& json,const gdx_cpp::graphics::g2d:
     json.writeObjectEnd();
 }
 
-gdx_cpp::graphics::g2d::TextureRegion& Skin::read (const gdx_cpp::utils::Json& json,const Object& jsonData,const Class& type) {
+gdx::TextureRegion& Skin::read (const gdx::Json& json,const Object& jsonData,const Class& type) {
     int x = json.readValue("x", int.class, jsonData);
     int y = json.readValue("y", int.class, jsonData);
     int width = json.readValue("width", int.class, jsonData);
@@ -263,22 +263,22 @@ gdx_cpp::graphics::g2d::TextureRegion& Skin::read (const gdx_cpp::utils::Json& j
     return new TextureRegion(skin.data.texture, x, y, width, height);
 }
 
-void Skin::write (const gdx_cpp::utils::Json& json,const gdx_cpp::graphics::g2d::BitmapFont& font,const Class& valueType) {
+void Skin::write (const gdx::Json& json,const gdx::BitmapFont& font,const Class& valueType) {
     json.writeValue(font.getData().getFontFile().toString().replace('\\', '/'));
 }
 
-gdx_cpp::graphics::g2d::BitmapFont& Skin::read (const gdx_cpp::utils::Json& json,const Object& jsonData,const Class& type) {
+gdx::BitmapFont& Skin::read (const gdx::Json& json,const Object& jsonData,const Class& type) {
     String path = json.readValue(String.class, jsonData);
     FileHandle file = skinFile.parent().child(path);
     if (!file.exists()) file = Gdx.files.internal(path);
     return new BitmapFont(file, false);
 }
 
-void Skin::write (const gdx_cpp::utils::Json& json,const gdx_cpp::graphics::g2d::NinePatch& ninePatch,const Class& valueType) {
+void Skin::write (const gdx::Json& json,const gdx::NinePatch& ninePatch,const Class& valueType) {
     json.writeValue(ninePatch.getPatches());
 }
 
-gdx_cpp::graphics::g2d::NinePatch& Skin::read (const gdx_cpp::utils::Json& json,const Object& jsonData,const Class& type) {
+gdx::NinePatch& Skin::read (const gdx::Json& json,const Object& jsonData,const Class& type) {
     return new NinePatch(json.readValue(TextureRegion[].class, jsonData));
 }
 
@@ -286,7 +286,7 @@ Skin::Skin () {
     data = new SkinData();
 }
 
-Skin::Skin (const gdx_cpp::files::FileHandle& skinFile,const gdx_cpp::files::FileHandle& textureFile) {
+Skin::Skin (const gdx::FileHandle& skinFile,const gdx::FileHandle& textureFile) {
     data = new SkinData();
     data.texture = new Texture(textureFile);
     try {
@@ -296,7 +296,7 @@ Skin::Skin (const gdx_cpp::files::FileHandle& skinFile,const gdx_cpp::files::Fil
     }
 }
 
-Skin::Skin (const gdx_cpp::files::FileHandle& skinFile,const SkinData& data) {
+Skin::Skin (const gdx::FileHandle& skinFile,const SkinData& data) {
     this.data = data;
     data.texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
     try {

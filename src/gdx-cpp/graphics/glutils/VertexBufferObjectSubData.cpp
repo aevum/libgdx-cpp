@@ -26,9 +26,7 @@
 #include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
 #include "gdx-cpp/gl.hpp"
 
-using namespace gdx_cpp::graphics::glutils;
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp;
+using namespace gdx;
 
 int VertexBufferObjectSubData::createBufferObject () {
     if (Gdx::gl20 != NULL) {
@@ -45,7 +43,7 @@ int VertexBufferObjectSubData::createBufferObject () {
     return tmpHandle;
 }
 
-gdx_cpp::graphics::VertexAttributes& VertexBufferObjectSubData::getAttributes () {
+VertexAttributes& VertexBufferObjectSubData::getAttributes () {
     return attributes;
 }
 
@@ -57,7 +55,7 @@ int VertexBufferObjectSubData::getNumMaxVertices () {
     return byteBuffer.capacity() / attributes.vertexSize;
 }
 
-utils::float_buffer& VertexBufferObjectSubData::getBuffer () {
+float_buffer& VertexBufferObjectSubData::getBuffer () {
     isDirty = true;
     return buffer;
 }
@@ -248,7 +246,7 @@ int VertexBufferObjectSubData::getBufferHandle () {
     return bufferHandle;
 }
 
-VertexBufferObjectSubData::VertexBufferObjectSubData(bool isStatic, int numVertices, const std::vector< gdx_cpp::graphics::VertexAttribute >& attributes)
+VertexBufferObjectSubData::VertexBufferObjectSubData(bool isStatic, int numVertices, const std::vector< VertexAttribute >& attributes)
         :
         bufferHandle(0)
         , tmpHandle(0)

@@ -20,14 +20,11 @@
 
 #include "gdx-cpp/audio/AudioDevice.hpp"
 
-namespace gdx_cpp {
-
-namespace backends {
+namespace gdx {
 
 namespace nix {
   
-class LinuxOpenALAudioDevice: public gdx_cpp::audio::AudioDevice
-{
+class LinuxOpenALAudioDevice: public gdx::AudioDevice {
 
 public:
     bool isMono ();
@@ -41,7 +38,6 @@ protected:
 
 private:
 };
-}
 }
 }
 

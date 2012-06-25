@@ -20,9 +20,9 @@
 
 #include "CameraGroupStrategy.hpp"
 
-using namespace gdx_cpp::graphics::g3d::decals;
+using namespace gdx::g3d::decals;
 
-gdx_cpp::utils::ArrayDecal>& CameraGroupStrategy::newObject () {
+gdx::ArrayDecal>& CameraGroupStrategy::newObject () {
     return new Array<Decal>();
 }
 
@@ -32,11 +32,11 @@ int CameraGroupStrategy::compare (const Decal& o1,const Decal& o2) {
     return (int)Math.signum(dist2 - dist1);
 }
 
-void CameraGroupStrategy::setCamera (const gdx_cpp::graphics::Camera& camera) {
+void CameraGroupStrategy::setCamera (const gdx::Camera& camera) {
     this.camera = camera;
 }
 
-gdx_cpp::graphics::Camera& CameraGroupStrategy::getCamera () {
+gdx::Camera& CameraGroupStrategy::getCamera () {
     return camera;
 }
 
@@ -44,7 +44,7 @@ int CameraGroupStrategy::decideGroup (const Decal& decal) {
     return decal.getMaterial().isOpaque() ? GROUP_OPAQUE : GROUP_BLEND;
 }
 
-void CameraGroupStrategy::beforeGroup (int group,gdx_cpp::utils::ArrayDecal>& contents) {
+void CameraGroupStrategy::beforeGroup (int group,gdx::ArrayDecal>& contents) {
     if (group == GROUP_BLEND) {
         Gdx.gl.glEnable(GL10.GL_BLEND);
         contents.sort(cameraSorter);
@@ -130,7 +130,7 @@ void CameraGroupStrategy::createDefaultShader () {
     }
 }
 
-gdx_cpp::graphics::glutils::ShaderProgram& CameraGroupStrategy::getGroupShader (int group) {
+gdx::ShaderProgram& CameraGroupStrategy::getGroupShader (int group) {
     return shader;
 }
 

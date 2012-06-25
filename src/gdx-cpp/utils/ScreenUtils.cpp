@@ -20,15 +20,15 @@
 
 #include "ScreenUtils.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx::utils;
 
-gdx_cpp::graphics::g2d::TextureRegion& ScreenUtils::getFrameBufferTexture () {
+gdx::TextureRegion& ScreenUtils::getFrameBufferTexture () {
     final int w = Gdx.graphics.getWidth();
     final int h = Gdx.graphics.getHeight();
     return getFrameBufferTexture(0, 0, w, h);
 }
 
-gdx_cpp::graphics::g2d::TextureRegion& ScreenUtils::getFrameBufferTexture (int x,int y,int w,int h) {
+gdx::TextureRegion& ScreenUtils::getFrameBufferTexture (int x,int y,int w,int h) {
     final int potW = MathUtils.nextPowerOfTwo(w);
     final int potH = MathUtils.nextPowerOfTwo(h);
 

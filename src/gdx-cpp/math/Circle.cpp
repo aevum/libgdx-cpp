@@ -22,7 +22,7 @@
 #include "Circle.hpp"
 #include "Vector2.hpp"
 
-using namespace gdx_cpp::math;
+using namespace gdx;
 
 Circle::Circle(): x(0.0), y(0.0), radius(0.0)
 {
@@ -70,7 +70,7 @@ bool Circle::contains (const Vector2& point) {
     return _x * _x + _y * _y <= radius * radius;
 }
 
-void gdx_cpp::math::Circle::set(float x, float y, float radius)
+void Circle::set(float x, float y, float radius)
 {
     this->x = x;
     this->y = y;

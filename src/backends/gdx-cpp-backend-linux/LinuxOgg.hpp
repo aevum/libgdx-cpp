@@ -21,12 +21,8 @@
 #include "LinuxOpenALMusic.hpp"
 
 
-namespace gdx_cpp {
-namespace files {
+namespace gdx {
 class FileHandle;
-}
-
-namespace backends {
 
 namespace nix {
 class LinuxOpenALAudio;
@@ -35,13 +31,13 @@ class LinuxOggInputStream;
 class LinuxOggSound : public LinuxOpenALSound
 {
 public :
-    LinuxOggSound(gdx_cpp::backends::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx_cpp::files::FileHandle >::type file);
+    LinuxOggSound(gdx::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx::FileHandle >::type file);
 };
 
 class LinuxOggMusic : public LinuxOpenALMusic
 {
 public :
-    LinuxOggMusic(gdx_cpp::backends::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx_cpp::files::FileHandle >::type file);
+    LinuxOggMusic(gdx::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx::FileHandle >::type file);
     ~LinuxOggMusic();
 protected:
     int read (char * buffer, int bufferSize);
@@ -50,8 +46,6 @@ private:
     LinuxOggInputStream * input;
 };
 
-
-}
 
 }
 

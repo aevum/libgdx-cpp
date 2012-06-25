@@ -39,11 +39,10 @@
 
 #include <gdx-cpp/gl.hpp>
 
-using namespace gdx_cpp::backends::nix;
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp;
+using namespace gdx::nix;
+using namespace gdx;
 
-gdx_cpp::backends::nix::LinuxGraphics::LinuxGraphics() :
+gdx::nix::LinuxGraphics::LinuxGraphics() :
 gl10(0)
 ,gl11(0)
 ,gl20(0)
@@ -58,87 +57,87 @@ gl10(0)
 {
 }
 
-gdx_cpp::graphics::GL10* gdx_cpp::backends::nix::LinuxGraphics::getGL10()
+gdx::GL10* gdx::nix::LinuxGraphics::getGL10()
 {
     return gl10;
 }
 
-gdx_cpp::graphics::GL11* gdx_cpp::backends::nix::LinuxGraphics::getGL11()
+gdx::GL11* gdx::nix::LinuxGraphics::getGL11()
 {
     return gl11;
 }
 
-gdx_cpp::graphics::GL20* gdx_cpp::backends::nix::LinuxGraphics::getGL20()
+gdx::GL20* gdx::nix::LinuxGraphics::getGL20()
 {
     return gl20;
 }
 
-gdx_cpp::graphics::GLU* gdx_cpp::backends::nix::LinuxGraphics::getGLU()
+gdx::GLU* gdx::nix::LinuxGraphics::getGLU()
 {
     return glu;
 }
 
-gdx_cpp::Graphics::BufferFormat gdx_cpp::backends::nix::LinuxGraphics::getBufferFormat()
+gdx::Graphics::BufferFormat gdx::nix::LinuxGraphics::getBufferFormat()
 {
     throw std::runtime_error("not implemented yet");
 }
 
-float gdx_cpp::backends::nix::LinuxGraphics::getDeltaTime()
+float gdx::nix::LinuxGraphics::getDeltaTime()
 {
     return deltaTime;
 }
 
-float gdx_cpp::backends::nix::LinuxGraphics::getDensity()
+float gdx::nix::LinuxGraphics::getDensity()
 {
     return 0;
 }
 
-gdx_cpp::Graphics::DisplayMode gdx_cpp::backends::nix::LinuxGraphics::getDesktopDisplayMode()
+gdx::Graphics::DisplayMode gdx::nix::LinuxGraphics::getDesktopDisplayMode()
 {
     throw std::runtime_error("not implemented yet");
 }
 
-std::vector< gdx_cpp::Graphics::DisplayMode >& gdx_cpp::backends::nix::LinuxGraphics::getDisplayModes()
+std::vector< gdx::Graphics::DisplayMode >& gdx::nix::LinuxGraphics::getDisplayModes()
 {
     throw std::runtime_error("not implemented yet");
 }
 
-int gdx_cpp::backends::nix::LinuxGraphics::getFramesPerSecond()
+int gdx::nix::LinuxGraphics::getFramesPerSecond()
 {
     return this->fps;
 }
 
-gdx_cpp::graphics::GLCommon* gdx_cpp::backends::nix::LinuxGraphics::getGLCommon()
+gdx::GLCommon* gdx::nix::LinuxGraphics::getGLCommon()
 {
     return gl10;
 }
 
-int gdx_cpp::backends::nix::LinuxGraphics::getHeight()
+int gdx::nix::LinuxGraphics::getHeight()
 {
     return this->height;
 }
 
-float gdx_cpp::backends::nix::LinuxGraphics::getPpcX()
+float gdx::nix::LinuxGraphics::getPpcX()
 {
     return 0;
 }
 
-float gdx_cpp::backends::nix::LinuxGraphics::getPpcY()
+float gdx::nix::LinuxGraphics::getPpcY()
 {
     return 0;
 }
 
-float gdx_cpp::backends::nix::LinuxGraphics::getPpiX()
+float gdx::nix::LinuxGraphics::getPpiX()
 {
     return 0;
 }
 
-float gdx_cpp::backends::nix::LinuxGraphics::getPpiY()
+float gdx::nix::LinuxGraphics::getPpiY()
 {
     return 0;
 }
 
-void gdx_cpp::backends::nix::LinuxGraphics::updateTime()
+void gdx::nix::LinuxGraphics::updateTime()
 {
     uint64_t time = Gdx::system->nanoTime();
 
@@ -153,66 +152,66 @@ void gdx_cpp::backends::nix::LinuxGraphics::updateTime()
     frames++;
 }
 
-gdx_cpp::Graphics::GraphicsType gdx_cpp::backends::nix::LinuxGraphics::getType()
+gdx::Graphics::GraphicsType gdx::nix::LinuxGraphics::getType()
 {
-    return gdx_cpp::Graphics::SdlGL;
+    return gdx::Graphics::SdlGL;
 }
 
-int gdx_cpp::backends::nix::LinuxGraphics::getWidth()
+int gdx::nix::LinuxGraphics::getWidth()
 {
     return this->width;
 }
 
-bool gdx_cpp::backends::nix::LinuxGraphics::isGL11Available()
+bool gdx::nix::LinuxGraphics::isGL11Available()
 {
     return gl11 != NULL;
 }
 
-bool gdx_cpp::backends::nix::LinuxGraphics::isGL20Available()
+bool gdx::nix::LinuxGraphics::isGL20Available()
 {
     return gl20 != NULL;
 }
 
-bool gdx_cpp::backends::nix::LinuxGraphics::setDisplayMode(gdx_cpp::Graphics::DisplayMode displayMode)
+bool gdx::nix::LinuxGraphics::setDisplayMode(gdx::Graphics::DisplayMode displayMode)
 {
     if (!supportsDisplayModeChange())
         return false;
     return true;
 }
 
-void gdx_cpp::backends::nix::LinuxGraphics::setIcon(gdx_cpp::graphics::Pixmap::ptr pixmap)
+void gdx::nix::LinuxGraphics::setIcon(gdx::Pixmap::ptr pixmap)
 {
     this->iconPixmap = pixmap;
 }
 
-void gdx_cpp::backends::nix::LinuxGraphics::setTitle(const std::string& title)
+void gdx::nix::LinuxGraphics::setTitle(const std::string& title)
 {
     this->title = title;
 }
 
-void gdx_cpp::backends::nix::LinuxGraphics::setVSync(bool vsync)
+void gdx::nix::LinuxGraphics::setVSync(bool vsync)
 {
     this->vsync = true;
 }
 
-bool gdx_cpp::backends::nix::LinuxGraphics::supportsDisplayModeChange()
+bool gdx::nix::LinuxGraphics::supportsDisplayModeChange()
 {
     return false;
 }
 
-bool gdx_cpp::backends::nix::LinuxGraphics::supportsExtension(const std::string& extension)
+bool gdx::nix::LinuxGraphics::supportsExtension(const std::string& extension)
 {
     return false;
 }
 
-void gdx_cpp::backends::nix::LinuxGraphics::initialize()
+void gdx::nix::LinuxGraphics::initialize()
 {   
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         throw std::runtime_error("Failed to initialize SDL video");
     }
 }
 
-bool gdx_cpp::backends::nix::LinuxGraphics::setDisplayMode(int width, int height, bool fullscreen)
+bool gdx::nix::LinuxGraphics::setDisplayMode(int width, int height, bool fullscreen)
 {
     this->lastTime = Gdx::system->nanoTime();
     this->width = width;
@@ -238,51 +237,51 @@ bool gdx_cpp::backends::nix::LinuxGraphics::setDisplayMode(int width, int height
     return setupGLModes();
 }
 
-void gdx_cpp::backends::nix::LinuxGraphics::update()
+void gdx::nix::LinuxGraphics::update()
 {
     SDL_GL_SwapBuffers();
 }
 
-TextureData::ptr backends::nix::LinuxGraphics::resolveTextureData(files::FileHandle::ptr fileHandle,
+TextureData::ptr nix::LinuxGraphics::resolveTextureData(FileHandle::ptr fileHandle,
                                                                   Pixmap::ptr preloadedPixmap,
-                                                                  const gdx_cpp::graphics::Pixmap::Format* format,
+                                                                  const gdx::Pixmap::Format* format,
                                                                   bool useMipMaps)
 {
-    return TextureData::ptr(new glutils::FileTextureData(fileHandle, preloadedPixmap, format, useMipMaps));
+    return TextureData::ptr(new FileTextureData(fileHandle, preloadedPixmap, format, useMipMaps));
 }
 
-Pixmap* backends::nix::LinuxGraphics::resolvePixmap(int width, int height, const gdx_cpp::graphics::Pixmap::Format& format, int pixType)
+Pixmap* nix::LinuxGraphics::resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, int pixType)
 {
     switch(pixType) {
         case Pixmap::Gdx2d:
-            return g2d::Gdx2DPixmap::newPixmap(width, height, g2d::Gdx2DPixmap::Format::toGdx2DPixmapFormat(format));
+            return Gdx2DPixmap::newPixmap(width, height, Gdx2DPixmap::Format::toGdx2DPixmapFormat(format));
         case Pixmap::Svg:
-            return new g2d::svg::AggSvgPixmap(width, height);
+            return new AggSvgPixmap(width, height);
     }
 }
 
-Pixmap* backends::nix::LinuxGraphics::resolvePixmap(const gdx_cpp::graphics::Pixmap& other)
+Pixmap* nix::LinuxGraphics::resolvePixmap(const gdx::Pixmap& other)
 {
     switch(other.getType()) {
         case Pixmap::Gdx2d:
-            return new g2d::Gdx2DPixmap((g2d::Gdx2DPixmap&)other);
+            return new Gdx2DPixmap((Gdx2DPixmap&)other);
     } 
 }
 
-Pixmap* backends::nix::LinuxGraphics::resolvePixmap(const files::FileHandle::ptr& file)
+Pixmap* nix::LinuxGraphics::resolvePixmap(const FileHandle::ptr& file)
 {
     std::string extension = file->extension();
     
     if (extension == "png" || extension == "jpg" || extension == "tga" || extension == "bmp")
-        return g2d::Gdx2DPixmap::newPixmapFromFile(file, 0);
+        return Gdx2DPixmap::newPixmapFromFile(file, 0);
     else if (extension == "svg") {
-        return g2d::svg::AggSvgPixmap::newFromFile(file);        
+        return AggSvgPixmap::newFromFile(file);        
     } else {
         throw std::runtime_error("unsupported image format: " + extension);
     }
 }
 
-bool gdx_cpp::backends::nix::LinuxGraphics::setupGLModes()
+bool gdx::nix::LinuxGraphics::setupGLModes()
 {
     std::string version =  (const char*) ::glGetString(GL_VERSION);
 

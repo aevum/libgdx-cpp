@@ -26,8 +26,7 @@
 
 #undef GL_GENERATE_MIPMAP
 
-namespace gdx_cpp {
-namespace graphics {
+namespace gdx {
 
 class GLCommon {
 public:
@@ -86,7 +85,6 @@ protected:
     std::set<int> enabled_states;
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GLCOMMON_HPP_

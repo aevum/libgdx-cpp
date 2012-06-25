@@ -31,8 +31,7 @@
 
 #include "gdx-cpp/files/FileHandle.hpp"
 
-namespace gdx_cpp {
-namespace utils {
+namespace gdx {
 
 class XmlReader {
        
@@ -69,7 +68,7 @@ public:
         void setAttribute (const std::string& name, const std::string& value) ;
         int getChildCount () ;
         Element::ptr const getChild (int i) ;
-        void addChild (const gdx_cpp::utils::XmlReader::Element::ptr& element) ;
+        void addChild (const XmlReader::Element::ptr& element) ;
         const std::string& getText () ;
         void setText (const std::string& text) ;
         std::string toString () const;
@@ -111,7 +110,7 @@ public:
     
     Element::ptr parse (const std::string& xml);
     Element::ptr parse (std::ifstream& reader);
-    Element::ptr parse (gdx_cpp::files::FileHandle& file);
+    Element::ptr parse (FileHandle& file);
     Element::ptr parse (const char* data, int offset, int length);
 
 protected:
@@ -146,7 +145,6 @@ private:
     Element::ElementVector elements;
 };
 
-} // namespace gdx_cpp
-} // namespace utils
+} // namespace gdx
 
 #endif // GDX_CPP_UTILS_XMLREADER_HPP_

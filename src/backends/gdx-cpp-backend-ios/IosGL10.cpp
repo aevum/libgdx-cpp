@@ -20,7 +20,7 @@
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
 
-using namespace gdx_cpp::backends::ios;
+using namespace gdx::ios;
 
 void IosGL10::glActiveTexture(int texture) const {
     ::glActiveTexture ( texture);

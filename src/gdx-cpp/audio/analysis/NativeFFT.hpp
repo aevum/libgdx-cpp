@@ -24,11 +24,9 @@
 #include <vector>
 #include "gdx-cpp/utils/Disposable.hpp"
 
-namespace gdx_cpp {
-namespace audio {
-namespace analysis {
+namespace gdx {
 
-class NativeFFT: public gdx_cpp::utils::Disposable {
+class NativeFFT: public Disposable {
 public:
     void spectrum (std::vector<float>& samples,std::vector<float>& spectrum,int numSamples);
     void dispose ();
@@ -41,8 +39,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace audio
-} // namespace analysis
+} // namespace gdx
 
 #endif // GDX_CPP_AUDIO_ANALYSIS_NATIVEFFT_HPP_

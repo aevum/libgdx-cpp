@@ -27,10 +27,9 @@
 #include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
 #include <stdexcept>
 
-using namespace gdx_cpp::graphics::g2d;
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
-gdx_cpp::graphics::g2d::Sprite::Sprite()
+Sprite::Sprite()
  : color(1,1,1,1)
  , scaleX(1)
  , scaleY(1)
@@ -134,7 +133,7 @@ void Sprite::translate (float xAmount,float yAmount) {
     vertices[Y4] += yAmount;
 }
 
-void Sprite::setColor (const gdx_cpp::graphics::Color& tint) {
+void Sprite::setColor (const Color& tint) {
     float color = tint.toFloatBits();
     vertices[C1] = color;
     vertices[C2] = color;
@@ -145,7 +144,7 @@ void Sprite::setColor (const gdx_cpp::graphics::Color& tint) {
 void Sprite::setColor (float r,float g,float b,float a) {
     int intBits = ((int)(255 * a) << 24) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r));
 
-    float color =  gdx_cpp::utils::NumberUtils::intBitsToFloat(intBits & 0xfeffffff);
+    float color =  NumberUtils::intBitsToFloat(intBits & 0xfeffffff);
 
     vertices[C1] = color;
     vertices[C2] = color;
@@ -232,8 +231,8 @@ float* const Sprite::getVertices () {
             localY2 *= scaleY;
         }
         if (rotation != 0) {
-            float cos = gdx_cpp::math::utils::cosDeg(rotation);
-            float sin = gdx_cpp::math::utils::sinDeg(rotation);
+            float cos = cosDeg(rotation);
+            float sin = sinDeg(rotation);
             
             float localXCos = localX * cos;
             float localXSin = localX * sin;
@@ -284,7 +283,7 @@ float* const Sprite::getVertices () {
     return vertices;
 }
 
-const gdx_cpp::math::Rectangle& Sprite::getBoundingRectangle () {
+const Rectangle& Sprite::getBoundingRectangle () {
     getVertices();
 
     float minx = vertices[X1];
@@ -366,9 +365,9 @@ float Sprite::getScaleY () {
     return scaleY;
 }
 
-const gdx_cpp::graphics::Color& Sprite::getColor () {
+const Color& Sprite::getColor () {
     float floatBits = vertices[C1];
-    int intBits = gdx_cpp::utils::NumberUtils::floatToRawIntBits(vertices[C1]);
+    int intBits = NumberUtils::floatToRawIntBits(vertices[C1]);
     color.r = (intBits & 0xff) / 255.0f;
     color.g = (((unsigned int )intBits >> 8) & 0xff) / 255.0f;
     color.b = (((unsigned int )intBits >> 16) & 0xff) / 255.0f;
@@ -483,7 +482,7 @@ Sprite::Sprite(Texture::ptr texture, int srcX, int srcY, int srcWidth, int srcHe
     initialize(texture, srcX, srcY, srcWidth, srcHeight);
 }
 
-void Sprite::initialize(graphics::Texture::ptr texture, int srcX, int srcY, int srcWidth, int srcHeight)
+void Sprite::initialize(Texture::ptr texture, int srcX, int srcY, int srcWidth, int srcHeight)
 {
     if (texture == NULL)
         throw std::runtime_error("texture cannot be null.");

@@ -20,7 +20,7 @@
 
 #include "InputAdapter.hpp"
 
-using namespace gdx_cpp;
+using namespace gdx;
 
 bool InputAdapter::keyDown (int keycode) {
     return false;

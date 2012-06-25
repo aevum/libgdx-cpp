@@ -23,9 +23,7 @@
 
 #include <vector>
 
-namespace gdx_cpp {
-namespace audio {
-namespace analysis {
+namespace gdx {
 
 class FourierTransform {
 public:
@@ -89,8 +87,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace audio
-} // namespace analysis
+} // namespace gdx
 
 #endif // GDX_CPP_AUDIO_ANALYSIS_FOURIERTRANSFORM_HPP_

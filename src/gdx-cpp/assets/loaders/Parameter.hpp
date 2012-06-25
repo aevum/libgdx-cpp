@@ -18,19 +18,11 @@
 #ifndef GDX_CPP_ASSETS_LOADERS_PARAMETER_HPP
 #define GDX_CPP_ASSETS_LOADERS_PARAMETER_HPP
 
-namespace gdx_cpp {
-
-namespace assets {
-
-namespace loaders {
+namespace gdx {
 
 struct Parameter
 {
 };
-
-}
-
-}
 
 }
 

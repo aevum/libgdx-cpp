@@ -20,12 +20,8 @@
 #include <string>
 #include "gdx-cpp/utils/Aliases.hpp"
 
-namespace gdx_cpp {
-
-namespace files {
-    class FileHandle;
-}
-    
+namespace gdx {
+class FileHandle;
 class Files {
 public:
     enum FileType {
@@ -44,13 +40,13 @@ public:
         Absolute
     };
 
-    virtual ref_ptr_maker<files::FileHandle>::type getFileHandle (const std::string& path, FileType type) = 0;
+    virtual ref_ptr_maker<FileHandle>::type getFileHandle (const std::string& path, FileType type) = 0;
 
-    virtual ref_ptr_maker<files::FileHandle>::type internal (const std::string& path) = 0;
+    virtual ref_ptr_maker<FileHandle>::type internal (const std::string& path) = 0;
 
-    virtual ref_ptr_maker<files::FileHandle>::type external (const std::string& path) = 0;
+    virtual ref_ptr_maker<FileHandle>::type external (const std::string& path) = 0;
 
-    virtual ref_ptr_maker<files::FileHandle>::type absolute (const std::string& path) = 0;
+    virtual ref_ptr_maker<FileHandle>::type absolute (const std::string& path) = 0;
 
     virtual std::string getExternalStoragePath () = 0;
 

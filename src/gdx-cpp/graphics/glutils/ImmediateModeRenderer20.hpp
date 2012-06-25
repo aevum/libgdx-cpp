@@ -28,17 +28,14 @@
 #include <string>
 #include <vector>
 
-namespace gdx_cpp {
-namespace graphics {
-namespace glutils {
-
+namespace gdx {
 class ImmediateModeRenderer20 : public ImmediateModeRenderer {
 public:
     RendererType getRendererType() { return IMMEDIATE_GLES20; }
     
     std::string createVertexShader (bool hasNormals, bool hasColors, int numTexCoords);
-    void begin (gdx_cpp::math::Matrix4& projModelView,int primitiveType);
-    void begin (gdx_cpp::graphics::glutils::ShaderProgram* shader, int primitiveType);
+    void begin (Matrix4& projModelView,int primitiveType);
+    void begin (ShaderProgram* shader, int primitiveType);
     void color (float r,float g,float b,float a);
     void texCoord (float u,float v);
     void normal (float x,float y,float z);
@@ -62,7 +59,7 @@ protected:
     int normalOffset;
     int colorOffset;
     int texCoordOffset ;
-    math::Matrix4 projModelView;
+    Matrix4 projModelView;
     float* vertices;
     ShaderProgram* customShader ;
     ShaderProgram* defaultShader ;
@@ -71,12 +68,10 @@ protected:
     std::string fragmentShader;
 
 private:
-    std::vector<gdx_cpp::graphics::VertexAttribute> buildVertexAttributes (bool hasNormals,bool hasColor,int numTexCoords);
+    std::vector<VertexAttribute> buildVertexAttributes (bool hasNormals,bool hasColor,int numTexCoords);
     std::string createFragmentShader (bool hasNormals, bool hasColors, int numTexCoords);
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace glutils
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GLUTILS_IMMEDIATEMODERENDERER20_HPP_

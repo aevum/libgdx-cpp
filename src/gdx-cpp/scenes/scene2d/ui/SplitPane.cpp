@@ -20,7 +20,7 @@
 
 #include "SplitPane.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui;
+using namespace gdx::ui;
 
 void SplitPane::setStyle (const SplitPaneStyle& style) {
     this.style = style;
@@ -74,7 +74,7 @@ float SplitPane::getMaxHeight () {
     return 0;
 }
 
-void SplitPane::calculateBoundsAndPositions (const gdx_cpp::math::Matrix4& transform) {
+void SplitPane::calculateBoundsAndPositions (const gdx::Matrix4& transform) {
     if (oldSplitAmount != splitAmount) {
         oldSplitAmount = splitAmount;
         invalidate();
@@ -141,7 +141,7 @@ void SplitPane::calculateVertBoundsAndPositions () {
     handleBounds.set(0, bottomAreaHeight, width, handleHeight);
 }
 
-void SplitPane::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void SplitPane::draw (const gdx::SpriteBatch& batch,float parentAlpha) {
     NinePatch handle = style.handle;
 
     applyTransform(batch);
@@ -209,7 +209,7 @@ void SplitPane::touchDragged (float x,float y,int pointer) {
         super.touchDragged(x, y, pointer);
 }
 
-gdx_cpp::scenes::scene2d::Actor& SplitPane::hit (float x,float y) {
+gdx::Actor& SplitPane::hit (float x,float y) {
     return x > 0 && x < width && y > 0 && y < height ? this : null;
 }
 
@@ -234,7 +234,7 @@ void SplitPane::setMaxSplitAmount (float maxAmount) {
     this.maxAmount = maxAmount;
 }
 
-void SplitPane::setWidgets (const gdx_cpp::scenes::scene2d::Actor& firstWidget,const gdx_cpp::scenes::scene2d::Actor& secondWidget) {
+void SplitPane::setWidgets (const gdx::Actor& firstWidget,const gdx::Actor& secondWidget) {
     if (firstWidget == null) throw new IllegalArgumentException("firstWidget must not be null");
     if (secondWidget == null) throw new IllegalArgumentException("secondWidget must not be null");
     this.removeActor(this.firstWidget);
@@ -246,15 +246,15 @@ void SplitPane::setWidgets (const gdx_cpp::scenes::scene2d::Actor& firstWidget,c
     invalidate();
 }
 
-SplitPane::SplitPane (const gdx_cpp::scenes::scene2d::Actor& firstWidget,const gdx_cpp::scenes::scene2d::Actor& secondWidget,bool vertical,const gdx_cpp::scenes::scene2d::Stage& stage,const Skin& skin) {
+SplitPane::SplitPane (const gdx::Actor& firstWidget,const gdx::Actor& secondWidget,bool vertical,const gdx::Stage& stage,const Skin& skin) {
     this(firstWidget, secondWidget, vertical, stage, skin.getStyle(SplitPaneStyle.class), null);
 }
 
-SplitPane::SplitPane (const gdx_cpp::scenes::scene2d::Actor& firstWidget,const gdx_cpp::scenes::scene2d::Actor& secondWidget,bool vertical,const gdx_cpp::scenes::scene2d::Stage& stage,const SplitPaneStyle& style) {
+SplitPane::SplitPane (const gdx::Actor& firstWidget,const gdx::Actor& secondWidget,bool vertical,const gdx::Stage& stage,const SplitPaneStyle& style) {
     this(firstWidget, secondWidget, vertical, stage, style, null);
 }
 
-SplitPane::SplitPane (const gdx_cpp::scenes::scene2d::Actor& firstWidget,const gdx_cpp::scenes::scene2d::Actor& secondWidget,bool vertical,const gdx_cpp::scenes::scene2d::Stage& stage,const SplitPaneStyle& style,const std::string& name) {
+SplitPane::SplitPane (const gdx::Actor& firstWidget,const gdx::Actor& secondWidget,bool vertical,const gdx::Stage& stage,const SplitPaneStyle& style,const std::string& name) {
     super(name);
     this.stage = stage;
     setStyle(style);

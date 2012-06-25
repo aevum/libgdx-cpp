@@ -26,7 +26,7 @@
 
 class Runnable;
 
-namespace gdx_cpp {
+namespace gdx {
 
 class Graphics;
 class Audio;

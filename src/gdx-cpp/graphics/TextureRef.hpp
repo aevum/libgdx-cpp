@@ -21,8 +21,7 @@
 #ifndef GDX_CPP_GRAPHICS_TEXTUREREF_HPP_
 #define GDX_CPP_GRAPHICS_TEXTUREREF_HPP_
 
-namespace gdx_cpp {
-namespace graphics {
+namespace gdx {
 
 class TextureRef {
 public:
@@ -39,7 +38,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_TEXTUREREF_HPP_

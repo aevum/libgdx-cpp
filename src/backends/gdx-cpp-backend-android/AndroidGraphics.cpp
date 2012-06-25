@@ -39,11 +39,10 @@
 #include <gdx-cpp/gl.hpp>
 #include "AndroidGLU.hpp"
 
-using namespace gdx_cpp::backends::android;
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp;
+using namespace gdx::android;
+using namespace gdx;
 
-gdx_cpp::backends::android::AndroidGraphics::AndroidGraphics() :
+gdx::android::AndroidGraphics::AndroidGraphics() :
 gl10(0)
 ,gl11(0)
 ,gl20(0)
@@ -58,87 +57,87 @@ gl10(0)
 {
 }
 
-gdx_cpp::graphics::GL10* gdx_cpp::backends::android::AndroidGraphics::getGL10()
+gdx::GL10* gdx::android::AndroidGraphics::getGL10()
 {
     return gl10;
 }
 
-gdx_cpp::graphics::GL11* gdx_cpp::backends::android::AndroidGraphics::getGL11()
+gdx::GL11* gdx::android::AndroidGraphics::getGL11()
 {
     return gl11;
 }
 
-gdx_cpp::graphics::GL20* gdx_cpp::backends::android::AndroidGraphics::getGL20()
+gdx::GL20* gdx::android::AndroidGraphics::getGL20()
 {
     return gl20;
 }
 
-gdx_cpp::graphics::GLU* gdx_cpp::backends::android::AndroidGraphics::getGLU()
+gdx::GLU* gdx::android::AndroidGraphics::getGLU()
 {
     return glu;
 }
 
-gdx_cpp::Graphics::BufferFormat gdx_cpp::backends::android::AndroidGraphics::getBufferFormat()
+gdx::Graphics::BufferFormat gdx::android::AndroidGraphics::getBufferFormat()
 {
 
 }
 
-float gdx_cpp::backends::android::AndroidGraphics::getDeltaTime()
+float gdx::android::AndroidGraphics::getDeltaTime()
 {
     return deltaTime;
 }
 
-float gdx_cpp::backends::android::AndroidGraphics::getDensity()
+float gdx::android::AndroidGraphics::getDensity()
 {
 
 }
 
-gdx_cpp::Graphics::DisplayMode gdx_cpp::backends::android::AndroidGraphics::getDesktopDisplayMode()
+gdx::Graphics::DisplayMode gdx::android::AndroidGraphics::getDesktopDisplayMode()
 {
 
 }
 
-std::vector< gdx_cpp::Graphics::DisplayMode >& gdx_cpp::backends::android::AndroidGraphics::getDisplayModes()
+std::vector< gdx::Graphics::DisplayMode >& gdx::android::AndroidGraphics::getDisplayModes()
 {
 
 }
 
-int gdx_cpp::backends::android::AndroidGraphics::getFramesPerSecond()
+int gdx::android::AndroidGraphics::getFramesPerSecond()
 {
     return this->fps;
 }
 
-gdx_cpp::graphics::GLCommon* gdx_cpp::backends::android::AndroidGraphics::getGLCommon()
+gdx::GLCommon* gdx::android::AndroidGraphics::getGLCommon()
 {
     return gl10;
 }
 
-int gdx_cpp::backends::android::AndroidGraphics::getHeight()
+int gdx::android::AndroidGraphics::getHeight()
 {
     return this->height;
 }
 
-float gdx_cpp::backends::android::AndroidGraphics::getPpcX()
+float gdx::android::AndroidGraphics::getPpcX()
 {
 
 }
 
-float gdx_cpp::backends::android::AndroidGraphics::getPpcY()
+float gdx::android::AndroidGraphics::getPpcY()
 {
 
 }
 
-float gdx_cpp::backends::android::AndroidGraphics::getPpiX()
+float gdx::android::AndroidGraphics::getPpiX()
 {
 
 }
 
-float gdx_cpp::backends::android::AndroidGraphics::getPpiY()
+float gdx::android::AndroidGraphics::getPpiY()
 {
 
 }
 
-void gdx_cpp::backends::android::AndroidGraphics::updateTime()
+void gdx::android::AndroidGraphics::updateTime()
 {
     uint64_t time = Gdx::system->nanoTime();
 
@@ -160,58 +159,58 @@ void gdx_cpp::backends::android::AndroidGraphics::updateTime()
     frames++;
 }
 
-gdx_cpp::Graphics::GraphicsType gdx_cpp::backends::android::AndroidGraphics::getType()
+gdx::Graphics::GraphicsType gdx::android::AndroidGraphics::getType()
 {
-    return gdx_cpp::Graphics::AndroidGL;
+    return gdx::Graphics::AndroidGL;
 }
 
-int gdx_cpp::backends::android::AndroidGraphics::getWidth()
+int gdx::android::AndroidGraphics::getWidth()
 {
     return this->width;
 }
 
-bool gdx_cpp::backends::android::AndroidGraphics::isGL11Available()
+bool gdx::android::AndroidGraphics::isGL11Available()
 {
     return gl11 != NULL;
 }
 
-bool gdx_cpp::backends::android::AndroidGraphics::isGL20Available()
+bool gdx::android::AndroidGraphics::isGL20Available()
 {
     return gl20 != NULL;
 }
 
-bool gdx_cpp::backends::android::AndroidGraphics::setDisplayMode(gdx_cpp::Graphics::DisplayMode displayMode)
+bool gdx::android::AndroidGraphics::setDisplayMode(gdx::Graphics::DisplayMode displayMode)
 {    
     if (!supportsDisplayModeChange())
         return false;
 }
 
-void gdx_cpp::backends::android::AndroidGraphics::setIcon(gdx_cpp::graphics::Pixmap::ptr pixmap)
+void gdx::android::AndroidGraphics::setIcon(gdx::Pixmap::ptr pixmap)
 {
     this->iconPixmap = pixmap;
 }
 
-void gdx_cpp::backends::android::AndroidGraphics::setTitle(const std::string& title)
+void gdx::android::AndroidGraphics::setTitle(const std::string& title)
 {
     this->title = title;
 }
 
-void gdx_cpp::backends::android::AndroidGraphics::setVSync(bool vsync)
+void gdx::android::AndroidGraphics::setVSync(bool vsync)
 {
     this->vsync = true;
 }
 
-bool gdx_cpp::backends::android::AndroidGraphics::supportsDisplayModeChange()
+bool gdx::android::AndroidGraphics::supportsDisplayModeChange()
 {
     return false;
 }
 
-bool gdx_cpp::backends::android::AndroidGraphics::supportsExtension(const std::string& extension)
+bool gdx::android::AndroidGraphics::supportsExtension(const std::string& extension)
 {
     return false;
 }
 
-void gdx_cpp::backends::android::AndroidGraphics::initialize()
+void gdx::android::AndroidGraphics::initialize()
 {
     const GLubyte* version = ::glGetString(GL_VERSION);
     int major = atoi((const char*) version);
@@ -231,7 +230,7 @@ void gdx_cpp::backends::android::AndroidGraphics::initialize()
     assert(glCommon);    
 }
 
-bool gdx_cpp::backends::android::AndroidGraphics::setDisplayMode(int width, int height, bool fullscreen)
+bool gdx::android::AndroidGraphics::setDisplayMode(int width, int height, bool fullscreen)
 {
     this->width = width;
     this->height = height;
@@ -240,11 +239,11 @@ bool gdx_cpp::backends::android::AndroidGraphics::setDisplayMode(int width, int 
     glCommon->glViewport(0, 0, width, height);
 }
 
-void gdx_cpp::backends::android::AndroidGraphics::update()
+void gdx::android::AndroidGraphics::update()
 {
 }
 
-void backends::android::AndroidGraphics::resize(int width, int height)
+void android::AndroidGraphics::resize(int width, int height)
 {
     this->width = width;
     this->height = height;
@@ -252,45 +251,45 @@ void backends::android::AndroidGraphics::resize(int width, int height)
     glCommon->glViewport(0, 0, width, height);
 }
 
-TextureData::ptr backends::android::AndroidGraphics::resolveTextureData(files::FileHandle::ptr fileHandle,
-                                                                        graphics::Pixmap::ptr preloadedPixmap,
-                                                                        const gdx_cpp::graphics::Pixmap::Format* format,
+TextureData::ptr android::AndroidGraphics::resolveTextureData(FileHandle::ptr fileHandle,
+                                                                        Pixmap::ptr preloadedPixmap,
+                                                                        const gdx::Pixmap::Format* format,
                                                                         bool useMipMaps)
 {
-    return TextureData::ptr(new glutils::FileTextureData(fileHandle, preloadedPixmap, format, useMipMaps));
+    return TextureData::ptr(new FileTextureData(fileHandle, preloadedPixmap, format, useMipMaps));
 }
 
-graphics::Pixmap* backends::android::AndroidGraphics::resolvePixmap(int width, int height, const gdx_cpp::graphics::Pixmap::Format& format, int pixType)
+Pixmap* android::AndroidGraphics::resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, int pixType)
 {
     switch(pixType) {
-        case graphics::Pixmap::Gdx2d:
-            return g2d::Gdx2DPixmap::newPixmap(width, height, g2d::Gdx2DPixmap::Format::toGdx2DPixmapFormat(format));
-        case graphics::Pixmap::Svg:
-            return new g2d::svg::AggSvgPixmap(width, height);
+        case Pixmap::Gdx2d:
+            return Gdx2DPixmap::newPixmap(width, height, Gdx2DPixmap::Format::toGdx2DPixmapFormat(format));
+        case Pixmap::Svg:
+            return new AggSvgPixmap(width, height);
     }
 }
 
-graphics::Pixmap* backends::android::AndroidGraphics::resolvePixmap(const gdx_cpp::graphics::Pixmap& other)
+Pixmap* android::AndroidGraphics::resolvePixmap(const gdx::Pixmap& other)
 {
     switch(other.getType()) {
-        case graphics::Pixmap::Gdx2d:
-            return new g2d::Gdx2DPixmap((g2d::Gdx2DPixmap&)other);
-        case graphics::Pixmap::Svg:
+        case Pixmap::Gdx2d:
+            return new Gdx2DPixmap((Gdx2DPixmap&)other);
+        case Pixmap::Svg:
         default:
             throw std::runtime_error("Pixmap of type Svg doesnt provide a copy constructor");
     } 
 }
 
-graphics::Pixmap* backends::android::AndroidGraphics::resolvePixmap(const gdx_cpp::files::FileHandle::ptr& file)
+Pixmap* android::AndroidGraphics::resolvePixmap(const gdx::FileHandle::ptr& file)
 {
     std::string extension = file->extension();
     
     if (extension == "png" || extension == "jpg" || extension == "tga" || extension == "bmp") {
-        gdx_cpp::files::FileHandle::buffer_ptr data;
+        gdx::FileHandle::buffer_ptr data;
         int len = file->readBytes(data);
-        return g2d::Gdx2DPixmap::newPixmapFromBuffer((unsigned char*) data.get(), len, 0);
+        return Gdx2DPixmap::newPixmapFromBuffer((unsigned char*) data.get(), len, 0);
     } else if (extension == "svg") {
-        return g2d::svg::AggSvgPixmap::newFromFile(file);
+        return AggSvgPixmap::newFromFile(file);
     } else {
         throw std::runtime_error("unsupported image format: " + extension);
     }

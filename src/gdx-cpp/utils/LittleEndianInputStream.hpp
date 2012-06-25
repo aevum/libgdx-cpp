@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_UTILS_LITTLEENDIANINPUTSTREAM_HPP_
 #define GDX_CPP_UTILS_LITTLEENDIANINPUTSTREAM_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace utils {
 
 class LittleEndianInputStream {
@@ -49,7 +49,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace utils
 
 #endif // GDX_CPP_UTILS_LITTLEENDIANINPUTSTREAM_HPP_

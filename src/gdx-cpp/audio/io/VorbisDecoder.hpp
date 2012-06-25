@@ -28,9 +28,7 @@
 
 struct OggFile;
 
-namespace gdx_cpp {
-namespace audio {
-namespace io {
+namespace gdx {
 
 class VorbisDecoder : public Decoder {
 public:
@@ -57,8 +55,6 @@ private:
     void closeFile(OggFile* file);
 };
 
-} // namespace gdx_cpp
-} // namespace audio
-} // namespace io
+} // namespace gdx
 
 #endif // GDX_CPP_AUDIO_IO_VORBISDECODER_HPP_

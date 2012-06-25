@@ -23,10 +23,9 @@
 
 #include "Camera.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
+namespace gdx {
 
-class OrthographicCamera : public graphics::Camera {
+class OrthographicCamera : public Camera {
 public:
     OrthographicCamera();
     OrthographicCamera (float viewportWidth, float viewportHeight);
@@ -40,14 +39,13 @@ public:
     float zoom;
     
 protected:
-    math::Vector3 tmp;
+    Vector3 tmp;
     
 private:
     float calculateAngle (float a);
-    void calculateDirection (float angle, gdx_cpp::math::Vector3& dir);
+    void calculateDirection (float angle, gdx::Vector3& dir);
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_ORTHOGRAPHICCAMERA_HPP_

@@ -25,7 +25,7 @@
 #include <gdx-cpp/Gdx.hpp>
 #include <list>
 
-namespace gdx_cpp {
+namespace gdx {
 namespace backends {
 namespace ios {
 	
@@ -71,7 +71,7 @@ protected:
     
     std::list< Runnable::ptr > runnables;
 	
-    gdx_cpp::implementation::Thread::ptr mainLoopThread;
+    gdx::Thread::ptr mainLoopThread;
     
     void initialize();
 	

@@ -20,7 +20,7 @@
 
 #include "AsynchronousAssetLoader<T, P>.hpp"
 
-using namespace gdx_cpp::assets::loaders;
+using namespace gdx;
 
 
 

@@ -32,7 +32,7 @@
 #include <sys/types.h>
 #include <sys/dir.h>
 
-using namespace gdx_cpp::backends::nix;
+using namespace gdx::nix;
 
 std::string LinuxSystem::canonicalize(const std::string& path)    
 {
@@ -69,20 +69,20 @@ void LinuxSystem::checkRead(const std::string& path)
     throw std::runtime_error("Read permission denied on file: " + path);
 }
 
-bool LinuxSystem::createDirectory(const gdx_cpp::files::File& f)
+bool LinuxSystem::createDirectory(const gdx::File& f)
 {
     if(mkdir(f.getAbsolutePath().c_str(), S_IWUSR | S_IRUSR) == -1) return false;
     return true;
 }
 
-bool LinuxSystem::deleteFile(gdx_cpp::files::File& f)
+bool LinuxSystem::deleteFile(gdx::File& f)
 {
     std::string cmd;
     if(remove(f.getCanonicalPath().c_str()) == -1) return false;
     return true;
 }
 
-int LinuxSystem::getBooleanAttributes(const gdx_cpp::files::File& f)
+int LinuxSystem::getBooleanAttributes(const gdx::File& f)
 {
     int attribs = 0;
     struct stat fileStat;
@@ -121,7 +121,7 @@ std::string LinuxSystem::getDefaultParent()
     return "/";
 }
 
-int64_t LinuxSystem::getLength(gdx_cpp::files::File f)
+int64_t LinuxSystem::getLength(gdx::File f)
 {
     std::ifstream test(f.getPath().c_str(), std::ios::in| std::ios::binary | std::ios::ate);
     std::ifstream::pos_type size;
@@ -140,12 +140,12 @@ char LinuxSystem::getSeparator()
     return '/';
 }
 
-bool LinuxSystem::isAbsolute(const gdx_cpp::files::File& f)
+bool LinuxSystem::isAbsolute(const gdx::File& f)
 {
     return (f.getPrefixLength() != 0);
 }
 
-void LinuxSystem::list(const gdx_cpp::files::File& f, std::vector< std::string > &paths)
+void LinuxSystem::list(const gdx::File& f, std::vector< std::string > &paths)
 {
     paths.resize(0);
     if(!f.isDirectory()) return;
@@ -210,7 +210,7 @@ int LinuxSystem::prefixLength(const std::string& path)
     return (path[0] == '/') ? 1 : 0;
 }
 
-bool LinuxSystem::renameFile(gdx_cpp::files::File& f1, const gdx_cpp::files::File& f2)
+bool LinuxSystem::renameFile(gdx::File& f1, const gdx::File& f2)
 {
     std::string to;
     if(f2.exists()) to = f2.getCanonicalPath();
@@ -219,7 +219,7 @@ bool LinuxSystem::renameFile(gdx_cpp::files::File& f1, const gdx_cpp::files::Fil
     return true;
 }
 
-std::string LinuxSystem::resolve(const gdx_cpp::files::File& f)
+std::string LinuxSystem::resolve(const gdx::File& f)
 {
     if (isAbsolute(f)) return f.getPath();
     char buffer[2048];
@@ -249,7 +249,7 @@ void LinuxSystem::checkWrite(const std::string& path)
      throw std::runtime_error("Write permission denied on file: " + path);
 }
 
-class LinuxMutex : public gdx_cpp::implementation::Mutex {
+class LinuxMutex : public gdx::Mutex {
 public:
     LinuxMutex()
     {
@@ -274,7 +274,7 @@ void* run_runnable(void* runnable) {
     return NULL;
 }
 
-class LinuxThread : public gdx_cpp::implementation::Thread {
+class LinuxThread : public gdx::Thread {
 public:
     LinuxThread(Runnable* theRunnable)
         : runnable(theRunnable)
@@ -315,17 +315,17 @@ private:
     pthread_t thread;
 };
 
-gdx_cpp::implementation::Thread::ptr gdx_cpp::backends::nix::LinuxSystem::LinuxThreadFactory::createThread(Runnable* t)
+gdx::Thread::ptr gdx::nix::LinuxSystem::LinuxThreadFactory::createThread(Runnable* t)
 {
-    return gdx_cpp::implementation::Thread::ptr(new LinuxThread(t));
+    return gdx::Thread::ptr(new LinuxThread(t));
 }
 
-gdx_cpp::implementation::Mutex::ptr gdx_cpp::backends::nix::LinuxSystem::LinuxMutexFactory::createMutex()
+gdx::Mutex::ptr gdx::nix::LinuxSystem::LinuxMutexFactory::createMutex()
 {
-    return gdx_cpp::implementation::Mutex::ptr(new LinuxMutex);
+    return gdx::Mutex::ptr(new LinuxMutex);
 }
 
-uint64_t gdx_cpp::backends::nix::LinuxSystem::nanoTime()
+uint64_t gdx::nix::LinuxSystem::nanoTime()
 {
     static timespec ts;
     ::clock_gettime(CLOCK_MONOTONIC, &ts);

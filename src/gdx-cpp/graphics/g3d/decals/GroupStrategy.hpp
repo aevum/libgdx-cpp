@@ -21,16 +21,16 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_DECALS_GROUPSTRATEGY_HPP_
 #define GDX_CPP_GRAPHICS_G3D_DECALS_GROUPSTRATEGY_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace decals {
 
 class GroupStrategy {
 public:
-    virtual   gdx_cpp::graphics::glutils::ShaderProgram& getGroupShader (int group) = 0;
+    virtual   gdx::ShaderProgram& getGroupShader (int group) = 0;
     virtual   int decideGroup (const Decal& decal) = 0;
-    virtual   void beforeGroup (int group,gdx_cpp::utils::ArrayDecal>& contents) = 0;
+    virtual   void beforeGroup (int group,gdx::ArrayDecal>& contents) = 0;
     virtual   void afterGroup (int group) = 0;
     virtual   void beforeGroups () = 0;
     virtual   void afterGroups () = 0;
@@ -42,7 +42,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace decals

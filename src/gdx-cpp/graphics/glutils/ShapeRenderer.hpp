@@ -25,9 +25,7 @@
 #include "gdx-cpp/math/Matrix4.hpp"
 #include "ImmediateModeRenderer.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
-namespace glutils {
+namespace gdx {
 
 class ShapeRenderer {
 public:
@@ -55,10 +53,10 @@ public:
     };
 
     int getGlType ();
-    void setColor (const gdx_cpp::graphics::Color& color);
+    void setColor (const Color& color);
     void setColor (float r,float g,float b,float a);
-    void setProjectionMatrix (const gdx_cpp::math::Matrix4& matrix);
-    void setTransformMatrix (const gdx_cpp::math::Matrix4& matrix);
+    void setProjectionMatrix (const Matrix4& matrix);
+    void setTransformMatrix (const Matrix4& matrix);
     void identity ();
     void translate (float x,float y,float z);
     void rotate (float axisX,float axisY,float axisZ,float angle);
@@ -78,10 +76,10 @@ public:
 protected:
     ImmediateModeRenderer* renderer;
     bool matrixDirty;
-    math::Matrix4 projView;
-    math::Matrix4 transform;
-    math::Matrix4 combined;
-    math::Matrix4 tmp;
+    Matrix4 projView;
+    Matrix4 transform;
+    Matrix4 combined;
+    Matrix4 tmp;
     Color color;
     const ShapeType* currType;
 
@@ -91,8 +89,6 @@ private:
     int glType ;
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace glutils
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GLUTILS_SHAPERENDERER_HPP_

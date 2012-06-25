@@ -27,14 +27,14 @@
 #include <string>
 #include <sstream>
 
-using namespace gdx_cpp::math::collision;
+using namespace gdx;
 
 BoundingBox::BoundingBox (const BoundingBox& bounds) : crn_dirty(true) {
     this->crn.reserve(8);
     this->set(bounds);
 }
 
-gdx_cpp::math::Vector3& BoundingBox::getCenter () {
+Vector3& BoundingBox::getCenter () {
     return cnt;
 }
 
@@ -52,20 +52,20 @@ void BoundingBox::updateCorners () {
     crn_dirty = false;
 }
 
-const std::vector< gdx_cpp::math::Vector3 >& BoundingBox::getCorners () {
+const std::vector< Vector3 >& BoundingBox::getCorners () {
     updateCorners();
     return crn;
 }
 
-gdx_cpp::math::Vector3& BoundingBox::getDimensions () {
+Vector3& BoundingBox::getDimensions () {
     return dim;
 }
 
-gdx_cpp::math::Vector3& BoundingBox::getMin () {
+Vector3& BoundingBox::getMin () {
     return min;
 }
 
-gdx_cpp::math::Vector3& BoundingBox::getMax () {
+Vector3& BoundingBox::getMax () {
     return max;
 }
 
@@ -74,7 +74,7 @@ BoundingBox& BoundingBox::set (const BoundingBox& bounds) {
     return this->set(bounds.min, bounds.max);
 }
 
-BoundingBox& BoundingBox::set (const gdx_cpp::math::Vector3& minimum,const gdx_cpp::math::Vector3& maximum) {
+BoundingBox& BoundingBox::set (const Vector3& minimum,const Vector3& maximum) {
     min.set(minimum.x < maximum.x ? minimum.x : maximum.x, minimum.y < maximum.y ? minimum.y : maximum.y,
             minimum.z < maximum.z ? minimum.z : maximum.z);
     max.set(minimum.x > maximum.x ? minimum.x : maximum.x, minimum.y > maximum.y ? minimum.y : maximum.y,
@@ -108,7 +108,7 @@ BoundingBox& BoundingBox::inf () {
     return *this;
 }
 
-BoundingBox& BoundingBox::ext (const gdx_cpp::math::Vector3& point) {
+BoundingBox& BoundingBox::ext (const Vector3& point) {
     crn_dirty = true;
     return this->set(min.set(_min(min.x, point.x), _min(min.y, point.y), _min(min.z, point.z)),
                      max.set(std::max(max.x, point.x), std::max(max.y, point.y), std::max(max.z, point.z)));
@@ -129,7 +129,7 @@ BoundingBox& BoundingBox::ext (const BoundingBox& a_bounds) {
                      max.set(_max(max.x, a_bounds.max.x), _max(max.y, a_bounds.max.y), _max(max.z, a_bounds.max.z)));
 }
 
-BoundingBox& BoundingBox::mul (const gdx_cpp::math::Matrix4& matrix) {
+BoundingBox& BoundingBox::mul (const Matrix4& matrix) {
     updateCorners();
     this->inf();
 
@@ -154,7 +154,7 @@ bool BoundingBox::contains (const BoundingBox& bounds) {
     return true;
 }
 
-bool BoundingBox::contains (const gdx_cpp::math::Vector3& v) {
+bool BoundingBox::contains (const Vector3& v) {
     if (min.x > v.x) return false;
     if (max.x < v.x) return false;
     if (min.y > v.y) return false;

@@ -20,13 +20,13 @@
 
 #include "TextureAtlas.hpp"
 
-using namespace gdx_cpp::graphics::g2d;
+using namespace gdx;
 
-gdx_cpp::utils::ArrayPage>& TextureAtlas::getPages () {
+ArrayPage& TextureAtlas::getPages () {
     return pages;
 }
 
-gdx_cpp::utils::ArrayRegion>& TextureAtlas::getRegion () {
+ArrayRegion>& TextureAtlas::getRegion () {
     return regions;
 }
 
@@ -61,7 +61,7 @@ for (Region region : data.regions) {
     }
 }
 
-AtlasRegion& TextureAtlas::addRegion (const std::string& name,const gdx_cpp::graphics::Texture& texture,int x,int y,int width,int height) {
+AtlasRegion& TextureAtlas::addRegion (const std::string& name,const Texture& texture,int x,int y,int width,int height) {
     textures.add(texture);
     AtlasRegion region = new AtlasRegion(texture, x, y, width, height);
     region.name = name;
@@ -153,7 +153,7 @@ for (Texture texture : textures)
     textures.clear();
 }
 
-int TextureAtlas::compare (const gdx_cpp::graphics::g2d::TextureAtlas::TextureAtlasData::Region& region1,const gdx_cpp::graphics::g2d::TextureAtlas::TextureAtlasData::Region& region2) {
+int TextureAtlas::compare (const TextureAtlas::TextureAtlasData::Region& region1,const TextureAtlas::TextureAtlasData::Region& region2) {
     int i1 = region1.index;
     if (i1 == -1) i1 = Integer.MAX_VALUE;
     int i2 = region2.index;

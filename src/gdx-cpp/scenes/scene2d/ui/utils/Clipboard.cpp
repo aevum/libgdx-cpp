@@ -20,7 +20,7 @@
 
 #include "Clipboard.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui::utils;
+using namespace gdx::ui::utils;
 
 Clipboard& Clipboard::getDefaultClipboard () {
     if (Gdx.app.getType() == ApplicationType.Android)

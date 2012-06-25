@@ -21,18 +21,18 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_INTERPOLATORS_ACCELERATEDECELERATEINTERPOLATOR_HPP_
 #define GDX_CPP_SCENES_SCENE2D_INTERPOLATORS_ACCELERATEDECELERATEINTERPOLATOR_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace interpolators {
 
-class AccelerateDecelerateInterpolator: public gdx_cpp::scenes::scene2d::Interpolator {
+class AccelerateDecelerateInterpolator: public gdx::Interpolator {
 public:
     static AccelerateDecelerateInterpolator& $ (float factor);
     static AccelerateDecelerateInterpolator& $ ();
     void finished ();
     float getInterpolation (float input);
-    gdx_cpp::scenes::scene2d::Interpolator& copy ();
+    gdx::Interpolator& copy ();
 
 protected:
     AccelerateDecelerateInterpolator& newObject ();
@@ -42,7 +42,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace interpolators

@@ -20,7 +20,7 @@
 
 #include "AnticipateInterpolator.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::interpolators;
+using namespace gdx::interpolators;
 
 AnticipateInterpolator& AnticipateInterpolator::newObject () {
     return new AnticipateInterpolator();
@@ -44,7 +44,7 @@ float AnticipateInterpolator::getInterpolation (float t) {
     return t * t * ((tension + 1) * t - tension);
 }
 
-gdx_cpp::scenes::scene2d::Interpolator& AnticipateInterpolator::copy () {
+gdx::Interpolator& AnticipateInterpolator::copy () {
     return $(tension);
 }
 

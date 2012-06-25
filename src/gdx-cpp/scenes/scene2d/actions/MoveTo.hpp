@@ -24,18 +24,18 @@
 #include "gdx-cpp/scenes/scene2d/AnimationAction.hpp"
 #include "ActionResetingPool.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace actions {
 
-class MoveTo: public gdx_cpp::scenes::scene2d::AnimationAction {
+class MoveTo: public gdx::AnimationAction {
 public:
     static MoveTo* build(float x,float y,float duration);
-    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
+    void setTarget (gdx::Actor* actor);
     void act (float delta);
     void finish ();
-    gdx_cpp::scenes::scene2d::Action* copy ();
+    gdx::Action* copy ();
 
 protected:
     float x;
@@ -48,7 +48,7 @@ protected:
     static ActionResetingPool<MoveTo> pool;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace actions

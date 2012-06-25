@@ -20,7 +20,7 @@
 
 #include "DecelerateInterpolator.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::interpolators;
+using namespace gdx::interpolators;
 
 DecelerateInterpolator& DecelerateInterpolator::newObject () {
     return new DecelerateInterpolator();
@@ -49,7 +49,7 @@ float DecelerateInterpolator::getInterpolation (float input) {
     }
 }
 
-gdx_cpp::scenes::scene2d::Interpolator& DecelerateInterpolator::copy () {
+gdx::Interpolator& DecelerateInterpolator::copy () {
     return $(factor);
 }
 

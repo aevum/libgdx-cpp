@@ -20,7 +20,7 @@
 
 #include "LinearInterpolator.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::interpolators;
+using namespace gdx::interpolators;
 
 LinearInterpolator& LinearInterpolator::newObject () {
     return new LinearInterpolator();
@@ -38,7 +38,7 @@ float LinearInterpolator::getInterpolation (float input) {
     return input;
 }
 
-gdx_cpp::scenes::scene2d::Interpolator& LinearInterpolator::copy () {
+gdx::Interpolator& LinearInterpolator::copy () {
     return $();
 }
 

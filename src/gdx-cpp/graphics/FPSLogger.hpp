@@ -22,8 +22,7 @@
 #define GDX_CPP_GRAPHICS_FPSLOGGER_HPP_
 #include <stdint.h>
 
-namespace gdx_cpp {
-namespace graphics {
+namespace gdx {
 
 class FPSLogger {
 public:
@@ -39,7 +38,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_FPSLOGGER_HPP_

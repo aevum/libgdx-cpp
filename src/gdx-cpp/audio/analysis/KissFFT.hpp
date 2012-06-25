@@ -27,11 +27,9 @@
 
 struct KissFFTO;
 
-namespace gdx_cpp {
-namespace audio {
-namespace analysis {
+namespace gdx {
 
-class KissFFT: public gdx_cpp::utils::Disposable {
+class KissFFT: public Disposable {
 public:
     void spectrum (std::vector<short>& samples, std::vector<float>& spectrum);
     void dispose ();
@@ -50,8 +48,6 @@ private:
     void spectrum(KissFFTO* fft, std::vector< short >& samples2, std::vector< float >& spectrum);
 };
 
-} // namespace gdx_cpp
-} // namespace audio
-} // namespace analysis
+} // namespace gdx
 
 #endif // GDX_CPP_AUDIO_ANALYSIS_KISSFFT_HPP_

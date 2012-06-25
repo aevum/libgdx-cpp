@@ -25,16 +25,16 @@
 #include "gdx-cpp/Application.hpp"
 #include "gdx-cpp/implementation/System.hpp"
 
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
 void FPSLogger::log () {
-    if (gdx_cpp::Gdx::system->nanoTime() - startTime > 1000000000) {
-        gdx_cpp::Gdx::app->log("FPSLogger", "fps: %u", gdx_cpp::Gdx::graphics->getFramesPerSecond());
-        startTime = gdx_cpp::Gdx::system->nanoTime();
+    if (Gdx::system->nanoTime() - startTime > 1000000000) {
+        Gdx::app->log("FPSLogger", "fps: %u", Gdx::graphics->getFramesPerSecond());
+        startTime = Gdx::system->nanoTime();
     }
 }
 
-gdx_cpp::graphics::FPSLogger::FPSLogger() : startTime(gdx_cpp::Gdx::system->nanoTime())
+FPSLogger::FPSLogger() : startTime(Gdx::system->nanoTime())
 {
 }
 

@@ -23,9 +23,7 @@
 
 #include <string>
 
-namespace gdx_cpp {
-namespace graphics {
-
+namespace gdx {
 class Color {
 public:
     static const Color WHITE;
@@ -37,7 +35,7 @@ public:
     float r, g, b, a;
 
     Color (float r, float g, float b, float a) ;
-    Color (const gdx_cpp::graphics::Color& color) ;
+    Color (const gdx::Color& color) ;
     Color& set (const Color& color);
     Color& mul (const Color& color);
     Color& mul (float value);
@@ -45,7 +43,7 @@ public:
     Color& sub (const Color& color);
     void clamp ();
     void set (float r,float g,float b,float a);
-    bool equals (const gdx_cpp::graphics::Color& o);
+    bool equals (const gdx::Color& o);
     int hashCode ();
     const std::string toString ();
     static float toFloatBits (int r,int g,int b,int a);
@@ -70,7 +68,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_COLOR_HPP_

@@ -27,17 +27,16 @@
 
 #include "XmlReader.hpp"
 
-namespace gdx_cpp {
-namespace utils {
+namespace gdx {
 
 class XmlWriter {
 public:
     XmlWriter(std::ofstream& writer);
     
     XmlWriter& element (const std::string& name);
-    XmlWriter& element (const std::string& name, const gdx_cpp::utils::XmlReader::Element* text);
-    XmlWriter& attribute (const std::string& name, const gdx_cpp::utils::XmlReader::Element* value);
-    XmlWriter& text (const gdx_cpp::utils::XmlReader::Element* text);
+    XmlWriter& element (const std::string& name, const XmlReader::Element* text);
+    XmlWriter& attribute (const std::string& name, const XmlReader::Element* value);
+    XmlWriter& text (const XmlReader::Element* text);
     XmlWriter& pop ();
     void close ();
     void write (const char* cbuf, int off, int len);
@@ -55,7 +54,6 @@ private:
     bool indentNextClose;
 };
 
-} // namespace gdx_cpp
-} // namespace utils
+} // namespace gdx
 
 #endif // GDX_CPP_UTILS_XMLWRITER_HPP_

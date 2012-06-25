@@ -24,10 +24,10 @@
 #include "gdx-cpp/utils/StringConvertion.hpp"
 #include "gdx-cpp/math/MathUtils.hpp"
 
-using namespace gdx_cpp::scenes::scene2d;
-using namespace gdx_cpp;
+using namespace gdx::scene2d;
+using namespace gdx;
 
-gdx_cpp::graphics::Texture::ptr Group::debugTexture;
+gdx::Texture::ptr Group::debugTexture;
 bool Group::debug = false;
 
 void Group::act (float delta) {
@@ -46,7 +46,7 @@ void Group::act (float delta) {
     }
 }
 
-void Group::draw (gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void Group::draw (gdx::SpriteBatch& batch,float parentAlpha) {
     if (!visible) return;
 
     if (debug && debugTexture != NULL && parent != NULL)
@@ -58,7 +58,7 @@ void Group::draw (gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) 
     if (transform) resetTransform(batch);
 }
 
-void Group::drawChildren (gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void Group::drawChildren (gdx::SpriteBatch& batch,float parentAlpha) {
     parentAlpha *= color.a;
     
     ActorList::iterator it = children.begin();
@@ -83,13 +83,13 @@ void Group::drawChildren (gdx_cpp::graphics::g2d::SpriteBatch& batch,float paren
     if (transform) batch.flush();
 }
 
-void Group::drawChild (Actor* child, gdx_cpp::graphics::g2d::SpriteBatch& batch, float parentAlpha) {
+void Group::drawChild (Actor* child, gdx::SpriteBatch& batch, float parentAlpha) {
     if (child->visible) child->draw(batch, parentAlpha * color.a);
     if (transform) batch.flush();
 }
 
-void Group::applyTransform (gdx_cpp::graphics::g2d::SpriteBatch& batch) {
-    gdx_cpp::math::Matrix4& newBatchTransform = updateTransform();
+void Group::applyTransform (gdx::SpriteBatch& batch) {
+    gdx::Matrix4& newBatchTransform = updateTransform();
 
     batch.end();
     oldBatchTransform.set(batch.getTransformMatrix());
@@ -97,8 +97,8 @@ void Group::applyTransform (gdx_cpp::graphics::g2d::SpriteBatch& batch) {
     batch.begin();
 }
 
-gdx_cpp::math::Matrix4& Group::updateTransform () {
-    gdx_cpp::math::Matrix3& temp = worldTransform;
+gdx::Matrix4& Group::updateTransform () {
+    gdx::Matrix3& temp = worldTransform;
     
     if (originX != 0 || originY != 0)
         localTransform.setToTranslation(originX, originY);
@@ -126,7 +126,7 @@ gdx_cpp::math::Matrix4& Group::updateTransform () {
     return batchTransform;
 }
 
-void Group::resetTransform (gdx_cpp::graphics::g2d::SpriteBatch& batch) {
+void Group::resetTransform (gdx::SpriteBatch& batch) {
     batch.end();
     batch.setTransformMatrix(oldBatchTransform);
     batch.begin();
@@ -135,7 +135,7 @@ void Group::resetTransform (gdx_cpp::graphics::g2d::SpriteBatch& batch) {
 bool Group::touchDown (float x,float y,int pointer) {
     if (!touchable) return false;
 
-    if (debug) gdx_cpp::Gdx::app->log("Group", "%s: %f,%f", name.c_str() , x, y);
+    if (debug) gdx::Gdx::app->log("Group", "%s: %f,%f", name.c_str() , x, y);
 
     if (focusedActor[pointer] != NULL) {
         point.x = x;
@@ -384,7 +384,7 @@ void Group::keyboardFocus (Actor* actor) {
     if (parent != NULL) parent->keyboardFocus(actor);
 }
 
-void Group::scrollFocus (scenes::scene2d::Actor* actor) {
+void Group::scrollFocus (Actor* actor) {
     scrollFocusedActor = actor;
     if (parent != NULL) parent->scrollFocus(actor);
 }
@@ -426,7 +426,7 @@ void Group::unfocusAll (const Actor* actor) {
     if (scrollFocusedActor == actor) scrollFocus(NULL);
 }
 
-void Group::toChildCoordinates (scenes::scene2d::Actor*const child, float x, float y, math::Vector2& out) {
+void Group::toChildCoordinates (Actor*const child, float x, float y, Vector2& out) {
     if (child->rotation == 0) {
         if (child->scaleX == 1 && child->scaleY == 1) {
             out.x = x - child->x;
@@ -441,8 +441,8 @@ void Group::toChildCoordinates (scenes::scene2d::Actor*const child, float x, flo
             }
         }
     } else {
-        float cos = (float)math::utils::cos(child->rotation * math::utils::detail::degreesToRadians);
-        float sin = (float)math::utils::sin(child->rotation * math::utils::detail::degreesToRadians);
+        float cos = (float)cos(child->rotation * detail::degreesToRadians);
+        float sin = (float)sin(child->rotation * detail::degreesToRadians);
 
         if (child->scaleX == 1 && child->scaleY == 1) {
             if (child->originX == 0 && child->originY == 0) {
@@ -506,7 +506,7 @@ void Group::toChildCoordinates (scenes::scene2d::Actor*const child, float x, flo
 }
 
 void Group::enableDebugging (const std::string& debugTextureFile) {
-    debugTexture = graphics::Texture::newFromFile(Gdx::files->internal(debugTextureFile), 0, false);
+    debugTexture = Texture::newFromFile(Gdx::files->internal(debugTextureFile), 0, false);
     debug = true;
 }
 

@@ -21,8 +21,8 @@
 #include "Stage.hpp"
 #include "gdx-cpp/graphics/OrthographicCamera.hpp"
 
-using namespace gdx_cpp::scenes::scene2d;
-using namespace gdx_cpp;
+using namespace gdx::scene2d;
+using namespace gdx;
 
 void Stage::setViewport (float width, float height, bool stretch) {
     if (!stretch) {
@@ -198,19 +198,19 @@ void Stage::graphToString (std::stringstream& buffer, const Actor* actor,int lev
     }
 }
 
-scenes::scene2d::Group& Stage::getRoot () {
+Group& Stage::getRoot () {
     return root;
 }
 
-gdx_cpp::graphics::g2d::SpriteBatch* Stage::getSpriteBatch () {
+gdx::SpriteBatch* Stage::getSpriteBatch () {
     return batch;
 }
 
-gdx_cpp::graphics::Camera* const Stage::getCamera () {
+gdx::Camera* const Stage::getCamera () {
     return camera;
 }
 
-void Stage::setCamera (gdx_cpp::graphics::Camera* camera) {
+void Stage::setCamera (gdx::Camera* camera) {
     this->camera = camera;
 }
 
@@ -223,7 +223,7 @@ Actor* Stage::hit (float x,float y) {
     return root.hit(point.x, point.y);
 }
 
-void Stage::toStageCoordinates (int x,int y,gdx_cpp::math::Vector2& out) {
+void Stage::toStageCoordinates (int x,int y,gdx::Vector2& out) {
     camera->unproject(tmp.set(x, y, 0));
     out.x = tmp.x;
     out.y = tmp.y;
@@ -246,13 +246,13 @@ Stage::Stage (float width, float height, bool stretch)
  ,_height(height)
  ,stretch(stretch)
  ,root("root")
- ,camera(new graphics::OrthographicCamera)
- ,batch(new graphics::g2d::SpriteBatch)
+ ,camera(new OrthographicCamera)
+ ,batch(new SpriteBatch)
 {
     setViewport(width, height, stretch);
 }
 
-scenes::scene2d::Stage::~Stage()
+Stage::~Stage()
 {
     batch->dispose();
     delete batch;

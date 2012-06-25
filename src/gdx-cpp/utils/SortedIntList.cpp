@@ -20,7 +20,7 @@
 
 #include "SortedIntList<E>.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx::utils;
 
 E& SortedIntList<E>::insert (int index,const E& value) {
     if (first != null) {

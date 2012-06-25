@@ -20,9 +20,9 @@
 
 #include "ModelLoaderOld.hpp"
 
-using namespace gdx_cpp::graphics::g3d::loaders;
+using namespace gdx::g3d::loaders;
 
-gdx_cpp::graphics::Mesh& ModelLoaderOld::loadObj (const InputStream& in) {
+gdx::Mesh& ModelLoaderOld::loadObj (const InputStream& in) {
     return ObjLoader.loadObj(in);
 }
 

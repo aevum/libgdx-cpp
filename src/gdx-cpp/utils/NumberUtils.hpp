@@ -23,8 +23,7 @@
 
 #include <stdint.h>
 
-namespace gdx_cpp {
-namespace utils {
+namespace gdx {
 
 class NumberUtils {
 public:
@@ -35,7 +34,6 @@ public:
     static double longBitsToDouble (long value);
 };
 
-} // namespace gdx_cpp
-} // namespace utils
+} // namespace gdx
 
 #endif // GDX_CPP_UTILS_NUMBERUTILS_HPP_

@@ -20,7 +20,7 @@
 
 #include "MD5Joints.hpp"
 
-using namespace gdx_cpp::graphics::g3d::loaders::md5;
+using namespace gdx::g3d::md5;
 
 void MD5Joints::read (const DataInputStream& in) throws IOException {
     int numNames = in.readInt();

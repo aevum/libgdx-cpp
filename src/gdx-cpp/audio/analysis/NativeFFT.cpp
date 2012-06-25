@@ -21,7 +21,7 @@
 #include "NativeFFT.hpp"
 #include <vector>
 
-using namespace gdx_cpp::audio::analysis;
+using namespace gdx;
 
 void NativeFFT::spectrum (std::vector< float >& samples, std::vector< float >& spectrum, int numSamples) {
 //nativeSpectrum(handle, samples, spectrum, numSamples);

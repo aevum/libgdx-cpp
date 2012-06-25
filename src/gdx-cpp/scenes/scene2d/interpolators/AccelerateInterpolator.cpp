@@ -20,7 +20,7 @@
 
 #include "AccelerateInterpolator.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::interpolators;
+using namespace gdx::interpolators;
 
 AccelerateInterpolator& AccelerateInterpolator::newObject () {
     return new AccelerateInterpolator();
@@ -49,7 +49,7 @@ float AccelerateInterpolator::getInterpolation (float input) {
     }
 }
 
-gdx_cpp::scenes::scene2d::Interpolator& AccelerateInterpolator::copy () {
+gdx::Interpolator& AccelerateInterpolator::copy () {
     return $(factor);
 }
 

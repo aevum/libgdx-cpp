@@ -26,7 +26,7 @@
 
 #include "gdx-cpp/Gdx.hpp"
 
-using namespace gdx_cpp::files;
+using namespace gdx;
 
 FileHandle::FileHandle()
 {
@@ -34,23 +34,23 @@ FileHandle::FileHandle()
 
 FileHandle::FileHandle (const std::string &fileName)
   :   file(fileName),
-      type(gdx_cpp::Files::Absolute)
+      type(gdx::Files::Absolute)
 {
 }
 
 FileHandle::FileHandle (File const& file)
   : file(file),
-    type(gdx_cpp::Files::Absolute)
+    type(gdx::Files::Absolute)
 {
 }
 
-FileHandle::FileHandle (const std::string &fileName, gdx_cpp::Files::FileType _type)
+FileHandle::FileHandle (const std::string &fileName, gdx::Files::FileType _type)
   : type(_type),
     file(fileName)
 {
 }
 
-FileHandle::FileHandle (const gdx_cpp::files::File &file, gdx_cpp::Files::FileType type)
+FileHandle::FileHandle (const gdx::File &file, gdx::Files::FileType type)
   : file(file),
     type(type)
 {
@@ -73,18 +73,18 @@ std::string FileHandle::nameWithoutExtension () const {
 }
 
 std::string FileHandle::typetoString () const {
-    if(type == gdx_cpp::Files::Absolute) return "Absolute";
-    if (type == gdx_cpp::Files::External) return "External";
-    if (type == gdx_cpp::Files::Internal) return "Internal";
+    if(type == gdx::Files::Absolute) return "Absolute";
+    if (type == gdx::Files::External) return "External";
+    if (type == gdx::Files::Internal) return "Internal";
     return "Classpath";
 }
 
-gdx_cpp::Files::FileType FileHandle::getType () const {
+gdx::Files::FileType FileHandle::getType () const {
     return type;
 }
 
 File FileHandle::getFile () const {
-    if (type == gdx_cpp::Files::External) return File( gdx_cpp::Gdx::files->getExternalStoragePath(), file.getPath());
+    if (type == gdx::Files::External) return File( gdx::Gdx::files->getExternalStoragePath(), file.getPath());
     return file;
 }
 
@@ -147,7 +147,7 @@ int FileHandle::write ( const char* data, int lenght, bool append) {
     throw std::runtime_error("Not implemented, if you're seeing this error your backend"
                              " hasn't implemented the write method, wich he should");
     
-//     if (type == gdx_cpp::Files::Internal) throw std::runtime_error("Cannot write to an internal file: " + file.getPath());
+//     if (type == gdx::Files::Internal) throw std::runtime_error("Cannot write to an internal file: " + file.getPath());
 //     ofstream_ptr output;
 //     try
 //     {
@@ -200,7 +200,7 @@ FileHandle FileHandle::parent () {
     parent = file.getParentFile();
     if(parent.getPath() == "")
     {
-        if (type == gdx_cpp::Files::Absolute)
+        if (type == gdx::Files::Absolute)
             parent = File("/");
         else
             parent = File("");
@@ -209,13 +209,13 @@ FileHandle FileHandle::parent () {
 }
 
 void FileHandle::mkdirs () {
-    if (type == gdx_cpp::Files::Internal) throw std::runtime_error("Cannot mkdirs with an internal file: " + file.getPath());
+    if (type == gdx::Files::Internal) throw std::runtime_error("Cannot mkdirs with an internal file: " + file.getPath());
     getFile().mkdirs();
 }
 
 bool FileHandle::exists () const {
     switch (type) {
-    case gdx_cpp::Files::Internal:
+    case gdx::Files::Internal:
         if (file.exists()) return true;
         break;
     default:
@@ -226,12 +226,12 @@ bool FileHandle::exists () const {
 
 bool FileHandle::deleteFile ()
 {
-    if (type == gdx_cpp::Files::Internal) throw std::runtime_error("Cannot delete an internal file: " + file.getPath());
+    if (type == gdx::Files::Internal) throw std::runtime_error("Cannot delete an internal file: " + file.getPath());
     return getFile().deleteFile();
 }
 
 bool FileHandle::deleteDirectory () {
-    if (type == gdx_cpp::Files::Internal) throw std::runtime_error("Cannot delete an internal file: " + file.getPath());
+    if (type == gdx::Files::Internal) throw std::runtime_error("Cannot delete an internal file: " + file.getPath());
     File target = getFile();
     return deleteDirectory(target);
 }
@@ -260,7 +260,7 @@ void FileHandle::copyTo (FileHandle& dest) {
 }
 
 void FileHandle::moveTo (FileHandle& dest) {
-    if (type == gdx_cpp::Files::Internal) throw std::runtime_error("Cannot move an internal file: " + file.getPath());
+    if (type == gdx::Files::Internal) throw std::runtime_error("Cannot move an internal file: " + file.getPath());
     copyTo(dest);
     deleteFile();
 }
@@ -269,7 +269,7 @@ int64_t FileHandle::length () const {
     throw std::runtime_error("Not implemented, if you're seeing this error your backend"
     " hasn't implemented the length method, wich he should");
     
-//     if ((type == gdx_cpp::Files::Internal && !file.exists())) {
+//     if ((type == gdx::Files::Internal && !file.exists())) {
 //       int64_t length = 0;
 //       ifstream_ptr input = read();
 //       try

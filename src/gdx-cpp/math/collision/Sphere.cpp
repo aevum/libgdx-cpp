@@ -20,7 +20,7 @@
 
 #include "Sphere.hpp"
 
-using namespace gdx_cpp::math::collision;
+using namespace gdx;
 
 Sphere::Sphere (const Vector3& center, float radius)
 {

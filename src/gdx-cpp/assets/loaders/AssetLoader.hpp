@@ -27,16 +27,13 @@
 #include <vector>
 #include "Parameter.hpp"
 
-namespace gdx_cpp {
-namespace assets {
+namespace gdx {
 
 class AssetDescriptor;
-    
-namespace loaders {
 
 class AssetLoader {
 public:
-    const gdx_cpp::files::FileHandle& resolve (const std::string& fileName)
+    const FileHandle& resolve (const std::string& fileName)
     {
         return resolver.resolve(fileName);
     }
@@ -50,8 +47,6 @@ private:
     const FileHandleResolver& resolver;
 };
 
-} // namespace gdx_cpp
-} // namespace assets
-} // namespace loaders
+} // namespace gdx
 
 #endif // GDX_CPP_ASSETS_LOADERS_ASSETLOADER_HPP_

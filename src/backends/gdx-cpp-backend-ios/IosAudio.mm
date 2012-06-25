@@ -25,9 +25,9 @@
 #import <AVFoundation/AVFoundation.h>
 
 
-using namespace gdx_cpp::backends::ios;
+using namespace gdx::ios;
 
-class AvAudioPlayerSound : public gdx_cpp::audio::Sound {
+class AvAudioPlayerSound : public gdx::Sound {
 public:
     AvAudioPlayerSound(NSURL* url) {
         NSError* error;
@@ -57,7 +57,7 @@ private:
 };
 
 
-class AvAudioPlayerMusic : public gdx_cpp::audio::Music {
+class AvAudioPlayerMusic : public gdx::Music {
 public:
     
     AvAudioPlayerMusic(NSURL* url) {
@@ -107,7 +107,7 @@ private:
     AVAudioPlayer *audioPlayer;
 };
 
-gdx_cpp::audio::Sound* IosAudio::newSound(const ref_ptr_maker<gdx_cpp::files::FileHandle>::type fileHandle) {
+gdx::Sound* IosAudio::newSound(const ref_ptr_maker<gdx::FileHandle>::type fileHandle) {
     
     std::string path = fileHandle->path();  
     
@@ -116,7 +116,7 @@ gdx_cpp::audio::Sound* IosAudio::newSound(const ref_ptr_maker<gdx_cpp::files::Fi
     return new AvAudioPlayerSound(file);
 }
 
-gdx_cpp::audio::Music* IosAudio::newMusic(const ref_ptr_maker<gdx_cpp::files::FileHandle>::type file) {
+gdx::Music* IosAudio::newMusic(const ref_ptr_maker<gdx::FileHandle>::type file) {
     std::string path = file->path();  
     
     NSURL* fileUrl = [[NSURL alloc] initWithString:[NSString stringWithCString:path.c_str() encoding:NSASCIIStringEncoding]];
@@ -125,11 +125,11 @@ gdx_cpp::audio::Music* IosAudio::newMusic(const ref_ptr_maker<gdx_cpp::files::Fi
 }
 
 
-gdx_cpp::audio::AudioDevice * IosAudio::newAudioDevice (int samplingRate, bool isMono){
+gdx::AudioDevice * IosAudio::newAudioDevice (int samplingRate, bool isMono){
     throw std::runtime_error("Not implemented");
 }
 
-gdx_cpp::audio::AudioRecorder *  IosAudio::newAudioRecoder (int samplingRate, bool isMono) {
+gdx::AudioRecorder *  IosAudio::newAudioRecoder (int samplingRate, bool isMono) {
     throw std::runtime_error("Not implemented");
 }
 

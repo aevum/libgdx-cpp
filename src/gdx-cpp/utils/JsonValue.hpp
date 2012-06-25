@@ -30,9 +30,7 @@
 #include <stdexcept>
 #include "gdx-cpp/utils/Aliases.hpp"
 
-namespace gdx_cpp {
-
-namespace utils {
+namespace gdx {
 
 enum json_item_type {
     json_string,
@@ -178,8 +176,6 @@ private:
     operator float&();
     operator std::string&();
 };
-
-}
 
 }
 

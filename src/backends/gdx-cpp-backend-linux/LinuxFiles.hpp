@@ -24,28 +24,26 @@
 #include <gdx-cpp/Files.hpp>
 #include <gdx-cpp/files/FileHandle.hpp>
 
-namespace gdx_cpp {
+namespace gdx {
 
 class Files;
 
-namespace backends {
-
 namespace nix {
 
-  class LinuxFiles : public gdx_cpp::Files
+  class LinuxFiles : public gdx::Files
   {
     public:
         //Override
-        gdx_cpp::files::FileHandle::ptr getFileHandle (const std::string &fileName, gdx_cpp::Files::FileType type);
+        gdx::FileHandle::ptr getFileHandle (const std::string &fileName, gdx::Files::FileType type);
 
         //Override
-        gdx_cpp::files::FileHandle::ptr internal (const std::string &path);
+        gdx::FileHandle::ptr internal (const std::string &path);
 
         //Override
-        gdx_cpp::files::FileHandle::ptr external (const std::string &path);
+        gdx::FileHandle::ptr external (const std::string &path);
 
         //Override
-        gdx_cpp::files::FileHandle::ptr absolute (const std::string &path);
+        gdx::FileHandle::ptr absolute (const std::string &path);
 
         //Override
         std::string getExternalStoragePath ();
@@ -60,8 +58,6 @@ namespace nix {
         
   };
     
-}
-
 }
 
 }

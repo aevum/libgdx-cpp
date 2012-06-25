@@ -20,9 +20,7 @@
 
 #include <string>
 
-namespace gdx_cpp {
-
-namespace math {
+namespace gdx {
 
 class Vector3;
 
@@ -59,7 +57,6 @@ private:
     float tmp[9];
 };
 
-}
 }
 
 #endif // GDX_CPP_MATH_MATRIX3_HPP

@@ -20,7 +20,7 @@
 
 #include "JsonWriter.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx;
 
 void JsonWriter::setOutputType (const OutputType& outputType) {
     this.outputType = outputType;

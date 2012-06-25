@@ -20,7 +20,7 @@
 
 #include "MD5Mesh.hpp"
 
-using namespace gdx_cpp::graphics::g3d::loaders::md5;
+using namespace gdx::g3d::md5;
 
 float* MD5Mesh::createVertexArray () {
     return createVertexArray(5);
@@ -44,15 +44,15 @@ short* MD5Mesh::getIndices () {
     return indices;
 }
 
-void MD5Mesh::calculateVerticesN (const MD5Joints& skeleton,const gdx_cpp::math::collision::BoundingBox& bbox) {
+void MD5Mesh::calculateVerticesN (const MD5Joints& skeleton,const gdx::BoundingBox& bbox) {
     calculateVerticesN(skeleton, weights, vertices, verts, floatsPerVertex, floatsPerWeight, bbox);
 }
 
-void MD5Mesh::calculateVertices (const MD5Joints& skeleton,const gdx_cpp::math::collision::BoundingBox& bbox) {
+void MD5Mesh::calculateVertices (const MD5Joints& skeleton,const gdx::BoundingBox& bbox) {
     calculateVertices(skeleton, weights, vertices, verts, floatsPerVertex, floatsPerWeight, bbox);
 }
 
-void MD5Mesh::calculateVerticesN (const MD5Joints& skeleton,float vertices,int vstride,int wstride,const gdx_cpp::math::collision::BoundingBox& bbox) {
+void MD5Mesh::calculateVerticesN (const MD5Joints& skeleton,float vertices,int vstride,int wstride,const gdx::BoundingBox& bbox) {
     for (int vertexOffset = 2, k = 0; vertexOffset < vertices.length; vertexOffset += vstride) {
         float finalX = 0;
         float finalY = 0;
@@ -132,7 +132,7 @@ void MD5Mesh::calculateVerticesN (const MD5Joints& skeleton,float vertices,int v
     }
 }
 
-void MD5Mesh::calculateVertices (const MD5Joints& skeleton,float vertices,int vstride,int wstride,const gdx_cpp::math::collision::BoundingBox& bbox) {
+void MD5Mesh::calculateVertices (const MD5Joints& skeleton,float vertices,int vstride,int wstride,const gdx::BoundingBox& bbox) {
     for (int vertexOffset = 2, k = 0; vertexOffset < vertices.length; vertexOffset += vstride) {
         float finalX = 0;
         float finalY = 0;
@@ -187,7 +187,7 @@ void MD5Mesh::calculateNormalsBind (const MD5Joints& bindPoseSkeleton) {
     calculateNormalsBind(bindPoseSkeleton, weights, vertices, indices, verts, floatsPerVertex, floatsPerWeight);
 }
 
-gdx_cpp::math::Vector3& MD5Mesh::calcNor (const gdx_cpp::math::Vector3& v1,const gdx_cpp::math::Vector3& v2,const gdx_cpp::math::Vector3& v3) {
+gdx::Vector3& MD5Mesh::calcNor (const gdx::Vector3& v1,const gdx::Vector3& v2,const gdx::Vector3& v3) {
     _A = v2.cpy();
     _A.sub(v1);
     _B = v3.cpy();

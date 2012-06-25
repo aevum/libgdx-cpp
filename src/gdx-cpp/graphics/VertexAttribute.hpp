@@ -23,8 +23,7 @@
 
 #include <string>
 
-namespace gdx_cpp {
-namespace graphics {
+namespace gdx {
 
 class VertexAttribute {
 public:
@@ -37,7 +36,6 @@ public:
 
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_VERTEXATTRIBUTE_HPP_

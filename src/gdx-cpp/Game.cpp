@@ -22,7 +22,7 @@
 #include "Gdx.hpp"
 #include "Graphics.hpp"
 
-using namespace gdx_cpp;
+using namespace gdx;
 
 void Game::dispose () {
     if (screen != NULL) screen->hide();

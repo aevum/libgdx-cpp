@@ -25,7 +25,7 @@
 #include "gdx-cpp/math/MathUtils.hpp"
 #include <stdexcept>
 
-using namespace gdx_cpp::audio::analysis;
+using namespace gdx;
 
 
 FFT::FFT(int ts, float sr): FourierTransform(ts, sr)
@@ -191,7 +191,7 @@ void FFT::buildTrigTables () {
     sinlookup = std::vector<float>(N);
     coslookup = std::vector<float>(N);
     for (int i = 0; i < N; i++) {
-        sinlookup[i] = (float)std::sin(-(float)math::utils::PI / i);
-        coslookup[i] = (float)std::cos(-(float)math::utils::PI / i);
+        sinlookup[i] = (float)std::sin(-(float)PI / i);
+        coslookup[i] = (float)std::cos(-(float)PI / i);
     }
 }

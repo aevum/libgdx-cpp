@@ -40,11 +40,11 @@
 
 #import <OpenGLES/ES1/gl.h>
 
-using namespace gdx_cpp::backends::ios;
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp;
+using namespace gdx::ios;
+using namespace gdx::graphics;
+using namespace gdx;
 
-gdx_cpp::backends::ios::IosGraphics::IosGraphics() :
+gdx::ios::IosGraphics::IosGraphics() :
 gl10(0)
 ,gl11(0)
 ,gl20(0)
@@ -58,87 +58,87 @@ gl10(0)
 {
 }
 
-gdx_cpp::graphics::GL10* gdx_cpp::backends::ios::IosGraphics::getGL10()
+gdx::GL10* gdx::ios::IosGraphics::getGL10()
 {
     return gl10;
 }
 
-gdx_cpp::graphics::GL11* gdx_cpp::backends::ios::IosGraphics::getGL11()
+gdx::GL11* gdx::ios::IosGraphics::getGL11()
 {
     return gl11;
 }
 
-gdx_cpp::graphics::GL20* gdx_cpp::backends::ios::IosGraphics::getGL20()
+gdx::GL20* gdx::ios::IosGraphics::getGL20()
 {
     return gl20;
 }
 
-gdx_cpp::graphics::GLU* gdx_cpp::backends::ios::IosGraphics::getGLU()
+gdx::GLU* gdx::ios::IosGraphics::getGLU()
 {
     return glu;
 }
 
-gdx_cpp::Graphics::BufferFormat gdx_cpp::backends::ios::IosGraphics::getBufferFormat()
+gdx::Graphics::BufferFormat gdx::ios::IosGraphics::getBufferFormat()
 {
     throw std::runtime_error("not implemented yet");
 }
 
-float gdx_cpp::backends::ios::IosGraphics::getDeltaTime()
+float gdx::ios::IosGraphics::getDeltaTime()
 {
     return deltaTime;
 }
 
-float gdx_cpp::backends::ios::IosGraphics::getDensity()
+float gdx::ios::IosGraphics::getDensity()
 {
     return 0;
 }
 
-gdx_cpp::Graphics::DisplayMode gdx_cpp::backends::ios::IosGraphics::getDesktopDisplayMode()
+gdx::Graphics::DisplayMode gdx::ios::IosGraphics::getDesktopDisplayMode()
 {
     throw std::runtime_error("not implemented yet");
 }
 
-std::vector< gdx_cpp::Graphics::DisplayMode >& gdx_cpp::backends::ios::IosGraphics::getDisplayModes()
+std::vector< gdx::Graphics::DisplayMode >& gdx::ios::IosGraphics::getDisplayModes()
 {
     throw std::runtime_error("not implemented yet");
 }
 
-int gdx_cpp::backends::ios::IosGraphics::getFramesPerSecond()
+int gdx::ios::IosGraphics::getFramesPerSecond()
 {
     return this->fps;
 }
 
-gdx_cpp::graphics::GLCommon* gdx_cpp::backends::ios::IosGraphics::getGLCommon()
+gdx::GLCommon* gdx::ios::IosGraphics::getGLCommon()
 {
     return gl10;
 }
 
-int gdx_cpp::backends::ios::IosGraphics::getHeight()
+int gdx::ios::IosGraphics::getHeight()
 {
     return this->height;
 }
 
-float gdx_cpp::backends::ios::IosGraphics::getPpcX()
+float gdx::ios::IosGraphics::getPpcX()
 {
     return 0;
 }
 
-float gdx_cpp::backends::ios::IosGraphics::getPpcY()
+float gdx::ios::IosGraphics::getPpcY()
 {
     return 0;
 }
 
-float gdx_cpp::backends::ios::IosGraphics::getPpiX()
+float gdx::ios::IosGraphics::getPpiX()
 {
     return 0;
 }
 
-float gdx_cpp::backends::ios::IosGraphics::getPpiY()
+float gdx::ios::IosGraphics::getPpiY()
 {
     return 0;
 }
 
-void gdx_cpp::backends::ios::IosGraphics::updateTime()
+void gdx::ios::IosGraphics::updateTime()
 {
     uint64_t time = Gdx::system->nanoTime();
 
@@ -153,58 +153,58 @@ void gdx_cpp::backends::ios::IosGraphics::updateTime()
     frames++;
 }
 
-gdx_cpp::Graphics::GraphicsType gdx_cpp::backends::ios::IosGraphics::getType()
+gdx::Graphics::GraphicsType gdx::ios::IosGraphics::getType()
 {
-    return gdx_cpp::Graphics::IOsGL;
+    return gdx::Graphics::IOsGL;
 }
 
-int gdx_cpp::backends::ios::IosGraphics::getWidth()
+int gdx::ios::IosGraphics::getWidth()
 {
     return this->width;
 }
 
-bool gdx_cpp::backends::ios::IosGraphics::isGL11Available()
+bool gdx::ios::IosGraphics::isGL11Available()
 {
     return gl11 != NULL;
 }
 
-bool gdx_cpp::backends::ios::IosGraphics::isGL20Available()
+bool gdx::ios::IosGraphics::isGL20Available()
 {
     return gl20 != NULL;
 }
 
-bool gdx_cpp::backends::ios::IosGraphics::setDisplayMode(gdx_cpp::Graphics::DisplayMode displayMode)
+bool gdx::ios::IosGraphics::setDisplayMode(gdx::Graphics::DisplayMode displayMode)
 {
     if (!supportsDisplayModeChange())
         return false;
     return true;
 }
 
-void gdx_cpp::backends::ios::IosGraphics::setIcon(gdx_cpp::graphics::Pixmap::ptr pixmap)
+void gdx::ios::IosGraphics::setIcon(gdx::Pixmap::ptr pixmap)
 {
     this->iconPixmap = pixmap;
 }
 
-void gdx_cpp::backends::ios::IosGraphics::setTitle(const std::string& title)
+void gdx::ios::IosGraphics::setTitle(const std::string& title)
 {
 }
 
-void gdx_cpp::backends::ios::IosGraphics::setVSync(bool vsync)
+void gdx::ios::IosGraphics::setVSync(bool vsync)
 {
     this->vsync = true;
 }
 
-bool gdx_cpp::backends::ios::IosGraphics::supportsDisplayModeChange()
+bool gdx::ios::IosGraphics::supportsDisplayModeChange()
 {
     return false;
 }
 
-bool gdx_cpp::backends::ios::IosGraphics::supportsExtension(const std::string& extension)
+bool gdx::ios::IosGraphics::supportsExtension(const std::string& extension)
 {
     return false;
 }
 
-void gdx_cpp::backends::ios::IosGraphics::initialize()
+void gdx::ios::IosGraphics::initialize()
 {   
 	this->lastTime = Gdx::system->nanoTime();   
     const GLubyte* version = glGetString(GL_VERSION);
@@ -231,7 +231,7 @@ void gdx_cpp::backends::ios::IosGraphics::initialize()
     } 
 }
 
-bool gdx_cpp::backends::ios::IosGraphics::setDisplayMode(int width, int height, bool fullscreen)
+bool gdx::ios::IosGraphics::setDisplayMode(int width, int height, bool fullscreen)
 {
 	this->width = width;
 	this->height = height;
@@ -239,51 +239,51 @@ bool gdx_cpp::backends::ios::IosGraphics::setDisplayMode(int width, int height, 
 	return true;
 }
 
-void gdx_cpp::backends::ios::IosGraphics::update()
+void gdx::ios::IosGraphics::update()
 {
 }
 
-TextureData::ptr backends::ios::IosGraphics::resolveTextureData(gdx_cpp::files::FileHandle::ptr fileHandle,
+TextureData::ptr ios::IosGraphics::resolveTextureData(gdx::FileHandle::ptr fileHandle,
                                                                   Pixmap::ptr preloadedPixmap,
-                                                                  const gdx_cpp::graphics::Pixmap::Format* format,
+                                                                  const gdx::Pixmap::Format* format,
                                                                   bool useMipMaps)
 {
-    return TextureData::ptr(new glutils::FileTextureData(fileHandle, preloadedPixmap, format, useMipMaps));
+    return TextureData::ptr(new glFileTextureData(fileHandle, preloadedPixmap, format, useMipMaps));
 }
 
-Pixmap* backends::ios::IosGraphics::resolvePixmap(int width, int height, const gdx_cpp::graphics::Pixmap::Format& format, int pixType)
+Pixmap* ios::IosGraphics::resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, int pixType)
 {
     switch(pixType) {
         case Pixmap::Gdx2d:
-            return g2d::Gdx2DPixmap::newPixmap(width, height, g2d::Gdx2DPixmap::Format::toGdx2DPixmapFormat(format));
+            return Gdx2DPixmap::newPixmap(width, height, Gdx2DPixmap::Format::toGdx2DPixmapFormat(format));
         case Pixmap::Svg:
-            return new g2d::svg::AggSvgPixmap(width, height);
+            return new svg::AggSvgPixmap(width, height);
     }
     return NULL;
 }
 
-Pixmap* backends::ios::IosGraphics::resolvePixmap(const gdx_cpp::graphics::Pixmap& other)
+Pixmap* ios::IosGraphics::resolvePixmap(const gdx::Pixmap& other)
 {
     switch(other.getType()) {
         case Pixmap::Gdx2d:
-            return new g2d::Gdx2DPixmap((g2d::Gdx2DPixmap&)other);
+            return new Gdx2DPixmap((Gdx2DPixmap&)other);
 		case Pixmap::Svg:
 			break;			
     } 
     return NULL;
 }
 
-Pixmap* backends::ios::IosGraphics::resolvePixmap(const gdx_cpp::files::FileHandle::ptr& file)
+Pixmap* ios::IosGraphics::resolvePixmap(const gdx::FileHandle::ptr& file)
 {
     std::string extension = file->extension();
     
     if (extension == "png" || extension == "jpg" || extension == "tga" || extension == "bmp") {
-		gdx_cpp::files::FileHandle::buffer_ptr buffer;
+		gdx::FileHandle::buffer_ptr buffer;
 		int length = file->readBytes(buffer);
-		return g2d::Gdx2DPixmap::pixmapFromByteArray((unsigned char*) buffer.get(), length, 0);
+		return Gdx2DPixmap::pixmapFromByteArray((unsigned char*) buffer.get(), length, 0);
 	}
     else if (extension == "svg") {
-        return g2d::svg::AggSvgPixmap::newFromFile(file);        
+        return svg::AggSvgPixmap::newFromFile(file);        
     } else {
         throw std::runtime_error("unsupported image format: " + extension);
     }

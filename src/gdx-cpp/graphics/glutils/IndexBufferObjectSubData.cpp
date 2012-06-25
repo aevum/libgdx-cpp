@@ -26,9 +26,7 @@
 #include "gdx-cpp/graphics/GL10.hpp"
 #include "gdx-cpp/gl.hpp"
 
-using namespace gdx_cpp;
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp::graphics::glutils;
+using namespace gdx;
 
 int IndexBufferObjectSubData::createBufferObject () {
     if (Gdx::gl20 != NULL) {
@@ -81,7 +79,7 @@ void IndexBufferObjectSubData::setIndices (const std::vector<short>& indices, in
     }
 }
 
-gdx_cpp::utils::short_buffer& IndexBufferObjectSubData::getBuffer () {
+gdx::short_buffer& IndexBufferObjectSubData::getBuffer () {
     isDirty = true;
     return buffer;
 }

@@ -27,9 +27,7 @@
 #include <cstdio>
 #include <stdexcept>
 
-namespace gdx_cpp {
-
-namespace utils {
+namespace gdx {
 
 template <typename returnType>
 returnType from_string(const std::string& str) {
@@ -77,8 +75,6 @@ std::string to_string(const T& item) {
     ss << item;
 
     return ss.str();
-}
-
 }
 
 }

@@ -21,14 +21,11 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_TILED_TILEDLOADER_HPP_
 #define GDX_CPP_GRAPHICS_G2D_TILED_TILEDLOADER_HPP_
 
-namespace gdx_cpp {
-namespace graphics {
-namespace g2d {
-namespace tiled {
+namespace gdx {
 
 class TiledLoader {
 public:
-    static TiledMap& createMap (const gdx_cpp::files::FileHandle& tmxFile);
+    static TiledMap& createMap (const FileHandle& tmxFile);
 
 protected:
     void open (const std::string& name);
@@ -44,9 +41,6 @@ private:
     void unGZip ();
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g2d
-} // namespace tiled
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_G2D_TILED_TILEDLOADER_HPP_

@@ -20,7 +20,7 @@
 
 #include "TextureParameter.hpp"
 
-using namespace gdx_cpp::assets::loaders;
+using namespace gdx;
 
 
 

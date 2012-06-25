@@ -20,7 +20,7 @@
 
 #include "Action.hpp"
 
-using namespace gdx_cpp::scenes::scene2d;
+using namespace gdx::scene2d;
 
 void Action::finish () {
     if (listener != NULL) {

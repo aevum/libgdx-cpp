@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_UI_TABLELAYOUT_TABLELAYOUT_HPP_
 #define GDX_CPP_SCENES_SCENE2D_UI_TABLELAYOUT_TABLELAYOUT_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace ui {
@@ -29,13 +29,13 @@ namespace tablelayout {
 
 class TableLayout {
 public:
-    gdx_cpp::scenes::scene2d::Actor& register (const gdx_cpp::scenes::scene2d::Actor& actor);
-    gdx_cpp::scenes::scene2d::Actor& registerImage (const std::string& name);
-    gdx_cpp::scenes::scene2d::Actor& getWidget (const std::string& name);
+    gdx::Actor& register (const gdx::Actor& actor);
+    gdx::Actor& registerImage (const std::string& name);
+    gdx::Actor& getWidget (const std::string& name);
     void layout ();
     void invalidate ();
     void invalidateHierarchy ();
-    void drawDebug (const gdx_cpp::graphics::g2d::SpriteBatch& batch);
+    void drawDebug (const gdx::SpriteBatch& batch);
     TableLayout ();
     TableLayout (const LibgdxToolkit& toolkit);
     TextureAtlas atlas ;
@@ -50,7 +50,7 @@ private:
     ImmediateModeRenderer debugRenderer ;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace ui

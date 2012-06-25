@@ -26,20 +26,15 @@
 #include "gdx-cpp/utils/Aliases.hpp"
 #include "gdx-cpp/graphics/Texture.hpp"
 
-namespace gdx_cpp {
-namespace files{
+namespace gdx {
 class FileHandle;
-}
-namespace graphics {
-  
-namespace g2d {
 
 class TextureAtlas;
 class SpriteBatch;
 class ParticleEmitter;
 class File;
 
-class ParticleEffect: public gdx_cpp::utils::Disposable {
+class ParticleEffect: public Disposable {
 public:
 
     ParticleEffect ();
@@ -58,24 +53,22 @@ public:
     ParticleEmitter* findEmitter (const std::string& name);
     void save (const File& file);
     void load (std::string file);
-    void load (const gdx_cpp::files::FileHandle& effectFile,const gdx_cpp::files::FileHandle& imagesDir);
-    void load (const gdx_cpp::files::FileHandle& effectFile,const TextureAtlas& atlas);
-    void loadEmitters (const gdx_cpp::files::FileHandle& effectFile);
+    void load (const FileHandle& effectFile,const FileHandle& imagesDir);
+    void load (const FileHandle& effectFile,const TextureAtlas& atlas);
+    void loadEmitters (const FileHandle& effectFile);
     void loadEmittersTest (std::string file);
     void loadEmitterImages (const TextureAtlas& atlas);
-    void loadEmitterImages (const gdx_cpp::files::FileHandle& imagesDir);
+    void loadEmitterImages (const FileHandle& imagesDir);
     void loadEmitterImagesTest ();
     void dispose ();
 
 protected:
-    gdx_cpp::graphics::Texture::ptr loadTexture (const gdx_cpp::files::FileHandle::ptr file);
+    Texture::ptr loadTexture (const FileHandle::ptr file);
 
 private:
     std::vector<ParticleEmitter *> emitters;
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g2d
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_G2D_PARTICLEEFFECT_HPP_

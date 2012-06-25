@@ -24,7 +24,7 @@
 #include <vector>
 #include "Action.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 
@@ -37,7 +37,7 @@ protected:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 

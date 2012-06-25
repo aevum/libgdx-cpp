@@ -29,7 +29,7 @@
 #include "gdx-cpp/math/Vector2.hpp"
 #include "Group.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 
@@ -62,17 +62,17 @@ public:
     void act (float delta);
     void draw ();
     void dispose ();
-    void addActor (gdx_cpp::scenes::scene2d::Actor*const actor);
+    void addActor (gdx::Actor*const actor);
     std::string graphToString ();
     Group& getRoot ();
-    graphics::g2d::SpriteBatch* getSpriteBatch ();
-    graphics::Camera*const getCamera ();
-    void setCamera (gdx_cpp::graphics::Camera* camera);
+    SpriteBatch* getSpriteBatch ();
+    Camera*const getCamera ();
+    void setCamera (gdx::Camera* camera);
     Actor* getLastTouchedChild ();
     Actor* hit (float x, float y);
-    void toStageCoordinates (int x, int y, gdx_cpp::math::Vector2& out);
+    void toStageCoordinates (int x, int y, gdx::Vector2& out);
     void clear ();
-    void removeActor (gdx_cpp::scenes::scene2d::Actor* actor);
+    void removeActor (gdx::Actor* actor);
     void unfocusAll ();
     Stage (float width,float height,bool stretch);
 
@@ -85,17 +85,17 @@ protected:
     float _centerY ;
     bool stretch ;
     Group root ;
-    graphics::g2d::SpriteBatch* batch ;
-    graphics::Camera* camera ;
+    SpriteBatch* batch ;
+    Camera* camera ;
 
-    math::Vector2 point;
-    math::Vector2 coords;
-    math::Vector3 tmp;
+    Vector2 point;
+    Vector2 coords;
+    Vector3 tmp;
 private:
-    void graphToString (std::stringstream& buffer, const gdx_cpp::scenes::scene2d::Actor* actor, int level);
+    void graphToString (std::stringstream& buffer, const gdx::Actor* actor, int level);
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 

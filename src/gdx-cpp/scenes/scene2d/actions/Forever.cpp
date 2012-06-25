@@ -20,17 +20,17 @@
 
 #include "Forever.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::actions;
+using namespace gdx::actions;
 
 ActionResetingPool<Forever> Forever::pool = ActionResetingPool<Forever>(4, 100);
 
-Forever* Forever::build (gdx_cpp::scenes::scene2d::Action* action) {
+Forever* Forever::build (gdx::Action* action) {
     Forever* forever = pool.obtain();
     forever->action = action;
     return forever;
 }
 
-void Forever::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+void Forever::setTarget (gdx::Actor* actor) {
     action->setTarget(actor);
     target = actor;
 }
@@ -55,11 +55,11 @@ void Forever::finish () {
     TemporalAction::finish();
 }
 
-gdx_cpp::scenes::scene2d::Action* Forever::copy () {
+gdx::Action* Forever::copy () {
     return Forever::build(action->copy());
 }
 
-gdx_cpp::scenes::scene2d::Actor* Forever::getTarget () {
+gdx::Actor* Forever::getTarget () {
     return target;
 }
 

@@ -24,13 +24,11 @@
 #include <gdx-cpp/audio/Sound.hpp>
 #include <jni.h>
 
-namespace gdx_cpp {
-
-namespace backends {
+namespace gdx {
 
 namespace android {
 
-class AndroidSound : public audio::Sound
+class AndroidSound : public Sound
 {
 public:
     AndroidSound(jobject jniSound);
@@ -49,8 +47,6 @@ private:
     jmethodID playFloatJNI;
     jmethodID stopJNI;
 };
-
-}
 
 }
 

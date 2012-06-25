@@ -17,7 +17,7 @@
 
 #include "LinuxOpenALAudioRecorder.hpp"
 
-using namespace gdx_cpp::backends::nix;
+using namespace gdx::nix;
 
 void LinuxOpenALAudioRecorder::read (int offset,int numSamples)
 {

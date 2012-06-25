@@ -20,7 +20,7 @@
 
 #include "MoveBy.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::actions;
+using namespace gdx::actions;
 
 ActionResetingPool<MoveBy> MoveBy::pool = ActionResetingPool<MoveBy>(4, 100);
 
@@ -33,7 +33,7 @@ MoveBy* MoveBy::build(float x,float y,float duration) {
     return action;
 }
 
-void MoveBy::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+void MoveBy::setTarget (gdx::Actor* actor) {
     this->target = actor;
     this->startX = target->x;
     this->startY = target->y;
@@ -61,7 +61,7 @@ void MoveBy::finish () {
     pool.free(this);
 }
 
-gdx_cpp::scenes::scene2d::Action* MoveBy::copy () {
+gdx::Action* MoveBy::copy () {
     MoveBy* moveBy = MoveBy::build(initialX, initialY, duration);
     if (interpolator != NULL) moveBy->setInterpolator(interpolator->copy());
     return moveBy;

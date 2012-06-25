@@ -24,8 +24,7 @@
 
 #include <iostream>
 
-using namespace gdx_cpp::graphics::g2d;
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
 ParticleEffect::ParticleEffect () {
     emitters.reserve(8);
@@ -137,17 +136,17 @@ void ParticleEffect::load (std::string file)
     loadEmittersTest(file);
     loadEmitterImagesTest();
 }
-void ParticleEffect::load (const gdx_cpp::files::FileHandle& effectFile,const gdx_cpp::files::FileHandle& imagesDir) {
+void ParticleEffect::load (const FileHandle& effectFile,const FileHandle& imagesDir) {
     loadEmitters(effectFile);
     loadEmitterImages(imagesDir);
 }
 
-void ParticleEffect::load (const gdx_cpp::files::FileHandle& effectFile,const TextureAtlas& atlas) {
+void ParticleEffect::load (const FileHandle& effectFile,const TextureAtlas& atlas) {
     loadEmitters(effectFile);
     loadEmitterImages(atlas);
 }
 
-void ParticleEffect::loadEmitters (const gdx_cpp::files::FileHandle& effectFile) {
+void ParticleEffect::loadEmitters (const FileHandle& effectFile) {
 //     InputStream input = effectFile.read();
 //     emitters.clear();
 //     BufferedReader reader = null;
@@ -186,7 +185,7 @@ void ParticleEffect::loadEmitterImages (const TextureAtlas& atlas) {
 //     }
 }
 
-void ParticleEffect::loadEmitterImages (const gdx_cpp::files::FileHandle& imagesDir) {
+void ParticleEffect::loadEmitterImages (const FileHandle& imagesDir) {
 //     for (unsigned int i = 0, n = emitters.size; i < n; i++) {
 //         ParticleEmitter emitter = emitters.get(i);
 //         String imagePath = emitter.getImagePath();
@@ -230,8 +229,8 @@ void ParticleEffect::loadEmitterImagesTest () {
     }
 }
 
-gdx_cpp::graphics::Texture::ptr ParticleEffect::loadTexture (const gdx_cpp::files::FileHandle::ptr file) {
-    return gdx_cpp::graphics::Texture::newFromFile(file, NULL, false);
+Texture::ptr ParticleEffect::loadTexture (const FileHandle::ptr file) {
+    return Texture::newFromFile(file, NULL, false);
 }
 
 void ParticleEffect::dispose () {

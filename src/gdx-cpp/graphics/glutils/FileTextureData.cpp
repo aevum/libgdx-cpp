@@ -26,11 +26,9 @@
 
 #include <stdexcept>
 
-using namespace gdx_cpp;
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp::graphics::glutils;
+using namespace gdx;
 
-gdx_cpp::graphics::Pixmap::ptr FileTextureData::getPixmap () {
+gdx::Pixmap::ptr FileTextureData::getPixmap () {
     if (pixmap != NULL) {
         Pixmap::ptr tmp = pixmap;
         this->pixmap.reset();
@@ -56,7 +54,7 @@ int FileTextureData::getHeight () {
     return height;
 }
 
-const gdx_cpp::graphics::Pixmap::Format* FileTextureData::getFormat () {
+const gdx::Pixmap::Format* FileTextureData::getFormat () {
     return format;
 }
 
@@ -68,7 +66,7 @@ bool FileTextureData::isManaged () {
     return true;
 }
 
-gdx_cpp::files::FileHandle::ptr FileTextureData::getFileHandle () {
+gdx::FileHandle::ptr FileTextureData::getFileHandle () {
     return file;
 }
 
@@ -80,7 +78,7 @@ void FileTextureData::uploadCompressedData () {
     throw std::runtime_error("This TextureData implementation does not upload data itself");
 }
 
-FileTextureData::FileTextureData(files::FileHandle::ptr file, gdx_cpp::graphics::Pixmap::ptr preloadedPixmap,
+FileTextureData::FileTextureData(FileHandle::ptr file, gdx::Pixmap::ptr preloadedPixmap,
                                  const Pixmap::Format* format, bool useMipMaps)
 :
 file(file)

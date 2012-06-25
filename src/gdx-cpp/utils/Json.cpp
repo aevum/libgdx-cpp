@@ -21,14 +21,13 @@
 #include "Json.hpp"
 #include <stdexcept>
 
-using namespace gdx_cpp::utils;
-using namespace gdx_cpp;
+using namespace gdx;
 
 void Json::setIgnoreUnknownFields (bool ignoreUnknownFields) {
     this->ignoreUnknownFields = ignoreUnknownFields;
 }
 
-void Json::setOutputType (const gdx_cpp::utils::JsonWriter::OutputType& outputType) {
+void Json::setOutputType (const JsonWriter::OutputType& outputType) {
     this->outputType = outputType;
 }
 
@@ -67,17 +66,17 @@ std::string& Json::toJson (const JsonValue& object) {
     return buffer.str();
 }
 
-void Json::toJson (const JsonValue& object,const gdx_cpp::files::FileHandle& file) {
+void Json::toJson (const JsonValue& object,const FileHandle& file) {
     toJson(object, object == NULL ? NULL : object.getClass(), NULL, file);
 }
 
-void Json::toJson (const JsonValue& object,const Class& knownType,const gdx_cpp::files::FileHandle& file) {
+void Json::toJson (const JsonValue& object,const Class& knownType,const FileHandle& file) {
     toJson(object, knownType, NULL, file);
 }
 
-void Json::toJson (const JsonValue& object,const Class& knownType,const Class& elementType,const gdx_cpp::files::FileHandle& file) {
+void Json::toJson (const JsonValue& object,const Class& knownType,const Class& elementType,const FileHandle& file) {
     try {
-        files::FileHandle::ofstream_ptr writer = file.write(false);
+        FileHandle::ofstream_ptr writer = file.write(false);
         toJson(object, knownType, elementType, writer);
         writer->close();
     } catch (...) {
@@ -118,7 +117,7 @@ for (FieldMetadata metadata : fields.values()) {
     }
 }
 
-std::vector< Json::json_item > Json::getDefaultValues (const gdx_cpp::utils::Json::json_item& item) {
+std::vector< Json::json_item > Json::getDefaultValues (const Json::json_item& item) {
     if (!usePrototypes) return std::vector< JsonValue >();
     
     std::vector< Json::json_item > values = classToDefaultValues[item.item_type];
@@ -608,7 +607,7 @@ Json::Json () {
     outputType = OutputType.minimal;
 }
 
-Json::Json (const gdx_cpp::utils::JsonWriter::OutputType& outputType) {
+Json::Json (const JsonWriter::OutputType& outputType) {
     this->outputType = outputType;
 }
 

@@ -20,9 +20,9 @@
 
 #include "TextureLoader.hpp"
 
-using namespace gdx_cpp::assets::loaders;
+using namespace gdx;
 
-void TextureLoader::loadAsync (const gdx_cpp::assets::AssetManager& manager,const std::string& fileName,const TextureParameter& parameter) {
+void TextureLoader::loadAsync (const AssetManager& manager,const std::string& fileName,const TextureParameter& parameter) {
     FileHandle handle = resolve(fileName);
     Pixmap pixmap = new Pixmap(handle);
     Format format = null;
@@ -38,7 +38,7 @@ void TextureLoader::loadAsync (const gdx_cpp::assets::AssetManager& manager,cons
     data = new FileTextureData(handle, pixmap, format, genMipMaps);
 }
 
-gdx_cpp::graphics::Texture& TextureLoader::loadSync () {
+Texture& TextureLoader::loadSync () {
     if (texture != null) {
         texture.load(data);
         return texture;
@@ -47,7 +47,7 @@ gdx_cpp::graphics::Texture& TextureLoader::loadSync () {
     }
 }
 
-gdx_cpp::utils::ArrayAssetDescriptor>& TextureLoader::getDependencies (const std::string& fileName,const TextureParameter& parameter) {
+ArrayAssetDescriptor& TextureLoader::getDependencies (const std::string& fileName,const TextureParameter& parameter) {
     return null;
 }
 

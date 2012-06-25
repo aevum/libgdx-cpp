@@ -25,7 +25,7 @@
 #include "gdx-cpp/scenes/scene2d/Action.hpp"
 #include "ActionResetingPool.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace actions {
@@ -46,11 +46,11 @@ public:
         return sequence;
     }
      
-    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
+    void setTarget (gdx::Actor* actor);
     void act (float delta);
     bool isDone ();
     void finish ();
-    gdx_cpp::scenes::scene2d::Action* copy ();
+    gdx::Action* copy ();
     Actor* getTarget ();
 
     Sequence();
@@ -62,7 +62,7 @@ protected:
     static ActionResetingPool<Sequence> pool;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace actions

@@ -24,15 +24,15 @@
 #include "gdx-cpp/scenes/scene2d/TemporalAction.hpp"
 #include "ActionResetingPool.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace actions {
 
-class Forever: public gdx_cpp::scenes::scene2d::TemporalAction {
+class Forever: public gdx::TemporalAction {
 public:
-    static Forever* build (gdx_cpp::scenes::scene2d::Action* action);
-    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
+    static Forever* build (gdx::Action* action);
+    void setTarget (gdx::Actor* actor);
     void act (float delta);
     bool isDone ();
     void finish ();
@@ -43,7 +43,7 @@ private:
     static ActionResetingPool<Forever> pool;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace actions

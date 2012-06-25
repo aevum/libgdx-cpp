@@ -21,15 +21,13 @@
 #ifndef GDX_CPP_ASSETS_LOADERS_PIXMAPLOADER_HPP_
 #define GDX_CPP_ASSETS_LOADERS_PIXMAPLOADER_HPP_
 
-namespace gdx_cpp {
-namespace assets {
-namespace loaders {
-
+namespace gdx {
+    
 class PixmapLoader {
 public:
-    void loadAsync (const gdx_cpp::assets::AssetManager& manager,const std::string& fileName,const PixmapParameter& parameter);
-    gdx_cpp::graphics::Pixmap& loadSync ();
-    gdx_cpp::utils::ArrayAssetDescriptor>& getDependencies (const std::string& fileName,const PixmapParameter& parameter);
+    void loadAsync (const AssetManager& manager,const std::string& fileName,const PixmapParameter& parameter);
+    Pixmap& loadSync ();
+    ArrayAssetDescriptor& getDependencies (const std::string& fileName,const PixmapParameter& parameter);
 
 protected:
 
@@ -38,8 +36,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace assets
-} // namespace loaders
+} // namespace gdx
 
 #endif // GDX_CPP_ASSETS_LOADERS_PIXMAPLOADER_HPP_

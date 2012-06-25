@@ -21,13 +21,13 @@
 #include <gdx-cpp/graphics/GL11.hpp>
 #include "IosGL10.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 
 namespace backends {
 
 namespace ios {
 
-class IosGL11 : public IosGL10, virtual public graphics::GL11
+class IosGL11 : public IosGL10, virtual public GL11
 {
 public:
      void glClipPlanef (int plane,const float* equation) const ;

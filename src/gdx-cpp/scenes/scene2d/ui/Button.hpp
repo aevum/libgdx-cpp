@@ -21,23 +21,23 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_UI_BUTTON_HPP_
 #define GDX_CPP_SCENES_SCENE2D_UI_BUTTON_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace ui {
 
-class Button: public gdx_cpp::scenes::scene2d::ui::tablelayout::Table {
+class Button: public gdx::ui::tablelayout::Table {
 public:
-    void click (const gdx_cpp::scenes::scene2d::Actor& actor);
+    void click (const gdx::Actor& actor);
     void setStyle (const ButtonStyle& style);
     void setClickListener (const ClickListener& listener);
     void setText (const std::string& text);
     std::string& getText ();
-    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
+    void draw (const gdx::SpriteBatch& batch,float parentAlpha);
     Button (const Skin& skin);
     Button (const ButtonStyle& style);
-    Button (const gdx_cpp::scenes::scene2d::Actor& child,const Skin& skin);
-    Button (const gdx_cpp::scenes::scene2d::Actor& child,const ButtonStyle& style);
+    Button (const gdx::Actor& child,const Skin& skin);
+    Button (const gdx::Actor& child,const ButtonStyle& style);
     Button (const std::string& text,const Skin& skin);
     Button (const std::string& text,const ButtonStyle& style);
     Button (const std::string& text,const ButtonStyle& style,const std::string& name);
@@ -52,7 +52,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace ui

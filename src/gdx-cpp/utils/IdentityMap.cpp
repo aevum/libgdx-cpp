@@ -20,7 +20,7 @@
 
 #include "IdentityMap<K, V>.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx::utils;
 
 V& IdentityMap<K, V>::put (const K& key,const V& value) {
     if (key == null) throw new IllegalArgumentException("key cannot be null.");

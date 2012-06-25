@@ -24,13 +24,11 @@
 #include <gdx-cpp/audio/Music.hpp>
 #include <jni.h>
 
-namespace gdx_cpp {
-
-namespace backends {
+namespace gdx {
 
 namespace android {
 
-class AndroidMusic : public audio::Music
+class AndroidMusic : public Music
 {
 public:
     AndroidMusic(jobject musicObj);
@@ -59,8 +57,6 @@ protected:
     jmethodID setVolumeJNI;
     jmethodID stopJNI;
 };
-
-}
 
 }
 

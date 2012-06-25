@@ -20,13 +20,13 @@
 
 #include <gdx-cpp/graphics/GL10.hpp>
 
-namespace gdx_cpp {
+namespace gdx {
 
 namespace backends {
 
 namespace ios {
 
-class IosGL10 : virtual public graphics::GL10
+class IosGL10 : virtual public GL10
 {
 public:
     virtual void glActiveTexture (int texture) const ;

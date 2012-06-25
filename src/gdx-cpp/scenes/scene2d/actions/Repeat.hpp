@@ -24,22 +24,22 @@
 #include "gdx-cpp/scenes/scene2d/TemporalAction.hpp"
 #include "ActionResetingPool.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace actions {
 
-class Repeat: public gdx_cpp::scenes::scene2d::TemporalAction {
+class Repeat: public gdx::TemporalAction {
 public:
-    static Repeat* build (gdx_cpp::scenes::scene2d::Action* action, int times);
+    static Repeat* build (gdx::Action* action, int times);
     
     void reset ();
-    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
+    void setTarget (gdx::Actor* actor);
     void act (float delta);
     bool isDone ();
     void finish ();
-    gdx_cpp::scenes::scene2d::Action* copy ();
-    gdx_cpp::scenes::scene2d::Actor* getTarget ();
+    gdx::Action* copy ();
+    gdx::Actor* getTarget ();
 
 protected:
     int times;
@@ -48,7 +48,7 @@ protected:
     static ActionResetingPool<Repeat> pool;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace actions

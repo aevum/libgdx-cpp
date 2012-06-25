@@ -28,22 +28,19 @@
 #include "gdx-cpp/scenes/scene2d/Actor.hpp"
 #include "gdx-cpp/scenes/scene2d/Layout.hpp"
 
-namespace gdx_cpp {
-namespace scenes {
-namespace scene2d {
-namespace actors {
+namespace gdx {
 
 class Label : public Actor, public Layout {
 public:
     void setText (const std::string& text);
     void setMultiLineText (const std::string& text);
-    void setWrappedText (const std::string& text,const gdx_cpp::graphics::g2d::BitmapFont::HAlignment& halign);
-    void setFont (const gdx_cpp::graphics::g2d::BitmapFont& font);
-    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
+    void setWrappedText (const std::string& text,const gdx::BitmapFont::HAlignment& halign);
+    void setFont (const gdx::BitmapFont& font);
+    void draw (const gdx::SpriteBatch& batch,float parentAlpha);
     bool touchDown (float x,float y,int pointer);
     void touchUp (float x,float y,int pointer);
     void touchDragged (float x,float y,int pointer);
-    gdx_cpp::scenes::scene2d::Actor* hit (float x,float y);
+    gdx::Actor* hit (float x,float y);
     void layout ();
     void invalidate ();
     float getPrefWidth ();
@@ -52,8 +49,8 @@ public:
     float getMinHeight ();
     float getMaxWidth ();
     float getMaxHeight ();
-    Label (const std::string& name,const gdx_cpp::graphics::g2d::BitmapFont& font);
-    Label (const std::string& name,const gdx_cpp::graphics::g2d::BitmapFont& font,const std::string& text);
+    Label (const std::string& name,const gdx::BitmapFont& font);
+    Label (const std::string& name,const gdx::BitmapFont& font,const std::string& text);
 
     BitmapFontCache cache ;
     VAlignment valign = VAlignment.BOTTOM;
@@ -68,9 +65,6 @@ private:
     float lastWidth = -1;
 };
 
-} // namespace gdx_cpp
-} // namespace scenes
-} // namespace scene2d
-} // namespace actors
+} // namespace gdx
 
 #endif // GDX_CPP_SCENES_SCENE2D_ACTORS_LABEL_HPP_

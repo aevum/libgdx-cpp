@@ -25,18 +25,11 @@
 #include "Sprite.hpp"
 #include "gdx-cpp/math/Matrix4.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
-
+namespace gdx {
 class Mesh;
-
-namespace glutils {
 class ShaderProgram;
-}
 
-namespace g2d {
-
-class SpriteCache: public gdx_cpp::utils::Disposable {
+class SpriteCache: public Disposable {
     struct Cache {
         int id;
         int offset;
@@ -50,41 +43,41 @@ class SpriteCache: public gdx_cpp::utils::Disposable {
         }
     };
 
-    static glutils::ShaderProgram* createDefaultShader ();
+    static ShaderProgram* createDefaultShader ();
 public:
-    SpriteCache(int size = 1000, bool useIndices = false, gdx_cpp::graphics::glutils::ShaderProgram* shader = createDefaultShader());
+    SpriteCache(int size = 1000, bool useIndices = false, ShaderProgram* shader = createDefaultShader());
 
-    void setColor (const gdx_cpp::graphics::Color& tint);
+    void setColor (const Color& tint);
     void setColor (float r,float g,float b,float a);
     void setColor (float color);
-    gdx_cpp::graphics::Color& getColor ();
+    Color& getColor ();
     void beginCache ();
     void beginCache (unsigned int cacheID);
     int endCache ();
     void clear ();
 
-    void add (const gdx_cpp::graphics::Texture::ptr texture, float* vertices, int size, int offset, int length) ;
-    void add (gdx_cpp::graphics::Texture::ptr texture,float x,float y);
-    void add (const gdx_cpp::graphics::Texture::ptr texture, float* vertices, int offset, int length);
-    void add (gdx_cpp::graphics::g2d::TextureRegion& region, float x, float y, float width, float height);
-    void add (const gdx_cpp::graphics::Texture::ptr texture,float x,float y,int srcWidth,int srcHeight,float u,float v,float u2,float v2,float color);
+    void add (const Texture::ptr texture, float* vertices, int size, int offset, int length) ;
+    void add (Texture::ptr texture,float x,float y);
+    void add (const Texture::ptr texture, float* vertices, int offset, int length);
+    void add (TextureRegion& region, float x, float y, float width, float height);
+    void add (const Texture::ptr texture,float x,float y,int srcWidth,int srcHeight,float u,float v,float u2,float v2,float color);
     void add (Texture::ptr texture,float x,float y,int srcX,int srcY,int srcWidth,int srcHeight);
     void add (Texture::ptr texture, float x, float y, float width, float height, int srcX, int srcY, int srcWidth, int srcHeight, bool flipX, bool flipY);
     void add (Texture::ptr texture, float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float rotation, int srcX, int srcY, int srcWidth, int srcHeight, bool flipX, bool flipY);
     void add (TextureRegion::ptr region, float x, float y);
     void add (TextureRegion::ptr region, float x, float y, float width, float height);
     void add (TextureRegion::ptr region,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation);
-    void add (gdx_cpp::graphics::g2d::Sprite& sprite);
+    void add (Sprite& sprite);
     void begin ();
     void end ();
     void draw (int cacheID);
     void draw (int cacheID,int offset,int length);
     void dispose ();
-    gdx_cpp::math::Matrix4& getProjectionMatrix ();
-    void setProjectionMatrix (const gdx_cpp::math::Matrix4& projection);
-    gdx_cpp::math::Matrix4& getTransformMatrix ();
-    void setTransformMatrix (const gdx_cpp::math::Matrix4& transform);
-    void setShader (gdx_cpp::graphics::glutils::ShaderProgram* shader);
+    Matrix4& getProjectionMatrix ();
+    void setProjectionMatrix (const Matrix4& projection);
+    Matrix4& getTransformMatrix ();
+    void setTransformMatrix (const Matrix4& transform);
+    void setShader (ShaderProgram* shader);
 
     void disposeCache(int cacheID);
 private:
@@ -95,12 +88,12 @@ private:
 
     Mesh* mesh;
     bool drawing;
-    math::Matrix4 transformMatrix;
-    math::Matrix4 projectionMatrix;
+    Matrix4 transformMatrix;
+    Matrix4 projectionMatrix;
     std::vector<Cache*> caches;
 
-    math::Matrix4 combinedMatrix;
-    glutils::ShaderProgram* shader;
+    Matrix4 combinedMatrix;
+    ShaderProgram* shader;
 
     Cache* currentCache;
     std::vector<Texture::ptr> textures;
@@ -109,11 +102,8 @@ private:
     float color;
     Color tempColor;
 
-    glutils::ShaderProgram* customShader;
+    ShaderProgram* customShader;
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g2d
-
+} // namespace gdx
 #endif // GDX_CPP_GRAPHICS_G2D_SPRITECACHE_HPP_

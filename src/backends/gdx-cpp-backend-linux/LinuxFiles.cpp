@@ -22,26 +22,26 @@
 #include "LinuxFileHandle.hpp"
 #include <unistd.h>
 
-using namespace gdx_cpp::backends::nix;
+using namespace gdx::nix;
 
-gdx_cpp::files::FileHandle::ptr LinuxFiles::getFileHandle (const std::string &fileName, gdx_cpp::Files::FileType type)
+gdx::FileHandle::ptr LinuxFiles::getFileHandle (const std::string &fileName, gdx::Files::FileType type)
 {
-    return gdx_cpp::files::FileHandle::ptr(new LinuxFileHandle(fileName, type));
+    return gdx::FileHandle::ptr(new LinuxFileHandle(fileName, type));
 }
 
-gdx_cpp::files::FileHandle::ptr LinuxFiles::internal (const std::string &path)
+gdx::FileHandle::ptr LinuxFiles::internal (const std::string &path)
 {
-    return gdx_cpp::files::FileHandle::ptr(new LinuxFileHandle(path, gdx_cpp::Files::Internal));
+    return gdx::FileHandle::ptr(new LinuxFileHandle(path, gdx::Files::Internal));
 }
 
-gdx_cpp::files::FileHandle::ptr LinuxFiles::external (const std::string &path)
+gdx::FileHandle::ptr LinuxFiles::external (const std::string &path)
 {
-    return gdx_cpp::files::FileHandle::ptr(new LinuxFileHandle(path, gdx_cpp::Files::External));
+    return gdx::FileHandle::ptr(new LinuxFileHandle(path, gdx::Files::External));
 }
 
-gdx_cpp::files::FileHandle::ptr LinuxFiles::absolute (const std::string &path)
+gdx::FileHandle::ptr LinuxFiles::absolute (const std::string &path)
 {
-    return gdx_cpp::files::FileHandle::ptr(new LinuxFileHandle(path, gdx_cpp::Files::Absolute));
+    return gdx::FileHandle::ptr(new LinuxFileHandle(path, gdx::Files::Absolute));
 }
 
 std::string LinuxFiles::getExternalStoragePath ()

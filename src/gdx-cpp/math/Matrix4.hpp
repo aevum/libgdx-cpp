@@ -22,9 +22,7 @@
 
 #include "gdx-cpp/utils/Aliases.hpp"
 
-namespace gdx_cpp {
-
-namespace math {
+namespace gdx {
 
 class Quaternion;
 class Vector3;
@@ -92,8 +90,8 @@ public:
     void lerp(const Matrix4& matrix, float alpha);
     Matrix4& set(const Matrix3& mat);
     void scl(const Vector3& scale);
-    void getTranslation(gdx_cpp::math::Vector3& position);
-    void getRotation(gdx_cpp::math::Quaternion& rotation);
+    void getTranslation(Vector3& position);
+    void getRotation(Quaternion& rotation);
     Matrix4& toNormalMatrix();
     
     void translate(float x, float y, float z);
@@ -114,8 +112,6 @@ public:
     float val[length];
     
 };
-
-}
 
 }
 

@@ -26,9 +26,7 @@
 #include "gdx-cpp/utils/Aliases.hpp"
 #include "AssetType.hpp"
 
-namespace gdx_cpp {
-namespace assets {
-
+namespace gdx {
     
 class AssetDescriptor {
 public:
@@ -47,7 +45,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace assets
+} // namespace gdx
 
 #endif // GDX_CPP_ASSETS_ASSETDESCRIPTOR_HPP_

@@ -20,9 +20,9 @@
 
 #include "PluggableGroupStrategy.hpp"
 
-using namespace gdx_cpp::graphics::g3d::decals;
+using namespace gdx::g3d::decals;
 
-void PluggableGroupStrategy::beforeGroup (int group,gdx_cpp::utils::ArrayDecal>& contents) {
+void PluggableGroupStrategy::beforeGroup (int group,gdx::ArrayDecal>& contents) {
     plugs.get(group).beforeGroup(contents);
 }
 

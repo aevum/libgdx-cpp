@@ -20,7 +20,7 @@
 
 #include "GL20.hpp"
 
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
  const int GL20::GL_ES_VERSION_2_0 = 1;
  const int GL20::GL_DEPTH_BUFFER_BIT = 0x00000100;

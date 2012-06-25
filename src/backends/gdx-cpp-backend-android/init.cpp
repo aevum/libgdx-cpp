@@ -12,14 +12,14 @@
 #include "AndroidAudio.hpp"
 
 #include <unistd.h>
-using namespace gdx_cpp;
-using namespace gdx_cpp::backends::android;
+using namespace gdx;
+using namespace gdx::android;
 
-gdx_cpp::ApplicationListener* applicationListener = 0;
+gdx::ApplicationListener* applicationListener = 0;
 JavaVM* vm = 0;
 AndroidApplication* app = 0;
 
-extern "C" void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int width, int height)
+extern "C" void gdxcpp_create_application(gdx::ApplicationListener* listener, const std::string& applicationName, int width, int height)
 {
     applicationListener = listener;
 }

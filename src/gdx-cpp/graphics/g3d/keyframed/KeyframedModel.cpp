@@ -20,9 +20,9 @@
 
 #include "KeyframedModel.hpp"
 
-using namespace gdx_cpp::graphics::g3d::keyframed;
+using namespace gdx::g3d::keyframed;
 
-gdx_cpp::graphics::g3d::Animator& KeyframedModel::getAnimator () {
+gdx::g3d::Animator& KeyframedModel::getAnimator () {
     return animator;
 }
 
@@ -37,7 +37,7 @@ void KeyframedModel::setTaggedJoints (const ArrayList<String>& joints) {
     taggedJointNames = joints;
 }
 
-KeyframeAnimation& KeyframedModel::sampleAnimationFromMD5 (const gdx_cpp::graphics::g3d::loaders::md5::MD5Model& md5model,const gdx_cpp::graphics::g3d::loaders::md5::MD5Renderer& md5renderer,const gdx_cpp::graphics::g3d::loaders::md5::MD5Animator& md5animator,const gdx_cpp::graphics::g3d::loaders::md5::MD5Animation& md5animation,float sampleRate,const std::string& modelAsset,const std::string& animKey) {
+KeyframeAnimation& KeyframedModel::sampleAnimationFromMD5 (const gdx::g3d::md5::MD5Model& md5model,const gdx::g3d::md5::MD5Renderer& md5renderer,const gdx::g3d::md5::MD5Animator& md5animator,const gdx::g3d::md5::MD5Animation& md5animation,float sampleRate,const std::string& modelAsset,const std::string& animKey) {
     this.assetName = modelAsset;
     numMeshes = md5model.meshes.length;
     boolean cached = false;
@@ -155,7 +155,7 @@ KeyframeAnimation& KeyframedModel::sampleAnimationFromMD5 (const gdx_cpp::graphi
     return a;
 }
 
-void KeyframedModel::getJointData (int tagIndex,const gdx_cpp::math::Vector3& pos,const gdx_cpp::math::Quaternion& orient) {
+void KeyframedModel::getJointData (int tagIndex,const gdx::Vector3& pos,const gdx::Quaternion& orient) {
     Keyframe kf = animator.getInterpolatedKeyframe();
     pos.set(kf.taggedJointPos[tagIndex]);
     orient.x = kf.taggedJoint[tagIndex].x;
@@ -164,7 +164,7 @@ void KeyframedModel::getJointData (int tagIndex,const gdx_cpp::math::Vector3& po
     orient.w = kf.taggedJoint[tagIndex].w;
 }
 
-void KeyframedModel::setAnimation (const std::string& animKey,const gdx_cpp::graphics::g3d::Animator::WrapMode& wrapMode) {
+void KeyframedModel::setAnimation (const std::string& animKey,const gdx::g3d::Animator::WrapMode& wrapMode) {
     KeyframeAnimation anim = getAnimation(animKey);
     if (anim != null) {
         animator.setAnimation(anim, wrapMode);

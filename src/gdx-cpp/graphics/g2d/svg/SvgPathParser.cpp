@@ -2071,7 +2071,7 @@ float mystrtof( char *pen ) {
     return val * exp_lookup[ neg_exp ] * (isneg ? -1 : 1);
 }
 
-void gdx_cpp::graphics::g2d::svg::SvgParser::parse_path_data(const char* data, int length) {
+void gdx::SvgParser::parse_path_data(const char* data, int length) {
 	bool relative = false;
 	char* s = NULL, *p = (char*)data,* pe = (char*)data + length,* eof = pe;
 	unsigned int cs, top = 0;

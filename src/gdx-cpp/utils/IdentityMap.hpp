@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_UTILS_IDENTITYMAP<K, V>_HPP_
 #define GDX_CPP_UTILS_IDENTITYMAP<K, V>_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace utils {
 
 class IdentityMap {
@@ -63,7 +63,7 @@ private:
     int hash3 (long h);
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace utils
 
 #endif // GDX_CPP_UTILS_IDENTITYMAP<K, V>_HPP_

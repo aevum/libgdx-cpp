@@ -20,7 +20,7 @@
 
 #include "RemoteInput.hpp"
 
-using namespace gdx_cpp::input;
+using namespace gdx;
 
 void RemoteInput::run () {
     justTouched = false;
@@ -242,11 +242,11 @@ void RemoteInput::setCatchBackKey (bool catchBack) {
 
 }
 
-void RemoteInput::setInputProcessor (const gdx_cpp::InputProcessor& processor) {
+void RemoteInput::setInputProcessor (const InputProcessor& processor) {
     this.processor = processor;
 }
 
-gdx_cpp::InputProcessor& RemoteInput::getInputProcessor () {
+InputProcessor& RemoteInput::getInputProcessor () {
     return this.processor;
 }
 

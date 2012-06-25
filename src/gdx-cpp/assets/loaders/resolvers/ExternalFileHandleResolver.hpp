@@ -21,14 +21,11 @@
 #ifndef GDX_CPP_ASSETS_LOADERS_RESOLVERS_EXTERNALFILEHANDLERESOLVER_HPP_
 #define GDX_CPP_ASSETS_LOADERS_RESOLVERS_EXTERNALFILEHANDLERESOLVER_HPP_
 
-namespace gdx_cpp {
-namespace assets {
-namespace loaders {
-namespace resolvers {
+namespace gdx {
 
-class ExternalFileHandleResolver: public gdx_cpp::assets::loaders::FileHandleResolver {
+class ExternalFileHandleResolver: public gdx::FileHandleResolver {
 public:
-    gdx_cpp::files::FileHandle& resolve (const std::string& fileName);
+    gdx::FileHandle& resolve (const std::string& fileName);
 
 protected:
 
@@ -37,9 +34,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace assets
-} // namespace loaders
-} // namespace resolvers
+} // namespace gdx
 
 #endif // GDX_CPP_ASSETS_LOADERS_RESOLVERS_EXTERNALFILEHANDLERESOLVER_HPP_

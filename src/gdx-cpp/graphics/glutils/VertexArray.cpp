@@ -26,14 +26,12 @@
 #include "gdx-cpp/Application.hpp"
 #include "gdx-cpp/gl.hpp"
 
-using namespace gdx_cpp::graphics::glutils;
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp;
+using namespace gdx;
 
 void VertexArray::dispose () {
 }
 
-utils::float_buffer& VertexArray::getBuffer () {
+float_buffer& VertexArray::getBuffer () {
     return buffer;
 }
 
@@ -127,11 +125,11 @@ void VertexArray::unbind () {
     isBound = false;
 }
 
-gdx_cpp::graphics::VertexAttributes& VertexArray::getAttributes () {
+VertexAttributes& VertexArray::getAttributes () {
     return attributes;
 }
 
-VertexArray::VertexArray(int numVertices, const gdx_cpp::graphics::VertexAttributes& attributes)
+VertexArray::VertexArray(int numVertices, const VertexAttributes& attributes)
 :
 attributes(attributes),
 isBound(false)

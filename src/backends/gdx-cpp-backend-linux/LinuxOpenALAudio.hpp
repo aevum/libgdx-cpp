@@ -24,32 +24,26 @@
 struct ALCdevice_struct;
 class ALCcontext_struct;
 
-namespace gdx_cpp {
-namespace files {
+namespace gdx {
 class FileHandle;
-}
 
-namespace audio{
 class Music;
 class Sound;
 class Device;
 class Recorder;
-}
-
-namespace backends {
 
 namespace nix {
   class LinuxOpenALMusic;
 
-class LinuxOpenALAudio : public gdx_cpp::Audio
+class LinuxOpenALAudio : public gdx::Audio
 {
 
 
 public:
-    gdx_cpp::audio::AudioDevice * newAudioDevice (int samplingRate, bool isMono);
-    gdx_cpp::audio::AudioRecorder * newAudioRecoder (int samplingRate, bool isMono);
-    gdx_cpp::audio::Sound * newSound (const ref_ptr_maker< gdx_cpp::files::FileHandle >::type file);
-    gdx_cpp::audio::Music * newMusic (const ref_ptr_maker< gdx_cpp::files::FileHandle >::type file);
+    gdx::AudioDevice * newAudioDevice (int samplingRate, bool isMono);
+    gdx::AudioRecorder * newAudioRecoder (int samplingRate, bool isMono);
+    gdx::Sound * newSound (const ref_ptr_maker< gdx::FileHandle >::type file);
+    gdx::Music * newMusic (const ref_ptr_maker< gdx::FileHandle >::type file);
 
     LinuxOpenALAudio (int simultaneousSources = 16);
     
@@ -69,8 +63,6 @@ private :
     ALCcontext_struct * context;
 
 };
-
-}
 
 }
 

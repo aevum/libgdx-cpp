@@ -28,8 +28,7 @@
 
 #include <stdexcept>
 
-using namespace gdx_cpp::graphics::glutils;
-using namespace gdx_cpp;
+using namespace gdx;
 
 const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Point(GL_POINTS);
 const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Line(GL_LINES);
@@ -41,7 +40,7 @@ int ShapeRenderer::getGlType () {
     return glType;
 }
 
-void ShapeRenderer::setColor (const gdx_cpp::graphics::Color& color) {
+void ShapeRenderer::setColor (const Color& color) {
     this->color.set(color);
 }
 
@@ -49,12 +48,12 @@ void ShapeRenderer::setColor (float r,float g,float b,float a) {
     this->color.set(r, g, b, a);
 }
 
-void ShapeRenderer::setProjectionMatrix (const gdx_cpp::math::Matrix4& matrix) {
+void ShapeRenderer::setProjectionMatrix (const Matrix4& matrix) {
     projView.set(matrix);
     matrixDirty = true;
 }
 
-void ShapeRenderer::setTransformMatrix (const gdx_cpp::math::Matrix4& matrix) {
+void ShapeRenderer::setTransformMatrix (const Matrix4& matrix) {
     transform.set(matrix);
     matrixDirty = true;
 }
@@ -84,7 +83,7 @@ void ShapeRenderer::begin (const ShapeType& type) {
     currType = &type;
     if(matrixDirty) {
         combined.set(projView);
-        math::Matrix4::mul(combined.val, transform.val);
+        Matrix4::mul(combined.val, transform.val);
         matrixDirty = false;
     }
     

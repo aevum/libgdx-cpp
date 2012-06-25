@@ -21,7 +21,7 @@
 #include "gdx-cpp/graphics/GLCommon.hpp"
 #include "gdx-cpp/gl.hpp"
 
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
 void GLCommon::glActiveTexture(int texture) const
 {

@@ -24,20 +24,16 @@
 #include <gdx-cpp/files/FileHandle.hpp>
 #include <sys/types.h>
 
-namespace gdx_cpp {
-
-namespace backends {
+namespace gdx {
 
 namespace android {
 
-class AndroidFileHandle : public gdx_cpp::files::FileHandle
+class AndroidFileHandle : public gdx::FileHandle
 {
 public:
-    AndroidFileHandle(const std::string& fileName, gdx_cpp::Files::FileType type);
+    AndroidFileHandle(const std::string& fileName, gdx::Files::FileType type);
     virtual int readBytes(buffer_ptr& c) const;
 };
-
-}
 
 }
 

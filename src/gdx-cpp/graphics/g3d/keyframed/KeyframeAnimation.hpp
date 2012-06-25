@@ -21,12 +21,12 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_KEYFRAMED_KEYFRAMEANIMATION_HPP_
 #define GDX_CPP_GRAPHICS_G3D_KEYFRAMED_KEYFRAMEANIMATION_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace keyframed {
 
-class KeyframeAnimation: public gdx_cpp::graphics::g3d::Animation {
+class KeyframeAnimation: public gdx::g3d::Animation {
 public:
     float getLength ();
     int getNumFrames ();
@@ -40,7 +40,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace keyframed
