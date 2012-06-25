@@ -14,8 +14,9 @@
 
 ## Building GDX++ (Linux/Ubuntu)
 
-Assuming you have the latest Android NDK on ANDROID_NDK_HOME and the android SDK on ANDROID_SDK_HOME
-_Optional_: I'm installing the builded libraries and includes under build/local for convenience purposes as you won't need to sudo to install them.
+Assuming you have the latest Android NDK on "ANDROID_NDK_HOME" and the android SDK on "ANDROID_SDK_HOME"
+
+__Optional__: I'm installing the builded libraries and includes under build/local for convenience purposes as you won't need to sudo to install them.
 
 ```bash
 git clone git://github.com/aevum/libgdx-cpp.git 
