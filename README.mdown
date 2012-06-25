@@ -17,6 +17,7 @@
 Assuming you have the latest Android NDK on ANDROID_NDK_HOME and the android SDK on ANDROID_SDK_HOME
 _Optional_: I'm installing the builded libraries and includes under build/local for convenience purposes as you won't need to sudo to install them.
 
+```bash
 git clone git://github.com/aevum/libgdx-cpp.git 
 mkdir -p build/gcc/gdx build/android/gdx build/local
 
@@ -31,7 +32,7 @@ cd ../../android/gdx
 cmake ../../../libgdx-cpp -DCMAKE_TOOLCHAIN_FILE=../../../libgdx-cpp/cmake/android.toolchain.cmake -DANDROID_NDK=ANDROID_NDK_HOME -DCAMEK_BUILD_TYPE=Release
 
 make install
-
+```
 
 ## Using GDX++ on your own projects
 
@@ -65,7 +66,7 @@ target_link_libraries(mytarget ${GDXCPP_LIBRARIES})
 
 and when running the cmake command:
 
-```shell
+```bash
 cmake -DGDX_ROOT=build/local REST_OF_CONFIG_FLAGS
 ```
 
