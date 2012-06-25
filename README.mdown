@@ -76,7 +76,9 @@ cmake -DGDX_ROOT=build/local REST_OF_CONFIG_FLAGS
 This is because C++ contruction blocks us to use shared_pointers, so we had to make it two-phase-like. So instead of calling the constructor,
 you'll have to call, for example:
 
-    Texture::newFromFile()
+```c++
+Texture::newFromFile()
+```
 
 with the same parameters that you would expect on the constructor.
 
@@ -84,9 +86,11 @@ with the same parameters that you would expect on the constructor.
 
 Analogically, the calls to create an PixMap now are:
 
-    Pixmap::newFromFile()
-    Pixmap::newFromPixmap()
-    Pixmap::newFromRect()
+```c++
+Pixmap::newFromFile()
+Pixmap::newFromPixmap()
+Pixmap::newFromRect()
+```
 
 * The Pixmap class has turned into an interface. This had to be done because we can have different pixmap backends (currently we have Svg and Gdx2d).
 The gdx_cpp::Graphics interface now have to handle the TextureData and Pixmap resolution and creation. This was made to decouple the texture class from determining
