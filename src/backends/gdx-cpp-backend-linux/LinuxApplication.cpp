@@ -28,7 +28,7 @@ using namespace gdx;
 gdx::nix::LinuxApplication::LinuxApplication(gdx::ApplicationListener* listener,
         const std::string& title, int width, int height,
         bool useGL20IfAvailable)
-    :  Synchronizable(Gdx::system->getMutexFactory())
+    :  Synchronizable(gdx::system->getMutexFactory())
     , width(width)
     , height(height)
     , title(title)
@@ -53,7 +53,7 @@ void LinuxApplication::initialize() {
 
     SDL_EnableKeyRepeat(1, SDL_DEFAULT_REPEAT_INTERVAL);
 
-    Gdx::initialize(this, graphics, audio, input, files);
+    ::initialize(this, graphics, audio, input, files);
 
     this->run();
 }

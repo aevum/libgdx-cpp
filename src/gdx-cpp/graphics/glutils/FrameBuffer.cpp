@@ -33,7 +33,7 @@ void FrameBuffer::build () {
     colorTexture->setFilter(Texture::TextureFilter::Linear, Texture::TextureFilter::Linear);
     colorTexture->setWrap(Texture::TextureWrap::ClampToEdge, Texture::TextureWrap::ClampToEdge);
 
-    GL20& gl = *Gdx::gl20;
+    GL20& gl = *gl20;
 
     int handle;
     gl.glGenFramebuffers(1, &handle);
@@ -85,7 +85,7 @@ void FrameBuffer::build () {
 }
 
 void FrameBuffer::dispose () {
-    GL20& gl = *Gdx::gl20;
+    GL20& gl = *gl20;
 
     int handle = 0;
 
@@ -99,17 +99,17 @@ void FrameBuffer::dispose () {
     
     gl.glDeleteFramebuffers(1, &handle);
 
-    if (buffers.count(Gdx::app) > 0) buffers[Gdx::app].erase(this);
+    if (buffers.count(app) > 0) buffers[app].erase(this);
 }
 
 void FrameBuffer::begin () {
-    Gdx::gl20->glViewport(0, 0, colorTexture->getWidth(), colorTexture->getHeight());
-    Gdx::gl20->glBindFramebuffer(GL20::GL_FRAMEBUFFER, framebufferHandle);
+    gl20->glViewport(0, 0, colorTexture->getWidth(), colorTexture->getHeight());
+    gl20->glBindFramebuffer(GL20::GL_FRAMEBUFFER, framebufferHandle);
 }
 
 void FrameBuffer::end () {
-    Gdx::gl20->glViewport(0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
-    Gdx::gl20->glBindFramebuffer(GL20::GL_FRAMEBUFFER, 0);
+    gl20->glViewport(0, 0, graphics->getWidth(), graphics->getHeight());
+    gl20->glBindFramebuffer(GL20::GL_FRAMEBUFFER, 0);
 }
 
 void FrameBuffer::addManagedFrameBuffer (Application* app,
@@ -118,7 +118,7 @@ void FrameBuffer::addManagedFrameBuffer (Application* app,
 }
 
 void FrameBuffer::invalidateAllFrameBuffers (Application* app) {
-    if (Gdx::gl20 == NULL) return;
+    if (gl20 == NULL) return;
 
     buffer_map::value_type::second_type::iterator it = buffers[app].begin();
     buffer_map::value_type::second_type::iterator end = buffers[app].end();
@@ -175,7 +175,7 @@ FrameBuffer::FrameBuffer(const Pixmap::Format& format, int width, int height, bo
  ,hasDepth(hasDepth)
  {
     build();
-    addManagedFrameBuffer(Gdx::app, this);
+    addManagedFrameBuffer(app, this);
 }
 
 

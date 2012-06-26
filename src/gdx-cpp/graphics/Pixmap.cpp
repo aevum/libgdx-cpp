@@ -95,19 +95,19 @@ const Pixmap::Format& Pixmap::Format::fromGdx2DPixmapFormat(int format) {
 
 Pixmap::ptr Pixmap::newFromFile(const FileHandle::ptr file)
 {
-    return Pixmap::ptr(Gdx::graphics->resolvePixmap(file));
+    return Pixmap::ptr(graphics->resolvePixmap(file));
 }
 
 Pixmap::ptr Pixmap::newFromPixmap(const Pixmap& pixmap)
 {
-    return Pixmap::ptr(Gdx::graphics->resolvePixmap(pixmap));
+    return Pixmap::ptr(graphics->resolvePixmap(pixmap));
 }
 
 Pixmap::ptr Pixmap::newFromRect(int width, int height,
                                 const Pixmap::Format& format,
                                 Pixmap::PixmapType pixType)
 {
-    return Pixmap::ptr(Gdx::graphics->resolvePixmap(width, height, format, pixType));
+    return Pixmap::ptr(graphics->resolvePixmap(width, height, format, pixType));
 }
 
 

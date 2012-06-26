@@ -88,10 +88,10 @@ void ShapeRenderer::begin (const ShapeType& type) {
     }
     
     if(renderer->getRendererType() == ImmediateModeRenderer::IMMEDIATE_GLES10) {
-        Gdx::gl10->glMatrixMode(GL_PROJECTION);
-        Gdx::gl10->glLoadMatrixf(combined.val);
-        Gdx::gl10->glMatrixMode(GL_MODELVIEW);
-        Gdx::gl10->glLoadIdentity();
+        gl10->glMatrixMode(GL_PROJECTION);
+        gl10->glLoadMatrixf(combined.val);
+        gl10->glMatrixMode(GL_MODELVIEW);
+        gl10->glLoadIdentity();
         ((ImmediateModeRenderer10*)renderer)->begin(currType->getGlType());
     } else {
         ((ImmediateModeRenderer20*)renderer)->begin(combined, currType->getGlType());
@@ -266,12 +266,12 @@ matrixDirty(false),
 color(1,1,1,1),
 currType(NULL)
 {
-    if(Gdx::graphics->isGL20Available())
+    if(graphics->isGL20Available())
         renderer = new ImmediateModeRenderer20(false, true, 0);
     else
         renderer = new ImmediateModeRenderer10();
     
-    projView.setToOrtho2D(0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
+    projView.setToOrtho2D(0, 0, graphics->getWidth(), graphics->getHeight());
 }
 
 int ShapeRenderer::ShapeType::getGlType() const {

@@ -28,6 +28,7 @@
 #include "Files.hpp"
 #include "implementation/System.hpp"
 #include "backend.hpp"
+#include "Log.hpp"
 
 namespace gdx {
 
@@ -39,25 +40,26 @@ class GLU;
 
 class System;
 
-class Gdx {
-public:
-    static Application* app;
-    static Graphics* graphics;
-    static Audio* audio;
-    static Input* input;
-    static Files* files;
-    static GLCommon* gl;
-    static GL10* gl10;
-    static GL11* gl11;
-    static GL20* gl20;
-    static GLU* glu;
+extern Application* app;
+extern Graphics* graphics;
+extern Audio* audio;
+extern Input* input;
+extern Files* files; 
+extern GLCommon* gl;
+extern GL10* gl10;
+extern GL11* gl11;
+extern GL20* gl20;
+extern GLU* glu;
 
-    static System* system;
+extern System* system;
 
-    static void initializeSystem(System* system);
-    static void initialize(Application* application, Graphics* graphics,
-                           Audio* audio, Input* input, Files* files);
-};
+void initializeSystem(System* system, Log* log);
+void initialize(Application* application, Graphics* graphics,
+                        Audio* audio, Input* input, Files* files);
+
+void internal_log_error(const std::string& tag, const std::string& line, const std::string& file, const char* format, ...);
+void internal_log_info(const std::string& tag, const std::string& line, const std::string& file, const char* format, ...);
+void internal_log_debug(const std::string& tag, const std::string& line, const std::string& file,const char* format, ...);
 
 } // namespace gdx
 

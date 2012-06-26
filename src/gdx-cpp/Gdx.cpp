@@ -27,36 +27,57 @@
 #include "graphics/GLU.hpp"
 #include <cassert>
 
-using namespace gdx;
+namespace gdx {
+Application* app = 0;
+Graphics* graphics = 0;
+Audio* audio = 0;
+Input* input = 0;
+Files* files = 0; 
+GLCommon* gl = 0;
+GL10* gl10 = 0;
+GL11* gl11 = 0;
+GL20* gl20 = 0;
+GLU* glu = 0;
 
-Application* Gdx::app = 0;
-Graphics* Gdx::graphics = 0;
-Audio* Gdx::audio = 0;
-Input* Gdx::input = 0;
-Files* Gdx::files = 0;
-GLCommon* Gdx::gl = 0;
-GL10* Gdx::gl10 = 0;
-GL11* Gdx::gl11 = 0;
-GL20* Gdx::gl20 = 0;
-GLU* Gdx::glu = 0;
-System* Gdx::system = 0;
+System* system = 0;       
 
-void Gdx::initialize(Application* application,
-                     Graphics* graphics, Audio* audio, Input*  input , Files* files)
-{
-    Gdx::app = application;
-    Gdx::graphics = graphics;
-    Gdx::audio = audio;
-    Gdx::input = input;
-    Gdx::files = files;
-    Gdx::gl = Gdx::graphics->getGLCommon();
-    Gdx::gl10 = Gdx::graphics->getGL10();
-    Gdx::gl20 = Gdx::graphics->getGL20();
-    Gdx::gl11 = Gdx::graphics->getGL11();
-    Gdx::glu = Gdx::graphics->getGLU();
+Log* log = 0;
 }
 
-void Gdx::initializeSystem(System* system)
+
+
+void gdx::initialize(gdx::Application* application,
+                     gdx::Graphics* graphics, gdx::Audio* audio, gdx::Input*  input , gdx::Files* files)
 {
-    Gdx::system = system;
+    gdx::app = application;
+    gdx::graphics = graphics;
+    gdx::audio = audio;
+    gdx::input = input;
+    gdx::files = files;
+    gdx::gl = graphics->getGLCommon();
+    gdx::gl10 = graphics->getGL10();
+    gdx::gl20 = graphics->getGL20();
+    gdx::gl11 = graphics->getGL11();
+    gdx::glu = graphics->getGLU();
+}
+
+void gdx::initializeSystem(gdx::System* system, Log* log)
+{
+    gdx::system = system;
+    gdx::log = log;
+}
+
+void gdx::internal_log_debug(const std::string& tag, const std::string& line, const std::string& file, const char* format, ...) {
+    va_list ap;
+    log->debug(tag, line, file, format, ap);
+}
+
+void gdx::internal_log_info(const std::string& tag, const std::string& line, const std::string& file, const char* format, ...) {
+    va_list ap;
+    log->info(tag, line, file, format, ap);
+}
+
+void gdx::internal_log_error(const std::string& tag, const std::string& line, const std::string& file, const char* format, ...) {
+    va_list ap;
+    log->info(tag, line, file, format, ap);
 }

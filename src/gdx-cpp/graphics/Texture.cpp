@@ -72,18 +72,18 @@ void Texture::create (TextureData::ptr data) {
     load(data);
 
     if (data->isManaged()) {
-        addManagedTexture(Gdx::app, shared_from_this());
+        addManagedTexture(app, shared_from_this());
     }
 }
 
 int Texture::createGLHandle () {
-    Gdx::gl->glGenTextures(1, &buffer);
+    gl->glGenTextures(1, &buffer);
     return buffer;
 }
 
 void Texture::load (const TextureData::ptr& data) {
     if (this->data != NULL && data->isManaged() != this->data->isManaged()) {
-        Gdx::app->error("Texture.cpp", "New data must have the same managed status as the old data");
+        gdx_log_error("Texture.cpp", "New data must have the same managed status as the old data");
     }
 
     this->data = data;
@@ -97,7 +97,7 @@ void Texture::load (const TextureData::ptr& data) {
     }
 
     if (data->getType() == TextureData::TextureDataType::Compressed) {
-        Gdx::gl->glBindTexture(GL_TEXTURE_2D, glHandle);
+        gl->glBindTexture(GL_TEXTURE_2D, glHandle);
         data->uploadCompressedData();
         setFilter(minFilter, magFilter);
         setWrap(uWrap, vWrap);
@@ -105,7 +105,7 @@ void Texture::load (const TextureData::ptr& data) {
 }
 
 void Texture::uploadImageData (const Pixmap::ptr& pixmap) {
-    if (enforcePotImages && Gdx::gl20 == NULL
+    if (enforcePotImages && gl20 == NULL
             && (! isPowerOfTwo(data->getWidth()) || !isPowerOfTwo(data->getHeight())))
     {
         throw std::runtime_error("Texture.cpp: texture width and height must be powers of two");
@@ -121,12 +121,12 @@ void Texture::uploadImageData (const Pixmap::ptr& pixmap) {
         disposePixmap = true;
     }
 
-    Gdx::gl->glBindTexture(GL_TEXTURE_2D, glHandle);
-    Gdx::gl->glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    gl->glBindTexture(GL_TEXTURE_2D, glHandle);
+    gl->glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     if (data->useMipMaps()) {
         MipMapGenerator::generateMipMap(tmp, tmp->getWidth(), tmp->getHeight(), disposePixmap);
     } else {
-        Gdx::gl->glTexImage2D(GL_TEXTURE_2D, 0, tmp->getGLInternalFormat(), tmp->getWidth(), tmp->getHeight(), 0,
+        gl->glTexImage2D(GL_TEXTURE_2D, 0, tmp->getGLInternalFormat(), tmp->getWidth(), tmp->getHeight(), 0,
                               tmp->getGLFormat(), tmp->getGLType(), tmp->getPixels());
 
         if (disposePixmap) tmp->dispose();
@@ -135,7 +135,7 @@ void Texture::uploadImageData (const Pixmap::ptr& pixmap) {
 
 void Texture::reload () {
     if (!data->isManaged()) {
-        Gdx::app->error(__FILE__, "Tried to reload unmanaged Texture");
+        gdx_log_error(__FILE__, "Tried to reload unmanaged Texture");
     }
 
     createGLHandle();
@@ -143,21 +143,21 @@ void Texture::reload () {
 }
 
 void Texture::bind () {
-    Gdx::gl->glBindTexture(GL_TEXTURE_2D, glHandle);
+    gl->glBindTexture(GL_TEXTURE_2D, glHandle);
 }
 
 void Texture::bind (int unit) {
-    Gdx::gl->glActiveTexture(GL_TEXTURE0 + unit);
-    Gdx::gl->glBindTexture(GL_TEXTURE_2D, glHandle);
+    gl->glActiveTexture(GL_TEXTURE0 + unit);
+    gl->glBindTexture(GL_TEXTURE_2D, glHandle);
 }
 
 void Texture::draw (Pixmap& pixmap,int x,int y) {
     if (data->isManaged()) {
-        Gdx::app->error(__FILE__ , "can't draw to a managed texture");
+        gdx_log_error(__FILE__ , "can't draw to a managed texture");
     }
 
-    Gdx::gl->glBindTexture(GL_TEXTURE_2D, glHandle);
-    Gdx::gl->glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, pixmap.getWidth(), pixmap.getHeight(), pixmap.getGLFormat(),
+    gl->glBindTexture(GL_TEXTURE_2D, glHandle);
+    gl->glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, pixmap.getWidth(), pixmap.getHeight(), pixmap.getGLFormat(),
                              pixmap.getGLType(), (const unsigned char*) pixmap.getPixels());
 }
 
@@ -201,24 +201,24 @@ void Texture::setWrap (const Texture::TextureWrap& u, const Texture::TextureWrap
     this->uWrap = u;
     this->vWrap = v;
     bind();
-    Gdx::gl->glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, u.getGLEnum());
-    Gdx::gl->glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, v.getGLEnum());
+    gl->glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, u.getGLEnum());
+    gl->glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, v.getGLEnum());
 }
 
 void Texture::setFilter (const Texture::TextureFilter& minFilter, const Texture::TextureFilter& magFilter) {
     this->minFilter = minFilter;
     this->magFilter = magFilter;
     bind();
-    Gdx::gl->glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter.getGLEnum());
-    Gdx::gl->glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter.getGLEnum());
+    gl->glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter.getGLEnum());
+    gl->glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter.getGLEnum());
 }
 
 void Texture::dispose () {
     if (glHandle != 0) {
-        Gdx::gl->glDeleteTextures(1, &glHandle);
+        gl->glDeleteTextures(1, &glHandle);
 
         if (data->isManaged()) {
-//                 managedTextures[Gdx::app].remove();
+//                 managedTextures[app].remove();
         }
 
         glHandle = 0;
@@ -356,7 +356,7 @@ void Texture::initialize(const FileHandle::ptr file, const Pixmap::Format* forma
     this->useHWMipMap = true;
     this->assetManager = 0;
 
-    create(TextureData::ptr(Gdx::graphics->resolveTextureData(file, null_shared_ptr(), format, useMipMaps)));
+    create(TextureData::ptr(graphics->resolveTextureData(file, null_shared_ptr(), format, useMipMaps)));
 }
 
 Texture::~Texture()

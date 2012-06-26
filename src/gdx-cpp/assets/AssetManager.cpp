@@ -276,7 +276,7 @@ void AssetManager::injectDependency(const std::string& parentAssetFilename,
         addTask(dependendAssetDesc);
     }
 
-    gdx::Gdx::app->log("AssetManager.hpp") << "Injected dependency '" + dependendAssetDesc + "' for asset '" + parentAssetFilename + "'";
+   gdx_log_debug("AssetManager.hpp") << "Injected dependency '" + dependendAssetDesc + "' for asset '" + parentAssetFilename + "'";
 }
 
 void AssetManager::setLoader(AssetType& type, AssetLoader* loader) {
@@ -295,11 +295,11 @@ void AssetManager::preload(const std::string& fileName, const AssetType& type, A
     AssetLoader* loader = loaders[type];
 
     if (loader == NULL) {
-        gdx::Gdx::app->error("AssetManager.hpp") << "No loader for type '" + type.getSimpleName() + "'";
+        gdx_log_error("AssetManager.hpp") << "No loader for type '" + type.getSimpleName() + "'";
     }
 
     if (isLoaded(fileName)) {
-        gdx::Gdx::app->error("AssetManager.hpp") << "Asset '" + fileName + "' already loaded";
+        gdx_log_error("AssetManager.hpp") << "Asset '" + fileName + "' already loaded";
     }
 
     PreloadQueueType::iterator it = preloadQueue.begin();
@@ -307,7 +307,7 @@ void AssetManager::preload(const std::string& fileName, const AssetType& type, A
 
     for (; it != end; ++it) {
         if ((*it)->fileName == fileName) {
-            gdx::Gdx::app->error("AssetManager.hpp") << "Asset '" + fileName + "' already in preload queue";
+            gdx_log_error("AssetManager.hpp") << "Asset '" + fileName + "' already in preload queue";
         }
     }
 
@@ -321,7 +321,7 @@ void AssetManager::preload(const std::string& fileName, const AssetType& type, A
     AssetDescriptor::ptr assetDesc = AssetDescriptor::ptr(new AssetDescriptor(fileName, type, parameter));
     preloadQueue.push_back(assetDesc);
 
-    gdx::Gdx::app->log("AssetManager.hpp") << "Added asset '" + assetDesc->toString() + "' to preload queue";
+   gdx_log_debug("AssetManager.hpp") << "Added asset '" + assetDesc->toString() + "' to preload queue";
 }
 
 bool AssetManager::getAssetFileName(const Asset& asset, std::string& result) {

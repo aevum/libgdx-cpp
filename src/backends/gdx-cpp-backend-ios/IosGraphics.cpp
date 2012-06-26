@@ -140,7 +140,7 @@ float gdx::ios::IosGraphics::getPpiY()
 
 void gdx::ios::IosGraphics::updateTime()
 {
-    uint64_t time = Gdx::system->nanoTime();
+    uint64_t time = system->nanoTime();
 
     deltaTime = (time - lastTime) / 1000000000.0f;
     lastTime = time;
@@ -206,7 +206,7 @@ bool gdx::ios::IosGraphics::supportsExtension(const std::string& extension)
 
 void gdx::ios::IosGraphics::initialize()
 {   
-	this->lastTime = Gdx::system->nanoTime();   
+	this->lastTime = system->nanoTime();   
     const GLubyte* version = glGetString(GL_VERSION);
 	
     if (version) {

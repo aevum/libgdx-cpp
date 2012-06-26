@@ -34,7 +34,7 @@ AndroidFileHandle::AndroidFileHandle(const std::string& fileName, gdx::Files::Fi
 
 int gdx::android::AndroidFileHandle::readBytes(gdx::FileHandle::buffer_ptr& c) const
 {
-    JNIEnv* env = static_cast<AndroidSystem*>(Gdx::system)->getJniEnv();
+    JNIEnv* env = static_cast<AndroidSystem*>(system)->getJniEnv();
     jstring strpath = env->NewStringUTF(this->file.getPath().c_str());
 
     jclass managerClass = env->FindClass("com/aevumlab/gdxcpp/ApplicationManager");

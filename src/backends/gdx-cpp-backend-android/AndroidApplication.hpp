@@ -47,7 +47,6 @@ public:
     Preferences* getPreferences(std::string& name);
     ApplicationType getType();
     int getVersion();
-    void log(const std::string& tag, const char* format, ...);
     void postRunnable(Runnable::ptr runnable);
     void setLogLevel(int logLevel);
 

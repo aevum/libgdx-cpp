@@ -46,7 +46,7 @@ Mpg123Decoder::Mpg123Decoder (std::string filename) {
     handle = openFile(filename);
     if (handle == NULL)
     {
-      gdx::Gdx::app->error("GDX-CPP::AUDIO::IO Mpg123Decoder.cpp") << "couldn't open file '" << filename << "'";
+      gdx::app->error("GDX-CPP::AUDIO::IO Mpg123Decoder.cpp") << "couldn't open file '" << filename << "'";
     }
 }
 

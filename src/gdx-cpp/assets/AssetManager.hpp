@@ -76,7 +76,7 @@ public:
         Synchronizable::lock_holder hnd(synchronize());
 
         if (assets.count(type) == 0) {
-            gdx::Gdx::app->error("AssetManager.hpp", "Asset '%s' not loaded", filename.c_str());
+            gdx_log_error("AssetManager.hpp", "Asset '%s' not loaded", filename.c_str());
         }
 
         const AssetMap& assetsByType = assets[type];

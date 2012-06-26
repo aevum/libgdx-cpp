@@ -57,7 +57,7 @@ float_buffer ImmediateModeRenderer10::allocateBuffer (int numFloats) {
 }
 
 void ImmediateModeRenderer10::begin (Matrix4& projModelView,int primitiveType) {
-    GL10 * gl = Gdx::gl10;
+    GL10 * gl = gl10;
     gl->glMatrixMode(GL_PROJECTION);
     gl->glLoadMatrixf(projModelView.val);
     gl->glMatrixMode(GL_MODELVIEW);
@@ -116,7 +116,7 @@ int ImmediateModeRenderer10::getNumVertices () {
 void ImmediateModeRenderer10::end () {
     if (idxPos == 0) return;
 
-    GL10 * gl = Gdx::gl10;
+    GL10 * gl = gl10;
     gl->glEnableClientState(GL_VERTEX_ARRAY);
     positionsBuffer.clear();
     positionsBuffer.copy<float>(positions, idxPos, 0);

@@ -37,7 +37,7 @@ using namespace gdx::ios;
 using namespace gdx;
 
 gdx::ios::IosApplication::IosApplication(gdx::ApplicationListener* listener)
-:  Synchronizable(Gdx::system->getMutexFactory())
+:  Synchronizable(system->getMutexFactory())
 , listener(listener)
 , graphics(NULL)
 , input(NULL)
@@ -56,7 +56,7 @@ void IosApplication::initialize() {
 	graphics->initialize();
 	graphics->setDisplayMode(width, height, false);
 	
-	Gdx::initialize(this, graphics, audio, input, files);
+	initialize(this, graphics, audio, input, files);
 }
 
 void IosApplication::onRunnableStop()

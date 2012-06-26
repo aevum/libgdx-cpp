@@ -139,7 +139,7 @@ float gdx::nix::LinuxGraphics::getPpiY()
 
 void gdx::nix::LinuxGraphics::updateTime()
 {
-    uint64_t time = Gdx::system->nanoTime();
+    uint64_t time = system->nanoTime();
 
     deltaTime = (time - lastTime) / 1000000000.0f;
     lastTime = time;
@@ -213,7 +213,7 @@ void gdx::nix::LinuxGraphics::initialize()
 
 bool gdx::nix::LinuxGraphics::setDisplayMode(int width, int height, bool fullscreen)
 {
-    this->lastTime = Gdx::system->nanoTime();
+    this->lastTime = system->nanoTime();
     this->width = width;
     this->height = height;
     

@@ -577,7 +577,7 @@ BitmapFont::BitmapFont ( BitmapFont::BitmapFontData* p_data, TextureRegion::ptr 
       color ( Color::WHITE.toFloatBits() ),
       tempColor ( 1,1,1,1 ) {
     if ( region == NULL ) {
-        region = TextureRegion::newFromTexture ( Texture::newFromFile ( Gdx::files->internal ( data->imagePath ), NULL, false ) );
+        region = TextureRegion::newFromTexture ( Texture::newFromFile ( files->internal ( data->imagePath ), NULL, false ) );
     }
     load ( data );
 }
@@ -747,7 +747,7 @@ BitmapFont::BitmapFontData::BitmapFontData ( FileHandle::ptr fontFile, bool flip
             down = -down;
         }
     } catch ( std::exception e ) {
-        gdx::Gdx::app->log ( "BitmapFont", "Constructor exception: %s", e.what() );
+       gdx_log_debug ( "BitmapFont", "Constructor exception: %s", e.what() );
         throw std::runtime_error ( "Error loading font file: " + fontFile->name() );
     }
 }

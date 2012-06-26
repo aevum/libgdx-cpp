@@ -49,7 +49,7 @@ void VertexArray::setVertices (const float* vertices, int offset, int count) {
 }
 
 void VertexArray::bind () {
-    GL10& gl = *Gdx::gl10;
+    GL10& gl = *gl10;
     int textureUnit = 0;
     int numAttributes = attributes.size();
 
@@ -94,7 +94,7 @@ void VertexArray::bind () {
 }
 
 void VertexArray::unbind () {
-    GL10& gl = *Gdx::gl10;
+    GL10& gl = *gl10;
     int textureUnit = 0;
     int numAttributes = attributes.size();
 

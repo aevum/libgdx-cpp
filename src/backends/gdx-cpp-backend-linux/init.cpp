@@ -3,6 +3,7 @@
 #include <gdx-cpp/Gdx.hpp>
 #include "LinuxApplication.hpp"
 #include "LinuxSystem.hpp"
+#include "Log.hpp"
 
 using namespace gdx;
 using namespace gdx::nix;
@@ -14,8 +15,10 @@ std::string title;
 int main(int argc, char** argv);
 
 extern "C" int default_main(int argc, char** argv) {
-    Gdx::initializeSystem(new LinuxSystem);
+    gdx::initializeSystem(new LinuxSystem, new gdx::nix::Log);
 
+    std::cout << &gdx::system << std::endl;
+    
     gdxcpp_init(argc, argv);
 
     assert(applicationListener);

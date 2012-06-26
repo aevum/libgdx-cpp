@@ -4,11 +4,11 @@ include_directories(${GDXCPP_INCLUDE_DIR} ${SVG_BACKEND_ANTIGRAIN_INCLUDES})
 
 set(GDX_CPP_BACKEND_LINUX_SRC LinuxApplication.cpp  LinuxOpenALMusic.cpp
 LinuxGraphics.cpp LinuxGLU.cpp LinuxSystem.cpp LinuxInput.cpp LinuxFiles.cpp LinuxFileHandle.cpp init.cpp
-LinuxOpenALAudio.cpp LinuxOpenALSound.cpp LinuxOgg.cpp LinuxOggInputStream.cpp LinuxOpenALMusic.cpp
+LinuxOpenALAudio.cpp LinuxOpenALSound.cpp LinuxOgg.cpp LinuxOggInputStream.cpp LinuxOpenALMusic.cpp Log.cpp
 )
 set(GDX_CPP_BACKEND_LINUX_HEADERS LinuxApplication.hpp  LinuxGraphics.hpp
 LinuxFiles.hpp LinuxFileHandle.hpp LinuxGLU.hpp LinuxSystem.hpp LinuxInput.hpp
-LinuxOpenALAudio.hpp LinuxOpenALSound.hpp LinuxOgg.hpp LinuxOggInputStream.hpp LinuxOpenALMusic.hpp
+LinuxOpenALAudio.hpp LinuxOpenALSound.hpp LinuxOgg.hpp LinuxOggInputStream.hpp LinuxOpenALMusic.hpp Log.hpp
 )
 
 gdx_setup_library_target(gdx-cpp-backend-linux "${GDX_CPP_BACKEND_LINUX_SRC};${GDX_CPP_BACKEND_LINUX_HEADERS}")

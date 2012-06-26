@@ -29,7 +29,7 @@ gdx::android::AndroidSound::AndroidSound( jobject p_jniSound )
  : jniSound(p_jniSound)
 {
     
-    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::Gdx::system)->getJniEnv();
+    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::system)->getJniEnv();
     jclass cls = env->GetObjectClass(p_jniSound);
     
     disposeJNI = env->GetMethodID(cls, "dispose", "()V");
@@ -45,26 +45,26 @@ gdx::android::AndroidSound::AndroidSound( jobject p_jniSound )
 
 void gdx::android::AndroidSound::dispose()
 {
-    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::Gdx::system)->getJniEnv();
+    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::system)->getJniEnv();
     env->CallVoidMethod(jniSound, disposeJNI);
     env->DeleteGlobalRef(jniSound);
 }
 
 void gdx::android::AndroidSound::play()
 {
-    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::Gdx::system)->getJniEnv();
+    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::system)->getJniEnv();
     env->CallVoidMethod(jniSound, playJNI);
 }
 
 void gdx::android::AndroidSound::play(float volume)
 {
-    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::Gdx::system)->getJniEnv();
+    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::system)->getJniEnv();
     env->CallVoidMethod(jniSound, playFloatJNI, volume);
 }
 
 void gdx::android::AndroidSound::stop()
 {
-    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::Gdx::system)->getJniEnv();
+    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::system)->getJniEnv();
     env->CallVoidMethod(jniSound, stopJNI);
 }
 

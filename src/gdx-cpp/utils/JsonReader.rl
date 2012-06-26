@@ -74,7 +74,7 @@ JsonValue::ptr JsonReader::parse (const char* data, int offset, int length) {
     bool debug = false;
 
     if (debug) {
-        Gdx::app->log("JsonReader","\n");
+       gdx_log_debug("JsonReader","\n");
     }
 
     try {
@@ -96,7 +96,7 @@ JsonValue::ptr JsonReader::parse (const char* data, int offset, int length) {
                         std::string name(s, p-s);
                         s = p;
                         if (needsUnescape) name = unescape(name);
-                        if (debug) Gdx::app->log("JsonReader","name: %s", name.c_str());
+                        if (debug)gdx_log_debug("JsonReader","name: %s", name.c_str());
                         names.push_back(name);
                 }
                 action string {
@@ -109,7 +109,7 @@ JsonValue::ptr JsonReader::parse (const char* data, int offset, int length) {
                             names.pop_front();
                         }
 
-                        if (debug) Gdx::app->log("JsonReader","string: %s = %s", name.c_str(), value.c_str());;
+                        if (debug)gdx_log_debug("JsonReader","string: %s = %s", name.c_str(), value.c_str());;
                         string(name, value);
                 }
                 action number {
@@ -120,7 +120,7 @@ JsonValue::ptr JsonReader::parse (const char* data, int offset, int length) {
                             name = names.front();
                             names.pop_front();
                         }
-                        if (debug) Gdx::app->log("JsonReader","number: %s = %s", name.c_str(), value.c_str());
+                        if (debug)gdx_log_debug("JsonReader","number: %s = %s", name.c_str(), value.c_str());
 
                         if (value.find(".") != std::string::npos) {
                             number(name, from_string<float>(value));
@@ -136,7 +136,7 @@ JsonValue::ptr JsonReader::parse (const char* data, int offset, int length) {
                         }
 
                         if (debug) {
-                            Gdx::app->log("JsonReader","number: %s = true", name.c_str());
+                           gdx_log_debug("JsonReader","number: %s = true", name.c_str());
                         }
                         boolean(name, true);
                 }
@@ -148,7 +148,7 @@ JsonValue::ptr JsonReader::parse (const char* data, int offset, int length) {
                         }
 
                         if (debug) {
-                            Gdx::app->log("JsonReader","number: %s = false", name.c_str());
+                           gdx_log_debug("JsonReader","number: %s = false", name.c_str());
                         }
                         boolean(name, false);
                 }
@@ -160,7 +160,7 @@ JsonValue::ptr JsonReader::parse (const char* data, int offset, int length) {
                         }
 
                         if (debug) {
-                            Gdx::app->log("JsonReader","nulll: %s", name.c_str());
+                           gdx_log_debug("JsonReader","nulll: %s", name.c_str());
                         }
                         string(name, "");
                 }
@@ -172,14 +172,14 @@ JsonValue::ptr JsonReader::parse (const char* data, int offset, int length) {
                         }
 
                         if (debug) {
-                            Gdx::app->log("JsonReader","startObject: %s", name.c_str());
+                           gdx_log_debug("JsonReader","startObject: %s", name.c_str());
                         }
                         startObject(name);
                         fcall object;
                 }
                 action endObject {
                         if (debug) {
-                            Gdx::app->log("JsonReader","endObject");
+                           gdx_log_debug("JsonReader","endObject");
                         }
                         pop();
                         fret;
@@ -192,14 +192,14 @@ JsonValue::ptr JsonReader::parse (const char* data, int offset, int length) {
                         }
 
                         if (debug) {
-                            Gdx::app->log("JsonReader","startArray: %s", name.c_str());
+                           gdx_log_debug("JsonReader","startArray: %s", name.c_str());
                         }
                         startArray(name);
                         fcall array;
                 }
                 action endArray {
                         if (debug) {
-                            Gdx::app->log("JsonReader","endArray");
+                           gdx_log_debug("JsonReader","endArray");
                         }
                         pop();
                         fret;

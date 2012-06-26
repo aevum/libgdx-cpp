@@ -26,19 +26,19 @@ using namespace gdx;
 
 void Stage::setViewport (float width, float height, bool stretch) {
     if (!stretch) {
-        if (width > height && width / (float)Gdx::graphics->getWidth() <= height / (float)Gdx::graphics->getHeight()) {
-            float toDeviceSpace = Gdx::graphics->getHeight() / height;
-            float toViewportSpace = height / Gdx::graphics->getHeight();
+        if (width > height && width / (float)graphics->getWidth() <= height / (float)graphics->getHeight()) {
+            float toDeviceSpace = graphics->getHeight() / height;
+            float toViewportSpace = height / graphics->getHeight();
 
             float deviceWidth = width * toDeviceSpace;
-            this->_width = width + (Gdx::graphics->getWidth() - deviceWidth) * toViewportSpace;
+            this->_width = width + (graphics->getWidth() - deviceWidth) * toViewportSpace;
             this->_height = height;
         } else {
-            float toDeviceSpace = Gdx::graphics->getWidth() / width;
-            float toViewportSpace = width / Gdx::graphics->getWidth();
+            float toDeviceSpace = graphics->getWidth() / width;
+            float toViewportSpace = width / graphics->getWidth();
 
             float deviceHeight = height * toDeviceSpace;
-            this->_height = height + (Gdx::graphics->getHeight() - deviceHeight) * toViewportSpace;
+            this->_height = height + (graphics->getHeight() - deviceHeight) * toViewportSpace;
             this->_width = width;
         }
     } else {

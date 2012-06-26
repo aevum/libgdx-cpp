@@ -29,7 +29,6 @@
 #include <limits>
 #include "collision/Ray.hpp"
 #include <cassert>
-#include "gdx-cpp/Application.hpp"
 #include "gdx-cpp/Gdx.hpp"
 #include "Circle.hpp"
 
@@ -296,7 +295,7 @@ bool Intersector::intersectRayTriangles (const Ray& ray, const std::vector<float
 
     if ((triangles.size() / 3) % 3 != 0)
     {
-      Gdx::app->error("GDX-CPP Intersector.cpp","triangle list size is not a multiple of 3");
+      gdx_log_error("GDX-CPP Intersector.cpp","triangle list size is not a multiple of 3");
       assert(false);
     }
 
@@ -329,7 +328,7 @@ bool Intersector::intersectRayTriangles (const Ray& ray, const std::vector<float
 
     if ((indices.size() % 3) != 0)
     {
-      Gdx::app->error("GDX-CPP Intersector.cpp", "triangle list size is not a multiple of 3");
+      gdx_log_error("GDX-CPP Intersector.cpp", "triangle list size is not a multiple of 3");
       assert(false);
     } 
 
@@ -365,7 +364,7 @@ bool Intersector::intersectRayTriangles (const Ray& ray, const std::vector<Vecto
 
     if (triangles.size() % 3 != 0)
     {
-      Gdx::app->error("GDX-CPP Intersector.cpp", "triangle list size is not a multiple of 3");
+      gdx_log_error("GDX-CPP Intersector.cpp", "triangle list size is not a multiple of 3");
       assert(false);
     } 
 

@@ -57,7 +57,7 @@ const TextureData::TextureDataType& PixmapTextureData::getType () {
 }
 
 void PixmapTextureData::uploadCompressedData () {
-    Gdx::app->error(__FILE__, "This TextureData implementation does not upload data itself");
+    gdx_log_error(__FILE__, "This TextureData implementation does not upload data itself");
 }
 
 PixmapTextureData::PixmapTextureData(Pixmap::ptr _pixmap,

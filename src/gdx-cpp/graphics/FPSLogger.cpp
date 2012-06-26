@@ -28,13 +28,13 @@
 using namespace gdx;
 
 void FPSLogger::log () {
-    if (Gdx::system->nanoTime() - startTime > 1000000000) {
-        Gdx::app->log("FPSLogger", "fps: %u", Gdx::graphics->getFramesPerSecond());
-        startTime = Gdx::system->nanoTime();
+    if (system->nanoTime() - startTime > 1000000000) {
+       gdx_log_debug("FPSLogger", "fps: %u", graphics->getFramesPerSecond());
+        startTime = system->nanoTime();
     }
 }
 
-FPSLogger::FPSLogger() : startTime(Gdx::system->nanoTime())
+FPSLogger::FPSLogger() : startTime(system->nanoTime())
 {
 }
 

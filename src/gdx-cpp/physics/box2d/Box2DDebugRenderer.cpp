@@ -69,8 +69,8 @@ void Box2DDebugRenderer::renderBodies ( b2World& world) {
     
     renderer.end();
 
-    if (Gdx::gl10 != NULL) {
-        Gdx::gl10->glPointSize(3);
+    if (gl10 != NULL) {
+        gl10->glPointSize(3);
     }
     
     renderer.begin(ShapeRenderer::ShapeType::Point);
@@ -80,8 +80,8 @@ void Box2DDebugRenderer::renderBodies ( b2World& world) {
     }
     renderer.end();
     
-    if (Gdx::gl10 != NULL) {
-        Gdx::gl10->glPointSize(1);
+    if (gl10 != NULL) {
+        gl10->glPointSize(1);
     }
 }
 

@@ -6,10 +6,13 @@
 #include "AndroidApplication.hpp"
 #include "AndroidFiles.hpp"
 
-#include <android/log.h>
 #include <jni.h>
+#include <android/log.h>
 #include <gdx-cpp/files/FileHandle.hpp>
 #include "AndroidAudio.hpp"
+#include "Android.hpp"
+#include "Log.hpp"
+
 
 #include <unistd.h>
 using namespace gdx;
@@ -17,8 +20,11 @@ using namespace gdx::android;
 
 gdx::ApplicationListener* applicationListener = 0;
 JavaVM* vm = 0;
+namespace gdx {
+namespace android {
 AndroidApplication* app = 0;
-
+}
+}
 extern "C" void gdxcpp_create_application(gdx::ApplicationListener* listener, const std::string& applicationName, int width, int height)
 {
     applicationListener = listener;
@@ -26,14 +32,14 @@ extern "C" void gdxcpp_create_application(gdx::ApplicationListener* listener, co
 
 extern "C" {  
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitSystem(JNIEnv* env) {        
-        Gdx::initializeSystem(new AndroidSystem);
-        static_cast<AndroidSystem*>(Gdx::system)->setJavaVM(vm);
+        initializeSystem(new AndroidSystem, new gdx::android::Log);
+        static_cast<AndroidSystem*>(gdx::system)->setJavaVM(vm);
         gdxcpp_init(1, NULL);
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeInitialize(JNIEnv* env, jclass clazz, jobject assetManager, int width, int height) {
         assert(applicationListener);
-        app = new AndroidApplication(applicationListener, "gdx-android", width, height, false);
+        gdx::android::app = new AndroidApplication(applicationListener, "gdx-android", width, height, false);
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeCreate(JNIEnv* env) {
@@ -43,22 +49,22 @@ extern "C" {
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeUpdate(JNIEnv* env) {
         assert(applicationListener);
-        app->update();
+        gdx::android::app->update();
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativePause(JNIEnv* env) {
         assert(applicationListener);
-        app->pause();
+        gdx::android::app->pause();
     }
     
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeResume(JNIEnv* env) {
         assert(applicationListener);
-        app->resume();
+        gdx::android::app->resume();
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeResize(JNIEnv* env, jobject object, jint width, jint height) {
         assert(applicationListener);
-        static_cast<AndroidGraphics*>(Gdx::app->getGraphics())->resize(width, height);
+        static_cast<AndroidGraphics*>(gdx::android::app->getGraphics())->resize(width, height);
     }
 
     enum EventType {
@@ -91,16 +97,16 @@ extern "C" {
         virtual void run() {
             switch (type) {
                 case MOUSE_DOWN:
-                    static_cast<AndroidInput*>(Gdx::app->getInput())->handleTouchDown(x, y, button);
+                    static_cast<AndroidInput*>(gdx::android::app->getInput())->handleTouchDown(x, y, button);
                     return;
                 case MOUSE_DRAG:
-                    static_cast<AndroidInput*>(Gdx::app->getInput())->handleTouchDrag(x, y, button);
+                    static_cast<AndroidInput*>(gdx::android::app->getInput())->handleTouchDrag(x, y, button);
                     return;
                 case MOUSE_UP:
-                    static_cast<AndroidInput*>(Gdx::app->getInput())->handleTouchUp(x, y, button);
+                    static_cast<AndroidInput*>(gdx::android::app->getInput())->handleTouchUp(x, y, button);
                     return;
                 case BACK_PRESSED:
-                    static_cast<AndroidInput*>(Gdx::app->getInput())->backPressed();
+                    static_cast<AndroidInput*>(gdx::android::app->getInput())->backPressed();
                     return;
             }            
         }
@@ -112,29 +118,28 @@ extern "C" {
     
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeTouchDownEvent(JNIEnv* env, jobject object, jfloat x, jfloat y, int button ) {
         assert(applicationListener);
-        Gdx::app->log("Android", "Touch down button: %d", button);
-        Gdx::app->postRunnable(Runnable::ptr(new EventRunnable(x, y, button, MOUSE_DOWN)));
+        gdx::android::app->postRunnable(Runnable::ptr(new EventRunnable(x, y, button, MOUSE_DOWN)));
     }
     
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeBackPressed(JNIEnv* env, jobject object) {
         assert(applicationListener);
-        Gdx::app->log("Android", "Back Pressed");
-        Gdx::app->postRunnable(Runnable::ptr(new EventRunnable(BACK_PRESSED)));
+//         gdx_log_debug("Android", "Back Pressed");
+        gdx::android::app->postRunnable(Runnable::ptr(new EventRunnable(BACK_PRESSED)));
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeTouchUpEvent(JNIEnv* env, jobject object, jfloat x, jfloat y, int button ) {
         assert(applicationListener);
-        Gdx::app->postRunnable(Runnable::ptr(new EventRunnable(x, y, button, MOUSE_UP)));
+        gdx::android::app->postRunnable(Runnable::ptr(new EventRunnable(x, y, button, MOUSE_UP)));
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeTouchDragEvent(JNIEnv* env, jobject object, jfloat x, jfloat y, int button ) {
         assert(applicationListener);
-        Gdx::app->postRunnable(Runnable::ptr(new EventRunnable(x, y, button, MOUSE_DRAG)));
+        gdx::android::app->postRunnable(Runnable::ptr(new EventRunnable(x, y, button, MOUSE_DRAG)));
     }
 
     void Java_com_badlogic_gdx_backends_android_AndroidAudio_registerAudioEngine(JNIEnv* env, jclass clazz, jobject object) {
         assert(applicationListener);
-        static_cast<AndroidAudio*>(Gdx::app->getAudio())->setupJNI(object);
+        static_cast<AndroidAudio*>(gdx::android::app->getAudio())->setupJNI(object);
     }
     
     JNIEXPORT jint JNICALL

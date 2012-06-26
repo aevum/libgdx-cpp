@@ -2,8 +2,8 @@
 #define GDX_GL_H
 
 /* #undef GDX_BACKEND_IOS */
-#define GDX_BACKEND_LINUX
-/* #undef GDX_BACKEND_ANDROID */
+/* #undef GDX_BACKEND_LINUX */
+#define GDX_BACKEND_ANDROID
 /* #undef GDX_BACKEND_WIN32 */
 
 #ifdef GDX_BACKEND_LINUX

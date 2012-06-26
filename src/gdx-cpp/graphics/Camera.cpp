@@ -75,7 +75,7 @@ void Camera::translate (float x,float y,float z) {
 void Camera::unproject (Vector3& vec,float viewportX,float viewportY,float viewportWidth,float viewportHeight) {
     float x = vec.x, y = vec.y;
     x = x - viewportX;
-    y = Gdx::graphics->getHeight() - y - 1;
+    y = graphics->getHeight() - y - 1;
     y = y - viewportY;
     vec.x = (2 * x) / viewportWidth - 1;
     vec.y = (2 * y) / viewportHeight - 1;
@@ -84,11 +84,11 @@ void Camera::unproject (Vector3& vec,float viewportX,float viewportY,float viewp
 }
 
 void Camera::unproject (Vector3& vec) {
-    unproject(vec, 0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
+    unproject(vec, 0, 0, graphics->getWidth(), graphics->getHeight());
 }
 
 void Camera::project (Vector3& vec) {
-    project(vec, 0, 0, Gdx::graphics->getWidth(),Gdx::graphics->getHeight());
+    project(vec, 0, 0, graphics->getWidth(),graphics->getHeight());
 }
 
 void Camera::project (Vector3& vec,float viewportX,float viewportY,float viewportWidth,float viewportHeight) {
@@ -106,6 +106,6 @@ Ray& Camera::getPickRay (float x,float y,float viewportX,float viewportY,float v
 }
 
 Ray& Camera::getPickRay (float x,float y) {
-    return getPickRay(x, y, 0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
+    return getPickRay(x, y, 0, 0, graphics->getWidth(), graphics->getHeight());
 }
 

@@ -44,7 +44,7 @@ void gdxcpp_create_listener() {
 
 int main(int argc, char** argv) {
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-    gdx::Gdx::initializeSystem(new gdx::ios::IosSystem);
+    gdx::initializeSystem(new gdx::ios::IosSystem);
     int retVal = UIApplicationMain(argc, argv, nil, NSStringFromClass([AppController class]));
     [pool release];
     return retVal;

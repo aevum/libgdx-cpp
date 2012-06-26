@@ -135,7 +135,7 @@ void Group::resetTransform (gdx::SpriteBatch& batch) {
 bool Group::touchDown (float x,float y,int pointer) {
     if (!touchable) return false;
 
-    if (debug) gdx::Gdx::app->log("Group", "%s: %f,%f", name.c_str() , x, y);
+    if (debug)gdx_log_debug("Group", "%s: %f,%f", name.c_str() , x, y);
 
     if (focusedActor[pointer] != NULL) {
         point.x = x;
@@ -374,7 +374,7 @@ void Group::focus (Actor* actor,int pointer) {
         focusedActor[pointer] = NULL;
         if (existingActor->parent != this) existingActor->parent->focus(NULL, pointer);
     }
-    if (debug) Gdx::app->log("Group", "focus: %s", actor == NULL ? "null" : actor->name.c_str());
+    if (debug)gdx_log_debug("Group", "focus: %s", actor == NULL ? "null" : actor->name.c_str());
     focusedActor[pointer] = actor;
     if (parent != NULL) parent->focus(actor, pointer);
 }
@@ -506,7 +506,7 @@ void Group::toChildCoordinates (Actor*const child, float x, float y, Vector2& ou
 }
 
 void Group::enableDebugging (const std::string& debugTextureFile) {
-    debugTexture = Texture::newFromFile(Gdx::files->internal(debugTextureFile), 0, false);
+    debugTexture = Texture::newFromFile(files->internal(debugTextureFile), 0, false);
     debug = true;
 }
 

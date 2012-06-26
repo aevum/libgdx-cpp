@@ -87,7 +87,7 @@
 
 - (void) mainLoop {
 	[(EAGLView*)self.view setFramebuffer];
-	gdx::Gdx::app->update();
+	gdx::app->update();
 	[(EAGLView*)self.view presentFramebuffer];
 }
 

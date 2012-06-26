@@ -45,17 +45,17 @@ void ETC1TextureData::uploadCompressedData () {
     width = data->width;
     height = data->height;
 
-    if (Gdx::app->getType() == Application::Desktop || Gdx::graphics->isGL20Available() == false) {
+    if (app->getType() == Application::Desktop || graphics->isGL20Available() == false) {
         Pixmap::ptr pixmap = ETC1.decodeImage(data, Pixmap::Format::RGB565);
-        Gdx::gl->glTexImage2D(GL10::GL_TEXTURE_2D, 0, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
+        gl->glTexImage2D(GL10::GL_TEXTURE_2D, 0, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
                             pixmap->getGLFormat(), pixmap->getGLType(), pixmap->getPixels());
         if (useMipMaps) MipMapGenerator::generateMipMap(pixmap, pixmap->getWidth(), pixmap->getHeight(), false);
         pixmap->dispose();
         useMipMaps = false;
     } else {
-        Gdx::gl->glCompressedTexImage2D(GL10::GL_TEXTURE_2D, 0, ETC1::ETC1_RGB8_OES, width, height, 0,
+        gl->glCompressedTexImage2D(GL10::GL_TEXTURE_2D, 0, ETC1::ETC1_RGB8_OES, width, height, 0,
                                       data->compressedData.capacity() - data->dataOffset, data->compressedData);
-        if (useMipMaps()) Gdx::gl20->glGenerateMipmap(GL20::GL_TEXTURE_2D);
+        if (useMipMaps()) gl20->glGenerateMipmap(GL20::GL_TEXTURE_2D);
     }
     data->dispose();
 }

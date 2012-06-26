@@ -62,7 +62,7 @@
 	[window makeKeyAndVisible];
 	
 	gdxcpp_initialize_application();	
-	gdx::Gdx::graphics->setDisplayMode(glView.viewWidth, glView.viewHeight, true);
+	gdx::graphics->setDisplayMode(glView.viewWidth, glView.viewHeight, true);
 	gdxcpp_create_listener();
 	
 	return YES;

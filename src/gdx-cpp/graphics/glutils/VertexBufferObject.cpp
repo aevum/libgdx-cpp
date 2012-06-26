@@ -30,10 +30,10 @@
 using namespace gdx;
 
 int VertexBufferObject::createBufferObject () {
-    if (Gdx::gl20 != NULL)
-        Gdx::gl20->glGenBuffers(1, &tmpHandle);
+    if (gl20 != NULL)
+        gl20->glGenBuffers(1, &tmpHandle);
     else
-        Gdx::gl11->glGenBuffers(1, &tmpHandle);
+        gl11->glGenBuffers(1, &tmpHandle);
 
     return tmpHandle;
 }
@@ -75,11 +75,11 @@ void VertexBufferObject::setVertices (const float* vertices, int offset, int cou
     }
 
     if (isBound) {
-        if (Gdx::gl20 != NULL) {
-            GL20& gl = *Gdx::gl20;
+        if (gl20 != NULL) {
+            GL20& gl = *gl20;
             gl.glBufferData(GL_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
         } else {
-            GL11& gl = *Gdx::gl11;
+            GL11& gl = *gl11;
             gl.glBufferData(GL_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
         }
         isDirty = false;
@@ -87,7 +87,7 @@ void VertexBufferObject::setVertices (const float* vertices, int offset, int cou
 }
 
 void VertexBufferObject::bind () {
-    GL11& gl = *Gdx::gl11;
+    GL11& gl = *gl11;
 
     gl.glBindBuffer(GL_ARRAY_BUFFER, bufferHandle);
     if (isDirty) {
@@ -141,11 +141,11 @@ void VertexBufferObject::bind () {
 }
 
 void VertexBufferObject::bind (ShaderProgram& shader) {
-    GL20& gl = *Gdx::gl20;
+    GL20& gl = *gl20;
 
     gl.glBindBuffer(GL_ARRAY_BUFFER, bufferHandle);
     if (isDirty) {
-        Gdx::app->log("VertexBufferObject", "********************** limit %d", buffer.limit() * 4);
+       gdx_log_debug("VertexBufferObject", "********************** limit %d", buffer.limit() * 4);
         byteBuffer.limit(buffer.limit() * 4);
         gl.glBufferData(GL_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
         isDirty = false;
@@ -168,7 +168,7 @@ void VertexBufferObject::bind (ShaderProgram& shader) {
 }
 
 void VertexBufferObject::unbind () {
-    GL11& gl = *Gdx::gl11;
+    GL11& gl = *gl11;
     int textureUnit = 0;
     int numAttributes = attributes.size();
 
@@ -200,7 +200,7 @@ void VertexBufferObject::unbind () {
 }
 
 void VertexBufferObject::unbind (ShaderProgram& shader) {
-    GL20& gl = *Gdx::gl20;
+    GL20& gl = *gl20;
     int numAttributes = attributes.size();
     for (int i = 0; i < numAttributes; i++) {
         VertexAttribute attribute = attributes.get(i);
@@ -216,15 +216,15 @@ void VertexBufferObject::invalidate () {
 }
 
 void VertexBufferObject::dispose () {
-    if (Gdx::gl20 != NULL) {
+    if (gl20 != NULL) {
         tmpHandle = bufferHandle;
-        GL20& gl = *Gdx::gl20;
+        GL20& gl = *gl20;
         gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
         gl.glDeleteBuffers(1, &tmpHandle);
         bufferHandle = 0;
     } else {
         tmpHandle = bufferHandle;
-        GL11& gl = *Gdx::gl11;
+        GL11& gl = *gl11;
         gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
         gl.glDeleteBuffers(1, &tmpHandle);
         bufferHandle = 0;

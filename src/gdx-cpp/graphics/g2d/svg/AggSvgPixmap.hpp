@@ -29,7 +29,7 @@
 #include "gdx-cpp/utils/XmlReader.hpp"
 #include "SvgParser.hpp"
 #include "gdx-cpp/Gdx.hpp"
-
+#include "gdx-cpp/Log.hpp"
 
 namespace gdx {
 
@@ -42,14 +42,14 @@ public:
     static AggSvgPixmap* newFromFile(const FileHandle::ptr& file) {
         static XmlReader reader;
 
-        gdx::Gdx::app->log("WreckingBaller", "%s", file->path().c_str());
+        gdx_log_debug("WreckingBaller", "%s", file->path().c_str());
 
         AggSvgPixmap* pix = new AggSvgPixmap;
-        uint64_t before = gdx::Gdx::system->nanoTime();
+        uint64_t before = gdx::system->nanoTime();
         SvgParser::render(reader.parse(*file).get(), pix);
-        uint64_t after = gdx::Gdx::system->nanoTime();
+        uint64_t after = gdx::system->nanoTime();
 
-        gdx::Gdx::app->log("WreckingBaller", "%s, took %f us", file->path().c_str(), (after - before) / 1000.0);
+        gdx_log_debug("WreckingBaller", "%s, took %f us", file->path().c_str(), (after - before) / 1000.0);
 
         return pix;
     }

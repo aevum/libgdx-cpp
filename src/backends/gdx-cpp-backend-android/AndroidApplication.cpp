@@ -21,7 +21,6 @@
 #include <gdx-cpp/Graphics.hpp>
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/implementation/System.hpp>
-#include <android/log.h>
 #include <stdexcept>
 #include <cassert>
 
@@ -31,7 +30,7 @@ using namespace gdx;
 
 gdx::android::AndroidApplication::AndroidApplication(gdx::ApplicationListener* listener,
         const std::string& title, int width, int height, bool useGL20IfAvailable)
-        :  Synchronizable(Gdx::system->getMutexFactory())
+        :  Synchronizable(system->getMutexFactory())
         , title(title)
         , useGL20iFAvailable(useGL20IfAvailable)
         , width(width)
@@ -56,7 +55,7 @@ void AndroidApplication::initialize() {
     graphics->setTitle(this->title);
     graphics->setDisplayMode(width, height, false);
 
-    Gdx::initialize(this, graphics, audio, input, files);
+    gdx::initialize(this, graphics, audio, input, files);
 }
 
 void android::AndroidApplication::onRunnableStop()
@@ -83,17 +82,6 @@ void android::AndroidApplication::run()
 
     listener->render();
     graphics->update();
-}
-
-void AndroidApplication::error(const std::string& tag, const char* format, ...)
-{
-    va_list list;
-    va_start(list, format);
-    __android_log_vprint(ANDROID_LOG_ERROR, tag.c_str(),format, list);
-
-#if DEBUG
-    assert(false);
-#endif
 }
 
 void gdx::android::AndroidApplication::exit()
@@ -150,17 +138,6 @@ void android::AndroidApplication::create()
 {
     listener->create();
     listener->resize(graphics->getWidth(), graphics->getHeight());
-}
-
-
-void gdx::android::AndroidApplication::log(const std::string& tag, const char* format, ...)
-{
-    if (logLevel == gdx::Application::LOG_NONE)
-        return;
-    
-    va_list list;
-    va_start(list, format);
-    __android_log_vprint(ANDROID_LOG_INFO, tag.c_str(),format, list);
 }
 
 int gdx::android::AndroidApplication::getVersion()

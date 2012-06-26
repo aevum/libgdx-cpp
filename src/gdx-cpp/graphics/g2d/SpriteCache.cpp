@@ -38,7 +38,7 @@ using namespace gdx;
 float SpriteCache::tempVertices[Sprite::VERTEX_SIZE * 6];
 
 ShaderProgram* SpriteCache::createDefaultShader () {
-    if ( !Gdx::graphics->isGL20Available() ) return NULL;
+    if ( !graphics->isGL20Available() ) return NULL;
     std::string vertexShader = "attribute vec4 " + ShaderProgram::POSITION_ATTRIBUTE + ";\n" //
                                "attribute vec4 " + ShaderProgram::COLOR_ATTRIBUTE + ";\n" //
                                "attribute vec2 " + ShaderProgram::TEXCOORD_ATTRIBUTE + "0;\n" //
@@ -104,7 +104,7 @@ SpriteCache::SpriteCache ( int size, bool useIndices, ShaderProgram* shader ) :
         mesh->setIndices ( indices );
     }
 
-    projectionMatrix.setToOrtho2D ( 0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight() );
+    projectionMatrix.setToOrtho2D ( 0, 0, graphics->getWidth(), graphics->getHeight() );
 }
 
 
@@ -785,8 +785,8 @@ void SpriteCache::begin () {
     if ( drawing )
         throw std::runtime_error ( "end must be called before begin." );
 
-    if ( Gdx::graphics->isGL20Available() == false ) {
-        GL10& gl = *Gdx::gl10;
+    if ( graphics->isGL20Available() == false ) {
+        GL10& gl = *gl10;
         gl.glDepthMask ( false );
         gl.glEnable ( GL_TEXTURE_2D );
 
@@ -799,7 +799,7 @@ void SpriteCache::begin () {
     } else {
         combinedMatrix.set ( projectionMatrix ).mul ( transformMatrix );
 
-        GL20& gl = *Gdx::gl20;
+        GL20& gl = *gl20;
         gl.glDepthMask ( false );
         gl.glEnable ( GL_TEXTURE_2D );
 
@@ -826,14 +826,14 @@ void SpriteCache::end () {
 
     drawing = false;
 
-    if ( Gdx::graphics->isGL20Available() == false ) {
-        GL10& gl = *Gdx::gl10;
+    if ( graphics->isGL20Available() == false ) {
+        GL10& gl = *gl10;
         gl.glDepthMask ( true );
         gl.glDisable ( GL_TEXTURE_2D );
         mesh->unbind();
     } else {
         shader->end();
-        GL20& gl = *Gdx::gl20;
+        GL20& gl = *gl20;
         gl.glDepthMask ( true );
         gl.glDisable ( GL_TEXTURE_2D );
         mesh->unbind ( *shader );
@@ -852,7 +852,7 @@ void SpriteCache::draw ( int cacheID ) {
     std::vector<Texture::ptr>& textures = cache->textures;
     std::vector<int>& counts = cache->counts;
 
-    if ( Gdx::graphics->isGL20Available() ) {
+    if ( graphics->isGL20Available() ) {
         for ( int i = 0, n = textures.size(); i < n; i++ ) {
             int count = counts[i];
             textures[i]->bind();
@@ -882,7 +882,7 @@ void SpriteCache::draw ( int cacheID,int offset,int length ) {
     length *= 6;
     std::vector<Texture::ptr>& textures = cache->textures;
     std::vector<int>& counts = cache->counts;
-    if ( Gdx::graphics->isGL20Available() ) {
+    if ( graphics->isGL20Available() ) {
         for ( int i = 0, n = textures.size(); i < n; i++ ) {
             textures[i]->bind();
             int count = counts[i];

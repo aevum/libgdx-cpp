@@ -31,7 +31,7 @@ namespace gdx {
 class Base64Coder {
 public:
     static std::string encodeString (const std::string& s);
-    static std::string encodeLines (char* bytes, int iLen, int iOff = 0, int lineLen = 76, char lineSeparator = gdx::Gdx::system->getSeparator());
+    static std::string encodeLines (char* bytes, int iLen, int iOff = 0, int lineLen = 76, char lineSeparator = gdx::system->getSeparator());
     static std::vector< char > encode (const char *in, int length, int iOff = 0);
 
     static std::string decodeString (const std::string& s);

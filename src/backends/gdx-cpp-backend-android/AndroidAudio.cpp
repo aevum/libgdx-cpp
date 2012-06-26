@@ -48,7 +48,7 @@ gdx::AudioRecorder* gdx::android::AndroidAudio::newAudioRecoder(int samplingRate
 
 gdx::Music* gdx::android::AndroidAudio::newMusic(const gdx::FileHandle::ptr file)
 {
-    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::Gdx::system)->getJniEnv();
+    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::system)->getJniEnv();
     jstring strpath = env->NewStringUTF(file->path().c_str());
     jobject jobjMusic = env->CallObjectMethod(androidAudioObj, newMusicJNI, strpath, Files::Internal);
 
@@ -63,7 +63,7 @@ gdx::Music* gdx::android::AndroidAudio::newMusic(const gdx::FileHandle::ptr file
 
 gdx::Sound* gdx::android::AndroidAudio::newSound(const gdx::FileHandle::ptr fileHandle)
 {
-    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::Gdx::system)->getJniEnv();
+    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::system)->getJniEnv();
     jstring strpath = env->NewStringUTF(fileHandle->path().c_str());
     jobject jobjSound = env->CallObjectMethod(androidAudioObj, newSoundJNI, strpath, Files::Internal);
 
@@ -78,7 +78,7 @@ gdx::Sound* gdx::android::AndroidAudio::newSound(const gdx::FileHandle::ptr file
 
 void gdx::android::AndroidAudio::setupJNI(jobject androidAudioObj)
 {
-    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::Gdx::system)->getJniEnv();
+    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::system)->getJniEnv();
     env = env;
     this->androidAudioObj = androidAudioObj;
     env->NewGlobalRef(androidAudioObj);
@@ -98,7 +98,7 @@ void gdx::android::AndroidAudio::setupJNI(jobject androidAudioObj)
 
 gdx::android::AndroidAudio::~AndroidAudio()
 {
-    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::Gdx::system)->getJniEnv();
+    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::system)->getJniEnv();
     env->DeleteGlobalRef(androidAudioObj);
 }
 

@@ -48,7 +48,7 @@ Mesh::Mesh(bool isStatic, int maxVertices, int maxIndices, const std::vector< Ve
 , autoBind(true)
 , disposed(false)
 {
-    if (Gdx::gl20 != NULL || Gdx::gl11 != NULL || Mesh::forceVBO) {
+    if (gl20 != NULL || gl11 != NULL || Mesh::forceVBO) {
         vertices = new VertexBufferObject(isStatic, maxVertices, attributes);
         indices = new IndexBufferObject(isStatic, maxIndices);
         isVertexArray = false;
@@ -58,7 +58,7 @@ Mesh::Mesh(bool isStatic, int maxVertices, int maxIndices, const std::vector< Ve
         isVertexArray = true;
     }
     
-    addManagedMesh(Gdx::app, this);
+    addManagedMesh(app, this);
 }
 
 void Mesh::setVertices (const std::vector<float>& vertices) {
@@ -136,21 +136,21 @@ void Mesh::setAutoBind (bool autoBind) {
 }
 
 void Mesh::bind () {
-    if (Gdx::graphics->isGL20Available())
+    if (graphics->isGL20Available())
         throw std::runtime_error("can't use this render method with OpenGL ES 2.0");
     vertices->bind();
     if (!isVertexArray && indices->getNumIndices() > 0) indices->bind();
 }
 
 void Mesh::unbind () {
-    if (Gdx::graphics->isGL20Available())
+    if (graphics->isGL20Available())
         throw std::runtime_error("can't use this render method with OpenGL ES 2.0");
     vertices->unbind();
     if (!isVertexArray && indices->getNumIndices() > 0) indices->unbind();
 }
 
 void Mesh::bind (ShaderProgram& shader) {
-    if (!Gdx::graphics->isGL20Available())
+    if (!graphics->isGL20Available())
         throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
 
     ((VertexBufferObject*)vertices)->bind(shader);
@@ -158,7 +158,7 @@ void Mesh::bind (ShaderProgram& shader) {
 }
 
 void Mesh::unbind (ShaderProgram& shader) {
-    if (!Gdx::graphics->isGL20Available()) throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
+    if (!graphics->isGL20Available()) throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
 
     ((VertexBufferObject*)vertices)->unbind(shader);
     if (indices->getNumIndices() > 0) indices->unbind();
@@ -169,7 +169,7 @@ void Mesh::render (int primitiveType) {
 }
 
 void Mesh::render (int primitiveType,int offset,int count) {
-    if (Gdx::graphics->isGL20Available()) throw std::runtime_error("can't use this render method with OpenGL ES 2.0");
+    if (graphics->isGL20Available()) throw std::runtime_error("can't use this render method with OpenGL ES 2.0");
 
     if (autoBind) bind();
 
@@ -180,18 +180,18 @@ void Mesh::render (int primitiveType,int offset,int count) {
             int oldLimit = buffer.limit();
             buffer.position(offset);
             buffer.limit(offset + count);
-            Gdx::gl10->glDrawElements(primitiveType, count, GL_UNSIGNED_SHORT, (void *) ((char*)buffer + offset));
+            gl10->glDrawElements(primitiveType, count, GL_UNSIGNED_SHORT, (void *) ((char*)buffer + offset));
             buffer.position(oldPosition);
             buffer.limit(oldLimit);
         } else
-            Gdx::gl10->glDrawArrays(primitiveType, offset, count);
+            gl10->glDrawArrays(primitiveType, offset, count);
     } else {
         if (indices->getNumIndices() > 0) {
             int newoffset = offset * 2;
-            Gdx::gl11->glDrawElements(primitiveType, count, GL_UNSIGNED_SHORT, (void *) newoffset );
+            gl11->glDrawElements(primitiveType, count, GL_UNSIGNED_SHORT, (void *) newoffset );
         }
         else
-            Gdx::gl11->glDrawArrays(primitiveType, offset, count);
+            gl11->glDrawArrays(primitiveType, offset, count);
     }
 
     if (autoBind) unbind();
@@ -202,22 +202,22 @@ void Mesh::render (ShaderProgram& shader,int primitiveType) {
 }
 
 void Mesh::render (ShaderProgram& shader,int primitiveType,int offset,int count) {
-    if (!Gdx::graphics->isGL20Available()) throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
+    if (!graphics->isGL20Available()) throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
 
     if (autoBind) bind(shader);
 
     if (indices->getNumIndices() > 0)
-        Gdx::gl20->glDrawElements(primitiveType, count, GL_UNSIGNED_SHORT, offset * 2);
+        gl20->glDrawElements(primitiveType, count, GL_UNSIGNED_SHORT, offset * 2);
     else
-        Gdx::gl20->glDrawArrays(primitiveType, offset, count);
+        gl20->glDrawArrays(primitiveType, offset, count);
 
     if (autoBind) unbind(shader);
 }
 
 void Mesh::dispose () {
     if (!disposed) {
-        if (meshes.count(Gdx::app) > 0 && meshes[Gdx::app].count(this))
-            meshes[Gdx::app].erase(this);
+        if (meshes.count(app) > 0 && meshes[app].count(this))
+            meshes[app].erase(this);
         vertices->dispose();
         indices->dispose();
     }
@@ -357,7 +357,7 @@ Mesh::Mesh(int type, bool isStatic, int maxVertices, int maxIndices, const std::
 , autoBind(true)
 , disposed(false)
 {
-    if (type == VertexDataType::VertexArray && Gdx::graphics->isGL20Available())
+    if (type == VertexDataType::VertexArray && graphics->isGL20Available())
         type = VertexDataType::VertexBufferObject;
 
     if (type == VertexDataType::VertexBufferObject) {
@@ -373,7 +373,7 @@ Mesh::Mesh(int type, bool isStatic, int maxVertices, int maxIndices, const std::
         indices = new IndexBufferObject(maxIndices);
         isVertexArray = true;
     }
-    addManagedMesh(Gdx::app, this);
+    addManagedMesh(app, this);
 }
 
 void Mesh::setVertices(const float* vertices, int size) {

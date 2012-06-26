@@ -84,7 +84,7 @@ gdx::Files::FileType FileHandle::getType () const {
 }
 
 File FileHandle::getFile () const {
-    if (type == gdx::Files::External) return File( gdx::Gdx::files->getExternalStoragePath(), file.getPath());
+    if (type == gdx::Files::External) return File( gdx::files->getExternalStoragePath(), file.getPath());
     return file;
 }
 

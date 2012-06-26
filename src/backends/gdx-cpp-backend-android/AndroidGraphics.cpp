@@ -139,12 +139,12 @@ float gdx::android::AndroidGraphics::getPpiY()
 
 void gdx::android::AndroidGraphics::updateTime()
 {
-    uint64_t time = Gdx::system->nanoTime();
+    uint64_t time = system->nanoTime();
 
     //This is to fix a nasty bug on HTC devices. Somehow sometimes the nanotime returns
     //with a very big value, this making the delta time go kucko :(
     if (time - lastTime > 10000000000LL) {
-        lastTime = Gdx::system->nanoTime();        
+        lastTime = system->nanoTime();        
         return;
     }
     
@@ -235,7 +235,7 @@ bool gdx::android::AndroidGraphics::setDisplayMode(int width, int height, bool f
     this->width = width;
     this->height = height;
 
-    this->lastTime = Gdx::system->nanoTime();
+    this->lastTime = system->nanoTime();
     glCommon->glViewport(0, 0, width, height);
 }
 
@@ -247,7 +247,7 @@ void android::AndroidGraphics::resize(int width, int height)
 {
     this->width = width;
     this->height = height;
-    this->lastTime = Gdx::system->nanoTime();
+    this->lastTime = system->nanoTime();
     glCommon->glViewport(0, 0, width, height);
 }
 

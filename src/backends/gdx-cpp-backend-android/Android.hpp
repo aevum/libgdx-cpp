@@ -18,40 +18,18 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "Game.hpp"
-#include "Gdx.hpp"
-#include "Graphics.hpp"
 
-using namespace gdx;
+#ifndef ANDROID_GDX_HPP_
+#define ANDROID_GDX_HPP_
 
-void Game::dispose () {
-    if (screen != NULL) screen->hide();
+namespace gdx {
+namespace android{
+    class AndroidApplication;
+    extern AndroidApplication* app;
 }
 
-void Game::pause () {
-    if (screen != NULL) screen->pause();
-}
+} // namespace gdx
 
-void Game::resume () {
-    if (screen != NULL) screen->resume();
-}
 
-void Game::render () {
-    if (screen != NULL) screen->render(graphics->getDeltaTime());
-}
 
-void Game::resize (int width,int height) {
-    if (screen != NULL) screen->resize(width, height);
-}
-
-void Game::setScreen (Screen* screen) {
-    if (this->screen != NULL) this->screen->hide();
-    this->screen = screen;
-    screen->show();
-    screen->resize(graphics->getWidth(), graphics->getHeight());
-}
-
-Screen* Game::getScreen () {
-    return screen;
-}
-
+#endif // GDX_CPP_GDX_HPP_

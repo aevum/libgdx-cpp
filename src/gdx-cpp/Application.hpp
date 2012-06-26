@@ -55,11 +55,7 @@ public:
     virtual Input* getInput () = 0;
     
     virtual Files* getFiles () = 0;
-    
-    virtual void log (const std::string& tag, const char* format, ...) = 0;
-    
-    virtual void error (const std::string& tag, const char* format, ...) = 0;
-    
+        
     virtual void setLogLevel (int logLevel) = 0;
     
     virtual ApplicationType getType () = 0;

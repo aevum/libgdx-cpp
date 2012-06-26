@@ -66,7 +66,7 @@ SpriteBatch::SpriteBatch(int size) :
                                      size * 6,
                                      attributes));
 
-    projectionMatrix.setToOrtho2D(0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
+    projectionMatrix.setToOrtho2D(0, 0, graphics->getWidth(), graphics->getHeight());
 
     vertices = new float[size * Sprite::SPRITE_SIZE];
     verticesSize  = size * Sprite::SPRITE_SIZE;
@@ -86,7 +86,7 @@ SpriteBatch::SpriteBatch(int size) :
     buffers[0]->setIndices(indices);
     mesh = buffers[0];
 
-    if (Gdx::graphics->isGL20Available()) createShader();
+    if (graphics->isGL20Available()) createShader();
 }
 
 
@@ -125,10 +125,10 @@ void SpriteBatch::begin () {
         throw new std::runtime_error("you have to call SpriteBatch.end() first");
 
     renderCalls = 0;
-    Gdx::gl->glDepthMask(false);
-    Gdx::gl->glEnable(GL_TEXTURE_2D);
+    gl->glDepthMask(false);
+    gl->glEnable(GL_TEXTURE_2D);
 
-    if (Gdx::graphics->isGL20Available()) {
+    if (graphics->isGL20Available()) {
         if (customShader != NULL)
             customShader->begin();
         else shader->begin();
@@ -149,12 +149,12 @@ void SpriteBatch::end () {
     idx = 0;
     drawing = false;
 
-    GLCommon& gl = *Gdx::gl;
+    GLCommon& gl = *::gl;
     gl.glDepthMask(true);
     if (isBlendingEnabled()) gl.glDisable(GL_BLEND);
     gl.glDisable(GL_TEXTURE_2D);
 
-    if (Gdx::graphics->isGL20Available()) {
+    if (graphics->isGL20Available()) {
         if (customShader != NULL)
             customShader->end();
         else
@@ -867,11 +867,11 @@ void SpriteBatch::renderMesh () {
 
     mesh->setVertices(vertices, idx);
 
-    if (Gdx::graphics->isGL20Available()) {
+    if (graphics->isGL20Available()) {
         if (blendingDisabled) {
-            Gdx::gl20->glDisable(GL_BLEND);
+            gl20->glDisable(GL_BLEND);
         } else {
-            GL20& gl20 = *Gdx::gl20;
+            GL20& gl20 = *::gl20;
             gl20.glEnable(GL_BLEND);
             gl20.glBlendFunc(blendSrcFunc, blendDstFunc);
         }
@@ -882,9 +882,9 @@ void SpriteBatch::renderMesh () {
             mesh->render(*shader, GL_TRIANGLES, 0, spritesInBatch * 6);
     } else {
         if (blendingDisabled) {
-            Gdx::gl10->glDisable(GL_BLEND);
+            gl10->glDisable(GL_BLEND);
         } else {
-            GL10& gl10 = *Gdx::gl10;
+            GL10& gl10 = *::gl10;
             gl10.glEnable(GL_BLEND);
             gl10.glBlendFunc(blendSrcFunc, blendDstFunc);
         }
@@ -979,7 +979,7 @@ SpriteBatch::SpriteBatch(int size, int buffers) :
         this->buffers[i] = new Mesh(false, size * 4, size * 6, attributes);
     }
 
-    projectionMatrix.setToOrtho2D(0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
+    projectionMatrix.setToOrtho2D(0, 0, graphics->getWidth(), graphics->getHeight());
 
     vertices = new float[size * Sprite::SPRITE_SIZE];
     verticesSize  = size * Sprite::SPRITE_SIZE;
@@ -1002,7 +1002,7 @@ SpriteBatch::SpriteBatch(int size, int buffers) :
     }
     mesh = this->buffers[0];
 
-    if (Gdx::graphics->isGL20Available()) createShader();
+    if (graphics->isGL20Available()) createShader();
 }
 
 
@@ -1062,8 +1062,8 @@ void SpriteBatch::draw(const Texture& texture, float* const spriteVertices, int 
 
 void SpriteBatch::setupMatrices()
 {
-    if (!Gdx::graphics->isGL20Available()) {
-        GL10& gl = *Gdx::gl10;
+    if (!graphics->isGL20Available()) {
+        GL10& gl = *gl10;
         gl.glMatrixMode(GL_PROJECTION);
         gl.glLoadMatrixf(projectionMatrix.val);
         gl.glMatrixMode(GL_MODELVIEW);
