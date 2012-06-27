@@ -26,8 +26,6 @@
 
 namespace gdx {
 
-namespace backends {
-
 namespace ios {
 
 class IosGLU : public gdx::GLU
@@ -46,8 +44,6 @@ public:
     inline bool gluUnProject (float winX,float winY,float winZ,float* model,float* proj, int* view,float* objX,float* objY,float* objZ) const {
     }
 };
-
-}
 
 }
 

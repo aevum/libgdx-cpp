@@ -26,7 +26,6 @@
 #include <list>
 
 namespace gdx {
-namespace backends {
 namespace ios {
 	
 class IosGraphics;
@@ -77,7 +76,6 @@ protected:
 	
     int logLevel;
 };
-}
 }
 }
 

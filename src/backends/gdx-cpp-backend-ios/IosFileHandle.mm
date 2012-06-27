@@ -23,11 +23,11 @@
 using namespace gdx::ios;
 
 IosFileHandle::IosFileHandle(const std::string& fileName, gdx::Files::FileType type)
-: gdx::files::FileHandle(fileName, type)
+: gdx::FileHandle(fileName, type)
 {	
 }
 
-int IosFileHandle::readBytes(gdx::files::FileHandle::buffer_ptr& c) const {
+int IosFileHandle::readBytes(gdx::FileHandle::buffer_ptr& c) const {
 	if (this->type == Files::Internal) {		
           
        NSString* filePath = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String: file.nameWithoutExtension().c_str()] ofType:[NSString stringWithUTF8String: file.extension().c_str()]
@@ -47,7 +47,7 @@ int IosFileHandle::readBytes(gdx::files::FileHandle::buffer_ptr& c) const {
 				Byte *byteData = new Byte[len];
 				memcpy(byteData, [data bytes], len);
 				
-				gdx::files::FileHandle::buffer_ptr new_ptr((char*) byteData, shared_ptr_array_deleter());
+				gdx::FileHandle::buffer_ptr new_ptr((char*) byteData, shared_ptr_array_deleter());
 				c.swap(new_ptr);
 				
 				return len;

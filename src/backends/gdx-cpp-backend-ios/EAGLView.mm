@@ -246,7 +246,7 @@
 	for (UITouch *touch in touches) {
         if (![toucheshHolder containsObject:touches]) {
             CGPoint pos = [touch locationInView:self];
-            ((gdx_cpp::backends::ios::IosInput*)gdx_cpp::Gdx::input)->handleTouchDown(pos.x, pos.y, [toucheshHolder count]);
+            ((gdx::ios::IosInput*)gdx::input)->handleTouchDown(pos.x, pos.y, [toucheshHolder count]);
             [toucheshHolder addObject:touch];
         }		
 	}
@@ -256,7 +256,7 @@
 	int i = 0;
 	for (UITouch *touch in touches) {
 		CGPoint pos = [touch locationInView:self];
-		((gdx_cpp::backends::ios::IosInput*)gdx_cpp::Gdx::input)->handleTouchDrag(pos.x, pos.y, [toucheshHolder indexOfObject:touch]);
+		((gdx::ios::IosInput*)gdx::input)->handleTouchDrag(pos.x, pos.y, [toucheshHolder indexOfObject:touch]);
 	}
 }
 
@@ -265,7 +265,7 @@
     
 	for (UITouch *touch in touches) {
 		CGPoint pos = [touch locationInView:self];
-		((gdx_cpp::backends::ios::IosInput*)gdx_cpp::Gdx::input)->handleTouchUp(pos.x, pos.y, [toucheshHolder indexOfObject:touch]);
+		((gdx::ios::IosInput*)gdx::input)->handleTouchUp(pos.x, pos.y, [toucheshHolder indexOfObject:touch]);
         [toRemove addObject:touch];
 	}
     

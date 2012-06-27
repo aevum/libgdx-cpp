@@ -56,7 +56,7 @@ void IosApplication::initialize() {
 	graphics->initialize();
 	graphics->setDisplayMode(width, height, false);
 	
-	initialize(this, graphics, audio, input, files);
+    gdx::initialize(this, graphics, audio, input, files);
 }
 
 void IosApplication::onRunnableStop()

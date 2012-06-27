@@ -9,3 +9,4 @@ libs/
 .svn/
 android/assets
 src/tests/backends/android/assets/
+gl.hpp

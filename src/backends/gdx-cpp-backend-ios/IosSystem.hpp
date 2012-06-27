@@ -30,8 +30,6 @@ class Runnable;
 
 namespace gdx {
 
-namespace backends {
-
 namespace ios {
 
 class IosSystem  : public gdx::System
@@ -80,8 +78,6 @@ private:
     IosThreadFactory threadFactory;
     IosMutexFactory mutexFactory;
 };
-
-}
 
 }
 

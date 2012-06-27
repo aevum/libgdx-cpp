@@ -24,23 +24,19 @@
 namespace gdx {
 
 class Files;
-  
-namespace backends {
 
 namespace ios {
 
-class IosFileHandle : public gdx::files::FileHandle
+class IosFileHandle : public gdx::FileHandle
 {	
 public:
 	IosFileHandle(const std::string& fileName, gdx::Files::FileType type);
-	virtual int readBytes(gdx::files::FileHandle::buffer_ptr& c) const;
+	virtual int readBytes(gdx::FileHandle::buffer_ptr& c) const;
     
     bool exists() const;
     
     virtual int write ( const char* data, int lenght, bool append);
 };
-
-}
 
 }
 

@@ -23,8 +23,6 @@
 
 namespace gdx {
 
-namespace backends {
-
 namespace ios {
 
 class IosGraphics : public Graphics
@@ -86,8 +84,6 @@ protected:
     uint32_t fps;
     float deltaTime;
 };
-
-}
 
 }
 
