@@ -21,14 +21,11 @@
 #ifndef GDX_CPP_ASSETS_LOADERS_TEXTUREATLASLOADER_HPP_
 #define GDX_CPP_ASSETS_LOADERS_TEXTUREATLASLOADER_HPP_
 
-namespace gdx_cpp {
-namespace assets {
-namespace loaders {
-
+namespace gdx {
 class TextureAtlasLoader {
 public:
-    gdx_cpp::graphics::g2d::TextureAtlas& load (const gdx_cpp::assets::AssetManager& assetManager,const std::string& fileName,const TextureAtlasParameter& parameter);
-    gdx_cpp::utils::ArrayAssetDescriptor>& getDependencies (const std::string& fileName,const TextureAtlasParameter& parameter);
+    TextureAtlas& load (const AssetManager& assetManager,const std::string& fileName,const TextureAtlasParameter& parameter);
+    ArrayAssetDescriptor>& getDependencies (const std::string& fileName,const TextureAtlasParameter& parameter);
 
 protected:
 
@@ -37,8 +34,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace assets
-} // namespace loaders
+} // namespace gdx
 
 #endif // GDX_CPP_ASSETS_LOADERS_TEXTUREATLASLOADER_HPP_

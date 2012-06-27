@@ -21,9 +21,7 @@
 #include "Thread.hpp"
 #include "gdx-cpp/utils/Runnable.hpp"
 
-namespace gdx_cpp {
-
-namespace implementation {
+namespace gdx {
 
 class ThreadFactory
 {
@@ -31,7 +29,6 @@ public:
     virtual Thread::ptr createThread(Runnable* t) = 0;
 };
 
-}
 }
 
 #endif // GDX_CPP_IMPLEMENTATION_THREADFACTORY_HPP

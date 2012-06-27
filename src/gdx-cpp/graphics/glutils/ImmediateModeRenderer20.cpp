@@ -23,9 +23,7 @@
 #include "gdx-cpp/graphics/Color.hpp"
 #include "gdx-cpp/utils/StringConvertion.hpp"
 
-using namespace gdx_cpp::graphics::glutils;
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp;
+using namespace gdx;
 
 std::vector< VertexAttribute > ImmediateModeRenderer20::buildVertexAttributes (bool hasNormals, bool hasColor, int numTexCoords) {
     std::vector<VertexAttribute> attribs;
@@ -40,7 +38,7 @@ std::vector< VertexAttribute > ImmediateModeRenderer20::buildVertexAttributes (b
     }
     
     for (int i = 0; i < numTexCoords; i++) {
-        attribs.push_back(VertexAttribute(VertexAttributes::Usage::TextureCoordinates, 2, ShaderProgram::TEXCOORD_ATTRIBUTE + utils::to_string(i)));
+        attribs.push_back(VertexAttribute(VertexAttributes::Usage::TextureCoordinates, 2, ShaderProgram::TEXCOORD_ATTRIBUTE + to_string(i)));
     }
         
     return attribs;
@@ -106,7 +104,7 @@ std::string ImmediateModeRenderer20::createFragmentShader (bool hasNormals,bool 
     return shader.str();
 }
 
-void ImmediateModeRenderer20::begin (math::Matrix4& projModelView, int primitiveType ) {
+void ImmediateModeRenderer20::begin (Matrix4& projModelView, int primitiveType ) {
     this->customShader = NULL;
     
     this->projModelView.set(projModelView);

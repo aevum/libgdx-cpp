@@ -21,15 +21,15 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_TEXTUREATLAS_HPP_
 #define GDX_CPP_GRAPHICS_G2D_TEXTUREATLAS_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g2d {
 
-class TextureAtlas: public gdx_cpp::utils::Disposable {
+class TextureAtlas: public gdx::Disposable {
 public:
-    gdx_cpp::utils::ArrayPage>& getPages ();
-    gdx_cpp::utils::ArrayRegion>& getRegion ();
-    AtlasRegion& addRegion (const std::string& name,const gdx_cpp::graphics::Texture& texture,int x,int y,int width,int height);
+    gdx::ArrayPage>& getPages ();
+    gdx::ArrayRegion>& getRegion ();
+    AtlasRegion& addRegion (const std::string& name,const gdx::Texture& texture,int x,int y,int width,int height);
     AtlasRegion& addRegion (const std::string& name,const TextureRegion& textureRegion);
     std::list<AtlasRegion>& getRegions ();
     AtlasRegion& findRegion (const std::string& name);
@@ -40,7 +40,7 @@ public:
     Sprite& createSprite (const std::string& name,int index);
     std::list<Sprite>& createSprites (const std::string& name);
     void dispose ();
-    int compare (const gdx_cpp::graphics::g2d::TextureAtlas::TextureAtlasData::Region& region1,const gdx_cpp::graphics::g2d::TextureAtlas::TextureAtlasData::Region& region2);
+    int compare (const gdx::TextureAtlas::TextureAtlasData::Region& region1,const gdx::TextureAtlas::TextureAtlasData::Region& region2);
     void flip (bool x,bool y);
     void setPosition (float x,float y);
     void setBounds (float x,float y,float width,float height);
@@ -65,7 +65,7 @@ private:
     Sprite& newSprite (const AtlasRegion& region);
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g2d
 

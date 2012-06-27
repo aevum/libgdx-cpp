@@ -25,57 +25,52 @@
 #include "gdx-cpp/graphics/Color.hpp"
 #include "gdx-cpp/math/Matrix4.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
+namespace gdx {
 
 class Mesh;
-namespace glutils {
-    class ShaderProgram;
-}
-
-namespace g2d {
+class ShaderProgram;
 
 class Sprite;
 
 class TextureRegion;
 
 
-class SpriteBatch: public gdx_cpp::utils::Disposable {
+class SpriteBatch: public Disposable {
 public:
     SpriteBatch(int size = 1000);
     SpriteBatch (int size, int buffers) ;
 
     void begin ();
     void end ();
-    void setColor (const gdx_cpp::graphics::Color& tint);
+    void setColor (const Color& tint);
     void setColor (float r,float g,float b,float a);
     void setColor (float color);
-    gdx_cpp::graphics::Color& getColor ();
-    void draw (const gdx_cpp::graphics::Texture& texture,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation,int srcX,int srcY,int srcWidth,int srcHeight,bool flipX,bool flipY);
-    void draw (const gdx_cpp::graphics::Texture& texture,float x,float y,float width,float height,int srcX,int srcY,int srcWidth,int srcHeight,bool flipX,bool flipY);
-    void draw (const gdx_cpp::graphics::Texture& texture,float x,float y,int srcX,int srcY,int srcWidth,int srcHeight);
-    void draw (const gdx_cpp::graphics::Texture& texture,float x,float y,float width,float height,float u,float v,float u2,float v2);
-    void draw (const gdx_cpp::graphics::Texture& texture,float x,float y);
-    void draw (const gdx_cpp::graphics::Texture& texture,float x,float y,float width,float height);
-    void draw (const gdx_cpp::graphics::Texture& texture, const std::vector< float >& spriteVertices, int offset, int length);
+    Color& getColor ();
+    void draw (const Texture& texture,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation,int srcX,int srcY,int srcWidth,int srcHeight,bool flipX,bool flipY);
+    void draw (const Texture& texture,float x,float y,float width,float height,int srcX,int srcY,int srcWidth,int srcHeight,bool flipX,bool flipY);
+    void draw (const Texture& texture,float x,float y,int srcX,int srcY,int srcWidth,int srcHeight);
+    void draw (const Texture& texture,float x,float y,float width,float height,float u,float v,float u2,float v2);
+    void draw (const Texture& texture,float x,float y);
+    void draw (const Texture& texture,float x,float y,float width,float height);
+    void draw (const Texture& texture, const std::vector< float >& spriteVertices, int offset, int length);
     void draw (const TextureRegion& region,float x,float y);
     void draw (const TextureRegion& region,float x,float y,float width,float height);
     void draw (const TextureRegion& region,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation);
     void draw (const TextureRegion& region,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation,bool clockwise);
-    void draw (const gdx_cpp::graphics::Texture& texture, float* const spriteVertices, int size, int offset, int length) ;
+    void draw (const Texture& texture, float* const spriteVertices, int size, int offset, int length) ;
     void flush ();
     void disableBlending ();
     void enableBlending ();
     void setBlendFunction (int srcFunc,int dstFunc);
     void dispose ();
-    gdx_cpp::math::Matrix4& getProjectionMatrix ();
-    const gdx_cpp::math::Matrix4& getTransformMatrix ();
-    void setProjectionMatrix (const gdx_cpp::math::Matrix4& projection);
-    void setTransformMatrix (const gdx_cpp::math::Matrix4& transform);
-    void setShader (gdx_cpp::graphics::glutils::ShaderProgram* shader);
+    Matrix4& getProjectionMatrix ();
+    const Matrix4& getTransformMatrix ();
+    void setProjectionMatrix (const Matrix4& projection);
+    void setTransformMatrix (const Matrix4& transform);
+    void setShader (ShaderProgram* shader);
     bool isBlendingEnabled ();
-    void setTransformMatrix(math::Matrix4& transform);
-    void setProjectionMatrix(math::Matrix4& projection);
+    void setTransformMatrix(Matrix4& transform);
+    void setProjectionMatrix(Matrix4& projection);
     int renderCalls;
     int maxSpritesInBatch;
 
@@ -101,9 +96,9 @@ private:
     int idx;
     int currBufferIdx;
     
-    math::Matrix4 transformMatrix;
-    math::Matrix4 projectionMatrix;
-    math::Matrix4 combinedMatrix;
+    Matrix4 transformMatrix;
+    Matrix4 projectionMatrix;
+    Matrix4 combinedMatrix;
     
     bool drawing;
     
@@ -113,14 +108,12 @@ private:
 
     void setupMatrices();
     
-    glutils::ShaderProgram *shader;
+    ShaderProgram *shader;
     Color tempColor;
     
-    glutils::ShaderProgram* customShader;
+    ShaderProgram* customShader;
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g2d
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_G2D_SPRITEBATCH_HPP_

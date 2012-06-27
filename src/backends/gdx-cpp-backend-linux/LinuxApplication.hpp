@@ -29,16 +29,14 @@
 #include "LinuxFiles.hpp"
 #include "LinuxOpenALAudio.hpp"
 
-namespace gdx_cpp {
-
-namespace backends {
+namespace gdx {
 
 namespace nix {
 
 class LinuxApplication : public Application, public Runnable, public Synchronizable
 {
 public:
-    LinuxApplication(gdx_cpp::ApplicationListener* listener, const std::string& title,
+    LinuxApplication(gdx::ApplicationListener* listener, const std::string& title,
                      int width, int height, bool useGL20IfAvailable);
 
     void error(const std::string& tag, const char* format, ...);
@@ -78,12 +76,10 @@ protected:
 
     std::list< Runnable::ptr > runnables;
 
-    gdx_cpp::implementation::Thread::ptr mainLoopThread;
+    gdx::Thread::ptr mainLoopThread;
 
     int logLevel;
 };
-
-}
 
 }
 

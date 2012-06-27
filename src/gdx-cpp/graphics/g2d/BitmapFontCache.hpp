@@ -27,28 +27,26 @@
 
 #include "BitmapFont.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
-namespace g2d {
+namespace gdx {
 
-class BitmapFontCache: public gdx_cpp::utils::Disposable {
+class BitmapFontCache: public Disposable {
 friend class BitmapFont;
 public:
     void setPosition (float x,float y);
     void translate (float xAmount,float yAmount);
     void setColor (float color);
-    void setColor (const gdx_cpp::graphics::Color& tint);
+    void setColor (const Color& tint);
     void setColor (float r,float g,float b,float a);
     void draw (SpriteBatch& spriteBatch);
     void draw (SpriteBatch& spriteBatch,float alphaModulation);
-    gdx_cpp::graphics::Color& getColor ();
-    gdx_cpp::graphics::g2d::BitmapFont::TextBounds& setText (const std::string& str,float x,float y);
-    gdx_cpp::graphics::g2d::BitmapFont::TextBounds& setText (const std::string& str,float x,float y,int start,int end);
-    gdx_cpp::graphics::g2d::BitmapFont::TextBounds& setMultiLineText (const std::string& str,float x,float y);
-    gdx_cpp::graphics::g2d::BitmapFont::TextBounds& setMultiLineText (const std::string& str,float x,float y,float alignmentWidth,const gdx_cpp::graphics::g2d::BitmapFont::HAlignment& alignment);
-    gdx_cpp::graphics::g2d::BitmapFont::TextBounds& setWrappedText (const std::string& str,float x,float y,float wrapWidth);
-    gdx_cpp::graphics::g2d::BitmapFont::TextBounds& setWrappedText (const std::string& str,float x,float y,float wrapWidth,const gdx_cpp::graphics::g2d::BitmapFont::HAlignment& alignment);
-    gdx_cpp::graphics::g2d::BitmapFont::TextBounds& getBounds ();
+    Color& getColor ();
+    BitmapFont::TextBounds& setText (const std::string& str,float x,float y);
+    BitmapFont::TextBounds& setText (const std::string& str,float x,float y,int start,int end);
+    BitmapFont::TextBounds& setMultiLineText (const std::string& str,float x,float y);
+    BitmapFont::TextBounds& setMultiLineText (const std::string& str,float x,float y,float alignmentWidth,const BitmapFont::HAlignment& alignment);
+    BitmapFont::TextBounds& setWrappedText (const std::string& str,float x,float y,float wrapWidth);
+    BitmapFont::TextBounds& setWrappedText (const std::string& str,float x,float y,float wrapWidth,const BitmapFont::HAlignment& alignment);
+    BitmapFont::TextBounds& getBounds ();
     float getX ();
     float getY ();
     BitmapFont* getFont ();
@@ -61,7 +59,7 @@ public:
 private:
     void reset (int glyphCount);
     float addToCache (const std::string& str,float x,float y,int start,int end);
-    void addGlyph (gdx_cpp::graphics::g2d::BitmapFont::Glyph* glyph,float x,float y,float width,float height);
+    void addGlyph (BitmapFont::Glyph* glyph,float x,float y,float width,float height);
     BitmapFont* font;
 
     std::vector<float> vertices;
@@ -74,8 +72,6 @@ private:
     float x,y;
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g2d
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_G2D_BITMAPFONTCACHE_HPP_

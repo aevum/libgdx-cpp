@@ -33,15 +33,12 @@
 
 #include <gdx-cpp/gl.hpp>
 
-using namespace gdx_cpp::graphics::glutils;
-using namespace gdx_cpp::graphics::g2d;
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp;
+using namespace gdx;
 
 float SpriteCache::tempVertices[Sprite::VERTEX_SIZE * 6];
 
 ShaderProgram* SpriteCache::createDefaultShader () {
-    if ( !Gdx::graphics->isGL20Available() ) return NULL;
+    if ( !graphics->isGL20Available() ) return NULL;
     std::string vertexShader = "attribute vec4 " + ShaderProgram::POSITION_ATTRIBUTE + ";\n" //
                                "attribute vec4 " + ShaderProgram::COLOR_ATTRIBUTE + ";\n" //
                                "attribute vec2 " + ShaderProgram::TEXCOORD_ATTRIBUTE + "0;\n" //
@@ -72,7 +69,7 @@ ShaderProgram* SpriteCache::createDefaultShader () {
     return shader;
 }
 
-gdx_cpp::graphics::g2d::SpriteCache::SpriteCache ( int size, bool useIndices, ShaderProgram* shader ) :
+SpriteCache::SpriteCache ( int size, bool useIndices, ShaderProgram* shader ) :
     color ( Color::WHITE.toFloatBits() )
     , tempColor ( 1,1,1,1 )
     , customShader ( 0 )
@@ -107,25 +104,25 @@ gdx_cpp::graphics::g2d::SpriteCache::SpriteCache ( int size, bool useIndices, Sh
         mesh->setIndices ( indices );
     }
 
-    projectionMatrix.setToOrtho2D ( 0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight() );
+    projectionMatrix.setToOrtho2D ( 0, 0, graphics->getWidth(), graphics->getHeight() );
 }
 
 
-void SpriteCache::setColor ( const gdx_cpp::graphics::Color& tint ) {
+void SpriteCache::setColor ( const Color& tint ) {
     color = tint.toFloatBits();
 }
 
 void SpriteCache::setColor ( float r, float g, float b, float a ) {
     int intBits = ( int ) ( 255 * a ) << 24 | ( int ) ( 255 * b ) << 16 | ( int ) ( 255 * g ) << 8 | ( int ) ( 255 * r );
-    color = utils::NumberUtils::intBitsToFloat ( intBits & 0xfeffffff );
+    color = NumberUtils::intBitsToFloat ( intBits & 0xfeffffff );
 }
 
 void SpriteCache::setColor ( float color ) {
     this->color = color;
 }
 
-gdx_cpp::graphics::Color& SpriteCache::getColor () {
-    int intBits = utils::NumberUtils::floatToRawIntBits ( color );
+Color& SpriteCache::getColor () {
+    int intBits = NumberUtils::floatToRawIntBits ( color );
     tempColor.r = ( intBits & 0xff ) / 255.0f;
     tempColor.g = ( ( ( unsigned int ) intBits >> 8 ) & 0xff ) / 255.0f;
     tempColor.b = ( ( ( unsigned int ) intBits >> 16 ) & 0xff ) / 255.0f;
@@ -189,7 +186,7 @@ int SpriteCache::endCache () {
         for ( int i = 0, n = counts.size(); i < n; i++ )
             currentCache->counts[i] = counts[i];
 
-        utils::float_buffer& vertices = mesh->getVerticesBuffer();
+        float_buffer& vertices = mesh->getVerticesBuffer();
         vertices.position ( 0 );
         Cache* lastCache = caches[caches.size() - 1];
         vertices.limit ( lastCache->offset + lastCache->maxCount );
@@ -211,7 +208,7 @@ void SpriteCache::clear () {
     mesh->getVerticesBuffer().clear().flip();
 }
 
-void SpriteCache::add ( gdx_cpp::graphics::Texture::ptr texture,float x,float y ) {
+void SpriteCache::add ( Texture::ptr texture,float x,float y ) {
     float fx2 = x + texture->getWidth();
     float fy2 = y + texture->getHeight();
 
@@ -262,7 +259,7 @@ void SpriteCache::add ( gdx_cpp::graphics::Texture::ptr texture,float x,float y 
     }
 }
 
-void SpriteCache::add ( const gdx_cpp::graphics::Texture::ptr texture, float x, float y, int srcWidth, int srcHeight, float u, float v, float u2, float v2, float color ) {
+void SpriteCache::add ( const Texture::ptr texture, float x, float y, int srcWidth, int srcHeight, float u, float v, float u2, float v2, float color ) {
     float fx2 = x + srcWidth;
     float fy2 = y + srcHeight;
 
@@ -370,7 +367,7 @@ void SpriteCache::add ( Texture::ptr texture, float x, float y, int srcX, int sr
     }
 }
 
-void SpriteCache::add ( gdx_cpp::graphics::Texture::ptr texture,float x,float y,float width,float height,int srcX,int srcY,int srcWidth,int srcHeight,bool flipX,bool flipY ) {
+void SpriteCache::add ( Texture::ptr texture,float x,float y,float width,float height,int srcX,int srcY,int srcWidth,int srcHeight,bool flipX,bool flipY ) {
 
     float invTexWidth = 1.0f / texture->getWidth();
     float invTexHeight = 1.0f / texture->getHeight();
@@ -439,7 +436,7 @@ void SpriteCache::add ( gdx_cpp::graphics::Texture::ptr texture,float x,float y,
     }
 }
 
-void SpriteCache::add ( gdx_cpp::graphics::Texture::ptr texture,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation,int srcX,int srcY,int srcWidth,int srcHeight,bool flipX,bool flipY ) {
+void SpriteCache::add ( Texture::ptr texture,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation,int srcX,int srcY,int srcWidth,int srcHeight,bool flipX,bool flipY ) {
 
     // bottom left and top right corner points relative to origin
     float worldOriginX = x + originX;
@@ -478,8 +475,8 @@ void SpriteCache::add ( gdx_cpp::graphics::Texture::ptr texture,float x,float y,
 
     // rotate
     if ( rotation != 0 ) {
-        float cos = math::utils::cosDeg ( rotation );
-        float sin = math::utils::sinDeg ( rotation );
+        float cos = cosDeg ( rotation );
+        float sin = sinDeg ( rotation );
 
         x1 = cos * p1x - sin * p1y;
         y1 = sin * p1x + cos * p1y;
@@ -679,8 +676,8 @@ void SpriteCache::add ( TextureRegion::ptr region, float x, float y, float origi
 
     // rotate
     if ( rotation != 0 ) {
-        float cos = math::utils::cosDeg ( rotation );
-        float sin = math::utils::sinDeg ( rotation );
+        float cos = cosDeg ( rotation );
+        float sin = sinDeg ( rotation );
 
         x1 = cos * p1x - sin * p1y;
         y1 = sin * p1x + cos * p1y;
@@ -788,8 +785,8 @@ void SpriteCache::begin () {
     if ( drawing )
         throw std::runtime_error ( "end must be called before begin." );
 
-    if ( Gdx::graphics->isGL20Available() == false ) {
-        GL10& gl = *Gdx::gl10;
+    if ( graphics->isGL20Available() == false ) {
+        GL10& gl = *gl10;
         gl.glDepthMask ( false );
         gl.glEnable ( GL_TEXTURE_2D );
 
@@ -802,7 +799,7 @@ void SpriteCache::begin () {
     } else {
         combinedMatrix.set ( projectionMatrix ).mul ( transformMatrix );
 
-        GL20& gl = *Gdx::gl20;
+        GL20& gl = *gl20;
         gl.glDepthMask ( false );
         gl.glEnable ( GL_TEXTURE_2D );
 
@@ -829,14 +826,14 @@ void SpriteCache::end () {
 
     drawing = false;
 
-    if ( Gdx::graphics->isGL20Available() == false ) {
-        GL10& gl = *Gdx::gl10;
+    if ( graphics->isGL20Available() == false ) {
+        GL10& gl = *gl10;
         gl.glDepthMask ( true );
         gl.glDisable ( GL_TEXTURE_2D );
         mesh->unbind();
     } else {
         shader->end();
-        GL20& gl = *Gdx::gl20;
+        GL20& gl = *gl20;
         gl.glDepthMask ( true );
         gl.glDisable ( GL_TEXTURE_2D );
         mesh->unbind ( *shader );
@@ -855,7 +852,7 @@ void SpriteCache::draw ( int cacheID ) {
     std::vector<Texture::ptr>& textures = cache->textures;
     std::vector<int>& counts = cache->counts;
 
-    if ( Gdx::graphics->isGL20Available() ) {
+    if ( graphics->isGL20Available() ) {
         for ( int i = 0, n = textures.size(); i < n; i++ ) {
             int count = counts[i];
             textures[i]->bind();
@@ -885,7 +882,7 @@ void SpriteCache::draw ( int cacheID,int offset,int length ) {
     length *= 6;
     std::vector<Texture::ptr>& textures = cache->textures;
     std::vector<int>& counts = cache->counts;
-    if ( Gdx::graphics->isGL20Available() ) {
+    if ( graphics->isGL20Available() ) {
         for ( int i = 0, n = textures.size(); i < n; i++ ) {
             textures[i]->bind();
             int count = counts[i];
@@ -920,27 +917,27 @@ void SpriteCache::dispose () {
     if ( shader != NULL ) shader->dispose();
 }
 
-gdx_cpp::math::Matrix4& SpriteCache::getProjectionMatrix () {
+Matrix4& SpriteCache::getProjectionMatrix () {
     return projectionMatrix;
 }
 
-void SpriteCache::setProjectionMatrix ( const gdx_cpp::math::Matrix4& projection ) {
+void SpriteCache::setProjectionMatrix ( const Matrix4& projection ) {
     if ( drawing )
         throw std::runtime_error ( "Can't set the matrix within begin/end." );
     projectionMatrix.set ( projection );
 }
 
-gdx_cpp::math::Matrix4& SpriteCache::getTransformMatrix () {
+Matrix4& SpriteCache::getTransformMatrix () {
     return transformMatrix;
 }
 
-void SpriteCache::setTransformMatrix ( const gdx_cpp::math::Matrix4& transform ) {
+void SpriteCache::setTransformMatrix ( const Matrix4& transform ) {
     if ( drawing )
         throw std::runtime_error ( "Can't set the matrix within begin/end." );
     transformMatrix.set ( transform );
 }
 
-void SpriteCache::setShader ( gdx_cpp::graphics::glutils::ShaderProgram* shader ) {
+void SpriteCache::setShader ( ShaderProgram* shader ) {
     customShader = shader;
 }
 
@@ -958,7 +955,7 @@ void SpriteCache::add ( Texture::ptr texture, float* vertices, int size, int off
     } else
         counts[lastIndex] = counts[lastIndex] + count;
 
-    utils::float_buffer& buffer = mesh->getVerticesBuffer();
+    float_buffer& buffer = mesh->getVerticesBuffer();
     if (buffer.capacity() - (buffer.position() + size) < 0) {
         int pos = -1;
         for (int i=0; i<caches.size(); i++) {

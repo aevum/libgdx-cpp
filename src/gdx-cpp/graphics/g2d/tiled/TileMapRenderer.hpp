@@ -21,20 +21,17 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_TILED_TILEMAPRENDERER_HPP_
 #define GDX_CPP_GRAPHICS_G2D_TILED_TILEMAPRENDERER_HPP_
 
-namespace gdx_cpp {
-namespace graphics {
-namespace g2d {
-namespace tiled {
+namespace gdx {
 
-class TileMapRenderer: public gdx_cpp::utils::Disposable {
+class TileMapRenderer: public Disposable {
 public:
     void render ();
     void render (float x,float y,float width,float height);
-    void render (const gdx_cpp::graphics::OrthographicCamera& cam);
-    void render (const gdx_cpp::graphics::OrthographicCamera& cam);
+    void render (const OrthographicCamera& cam);
+    void render (const OrthographicCamera& cam);
     void render (float x,float y,float width,float height);
-    gdx_cpp::math::Matrix4& getProjectionMatrix ();
-    gdx_cpp::math::Matrix4& getTransformMatrix ();
+    Matrix4& getProjectionMatrix ();
+    Matrix4& getTransformMatrix ();
     int getRow (int worldY);
     int getCol (int worldX);
     int getInitialRow ();
@@ -51,17 +48,14 @@ protected:
 
 
 private:
-    void init (const TileAtlas& atlas,int tileWidth,int tileHeight,float unitsPerTileX,float unitsPerTileY,const gdx_cpp::utils::IntArray& blendedTiles,int tilesPerBlockX,int tilesPerBlockY,const gdx_cpp::graphics::glutils::ShaderProgram& shader);
+    void init (const TileAtlas& atlas,int tileWidth,int tileHeight,float unitsPerTileX,float unitsPerTileY,const IntArray& blendedTiles,int tilesPerBlockX,int tilesPerBlockY,const ShaderProgram& shader);
     int addBlock (int blockRow,int blockCol,bool blended);
     int getLayerWidthInBlocks (int layer,int row);
     int getLayerHeightInBlocks (int layer);
     static int parseIntWithDefault (const std::string& string,int defaultValue);
-    static gdx_cpp::utils::IntArray& createFromCSV (const std::string& values);
+    static IntArray& createFromCSV (const std::string& values);
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g2d
-} // namespace tiled
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_G2D_TILED_TILEMAPRENDERER_HPP_

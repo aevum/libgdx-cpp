@@ -20,18 +20,18 @@
 
 #include "PixmapLoader.hpp"
 
-using namespace gdx_cpp::assets::loaders;
+using namespace gdx;
 
-void PixmapLoader::loadAsync (const gdx_cpp::assets::AssetManager& manager,const std::string& fileName,const PixmapParameter& parameter) {
+void PixmapLoader::loadAsync (const AssetManager& manager,const std::string& fileName,const PixmapParameter& parameter) {
     pixmap = null;
     pixmap = new Pixmap(resolve(fileName));
 }
 
-gdx_cpp::graphics::Pixmap& PixmapLoader::loadSync () {
+Pixmap& PixmapLoader::loadSync () {
     return pixmap;
 }
 
-gdx_cpp::utils::ArrayAssetDescriptor>& PixmapLoader::getDependencies (const std::string& fileName,const PixmapParameter& parameter) {
+ArrayAssetDescriptor& PixmapLoader::getDependencies (const std::string& fileName,const PixmapParameter& parameter) {
     return null;
 }
 

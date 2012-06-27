@@ -20,7 +20,7 @@
 
 #include "AtomicQueue<T>.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx;
 
 int AtomicQueue<T>::next (int idx) {
     return idx + 1 & queue.length() - 1;

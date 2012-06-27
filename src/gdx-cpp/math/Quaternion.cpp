@@ -25,7 +25,7 @@
 #include <string>
 #include <sstream>
 
-using namespace gdx_cpp::math;
+using namespace gdx;
 
 Quaternion Quaternion::tmp1(0, 0, 0, 0);
 Quaternion Quaternion::tmp2(0, 0, 0, 0);
@@ -84,7 +84,7 @@ Quaternion& Quaternion::set (const Quaternion& quaternion)
 
 Quaternion& Quaternion::set (const Vector3& axis, float angle)
 {
-    float l_ang = (float) (angle * math::utils::detail::degreesToRadians);
+    float l_ang = (float) (angle * detail::degreesToRadians);
     float l_sin = (float) std::sin(l_ang / 2);
     float l_cos = (float) std::cos(l_ang / 2);
     return this->set( axis.x * l_sin, axis.y * l_sin, axis.z * l_sin, l_cos).nor();
@@ -109,9 +109,9 @@ std::string Quaternion::toString ()
 
 Quaternion& Quaternion::setEulerAngles (float yaw, float pitch, float roll)
 {
-    yaw = (float) (yaw * math::utils::detail::degreesToRadians);
-    pitch = (float) (pitch * math::utils::detail::degreesToRadians);
-    roll = (float) (roll * math::utils::detail::degreesToRadians);
+    yaw = (float) (yaw * detail::degreesToRadians);
+    pitch = (float) (pitch * detail::degreesToRadians);
+    roll = (float) (roll * detail::degreesToRadians);
     float num9 = roll * 0.5f;
     float num6 = (float) std::sin(num9);
     float num5 = (float) std::cos(num9);
@@ -233,7 +233,7 @@ Quaternion& Quaternion::setFromAxis (const Vector3& axis, float angle)
 
 Quaternion& Quaternion::setFromAxis (float x, float y, float z, float angle)
 {
-    float l_ang = (angle * math::utils::detail::degreesToRadians);
+    float l_ang = (angle * detail::degreesToRadians);
     float l_sin = std::sin(l_ang / 2);
     float l_cos = std::cos(l_ang / 2);
     return this->set(x * l_sin, y * l_sin, z * l_sin, l_cos).nor();

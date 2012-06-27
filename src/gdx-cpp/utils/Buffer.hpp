@@ -25,9 +25,7 @@
 #include <string.h>
 #include <cassert>
 
-namespace gdx_cpp {
-
-namespace utils {
+namespace gdx {
 
 struct buffer_base {
 public:
@@ -371,7 +369,6 @@ typedef default_buffer<short> short_buffer;
 typedef default_buffer<float> float_buffer;
 typedef default_buffer<int> int_buffer;
 
-}
 }
 
 #endif // GDX_CPP_UTILS_BUFFER_HPP

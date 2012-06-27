@@ -23,12 +23,10 @@
 
 #include "Buffer.hpp"
 
-namespace gdx_cpp {
-namespace utils {
-
+namespace gdx {
 class BufferUtils {
 public:
-    static void copy (float * value, const gdx_cpp::utils::buffer<float>& dst, int numFloats,int offset);
+    static void copy (float * value, const gdx::buffer<float>& dst, int numFloats,int offset);
 
 //     static void copy (const Buffer& dst,int numFloats,int offset);
 //     static void copy (int srcOffset,const Buffer& dst,int numElements);
@@ -56,7 +54,6 @@ private:
 //     static int elementsToBytes (const Buffer& dst,int elements);
 };
 
-} // namespace gdx_cpp
-} // namespace utils
+} // namespace gdx
 
 #endif // GDX_CPP_UTILS_BUFFERUTILS_HPP_

@@ -24,18 +24,13 @@
 #include "gdx-cpp/utils/Disposable.hpp"
 #include <string>
 
-namespace gdx_cpp {
-namespace files {
+namespace gdx {
 
 class FileHandle;
-}
-
-namespace graphics {
-namespace glutils {
 
 class ETC1 {
 public:
-    class ETC1Data : public utils::Disposable {
+    class ETC1Data : public Disposable {
         public:
             int width;
             int height;
@@ -43,22 +38,22 @@ public:
             int dataOffset;
 
             ETC1Data (int width, int height, const char* compressedData, int dataOffset) ;
-            ETC1Data (files::FileHandle& pkmFile) ;
+            ETC1Data (FileHandle& pkmFile) ;
 
             bool hasPKMHeader ();
-            void write (files::FileHandle& file);
+            void write (FileHandle& file);
             void dispose () ;
 
             std::string toString();
     };
     
     bool hasPKMHeader ();
-    void write (const gdx_cpp::files::FileHandle& file);
+    void write (const FileHandle& file);
     void dispose ();
     std::string& toString ();
-    static ETC1Data& encodeImage (const gdx_cpp::graphics::Pixmap& pixmap);
-    static ETC1Data& encodeImagePKM (const gdx_cpp::graphics::Pixmap& pixmap);
-    static gdx_cpp::graphics::Pixmap& decodeImage (const ETC1Data& etc1Data,const gdx_cpp::graphics::Pixmap::Format& format);
+    static ETC1Data& encodeImage (const Pixmap& pixmap);
+    static ETC1Data& encodeImagePKM (const Pixmap& pixmap);
+    static Pixmap& decodeImage (const ETC1Data& etc1Data,const Pixmap::Format& format);
     int width;
     int height;
     ByteBuffer compressedData;
@@ -68,11 +63,9 @@ protected:
 
 
 private:
-    static int getPixelSize (const gdx_cpp::graphics::Pixmap::Format& format);
+    static int getPixelSize (const Pixmap::Format& format);
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace glutils
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GLUTILS_ETC1_HPP_

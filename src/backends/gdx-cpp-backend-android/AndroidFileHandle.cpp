@@ -25,16 +25,16 @@
 #include "AndroidSystem.hpp"
 #include <string.h>
 
-using namespace gdx_cpp::backends::android;
+using namespace gdx::android;
 
-AndroidFileHandle::AndroidFileHandle(const std::string& fileName, gdx_cpp::Files::FileType type)
+AndroidFileHandle::AndroidFileHandle(const std::string& fileName, gdx::Files::FileType type)
     : FileHandle(fileName, type)
 {
 }
 
-int gdx_cpp::backends::android::AndroidFileHandle::readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) const
+int gdx::android::AndroidFileHandle::readBytes(gdx::FileHandle::buffer_ptr& c) const
 {
-    JNIEnv* env = static_cast<AndroidSystem*>(Gdx::system)->getJniEnv();
+    JNIEnv* env = static_cast<AndroidSystem*>(system)->getJniEnv();
     jstring strpath = env->NewStringUTF(this->file.getPath().c_str());
 
     jclass managerClass = env->FindClass("com/aevumlab/gdxcpp/ApplicationManager");
@@ -51,7 +51,7 @@ int gdx_cpp::backends::android::AndroidFileHandle::readBytes(gdx_cpp::files::Fil
  
     env->GetByteArrayRegion(result, 0, size, (jbyte*) sbuffer);
 
-    gdx_cpp::files::FileHandle::buffer_ptr swapable(sbuffer, shared_ptr_array_deleter());
+    gdx::FileHandle::buffer_ptr swapable(sbuffer, shared_ptr_array_deleter());
     c.swap(swapable);
 
     return size;

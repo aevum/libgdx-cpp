@@ -21,17 +21,13 @@
 #ifndef GDX_CPP_UTILS_ARRAYUTILS_HPP
 #define GDX_CPP_UTILS_ARRAYUTILS_HPP
 
-namespace gdx_cpp {
-
-namespace utils {
+namespace gdx {
 
 template < typename T, int size >
 int array_size(T(&)[size]) {
     return size;
 }   
     
-}
-
 }
 
 #endif // GDX_CPP_UTILS_ARRAYUTILS_HPP

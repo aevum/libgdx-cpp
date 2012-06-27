@@ -20,7 +20,7 @@
 
 #include "KeyframeAnimator.hpp"
 
-using namespace gdx_cpp::graphics::g3d::keyframed;
+using namespace gdx::g3d::keyframed;
 
 Keyframe& KeyframeAnimator::getInterpolatedKeyframe () {
     return R;

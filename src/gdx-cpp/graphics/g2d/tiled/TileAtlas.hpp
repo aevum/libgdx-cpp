@@ -21,14 +21,11 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_TILED_TILEATLAS_HPP_
 #define GDX_CPP_GRAPHICS_G2D_TILED_TILEATLAS_HPP_
 
-namespace gdx_cpp {
-namespace graphics {
-namespace g2d {
-namespace tiled {
+namespace gdx {
 
-class TileAtlas: public gdx_cpp::utils::Disposable {
+class TileAtlas: public Disposable {
 public:
-    gdx_cpp::graphics::g2d::TextureRegion& getRegion (int id);
+    TextureRegion& getRegion (int id);
     void dispose ();
 
 protected:
@@ -37,12 +34,9 @@ protected:
 private:
     static std::string& removeExtension (const std::string& s);
     static std::string& removePath (const std::string& s);
-    static gdx_cpp::files::FileHandle& getRelativeFileHandle (const gdx_cpp::files::FileHandle& path,const std::string& relativePath);
+    static FileHandle& getRelativeFileHandle (const FileHandle& path,const std::string& relativePath);
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g2d
-} // namespace tiled
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_G2D_TILED_TILEATLAS_HPP_

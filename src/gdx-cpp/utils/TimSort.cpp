@@ -20,7 +20,7 @@
 
 #include "TimSort<T>.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx::utils;
 
 void TimSort<T>::doSort (const Comparator<T>& c,int lo,int hi) {
     stackSize = 0;

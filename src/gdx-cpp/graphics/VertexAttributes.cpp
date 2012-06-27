@@ -26,7 +26,7 @@
 #include "gdx-cpp/Gdx.hpp"
 #include <stdexcept>
 
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
 VertexAttributes::VertexAttributes (const std::vector<VertexAttribute>& attributes)
         : attributes(attributes)

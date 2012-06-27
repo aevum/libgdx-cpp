@@ -27,9 +27,9 @@
 #include "Vector3.hpp"
 #include <string.h>
 
-using namespace gdx_cpp::math;
+using namespace gdx;
 
-#define DEGREE_TO_RAD (float) math::utils::detail::PI / 180
+#define DEGREE_TO_RAD (float) detail::PI / 180
 
 Matrix3::Matrix3()
 {
@@ -166,7 +166,7 @@ float Matrix3::det() {
 Matrix3& Matrix3::inv() {
     float _det = det();
     if (_det == 0) {
-        gdx_cpp::Gdx::app->error("Matrix3.cpp", "Can't invert a singular matrix");
+        gdx_log_error("Matrix3.cpp", "Can't invert a singular matrix");
         assert(false);
     }
 
@@ -225,7 +225,7 @@ float* Matrix3::getValues() {
     return vals;
 }
 
-void gdx_cpp::math::Matrix3::translate(float x, float y)
+void gdx::Matrix3::translate(float x, float y)
 {
     tmp[0] = 1;
     tmp[1] = 0;
@@ -241,13 +241,13 @@ void gdx_cpp::math::Matrix3::translate(float x, float y)
     mul(vals, tmp);
 }
 
-void gdx_cpp::math::Matrix3::rotate(float angle)
+void gdx::Matrix3::rotate(float angle)
 {
     if (angle == 0) return;
     angle = DEGREE_TO_RAD * angle;
     
-    float cos = (float)math::utils::cos(angle);
-    float sin = (float)math::utils::sin(angle);
+    float cos = (float)::cos(angle);
+    float sin = (float)::sin(angle);
 
     tmp[0] = cos;
     tmp[1] = sin;
@@ -263,7 +263,7 @@ void gdx_cpp::math::Matrix3::rotate(float angle)
     mul(vals, tmp);
 }
 
-void gdx_cpp::math::Matrix3::scale(float scaleX, float scaleY)
+void gdx::Matrix3::scale(float scaleX, float scaleY)
 {
     tmp[0] = scaleX;
     tmp[1] = 0;
@@ -279,7 +279,7 @@ void gdx_cpp::math::Matrix3::scale(float scaleX, float scaleY)
     mul(vals, tmp);
 }
 
-void gdx_cpp::math::Matrix3::mul(float* mata, float* matb)
+void gdx::Matrix3::mul(float* mata, float* matb)
 {
     float v00 = mata[0] * matb[0] + mata[3] * matb[1] + mata[6] * matb[2];
     float v01 = mata[0] * matb[3] + mata[3] * matb[4] + mata[6] * matb[5];

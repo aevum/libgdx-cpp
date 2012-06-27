@@ -24,9 +24,7 @@
 #include <vector>
 #include "Rectangle.hpp"
 
-namespace gdx_cpp {
-namespace math {
-
+namespace gdx {
 class Rectangle;
 
 class Polygon {
@@ -66,7 +64,6 @@ private:
   Rectangle bounds;
 };
 
-} // namespace gdx_cpp
-} // namespace math
+} // namespace gdx
 
 #endif // GDX_CPP_MATH_POLYGON_HPP_

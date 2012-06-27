@@ -20,7 +20,7 @@
 
 #include "ScaleTo.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::actions;
+using namespace gdx::actions;
 
 ActionResetingPool<ScaleTo> ScaleTo::pool = ActionResetingPool<ScaleTo>(4, 100);
 
@@ -33,7 +33,7 @@ ScaleTo* ScaleTo::build (float scaleX,float scaleY,float duration) {
     return action;
 }
 
-void ScaleTo::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+void ScaleTo::setTarget (gdx::Actor* actor) {
     this->target = actor;
     this->startScaleX = target->scaleX;
     this->deltaScaleX = scaleX - target->scaleX;
@@ -59,7 +59,7 @@ void ScaleTo::finish () {
     pool.free(this);
 }
 
-gdx_cpp::scenes::scene2d::Action* ScaleTo::copy () {
+gdx::Action* ScaleTo::copy () {
     ScaleTo* scaleTo = ScaleTo::build(scaleX, scaleY, duration);
     if (interpolator != NULL) scaleTo->setInterpolator(interpolator->copy());
     return scaleTo;

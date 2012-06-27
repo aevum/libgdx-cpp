@@ -20,7 +20,7 @@
 
 #include "PauseableThread.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx::utils;
 
 void PauseableThread::run () {
     while (true) {

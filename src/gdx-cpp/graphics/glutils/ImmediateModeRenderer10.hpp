@@ -24,13 +24,9 @@
 #include "gdx-cpp/utils/Buffer.hpp"
 #include "ImmediateModeRenderer.hpp"
 
-namespace gdx_cpp {
-namespace math {
+namespace gdx {
 class Matrix4;
 class Vector3;
-}
-namespace graphics {
-namespace glutils {
 
 class ImmediateModeRenderer10 : public ImmediateModeRenderer {
 public:
@@ -39,7 +35,7 @@ public:
 
     RendererType getRendererType() { return IMMEDIATE_GLES10; }
     
-    void begin (gdx_cpp::math::Matrix4& projModelView, int primitiveType);
+    void begin (Matrix4& projModelView, int primitiveType);
     void begin (int primitiveType);
     void color (float r,float g,float b,float a);
     void normal (float x,float y,float z);
@@ -47,23 +43,23 @@ public:
     void vertex (float x,float y,float z);
     int getNumVertices ();
     void end ();
-    void vertex (const gdx_cpp::math::Vector3& point);
+    void vertex (const Vector3& point);
     int getMaxVertices();
     void dispose();
 protected:
 
 
 private:
-    utils::float_buffer allocateBuffer (int numFloats);
+    float_buffer allocateBuffer (int numFloats);
 
     float* positions;
-    gdx_cpp::utils::float_buffer  positionsBuffer;
+    float_buffer  positionsBuffer;
     float* colors;
-    gdx_cpp::utils::float_buffer  colorsBuffer;
+    float_buffer  colorsBuffer;
     float* normals;
-    gdx_cpp::utils::float_buffer  normalsBuffer;
+    float_buffer  normalsBuffer;
     float* texCoords;
-    gdx_cpp::utils::float_buffer  texCoordsBuffer;
+    float_buffer  texCoordsBuffer;
 
     int primitiveType;
     int idxPos;
@@ -78,8 +74,6 @@ private:
     bool hasTexCoords;
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace glutils
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GLUTILS_IMMEDIATEMODERENDERER10_HPP_

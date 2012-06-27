@@ -21,7 +21,7 @@
 
 #include <gdx-cpp/files/FileHandle.hpp>
 
-namespace gdx_cpp {
+namespace gdx {
 
 class Files;
   
@@ -29,11 +29,11 @@ namespace backends {
 
 namespace ios {
 
-class IosFileHandle : public gdx_cpp::files::FileHandle
+class IosFileHandle : public gdx::files::FileHandle
 {	
 public:
-	IosFileHandle(const std::string& fileName, gdx_cpp::Files::FileType type);
-	virtual int readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) const;
+	IosFileHandle(const std::string& fileName, gdx::Files::FileType type);
+	virtual int readBytes(gdx::files::FileHandle::buffer_ptr& c) const;
     
     bool exists() const;
     

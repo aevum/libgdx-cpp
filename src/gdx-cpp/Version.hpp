@@ -21,7 +21,7 @@
 #ifndef GDX_CPP__VERSION_HPP_
 #define GDX_CPP__VERSION_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace  {
 
 class Version {
@@ -35,7 +35,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace
 
 #endif // GDX_CPP__VERSION_HPP_

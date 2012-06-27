@@ -20,9 +20,9 @@
 
 #include "TiledLoader.hpp"
 
-using namespace gdx_cpp::graphics::g2d::tiled;
+using namespace gdx;
 
-TiledMap& TiledLoader::createMap (const gdx_cpp::files::FileHandle& tmxFile) {
+TiledMap& TiledLoader::createMap (const FileHandle& tmxFile) {
 
     final TiledMap map;
 

@@ -20,13 +20,13 @@
 
 #include "TextureDict.hpp"
 
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
 TextureRef& TextureDict::loadTexture (const std::string& path) {
     return loadTexture(path, TextureFilter.MipMap, TextureFilter.Linear, TextureWrap.ClampToEdge, TextureWrap.ClampToEdge);
 }
 
-TextureRef& TextureDict::loadTexture (const std::string& path,const gdx_cpp::graphics::Texture::TextureFilter& minFilter,const gdx_cpp::graphics::Texture::TextureFilter& magFilter,const gdx_cpp::graphics::Texture::TextureWrap& uwrap,const gdx_cpp::graphics::Texture::TextureWrap& vwrap) {
+TextureRef& TextureDict::loadTexture (const std::string& path,const Texture::TextureFilter& minFilter,const Texture::TextureFilter& magFilter,const Texture::TextureWrap& uwrap,const Texture::TextureWrap& vwrap) {
     if (sDictionary.containsKey(path)) {
         TextureRef ref = sDictionary.get(path);
         ref.addRef();

@@ -21,13 +21,11 @@
 #include "gdx-cpp/utils/Buffer.hpp"
 #include <AL/al.h>
 
-namespace gdx_cpp {
-namespace backends {
-
+namespace gdx {
 namespace nix {
 class   LinuxOpenALAudio;
 
-class LinuxOpenALSound : public gdx_cpp::audio::Sound
+class LinuxOpenALSound : public gdx::Sound
 {
 public:
     
@@ -53,8 +51,6 @@ private:
     LinuxOpenALAudio * audio;
 
 };
-}
-
 }
 
 }

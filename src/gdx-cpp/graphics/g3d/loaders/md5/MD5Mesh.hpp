@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_LOADERS_MD5_MD5MESH_HPP_
 #define GDX_CPP_GRAPHICS_G3D_LOADERS_MD5_MD5MESH_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace loaders {
@@ -32,10 +32,10 @@ public:
     float* createVertexArray ();
     float* createVertexArray (int stride);
     short* getIndices ();
-    void calculateVerticesN (const MD5Joints& skeleton,const gdx_cpp::math::collision::BoundingBox& bbox);
-    void calculateVertices (const MD5Joints& skeleton,const gdx_cpp::math::collision::BoundingBox& bbox);
-    static void calculateVerticesN (const MD5Joints& skeleton,float vertices,int vstride,int wstride,const gdx_cpp::math::collision::BoundingBox& bbox);
-    static void calculateVertices (const MD5Joints& skeleton,float vertices,int vstride,int wstride,const gdx_cpp::math::collision::BoundingBox& bbox);
+    void calculateVerticesN (const MD5Joints& skeleton,const gdx::BoundingBox& bbox);
+    void calculateVertices (const MD5Joints& skeleton,const gdx::BoundingBox& bbox);
+    static void calculateVerticesN (const MD5Joints& skeleton,float vertices,int vstride,int wstride,const gdx::BoundingBox& bbox);
+    static void calculateVertices (const MD5Joints& skeleton,float vertices,int vstride,int wstride,const gdx::BoundingBox& bbox);
     void calculateVerticesJni (const MD5Joints& skeleton);
     void calculateNormalsBind (const MD5Joints& bindPoseSkeleton);
     static void calculateNormalsBind (const MD5Joints& skeleton,float vertices,const short& indices,float verts,int vstride,int wstride);
@@ -46,10 +46,10 @@ protected:
 
 
 private:
-    static gdx_cpp::math::Vector3& calcNor (const gdx_cpp::math::Vector3& v1,const gdx_cpp::math::Vector3& v2,const gdx_cpp::math::Vector3& v3);
+    static gdx::Vector3& calcNor (const gdx::Vector3& v1,const gdx::Vector3& v2,const gdx::Vector3& v3);
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace loaders

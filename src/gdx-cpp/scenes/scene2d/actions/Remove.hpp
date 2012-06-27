@@ -24,15 +24,15 @@
 #include "gdx-cpp/scenes/scene2d/Action.hpp"
 #include "ActionResetingPool.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace actions {
 
-class Remove: public gdx_cpp::scenes::scene2d::Action {
+class Remove: public gdx::Action {
 public:
     static Remove* build ();
-    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
+    void setTarget (gdx::Actor* actor);
     void act (float delta);
     bool isDone ();
     Action* copy ();
@@ -49,7 +49,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace actions

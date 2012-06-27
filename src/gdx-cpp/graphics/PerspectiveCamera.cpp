@@ -21,15 +21,14 @@
 #include "PerspectiveCamera.hpp"
 #include <cmath>
 
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp;
+using namespace gdx;
 
-gdx_cpp::graphics::PerspectiveCamera::PerspectiveCamera()
+PerspectiveCamera::PerspectiveCamera()
     : fieldOfView(67)
 {
 }
 
-gdx_cpp::graphics::PerspectiveCamera::PerspectiveCamera(float fieldOfView, float viewportWidth, float viewportHeight)
+PerspectiveCamera::PerspectiveCamera(float fieldOfView, float viewportWidth, float viewportHeight)
 : Camera(viewportHeight, viewportWidth, 1, 100) ,
 fieldOfView(fieldOfView)
 {
@@ -42,9 +41,9 @@ void PerspectiveCamera::update () {
     projection.setToProjection(std::abs(near), std::abs(far), fieldOfView, aspect);
     view.setToLookAt(position, tmp.set(position).add(direction), up);
     combined.set(projection);
-    math::Matrix4::mul(combined.val, view.val);
+    Matrix4::mul(combined.val, view.val);
     invProjectionView.set(combined);
-    math::Matrix4::inv(invProjectionView.val);
+    Matrix4::inv(invProjectionView.val);
     frustum.update(invProjectionView);
 }
 

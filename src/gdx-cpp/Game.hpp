@@ -22,7 +22,7 @@
 #define GDX_CPP__GAME_HPP_
 #include "Screen.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 namespace  {
 
 class Game {
@@ -42,7 +42,7 @@ private:
     Screen* screen;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace
 
 #endif // GDX_CPP__GAME_HPP_

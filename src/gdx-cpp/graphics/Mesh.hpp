@@ -32,24 +32,16 @@
 #include <set>
 
 
-namespace gdx_cpp {
-namespace math {
-namespace collision {
+namespace gdx {
 
 class BoundingBox;
 class BoundingBox;
-}
-}
 
-namespace graphics {
+class VertexData;
+class IndexData;
+class ShaderProgram;
 
-namespace glutils {
-    class VertexData;
-    class IndexData;
-    class ShaderProgram;
-}
-
-class Mesh: public gdx_cpp::utils::Disposable {
+class Mesh: public Disposable {
 public:
     typedef ref_ptr_maker<Mesh>::type ptr;
     
@@ -59,7 +51,7 @@ public:
         static const int VertexBufferObjectSubData = 2;
     };
 
-    Mesh (int type, bool isStatic, int maxVertices, int maxIndices, const std::vector< gdx_cpp::graphics::VertexAttribute >& attributes) ;
+    Mesh (int type, bool isStatic, int maxVertices, int maxIndices, const std::vector< VertexAttribute >& attributes) ;
     Mesh (bool isStatic, int maxVertices, int maxIndices, const std::vector<VertexAttribute>& attributes);
     
     void setVertices(const float* length, int size);    
@@ -77,20 +69,20 @@ public:
     void setAutoBind (bool autoBind);
     void bind ();
     void unbind ();
-    void bind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
-    void unbind (gdx_cpp::graphics::glutils::ShaderProgram& shader);
+    void bind (ShaderProgram& shader);
+    void unbind (ShaderProgram& shader);
     void render (int primitiveType);
     void render (int primitiveType,int offset,int count);
-    void render (gdx_cpp::graphics::glutils::ShaderProgram& shader, int primitiveType);
-    void render (gdx_cpp::graphics::glutils::ShaderProgram& shader, int primitiveType, int offset, int count);
+    void render (ShaderProgram& shader, int primitiveType);
+    void render (ShaderProgram& shader, int primitiveType, int offset, int count);
     void dispose ();
     VertexAttribute* const getVertexAttribute (int usage);
     VertexAttributes& getVertexAttributes ();
-    utils::float_buffer& getVerticesBuffer ();
-    void calculateBoundingBox (gdx_cpp::math::collision::BoundingBox& bbox);
-    utils::short_buffer& getIndicesBuffer ();
-    static void invalidateAllMeshes (gdx_cpp::Application* app);
-    static void clearAllMeshes (gdx_cpp::Application* app);
+    float_buffer& getVerticesBuffer ();
+    void calculateBoundingBox (BoundingBox& bbox);
+    short_buffer& getIndicesBuffer ();
+    static void invalidateAllMeshes (Application* app);
+    static void clearAllMeshes (Application* app);
     std::string getManagedStatus ();
     void scale (float scaleX,float scaleY,float scaleZ);
 
@@ -99,19 +91,18 @@ public:
     ~Mesh();
     
 protected:
-    glutils::VertexData* vertices;
-    glutils::IndexData* indices;
+    VertexData* vertices;
+    IndexData* indices;
     bool autoBind;
     bool isVertexArray;
     bool disposed;
 private:
-    typedef std::tr1::unordered_map<gdx_cpp::Application*, std::set<Mesh*> > MeshMap;
+    typedef std::tr1::unordered_map<Application*, std::set<Mesh*> > MeshMap;
     static MeshMap meshes;
-    static void addManagedMesh (gdx_cpp::Application* app, gdx_cpp::graphics::Mesh* mesh);
+    static void addManagedMesh (Application* app, Mesh* mesh);
     
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_MESH_HPP_

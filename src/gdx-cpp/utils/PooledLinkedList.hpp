@@ -22,8 +22,7 @@
 
 #include "Pool.hpp"
 
-namespace gdx_cpp {
-namespace utils {
+namespace gdx {
 
 template <typename T>
 class PooledLinkedList {
@@ -126,7 +125,6 @@ private:
     int size;
 };
 
-} // namespace gdx_cpp
-} // namespace utils
+} // namespace gdx
 
 #endif // GDX_CPP_UTILS_POOLEDLINKEDLIST<T>_HPP_

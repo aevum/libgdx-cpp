@@ -25,40 +25,39 @@
 #include <cassert>
 #include <gdx-cpp/Gdx.hpp>
 
-using namespace gdx_cpp;
-using namespace gdx_cpp::files;
-using namespace gdx_cpp::backends::android;
+using namespace gdx;
+using namespace gdx::android;
 
 AndroidFiles::AndroidFiles()
 {
 }
 
-files::FileHandle::ptr gdx_cpp::backends::android::AndroidFiles::absolute(const std::string& path)
+FileHandle::ptr gdx::android::AndroidFiles::absolute(const std::string& path)
 {
-    return gdx_cpp::files::FileHandle::ptr(new AndroidFileHandle(path, gdx_cpp::Files::Absolute));
+    return gdx::FileHandle::ptr(new AndroidFileHandle(path, gdx::Files::Absolute));
 }
 
-files::FileHandle::ptr gdx_cpp::backends::android::AndroidFiles::external(const std::string& path)
+FileHandle::ptr gdx::android::AndroidFiles::external(const std::string& path)
 {
-    return gdx_cpp::files::FileHandle::ptr(new AndroidFileHandle(path, gdx_cpp::Files::External));
+    return gdx::FileHandle::ptr(new AndroidFileHandle(path, gdx::Files::External));
 }
 
-std::string gdx_cpp::backends::android::AndroidFiles::getExternalStoragePath()
+std::string gdx::android::AndroidFiles::getExternalStoragePath()
 {
     return externalPath;
 }
 
-files::FileHandle::ptr gdx_cpp::backends::android::AndroidFiles::getFileHandle(const std::string& path, gdx_cpp::Files::FileType type)
+FileHandle::ptr gdx::android::AndroidFiles::getFileHandle(const std::string& path, gdx::Files::FileType type)
 {
-    return gdx_cpp::files::FileHandle::ptr(new AndroidFileHandle(path, type));
+    return gdx::FileHandle::ptr(new AndroidFileHandle(path, type));
 }
 
-files::FileHandle::ptr gdx_cpp::backends::android::AndroidFiles::internal(const std::string& path)
+FileHandle::ptr gdx::android::AndroidFiles::internal(const std::string& path)
 {   
-    return gdx_cpp::files::FileHandle::ptr(new AndroidFileHandle(path, gdx_cpp::Files::Internal));
+    return gdx::FileHandle::ptr(new AndroidFileHandle(path, gdx::Files::Internal));
 }
 
-bool gdx_cpp::backends::android::AndroidFiles::isExternalStorageAvailable()
+bool gdx::android::AndroidFiles::isExternalStorageAvailable()
 {
     //TODO
     return false;

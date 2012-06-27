@@ -20,7 +20,7 @@
 
 #include "Decal.hpp"
 
-using namespace gdx_cpp::graphics::g3d::decals;
+using namespace gdx::g3d::decals;
 
 void Decal::setColor (float r,float g,float b,float a) {
     int intBits = ((int)(255 * a) << 24) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r));
@@ -49,14 +49,14 @@ void Decal::rotateZ (float angle) {
     updated = false;
 }
 
-void Decal::setRotation (const gdx_cpp::math::Vector3& dir,const gdx_cpp::math::Vector3& up) {
+void Decal::setRotation (const gdx::Vector3& dir,const gdx::Vector3& up) {
     tmp.set(up).crs(dir).nor();
     tmp2.set(dir).crs(tmp).nor();
     rotation.setFromAxes(tmp.x, tmp.y, tmp.z, tmp2.x, tmp2.y, tmp2.z, dir.x, dir.y, dir.z);
     updated = false;
 }
 
-gdx_cpp::math::Quaternion& Decal::getRotation () {
+gdx::Quaternion& Decal::getRotation () {
     return rotation;
 }
 
@@ -112,7 +112,7 @@ void Decal::setPosition (float x,float y,float z) {
     updated = false;
 }
 
-gdx_cpp::math::Vector3& Decal::getPosition () {
+gdx::Vector3& Decal::getPosition () {
     return position;
 }
 
@@ -328,7 +328,7 @@ void Decal::updateUVs () {
     vertices[V4] = tr.getV2();
 }
 
-void Decal::setTextureRegion (const gdx_cpp::graphics::g2d::TextureRegion& textureRegion) {
+void Decal::setTextureRegion (const gdx::TextureRegion& textureRegion) {
     this.material.textureRegion = textureRegion;
     updateUVs();
 }
@@ -342,27 +342,27 @@ DecalMaterial& Decal::getMaterial () {
     return material;
 }
 
-Decal& Decal::newDecal (const gdx_cpp::graphics::g2d::TextureRegion& textureRegion) {
+Decal& Decal::newDecal (const gdx::TextureRegion& textureRegion) {
     return newDecal(textureRegion.getRegionWidth(), textureRegion.getRegionHeight(), textureRegion, DecalMaterial.NO_BLEND,
                     DecalMaterial.NO_BLEND);
 }
 
-Decal& Decal::newDecal (const gdx_cpp::graphics::g2d::TextureRegion& textureRegion,bool hasTransparency) {
+Decal& Decal::newDecal (const gdx::TextureRegion& textureRegion,bool hasTransparency) {
     return newDecal(textureRegion.getRegionWidth(), textureRegion.getRegionHeight(), textureRegion,
                     hasTransparency ? GL10.GL_SRC_ALPHA : DecalMaterial.NO_BLEND, hasTransparency ? GL10.GL_ONE_MINUS_SRC_ALPHA
                     : DecalMaterial.NO_BLEND);
 }
 
-Decal& Decal::newDecal (float width,float height,const gdx_cpp::graphics::g2d::TextureRegion& textureRegion) {
+Decal& Decal::newDecal (float width,float height,const gdx::TextureRegion& textureRegion) {
     return newDecal(width, height, textureRegion, DecalMaterial.NO_BLEND, DecalMaterial.NO_BLEND);
 }
 
-Decal& Decal::newDecal (float width,float height,const gdx_cpp::graphics::g2d::TextureRegion& textureRegion,bool hasTransparency) {
+Decal& Decal::newDecal (float width,float height,const gdx::TextureRegion& textureRegion,bool hasTransparency) {
     return newDecal(width, height, textureRegion, hasTransparency ? GL10.GL_SRC_ALPHA : DecalMaterial.NO_BLEND,
                     hasTransparency ? GL10.GL_ONE_MINUS_SRC_ALPHA : DecalMaterial.NO_BLEND);
 }
 
-Decal& Decal::newDecal (float width,float height,const gdx_cpp::graphics::g2d::TextureRegion& textureRegion,int srcBlendFactor,int dstBlendFactor) {
+Decal& Decal::newDecal (float width,float height,const gdx::TextureRegion& textureRegion,int srcBlendFactor,int dstBlendFactor) {
     Decal decal = new Decal();
     decal.setTextureRegion(textureRegion);
     decal.setBlending(srcBlendFactor, dstBlendFactor);

@@ -20,7 +20,7 @@
 
 #include "OvershootInterpolator.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::interpolators;
+using namespace gdx::interpolators;
 
 OvershootInterpolator& OvershootInterpolator::newObject () {
     return new OvershootInterpolator();
@@ -46,7 +46,7 @@ float OvershootInterpolator::getInterpolation (float t) {
     return t * t * ((factor + 1) * t + factor) + 1.0f;
 }
 
-gdx_cpp::scenes::scene2d::Interpolator& OvershootInterpolator::copy () {
+gdx::Interpolator& OvershootInterpolator::copy () {
     return $(factor);
 }
 

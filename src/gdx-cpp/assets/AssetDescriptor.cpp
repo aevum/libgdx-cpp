@@ -20,7 +20,7 @@
 
 #include "AssetDescriptor.hpp"
 
-using namespace gdx_cpp::assets;
+using namespace gdx;
 
 const std::string& AssetDescriptor::toString () {
     return fileName;
@@ -28,7 +28,7 @@ const std::string& AssetDescriptor::toString () {
 
 AssetDescriptor::AssetDescriptor(const std::string& filename,
                                  AssetManager::AssetType& type,
-                                 gdx_cpp::assets::AssetLoaderParameters& params)
+                                 gdx::AssetLoaderParameters& params)
     : fileName(filename)
     , type(type)
     , params(params)

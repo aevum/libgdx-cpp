@@ -23,10 +23,9 @@
 
 #include "gdx-cpp/utils/Disposable.hpp"
 
-namespace gdx_cpp {
-namespace audio {
+namespace gdx {
 
-class AudioDevice: public gdx_cpp::utils::Disposable {
+class AudioDevice: public Disposable {
 public:
     virtual   bool isMono () = 0;
     virtual   void writeSamples (short * samples, int offset,int numSamples) = 0;
@@ -40,8 +39,5 @@ protected:
 private:
 
 };
-
-} // namespace gdx_cpp
-} // namespace audio
-
+}
 #endif // GDX_CPP_AUDIO_AUDIODEVICE_HPP_

@@ -20,7 +20,7 @@
 
 #include "TemporalAction.hpp"
 
-using namespace gdx_cpp::scenes::scene2d;
+using namespace gdx::scene2d;
 
 Action* TemporalAction::getAction () {
     return action;

@@ -20,7 +20,7 @@
 
 #include "AnimationAction.hpp"
 
-using namespace gdx_cpp::scenes::scene2d;
+using namespace gdx::scene2d;
 
 bool AnimationAction::isDone () {
     return done;
@@ -52,7 +52,7 @@ float AnimationAction::createInterpolatedAlpha (float delta) {
     }
 }
 
-gdx_cpp::scenes::scene2d::Actor* AnimationAction::getTarget () {
+gdx::Actor* AnimationAction::getTarget () {
     return target;
 }
 

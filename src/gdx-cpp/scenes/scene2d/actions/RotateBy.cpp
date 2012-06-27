@@ -20,7 +20,7 @@
 
 #include "RotateBy.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::actions;
+using namespace gdx::actions;
 
 ActionResetingPool<RotateBy> RotateBy::pool = ActionResetingPool<RotateBy>(4, 100);
 
@@ -32,7 +32,7 @@ RotateBy* RotateBy::build (float rotation,float duration) {
     return action;
 }
 
-void RotateBy::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+void RotateBy::setTarget (gdx::Actor* actor) {
     this->target = actor;
     this->startRotation = target->rotation;
     this->deltaRotation = rotation;
@@ -54,7 +54,7 @@ void RotateBy::finish () {
     pool.free(this);
 }
 
-gdx_cpp::scenes::scene2d::Action* RotateBy::copy () {
+gdx::Action* RotateBy::copy () {
     RotateBy* rotateBy = RotateBy::build(rotation, duration);
     if (interpolator != NULL) rotateBy->setInterpolator(interpolator->copy());
     return rotateBy;

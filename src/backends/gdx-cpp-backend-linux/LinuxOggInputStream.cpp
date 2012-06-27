@@ -3,7 +3,7 @@
 #include <gdx-cpp/utils/Buffer.hpp>
 #include <string>
 
-using namespace gdx_cpp::backends::nix;
+using namespace gdx::nix;
 
 void LinuxOggInputStream::open(std::string path)
 {

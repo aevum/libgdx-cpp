@@ -24,9 +24,7 @@
 #include "ArrayBase.hpp"
 #include <vector>
 
-namespace gdx_cpp {
-namespace utils {
-
+namespace gdx {
 template <class T>
 struct Row
 {
@@ -69,6 +67,5 @@ private:
   T * value;
 };
 } //namespace gdx
-} //namespace utils
 #endif // GDX_CPP_UTILS_MATRIXBASE_HPP
 

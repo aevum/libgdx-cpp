@@ -21,28 +21,28 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_UI_WINDOW_HPP_
 #define GDX_CPP_SCENES_SCENE2D_UI_WINDOW_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace ui {
 
-class Window: public gdx_cpp::scenes::scene2d::ui::tablelayout::Table {
+class Window: public gdx::ui::tablelayout::Table {
 public:
     void setStyle (const WindowStyle& style);
-    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
+    void draw (const gdx::SpriteBatch& batch,float parentAlpha);
     bool touchDown (float x,float y,int pointer);
     void touchUp (float x,float y,int pointer);
     void touchDragged (float x,float y,int pointer);
-    gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
+    gdx::Actor& hit (float x,float y);
     void setTitle (const std::string& title);
     std::string& getTitle ();
     void setMovable (bool isMovable);
     bool isMovable ();
     void setModal (bool isModal);
     bool isModal ();
-    Window (const std::string& title,const gdx_cpp::scenes::scene2d::Stage& stage,const Skin& skin);
-    Window (const std::string& title,const gdx_cpp::scenes::scene2d::Stage& stage,const WindowStyle& style);
-    Window (const std::string& name,const std::string& title,const gdx_cpp::scenes::scene2d::Stage& stage,const WindowStyle& style,int prefWidth,int prefHeight);
+    Window (const std::string& title,const gdx::Stage& stage,const Skin& skin);
+    Window (const std::string& title,const gdx::Stage& stage,const WindowStyle& style);
+    Window (const std::string& name,const std::string& title,const gdx::Stage& stage,const WindowStyle& style,int prefWidth,int prefHeight);
 
 protected:
     WindowStyle style ;
@@ -60,10 +60,10 @@ protected:
     TableLayout layout = getTableLayout();
 
 private:
-    void calculateBoundsAndScissors (const gdx_cpp::math::Matrix4& transform);
+    void calculateBoundsAndScissors (const gdx::Matrix4& transform);
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace ui

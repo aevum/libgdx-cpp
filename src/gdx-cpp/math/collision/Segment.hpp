@@ -23,9 +23,7 @@
 
 #include "gdx-cpp/math/Vector3.hpp"
 
-namespace gdx_cpp {
-namespace math {
-namespace collision {
+namespace gdx {
 
 class Segment {
 public:
@@ -41,8 +39,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace math
-} // namespace collision
+} // namespace gdx
 
 #endif // GDX_CPP_MATH_COLLISION_SEGMENT_HPP_

@@ -21,18 +21,18 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_INTERPOLATORS_OVERSHOOTINTERPOLATOR_HPP_
 #define GDX_CPP_SCENES_SCENE2D_INTERPOLATORS_OVERSHOOTINTERPOLATOR_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace interpolators {
 
-class OvershootInterpolator: public gdx_cpp::scenes::scene2d::Interpolator {
+class OvershootInterpolator: public gdx::Interpolator {
 public:
     static OvershootInterpolator& $ (float factor);
     static OvershootInterpolator& $ ();
     void finished ();
     float getInterpolation (float t);
-    gdx_cpp::scenes::scene2d::Interpolator& copy ();
+    gdx::Interpolator& copy ();
 
 protected:
     OvershootInterpolator& newObject ();
@@ -42,7 +42,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace interpolators

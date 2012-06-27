@@ -33,16 +33,16 @@
 
 #import <UIKit/UIKit.h>
 
-using namespace gdx_cpp::backends::ios;
-using namespace gdx_cpp;
+using namespace gdx::ios;
+using namespace gdx;
 
-gdx_cpp::backends::ios::IosApplication::IosApplication(gdx_cpp::ApplicationListener* listener)
-:  Synchronizable(Gdx::system->getMutexFactory())
+gdx::ios::IosApplication::IosApplication(gdx::ApplicationListener* listener)
+:  Synchronizable(system->getMutexFactory())
 , listener(listener)
 , graphics(NULL)
 , input(NULL)
 , files(NULL)
-, logLevel(gdx_cpp::Application::LOG_INFO)
+, logLevel(gdx::Application::LOG_INFO)
 {
     initialize();
 }
@@ -56,7 +56,7 @@ void IosApplication::initialize() {
 	graphics->initialize();
 	graphics->setDisplayMode(width, height, false);
 	
-	Gdx::initialize(this, graphics, audio, input, files);
+	initialize(this, graphics, audio, input, files);
 }
 
 void IosApplication::onRunnableStop()
@@ -143,9 +143,9 @@ Preferences* IosApplication::getPreferences(std::string& name)
 	throw std::runtime_error("not implemented yet");
 }
 
-gdx_cpp::Application::ApplicationType IosApplication::getType()
+gdx::Application::ApplicationType IosApplication::getType()
 {
-    return gdx_cpp::Application::IOs;
+    return gdx::Application::IOs;
 }
 
 void IosApplication::log(const std::string& tag, const char* format, ...)

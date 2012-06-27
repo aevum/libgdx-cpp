@@ -27,15 +27,14 @@
 #include <list>
 #include "gdx-cpp/files/FileHandle.hpp"
 
-namespace gdx_cpp {
-namespace utils {
+namespace gdx {
 
 class JsonReader {
 public:
     JsonReader();
     
     static JsonValue::ptr parse (const std::string& json);
-    static JsonValue::ptr parse (const gdx_cpp::files::FileHandle& file);
+    static JsonValue::ptr parse (const gdx::FileHandle& file);
     static JsonValue::ptr parse (const char* data, int offset, int length);
 
 protected:
@@ -50,7 +49,7 @@ protected:
     static void boolean (const std::string& name, bool value);
 
 private:    
-    static void set (const std::string& name, gdx_cpp::utils::JsonValue::ptr value);
+    static void set (const std::string& name, gdx::JsonValue::ptr value);
     
     static std::string unescape (const std::string& value);
 
@@ -60,7 +59,6 @@ private:
     static std::list< JsonValue::ptr > elements;
 };
 
-} // namespace gdx_cpp
-} // namespace utils
+} // namespace gdx
 
 #endif // GDX_CPP_UTILS_JSONREADER_HPP_

@@ -20,7 +20,7 @@
 
 #include "LittleEndianInputStream.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx::utils;
 
 void LittleEndianInputStream::readFully () throws IOException {
     din.readFully(b);

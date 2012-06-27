@@ -20,9 +20,7 @@
 
 #include <string>
 
-namespace gdx_cpp {
-
-namespace math {
+namespace gdx {
 
 class Rectangle
 {
@@ -51,8 +49,6 @@ public:
     void merge(const Rectangle& rect);
     std::string toString ();
 };
-
-}
 
 }
 

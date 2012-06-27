@@ -20,7 +20,7 @@
 
 #include "AndroidClipboard.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui::utils;
+using namespace gdx::ui::utils;
 
 std::string& AndroidClipboard::getContents () {
     return "";

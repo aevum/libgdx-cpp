@@ -20,7 +20,7 @@
 
 #include "Logger.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx;
 
 void Logger::log (const std::string& message) {
     if (enabled) {

@@ -25,7 +25,7 @@
 
 #include "MathUtils.hpp"
 
-using namespace gdx_cpp::math;
+using namespace gdx;
 
 #define CONCAVE 1
 #define CONVEX - 1
@@ -137,7 +137,7 @@ int EarClippingTriangulator::computeSpannedAreaSign (float pX1, float pY1, float
     area += pX2 * (pY1 - pY3);
     area += pX3 * (pY2 - pY1);
 
-    return (int) utils::signum(area);
+    return (int) signum(area);
 }
 
 bool EarClippingTriangulator::isAnyVertexInTriangle (std::vector<Vector2>& pVertices, const std::vector<int>& pVertexTypes, float pX1,

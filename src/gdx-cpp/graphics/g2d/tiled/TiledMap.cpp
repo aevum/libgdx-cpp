@@ -20,7 +20,7 @@
 
 #include "TiledMap.hpp"
 
-using namespace gdx_cpp::graphics::g2d::tiled;
+using namespace gdx;
 
 void TiledMap::setTileProperty (int id,const std::string& name,const std::string& value) {
 for (TileProperty tp : tileProperties) {

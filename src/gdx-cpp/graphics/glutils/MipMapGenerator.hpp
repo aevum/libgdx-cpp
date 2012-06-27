@@ -23,30 +23,24 @@
 
 #include "gdx-cpp/graphics/Pixmap.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
-
-
-namespace glutils {
+namespace gdx {
 
 class MipMapGenerator {
 public:
     static bool useHWMipMap;
 
     static void setUseHardwareMipMap (bool useHWMipMap);
-    static void generateMipMap (gdx_cpp::graphics::Pixmap::ptr pixmap, int textureWidth, int textureHeight, bool disposePixmap);
+    static void generateMipMap (Pixmap::ptr pixmap, int textureWidth, int textureHeight, bool disposePixmap);
 
 protected:
 
 
 private:
-    static void generateMipMapGLES20 (gdx_cpp::graphics::Pixmap::ptr pixmap, bool disposePixmap);
-    static void generateMipMapDesktop (gdx_cpp::graphics::Pixmap::ptr pixmap, int textureWidth, int textureHeight, bool disposePixmap);
-    static void generateMipMapCPU (gdx_cpp::graphics::Pixmap::ptr pixmap, int textureWidth, int textureHeight, bool disposePixmap);
+    static void generateMipMapGLES20 (Pixmap::ptr pixmap, bool disposePixmap);
+    static void generateMipMapDesktop (Pixmap::ptr pixmap, int textureWidth, int textureHeight, bool disposePixmap);
+    static void generateMipMapCPU (Pixmap::ptr pixmap, int textureWidth, int textureHeight, bool disposePixmap);
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace glutils
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GLUTILS_MIPMAPGENERATOR_HPP_

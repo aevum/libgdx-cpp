@@ -28,41 +28,39 @@
 #include "Files.hpp"
 #include "implementation/System.hpp"
 #include "backend.hpp"
+#include "Log.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 
-namespace graphics {
-    class GLCommon;
-    class GL10;
-    class GL11;
-    class GL20;
-    class GLU;
-}
+class GLCommon;
+class GL10;
+class GL11;
+class GL20;
+class GLU;
 
-namespace implementation {
-    class System;
-}
+class System;
 
-class Gdx {
-public:
-    static Application* app;
-    static Graphics* graphics;
-    static Audio* audio;
-    static Input* input;
-    static Files* files;
-    static graphics::GLCommon* gl;
-    static graphics::GL10* gl10;
-    static graphics::GL11* gl11;
-    static graphics::GL20* gl20;
-    static graphics::GLU* glu;
+extern Application* app;
+extern Graphics* graphics;
+extern Audio* audio;
+extern Input* input;
+extern Files* files; 
+extern GLCommon* gl;
+extern GL10* gl10;
+extern GL11* gl11;
+extern GL20* gl20;
+extern GLU* glu;
 
-    static implementation::System* system;
+extern System* system;
 
-    static void initializeSystem(implementation::System* system);
-    static void initialize(Application* application, Graphics* graphics,
-                           Audio* audio, Input* input, Files* files);
-};
+void initializeSystem(System* system, Log* log);
+void initialize(Application* application, Graphics* graphics,
+                        Audio* audio, Input* input, Files* files);
 
-} // namespace gdx_cpp
+void internal_log_error(const std::string& tag, const std::string& line, const std::string& file, const char* format, ...);
+void internal_log_info(const std::string& tag, const std::string& line, const std::string& file, const char* format, ...);
+void internal_log_debug(const std::string& tag, const std::string& line, const std::string& file,const char* format, ...);
+
+} // namespace gdx
 
 #endif // GDX_CPP_GDX_HPP_

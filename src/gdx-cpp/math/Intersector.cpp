@@ -29,13 +29,12 @@
 #include <limits>
 #include "collision/Ray.hpp"
 #include <cassert>
-#include "gdx-cpp/Application.hpp"
 #include "gdx-cpp/Gdx.hpp"
 #include "Circle.hpp"
 
 
 
-using namespace gdx_cpp::math;
+using namespace gdx;
 
 
 Vector3 Intersector::v0;
@@ -159,7 +158,7 @@ float Intersector::intersectSegmentCircleDisplace (const Vector2& start,const Ve
         return std::numeric_limits<float>::infinity();
 }
 
-bool Intersector::intersectRayPlane (const gdx_cpp::math::collision::Ray& ray, Plane& plane, Vector3* intersection) {
+bool Intersector::intersectRayPlane (const Ray& ray, Plane& plane, Vector3* intersection) {
     float denom = ray.direction.dot(plane.getNormal());
     if (denom != 0) {
         float t = -(ray.origin.dot(plane.getNormal()) + plane.getD()) / denom;
@@ -174,7 +173,7 @@ bool Intersector::intersectRayPlane (const gdx_cpp::math::collision::Ray& ray, P
         return false;
 }
 
-bool Intersector::intersectRayTriangle (const gdx_cpp::math::collision::Ray& ray,const Vector3& t1,const Vector3& t2,const Vector3& t3, Vector3* intersection) {
+bool Intersector::intersectRayTriangle (const Ray& ray,const Vector3& t1,const Vector3& t2,const Vector3& t3, Vector3* intersection) {
     p.set(t1, t2, t3);
     if (!intersectRayPlane(ray, p, &i)) return false;
 
@@ -203,7 +202,7 @@ bool Intersector::intersectRayTriangle (const gdx_cpp::math::collision::Ray& ray
 
 }
 
-bool Intersector::intersectRaySphere (const gdx_cpp::math::collision::Ray& ray,const Vector3& center,float radius, Vector3* intersection) {
+bool Intersector::intersectRaySphere (const Ray& ray,const Vector3& center,float radius, Vector3* intersection) {
     dir.set(ray.direction).nor();
     start.set(ray.origin);
     float b = 2 * (dir.dot(start.tmp().sub(center)));
@@ -248,7 +247,7 @@ bool Intersector::intersectRaySphere (const gdx_cpp::math::collision::Ray& ray,c
     }
 }
 
-bool Intersector::intersectRayBoundsFast (const gdx_cpp::math::collision::Ray& ray, const gdx_cpp::math::collision::BoundingBox& box) {
+bool Intersector::intersectRayBoundsFast (const Ray& ray, const BoundingBox& box) {
     float a, b;
     float min, max;
     float divX = 1 / ray.direction.x;
@@ -290,13 +289,13 @@ bool Intersector::intersectRayBoundsFast (const gdx_cpp::math::collision::Ray& r
     return (max >= 0) && (max >= min);
 }
 
-bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ray, const std::vector<float>& triangles, Vector3* intersection) {
+bool Intersector::intersectRayTriangles (const Ray& ray, const std::vector<float>& triangles, Vector3* intersection) {
     float min_dist = std::numeric_limits<float>::max();
     bool hit = false;
 
     if ((triangles.size() / 3) % 3 != 0)
     {
-      gdx_cpp::Gdx::app->error("GDX-CPP Intersector.cpp","triangle list size is not a multiple of 3");
+      gdx_log_error("GDX-CPP Intersector.cpp","triangle list size is not a multiple of 3");
       assert(false);
     }
 
@@ -323,13 +322,13 @@ bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ra
     }
 }
 
-bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ray, const std::vector<float>& vertices, const std::vector<short>& indices, int vertexSize, Vector3* intersection) {
+bool Intersector::intersectRayTriangles (const Ray& ray, const std::vector<float>& vertices, const std::vector<short>& indices, int vertexSize, Vector3* intersection) {
     float min_dist = std::numeric_limits<float>::max();
     bool hit = false;
 
     if ((indices.size() % 3) != 0)
     {
-      gdx_cpp::Gdx::app->error("GDX-CPP Intersector.cpp", "triangle list size is not a multiple of 3");
+      gdx_log_error("GDX-CPP Intersector.cpp", "triangle list size is not a multiple of 3");
       assert(false);
     } 
 
@@ -360,12 +359,12 @@ bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ra
     }
 }
 
-bool Intersector::intersectRayTriangles (const gdx_cpp::math::collision::Ray& ray, const std::vector<gdx_cpp::math::Vector3>& triangles, gdx_cpp::math::Vector3* intersection) {
+bool Intersector::intersectRayTriangles (const Ray& ray, const std::vector<Vector3>& triangles, Vector3* intersection) {
     float min_dist = std::numeric_limits<float>::max();
 
     if (triangles.size() % 3 != 0)
     {
-      gdx_cpp::Gdx::app->error("GDX-CPP Intersector.cpp", "triangle list size is not a multiple of 3");
+      gdx_log_error("GDX-CPP Intersector.cpp", "triangle list size is not a multiple of 3");
       assert(false);
     } 
 

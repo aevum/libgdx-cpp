@@ -21,20 +21,14 @@
 #ifndef GDX_CPP_ASSETS_LOADERS_FILEHANDLERESOLVER_HPP_
 #define GDX_CPP_ASSETS_LOADERS_FILEHANDLERESOLVER_HPP_
 
-namespace gdx_cpp {
-namespace files {
+namespace gdx {
     class FileHandle;
-}
-namespace assets {
-namespace loaders {
 
 class FileHandleResolver {
 public:
-    virtual  gdx_cpp::files::FileHandle& resolve (const std::string& fileName) const = 0;
+    virtual  FileHandle& resolve (const std::string& fileName) const = 0;
 };
 
-} // namespace gdx_cpp
-} // namespace assets
-} // namespace loaders
+} // namespace gdx
 
 #endif // GDX_CPP_ASSETS_LOADERS_FILEHANDLERESOLVER_HPP_

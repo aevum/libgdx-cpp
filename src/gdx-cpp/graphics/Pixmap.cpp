@@ -31,7 +31,7 @@
 #include <iostream>
 #include <iostream>
 
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
 const Pixmap::Format Pixmap::Format::Alpha = Pixmap::Format("Alpha");
 const Pixmap::Format Pixmap::Format::LuminanceAlpha = Pixmap::Format("LuminanceAlpha");
@@ -40,7 +40,7 @@ const Pixmap::Format Pixmap::Format::RGBA4444 = Pixmap::Format("RGBA4444");
 const Pixmap::Format Pixmap::Format::RGB888 = Pixmap::Format("RGB888");
 const Pixmap::Format Pixmap::Format::RGBA8888 = Pixmap::Format("RGBA888");
 
-int Pixmap::Format::toGdx2DPixmapFormat(const gdx_cpp::graphics::Pixmap::Format& format) {
+int Pixmap::Format::toGdx2DPixmapFormat(const Pixmap::Format& format) {
     if (format == Pixmap::Format::Alpha) return GDX2D_FORMAT_ALPHA;
     if (format == Pixmap::Format::LuminanceAlpha) return GDX2D_FORMAT_LUMINANCE_ALPHA;
     if (format == Pixmap::Format::RGB565) return GDX2D_FORMAT_RGB565;
@@ -66,48 +66,48 @@ const Pixmap::Format& Pixmap::Format::fromGdx2DPixmapFormat(int format) {
     throw std::runtime_error(ss.str());
 }
 
-// Pixmap::Pixmap(int width, int height, const gdx_cpp::graphics::Pixmap::Format& format)
+// Pixmap::Pixmap(int width, int height, const Pixmap::Format& format)
 //         : color(0)
 // {
-//     pixmap = g2d::Gdx2DPixmap::newPixmap(width, height, Format::toGdx2DPixmapFormat(format));
+//     pixmap = Gdx2DPixmap::newPixmap(width, height, Format::toGdx2DPixmapFormat(format));
 //     assert(pixmap);
 //     setColor(0, 0, 0, 0);
 //     fill();
 // }
 // 
 // Pixmap::Pixmap(unsigned char* encodedData, int offset, int len) {
-//     pixmap = new g2d::Gdx2DPixmap(encodedData, offset, len, 0);
+//     pixmap = new Gdx2DPixmap(encodedData, offset, len, 0);
 // }
 // 
-// Pixmap::Pixmap(gdx_cpp::files::FileHandle& file) {
+// Pixmap::Pixmap(FileHandle& file) {
 // 
-//     gdx_cpp::files::FileHandle::char_ptr bytes;
+//     FileHandle::char_ptr bytes;
 //     int size = file.readBytes(bytes);
-//     pixmap = new g2d::Gdx2DPixmap((unsigned char*) bytes.get(), 0, size, 0);
+//     pixmap = new Gdx2DPixmap((unsigned char*) bytes.get(), 0, size, 0);
 //     assert(pixmap);
 // }
 // 
-// Pixmap::Pixmap(g2d::Gdx2DPixmap* pixmap)
+// Pixmap::Pixmap(Gdx2DPixmap* pixmap)
 //  : color(0)
 //  {
 //     this->pixmap = pixmap;
 // }
 
-Pixmap::ptr Pixmap::newFromFile(const gdx_cpp::files::FileHandle::ptr file)
+Pixmap::ptr Pixmap::newFromFile(const FileHandle::ptr file)
 {
-    return Pixmap::ptr(gdx_cpp::Gdx::graphics->resolvePixmap(file));
+    return Pixmap::ptr(graphics->resolvePixmap(file));
 }
 
-Pixmap::ptr Pixmap::newFromPixmap(const gdx_cpp::graphics::Pixmap& pixmap)
+Pixmap::ptr Pixmap::newFromPixmap(const Pixmap& pixmap)
 {
-    return Pixmap::ptr(gdx_cpp::Gdx::graphics->resolvePixmap(pixmap));
+    return Pixmap::ptr(graphics->resolvePixmap(pixmap));
 }
 
 Pixmap::ptr Pixmap::newFromRect(int width, int height,
-                                const gdx_cpp::graphics::Pixmap::Format& format,
-                                gdx_cpp::graphics::Pixmap::PixmapType pixType)
+                                const Pixmap::Format& format,
+                                Pixmap::PixmapType pixType)
 {
-    return Pixmap::ptr(gdx_cpp::Gdx::graphics->resolvePixmap(width, height, format, pixType));
+    return Pixmap::ptr(graphics->resolvePixmap(width, height, format, pixType));
 }
 
 

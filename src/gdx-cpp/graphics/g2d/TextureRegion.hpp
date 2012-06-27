@@ -24,9 +24,7 @@
 #include "gdx-cpp/graphics/Texture.hpp"
 #include "gdx-cpp/utils/MatrixBase.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
-namespace g2d {
+namespace gdx {
 
 class TextureRegion {
 public:
@@ -39,13 +37,13 @@ public:
     TextureRegion (Texture::ptr _texture);
     TextureRegion (Texture::ptr _texture, int x, int y, int width, int height);
     TextureRegion (Texture::ptr _texture, float u, float v, float u2, float v2);
-    TextureRegion (gdx_cpp::graphics::g2d::TextureRegion& region);
-    TextureRegion (gdx_cpp::graphics::g2d::TextureRegion& region, int x, int y, int width, int height);
+    TextureRegion (TextureRegion& region);
+    TextureRegion (TextureRegion& region, int x, int y, int width, int height);
     virtual void setRegion (Texture::ptr texture);
     virtual void setRegion (int x,int y,int width,int height);
     virtual void setRegion (float u,float v,float u2,float v2);
     virtual void setRegion (const TextureRegion& region);
-    virtual void setRegion (const gdx_cpp::graphics::g2d::TextureRegion& region, int x, int y, int width, int height);
+    virtual void setRegion (const TextureRegion& region, int x, int y, int width, int height);
     Texture::ptr getTexture () const;
     void setTexture (Texture::ptr texture);
     float getU () const;
@@ -66,8 +64,8 @@ public:
     void setRegionHeight (int height);
     void flip (bool x,bool y);
     void scroll (float xAmount,float yAmount);
-    utils::MatrixBase< gdx_cpp::graphics::g2d::TextureRegion::ptr > split (int tileWidth, int tileHeight);
-    utils::MatrixBase< gdx_cpp::graphics::g2d::TextureRegion::ptr > split (gdx_cpp::graphics::Texture::ptr texture, int tileWidth, int tileHeight);
+    MatrixBase< TextureRegion::ptr > split (int tileWidth, int tileHeight);
+    MatrixBase< TextureRegion::ptr > split (Texture::ptr texture, int tileWidth, int tileHeight);
 
     float u, v;
     float u2, v2;
@@ -79,8 +77,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g2d
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_G2D_TEXTUREREGION_HPP_

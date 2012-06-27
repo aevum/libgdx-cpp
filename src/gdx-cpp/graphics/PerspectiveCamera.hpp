@@ -23,8 +23,7 @@
 
 #include "gdx-cpp/graphics/Camera.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
+namespace gdx {
 
 class PerspectiveCamera : public Camera {
 public:
@@ -35,12 +34,11 @@ public:
     float fieldOfView;
 protected:
 
-    math::Vector3 tmp;
+    Vector3 tmp;
 private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_PERSPECTIVECAMERA_HPP_

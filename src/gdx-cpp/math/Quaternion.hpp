@@ -24,9 +24,8 @@
 #include <string>
 #include "gdx-cpp/utils/Aliases.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 
-namespace math {
 class Vector3;
 class Matrix4;
 class Quaternion
@@ -75,8 +74,6 @@ private:
     static Quaternion tmp2;
     static const float NORMALIZATION_TOLERANCE;//TODO falta inicializar
 };
-
-}
 
 }
 

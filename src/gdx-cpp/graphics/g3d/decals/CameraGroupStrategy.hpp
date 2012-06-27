@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_DECALS_CAMERAGROUPSTRATEGY_HPP_
 #define GDX_CPP_GRAPHICS_G3D_DECALS_CAMERAGROUPSTRATEGY_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace decals {
@@ -29,23 +29,23 @@ namespace decals {
 class CameraGroupStrategy {
 public:
     int compare (const Decal& o1,const Decal& o2);
-    void setCamera (const gdx_cpp::graphics::Camera& camera);
-    gdx_cpp::graphics::Camera& getCamera ();
+    void setCamera (const gdx::Camera& camera);
+    gdx::Camera& getCamera ();
     int decideGroup (const Decal& decal);
-    void beforeGroup (int group,gdx_cpp::utils::ArrayDecal>& contents);
+    void beforeGroup (int group,gdx::ArrayDecal>& contents);
     void afterGroup (int group);
     void beforeGroups ();
     void afterGroups ();
-    gdx_cpp::graphics::glutils::ShaderProgram& getGroupShader (int group);
+    gdx::ShaderProgram& getGroupShader (int group);
 
 protected:
-    gdx_cpp::utils::ArrayDecal>& newObject ();
+    gdx::ArrayDecal>& newObject ();
 
 private:
     void createDefaultShader ();
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace decals

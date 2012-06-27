@@ -20,7 +20,7 @@
 
 #include "RemoteSender.hpp"
 
-using namespace gdx_cpp::input;
+using namespace gdx;
 
 void RemoteSender::sendUpdate () {
     synchronized (this) {

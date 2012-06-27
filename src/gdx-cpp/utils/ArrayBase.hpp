@@ -24,8 +24,7 @@
 #include "ArrayBase.hpp"
 #include <vector>
 
-namespace gdx_cpp {
-namespace utils {
+namespace gdx {
 
 template <class T>
 struct ArrayBase
@@ -47,6 +46,5 @@ private:
 };
 
 } //namespace gdx
-} //namespace utils
 #endif // GDX_CPP_UTILS_MATRIXBASE_HPP
 

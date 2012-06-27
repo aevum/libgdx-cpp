@@ -20,7 +20,7 @@
 
 #include "TextureRef.hpp"
 
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
 void TextureRef::addRef () {
     mRefCount++;

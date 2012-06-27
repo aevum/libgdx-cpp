@@ -22,7 +22,7 @@
 
 #include <sstream>
 
-using namespace gdx_cpp::math;
+using namespace gdx;
 
 Plane::Plane (const Vector3& normal, float d) : d(d) {
   this->normal.set(normal).nor();

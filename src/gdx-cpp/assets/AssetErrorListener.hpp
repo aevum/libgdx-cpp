@@ -24,15 +24,13 @@
 #include <string>
 #include "AssetType.hpp"
 
-namespace gdx_cpp {
-namespace assets {
+namespace gdx {
 
 class AssetErrorListener {
 public:
     virtual void error (const std::string& fileName,const AssetType& type, const std::exception& throwable) = 0;
 };
 
-} // namespace gdx_cpp
-} // namespace assets
+} // namespace gdx
 
 #endif // GDX_CPP_ASSETS_ASSETERRORLISTENER_HPP_

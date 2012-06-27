@@ -20,7 +20,7 @@
 
 #include "LongArray.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx::utils;
 
 void LongArray::add (long value) {
     long[] items = this.items;

@@ -1,6 +1,6 @@
 #include <gdx-cpp/implementation/System.hpp>
 
-using namespace gdx_cpp::implementation;
+using namespace gdx;
 
 /* -- Attribute accessors -- */
 /* Constants for simple boolean attributes */

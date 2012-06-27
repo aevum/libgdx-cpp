@@ -23,7 +23,7 @@
 
 #include "Matrix4.hpp"
 
-using namespace gdx_cpp::math;
+using namespace gdx;
 
 Vector3 Vector3::X(1, 0, 0);
 Vector3 Vector3::Y(0, 1, 0);

@@ -24,15 +24,12 @@
 #include "Plane.hpp"
 #include "Vector3.hpp"
 
-namespace gdx_cpp {
-namespace math {
+namespace gdx {
 
 class Matrix4;
 
-namespace collision {
 class Ray;
 class BoundingBox;
-}
 
 class Frustum {
 public:
@@ -41,8 +38,8 @@ public:
     bool pointInFrustum (const Vector3& point);
     bool sphereInFrustum (const Vector3& center,float radius);
     bool sphereInFrustumWithoutNearFar (const Vector3& center,float radius);
-    bool boundsInFrustum (gdx_cpp::math::collision::BoundingBox& bounds);
-//     collision::Ray& calculatePickRay (float screen_width,float screen_height,float mouse_x,float mouse_y,const Vector3& pos,const Vector3& dir,const Vector3& up);
+    bool boundsInFrustum (BoundingBox& bounds);
+//     Ray& calculatePickRay (float screen_width,float screen_height,float mouse_x,float mouse_y,const Vector3& pos,const Vector3& dir,const Vector3& up);
     static void main ();
 
     Plane* planes[6];
@@ -67,7 +64,6 @@ private:
     } _i;
 };
 
-} // namespace gdx_cpp
-} // namespace math
+} // namespace gdx
 
 #endif // GDX_CPP_MATH_FRUSTUM_HPP_

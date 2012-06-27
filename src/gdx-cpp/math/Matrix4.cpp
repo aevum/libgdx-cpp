@@ -27,7 +27,7 @@
 #include <cassert>
 #include <string.h>
 
-using namespace gdx_cpp::math;
+using namespace gdx;
 
 float _tmp[16];
 
@@ -301,7 +301,7 @@ float Matrix4::det() {
 
 Matrix4& Matrix4::setToProjection(float near, float far, float fov, float aspectRatio) {
     this->idt();
-    float l_fd = (float)(1.0f / std::tan((fov * (math::utils::detail::PI / 180.f)) / 2.0f));
+    float l_fd = (float)(1.0f / std::tan((fov * (detail::PI / 180.f)) / 2.0f));
     float l_a1 = (far + near) / (near - far);
     float l_a2 = (2 * far * near) / (near - far);
     val[M00] = l_fd / aspectRatio;
@@ -691,7 +691,7 @@ bool Matrix4::inv (float* val) {
 }
 
 
-void gdx_cpp::math::Matrix4::translate(float x, float y, float z)
+void Matrix4::translate(float x, float y, float z)
 {
     _tmp[M00] = 1;
     _tmp[M01] = 0;
@@ -713,7 +713,7 @@ void gdx_cpp::math::Matrix4::translate(float x, float y, float z)
     mul(val, _tmp);
 }
 
-void gdx_cpp::math::Matrix4::rotate(float axisX, float axisY, float axisZ, float angle)
+void Matrix4::rotate(float axisX, float axisY, float axisZ, float angle)
 {
     if (angle == 0) return;
     quat.set(tmpV.set(axisX, axisY, axisZ), angle);
@@ -748,7 +748,7 @@ void gdx_cpp::math::Matrix4::rotate(float axisX, float axisY, float axisZ, float
     mul(val, _tmp);
 }
 
-void gdx_cpp::math::Matrix4::scale(float scaleX, float scaleY, float scaleZ)
+void Matrix4::scale(float scaleX, float scaleY, float scaleZ)
 {
     _tmp[M00] = scaleX;
     _tmp[M01] = 0;

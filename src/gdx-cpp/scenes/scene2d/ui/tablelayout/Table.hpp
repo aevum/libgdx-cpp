@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_UI_TABLELAYOUT_TABLE_HPP_
 #define GDX_CPP_SCENES_SCENE2D_UI_TABLELAYOUT_TABLE_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace ui {
@@ -29,27 +29,27 @@ namespace tablelayout {
 
 class Table {
 public:
-    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
+    void draw (const gdx::SpriteBatch& batch,float parentAlpha);
     float getPrefWidth ();
     float getPrefHeight ();
     float getMinWidth ();
     float getMinHeight ();
     float getMaxWidth ();
     float getMaxHeight ();
-    void setBackground (const gdx_cpp::graphics::g2d::NinePatch& background);
-    void enableClipping (const gdx_cpp::scenes::scene2d::Stage& stage);
-    void setClickListener (const gdx_cpp::scenes::scene2d::ui::ClickListener& listener);
+    void setBackground (const gdx::NinePatch& background);
+    void enableClipping (const gdx::Stage& stage);
+    void setClickListener (const gdx::ui::ClickListener& listener);
     bool touchDown (float x,float y,int pointer);
     void touchUp (float x,float y,int pointer);
     void click ();
-    gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
+    gdx::Actor& hit (float x,float y);
     TableLayout& getTableLayout ();
     void clear ();
-    gdx_cpp::scenes::scene2d::Actor& register (const std::string& name,const gdx_cpp::scenes::scene2d::Actor& widget);
-    Cell& add (const gdx_cpp::scenes::scene2d::Actor& actor);
+    gdx::Actor& register (const std::string& name,const gdx::Actor& widget);
+    Cell& add (const gdx::Actor& actor);
     Cell& stack ();
     Cell& row ();
-    void parse (const gdx_cpp::files::FileHandle& tableDescriptionFile);
+    void parse (const gdx::FileHandle& tableDescriptionFile);
     void parse (const std::string& tableDescription);
     Cell& columnDefaults (int column);
     Cell& defaults ();
@@ -57,15 +57,15 @@ public:
     void invalidate ();
     void invalidateHierarchy ();
     void reset ();
-    gdx_cpp::scenes::scene2d::Actor& getWidget (const std::string& name);
+    gdx::Actor& getWidget (const std::string& name);
     std::list<Actor>& getWidgets ();
     std::list<Actor>& getWidgets (const std::string& namePrefix);
-    Cell& getCell (const gdx_cpp::scenes::scene2d::Actor& actor);
+    Cell& getCell (const gdx::Actor& actor);
     Cell& getCell (const std::string& name);
     std::list<Cell>& getAllCells ();
     std::list<Cell>& getAllCells (const std::string& namePrefix);
     std::list<Cell>& getCells ();
-    void setActor (const std::string& name,const gdx_cpp::scenes::scene2d::Actor& actor);
+    void setActor (const std::string& name,const gdx::Actor& actor);
     Table& size (const std::string& width,const std::string& height);
     Table& width (const std::string& width);
     Table& height (const std::string& height);
@@ -101,7 +101,7 @@ public:
     std::string& getPadBottom ();
     std::string& getPadRight ();
     int getAlign ();
-    void drawDebug (const gdx_cpp::scenes::scene2d::Stage& stage);
+    void drawDebug (const gdx::Stage& stage);
     Table ();
     Table (const TableLayout& layout);
     Table (const std::string& name);
@@ -115,9 +115,9 @@ protected:
     NinePatch backgroundPatch ;
 
 private:
-    void calculateScissors (const gdx_cpp::math::Matrix4& transform);
+    void calculateScissors (const gdx::Matrix4& transform);
     void computeSize ();
-    void drawDebug (std::list<Actor>& actors,const gdx_cpp::graphics::g2d::SpriteBatch& batch);
+    void drawDebug (std::list<Actor>& actors,const gdx::SpriteBatch& batch);
     TableLayout layout ;
     ClickListener listener ;
     Stage stage ;
@@ -125,7 +125,7 @@ private:
     Rectangle scissors = new Rectangle();
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace ui

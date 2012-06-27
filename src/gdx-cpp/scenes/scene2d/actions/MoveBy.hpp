@@ -24,7 +24,7 @@
 #include "gdx-cpp/scenes/scene2d/AnimationAction.hpp"
 #include "ActionResetingPool.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace actions {
@@ -32,10 +32,10 @@ namespace actions {
 class MoveBy: public AnimationAction {
 public:
     static MoveBy* build(float x,float y,float duration);
-    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
+    void setTarget (gdx::Actor* actor);
     void act (float delta);
     void finish ();
-    gdx_cpp::scenes::scene2d::Action* copy ();
+    gdx::Action* copy ();
 
 protected:
     float initialX;
@@ -50,7 +50,7 @@ protected:
     static ActionResetingPool<MoveBy> pool;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace actions

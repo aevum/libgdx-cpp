@@ -511,7 +511,7 @@ target_link_libraries(gdx-cpp z)
 
 if (ANDROID_NDK)
     #OpenGLEs is a dependency now
-    target_link_libraries(gdx-cpp GLESv1_CM GLESv2)
+    target_link_libraries(gdx-cpp GLESv1_CM GLESv2 gdx-cpp-backend-android log )
 endif()
 
 install(TARGETS gdx-cpp

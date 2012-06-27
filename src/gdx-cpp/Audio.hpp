@@ -20,25 +20,21 @@
 
 #include "gdx-cpp/utils/Aliases.hpp"
 
-namespace gdx_cpp {
-namespace files{
+namespace gdx {
 class FileHandle;
-}
-namespace audio{
 class AudioDevice;
 class AudioRecorder;
 class Sound;
 class Music;
-}
 
 
 class Audio {
 public:
-    virtual gdx_cpp::audio::AudioDevice * newAudioDevice (int samplingRate, bool isMono) = 0;
-    virtual gdx_cpp::audio::AudioRecorder * newAudioRecoder (int samplingRate, bool isMono) = 0;
+    virtual gdx::AudioDevice * newAudioDevice (int samplingRate, bool isMono) = 0;
+    virtual gdx::AudioRecorder * newAudioRecoder (int samplingRate, bool isMono) = 0;
 
-    virtual gdx_cpp::audio::Sound * newSound (const ref_ptr_maker< gdx_cpp::files::FileHandle >::type fileHandle) = 0;
-    virtual gdx_cpp::audio::Music * newMusic (const ref_ptr_maker< gdx_cpp::files::FileHandle >::type file) = 0;
+    virtual gdx::Sound * newSound (const ref_ptr_maker< gdx::FileHandle >::type fileHandle) = 0;
+    virtual gdx::Music * newMusic (const ref_ptr_maker< gdx::FileHandle >::type file) = 0;
 };
 }
 

@@ -22,10 +22,9 @@
 #include "gdx-cpp/utils/MatrixBase.hpp"
 #include <cmath>
 
-using namespace gdx_cpp::graphics::g2d;
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
-TextureRegion::ptr TextureRegion::newFromTexture(gdx_cpp::graphics::Texture::ptr texture)
+TextureRegion::ptr TextureRegion::newFromTexture(Texture::ptr texture)
 {
     return ptr(new TextureRegion(texture));
 }
@@ -48,12 +47,12 @@ TextureRegion::TextureRegion (Texture::ptr _texture) : texture(_texture), u(0.0)
 
 /** @param width The width of the texture region. May be negative to flip the sprite when drawn.
  * @param height The height of the texture region. May be negative to flip the sprite when drawn. */
-TextureRegion::TextureRegion (gdx_cpp::graphics::Texture::ptr _texture, int x, int y, int width, int height): texture(_texture), u(0.0), v(0.0), u2(0.0), v2(0.0)
+TextureRegion::TextureRegion (Texture::ptr _texture, int x, int y, int width, int height): texture(_texture), u(0.0), v(0.0), u2(0.0), v2(0.0)
 {
     setRegion(x, y, width, height);
 }
 
-TextureRegion::TextureRegion (gdx_cpp::graphics::Texture::ptr _texture, float u, float v, float u2, float v2):texture(_texture), u(0.0), v(0.0), u2(0.0), v2(0.0)
+TextureRegion::TextureRegion (Texture::ptr _texture, float u, float v, float u2, float v2):texture(_texture), u(0.0), v(0.0), u2(0.0), v2(0.0)
 {
     setRegion(u, v, u2, v2);
 }
@@ -74,7 +73,7 @@ TextureRegion::TextureRegion (TextureRegion& region, int x, int y, int width, in
 
 
 
-void TextureRegion::setRegion (gdx_cpp::graphics::Texture::ptr _texture) {
+void TextureRegion::setRegion (Texture::ptr _texture) {
     this->texture = _texture;
     setRegion(0, 0, _texture->getWidth(), _texture->getHeight());
 }
@@ -97,16 +96,16 @@ void TextureRegion::setRegion (const TextureRegion& region) {
     setRegion(region.u, region.v, region.u2, region.v2);
 }
 
-void TextureRegion::setRegion (const gdx_cpp::graphics::g2d::TextureRegion& region, int x, int y, int width, int height) {
+void TextureRegion::setRegion (const TextureRegion& region, int x, int y, int width, int height) {
     texture = region.texture;
     setRegion(region.getRegionX() + x, region.getRegionY() + y, width, height);
 }
 
-gdx_cpp::graphics::Texture::ptr TextureRegion::getTexture () const {
+Texture::ptr TextureRegion::getTexture () const {
     return texture;
 }
 
-void TextureRegion::setTexture (gdx_cpp::graphics::Texture::ptr) {
+void TextureRegion::setTexture (Texture::ptr) {
     this->texture = texture;
 }
 
@@ -200,7 +199,7 @@ void TextureRegion::scroll (float xAmount,float yAmount) {
     }
 }
 
-gdx_cpp::utils::MatrixBase<TextureRegion::ptr> TextureRegion::split (int tileWidth, int tileHeight)
+MatrixBase<TextureRegion::ptr> TextureRegion::split (int tileWidth, int tileHeight)
 {
     int x = getRegionX();
     int y = getRegionY();
@@ -221,7 +220,7 @@ gdx_cpp::utils::MatrixBase<TextureRegion::ptr> TextureRegion::split (int tileWid
     const int cols = width / tileWidth;
 
     int startX = x;
-    gdx_cpp::utils::MatrixBase<TextureRegion::ptr> matrix(rows, cols);
+    MatrixBase<TextureRegion::ptr> matrix(rows, cols);
 
     for (int row = 0; row < rows; row++, y += tileHeight) {
         x = startX;
@@ -235,7 +234,7 @@ gdx_cpp::utils::MatrixBase<TextureRegion::ptr> TextureRegion::split (int tileWid
 
 
 
-gdx_cpp::utils::MatrixBase<TextureRegion::ptr> TextureRegion::split (gdx_cpp::graphics::Texture::ptr texture, int tileWidth, int tileHeight) {
+MatrixBase<TextureRegion::ptr> TextureRegion::split (Texture::ptr texture, int tileWidth, int tileHeight) {
     TextureRegion region(texture);
     return region.split(tileWidth, tileHeight);
 }

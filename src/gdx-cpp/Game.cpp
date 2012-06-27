@@ -22,7 +22,7 @@
 #include "Gdx.hpp"
 #include "Graphics.hpp"
 
-using namespace gdx_cpp;
+using namespace gdx;
 
 void Game::dispose () {
     if (screen != NULL) screen->hide();
@@ -37,7 +37,7 @@ void Game::resume () {
 }
 
 void Game::render () {
-    if (screen != NULL) screen->render(Gdx::graphics->getDeltaTime());
+    if (screen != NULL) screen->render(graphics->getDeltaTime());
 }
 
 void Game::resize (int width,int height) {
@@ -48,7 +48,7 @@ void Game::setScreen (Screen* screen) {
     if (this->screen != NULL) this->screen->hide();
     this->screen = screen;
     screen->show();
-    screen->resize(Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
+    screen->resize(graphics->getWidth(), graphics->getHeight());
 }
 
 Screen* Game::getScreen () {

@@ -21,7 +21,7 @@
 #define GDXCPP_INPUT_H_
 #include <string>
 
-namespace gdx_cpp {
+namespace gdx {
     
 class InputProcessor;
 

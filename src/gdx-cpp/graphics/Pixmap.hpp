@@ -27,12 +27,11 @@
 
 #include "gdx-cpp/files/FileHandle.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
+namespace gdx {
 
 class Color;
 
-class Pixmap: public utils::Disposable {
+class Pixmap: public Disposable {
 public:
     typedef ref_ptr_maker<Pixmap>::type ptr;
 
@@ -59,7 +58,7 @@ public:
         const static Format RGBA8888;
 
         static int toGdx2DPixmapFormat (const Format& format);
-        static const gdx_cpp::graphics::Pixmap::Format& fromGdx2DPixmapFormat (int format);
+        static const gdx::Pixmap::Format& fromGdx2DPixmapFormat (int format);
 
         inline bool operator == (const Format& other) const {
             return this == &other;
@@ -80,12 +79,12 @@ public:
 
 //     Pixmap (int width, int height, const Format& format) ;
 //     Pixmap (unsigned char* encodedData, int offset, int len) ;
-//     Pixmap (files::FileHandle& file) ;
-//     Pixmap (gdx_cpp::graphics::g2d::Gdx2DPixmap* pixmap) ;
+//     Pixmap (FileHandle& file) ;
+//     Pixmap (gdx::Gdx2DPixmap* pixmap) ;
 
     static Pixmap::ptr newFromRect(int width, int height, const Format& format, PixmapType pixType);
     static Pixmap::ptr newFromPixmap(const Pixmap& pixmap);
-    static Pixmap::ptr newFromFile(const gdx_cpp::files::FileHandle::ptr file);
+    static Pixmap::ptr newFromFile(const gdx::FileHandle::ptr file);
       
 
     virtual PixmapType getType() const = 0;
@@ -116,7 +115,6 @@ public:
     virtual ~Pixmap() { }
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_PIXMAP_HPP_

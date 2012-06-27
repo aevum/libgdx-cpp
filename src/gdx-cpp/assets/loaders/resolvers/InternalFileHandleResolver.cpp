@@ -20,9 +20,9 @@
 
 #include "InternalFileHandleResolver.hpp"
 
-using namespace gdx_cpp::assets::loaders::resolvers;
+using namespace gdx;
 
-gdx_cpp::files::FileHandle& InternalFileHandleResolver::resolve (const std::string& fileName) {
+FileHandle& InternalFileHandleResolver::resolve (const std::string& fileName) {
     return Gdx.files.internal(fileName);
 }
 

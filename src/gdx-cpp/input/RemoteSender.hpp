@@ -23,10 +23,9 @@
 
 #include "gdx-cpp/InputProcessor.hpp"
 
-namespace gdx_cpp {
-namespace input {
+namespace gdx {
 
-class RemoteSender: public gdx_cpp::InputProcessor {
+class RemoteSender: public InputProcessor {
 public:
     void sendUpdate ();
     bool keyDown (int keycode);
@@ -46,7 +45,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace input
+} // namespace gdx
 
 #endif // GDX_CPP_INPUT_REMOTESENDER_HPP_

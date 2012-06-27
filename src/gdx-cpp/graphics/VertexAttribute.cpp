@@ -20,7 +20,7 @@
 
 #include "VertexAttribute.hpp"
 
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
 VertexAttribute::VertexAttribute(int usage, int numComponents, const std::string& alias)
         : usage(usage)

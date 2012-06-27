@@ -21,9 +21,7 @@
 #ifndef GDX_CPP_UTILS_COMPARABLETIMSORT_HPP_
 #define GDX_CPP_UTILS_COMPARABLETIMSORT_HPP_
 
-namespace gdx_cpp {
-namespace utils {
-
+namespace gdx {
 class ComparableTimSort {
 public:
     void doSort (int lo,int hi);
@@ -50,7 +48,6 @@ private:
     int[] runLen;
 };
 
-} // namespace gdx_cpp
-} // namespace utils
+} // namespace gdx
 
 #endif // GDX_CPP_UTILS_COMPARABLETIMSORT_HPP_

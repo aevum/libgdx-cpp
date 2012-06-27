@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_DECALS_DECAL_HPP_
 #define GDX_CPP_GRAPHICS_G3D_DECALS_DECAL_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace decals {
@@ -32,8 +32,8 @@ public:
     void rotateX (float angle);
     void rotateY (float angle);
     void rotateZ (float angle);
-    void setRotation (const gdx_cpp::math::Vector3& dir,const gdx_cpp::math::Vector3& up);
-    gdx_cpp::math::Quaternion& getRotation ();
+    void setRotation (const gdx::Vector3& dir,const gdx::Vector3& up);
+    gdx::Quaternion& getRotation ();
     void translateX (float units);
     void setX (float x);
     float getX ();
@@ -45,7 +45,7 @@ public:
     float getZ ();
     void translate (float x,float y,float z);
     void setPosition (float x,float y,float z);
-    gdx_cpp::math::Vector3& getPosition ();
+    gdx::Vector3& getPosition ();
     void setScaleX (float scale);
     float getScaleX ();
     void setScaleY (float scale);
@@ -58,13 +58,13 @@ public:
     float getHeight ();
     void setDimensions (float width,float height);
     float* getVertices ();
-    void setTextureRegion (const gdx_cpp::graphics::g2d::TextureRegion& textureRegion);
+    void setTextureRegion (const gdx::TextureRegion& textureRegion);
     void setBlending (int srcBlendFactor,int dstBlendFactor);
-    static Decal& newDecal (const gdx_cpp::graphics::g2d::TextureRegion& textureRegion);
-    static Decal& newDecal (const gdx_cpp::graphics::g2d::TextureRegion& textureRegion,bool hasTransparency);
-    static Decal& newDecal (float width,float height,const gdx_cpp::graphics::g2d::TextureRegion& textureRegion);
-    static Decal& newDecal (float width,float height,const gdx_cpp::graphics::g2d::TextureRegion& textureRegion,bool hasTransparency);
-    static Decal& newDecal (float width,float height,const gdx_cpp::graphics::g2d::TextureRegion& textureRegion,int srcBlendFactor,int dstBlendFactor);
+    static Decal& newDecal (const gdx::TextureRegion& textureRegion);
+    static Decal& newDecal (const gdx::TextureRegion& textureRegion,bool hasTransparency);
+    static Decal& newDecal (float width,float height,const gdx::TextureRegion& textureRegion);
+    static Decal& newDecal (float width,float height,const gdx::TextureRegion& textureRegion,bool hasTransparency);
+    static Decal& newDecal (float width,float height,const gdx::TextureRegion& textureRegion,int srcBlendFactor,int dstBlendFactor);
 
 protected:
     void update ();
@@ -77,7 +77,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace decals

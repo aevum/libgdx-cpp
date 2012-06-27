@@ -20,13 +20,11 @@
 
 #include "gdx-cpp/audio/AudioRecorder.hpp"
 
-namespace gdx_cpp {
-
-namespace backends {
+namespace gdx {
 
 namespace nix {
   
-class LinuxOpenALAudioRecorder : gdx_cpp::audio::AudioRecorder
+class LinuxOpenALAudioRecorder : gdx::AudioRecorder
 {
 public:
     void read (int offset,int numSamples);
@@ -38,8 +36,6 @@ protected:
 private:
 };
 
-}
-  
 }
   
 }

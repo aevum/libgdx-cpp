@@ -20,7 +20,7 @@
 
 #include "BufferUtils.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx;
 
 void BufferUtils::copy (const Buffer& dst,int numFloats,int offset) {
     copyJni(src, dst, numFloats, offset);

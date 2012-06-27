@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_LOADERS_OBJ_OBJLOADER_HPP_
 #define GDX_CPP_GRAPHICS_G3D_LOADERS_OBJ_OBJLOADER_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace loaders {
@@ -29,10 +29,10 @@ namespace obj {
 
 class ObjLoader {
 public:
-    static gdx_cpp::graphics::Mesh& loadObj (const InputStream& in);
-    static gdx_cpp::graphics::Mesh& loadObj (const InputStream& in,bool flipV);
-    static gdx_cpp::graphics::Mesh& loadObjFromString (const std::string& obj);
-    static gdx_cpp::graphics::Mesh& loadObjFromString (const std::string& obj,bool flipV);
+    static gdx::Mesh& loadObj (const InputStream& in);
+    static gdx::Mesh& loadObj (const InputStream& in,bool flipV);
+    static gdx::Mesh& loadObjFromString (const std::string& obj);
+    static gdx::Mesh& loadObjFromString (const std::string& obj,bool flipV);
 
 protected:
 
@@ -41,7 +41,7 @@ private:
     static int getIndex (const std::string& index,int size);
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace loaders

@@ -20,7 +20,7 @@
 
 #include "Stack.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui;
+using namespace gdx::ui;
 
 void Stack::layout () {
     if (!needsLayout) return;
@@ -39,7 +39,7 @@ void Stack::layout () {
     }
 }
 
-void Stack::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void Stack::draw (const gdx::SpriteBatch& batch,float parentAlpha) {
     if (needsLayout) layout();
     super.draw(batch, parentAlpha);
 }

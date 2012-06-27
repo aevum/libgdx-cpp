@@ -21,9 +21,7 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_MATERIAL_HPP_
 #define GDX_CPP_GRAPHICS_G3D_MATERIAL_HPP_
 
-namespace gdx_cpp {
-namespace graphics {
-namespace g3d {
+namespace gdx {
 
 class Material {
 public:
@@ -38,8 +36,6 @@ private:
     void setTmpArray (float r,float g,float b,float a);
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g3d
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_G3D_MATERIAL_HPP_

@@ -20,9 +20,9 @@
 
 #include "Button.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui;
+using namespace gdx::ui;
 
-void Button::click (const gdx_cpp::scenes::scene2d::Actor& actor) {
+void Button::click (const gdx::Actor& actor) {
     isChecked = !isChecked;
     if (listener != null) listener.click(actor);
 }
@@ -59,7 +59,7 @@ std::string& Button::getText () {
     throw new GdxRuntimeException("No child label was found.");
 }
 
-void Button::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void Button::draw (const gdx::SpriteBatch& batch,float parentAlpha) {
     float offsetX = 0, offsetY = 0;
     if (isPressed) {
         setBackground(style.down == null ? style.up : style.down);
@@ -94,11 +94,11 @@ Button::Button (const ButtonStyle& style) {
     this(style, null);
 }
 
-Button::Button (const gdx_cpp::scenes::scene2d::Actor& child,const Skin& skin) {
+Button::Button (const gdx::Actor& child,const Skin& skin) {
     this(child, skin.getStyle(ButtonStyle.class));
 }
 
-Button::Button (const gdx_cpp::scenes::scene2d::Actor& child,const ButtonStyle& style) {
+Button::Button (const gdx::Actor& child,const ButtonStyle& style) {
     this(style, null);
     add(child);
 }

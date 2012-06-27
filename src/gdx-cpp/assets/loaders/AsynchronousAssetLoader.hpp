@@ -21,13 +21,11 @@
 #ifndef GDX_CPP_ASSETS_LOADERS_ASYNCHRONOUSASSETLOADER<T, P>_HPP_
 #define GDX_CPP_ASSETS_LOADERS_ASYNCHRONOUSASSETLOADER<T, P>_HPP_
 
-namespace gdx_cpp {
-namespace assets {
-namespace loaders {
+namespace gdx {
 
 class AsynchronousAssetLoader {
 public:
-    virtual   void loadAsync (const gdx_cpp::assets::AssetManager& manager,const std::string& fileName,const P& parameter) = 0;
+    virtual   void loadAsync (const gdx::AssetManager& manager,const std::string& fileName,const P& parameter) = 0;
     virtual   T& loadSync () = 0;
 
 protected:
@@ -37,8 +35,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace assets
-} // namespace loaders
+} // namespace gdx
 
 #endif // GDX_CPP_ASSETS_LOADERS_ASYNCHRONOUSASSETLOADER<T, P>_HPP_

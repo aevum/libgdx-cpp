@@ -20,7 +20,7 @@
 
 #include "MD5Animator.hpp"
 
-using namespace gdx_cpp::graphics::g3d::loaders::md5;
+using namespace gdx::g3d::md5;
 
 void MD5Animator::setSkeleton (const MD5Joints& skeleton) {
     mSkeleton = skeleton;
@@ -30,7 +30,7 @@ MD5Joints& MD5Animator::getSkeleton () {
     return mSkeleton;
 }
 
-void MD5Animator::setAnimation (const gdx_cpp::graphics::g3d::Animation& anim,const WrapMode& wrapMode) {
+void MD5Animator::setAnimation (const gdx::g3d::Animation& anim,const WrapMode& wrapMode) {
     super.setAnimation(anim, wrapMode);
 
     if (anim != null) {

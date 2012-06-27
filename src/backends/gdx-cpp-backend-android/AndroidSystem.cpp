@@ -36,9 +36,9 @@
 
 #include <android/log.h>
 
-using namespace gdx_cpp::backends::android;
+using namespace gdx::android;
 
-class AndroidMutex : public gdx_cpp::implementation::Mutex {
+class AndroidMutex : public gdx::Mutex {
 public:
     AndroidMutex()
     {
@@ -63,7 +63,7 @@ void* run_runnable(void* runnable) {
     return NULL;
 }
 
-class AndroidThread : public gdx_cpp::implementation::Thread {
+class AndroidThread : public gdx::Thread {
 public:
     AndroidThread(Runnable* theRunnable)
         : runnable(theRunnable)
@@ -104,17 +104,17 @@ private:
     pthread_t thread;
 };
 
-gdx_cpp::implementation::Thread::ptr gdx_cpp::backends::android::AndroidSystem::AndroidThreadFactory::createThread(Runnable* t)
+gdx::Thread::ptr gdx::android::AndroidSystem::AndroidThreadFactory::createThread(Runnable* t)
 {
-    return gdx_cpp::implementation::Thread::ptr(new AndroidThread(t));
+    return gdx::Thread::ptr(new AndroidThread(t));
 }
 
-gdx_cpp::implementation::Mutex::ptr gdx_cpp::backends::android::AndroidSystem::AndroidMutexFactory::createMutex()
+gdx::Mutex::ptr gdx::android::AndroidSystem::AndroidMutexFactory::createMutex()
 {
-    return gdx_cpp::implementation::Mutex::ptr(new AndroidMutex);
+    return gdx::Mutex::ptr(new AndroidMutex);
 }
 
-uint64_t gdx_cpp::backends::android::AndroidSystem::nanoTime()
+uint64_t gdx::android::AndroidSystem::nanoTime()
 {
     static timespec ts;
     ::clock_gettime(CLOCK_MONOTONIC, &ts);
@@ -124,14 +124,14 @@ uint64_t gdx_cpp::backends::android::AndroidSystem::nanoTime()
     return ts.tv_sec * 1000000000LL + ts.tv_nsec;
 }
 
-std::string gdx_cpp::backends::android::AndroidSystem::canonicalize(const std::string& path)
+std::string gdx::android::AndroidSystem::canonicalize(const std::string& path)
 {
     char buffer[32768];
     if(realpath(path.c_str(), buffer) == NULL) throw std::runtime_error("Error trying to canonicalize path: " + path);
     return std::string(buffer);
 }
 
-void gdx_cpp::backends::android::AndroidSystem::checkDelete(const std::string& path)
+void gdx::android::AndroidSystem::checkDelete(const std::string& path)
 {
     unsigned int found;
     std::string testPath = path;
@@ -145,7 +145,7 @@ void gdx_cpp::backends::android::AndroidSystem::checkDelete(const std::string& p
     throw std::runtime_error("Delete permission denied on file: " + path);
 }
 
-void gdx_cpp::backends::android::AndroidSystem::checkRead(const std::string& path)
+void gdx::android::AndroidSystem::checkRead(const std::string& path)
 {
     unsigned int found;
     std::string testPath = path;
@@ -159,7 +159,7 @@ void gdx_cpp::backends::android::AndroidSystem::checkRead(const std::string& pat
     throw std::runtime_error("Read permission denied on file: " + path);
 }
 
-void gdx_cpp::backends::android::AndroidSystem::checkWrite(const std::string& path)
+void gdx::android::AndroidSystem::checkWrite(const std::string& path)
 {
     unsigned int found;
     std::string testPath = path;
@@ -173,20 +173,20 @@ void gdx_cpp::backends::android::AndroidSystem::checkWrite(const std::string& pa
     throw std::runtime_error("Write permission denied on file: " + path);
 }
 
-bool gdx_cpp::backends::android::AndroidSystem::createDirectory(const gdx_cpp::files::File& f)
+bool gdx::android::AndroidSystem::createDirectory(const gdx::File& f)
 {
     if(mkdir(f.getAbsolutePath().c_str(), S_IWUSR | S_IRUSR) == -1) return false;
     return true;
 }
 
-bool gdx_cpp::backends::android::AndroidSystem::deleteFile(gdx_cpp::files::File& f)
+bool gdx::android::AndroidSystem::deleteFile(gdx::File& f)
 {
     std::string cmd;
     if(remove(f.getCanonicalPath().c_str()) == -1) return false;
     return true;
 }
 
-int gdx_cpp::backends::android::AndroidSystem::getBooleanAttributes(const gdx_cpp::files::File& f)
+int gdx::android::AndroidSystem::getBooleanAttributes(const gdx::File& f)
 {
     int attribs = 0;
     struct stat fileStat;
@@ -220,12 +220,12 @@ int gdx_cpp::backends::android::AndroidSystem::getBooleanAttributes(const gdx_cp
     return attribs;
 }
 
-std::string gdx_cpp::backends::android::AndroidSystem::getDefaultParent()
+std::string gdx::android::AndroidSystem::getDefaultParent()
 {
     return "/";
 }
 
-int64_t gdx_cpp::backends::android::AndroidSystem::getLength(gdx_cpp::files::File f)
+int64_t gdx::android::AndroidSystem::getLength(gdx::File f)
 {
     std::ifstream test(f.getPath().c_str(), std::ios::in| std::ios::binary | std::ios::ate);
     std::ifstream::pos_type size;
@@ -234,27 +234,27 @@ int64_t gdx_cpp::backends::android::AndroidSystem::getLength(gdx_cpp::files::Fil
     return (int64_t) size;
 }
 
-char gdx_cpp::backends::android::AndroidSystem::getPathSeparator()
+char gdx::android::AndroidSystem::getPathSeparator()
 {
     return ':';
 }
 
-char gdx_cpp::backends::android::AndroidSystem::getSeparator()
+char gdx::android::AndroidSystem::getSeparator()
 {
     return '/';
 }
 
-bool gdx_cpp::backends::android::AndroidSystem::isAbsolute(const gdx_cpp::files::File& f)
+bool gdx::android::AndroidSystem::isAbsolute(const gdx::File& f)
 {
     return (f.getPrefixLength() != 0);
 }
 
-void gdx_cpp::backends::android::AndroidSystem::list(const gdx_cpp::files::File& f, std::vector< std::string >& paths)
+void gdx::android::AndroidSystem::list(const gdx::File& f, std::vector< std::string >& paths)
 {
    throw std::runtime_error("Not supported yet");
 }
 
-std::string gdx_cpp::backends::android::AndroidSystem::normalize(const std::string& path)
+std::string gdx::android::AndroidSystem::normalize(const std::string& path)
 {
     int n = path.length();
     std::string pathname = path;
@@ -269,7 +269,7 @@ std::string gdx_cpp::backends::android::AndroidSystem::normalize(const std::stri
              return pathname;
 }
 
-std::string gdx_cpp::backends::android::AndroidSystem::normalize(const std::string& pathname, const int& len, const int& off)
+std::string gdx::android::AndroidSystem::normalize(const std::string& pathname, const int& len, const int& off)
 {
     if (len == 0) return pathname;
     int n = len;
@@ -287,13 +287,13 @@ std::string gdx_cpp::backends::android::AndroidSystem::normalize(const std::stri
     return sb;
 }
 
-int gdx_cpp::backends::android::AndroidSystem::prefixLength(const std::string& path)
+int gdx::android::AndroidSystem::prefixLength(const std::string& path)
 {
     if(path.length() == 0) return 0;
     return (path[0] == '/') ? 1 : 0;
 }
 
-bool gdx_cpp::backends::android::AndroidSystem::renameFile(gdx_cpp::files::File& f1, const gdx_cpp::files::File& f2)
+bool gdx::android::AndroidSystem::renameFile(gdx::File& f1, const gdx::File& f2)
 {
     std::string to;
     if(f2.exists()) to = f2.getCanonicalPath();
@@ -302,7 +302,7 @@ bool gdx_cpp::backends::android::AndroidSystem::renameFile(gdx_cpp::files::File&
     return true;
 }
 
-std::string gdx_cpp::backends::android::AndroidSystem::resolve(const std::string& parent, const std::string& child)
+std::string gdx::android::AndroidSystem::resolve(const std::string& parent, const std::string& child)
 {
     std::string nparent = normalize(parent);
     std::string nchild = normalize(child);
@@ -310,7 +310,7 @@ std::string gdx_cpp::backends::android::AndroidSystem::resolve(const std::string
     return nparent + getSeparator() + nchild;
 }
 
-std::string gdx_cpp::backends::android::AndroidSystem::resolve(const gdx_cpp::files::File& f)
+std::string gdx::android::AndroidSystem::resolve(const gdx::File& f)
 {
     if (isAbsolute(f)) return f.getPath();
     char buffer[2048];
@@ -318,17 +318,17 @@ std::string gdx_cpp::backends::android::AndroidSystem::resolve(const gdx_cpp::fi
     return resolve(std::string(buffer), f.getPath());
 }
 
-JavaVM* const gdx_cpp::backends::android::AndroidSystem::getJavaVM()
+JavaVM* const gdx::android::AndroidSystem::getJavaVM()
 {
     return this->vm;
 }
 
-void gdx_cpp::backends::android::AndroidSystem::setJavaVM(JavaVM* _vm)
+void gdx::android::AndroidSystem::setJavaVM(JavaVM* _vm)
 {
     this->vm = _vm;
 }
 
-JNIEnv* gdx_cpp::backends::android::AndroidSystem::getJniEnv()
+JNIEnv* gdx::android::AndroidSystem::getJniEnv()
 {
     JNIEnv* env;
     assert(this->vm);

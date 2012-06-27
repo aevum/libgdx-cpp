@@ -20,7 +20,7 @@
 
 #include "CheckBox.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui;
+using namespace gdx::ui;
 
 void CheckBox::click () {
     super.click();

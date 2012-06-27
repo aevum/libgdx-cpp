@@ -28,16 +28,11 @@
 
 #include <gdx-cpp/gl.hpp>
 
-using namespace gdx_cpp::graphics::g2d::svg;
-using namespace gdx_cpp::utils;
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
-namespace gdx_cpp {
-namespace graphics {
-namespace g2d {
-namespace svg {
+namespace gdx {
 
-class AggTransform : public gdx_cpp::utils::SvgRendererHandler::transform {
+class AggTransform : public SvgRendererHandler::transform {
 public:  
     friend class AggSvgPixmap;
     
@@ -102,15 +97,12 @@ private:
 };
 
 }
-}
-}
-}
 
 struct AggSvgPixmap::impl {
     agg::svg::path_renderer renderer;
     agg::rgba8 color;
 
-    svg::AggTransform transform;
+    AggTransform transform;
 };
 
 
@@ -197,11 +189,11 @@ void AggSvgPixmap::moveTo(float x, float y, bool relative) {
     pimpl->renderer.move_to(x, y, relative);
 }
 
-void AggSvgPixmap::setLineCap(utils::SvgRendererHandler::LineCap cap) {
+void AggSvgPixmap::setLineCap(SvgRendererHandler::LineCap cap) {
     pimpl->renderer.line_cap((agg::line_cap_e) cap);
 }
 
-void AggSvgPixmap::setLineJoin(utils::SvgRendererHandler::LineJoin join) {
+void AggSvgPixmap::setLineJoin(SvgRendererHandler::LineJoin join) {
     pimpl->renderer.line_join((agg::line_join_e) join);
 }
 
@@ -265,10 +257,10 @@ void AggSvgPixmap::drawPixel(int x, int y) {
     pimpl->renderer.end_path();
 }
 
-void AggSvgPixmap::drawPixmap(const gdx_cpp::graphics::Pixmap& pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight) {
+void AggSvgPixmap::drawPixmap(const gdx::Pixmap& pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight) {
 }
 
-void AggSvgPixmap::drawPixmap(const gdx_cpp::graphics::Pixmap& pixmap, int srcx, int srcy, int srcWidth, int srcHeight, int dstx, int dsty, int dstWidth, int dstHeight) {
+void AggSvgPixmap::drawPixmap(const gdx::Pixmap& pixmap, int srcx, int srcy, int srcWidth, int srcHeight, int dstx, int dsty, int dstWidth, int dstHeight) {
 }
 
 void AggSvgPixmap::drawRectangle(int x, int y, int width, int height) {
@@ -288,7 +280,7 @@ void AggSvgPixmap::fillCircle(int x, int y, int radius) {
 void AggSvgPixmap::fillRectangle(int x, int y, int width, int height) {
 }
 
-const gdx_cpp::graphics::Pixmap::Format& AggSvgPixmap::getFormat() {
+const gdx::Pixmap::Format& AggSvgPixmap::getFormat() {
     return Pixmap::Format::RGBA8888;
 }
 int AggSvgPixmap::getGLFormat() const {
@@ -355,7 +347,7 @@ void AggSvgPixmap::fill() {
     pimpl->renderer.fill(pimpl->color);
 }
 
-void AggSvgPixmap::fillRadialGradient(const gdx_cpp::utils::SvgRendererHandler::RadialGradient& gradient) {
+void AggSvgPixmap::fillRadialGradient(const gdx::SvgRendererHandler::RadialGradient& gradient) {
     agg::svg::radial_gradient ra_gradient;
 
     ra_gradient.cx = gradient.cx;
@@ -381,7 +373,7 @@ void AggSvgPixmap::fillRadialGradient(const gdx_cpp::utils::SvgRendererHandler::
 
     pimpl->renderer.fill_gradient(ra_gradient);
 }
-void AggSvgPixmap::fillLinearGradient(const gdx_cpp::utils::SvgRendererHandler::LinearGradient& gradient) {
+void AggSvgPixmap::fillLinearGradient(const gdx::SvgRendererHandler::LinearGradient& gradient) {
     agg::svg::linear_gradient li_gradient;
 
     li_gradient.x1 = gradient.x1;
@@ -407,7 +399,7 @@ void AggSvgPixmap::fillLinearGradient(const gdx_cpp::utils::SvgRendererHandler::
     pimpl->renderer.fill_gradient(li_gradient);
 }
 
-void AggSvgPixmap::setColor(const gdx_cpp::graphics::Color& color) {
+void AggSvgPixmap::setColor(const gdx::Color& color) {
     pimpl->color = agg::rgba8(color.r, color.g, color.b, color.a);
 }
 

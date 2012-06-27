@@ -29,13 +29,10 @@
 
 #include <string>
 
-namespace gdx_cpp {
-namespace graphics {
-namespace g2d {
-
+namespace gdx {
 class BitmapFontCache;
 
-class BitmapFont: public gdx_cpp::utils::Disposable {
+class BitmapFont: public Disposable {
     friend class BitmapFontCache;
 protected:
     static const int LOG2_PAGE_SIZE = 9;
@@ -70,7 +67,7 @@ public:
         friend class BitmapFontCache;
     protected:
         std::string imagePath;
-        files::FileHandle::ptr fontFile;
+        FileHandle::ptr fontFile;
         bool flipped;
         float lineHeight;
         float capHeight;
@@ -87,10 +84,10 @@ public:
     public:
         ~BitmapFontData();
 
-        BitmapFontData (gdx_cpp::files::FileHandle::ptr fontFile, bool flip);
+        BitmapFontData (FileHandle::ptr fontFile, bool flip);
         Glyph* getGlyph (char ch);
         std::string getImagePath ();
-        gdx_cpp::files::FileHandle::ptr getFontFile ();
+        FileHandle::ptr getFontFile ();
 
     private:
         void setGlyph (int ch,Glyph* glyph);
@@ -111,12 +108,12 @@ public:
     };
 
 
-    TextBounds& draw (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, const std::string& str, float x, float y);
-    TextBounds& draw (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, const std::string& str, float x, float y, int start, int end);
-    TextBounds& drawMultiLine (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, const std::string& str, float x, float y);
-    TextBounds& drawMultiLine (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, const std::string& str, float x, float y, float alignmentWidth, int alignment);
-    TextBounds& drawWrapped (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth);
-    TextBounds& drawWrapped (gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth, const gdx_cpp::graphics::g2d::BitmapFont::HAlignment& alignment);
+    TextBounds& draw (SpriteBatch& spriteBatch, const std::string& str, float x, float y);
+    TextBounds& draw (SpriteBatch& spriteBatch, const std::string& str, float x, float y, int start, int end);
+    TextBounds& drawMultiLine (SpriteBatch& spriteBatch, const std::string& str, float x, float y);
+    TextBounds& drawMultiLine (SpriteBatch& spriteBatch, const std::string& str, float x, float y, float alignmentWidth, int alignment);
+    TextBounds& drawWrapped (SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth);
+    TextBounds& drawWrapped (SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth, const BitmapFont::HAlignment& alignment);
     TextBounds& getBounds (const std::string& str);
     TextBounds& getBounds (const std::string& str,int start,int end);
     TextBounds& getMultiLineBounds (const std::string& str);
@@ -126,7 +123,7 @@ public:
     int computeVisibleGlyphs (const std::string& str,int start,int end,float availableWidth);
 
     void setColor (float color);
-    void setColor (const gdx_cpp::graphics::Color& tint);
+    void setColor (const Color& tint);
     void setColor (float r,float g,float b,float a);
 
     Color getColor ();
@@ -150,8 +147,8 @@ public:
     bool usesIntegerPositions ();
     BitmapFontData* getData ();
 
-    static BitmapFont* fromFiles (gdx_cpp::files::FileHandle::ptr fontFile,
-                                  gdx_cpp::files::FileHandle::ptr imageFile = null_shared_ptr(),
+    static BitmapFont* fromFiles (FileHandle::ptr fontFile,
+                                  FileHandle::ptr imageFile = null_shared_ptr(),
                                   bool flip = false,
                                   bool integer = true);
 
@@ -169,7 +166,7 @@ protected:
     static const char xChars[];
     static const char capChars[];
 
-    graphics::g2d::TextureRegion::ptr region;
+    TextureRegion::ptr region;
     TextBounds textBounds;
     float color;
     Color tempColor;
@@ -181,8 +178,6 @@ private:
     void load (BitmapFontData* data);
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g2d
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_G2D_BITMAPFONT_HPP_

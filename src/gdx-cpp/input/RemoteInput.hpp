@@ -21,10 +21,9 @@
 #ifndef GDX_CPP_INPUT_REMOTEINPUT_HPP_
 #define GDX_CPP_INPUT_REMOTEINPUT_HPP_
 
-namespace gdx_cpp {
-namespace input {
+namespace gdx {
 
-class RemoteInput: public gdx_cpp::Input {
+class RemoteInput: public Input {
 public:
     void run ();
     void run ();
@@ -49,8 +48,8 @@ public:
     float getPitch ();
     float getRoll ();
     void setCatchBackKey (bool catchBack);
-    void setInputProcessor (const gdx_cpp::InputProcessor& processor);
-    gdx_cpp::InputProcessor& getInputProcessor ();
+    void setInputProcessor (const InputProcessor& processor);
+    InputProcessor& getInputProcessor ();
     std::string* getIPs ();
     bool isPeripheralAvailable (const Peripheral& peripheral);
     int getRotation ();
@@ -73,7 +72,6 @@ private:
     int port;
 };
 
-} // namespace gdx_cpp
-} // namespace input
+} // namespace gdx
 
 #endif // GDX_CPP_INPUT_REMOTEINPUT_HPP_

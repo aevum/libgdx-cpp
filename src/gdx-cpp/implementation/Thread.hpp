@@ -23,9 +23,7 @@
 
 #include <string>
 
-namespace gdx_cpp {
-
-namespace implementation {
+namespace gdx {
 
 class Thread
 {
@@ -39,8 +37,6 @@ public:
     
     virtual const std::string getThreadName() = 0;
 };
-
-}
 
 }
 

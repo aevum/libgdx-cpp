@@ -21,19 +21,19 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_KEYFRAMED_KEYFRAMEDMODEL_HPP_
 #define GDX_CPP_GRAPHICS_G3D_KEYFRAMED_KEYFRAMEDMODEL_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace keyframed {
 
 class KeyframedModel {
 public:
-    gdx_cpp::graphics::g3d::Animator& getAnimator ();
+    gdx::g3d::Animator& getAnimator ();
     void setMaterials ();
     void setTaggedJoints (const ArrayList<String>& joints);
-    KeyframeAnimation& sampleAnimationFromMD5 (const gdx_cpp::graphics::g3d::loaders::md5::MD5Model& md5model,const gdx_cpp::graphics::g3d::loaders::md5::MD5Renderer& md5renderer,const gdx_cpp::graphics::g3d::loaders::md5::MD5Animator& md5animator,const gdx_cpp::graphics::g3d::loaders::md5::MD5Animation& md5animation,float sampleRate,const std::string& modelAsset,const std::string& animKey);
-    void getJointData (int tagIndex,const gdx_cpp::math::Vector3& pos,const gdx_cpp::math::Quaternion& orient);
-    void setAnimation (const std::string& animKey,const gdx_cpp::graphics::g3d::Animator::WrapMode& wrapMode);
+    KeyframeAnimation& sampleAnimationFromMD5 (const gdx::g3d::md5::MD5Model& md5model,const gdx::g3d::md5::MD5Renderer& md5renderer,const gdx::g3d::md5::MD5Animator& md5animator,const gdx::g3d::md5::MD5Animation& md5animation,float sampleRate,const std::string& modelAsset,const std::string& animKey);
+    void getJointData (int tagIndex,const gdx::Vector3& pos,const gdx::Quaternion& orient);
+    void setAnimation (const std::string& animKey,const gdx::g3d::Animator::WrapMode& wrapMode);
     KeyframeAnimation& getAnimation (const std::string& animKey);
     void update (float dt);
     void render ();
@@ -47,7 +47,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace keyframed

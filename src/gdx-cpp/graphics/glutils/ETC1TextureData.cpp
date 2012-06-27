@@ -26,15 +26,12 @@
 #include "gdx-cpp/Gdx.hpp"
 #include "MipMapGenerator.hpp"
 
-using namespace gdx_cpp::graphics::glutils;
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp::utils;
-
+using namespace gdx;
 TextureData::TextureDataType& ETC1TextureData::getType () {
     return TextureDataType::Compressed;
 }
 
-gdx_cpp::graphics::Pixmap::ptr ETC1TextureData::getPixmap () {
+Pixmap::ptr ETC1TextureData::getPixmap () {
     throw GdxRuntimeException("This TextureData implementation does not return a Pixmap");
 }
 
@@ -48,17 +45,17 @@ void ETC1TextureData::uploadCompressedData () {
     width = data->width;
     height = data->height;
 
-    if (gdx_cpp::Gdx::app->getType() == gdx_cpp::Application::Desktop || gdx_cpp::Gdx::graphics->isGL20Available() == false) {
+    if (app->getType() == Application::Desktop || graphics->isGL20Available() == false) {
         Pixmap::ptr pixmap = ETC1.decodeImage(data, Pixmap::Format::RGB565);
-        gdx_cpp::Gdx::gl->glTexImage2D(GL10::GL_TEXTURE_2D, 0, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
+        gl->glTexImage2D(GL10::GL_TEXTURE_2D, 0, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
                             pixmap->getGLFormat(), pixmap->getGLType(), pixmap->getPixels());
         if (useMipMaps) MipMapGenerator::generateMipMap(pixmap, pixmap->getWidth(), pixmap->getHeight(), false);
         pixmap->dispose();
         useMipMaps = false;
     } else {
-        gdx_cpp::Gdx::gl->glCompressedTexImage2D(GL10::GL_TEXTURE_2D, 0, ETC1::ETC1_RGB8_OES, width, height, 0,
+        gl->glCompressedTexImage2D(GL10::GL_TEXTURE_2D, 0, ETC1::ETC1_RGB8_OES, width, height, 0,
                                       data->compressedData.capacity() - data->dataOffset, data->compressedData);
-        if (useMipMaps()) gdx_cpp::Gdx::gl20->glGenerateMipmap(GL20::GL_TEXTURE_2D);
+        if (useMipMaps()) gl20->glGenerateMipmap(GL20::GL_TEXTURE_2D);
     }
     data->dispose();
 }
@@ -71,7 +68,7 @@ int ETC1TextureData::getHeight () {
     return height;
 }
 
-const gdx_cpp::graphics::Pixmap::Format& ETC1TextureData::getFormat () {
+const Pixmap::Format& ETC1TextureData::getFormat () {
     return Pixmap::Format::RGB565;
 }
 

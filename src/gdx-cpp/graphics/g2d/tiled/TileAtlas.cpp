@@ -20,9 +20,9 @@
 
 #include "TileAtlas.hpp"
 
-using namespace gdx_cpp::graphics::g2d::tiled;
+using namespace gdx;
 
-gdx_cpp::graphics::g2d::TextureRegion& TileAtlas::getRegion (int id) {
+TextureRegion& TileAtlas::getRegion (int id) {
     return regionsMap.get(id);
 }
 
@@ -60,7 +60,7 @@ std::string& TileAtlas::removePath (const std::string& s) {
     }
 }
 
-gdx_cpp::files::FileHandle& TileAtlas::getRelativeFileHandle (const gdx_cpp::files::FileHandle& path,const std::string& relativePath) {
+FileHandle& TileAtlas::getRelativeFileHandle (const FileHandle& path,const std::string& relativePath) {
     if (relativePath.trim().length() == 0) {
         return path;
     }

@@ -24,7 +24,7 @@
 #include "MathUtils.hpp"
 #include "Matrix3.hpp"
 
-using namespace gdx_cpp::math;
+using namespace gdx;
 
 Vector2 Vector2::_tmp;
 
@@ -114,7 +114,7 @@ Vector2& Vector2::mul (float scalar) {
     return *this;
 }
 
-float Vector2::dst (const gdx_cpp::math::Vector2& v) const {
+float Vector2::dst (const Vector2& v) const {
     float x_d = v.x - x;
     float y_d = v.y - y;
     return (float)std::sqrt(x_d * x_d + y_d * y_d);
@@ -165,13 +165,13 @@ float Vector2::crs (float x, float y) {
 }
 
 float Vector2::angle () {
-    float angle =  (float) std::atan2(y, x) *  math::utils::detail::radiansToDegrees;
+    float angle =  (float) std::atan2(y, x) *  detail::radiansToDegrees;
     if (angle < 0) angle += 360;
     return angle;
 }
 
 Vector2 Vector2::rotate (float angle) {
-    float rad = angle * math::utils::detail::degreesToRadians;
+    float rad = angle * detail::degreesToRadians;
     float cos = (float)std::cos(rad);
     float sin = (float)std::sin(rad);
 

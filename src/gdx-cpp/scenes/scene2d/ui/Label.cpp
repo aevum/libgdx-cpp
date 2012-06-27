@@ -20,7 +20,7 @@
 
 #include "Label.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui;
+using namespace gdx::ui;
 
 void Label::setStyle (const LabelStyle& style) {
     this.style = style;
@@ -45,7 +45,7 @@ void Label::setColor (float color) {
     cache.setColor(color);
 }
 
-void Label::setColor (const gdx_cpp::graphics::Color& tint) {
+void Label::setColor (const gdx::Color& tint) {
     cache.setColor(tint);
 }
 
@@ -53,14 +53,14 @@ void Label::setColor (float r,float g,float b,float a) {
     cache.setColor(r, g, b, a);
 }
 
-gdx_cpp::graphics::Color& Label::getColor () {
+gdx::Color& Label::getColor () {
     return cache.getColor();
 }
 
 void Label::layout () {
 }
 
-void Label::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void Label::draw (const gdx::SpriteBatch& batch,float parentAlpha) {
     cache.setColor(color);
     cache.setPosition(x, y - style.font.getDescent());
     cache.draw(batch, parentAlpha);
@@ -76,7 +76,7 @@ void Label::touchUp (float x,float y,int pointer) {
 void Label::touchDragged (float x,float y,int pointer) {
 }
 
-gdx_cpp::scenes::scene2d::Actor& Label::hit (float x,float y) {
+gdx::Actor& Label::hit (float x,float y) {
     return null;
 }
 

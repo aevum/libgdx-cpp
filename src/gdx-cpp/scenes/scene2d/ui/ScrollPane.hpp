@@ -21,14 +21,14 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_UI_SCROLLPANE_HPP_
 #define GDX_CPP_SCENES_SCENE2D_UI_SCROLLPANE_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace ui {
 
 class ScrollPane {
 public:
-    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
+    void draw (const gdx::SpriteBatch& batch,float parentAlpha);
     void layout ();
     void invalidate ();
     float getPrefWidth ();
@@ -40,13 +40,13 @@ public:
     bool touchDown (float x,float y,int pointer);
     void touchUp (float x,float y,int pointer);
     void touchDragged (float x,float y,int pointer);
-    gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
+    gdx::Actor& hit (float x,float y);
     void setVScrollAmount (float vScrollAmount);
     void setHScrollAmount (float hScrollAmount);
-    void setWidget (const gdx_cpp::scenes::scene2d::Actor& widget);
-    ScrollPane (const gdx_cpp::scenes::scene2d::Actor& widget,const gdx_cpp::scenes::scene2d::Stage& stage,const Skin& skin);
-    ScrollPane (const gdx_cpp::scenes::scene2d::Actor& widget,const gdx_cpp::scenes::scene2d::Stage& stage,const ScrollPaneStyle& style);
-    ScrollPane (const gdx_cpp::scenes::scene2d::Actor& widget,const gdx_cpp::scenes::scene2d::Stage& stage,const ScrollPaneStyle& style,const std::string& name);
+    void setWidget (const gdx::Actor& widget);
+    ScrollPane (const gdx::Actor& widget,const gdx::Stage& stage,const Skin& skin);
+    ScrollPane (const gdx::Actor& widget,const gdx::Stage& stage,const ScrollPaneStyle& style);
+    ScrollPane (const gdx::Actor& widget,const gdx::Stage& stage,const ScrollPaneStyle& style,const std::string& name);
 
 protected:
     ScrollPaneStyle style ;
@@ -68,10 +68,10 @@ protected:
     Vector3 tmp = new Vector3();
 
 private:
-    void calculateBoundsAndPositions (const gdx_cpp::math::Matrix4& batchTransform);
+    void calculateBoundsAndPositions (const gdx::Matrix4& batchTransform);
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace ui

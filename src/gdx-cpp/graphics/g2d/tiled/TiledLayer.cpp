@@ -20,7 +20,7 @@
 
 #include "TiledLayer.hpp"
 
-using namespace gdx_cpp::graphics::g2d::tiled;
+using namespace gdx;
 
 int TiledLayer::getWidth () {
     if (tiles[0] == null) return 0;

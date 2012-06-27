@@ -23,9 +23,7 @@
 
 #include "IndexData.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
-namespace glutils {
+namespace gdx {
 
 class IndexBufferObject : public IndexData {
 public:
@@ -36,15 +34,15 @@ public:
     int getNumIndices ();
     int getNumMaxIndices ();
     void setIndices (const std::vector< short >& indices, int offset, int count);
-    utils::short_buffer& getBuffer ();
+    short_buffer& getBuffer ();
     void bind ();
     void unbind ();
     void invalidate ();
     void dispose ();
 
 protected:
-    utils::short_buffer buffer;
-    utils::byte_buffer byteBuffer;
+    short_buffer buffer;
+    byte_buffer byteBuffer;
     int bufferHandle;
     bool isDirect;
     bool isDirty;
@@ -56,8 +54,6 @@ private:
     int createBufferObject ();
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace glutils
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GLUTILS_INDEXBUFFEROBJECT_HPP_

@@ -26,11 +26,7 @@
 #include <iostream>
 #include "gdx-cpp/utils/NumberUtils.hpp"
 
-namespace gdx_cpp {
-
-namespace math {
-
-namespace utils {
+namespace gdx {
 
 struct detail {
     static const float PI;
@@ -136,7 +132,7 @@ inline float random () {
 }
 
 inline float random (float range) {
-    return utils::random() * range;
+    return random() * range;
 }
 
 inline float random(float low, float high)
@@ -152,7 +148,7 @@ inline float random(float low, float high)
     }
 
     /* calculate the random number & return it */
-    temp = utils::random() * (high - low) + low;
+    temp = random() * (high - low) + low;
     return temp;
 }
 
@@ -195,8 +191,6 @@ inline int roundPositive (float x) {
     return (int)(x + 0.5f);
 }
 
-}
-}
 }
 #endif // GDX_CPP_MATH_MATHUTILS_H
 

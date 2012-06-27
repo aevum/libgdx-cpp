@@ -21,17 +21,17 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_INTERPOLATORS_LINEARINTERPOLATOR_HPP_
 #define GDX_CPP_SCENES_SCENE2D_INTERPOLATORS_LINEARINTERPOLATOR_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace interpolators {
 
-class LinearInterpolator: public gdx_cpp::scenes::scene2d::Interpolator {
+class LinearInterpolator: public gdx::Interpolator {
 public:
     static LinearInterpolator& $ ();
     void finished ();
     float getInterpolation (float input);
-    gdx_cpp::scenes::scene2d::Interpolator& copy ();
+    gdx::Interpolator& copy ();
 
 protected:
     LinearInterpolator& newObject ();
@@ -40,7 +40,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace interpolators

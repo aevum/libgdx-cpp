@@ -21,14 +21,14 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_LOADERS_MODELLOADEROLD_HPP_
 #define GDX_CPP_GRAPHICS_G3D_LOADERS_MODELLOADEROLD_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace loaders {
 
 class ModelLoaderOld {
 public:
-    static gdx_cpp::graphics::Mesh& loadObj (const InputStream& in);
+    static gdx::Mesh& loadObj (const InputStream& in);
 
 protected:
 
@@ -37,7 +37,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace loaders

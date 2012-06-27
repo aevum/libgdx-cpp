@@ -20,9 +20,9 @@
 
 #include "ScissorStack.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui::utils;
+using namespace gdx::ui::utils;
 
-void ScissorStack::pushScissors (const gdx_cpp::math::Rectangle& scissor) {
+void ScissorStack::pushScissors (const gdx::Rectangle& scissor) {
     fix(scissor);
 
     if (scissors.size == 0) {
@@ -54,7 +54,7 @@ void ScissorStack::popScissors () {
     }
 }
 
-void ScissorStack::fix (const gdx_cpp::math::Rectangle& rect) {
+void ScissorStack::fix (const gdx::Rectangle& rect) {
     if (rect.width < 0) {
         rect.width = -rect.width;
         rect.x -= rect.width;
@@ -65,7 +65,7 @@ void ScissorStack::fix (const gdx_cpp::math::Rectangle& rect) {
     }
 }
 
-void ScissorStack::calculateScissors (const gdx_cpp::graphics::Camera& camera,const gdx_cpp::math::Matrix4& batchTransform,const gdx_cpp::math::Rectangle& area,const gdx_cpp::math::Rectangle& scissor) {
+void ScissorStack::calculateScissors (const gdx::Camera& camera,const gdx::Matrix4& batchTransform,const gdx::Rectangle& area,const gdx::Rectangle& scissor) {
     tmp.set(area.x, area.y, 0);
     tmp.mul(batchTransform);
     camera.project(tmp);
@@ -79,7 +79,7 @@ void ScissorStack::calculateScissors (const gdx_cpp::graphics::Camera& camera,co
     scissor.height = tmp.y - scissor.y;
 }
 
-gdx_cpp::math::Rectangle& ScissorStack::getViewport () {
+gdx::Rectangle& ScissorStack::getViewport () {
     if (scissors.size == 0) {
         viewport.set(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         return viewport;
@@ -90,7 +90,7 @@ gdx_cpp::math::Rectangle& ScissorStack::getViewport () {
     }
 }
 
-void ScissorStack::toWindowCoordinates (const gdx_cpp::graphics::Camera& camera,const gdx_cpp::math::Matrix4& transformMatrix,const gdx_cpp::math::Vector2& point) {
+void ScissorStack::toWindowCoordinates (const gdx::Camera& camera,const gdx::Matrix4& transformMatrix,const gdx::Vector2& point) {
     tmp.set(point.x, point.y, 0);
     tmp.mul(transformMatrix);
     camera.project(tmp);

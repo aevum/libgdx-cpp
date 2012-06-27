@@ -20,7 +20,7 @@
 
 #include "FlickScrollPane.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui;
+using namespace gdx::ui;
 
 bool FlickScrollPane::pan (int x,int y,int deltaX,int deltaY) {
     amountX -= deltaX;
@@ -58,7 +58,7 @@ bool FlickScrollPane::longPress (int x,int y) {
     return false;
 }
 
-void FlickScrollPane::toLocalCoordinates (const gdx_cpp::scenes::scene2d::Actor& actor,const gdx_cpp::math::Vector2& point) {
+void FlickScrollPane::toLocalCoordinates (const gdx::Actor& actor,const gdx::Vector2& point) {
     if (actor.parent == this) return;
     toLocalCoordinates(actor.parent, point);
     Group.toChildCoordinates(actor, point.x, point.y, point);
@@ -99,7 +99,7 @@ void FlickScrollPane::act (float delta) {
     }
 }
 
-void FlickScrollPane::calculateBoundsAndPositions (const gdx_cpp::math::Matrix4& batchTransform) {
+void FlickScrollPane::calculateBoundsAndPositions (const gdx::Matrix4& batchTransform) {
     // Get widget's desired width.
     float widgetWidth, widgetHeight;
     if (widget instanceof Layout) {
@@ -138,7 +138,7 @@ void FlickScrollPane::calculateBoundsAndPositions (const gdx_cpp::math::Matrix4&
     ScissorStack.calculateScissors(stage.getCamera(), batchTransform, widgetAreaBounds, scissorBounds);
 }
 
-void FlickScrollPane::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void FlickScrollPane::draw (const gdx::SpriteBatch& batch,float parentAlpha) {
     if (widget == null) return;
 
     // Setup transform for this group.
@@ -188,7 +188,7 @@ void FlickScrollPane::touchDragged (float x,float y,int pointer) {
     super.touchDragged(x, y, pointer);
 }
 
-gdx_cpp::scenes::scene2d::Actor& FlickScrollPane::hit (float x,float y) {
+gdx::Actor& FlickScrollPane::hit (float x,float y) {
     return x > 0 && x < width && y > 0 && y < height ? this : null;
 }
 
@@ -208,13 +208,13 @@ float FlickScrollPane::getScrollY () {
     return amountY;
 }
 
-void FlickScrollPane::setWidget (const gdx_cpp::scenes::scene2d::Actor& widget) {
+void FlickScrollPane::setWidget (const gdx::Actor& widget) {
     if (this.widget != null) removeActor(this.widget);
     this.widget = widget;
     if (widget != null) addActor(widget);
 }
 
-gdx_cpp::scenes::scene2d::Actor& FlickScrollPane::getWidget () {
+gdx::Actor& FlickScrollPane::getWidget () {
     return widget;
 }
 
@@ -257,11 +257,11 @@ float FlickScrollPane::getMaxHeight () {
     return 0;
 }
 
-FlickScrollPane::FlickScrollPane (const gdx_cpp::scenes::scene2d::Actor& widget,const gdx_cpp::scenes::scene2d::Stage& stage) {
+FlickScrollPane::FlickScrollPane (const gdx::Actor& widget,const gdx::Stage& stage) {
     this(widget, stage, null);
 }
 
-FlickScrollPane::FlickScrollPane (const gdx_cpp::scenes::scene2d::Actor& widget,const gdx_cpp::scenes::scene2d::Stage& stage,const std::string& name) {
+FlickScrollPane::FlickScrollPane (const gdx::Actor& widget,const gdx::Stage& stage,const std::string& name) {
     super(name);
 
     this.stage = stage;

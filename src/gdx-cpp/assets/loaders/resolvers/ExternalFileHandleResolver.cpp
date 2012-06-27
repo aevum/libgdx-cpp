@@ -20,9 +20,9 @@
 
 #include "ExternalFileHandleResolver.hpp"
 
-using namespace gdx_cpp::assets::loaders::resolvers;
+using namespace gdx;
 
-gdx_cpp::files::FileHandle& ExternalFileHandleResolver::resolve (const std::string& fileName) {
+FileHandle& ExternalFileHandleResolver::resolve (const std::string& fileName) {
     return Gdx.files.external(fileName);
 }
 

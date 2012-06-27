@@ -20,9 +20,9 @@
 
 #include "Animation.hpp"
 
-using namespace gdx_cpp::graphics::g2d;
+using namespace gdx;
 
-gdx_cpp::graphics::g2d::Animation::Animation(float frameDuration, const std::vector< TextureRegion::ptr >& keyFrames)
+Animation::Animation(float frameDuration, const std::vector< TextureRegion::ptr >& keyFrames)
  : keyFrames(keyFrames), frameDuration(frameDuration)
 {
 }

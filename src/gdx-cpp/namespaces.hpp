@@ -19,25 +19,8 @@
  */
 
 //dummy definitions so places that don't include all files wont complain
-namespace gdx_cpp {
-    namespace graphics {
-        namespace g2d {
-        }
-        namespace glutils {
-        }
-    }
-    namespace files {}
-    namespace audio {}
-    namespace math {}
-    namespace utils {}
+namespace gdx {
 }
 
 #define GDX_CPP_NAMESPACES \
-using namespace gdx_cpp;\
-using namespace gdx_cpp::graphics;\
-using namespace gdx_cpp::graphics::g2d;\
-using namespace gdx_cpp::graphics::glutils;\
-using namespace gdx_cpp::audio;\
-using namespace gdx_cpp::math;\
-using namespace gdx_cpp::utils;\
-using namespace gdx_cpp::files
+using namespace gdx;\

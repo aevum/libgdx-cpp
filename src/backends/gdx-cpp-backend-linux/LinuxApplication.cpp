@@ -22,13 +22,13 @@
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/implementation/System.hpp>
 
-using namespace gdx_cpp::backends::nix;
-using namespace gdx_cpp;
+using namespace gdx::nix;
+using namespace gdx;
 
-gdx_cpp::backends::nix::LinuxApplication::LinuxApplication(gdx_cpp::ApplicationListener* listener,
+gdx::nix::LinuxApplication::LinuxApplication(gdx::ApplicationListener* listener,
         const std::string& title, int width, int height,
         bool useGL20IfAvailable)
-    :  Synchronizable(Gdx::system->getMutexFactory())
+    :  Synchronizable(gdx::system->getMutexFactory())
     , width(width)
     , height(height)
     , title(title)
@@ -36,7 +36,7 @@ gdx_cpp::backends::nix::LinuxApplication::LinuxApplication(gdx_cpp::ApplicationL
     , listener(listener)
     , graphics(0)
     , input(0)
-    , logLevel(gdx_cpp::Application::LOG_INFO)
+    , logLevel(gdx::Application::LOG_INFO)
 {
 }
 
@@ -53,17 +53,17 @@ void LinuxApplication::initialize() {
 
     SDL_EnableKeyRepeat(1, SDL_DEFAULT_REPEAT_INTERVAL);
 
-    Gdx::initialize(this, graphics, audio, input, files);
+    ::initialize(this, graphics, audio, input, files);
 
     this->run();
 }
 
-void backends::nix::LinuxApplication::onRunnableStop()
+void nix::LinuxApplication::onRunnableStop()
 {
     //DUMMY
 }
 
-void backends::nix::LinuxApplication::run()
+void nix::LinuxApplication::run()
 {
     listener->create();
     listener->resize(graphics->getWidth(), graphics->getHeight());
@@ -108,7 +108,7 @@ void LinuxApplication::error(const std::string& tag, const char* format, ...)
 #endif
 }
 
-void gdx_cpp::backends::nix::LinuxApplication::exit()
+void gdx::nix::LinuxApplication::exit()
 {
     if (listener) {
         this->listener->dispose();
@@ -117,39 +117,39 @@ void gdx_cpp::backends::nix::LinuxApplication::exit()
     }
 }
 
-Audio* gdx_cpp::backends::nix::LinuxApplication::getAudio()
+Audio* gdx::nix::LinuxApplication::getAudio()
 {
     return this->audio;
 }
 
-Files* gdx_cpp::backends::nix::LinuxApplication::getFiles()
+Files* gdx::nix::LinuxApplication::getFiles()
 {
     return files;
 }
 
-Graphics* gdx_cpp::backends::nix::LinuxApplication::getGraphics()
+Graphics* gdx::nix::LinuxApplication::getGraphics()
 {
     return graphics;
 }
 
-Input* gdx_cpp::backends::nix::LinuxApplication::getInput()
+Input* gdx::nix::LinuxApplication::getInput()
 {
     return input;
 }
 
-Preferences* gdx_cpp::backends::nix::LinuxApplication::getPreferences(std::string& name)
+Preferences* gdx::nix::LinuxApplication::getPreferences(std::string& name)
 {
 
 }
 
-gdx_cpp::Application::ApplicationType gdx_cpp::backends::nix::LinuxApplication::getType()
+gdx::Application::ApplicationType gdx::nix::LinuxApplication::getType()
 {
-    return gdx_cpp::Application::Desktop;
+    return gdx::Application::Desktop;
 }
 
 void LinuxApplication::log(const std::string& tag, const char* format, ...)
 {
-    if (logLevel == gdx_cpp::Application::LOG_NONE)
+    if (logLevel == gdx::Application::LOG_NONE)
         return;
 
     va_list list;
@@ -160,23 +160,23 @@ void LinuxApplication::log(const std::string& tag, const char* format, ...)
     fflush(stdout);
 }
 
-int gdx_cpp::backends::nix::LinuxApplication::getVersion()
+int gdx::nix::LinuxApplication::getVersion()
 {
     return 0.1;
 }
 
-void gdx_cpp::backends::nix::LinuxApplication::postRunnable(Runnable::ptr runnable)
+void gdx::nix::LinuxApplication::postRunnable(Runnable::ptr runnable)
 {
     lock_holder hnd = synchronize();
     runnables.push_back(runnable);
 }
 
-void gdx_cpp::backends::nix::LinuxApplication::setLogLevel(int logLevel)
+void gdx::nix::LinuxApplication::setLogLevel(int logLevel)
 {
     logLevel = logLevel;
 }
 
-bool gdx_cpp::backends::nix::LinuxApplication::processEvents()
+bool gdx::nix::LinuxApplication::processEvents()
 {
     static SDL_Event event;
 

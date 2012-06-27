@@ -21,14 +21,14 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_UI_CLICKLISTENER_HPP_
 #define GDX_CPP_SCENES_SCENE2D_UI_CLICKLISTENER_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace ui {
 
 class ClickListener {
 public:
-    virtual   void click (const gdx_cpp::scenes::scene2d::Actor& actor) = 0;
+    virtual   void click (const gdx::Actor& actor) = 0;
 
 protected:
 
@@ -37,7 +37,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace ui

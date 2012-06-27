@@ -21,7 +21,7 @@
 #include "Base64Coder.hpp"
 #include <stdexcept>
 
-using namespace gdx_cpp::utils;
+using namespace gdx;
 
 struct Base64Coder::static_impl {
     static_impl() {

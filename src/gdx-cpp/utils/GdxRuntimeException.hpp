@@ -23,13 +23,13 @@
 
 #include <exception>
 
-namespace gdx_cpp {
+namespace gdx {
 namespace utils {
 
 class GdxRuntimeException : public std::exception {
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace utils
 
 #endif // GDX_CPP_UTILS_GDXRUNTIMEEXCEPTION_HPP_

@@ -35,12 +35,9 @@
 #include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
 #include "gdx-cpp/gl.hpp"
 
-using namespace gdx_cpp::graphics::glutils;
-using namespace gdx_cpp::graphics::g2d;
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp;
+using namespace gdx;
 
-gdx_cpp::graphics::g2d::SpriteBatch::SpriteBatch(int size) :
+SpriteBatch::SpriteBatch(int size) :
         color(Color::WHITE.toFloatBits())
         , maxSpritesInBatch(0)
         , renderCalls(0)
@@ -69,7 +66,7 @@ gdx_cpp::graphics::g2d::SpriteBatch::SpriteBatch(int size) :
                                      size * 6,
                                      attributes));
 
-    projectionMatrix.setToOrtho2D(0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
+    projectionMatrix.setToOrtho2D(0, 0, graphics->getWidth(), graphics->getHeight());
 
     vertices = new float[size * Sprite::SPRITE_SIZE];
     verticesSize  = size * Sprite::SPRITE_SIZE;
@@ -89,7 +86,7 @@ gdx_cpp::graphics::g2d::SpriteBatch::SpriteBatch(int size) :
     buffers[0]->setIndices(indices);
     mesh = buffers[0];
 
-    if (Gdx::graphics->isGL20Available()) createShader();
+    if (graphics->isGL20Available()) createShader();
 }
 
 
@@ -128,10 +125,10 @@ void SpriteBatch::begin () {
         throw new std::runtime_error("you have to call SpriteBatch.end() first");
 
     renderCalls = 0;
-    Gdx::gl->glDepthMask(false);
-    Gdx::gl->glEnable(GL_TEXTURE_2D);
+    gl->glDepthMask(false);
+    gl->glEnable(GL_TEXTURE_2D);
 
-    if (Gdx::graphics->isGL20Available()) {
+    if (graphics->isGL20Available()) {
         if (customShader != NULL)
             customShader->begin();
         else shader->begin();
@@ -152,12 +149,12 @@ void SpriteBatch::end () {
     idx = 0;
     drawing = false;
 
-    GLCommon& gl = *Gdx::gl;
+    GLCommon& gl = *::gl;
     gl.glDepthMask(true);
     if (isBlendingEnabled()) gl.glDisable(GL_BLEND);
     gl.glDisable(GL_TEXTURE_2D);
 
-    if (Gdx::graphics->isGL20Available()) {
+    if (graphics->isGL20Available()) {
         if (customShader != NULL)
             customShader->end();
         else
@@ -165,21 +162,21 @@ void SpriteBatch::end () {
     }
 }
 
-void SpriteBatch::setColor (const gdx_cpp::graphics::Color& tint) {
+void SpriteBatch::setColor (const Color& tint) {
     color = tint.toFloatBits();
 }
 
 void SpriteBatch::setColor (float r,float g,float b,float a) {
     int intBits = (int)(255 * a) << 24 | (int)(255 * b) << 16 | (int)(255 * g) << 8 | (int)(255 * r);
-    color =  utils::NumberUtils::intBitsToFloat(intBits & 0xfeffffff);
+    color =  NumberUtils::intBitsToFloat(intBits & 0xfeffffff);
 }
 
 void SpriteBatch::setColor (float color) {
     this->color = color;
 }
 
-gdx_cpp::graphics::Color& SpriteBatch::getColor () {
-    int intBits = utils::NumberUtils::floatToRawIntBits(color);
+Color& SpriteBatch::getColor () {
+    int intBits = NumberUtils::floatToRawIntBits(color);
     this->tempColor.r = (intBits & 0xff) / 255.0f;
     this->tempColor.g = (((unsigned int)intBits >> 8) & 0xff) / 255.0f;
     this->tempColor.b = (((unsigned int)intBits >> 16) & 0xff) / 255.0f;
@@ -187,7 +184,7 @@ gdx_cpp::graphics::Color& SpriteBatch::getColor () {
     return this->tempColor;
 }
 
-void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation,int srcX,int srcY,int srcWidth,int srcHeight,bool flipX,bool flipY) {
+void SpriteBatch::draw (const Texture& texture,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation,int srcX,int srcY,int srcWidth,int srcHeight,bool flipX,bool flipY) {
     if (!drawing)
         throw new std::runtime_error("SpriteBatch.begin must be called before draw.");
 
@@ -237,8 +234,8 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
 
     // rotate
     if (rotation != 0) {
-        float cos = math::utils::cosDeg(rotation);
-        float sin = math::utils::sinDeg(rotation);
+        float cos = cosDeg(rotation);
+        float sin = sinDeg(rotation);
 
         x1 = cos * p1x - sin * p1y;
         y1 = sin * p1x + cos * p1y;
@@ -316,7 +313,7 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
     vertices[idx++] = v;
 }
 
-void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float y,float width,float height,int srcX,int srcY,int srcWidth,int srcHeight,bool flipX,bool flipY) {
+void SpriteBatch::draw (const Texture& texture,float x,float y,float width,float height,int srcX,int srcY,int srcWidth,int srcHeight,bool flipX,bool flipY) {
     if (!drawing)
         throw std::runtime_error("SpriteBatch.begin must be called before draw.");
 
@@ -371,7 +368,7 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
     vertices[idx++] = v;
 }
 
-void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float y,int srcX,int srcY,int srcWidth,int srcHeight) {
+void SpriteBatch::draw (const Texture& texture,float x,float y,int srcX,int srcY,int srcWidth,int srcHeight) {
     if (!drawing)
         throw std::runtime_error("SpriteBatch.begin must be called before draw.");
 
@@ -414,7 +411,7 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
     vertices[idx++] = v;
 }
 
-void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float y,float width,float height,float u,float v,float u2,float v2) {
+void SpriteBatch::draw (const Texture& texture,float x,float y,float width,float height,float u,float v,float u2,float v2) {
     if (!drawing)
         throw std::runtime_error("SpriteBatch.begin must be called before draw.");
 
@@ -453,7 +450,7 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
     vertices[idx++] = v;
 }
 
-void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float y) {
+void SpriteBatch::draw (const Texture& texture,float x,float y) {
     if (!drawing)
         throw std::runtime_error("SpriteBatch.begin must be called before draw.");
 
@@ -492,7 +489,7 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
     vertices[idx++] = 1;
 }
 
-void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float y,float width,float height) {
+void SpriteBatch::draw (const Texture& texture,float x,float y,float width,float height) {
     if (!drawing)
         throw std::runtime_error("SpriteBatch.begin must be called before draw.");
 
@@ -536,7 +533,7 @@ void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,float x,float 
     vertices[idx++] = v;
 }
 
-void SpriteBatch::draw (const gdx_cpp::graphics::Texture& texture,const std::vector<float>& spriteVertices, int offset,int length) {
+void SpriteBatch::draw (const Texture& texture,const std::vector<float>& spriteVertices, int offset,int length) {
     if (!drawing)
         throw std::runtime_error("SpriteBatch.begin must be called before draw.");
 
@@ -576,7 +573,7 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float width,
     float u2 = region.u2;
     float v2 = region.v;
 
-    utils::float_buffer& buffer = mesh->getVerticesBuffer();
+    float_buffer& buffer = mesh->getVerticesBuffer();
     buffer.limit(buffer.position() + 20);
 
     vertices[idx++] = x;
@@ -654,8 +651,8 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float origin
 
     // rotate
     if (rotation != 0) {
-        float cos = math::utils::cosDeg(rotation);
-        float sin = math::utils::sinDeg(rotation);
+        float cos = cosDeg(rotation);
+        float sin = sinDeg(rotation);
 
         x1 = cos * p1x - sin * p1y;
         y1 = sin * p1x + cos * p1y;
@@ -772,8 +769,8 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float origin
 
     // rotate
     if (rotation != 0) {
-        float cos = math::utils::cosDeg(rotation);
-        float sin = math::utils::sinDeg(rotation);
+        float cos = cosDeg(rotation);
+        float sin = sinDeg(rotation);
 
         x1 = cos * p1x - sin * p1y;
         y1 = sin * p1x + cos * p1y;
@@ -870,11 +867,11 @@ void SpriteBatch::renderMesh () {
 
     mesh->setVertices(vertices, idx);
 
-    if (Gdx::graphics->isGL20Available()) {
+    if (graphics->isGL20Available()) {
         if (blendingDisabled) {
-            Gdx::gl20->glDisable(GL_BLEND);
+            gl20->glDisable(GL_BLEND);
         } else {
-            GL20& gl20 = *Gdx::gl20;
+            GL20& gl20 = *::gl20;
             gl20.glEnable(GL_BLEND);
             gl20.glBlendFunc(blendSrcFunc, blendDstFunc);
         }
@@ -885,9 +882,9 @@ void SpriteBatch::renderMesh () {
             mesh->render(*shader, GL_TRIANGLES, 0, spritesInBatch * 6);
     } else {
         if (blendingDisabled) {
-            Gdx::gl10->glDisable(GL_BLEND);
+            gl10->glDisable(GL_BLEND);
         } else {
-            GL10& gl10 = *Gdx::gl10;
+            GL10& gl10 = *::gl10;
             gl10.glEnable(GL_BLEND);
             gl10.glBlendFunc(blendSrcFunc, blendDstFunc);
         }
@@ -924,29 +921,29 @@ void SpriteBatch::dispose () {
         shader->dispose();
 }
 
-math::Matrix4& SpriteBatch::getProjectionMatrix () {
+Matrix4& SpriteBatch::getProjectionMatrix () {
     return projectionMatrix;
 }
 
-const gdx_cpp::math::Matrix4& SpriteBatch::getTransformMatrix () {
+const Matrix4& SpriteBatch::getTransformMatrix () {
     return transformMatrix;
 }
 
-void SpriteBatch::setProjectionMatrix (const gdx_cpp::math::Matrix4& projection) {
+void SpriteBatch::setProjectionMatrix (const Matrix4& projection) {
     if (drawing)
         throw std::runtime_error("Can't set the matrix within begin()/end() block");
 
     projectionMatrix.set(projection);
 }
 
-void SpriteBatch::setTransformMatrix (const gdx_cpp::math::Matrix4& transform) {
+void SpriteBatch::setTransformMatrix (const Matrix4& transform) {
     if (drawing)
         throw std::runtime_error("Can't set the matrix within begin()/end() block");
 
     transformMatrix.set(transform);
 }
 
-void SpriteBatch::setShader (gdx_cpp::graphics::glutils::ShaderProgram* shader) {
+void SpriteBatch::setShader (ShaderProgram* shader) {
     customShader = shader;
 }
 
@@ -982,7 +979,7 @@ SpriteBatch::SpriteBatch(int size, int buffers) :
         this->buffers[i] = new Mesh(false, size * 4, size * 6, attributes);
     }
 
-    projectionMatrix.setToOrtho2D(0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
+    projectionMatrix.setToOrtho2D(0, 0, graphics->getWidth(), graphics->getHeight());
 
     vertices = new float[size * Sprite::SPRITE_SIZE];
     verticesSize  = size * Sprite::SPRITE_SIZE;
@@ -1005,7 +1002,7 @@ SpriteBatch::SpriteBatch(int size, int buffers) :
     }
     mesh = this->buffers[0];
 
-    if (Gdx::graphics->isGL20Available()) createShader();
+    if (graphics->isGL20Available()) createShader();
 }
 
 
@@ -1065,8 +1062,8 @@ void SpriteBatch::draw(const Texture& texture, float* const spriteVertices, int 
 
 void SpriteBatch::setupMatrices()
 {
-    if (!Gdx::graphics->isGL20Available()) {
-        GL10& gl = *Gdx::gl10;
+    if (!graphics->isGL20Available()) {
+        GL10& gl = *gl10;
         gl.glMatrixMode(GL_PROJECTION);
         gl.glLoadMatrixf(projectionMatrix.val);
         gl.glMatrixMode(GL_MODELVIEW);
@@ -1085,7 +1082,7 @@ void SpriteBatch::setupMatrices()
     }
 }
 
-void SpriteBatch::setTransformMatrix(math::Matrix4& transform)
+void SpriteBatch::setTransformMatrix(Matrix4& transform)
 {
     if (drawing) {
         flush();
@@ -1098,7 +1095,7 @@ void SpriteBatch::setTransformMatrix(math::Matrix4& transform)
     }
 }
 
-void SpriteBatch::setProjectionMatrix(math::Matrix4& projection)
+void SpriteBatch::setProjectionMatrix(Matrix4& projection)
 {
     if (drawing) {
         flush();

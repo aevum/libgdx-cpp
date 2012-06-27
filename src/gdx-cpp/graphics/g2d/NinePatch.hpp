@@ -26,12 +26,8 @@
 
 #include<vector>
 
-namespace gdx_cpp {
-namespace graphics {
-  
+namespace gdx {
 class Texture;
-
-namespace g2d {
 
 class SpriteBatch;
 class TextureRegion;
@@ -54,7 +50,7 @@ public:
     NinePatch (std::vector< TextureRegion::ptr >& _patches);
     NinePatch(TextureRegion::ptr region);
     
-    void draw (gdx_cpp::graphics::g2d::SpriteBatch& batch, float x, float y, float width, float height);
+    void draw (gdx::SpriteBatch& batch, float x, float y, float width, float height);
     float getLeftWidth ();
     float getRightWidth ();
     float getTopHeight ();
@@ -71,8 +67,6 @@ private:
     NinePatch();
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g2d
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_G2D_NINEPATCH_HPP_

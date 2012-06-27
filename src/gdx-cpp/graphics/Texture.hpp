@@ -35,17 +35,12 @@
 #undef GL_NEAREST
 #undef GL_LINEAR
 
-namespace gdx_cpp {
+namespace gdx {
 
-namespace files {
 class FileHandle;
-}
-
-namespace graphics {
-
 class Texture
-    : public gdx_cpp::utils::Disposable,
-  public gdx_cpp::assets::Asset,
+    : public Disposable,
+  public Asset,
       public std::tr1::enable_shared_from_this<Texture> {
 public:
     typedef ref_ptr_maker<Texture>::type ptr;
@@ -92,17 +87,17 @@ public:
         }
     };
 
-    Texture (const gdx_cpp::graphics::TextureData::ptr data) ;
-    Texture (int width, int height, const gdx_cpp::graphics::Pixmap::Format& format, gdx_cpp::graphics::Pixmap::PixmapType pixType) ;
-    Texture (const gdx_cpp::graphics::Pixmap::ptr pixmap, bool useMipMaps) ;
-    Texture (const gdx_cpp::graphics::Pixmap::ptr pixmap, const Pixmap::Format& format, bool useMipMaps) ;
+    Texture (const TextureData::ptr data) ;
+    Texture (int width, int height, const Pixmap::Format& format, Pixmap::PixmapType pixType) ;
+    Texture (const Pixmap::ptr pixmap, bool useMipMaps) ;
+    Texture (const Pixmap::ptr pixmap, const Pixmap::Format& format, bool useMipMaps) ;
     Texture (const TextureData& data) ;
 
-    const gdx_cpp::assets::AssetType& getAssetType();
-    void load (const gdx_cpp::graphics::TextureData::ptr& data);
+    const AssetType& getAssetType();
+    void load (const TextureData::ptr& data);
     void bind ();
     void bind (int unit);
-    void draw (gdx_cpp::graphics::Pixmap& pixmap, int x, int y);
+    void draw (Pixmap& pixmap, int x, int y);
     int getWidth () const;
     int getHeight () const;
     const TextureFilter& getMinFilter () const;
@@ -113,32 +108,32 @@ public:
     bool isManaged ();
     int getTextureObjectHandle ();
     void setWrap (const TextureWrap& u, const TextureWrap& v);
-    void setFilter (const gdx_cpp::graphics::Texture::TextureFilter& minFilter, const gdx_cpp::graphics::Texture::TextureFilter& magFilter);
+    void setFilter (const Texture::TextureFilter& minFilter, const Texture::TextureFilter& magFilter);
 
     void setEnforcePotImages (bool enforcePotImages);
-    static void clearAllTextures (gdx_cpp::Application* app);
-    static void invalidateAllTextures (gdx_cpp::Application* app);
-    static void setAssetManager (gdx_cpp::assets::AssetManager* manager);
+    static void clearAllTextures (Application* app);
+    static void invalidateAllTextures (Application* app);
+    static void setAssetManager (AssetManager* manager);
     std::string getManagedStatus ();
     static int createGLHandle ();
 
-    static ptr newFromFile(const gdx_cpp::files::FileHandle::ptr file,
-                           const gdx_cpp::graphics::Pixmap::Format* format = NULL,
+    static ptr newFromFile(const FileHandle::ptr file,
+                           const Pixmap::Format* format = NULL,
                            bool useMipMaps = false);
 
     virtual ~Texture();
 
 protected:
     void dispose ();
-    void initialize(const gdx_cpp::files::FileHandle::ptr file, const gdx_cpp::graphics::Pixmap::Format* format, bool useMipMaps);
+    void initialize(const FileHandle::ptr file, const Pixmap::Format* format, bool useMipMaps);
     Texture ();
 
 private:
-    void create (gdx_cpp::graphics::TextureData::ptr data);
-    void uploadImageData (const gdx_cpp::graphics::Pixmap::ptr& pixmap);
+    void create (TextureData::ptr data);
+    void uploadImageData (const Pixmap::ptr& pixmap);
     void reload ();
-    static void addManagedTexture (gdx_cpp::Application* app, const gdx_cpp::graphics::Texture::ptr texture);
-    static assets::AssetManager* assetManager;
+    static void addManagedTexture (Application* app, const Texture::ptr texture);
+    static AssetManager* assetManager;
 
     typedef std::list< Texture::weak_ptr > textureList;
     typedef std::tr1::unordered_map< Application* , textureList > managedTextureMap;
@@ -160,8 +155,7 @@ private:
     bool useHWMipMap;
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_TEXTURE_HPP_
 

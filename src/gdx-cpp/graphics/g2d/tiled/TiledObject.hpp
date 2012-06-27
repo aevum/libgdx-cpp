@@ -21,10 +21,7 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_TILED_TILEDOBJECT_HPP_
 #define GDX_CPP_GRAPHICS_G2D_TILED_TILEDOBJECT_HPP_
 
-namespace gdx_cpp {
-namespace graphics {
-namespace g2d {
-namespace tiled {
+namespace gdx {
 
 class TiledObject {
 public:
@@ -37,9 +34,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g2d
-} // namespace tiled
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_G2D_TILED_TILEDOBJECT_HPP_

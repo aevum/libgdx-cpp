@@ -24,9 +24,7 @@
 #include "ThreadFactory.hpp"
 #include <stdint.h>
 
-namespace gdx_cpp {
-
-namespace implementation {
+namespace gdx {
 
 class System
 {
@@ -40,7 +38,7 @@ public:
     static const int BA_DIRECTORY;
     static const int BA_HIDDEN;
 
-    virtual int getBooleanAttributes(const gdx_cpp::files::File &f) = 0;
+    virtual int getBooleanAttributes(const File &f) = 0;
 
     static const int ACCESS_READ;
     static const int ACCESS_WRITE;
@@ -52,23 +50,22 @@ public:
     virtual std::string normalize(const std::string &path) = 0;
     virtual int prefixLength(const std::string &path) = 0;
     virtual std::string getDefaultParent() = 0;
-    virtual bool isAbsolute(const gdx_cpp::files::File &f) = 0;
-    virtual std::string resolve(const gdx_cpp::files::File &f) = 0;
+    virtual bool isAbsolute(const File &f) = 0;
+    virtual std::string resolve(const File &f) = 0;
     virtual std::string canonicalize(const std::string &path) = 0; //throws IOException;
     virtual void checkRead(const std::string &path) = 0;
-    virtual void list(const gdx_cpp::files::File &f, std::vector<std::string> &paths) = 0;
-    virtual int64_t getLength(gdx_cpp::files::File f) = 0;
+    virtual void list(const File &f, std::vector<std::string> &paths) = 0;
+    virtual int64_t getLength(File f) = 0;
     virtual void checkDelete(const std::string &path) = 0;
-    virtual bool deleteFile(gdx_cpp::files::File &f) = 0;
+    virtual bool deleteFile(File &f) = 0;
     virtual void checkWrite(const std::string &path) = 0;   
-    virtual bool createDirectory(const gdx_cpp::files::File &f) = 0;
-    virtual bool renameFile(gdx_cpp::files::File &f1, const gdx_cpp::files::File &f2) = 0;
+    virtual bool createDirectory(const File &f) = 0;
+    virtual bool renameFile(File &f1, const File &f2) = 0;
     virtual uint64_t nanoTime() = 0;
     virtual MutexFactory* getMutexFactory() = 0;
     virtual ThreadFactory* getThreadFactory() = 0;
 };
 
-}
 }
 
 #endif // GDX_CPP_IMPLEMENTATION_SYSTEM_HPP

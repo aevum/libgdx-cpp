@@ -24,11 +24,9 @@
 #include "gdx-cpp/utils/Disposable.hpp"
 #include <vector>
 
-namespace gdx_cpp {
-namespace audio {
-namespace io {
+namespace gdx {
 
-class Decoder: public gdx_cpp::utils::Disposable {
+class Decoder: public Disposable {
 public:
     virtual   int readSamples (std::vector< short >& samples) = 0;
     virtual   int skipSamples (int numSamples) = 0;
@@ -44,8 +42,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace audio
-} // namespace io
+} // namespace gdx
 
 #endif // GDX_CPP_AUDIO_IO_DECODER_HPP_

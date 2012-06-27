@@ -16,23 +16,23 @@
  *  @author Victor Vicente de Carvalho victor.carvalho@aevumlab.com
  */
 
-#ifndef gdx_cpp_IosAudio_hpp
-#define gdx_cpp_IosAudio_hpp
+#ifndef gdx_IosAudio_hpp
+#define gdx_IosAudio_hpp
 
 #include <gdx-cpp/Audio.hpp>
 #include <gdx-cpp/files/FileHandle.hpp>
 
-namespace gdx_cpp {
+namespace gdx {
 namespace backends {
 namespace ios {
             
-class IosAudio : public gdx_cpp::Audio {
+class IosAudio : public gdx::Audio {
 public:        
-    virtual gdx_cpp::audio::AudioDevice * newAudioDevice (int samplingRate, bool isMono);
-    virtual gdx_cpp::audio::AudioRecorder * newAudioRecoder (int samplingRate, bool isMono);
+    virtual gdx::AudioDevice * newAudioDevice (int samplingRate, bool isMono);
+    virtual gdx::AudioRecorder * newAudioRecoder (int samplingRate, bool isMono);
     
-    virtual gdx_cpp::audio::Sound * newSound (const ref_ptr_maker< gdx_cpp::files::FileHandle >::type fileHandle);
-    virtual gdx_cpp::audio::Music * newMusic (const ref_ptr_maker< gdx_cpp::files::FileHandle >::type file);
+    virtual gdx::Sound * newSound (const ref_ptr_maker< gdx::FileHandle >::type fileHandle);
+    virtual gdx::Music * newMusic (const ref_ptr_maker< gdx::FileHandle >::type file);
 };
 
 }       

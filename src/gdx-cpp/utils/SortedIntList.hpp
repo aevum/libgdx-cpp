@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_UTILS_SORTEDINTLIST<E>_HPP_
 #define GDX_CPP_UTILS_SORTEDINTLIST<E>_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace utils {
 
 class SortedIntList {
@@ -44,7 +44,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace utils
 
 #endif // GDX_CPP_UTILS_SORTEDINTLIST<E>_HPP_

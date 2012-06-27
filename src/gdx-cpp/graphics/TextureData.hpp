@@ -24,8 +24,7 @@
 #include "gdx-cpp/utils/Aliases.hpp"
 #include "Pixmap.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
+namespace gdx {
 
 class TextureData {
 public:
@@ -45,7 +44,7 @@ public:
     };
 
     virtual const TextureDataType& getType () = 0;
-    virtual graphics::Pixmap::ptr getPixmap () = 0;
+    virtual Pixmap::ptr getPixmap () = 0;
     virtual bool disposePixmap () = 0;
     virtual void uploadCompressedData () = 0;
     virtual int getWidth () = 0;
@@ -62,7 +61,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_TEXTUREDATA_HPP_

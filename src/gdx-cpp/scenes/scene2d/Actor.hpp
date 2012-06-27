@@ -26,7 +26,7 @@
 #include "gdx-cpp/utils/PooledLinkedList.hpp"
 #include "gdx-cpp/math/Vector2.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 
@@ -42,7 +42,7 @@ public:
 
     virtual ActorType getType() const { return Actor_Actor; }
     
-    virtual void draw (gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) = 0;
+    virtual void draw (gdx::SpriteBatch& batch,float parentAlpha) = 0;
     virtual bool touchDown (float x,float y,int pointer) = 0;
     virtual void touchUp (float x,float y,int pointer) = 0;
     virtual void touchDragged (float x,float y,int pointer) = 0;
@@ -53,10 +53,10 @@ public:
     bool keyUp (int keycode);
     bool keyTyped (char character);
     virtual Actor* hit (float x,float y) = 0;
-    void toLocalCoordinates (gdx_cpp::math::Vector2& point);
+    void toLocalCoordinates (gdx::Vector2& point);
     void remove ();
     void act (float delta);
-    void action (gdx_cpp::scenes::scene2d::Action*const action);
+    void action (gdx::Action*const action);
     void clearActions ();
     std::string toString () const;
     void markToRemove (bool boolean);
@@ -77,16 +77,16 @@ public:
     float scaleY;
     float rotation ;
     
-    gdx_cpp::graphics::Color color;
+    gdx::Color color;
 
 protected:
-    utils::PooledLinkedList<Action> actions;
+    PooledLinkedList<Action> actions;
 
 private:
     bool toRemove ;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 

@@ -24,8 +24,7 @@
 #include "GLCommon.hpp"
 #include <set>
 
-namespace gdx_cpp {
-namespace graphics {
+namespace gdx {
 
 class GL10 : virtual public GLCommon {
 public:
@@ -79,7 +78,6 @@ public:
     virtual void glPolygonMode (int face,int mode) const ;
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GL10_HPP_

@@ -20,7 +20,7 @@
 
 #include "Remove.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::actions;
+using namespace gdx::actions;
 
 ActionResetingPool<Remove> Remove::pool = ActionResetingPool<Remove>(4, 100);
 
@@ -37,7 +37,7 @@ Remove* Remove::build () {
     return remove;
 }
 
-void Remove::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+void Remove::setTarget (gdx::Actor* actor) {
     this->target = actor;
 }
 
@@ -53,11 +53,11 @@ bool Remove::isDone () {
     return removed;
 }
 
-gdx_cpp::scenes::scene2d::Action* Remove::copy () {
+gdx::Action* Remove::copy () {
     return Remove::build();
 }
 
-gdx_cpp::scenes::scene2d::Actor* Remove::getTarget () {
+gdx::Actor* Remove::getTarget () {
     return target;
 }
 

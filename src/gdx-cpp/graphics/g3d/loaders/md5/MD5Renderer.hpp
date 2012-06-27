@@ -21,18 +21,18 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_LOADERS_MD5_MD5RENDERER_HPP_
 #define GDX_CPP_GRAPHICS_G3D_LOADERS_MD5_MD5RENDERER_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace loaders {
 namespace md5 {
 
-class MD5Renderer: public gdx_cpp::utils::Disposable {
+class MD5Renderer: public gdx::Disposable {
 public:
-    gdx_cpp::math::collision::BoundingBox& getBBox ();
+    gdx::BoundingBox& getBBox ();
     float* getVertices (int idx);
     short* getIndices (int idx);
-    gdx_cpp::graphics::Mesh& getMesh ();
+    gdx::Mesh& getMesh ();
     void setSkeleton (const MD5Joints& skeleton);
     void setUseJni (bool useJni);
     void calculateNormals (const MD5Joints& bindPoseSkeleton);
@@ -51,7 +51,7 @@ private:
     float[][] vertices;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace loaders

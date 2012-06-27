@@ -20,7 +20,7 @@
 
 #include "FadeTo.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::actions;
+using namespace gdx::actions;
 
 ActionResetingPool<FadeTo> FadeTo::pool = ActionResetingPool<FadeTo>(4, 100);
 
@@ -32,7 +32,7 @@ FadeTo* FadeTo::build (float alpha,float duration) {
     return action;
 }
 
-void FadeTo::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+void FadeTo::setTarget (gdx::Actor* actor) {
     this->target = actor;
     this->startAlpha = this->target->color.a;
     this->deltaAlpha = toAlpha - this->target->color.a;
@@ -55,13 +55,13 @@ void FadeTo::finish () {
     pool.free(this);
 }
 
-gdx_cpp::scenes::scene2d::Action* FadeTo::copy () {
+gdx::Action* FadeTo::copy () {
     FadeTo* fadeTo = FadeTo::build(toAlpha, duration);
     if (interpolator != NULL) fadeTo->setInterpolator(interpolator->copy());
     return fadeTo;
 }
 
-gdx_cpp::scenes::scene2d::actions::FadeTo::FadeTo()
+gdx::actions::FadeTo::FadeTo()
  : toAlpha(0),
 startAlpha(0),
 deltaAlpha(0)

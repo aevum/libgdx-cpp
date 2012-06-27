@@ -25,8 +25,7 @@
 #include <vector>
 #include "VertexAttribute.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
+namespace gdx {
 
 class VertexAttributes {
 public:
@@ -53,7 +52,6 @@ private:
     std::vector<VertexAttribute> attributes;
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_VERTEXATTRIBUTES_HPP_

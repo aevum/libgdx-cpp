@@ -20,7 +20,7 @@
 
 #include "IntMap<V>.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx::utils;
 
 V& IntMap<V>::put (int key,const V& value) {
     if (key == 0) {

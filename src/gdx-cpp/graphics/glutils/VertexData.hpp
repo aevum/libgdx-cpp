@@ -27,11 +27,9 @@
 #include "gdx-cpp/utils/Buffer.hpp"
 #include "gdx-cpp/graphics/VertexAttributes.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
-namespace glutils {
+namespace gdx {
 
-class VertexData: public gdx_cpp::utils::Disposable {
+class VertexData: public Disposable {
 public:
     struct Kind {
         static const int VertexBufferObject = 0;
@@ -44,17 +42,15 @@ public:
     
     virtual int getNumVertices () = 0;
     virtual int getNumMaxVertices () = 0;
-    virtual gdx_cpp::graphics::VertexAttributes& getAttributes () = 0;
+    virtual VertexAttributes& getAttributes () = 0;
     virtual void setVertices (const float* vertices, int offset,int count) = 0;
-    virtual utils::float_buffer& getBuffer () = 0;
+    virtual float_buffer& getBuffer () = 0;
     virtual void bind () = 0;
     virtual void unbind () = 0;
     virtual void dispose () = 0;
 
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace glutils
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GLUTILS_VERTEXDATA_HPP_

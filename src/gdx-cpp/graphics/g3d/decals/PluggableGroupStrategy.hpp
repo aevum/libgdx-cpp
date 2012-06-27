@@ -21,14 +21,14 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_DECALS_PLUGGABLEGROUPSTRATEGY_HPP_
 #define GDX_CPP_GRAPHICS_G3D_DECALS_PLUGGABLEGROUPSTRATEGY_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace decals {
 
 class PluggableGroupStrategy {
 public:
-    void beforeGroup (int group,gdx_cpp::utils::ArrayDecal>& contents);
+    void beforeGroup (int group,gdx::ArrayDecal>& contents);
     void afterGroup (int group);
     void plugIn (const GroupPlug& plug,int group);
     GroupPlug& unPlug (int group);
@@ -40,7 +40,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace decals

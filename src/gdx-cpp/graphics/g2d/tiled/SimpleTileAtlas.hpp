@@ -21,11 +21,7 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_TILED_SIMPLETILEATLAS_HPP_
 #define GDX_CPP_GRAPHICS_G2D_TILED_SIMPLETILEATLAS_HPP_
 
-namespace gdx_cpp {
-namespace graphics {
-namespace g2d {
-namespace tiled {
-
+namespace gdx {
 class SimpleTileAtlas {
 public:
 
@@ -34,12 +30,9 @@ protected:
 
 
 private:
-    static gdx_cpp::graphics::g2d::TextureRegion* split (const gdx_cpp::graphics::Texture& texture,int totalWidth,int totalHeight,int width,int height,int spacing,int margin);
+    static TextureRegion* split (const Texture& texture,int totalWidth,int totalHeight,int width,int height,int spacing,int margin);
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g2d
-} // namespace tiled
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_G2D_TILED_SIMPLETILEATLAS_HPP_

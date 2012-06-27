@@ -17,7 +17,7 @@
 
 #include "AssetType.hpp"
 
-using namespace gdx_cpp::assets;
+using namespace gdx;
 
 const AssetType AssetType::BitmapFont("BitmapFont");
 const AssetType AssetType::Music("Music");

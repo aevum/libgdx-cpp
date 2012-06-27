@@ -21,13 +21,12 @@
 #ifndef GDX_CPP_GRAPHICS_TEXTUREDICT_HPP_
 #define GDX_CPP_GRAPHICS_TEXTUREDICT_HPP_
 
-namespace gdx_cpp {
-namespace graphics {
+namespace gdx {
 
 class TextureDict {
 public:
     static TextureRef& loadTexture (const std::string& path);
-    static TextureRef& loadTexture (const std::string& path,const gdx_cpp::graphics::Texture::TextureFilter& minFilter,const gdx_cpp::graphics::Texture::TextureFilter& magFilter,const gdx_cpp::graphics::Texture::TextureWrap& uwrap,const gdx_cpp::graphics::Texture::TextureWrap& vwrap);
+    static TextureRef& loadTexture (const std::string& path,const Texture::TextureFilter& minFilter,const Texture::TextureFilter& magFilter,const Texture::TextureWrap& uwrap,const Texture::TextureWrap& vwrap);
     static void removeTexture (const std::string& path);
     static void unloadAll ();
 
@@ -38,7 +37,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_TEXTUREDICT_HPP_

@@ -22,13 +22,13 @@
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/Application.hpp"
 
-using namespace gdx_cpp::graphics::glutils;
+using namespace gdx;
 
 bool PixmapTextureData::disposePixmap () {
     return _disposePixmap;
 }
 
-gdx_cpp::graphics::Pixmap::ptr PixmapTextureData::getPixmap () {
+Pixmap::ptr PixmapTextureData::getPixmap () {
     return pixmap;
 }
 
@@ -40,7 +40,7 @@ int PixmapTextureData::getHeight () {
     return pixmap->getHeight();
 }
 
-const gdx_cpp::graphics::Pixmap::Format* PixmapTextureData::getFormat () {
+const Pixmap::Format* PixmapTextureData::getFormat () {
     return &format;
 }
 
@@ -52,16 +52,16 @@ bool PixmapTextureData::isManaged () {
     return false;
 }
 
-const gdx_cpp::graphics::TextureData::TextureDataType& PixmapTextureData::getType () {
+const TextureData::TextureDataType& PixmapTextureData::getType () {
     return TextureDataType::Pixmap;
 }
 
 void PixmapTextureData::uploadCompressedData () {
-    gdx_cpp::Gdx::app->error(__FILE__, "This TextureData implementation does not upload data itself");
+    gdx_log_error(__FILE__, "This TextureData implementation does not upload data itself");
 }
 
-PixmapTextureData::PixmapTextureData(gdx_cpp::graphics::Pixmap::ptr _pixmap,
-                                     const gdx_cpp::graphics::Pixmap::Format* format,
+PixmapTextureData::PixmapTextureData(Pixmap::ptr _pixmap,
+                                     const Pixmap::Format* format,
                                      bool useMipMaps, bool disposePixmap)
 : _useMipMaps(useMipMaps)
 , _disposePixmap(disposePixmap)

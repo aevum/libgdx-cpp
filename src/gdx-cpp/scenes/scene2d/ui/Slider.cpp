@@ -20,7 +20,7 @@
 
 #include "Slider.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui;
+using namespace gdx::ui;
 
 void Slider::setStyle (const SliderStyle& style) {
     this.style = style;
@@ -29,7 +29,7 @@ void Slider::setStyle (const SliderStyle& style) {
 void Slider::layout () {
 }
 
-void Slider::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void Slider::draw (const gdx::SpriteBatch& batch,float parentAlpha) {
     final TextureRegion knob = style.knob;
     final NinePatch slider = style.slider;
 
@@ -67,7 +67,7 @@ void Slider::calculateSliderPosAndValue (float x) {
     if (listener != null) listener.changed(this, getValue());
 }
 
-gdx_cpp::scenes::scene2d::Actor& Slider::hit (float x,float y) {
+gdx::Actor& Slider::hit (float x,float y) {
     return x > 0 && x < width && y > 0 && y < height ? this : null;
 }
 

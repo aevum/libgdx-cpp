@@ -20,7 +20,7 @@
 
 #include "TiledObject.hpp"
 
-using namespace gdx_cpp::graphics::g2d::tiled;
+using namespace gdx;
 
 
 

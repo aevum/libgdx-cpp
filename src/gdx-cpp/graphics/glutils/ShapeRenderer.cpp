@@ -28,8 +28,7 @@
 
 #include <stdexcept>
 
-using namespace gdx_cpp::graphics::glutils;
-using namespace gdx_cpp;
+using namespace gdx;
 
 const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Point(GL_POINTS);
 const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Line(GL_LINES);
@@ -41,7 +40,7 @@ int ShapeRenderer::getGlType () {
     return glType;
 }
 
-void ShapeRenderer::setColor (const gdx_cpp::graphics::Color& color) {
+void ShapeRenderer::setColor (const Color& color) {
     this->color.set(color);
 }
 
@@ -49,12 +48,12 @@ void ShapeRenderer::setColor (float r,float g,float b,float a) {
     this->color.set(r, g, b, a);
 }
 
-void ShapeRenderer::setProjectionMatrix (const gdx_cpp::math::Matrix4& matrix) {
+void ShapeRenderer::setProjectionMatrix (const Matrix4& matrix) {
     projView.set(matrix);
     matrixDirty = true;
 }
 
-void ShapeRenderer::setTransformMatrix (const gdx_cpp::math::Matrix4& matrix) {
+void ShapeRenderer::setTransformMatrix (const Matrix4& matrix) {
     transform.set(matrix);
     matrixDirty = true;
 }
@@ -84,15 +83,15 @@ void ShapeRenderer::begin (const ShapeType& type) {
     currType = &type;
     if(matrixDirty) {
         combined.set(projView);
-        math::Matrix4::mul(combined.val, transform.val);
+        Matrix4::mul(combined.val, transform.val);
         matrixDirty = false;
     }
     
     if(renderer->getRendererType() == ImmediateModeRenderer::IMMEDIATE_GLES10) {
-        Gdx::gl10->glMatrixMode(GL_PROJECTION);
-        Gdx::gl10->glLoadMatrixf(combined.val);
-        Gdx::gl10->glMatrixMode(GL_MODELVIEW);
-        Gdx::gl10->glLoadIdentity();
+        gl10->glMatrixMode(GL_PROJECTION);
+        gl10->glLoadMatrixf(combined.val);
+        gl10->glMatrixMode(GL_MODELVIEW);
+        gl10->glLoadIdentity();
         ((ImmediateModeRenderer10*)renderer)->begin(currType->getGlType());
     } else {
         ((ImmediateModeRenderer20*)renderer)->begin(combined, currType->getGlType());
@@ -267,12 +266,12 @@ matrixDirty(false),
 color(1,1,1,1),
 currType(NULL)
 {
-    if(Gdx::graphics->isGL20Available())
+    if(graphics->isGL20Available())
         renderer = new ImmediateModeRenderer20(false, true, 0);
     else
         renderer = new ImmediateModeRenderer10();
     
-    projView.setToOrtho2D(0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
+    projView.setToOrtho2D(0, 0, graphics->getWidth(), graphics->getHeight());
 }
 
 int ShapeRenderer::ShapeType::getGlType() const {

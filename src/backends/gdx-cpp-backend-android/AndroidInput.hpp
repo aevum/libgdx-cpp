@@ -23,13 +23,11 @@
 
 #include <gdx-cpp/Input.hpp>
 
-namespace gdx_cpp {
-
-namespace backends {
+namespace gdx {
 
 namespace android {
 
-class AndroidInput : public gdx_cpp::Input
+class AndroidInput : public gdx::Input
 {
 public:
     AndroidInput();
@@ -83,7 +81,7 @@ public:
 
     void setCatchMenuKey (bool catchMenu) ;
 
-    void setInputProcessor (gdx_cpp::InputProcessor* processor) ;
+    void setInputProcessor (gdx::InputProcessor* processor) ;
 
     bool isPeripheralAvailable (int peripheral) ;
 
@@ -106,7 +104,7 @@ public:
     void backPressed();
     void setKeyboardRepeat(int delay, int repeatInterval);
 protected:
-    gdx_cpp::InputProcessor* processor;
+    gdx::InputProcessor* processor;
 
     bool _justTouched;
     bool touching;
@@ -114,8 +112,6 @@ protected:
     int touchY, deltaY;
     
 };
-
-}
 
 }
 

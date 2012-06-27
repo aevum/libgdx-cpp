@@ -20,7 +20,7 @@
 
 #include "AssetLoadingTask.hpp"
 
-using namespace gdx_cpp::assets;
+using namespace gdx;
 
 Void& AssetLoadingTask::call () throws Exception {
     AsynchronousAssetLoader asyncLoader = (AsynchronousAssetLoader)loader;

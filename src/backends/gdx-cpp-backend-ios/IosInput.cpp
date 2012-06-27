@@ -20,9 +20,9 @@
 #include <gdx-cpp/InputProcessor.hpp>
 #include <cassert>
 
-using namespace gdx_cpp::backends::ios;
+using namespace gdx::ios;
 
-gdx_cpp::backends::ios::IosInput::IosInput()
+gdx::ios::IosInput::IosInput()
  :
  touching(false)
  ,touchX(0)
@@ -34,41 +34,41 @@ gdx_cpp::backends::ios::IosInput::IosInput()
 {
 }
 
-void gdx_cpp::backends::ios::IosInput::cancelVibrate()
+void gdx::ios::IosInput::cancelVibrate()
 {
 }
 
-float gdx_cpp::backends::ios::IosInput::getAccelerometerX()
-{
-    return 0;
-}
-
-float gdx_cpp::backends::ios::IosInput::getAccelerometerY()
+float gdx::ios::IosInput::getAccelerometerX()
 {
     return 0;
 }
 
-float gdx_cpp::backends::ios::IosInput::getAccelerometerZ()
+float gdx::ios::IosInput::getAccelerometerY()
 {
     return 0;
 }
 
-float gdx_cpp::backends::ios::IosInput::getAzimuth()
+float gdx::ios::IosInput::getAccelerometerZ()
 {
     return 0;
 }
 
-long int gdx_cpp::backends::ios::IosInput::getCurrentEventTime()
+float gdx::ios::IosInput::getAzimuth()
 {
     return 0;
 }
 
-int gdx_cpp::backends::ios::IosInput::getDeltaX()
+long int gdx::ios::IosInput::getCurrentEventTime()
+{
+    return 0;
+}
+
+int gdx::ios::IosInput::getDeltaX()
 {
     return deltaX;
 }
 
-int gdx_cpp::backends::ios::IosInput::getDeltaX(int pointer)
+int gdx::ios::IosInput::getDeltaX(int pointer)
 {       
     if (pointer == 0) {
         return deltaX;
@@ -76,12 +76,12 @@ int gdx_cpp::backends::ios::IosInput::getDeltaX(int pointer)
     return 0;
 }
 
-int gdx_cpp::backends::ios::IosInput::getDeltaY()
+int gdx::ios::IosInput::getDeltaY()
 {
     return deltaY;
 }
 
-int gdx_cpp::backends::ios::IosInput::getDeltaY(int pointer)
+int gdx::ios::IosInput::getDeltaY(int pointer)
 {
     if (pointer == 0) {
         return deltaY;
@@ -89,132 +89,132 @@ int gdx_cpp::backends::ios::IosInput::getDeltaY(int pointer)
     return 0;
 }
 
-gdx_cpp::Input::Orientation gdx_cpp::backends::ios::IosInput::getNativeOrientation()
+gdx::Input::Orientation gdx::ios::IosInput::getNativeOrientation()
 {
-    return gdx_cpp::Input::Landscape;
+    return gdx::Input::Landscape;
 }
 
-float gdx_cpp::backends::ios::IosInput::getPitch()
-{
-    return 0;
-}
-
-float gdx_cpp::backends::ios::IosInput::getRoll()
+float gdx::ios::IosInput::getPitch()
 {
     return 0;
 }
 
-int gdx_cpp::backends::ios::IosInput::getRotation()
+float gdx::ios::IosInput::getRoll()
 {
     return 0;
 }
 
-void gdx_cpp::backends::ios::IosInput::getTextInput(const gdx_cpp::Input::TextInputListener& listener,
+int gdx::ios::IosInput::getRotation()
+{
+    return 0;
+}
+
+void gdx::ios::IosInput::getTextInput(const gdx::Input::TextInputListener& listener,
                                                       const std::string& title, const std::string& text)
 {
 }
 
-int gdx_cpp::backends::ios::IosInput::getX()
+int gdx::ios::IosInput::getX()
 {
     return touchX;
 }
 
-int gdx_cpp::backends::ios::IosInput::getX(int pointer)
+int gdx::ios::IosInput::getX(int pointer)
 {
     return 0;
 }
 
-int gdx_cpp::backends::ios::IosInput::getY()
+int gdx::ios::IosInput::getY()
 {
     return touchY;
 }
 
-int gdx_cpp::backends::ios::IosInput::getY(int pointer)
+int gdx::ios::IosInput::getY(int pointer)
 {
     return 0;
 }
 
-bool gdx_cpp::backends::ios::IosInput::isButtonPressed(int button)
+bool gdx::ios::IosInput::isButtonPressed(int button)
 {
     return false;
 }
 
-bool gdx_cpp::backends::ios::IosInput::isCursorCatched()
+bool gdx::ios::IosInput::isCursorCatched()
 {
     return false;
 }
 
-bool gdx_cpp::backends::ios::IosInput::isKeyPressed(int key)
+bool gdx::ios::IosInput::isKeyPressed(int key)
 {
     return false;
 }
 
-bool gdx_cpp::backends::ios::IosInput::isPeripheralAvailable(int peripheral)
+bool gdx::ios::IosInput::isPeripheralAvailable(int peripheral)
 {
     return peripheral == Peripheral::HardwareKeyboard;
 }
 
-bool gdx_cpp::backends::ios::IosInput::isTouched()
+bool gdx::ios::IosInput::isTouched()
 {
     return touching;
 }
 
-bool gdx_cpp::backends::ios::IosInput::isTouched(int pointer)
+bool gdx::ios::IosInput::isTouched(int pointer)
 {
     return pointer == 0 && touching;
 }
 
-bool gdx_cpp::backends::ios::IosInput::justTouched()
+bool gdx::ios::IosInput::justTouched()
 {
     return _justTouched;
 }
 
-void gdx_cpp::backends::ios::IosInput::setCatchBackKey(bool catchBack)
+void gdx::ios::IosInput::setCatchBackKey(bool catchBack)
 {
 }
 
-void gdx_cpp::backends::ios::IosInput::setCatchMenuKey(bool catchMenu)
+void gdx::ios::IosInput::setCatchMenuKey(bool catchMenu)
 {
 }
 
-void gdx_cpp::backends::ios::IosInput::setCursorCatched(bool catched)
+void gdx::ios::IosInput::setCursorCatched(bool catched)
 {
 }
 
-void gdx_cpp::backends::ios::IosInput::setCursorPosition(int x, int y)
+void gdx::ios::IosInput::setCursorPosition(int x, int y)
 {
 }
 
-void gdx_cpp::backends::ios::IosInput::setInputProcessor(gdx_cpp::InputProcessor* processor)
+void gdx::ios::IosInput::setInputProcessor(gdx::InputProcessor* processor)
 {
     this->processor = processor;
 }
 
-void gdx_cpp::backends::ios::IosInput::setOnscreenKeyboardVisible(bool visible)
+void gdx::ios::IosInput::setOnscreenKeyboardVisible(bool visible)
 {
 }
 
-void gdx_cpp::backends::ios::IosInput::vibrate(int milliseconds)
+void gdx::ios::IosInput::vibrate(int milliseconds)
 {
 }
 
-void gdx_cpp::backends::ios::IosInput::vibrate(long int* pattern, int repeat)
+void gdx::ios::IosInput::vibrate(long int* pattern, int repeat)
 {
 }
 
-void gdx_cpp::backends::ios::IosInput::reset()
+void gdx::ios::IosInput::reset()
 {
     this->_justTouched = false;
 }
 
-void gdx_cpp::backends::ios::IosInput::handleTouchDrag(float x, float y, int button)
+void gdx::ios::IosInput::handleTouchDrag(float x, float y, int button)
 {
     if (this->processor) {
         this->processor->touchDragged(x, y, button);
     }
 }
 
-void gdx_cpp::backends::ios::IosInput::handleTouchDown(float x, float y, int button)
+void gdx::ios::IosInput::handleTouchDown(float x, float y, int button)
 {
     touchX = x;
     touchY = y;
@@ -225,7 +225,7 @@ void gdx_cpp::backends::ios::IosInput::handleTouchDown(float x, float y, int but
     }
 }
 
-void gdx_cpp::backends::ios::IosInput::handleTouchUp(float x, float y, int button)
+void gdx::ios::IosInput::handleTouchUp(float x, float y, int button)
 {
     touching = false;
     if (this->processor) {

@@ -1,6 +1,6 @@
 #include "MathUtils.hpp"
 
-using namespace gdx_cpp::math::utils;
+using namespace gdx;
 
 
 detail::detail() {
@@ -50,7 +50,7 @@ float detail::_cos[SIN_COUNT];
 const int detail::BIG_ENOUGH_INT = 16 * 1024;
 const float detail::BIG_ENOUGH_FLOOR = detail::BIG_ENOUGH_INT;
 const float detail::CEIL = 0.9999999;
-const float detail::BIG_ENOUGH_CEIL = gdx_cpp::utils::NumberUtils::longBitsToDouble(gdx_cpp::utils::NumberUtils::doubleToLongBits(detail::BIG_ENOUGH_INT + 1) - 1);
+const float detail::BIG_ENOUGH_CEIL = NumberUtils::longBitsToDouble(NumberUtils::doubleToLongBits(detail::BIG_ENOUGH_INT + 1) - 1);
 const float detail::BIG_ENOUGH_ROUND = detail::BIG_ENOUGH_INT + 0.5f;
 const int detail::ATAN2_DIM = 128;
 float detail::_atan2[ATAN2_COUNT];

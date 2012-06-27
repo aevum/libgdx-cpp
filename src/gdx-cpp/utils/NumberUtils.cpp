@@ -22,7 +22,7 @@
 
 #include <string.h>
 
-using namespace gdx_cpp::utils;
+using namespace gdx;
 
 uint32_t NumberUtils::floatToIntBits (float value) {
     uint32_t y;

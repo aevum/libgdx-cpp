@@ -23,8 +23,7 @@
 
 #include "GL10.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
+namespace gdx {
 
 class GL11 : virtual public GL10 {
 public:
@@ -59,7 +58,6 @@ public:
     virtual void glDrawElements (int mode,int count,int type,void* indices) const;
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_GL11_HPP_

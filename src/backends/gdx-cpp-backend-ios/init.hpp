@@ -25,4 +25,5 @@ NSString* gdxcpp_get_app_controller();
 void gdxcpp_initialize_application();
 void gdxcpp_create_listener();
 
+
 #endif //GDX_CPP_BACKENDS_IOS_INIT_CPP

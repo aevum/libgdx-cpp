@@ -21,21 +21,16 @@
 #include "gdx-cpp/audio/Music.hpp"
 #include <gdx-cpp/utils/Aliases.hpp>
 
-namespace gdx_cpp {
-namespace files {
+namespace gdx {
 class FileHandle;
-}
-
-
-namespace backends {
 
 namespace nix {
 class   LinuxOpenALAudio;
 
-class LinuxOpenALMusic : public gdx_cpp::audio::Music
+class LinuxOpenALMusic : public gdx::Music
 {
 public:
-    LinuxOpenALMusic(gdx_cpp::backends::nix::LinuxOpenALAudio* _audio, ref_ptr_maker< gdx_cpp::files::FileHandle >::type file);
+    LinuxOpenALMusic(gdx::nix::LinuxOpenALAudio* _audio, ref_ptr_maker< gdx::FileHandle >::type file);
 
     void setup (int _channels, int _sampleRate);
     
@@ -55,7 +50,7 @@ public:
 protected:
     virtual int read (char * buffer, int bufferSize) = 0;
     virtual void reset () = 0;
-    ref_ptr_maker< gdx_cpp::files::FileHandle >::type file;
+    ref_ptr_maker< gdx::FileHandle >::type file;
 private:
     const static int bufferSize = 40960;
     const static int bufferCount = 3;
@@ -73,8 +68,6 @@ private:
     bool fill(int bufferID);
 
 };
-
-}
 
 }
 

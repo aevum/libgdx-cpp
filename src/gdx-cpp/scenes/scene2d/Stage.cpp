@@ -21,24 +21,24 @@
 #include "Stage.hpp"
 #include "gdx-cpp/graphics/OrthographicCamera.hpp"
 
-using namespace gdx_cpp::scenes::scene2d;
-using namespace gdx_cpp;
+using namespace gdx::scene2d;
+using namespace gdx;
 
 void Stage::setViewport (float width, float height, bool stretch) {
     if (!stretch) {
-        if (width > height && width / (float)Gdx::graphics->getWidth() <= height / (float)Gdx::graphics->getHeight()) {
-            float toDeviceSpace = Gdx::graphics->getHeight() / height;
-            float toViewportSpace = height / Gdx::graphics->getHeight();
+        if (width > height && width / (float)graphics->getWidth() <= height / (float)graphics->getHeight()) {
+            float toDeviceSpace = graphics->getHeight() / height;
+            float toViewportSpace = height / graphics->getHeight();
 
             float deviceWidth = width * toDeviceSpace;
-            this->_width = width + (Gdx::graphics->getWidth() - deviceWidth) * toViewportSpace;
+            this->_width = width + (graphics->getWidth() - deviceWidth) * toViewportSpace;
             this->_height = height;
         } else {
-            float toDeviceSpace = Gdx::graphics->getWidth() / width;
-            float toViewportSpace = width / Gdx::graphics->getWidth();
+            float toDeviceSpace = graphics->getWidth() / width;
+            float toViewportSpace = width / graphics->getWidth();
 
             float deviceHeight = height * toDeviceSpace;
-            this->_height = height + (Gdx::graphics->getHeight() - deviceHeight) * toViewportSpace;
+            this->_height = height + (graphics->getHeight() - deviceHeight) * toViewportSpace;
             this->_width = width;
         }
     } else {
@@ -198,19 +198,19 @@ void Stage::graphToString (std::stringstream& buffer, const Actor* actor,int lev
     }
 }
 
-scenes::scene2d::Group& Stage::getRoot () {
+Group& Stage::getRoot () {
     return root;
 }
 
-gdx_cpp::graphics::g2d::SpriteBatch* Stage::getSpriteBatch () {
+gdx::SpriteBatch* Stage::getSpriteBatch () {
     return batch;
 }
 
-gdx_cpp::graphics::Camera* const Stage::getCamera () {
+gdx::Camera* const Stage::getCamera () {
     return camera;
 }
 
-void Stage::setCamera (gdx_cpp::graphics::Camera* camera) {
+void Stage::setCamera (gdx::Camera* camera) {
     this->camera = camera;
 }
 
@@ -223,7 +223,7 @@ Actor* Stage::hit (float x,float y) {
     return root.hit(point.x, point.y);
 }
 
-void Stage::toStageCoordinates (int x,int y,gdx_cpp::math::Vector2& out) {
+void Stage::toStageCoordinates (int x,int y,gdx::Vector2& out) {
     camera->unproject(tmp.set(x, y, 0));
     out.x = tmp.x;
     out.y = tmp.y;
@@ -246,13 +246,13 @@ Stage::Stage (float width, float height, bool stretch)
  ,_height(height)
  ,stretch(stretch)
  ,root("root")
- ,camera(new graphics::OrthographicCamera)
- ,batch(new graphics::g2d::SpriteBatch)
+ ,camera(new OrthographicCamera)
+ ,batch(new SpriteBatch)
 {
     setViewport(width, height, stretch);
 }
 
-scenes::scene2d::Stage::~Stage()
+Stage::~Stage()
 {
     batch->dispose();
     delete batch;

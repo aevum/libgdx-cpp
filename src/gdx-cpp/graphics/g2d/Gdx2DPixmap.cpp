@@ -33,8 +33,7 @@
 #include <iostream>
 #include <cstdio>
 
-using namespace gdx_cpp::graphics::g2d;
-using namespace gdx_cpp;
+using namespace gdx;
 
 Gdx2DPixmap::Blending Gdx2DPixmap::blending = SourceOver;
 
@@ -51,39 +50,39 @@ gdx2d_pixmap* newPixmap (int width, int height, int format) {
     return pixmap;
 }
 
-graphics::Pixmap::Blending graphics::g2d::Gdx2DPixmap::getBlending()
+Pixmap::Blending Gdx2DPixmap::getBlending()
 {
     return blending;
 }
 
-void graphics::g2d::Gdx2DPixmap::drawPixmap(const gdx_cpp::graphics::Pixmap& pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight)
+void Gdx2DPixmap::drawPixmap(const Pixmap& pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight)
 {
     drawPixmap(pixmap, srcx, srcy, srcWidth, srcHeight, x, y, srcWidth, srcHeight);
 }
 
-void graphics::g2d::Gdx2DPixmap::setBlending(const gdx_cpp::graphics::Pixmap::Blending& _blending)
+void Gdx2DPixmap::setBlending(const Pixmap::Blending& _blending)
 {
     blending = _blending;
 }
 
-void graphics::g2d::Gdx2DPixmap::setFilter(const gdx_cpp::graphics::Pixmap::Filter& filter)
+void Gdx2DPixmap::setFilter(const Pixmap::Filter& filter)
 {
     setScale(filter == NearestNeighbour ? GDX2D_SCALE_NEAREST : GDX2D_SCALE_LINEAR);
 }
 
-void graphics::g2d::Gdx2DPixmap::setStrokeWidth(int width)
+void Gdx2DPixmap::setStrokeWidth(int width)
 {
 
 }
 
-Gdx2DPixmap::Gdx2DPixmap (files::FileHandle::ptr fhandle, int requestedFormat)
+Gdx2DPixmap::Gdx2DPixmap (FileHandle::ptr fhandle, int requestedFormat)
         :
         pixData(0)
         ,width(0)
         ,height(0)
         ,format(0)
 {
-    files::FileHandle::buffer_ptr buffer;    
+    FileHandle::buffer_ptr buffer;    
     int readed = fhandle->readBytes(buffer);
 
     assert(readed);
@@ -134,17 +133,17 @@ Gdx2DPixmap::Gdx2DPixmap (unsigned char* encodedData, int offset, int len, int r
     }
 }
 
-graphics::g2d::Gdx2DPixmap::~Gdx2DPixmap()
+Gdx2DPixmap::~Gdx2DPixmap()
 {
     dispose();
 }
 
-void graphics::g2d::Gdx2DPixmap::setBlend(int blend)
+void Gdx2DPixmap::setBlend(int blend)
 {
     gdx2d_set_blend(blend);
 }
 
-void graphics::g2d::Gdx2DPixmap::setScale(int scale)
+void Gdx2DPixmap::setScale(int scale)
 {
     gdx2d_set_scale(scale);
 }
@@ -198,31 +197,31 @@ void Gdx2DPixmap::fillCircle (int x,int y,int radius) {
     gdx2d_fill_circle((gdx2d_pixmap*)pixData, x, y, radius, color);
 }
 
-void Gdx2DPixmap::drawPixmap (const gdx_cpp::graphics::Pixmap& src, int srcX, int srcY, int dstX, int dstY, int width) {
+void Gdx2DPixmap::drawPixmap (const Pixmap& src, int srcX, int srcY, int dstX, int dstY, int width) {
     drawPixmap(src, srcX, srcY, width, height, dstX, dstY, width, height);
 }
 
-void Gdx2DPixmap::drawPixmap (const gdx_cpp::graphics::Pixmap& src, int srcX, int srcY, int srcWidth, int srcHeight, int dstX, int dstY, int dstWidth, int dstHeight) {
+void Gdx2DPixmap::drawPixmap (const Pixmap& src, int srcX, int srcY, int srcWidth, int srcHeight, int dstX, int dstY, int dstWidth, int dstHeight) {
     assert(pixData != NULL);
 
-    if (src.getType() == graphics::Pixmap::Gdx2d) {    
+    if (src.getType() == Pixmap::Gdx2d) {    
         gdx2d_draw_pixmap((gdx2d_pixmap*)((Gdx2DPixmap&) src).pixData, (gdx2d_pixmap*)pixData, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight);
     } else {
         throw std::runtime_error("Unsupported conversion: expected a Gdx2DPixmap");
     }
 }
 
-graphics::g2d::Gdx2DPixmap* Gdx2DPixmap::newPixmapFromFile (files::FileHandle::ptr file, int requestedFormat) {
-    files::FileHandle::buffer_ptr buffer;
+Gdx2DPixmap* Gdx2DPixmap::newPixmapFromFile (FileHandle::ptr file, int requestedFormat) {
+    FileHandle::buffer_ptr buffer;
     int readed = file->readBytes(buffer);
     return newPixmapFromBuffer((unsigned char*) buffer.get(), readed, requestedFormat);
 }
 
-graphics::g2d::Gdx2DPixmap* Gdx2DPixmap::pixmapFromByteArray (unsigned char* buffer, unsigned int size, int requestedFormat) {
+Gdx2DPixmap* Gdx2DPixmap::pixmapFromByteArray (unsigned char* buffer, unsigned int size, int requestedFormat) {
     return new Gdx2DPixmap(buffer, 0, size, requestedFormat);
 }
 
-graphics::g2d::Gdx2DPixmap* Gdx2DPixmap::newPixmap (int width, int height, int format) {
+Gdx2DPixmap* Gdx2DPixmap::newPixmap (int width, int height, int format) {
     return new Gdx2DPixmap(width, height, format);
 }
 
@@ -239,13 +238,11 @@ int Gdx2DPixmap::getWidth () const {
     return width;
 }
 
-const graphics::Pixmap::Format& Gdx2DPixmap::getFormat () {
+const Pixmap::Format& Gdx2DPixmap::getFormat () {
     return Pixmap::Format::fromGdx2DPixmapFormat(format);
 }
 
 int Gdx2DPixmap::getGLInternalFormat () const {
-    using namespace gdx_cpp::graphics;
-
     switch (pixData->format) {
     case GDX2D_FORMAT_ALPHA:
         return GL_ALPHA;
@@ -271,7 +268,6 @@ int Gdx2DPixmap::getGLFormat () const {
 }
 
 int Gdx2DPixmap::getGLType () const {
-    using namespace gdx_cpp::graphics;
     switch (pixData->format) {
     case GDX2D_FORMAT_ALPHA:
     case GDX2D_FORMAT_LUMINANCE_ALPHA:
@@ -310,17 +306,17 @@ const std::string Gdx2DPixmap::getFormatString () {
     }
 }
 
-void graphics::g2d::Gdx2DPixmap::setColor(float r, float g, float b, float a)
+void Gdx2DPixmap::setColor(float r, float g, float b, float a)
 {
-    this->color = graphics::Color::rgba8888(r, g, b, a);
+    this->color = Color::rgba8888(r, g, b, a);
 }
 
-void graphics::g2d::Gdx2DPixmap::setColor(const gdx_cpp::graphics::Color& color)
+void Gdx2DPixmap::setColor(const Color& color)
 {
-    this->color = graphics::Color::rgba8888(color.r, color.g, color.b, color.a);
+    this->color = Color::rgba8888(color.r, color.g, color.b, color.a);
 }
 
-void graphics::g2d::Gdx2DPixmap::setScale(float scaleX, float scaleY)
+void Gdx2DPixmap::setScale(float scaleX, float scaleY)
 {
     throw std::runtime_error("Gdx2DPixmap::setScale: unsupported operation");
 }

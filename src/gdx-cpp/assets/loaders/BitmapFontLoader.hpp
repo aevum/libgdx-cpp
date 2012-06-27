@@ -25,27 +25,22 @@
 #include "gdx-cpp/graphics/g2d/BitmapFont.hpp"
 #include "BitmapFontParameter.hpp"
 
-namespace gdx_cpp {
-namespace assets {
+namespace gdx {
 
     class AssetManager;
 
-namespace loaders {
-
-class BitmapFontLoader : public AssetLoader<graphics::g2d::BitmapFont, BitmapFontParameter> {
+class BitmapFontLoader : public AssetLoader<BitmapFont, BitmapFontParameter> {
 public:
-    std::vector<AssetDescriptor> getDependencies (const std::string& fileName, const gdx_cpp::assets::loaders::Parameter* parameter);
-    void loadAsync (const gdx_cpp::assets::AssetManager* manager, const std::string& fileName, const gdx_cpp::assets::loaders::BitmapFontParameter& parameter);
-    gdx_cpp::graphics::g2d::BitmapFont& loadSync ();
+    std::vector<AssetDescriptor> getDependencies (const std::string& fileName, const Parameter* parameter);
+    void loadAsync (const AssetManager* manager, const std::string& fileName, const BitmapFontParameter& parameter);
+    BitmapFont& loadSync ();
 
 protected:
-    graphics::g2d::BitmapFont::BitmapFontData::ptr data;
+    BitmapFont::BitmapFontData::ptr data;
     AssetManager* manager;
     std::string fileName;
 };
 
-} // namespace gdx_cpp
-} // namespace assets
-} // namespace loaders
+} // namespace gdx
 
 #endif // GDX_CPP_ASSETS_LOADERS_BITMAPFONTLOADER_HPP_

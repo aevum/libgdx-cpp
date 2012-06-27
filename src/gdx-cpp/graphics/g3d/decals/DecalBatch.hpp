@@ -21,12 +21,12 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_DECALS_DECALBATCH_HPP_
 #define GDX_CPP_GRAPHICS_G3D_DECALS_DECALBATCH_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace decals {
 
-class DecalBatch: public gdx_cpp::utils::Disposable {
+class DecalBatch: public gdx::Disposable {
 public:
     void setGroupStrategy (const GroupStrategy& groupStrategy);
     void initialize (int size);
@@ -36,16 +36,16 @@ public:
     void dispose ();
 
 protected:
-    gdx_cpp::utils::ArrayDecal>& newObject ();
+    gdx::ArrayDecal>& newObject ();
     void render ();
-    void flush (const gdx_cpp::graphics::glutils::ShaderProgram& shader,int verticesPosition);
+    void flush (const gdx::ShaderProgram& shader,int verticesPosition);
     void clear ();
 
 private:
-    void render (const gdx_cpp::graphics::glutils::ShaderProgram& shader,gdx_cpp::utils::ArrayDecal>& decals);
+    void render (const gdx::ShaderProgram& shader,gdx::ArrayDecal>& decals);
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace decals

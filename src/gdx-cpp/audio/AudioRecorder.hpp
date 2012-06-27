@@ -24,10 +24,9 @@
 #include "gdx-cpp/utils/Disposable.hpp"
 
 
-namespace gdx_cpp {
-namespace audio {
+namespace gdx {
 
-class AudioRecorder: public gdx_cpp::utils::Disposable {
+class AudioRecorder: public Disposable {
 public:
     virtual   void read (int offset,int numSamples) = 0;
     virtual   void dispose () = 0;
@@ -39,7 +38,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace audio
+} // namespace gdx
 
 #endif // GDX_CPP_AUDIO_AUDIORECORDER_HPP_

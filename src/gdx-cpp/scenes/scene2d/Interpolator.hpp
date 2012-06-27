@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_INTERPOLATOR_HPP_
 #define GDX_CPP_SCENES_SCENE2D_INTERPOLATOR_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 
@@ -32,7 +32,7 @@ public:
     virtual Interpolator* copy () = 0;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 

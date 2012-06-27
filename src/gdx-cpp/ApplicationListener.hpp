@@ -2,7 +2,7 @@
 #ifndef GDXCPP_APPLICATION_LISTENER_H
 #define GDXCPP_APPLICATION_LISTENER_H
 
-namespace gdx_cpp {
+namespace gdx {
   
 class ApplicationListener {
 public:

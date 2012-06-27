@@ -25,15 +25,14 @@
 
 #include "gdx-cpp/utils/ArrayUtils.hpp"
 
-using namespace gdx_cpp::graphics::g2d;
-using namespace gdx_cpp;
+using namespace gdx;
 
 const char BitmapFont::xChars[] = {'x', 'e', 'a', 'o', 'n', 's', 'r', 'c', 'u', 'm', 'v', 'w', 'z'};
 const char BitmapFont::capChars[] = {'M', 'N', 'B', 'D', 'C', 'E', 'F', 'K', 'A', 'G', 'H', 'I', 'J', 'L', 'O', 'P', 'Q', 'R', 'S',
                                      'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
                                     };
 
-void BitmapFont::BitmapFontData::setGlyph ( int ch, graphics::g2d::BitmapFont::Glyph* glyph ) {
+void BitmapFont::BitmapFontData::setGlyph ( int ch, BitmapFont::Glyph* glyph ) {
     Glyph** page = glyphs[ch / PAGE_SIZE];
 
     if ( page == NULL ) {
@@ -77,7 +76,7 @@ std::string BitmapFont::BitmapFontData::getImagePath () {
     return imagePath;
 }
 
-gdx_cpp::files::FileHandle::ptr BitmapFont::BitmapFontData::getFontFile () {
+FileHandle::ptr BitmapFont::BitmapFontData::getFontFile () {
     return fontFile;
 }
 
@@ -119,7 +118,7 @@ BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch,const std::s
 BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch,const std::string& str,float x,float y,int start,int end ) {
     float batchColor = spriteBatch.color;
     spriteBatch.setColor ( color );
-    graphics::Texture::ptr texture = region->getTexture();
+    Texture::ptr texture = region->getTexture();
     y += data->ascent;
     float startX = x;
 
@@ -251,7 +250,7 @@ BitmapFont::TextBounds& BitmapFont::drawWrapped ( SpriteBatch& spriteBatch,const
     return drawWrapped ( spriteBatch, str, x, y, wrapWidth, HALIGNMENT_LEFT );
 }
 
-BitmapFont::TextBounds& BitmapFont::drawWrapped ( gdx_cpp::graphics::g2d::SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth, const gdx_cpp::graphics::g2d::BitmapFont::HAlignment& alignment ) {
+BitmapFont::TextBounds& BitmapFont::drawWrapped ( SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth, const BitmapFont::HAlignment& alignment ) {
     float batchColor = spriteBatch.color;
     float down = this->data->down;
     int start = 0;
@@ -455,18 +454,18 @@ void BitmapFont::setColor ( float color ) {
     this->color = color;
 }
 
-void BitmapFont::setColor ( const gdx_cpp::graphics::Color& tint ) {
+void BitmapFont::setColor ( const Color& tint ) {
     this->color = tint.toFloatBits();
 }
 
 void BitmapFont::setColor ( float r,float g,float b,float a ) {
     int intBits = ( int ) ( 255 * a ) << 24 | ( int ) ( 255 * b ) << 16 | ( int ) ( 255 * g ) << 8 | ( int ) ( 255 * r );
-    color = gdx_cpp::utils::NumberUtils::intBitsToFloat ( ( intBits & 0xfeffffff ) );
+    color = NumberUtils::intBitsToFloat ( ( intBits & 0xfeffffff ) );
 }
 
-gdx_cpp::graphics::Color BitmapFont::getColor () {
-    int intBits = gdx_cpp::utils::NumberUtils::floatToRawIntBits ( color );
-    graphics::Color color = this->tempColor;
+Color BitmapFont::getColor () {
+    int intBits = NumberUtils::floatToRawIntBits ( color );
+    Color color = this->tempColor;
     color.r = ( intBits & 0xff ) / 255.f;
     color.g = ( ( intBits >> 8 ) & 0xff ) / 255.f;
     color.b = ( ( intBits >> 16 ) & 0xff ) / 255.f;
@@ -570,31 +569,31 @@ BitmapFont::BitmapFontData* BitmapFont::getData () {
     return data;
 }
 
-BitmapFont::BitmapFont ( graphics::g2d::BitmapFont::BitmapFontData* p_data, graphics::g2d::TextureRegion::ptr p_region, bool p_integer )
+BitmapFont::BitmapFont ( BitmapFont::BitmapFontData* p_data, TextureRegion::ptr p_region, bool p_integer )
     : data ( p_data ),
       region ( p_region ),
       integer ( p_integer ),
       flipped ( p_data->flipped ),
-      color ( graphics::Color::WHITE.toFloatBits() ),
+      color ( Color::WHITE.toFloatBits() ),
       tempColor ( 1,1,1,1 ) {
     if ( region == NULL ) {
-        region = TextureRegion::newFromTexture ( graphics::Texture::newFromFile ( Gdx::files->internal ( data->imagePath ), NULL, false ) );
+        region = TextureRegion::newFromTexture ( Texture::newFromFile ( files->internal ( data->imagePath ), NULL, false ) );
     }
     load ( data );
 }
 
-BitmapFont* BitmapFont::fromFiles ( files::FileHandle::ptr fontFile, files::FileHandle::ptr imageFile, bool flip, bool integer ) {
+BitmapFont* BitmapFont::fromFiles ( FileHandle::ptr fontFile, FileHandle::ptr imageFile, bool flip, bool integer ) {
     BitmapFontData* data = new BitmapFontData ( fontFile, flip );
-    graphics::g2d::TextureRegion::ptr region;
+    TextureRegion::ptr region;
 
     if ( imageFile != NULL ) {
-        region = graphics::g2d::TextureRegion::newFromTexture ( graphics::Texture::newFromFile ( imageFile, NULL, false ) );
+        region = TextureRegion::newFromTexture ( Texture::newFromFile ( imageFile, NULL, false ) );
     }
 
     return new BitmapFont ( data, region, integer );
 }
 
-BitmapFont::BitmapFontData::BitmapFontData ( files::FileHandle::ptr fontFile, bool flip )
+BitmapFont::BitmapFontData::BitmapFontData ( FileHandle::ptr fontFile, bool flip )
     : fontFile ( fontFile ),
       flipped ( flip ),
       capHeight ( 1 ),
@@ -611,7 +610,7 @@ BitmapFont::BitmapFontData::BitmapFontData ( files::FileHandle::ptr fontFile, bo
     std::vector <char> n_buffer;
     
     {
-        files::FileHandle::buffer_ptr buffer;
+        FileHandle::buffer_ptr buffer;
         int readed = fontFile->readBytes ( buffer );
         n_buffer.resize ( readed + 1);
         memcpy ( &n_buffer[0], buffer.get(), readed );
@@ -725,7 +724,7 @@ BitmapFont::BitmapFontData::BitmapFontData ( files::FileHandle::ptr fontFile, bo
         spaceWidth = spaceGlyph != NULL ? spaceGlyph->xadvance + spaceGlyph->width : 1;
 
         Glyph* xGlyph = NULL;
-        for ( int i = 0; i < utils::array_size ( xChars ); i++ ) {
+        for ( int i = 0; i < array_size ( xChars ); i++ ) {
             xGlyph = getGlyph ( xChars[i] );
             if ( xGlyph != NULL ) break;
         }
@@ -734,7 +733,7 @@ BitmapFont::BitmapFontData::BitmapFontData ( files::FileHandle::ptr fontFile, bo
         xHeight = xGlyph->height;
 
         Glyph* capGlyph = NULL;
-        for ( int i = 0; i < utils::array_size ( capChars ); i++ ) {
+        for ( int i = 0; i < array_size ( capChars ); i++ ) {
             capGlyph = getGlyph ( capChars[i] );
             if ( capGlyph != NULL ) break;
         }
@@ -748,7 +747,7 @@ BitmapFont::BitmapFontData::BitmapFontData ( files::FileHandle::ptr fontFile, bo
             down = -down;
         }
     } catch ( std::exception e ) {
-        gdx_cpp::Gdx::app->log ( "BitmapFont", "Constructor exception: %s", e.what() );
+       gdx_log_debug ( "BitmapFont", "Constructor exception: %s", e.what() );
         throw std::runtime_error ( "Error loading font file: " + fontFile->name() );
     }
 }
@@ -788,7 +787,7 @@ int BitmapFont::Glyph::getKerning ( char ch ) {
     return 0;
 }
 
-graphics::g2d::BitmapFont::BitmapFontData::~BitmapFontData() {
+BitmapFont::BitmapFontData::~BitmapFontData() {
     for ( int  i = 0; i < PAGES; ++i ) {
         Glyph** page = glyphs[i];
 
@@ -808,7 +807,7 @@ graphics::g2d::BitmapFont::BitmapFontData::~BitmapFontData() {
     delete [] glyphs;
 }
 
-graphics::g2d::BitmapFont::Glyph::~Glyph() {
+BitmapFont::Glyph::~Glyph() {
     if ( kerning ) {
         for ( int  i = 0; i < PAGES; ++i ) {
             char* _kerning = kerning[i];

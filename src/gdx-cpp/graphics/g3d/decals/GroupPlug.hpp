@@ -21,14 +21,14 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_DECALS_GROUPPLUG_HPP_
 #define GDX_CPP_GRAPHICS_G3D_DECALS_GROUPPLUG_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace decals {
 
 class GroupPlug {
 public:
-    virtual   void beforeGroup (gdx_cpp::utils::ArrayDecal>& contents) = 0;
+    virtual   void beforeGroup (gdx::ArrayDecal>& contents) = 0;
     virtual   void afterGroup () = 0;
 
 protected:
@@ -38,7 +38,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace decals

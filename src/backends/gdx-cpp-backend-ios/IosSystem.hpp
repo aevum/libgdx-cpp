@@ -28,22 +28,22 @@
 
 class Runnable;
 
-namespace gdx_cpp {
+namespace gdx {
 
 namespace backends {
 
 namespace ios {
 
-class IosSystem  : public gdx_cpp::implementation::System
+class IosSystem  : public gdx::System
 {
-class IosThreadFactory : public gdx_cpp::implementation::ThreadFactory {
+class IosThreadFactory : public gdx::ThreadFactory {
 public: 
-        implementation::Thread::ptr createThread(Runnable* t);
+        Thread::ptr createThread(Runnable* t);
 };
 
-class IosMutexFactory : public gdx_cpp::implementation::MutexFactory {
+class IosMutexFactory : public gdx::MutexFactory {
 public:
-        implementation::Mutex::ptr createMutex();
+        Mutex::ptr createMutex();
 };
 
 public:
@@ -59,20 +59,20 @@ public:
     std::string canonicalize(const std::string& path);
     void checkDelete(const std::string& path);
     void checkRead(const std::string& path);
-    bool createDirectory(const gdx_cpp::files::File& f);
-    bool deleteFile(files::File& f);
-    int getBooleanAttributes(const gdx_cpp::files::File& f);
+    bool createDirectory(const gdx::File& f);
+    bool deleteFile(File& f);
+    int getBooleanAttributes(const gdx::File& f);
     std::string getDefaultParent();
-    int64_t getLength(files::File f);
+    int64_t getLength(File f);
     char getPathSeparator();
     char getSeparator();
-    bool isAbsolute(const gdx_cpp::files::File& f);
-    void list(const gdx_cpp::files::File& f, std::vector< std::string > &paths);
+    bool isAbsolute(const gdx::File& f);
+    void list(const gdx::File& f, std::vector< std::string > &paths);
     std::string normalize(const std::string &pathname, const int &len, const int &off);
     std::string normalize(const std::string &path);
     int prefixLength(const std::string& path);
-    bool renameFile(files::File& f1, const gdx_cpp::files::File& f2);
-    std::string resolve(const gdx_cpp::files::File& f);
+    bool renameFile(File& f1, const gdx::File& f2);
+    std::string resolve(const gdx::File& f);
     std::string resolve(const std::string& parent, const std::string& child);
     void checkWrite(const std::string& path);
     

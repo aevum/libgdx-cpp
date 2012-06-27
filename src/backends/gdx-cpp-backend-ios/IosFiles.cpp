@@ -19,26 +19,26 @@
 #include "IosFiles.hpp"
 #include "IosFileHandle.hpp"
 
-using namespace gdx_cpp::backends::ios;
+using namespace gdx::ios;
 
-gdx_cpp::files::FileHandle::ptr IosFiles::getFileHandle (const std::string &fileName, gdx_cpp::Files::FileType type)
+gdx::FileHandle::ptr IosFiles::getFileHandle (const std::string &fileName, gdx::Files::FileType type)
 {
-    return gdx_cpp::files::FileHandle::ptr(new IosFileHandle(fileName, type));
+    return gdx::FileHandle::ptr(new IosFileHandle(fileName, type));
 }
 
-gdx_cpp::files::FileHandle::ptr IosFiles::internal (const std::string &path)
+gdx::FileHandle::ptr IosFiles::internal (const std::string &path)
 {
-    return gdx_cpp::files::FileHandle::ptr(new IosFileHandle(path, gdx_cpp::Files::Internal));
+    return gdx::FileHandle::ptr(new IosFileHandle(path, gdx::Files::Internal));
 }
 
-gdx_cpp::files::FileHandle::ptr IosFiles::external (const std::string &path)
+gdx::FileHandle::ptr IosFiles::external (const std::string &path)
 {
-    return gdx_cpp::files::FileHandle::ptr(new IosFileHandle(path, gdx_cpp::Files::External));
+    return gdx::FileHandle::ptr(new IosFileHandle(path, gdx::Files::External));
 }
 
-gdx_cpp::files::FileHandle::ptr IosFiles::absolute (const std::string &path)
+gdx::FileHandle::ptr IosFiles::absolute (const std::string &path)
 {
-    return gdx_cpp::files::FileHandle::ptr(new IosFileHandle(path, gdx_cpp::Files::Absolute));
+    return gdx::FileHandle::ptr(new IosFileHandle(path, gdx::Files::Absolute));
 }
 
 std::string IosFiles::getExternalStoragePath ()

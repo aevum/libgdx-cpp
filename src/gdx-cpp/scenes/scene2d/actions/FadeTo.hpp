@@ -24,16 +24,16 @@
 #include "gdx-cpp/scenes/scene2d/AnimationAction.hpp"
 #include "ActionResetingPool.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace actions {
 
-class FadeTo: public gdx_cpp::scenes::scene2d::AnimationAction {
+class FadeTo: public gdx::AnimationAction {
 public:
     FadeTo* build (float alpha,float duration);
     
-    void setTarget (gdx_cpp::scenes::scene2d::Actor* actor);
+    void setTarget (gdx::Actor* actor);
     void act (float delta);
     void finish ();
     Action* copy ();
@@ -48,7 +48,7 @@ private:
     static ActionResetingPool<FadeTo> pool;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace actions

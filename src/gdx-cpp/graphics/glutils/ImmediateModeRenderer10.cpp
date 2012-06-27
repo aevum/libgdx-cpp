@@ -25,7 +25,7 @@
 #include "gdx-cpp/math/Vector3.hpp"
 #include "gdx-cpp/gl.hpp"
 
-using namespace gdx_cpp::graphics::glutils;
+using namespace gdx;
 
 
 ImmediateModeRenderer10::ImmediateModeRenderer10 (int maxVertices) :
@@ -50,14 +50,14 @@ ImmediateModeRenderer10::~ImmediateModeRenderer10 ()
     delete [] this->texCoords;
 }
 
-gdx_cpp::utils::float_buffer ImmediateModeRenderer10::allocateBuffer (int numFloats) {
-    gdx_cpp::utils::byte_buffer buffer(numFloats * 4);
+float_buffer ImmediateModeRenderer10::allocateBuffer (int numFloats) {
+    byte_buffer buffer(numFloats * 4);
 //     buffer->order(ByteOrder.nativeOrder());
     return buffer.convert<float>();
 }
 
-void ImmediateModeRenderer10::begin (gdx_cpp::math::Matrix4& projModelView,int primitiveType) {
-    gdx_cpp::graphics::GL10 * gl = gdx_cpp::Gdx::gl10;
+void ImmediateModeRenderer10::begin (Matrix4& projModelView,int primitiveType) {
+    GL10 * gl = gl10;
     gl->glMatrixMode(GL_PROJECTION);
     gl->glLoadMatrixf(projModelView.val);
     gl->glMatrixMode(GL_MODELVIEW);
@@ -116,7 +116,7 @@ int ImmediateModeRenderer10::getNumVertices () {
 void ImmediateModeRenderer10::end () {
     if (idxPos == 0) return;
 
-    gdx_cpp::graphics::GL10 * gl = gdx_cpp::Gdx::gl10;
+    GL10 * gl = gl10;
     gl->glEnableClientState(GL_VERTEX_ARRAY);
     positionsBuffer.clear();
     positionsBuffer.copy<float>(positions, idxPos, 0);
@@ -151,16 +151,16 @@ void ImmediateModeRenderer10::end () {
     if (hasTexCoords) gl->glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
-void ImmediateModeRenderer10::vertex (const gdx_cpp::math::Vector3& point) {
+void ImmediateModeRenderer10::vertex (const Vector3& point) {
     vertex(point.x, point.y, point.z);
 }
 
-int gdx_cpp::graphics::glutils::ImmediateModeRenderer10::getMaxVertices()
+int ImmediateModeRenderer10::getMaxVertices()
 {
     return maxVertices; 
 }
 
-void gdx_cpp::graphics::glutils::ImmediateModeRenderer10::dispose()
+void ImmediateModeRenderer10::dispose()
 {
 
 }

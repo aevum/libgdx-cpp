@@ -22,14 +22,12 @@
 #include <cmath>
 #include "gdx-cpp/math/MathUtils.hpp"
 
-using namespace gdx_cpp::physics::box2d;
-using namespace gdx_cpp::graphics::glutils;
-using namespace gdx_cpp;
+using namespace gdx;
 
 b2Vec2 Box2DDebugRenderer::mLower;
 b2Vec2 Box2DDebugRenderer::mUpper;
 
-void Box2DDebugRenderer::render (b2World& world,const gdx_cpp::math::Matrix4& projMatrix) {
+void Box2DDebugRenderer::render (b2World& world,const Matrix4& projMatrix) {
     renderer.setProjectionMatrix(projMatrix);
     renderBodies(world);
 }
@@ -71,8 +69,8 @@ void Box2DDebugRenderer::renderBodies ( b2World& world) {
     
     renderer.end();
 
-    if (Gdx::gl10 != NULL) {
-        Gdx::gl10->glPointSize(3);
+    if (gl10 != NULL) {
+        gl10->glPointSize(3);
     }
     
     renderer.begin(ShapeRenderer::ShapeType::Point);
@@ -82,8 +80,8 @@ void Box2DDebugRenderer::renderBodies ( b2World& world) {
     }
     renderer.end();
     
-    if (Gdx::gl10 != NULL) {
-        Gdx::gl10->glPointSize(1);
+    if (gl10 != NULL) {
+        gl10->glPointSize(1);
     }
 }
 
@@ -135,7 +133,7 @@ void Box2DDebugRenderer::drawAABB (const b2Fixture& fixture, const b2Transform& 
 
 void Box2DDebugRenderer::drawShape (const b2Fixture& fixture,
                                     const b2Transform& transform,
-                                    const gdx_cpp::graphics::Color& color) {
+                                    const Color& color) {
     if (fixture.GetType() == b2Shape::e_circle) {
         b2CircleShape* circle = (b2CircleShape*)fixture.GetShape();        
         t = b2Mul(transform, circle->m_p);                
@@ -171,9 +169,9 @@ void Box2DDebugRenderer::drawShape (const b2Fixture& fixture,
     }
 }
 
-void Box2DDebugRenderer::drawSolidCircle (const b2Vec2& center,float radius,const b2Vec2& axis,const gdx_cpp::graphics::Color& color) {
+void Box2DDebugRenderer::drawSolidCircle (const b2Vec2& center,float radius,const b2Vec2& axis,const Color& color) {
     float angle = 0;
-    float angleInc = 2 * math::utils::detail::PI / 20.f;
+    float angleInc = 2 * detail::PI / 20.f;
     renderer.setColor(color.r, color.g, color.b, color.a);
     for (int i = 0; i < 20; i++, angle += angleInc) {
         v.Set((float)std::cos(angle) * radius + center.x, (float)std::sin(angle) * radius + center.y);
@@ -189,7 +187,7 @@ void Box2DDebugRenderer::drawSolidCircle (const b2Vec2& center,float radius,cons
     renderer.line(center.x, center.y, 0, center.x + axis.x * radius, center.y + axis.y * radius, 0);
 }
 
-void Box2DDebugRenderer::drawSolidPolygon (b2Vec2* vertices, int vertexCount, const gdx_cpp::graphics::Color& color) {
+void Box2DDebugRenderer::drawSolidPolygon (b2Vec2* vertices, int vertexCount, const Color& color) {
     renderer.setColor(color.r, color.g, color.b, color.a);
     
     for (int i = 0; i < vertexCount; i++) {
@@ -235,7 +233,7 @@ void Box2DDebugRenderer::drawJoint (b2Joint& joint) {
     }
 }
 
-void Box2DDebugRenderer::drawSegment (const b2Vec2& x1, const b2Vec2& x2, const gdx_cpp::graphics::Color& color) {
+void Box2DDebugRenderer::drawSegment (const b2Vec2& x1, const b2Vec2& x2, const Color& color) {
     renderer.setColor(color);
     renderer.line(x1.x, x1.y, x2.x, x2.y);
 }

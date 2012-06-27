@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_UI_SPLITPANE_HPP_
 #define GDX_CPP_SCENES_SCENE2D_UI_SPLITPANE_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace ui {
@@ -37,19 +37,19 @@ public:
     float getMinHeight ();
     float getMaxWidth ();
     float getMaxHeight ();
-    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
+    void draw (const gdx::SpriteBatch& batch,float parentAlpha);
     bool touchDown (float x,float y,int pointer);
     void touchUp (float x,float y,int pointer);
     void touchDragged (float x,float y,int pointer);
-    gdx_cpp::scenes::scene2d::Actor& hit (float x,float y);
+    gdx::Actor& hit (float x,float y);
     void setSplitAmount (float split);
     float getSplit ();
     void setMinSplitAmount (float minAmount);
     void setMaxSplitAmount (float maxAmount);
-    void setWidgets (const gdx_cpp::scenes::scene2d::Actor& firstWidget,const gdx_cpp::scenes::scene2d::Actor& secondWidget);
-    SplitPane (const gdx_cpp::scenes::scene2d::Actor& firstWidget,const gdx_cpp::scenes::scene2d::Actor& secondWidget,bool vertical,const gdx_cpp::scenes::scene2d::Stage& stage,const Skin& skin);
-    SplitPane (const gdx_cpp::scenes::scene2d::Actor& firstWidget,const gdx_cpp::scenes::scene2d::Actor& secondWidget,bool vertical,const gdx_cpp::scenes::scene2d::Stage& stage,const SplitPaneStyle& style);
-    SplitPane (const gdx_cpp::scenes::scene2d::Actor& firstWidget,const gdx_cpp::scenes::scene2d::Actor& secondWidget,bool vertical,const gdx_cpp::scenes::scene2d::Stage& stage,const SplitPaneStyle& style,const std::string& name);
+    void setWidgets (const gdx::Actor& firstWidget,const gdx::Actor& secondWidget);
+    SplitPane (const gdx::Actor& firstWidget,const gdx::Actor& secondWidget,bool vertical,const gdx::Stage& stage,const Skin& skin);
+    SplitPane (const gdx::Actor& firstWidget,const gdx::Actor& secondWidget,bool vertical,const gdx::Stage& stage,const SplitPaneStyle& style);
+    SplitPane (const gdx::Actor& firstWidget,const gdx::Actor& secondWidget,bool vertical,const gdx::Stage& stage,const SplitPaneStyle& style,const std::string& name);
 
 protected:
     SplitPaneStyle style ;
@@ -69,12 +69,12 @@ protected:
     boolean touchDrag = false;
 
 private:
-    void calculateBoundsAndPositions (const gdx_cpp::math::Matrix4& transform);
+    void calculateBoundsAndPositions (const gdx::Matrix4& transform);
     void calculateHorizBoundsAndPositions ();
     void calculateVertBoundsAndPositions ();
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace ui

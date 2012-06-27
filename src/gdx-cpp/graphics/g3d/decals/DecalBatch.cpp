@@ -20,9 +20,9 @@
 
 #include "DecalBatch.hpp"
 
-using namespace gdx_cpp::graphics::g3d::decals;
+using namespace gdx::g3d::decals;
 
-gdx_cpp::utils::ArrayDecal>& DecalBatch::newObject () {
+gdx::ArrayDecal>& DecalBatch::newObject () {
     return new Array<Decal>(false, 100);
 }
 
@@ -83,7 +83,7 @@ for (SortedIntList.Node<Array<Decal>> group : groupList) {
     groupStrategy.afterGroups();
 }
 
-void DecalBatch::render (const gdx_cpp::graphics::glutils::ShaderProgram& shader,gdx_cpp::utils::ArrayDecal>& decals) {
+void DecalBatch::render (const gdx::ShaderProgram& shader,gdx::ArrayDecal>& decals) {
     // batch vertices
     DecalMaterial lastMaterial = null;
     int idx = 0;
@@ -111,7 +111,7 @@ for (Decal decal : decals) {
     }
 }
 
-void DecalBatch::flush (const gdx_cpp::graphics::glutils::ShaderProgram& shader,int verticesPosition) {
+void DecalBatch::flush (const gdx::ShaderProgram& shader,int verticesPosition) {
     mesh.setVertices(vertices, 0, verticesPosition);
     if (shader != null) {
         mesh.render(shader, GL10.GL_TRIANGLES, 0, verticesPosition / 4);

@@ -23,8 +23,7 @@
 
 #include "Asset.hpp"
 
-namespace gdx_cpp {
-namespace assets {
+namespace gdx {
 
 class ReferenceCountedAsset : public Asset {
 public:
@@ -38,7 +37,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace assets
+} // namespace gdx
 
 #endif // GDX_CPP_ASSETS_REFERENCECOUNTEDASSET_HPP_

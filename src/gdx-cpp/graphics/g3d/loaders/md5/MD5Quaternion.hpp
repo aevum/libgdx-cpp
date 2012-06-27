@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_LOADERS_MD5_MD5QUATERNION_HPP_
 #define GDX_CPP_GRAPHICS_G3D_LOADERS_MD5_MD5QUATERNION_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace loaders {
@@ -33,8 +33,8 @@ public:
     void computeW ();
     void normalize ();
     void multiply (const MD5Quaternion& q);
-    void multiply (const gdx_cpp::math::Vector3& v);
-    void rotate (const gdx_cpp::math::Vector3& vec);
+    void multiply (const gdx::Vector3& v);
+    void rotate (const gdx::Vector3& vec);
     float dot (const MD5Quaternion& q);
     void slerp (const MD5Quaternion& q,float t);
     std::string& toString ();
@@ -47,7 +47,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace loaders

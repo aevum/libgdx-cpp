@@ -20,13 +20,13 @@
 
 #include "Camera.hpp"
 
-using namespace gdx_cpp::graphics;
+using namespace gdx;
 
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/Graphics.hpp"
 #include "gdx-cpp/gl.hpp"
 
-gdx_cpp::graphics::Camera::Camera()
+Camera::Camera()
 : direction(0, 0, -1)
 , up(0, 1, 0)
 , near(1)
@@ -36,7 +36,7 @@ gdx_cpp::graphics::Camera::Camera()
 {
 }
 
-gdx_cpp::graphics::Camera::Camera(float viewportHeight, float viewportWidth, float near, float far)
+Camera::Camera(float viewportHeight, float viewportWidth, float near, float far)
 : direction(0, 0, -1)
 , up(0, 1, 0)
 , near(near)
@@ -46,7 +46,7 @@ gdx_cpp::graphics::Camera::Camera(float viewportHeight, float viewportWidth, flo
 {
 }
 
-void Camera::apply (const gdx_cpp::graphics::GL10& gl) {
+void Camera::apply (const GL10& gl) {
     gl.glMatrixMode(GL_PROJECTION);
     gl.glLoadMatrixf(projection.val);
     gl.glMatrixMode(GL_MODELVIEW);
@@ -72,10 +72,10 @@ void Camera::translate (float x,float y,float z) {
     position.add(x, y, z);
 }
 
-void Camera::unproject (gdx_cpp::math::Vector3& vec,float viewportX,float viewportY,float viewportWidth,float viewportHeight) {
+void Camera::unproject (Vector3& vec,float viewportX,float viewportY,float viewportWidth,float viewportHeight) {
     float x = vec.x, y = vec.y;
     x = x - viewportX;
-    y = gdx_cpp::Gdx::graphics->getHeight() - y - 1;
+    y = graphics->getHeight() - y - 1;
     y = y - viewportY;
     vec.x = (2 * x) / viewportWidth - 1;
     vec.y = (2 * y) / viewportHeight - 1;
@@ -83,29 +83,29 @@ void Camera::unproject (gdx_cpp::math::Vector3& vec,float viewportX,float viewpo
     vec.prj(invProjectionView);
 }
 
-void Camera::unproject (gdx_cpp::math::Vector3& vec) {
-    unproject(vec, 0, 0, gdx_cpp::Gdx::graphics->getWidth(), gdx_cpp::Gdx::graphics->getHeight());
+void Camera::unproject (Vector3& vec) {
+    unproject(vec, 0, 0, graphics->getWidth(), graphics->getHeight());
 }
 
-void Camera::project (gdx_cpp::math::Vector3& vec) {
-    project(vec, 0, 0, gdx_cpp::Gdx::graphics->getWidth(),gdx_cpp::Gdx::graphics->getHeight());
+void Camera::project (Vector3& vec) {
+    project(vec, 0, 0, graphics->getWidth(),graphics->getHeight());
 }
 
-void Camera::project (gdx_cpp::math::Vector3& vec,float viewportX,float viewportY,float viewportWidth,float viewportHeight) {
+void Camera::project (Vector3& vec,float viewportX,float viewportY,float viewportWidth,float viewportHeight) {
     vec.prj(combined);
     vec.x = viewportWidth * (vec.x + 1) / 2 + viewportX;
     vec.y = viewportHeight * (vec.y + 1) / 2 + viewportY;
     vec.z = (vec.z + 1) / 2;
 }
 
-gdx_cpp::math::collision::Ray& Camera::getPickRay (float x,float y,float viewportX,float viewportY,float viewportWidth,float viewportHeight) {
+Ray& Camera::getPickRay (float x,float y,float viewportX,float viewportY,float viewportWidth,float viewportHeight) {
     unproject(ray.origin.set(x, y, 0), viewportX, viewportY, viewportWidth, viewportHeight);
     unproject(ray.direction.set(x, y, 1), viewportX, viewportY, viewportWidth, viewportHeight);
     ray.direction.sub(ray.origin).nor();
     return ray;
 }
 
-gdx_cpp::math::collision::Ray& Camera::getPickRay (float x,float y) {
-    return getPickRay(x, y, 0, 0, gdx_cpp::Gdx::graphics->getWidth(), gdx_cpp::Gdx::graphics->getHeight());
+Ray& Camera::getPickRay (float x,float y) {
+    return getPickRay(x, y, 0, 0, graphics->getWidth(), graphics->getHeight());
 }
 

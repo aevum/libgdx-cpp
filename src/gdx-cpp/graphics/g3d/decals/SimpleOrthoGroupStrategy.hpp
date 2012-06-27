@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_DECALS_SIMPLEORTHOGROUPSTRATEGY_HPP_
 #define GDX_CPP_GRAPHICS_G3D_DECALS_SIMPLEORTHOGROUPSTRATEGY_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace graphics {
 namespace g3d {
 namespace decals {
@@ -29,12 +29,12 @@ namespace decals {
 class SimpleOrthoGroupStrategy {
 public:
     int decideGroup (const Decal& decal);
-    void beforeGroup (int group,gdx_cpp::utils::ArrayDecal>& contents);
+    void beforeGroup (int group,gdx::ArrayDecal>& contents);
     void afterGroup (int group);
     void beforeGroups ();
     void afterGroups ();
     int compare (const Decal& a,const Decal& b);
-    gdx_cpp::graphics::glutils::ShaderProgram& getGroupShader (int group);
+    gdx::ShaderProgram& getGroupShader (int group);
 
 protected:
 
@@ -43,7 +43,7 @@ private:
 
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace graphics
 } // namespace g3d
 } // namespace decals

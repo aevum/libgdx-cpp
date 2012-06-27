@@ -20,11 +20,11 @@
 
 #include "Repeat.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::actions;
+using namespace gdx::actions;
 
 ActionResetingPool<Repeat> Repeat::pool = ActionResetingPool<Repeat>(4, 100);
 
-Repeat* Repeat::build (gdx_cpp::scenes::scene2d::Action* action,int times) {
+Repeat* Repeat::build (gdx::Action* action,int times) {
     Repeat* repeat = pool.obtain();
     repeat->action = action;
     repeat->times = times;
@@ -37,7 +37,7 @@ void Repeat::reset () {
     listener = NULL;
 }
 
-void Repeat::setTarget (gdx_cpp::scenes::scene2d::Actor* actor) {
+void Repeat::setTarget (gdx::Actor* actor) {
     action->setTarget(actor);
     target = actor;
 }
@@ -67,10 +67,10 @@ void Repeat::finish () {
     TemporalAction::finish();
 }
 
-gdx_cpp::scenes::scene2d::Action* Repeat::copy () {
+gdx::Action* Repeat::copy () {
     return Repeat::build(action->copy(), times);
 }
 
-gdx_cpp::scenes::scene2d::Actor* Repeat::getTarget () {
+gdx::Actor* Repeat::getTarget () {
     return target;
 }

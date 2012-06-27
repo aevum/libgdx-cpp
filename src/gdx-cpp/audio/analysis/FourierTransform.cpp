@@ -26,7 +26,7 @@
 #include <stdexcept>
 #include <sstream>
 
-using namespace gdx_cpp::audio::analysis;
+using namespace gdx;
 
 
 const int FourierTransform::NONE = 0; //FINAL
@@ -35,7 +35,7 @@ const int FourierTransform::HAMMING = 1;
 const int FourierTransform::LINAVG = 2;
 const int FourierTransform::LOGAVG = 3;
 const int FourierTransform::NOAVG = 4;
-const float FourierTransform::TWO_PI = (float)(2 * math::utils::PI);
+const float FourierTransform::TWO_PI = (float)(2 * PI);
 
 
 FourierTransform::FourierTransform(int ts, float sr): timeSizeVar(ts), sampleRate((int)sr), real(), imag(),spectrum (), octaves(0), avgPerOctave(0)

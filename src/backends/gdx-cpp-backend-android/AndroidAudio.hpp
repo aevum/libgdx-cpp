@@ -25,29 +25,24 @@
 #include <gdx-cpp/files/FileHandle.hpp>
 #include <jni.h>
 
-namespace gdx_cpp {
-namespace audio {
-
+namespace gdx {
 class AudioDevice;
 class Music;
 class AudioRecorder;
 class Music;
 class Sound;
-}
-
-namespace backends {
 
 namespace android {
 
-class AndroidAudio : public gdx_cpp::Audio
+class AndroidAudio : public gdx::Audio
 {
 public:
     AndroidAudio();
     
-    audio::AudioDevice* newAudioDevice(int samplingRate, bool isMono);
-    audio::AudioRecorder* newAudioRecoder(int samplingRate, bool isMono);
-    audio::Music* newMusic(const files::FileHandle::ptr file);
-    audio::Sound* newSound(const files::FileHandle::ptr fileHandle);
+    AudioDevice* newAudioDevice(int samplingRate, bool isMono);
+    AudioRecorder* newAudioRecoder(int samplingRate, bool isMono);
+    Music* newMusic(const FileHandle::ptr file);
+    Sound* newSound(const FileHandle::ptr fileHandle);
 
     void setupJNI( jobject androidAudioObj );
 
@@ -61,7 +56,6 @@ private:
     jmethodID newSoundJNI;
 };
 
-}
 }
 }
 

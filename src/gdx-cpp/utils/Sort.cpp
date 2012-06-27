@@ -20,7 +20,7 @@
 
 #include "Sort.hpp"
 
-using namespace gdx_cpp::utils;
+using namespace gdx::utils;
 
 Sort& Sort::instance () {
     if (instance == null) instance = new Sort();

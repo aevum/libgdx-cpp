@@ -27,19 +27,15 @@
 #include "Files.hpp"
 #include "graphics/TextureData.hpp"
 
-namespace gdx_cpp {
+namespace gdx {
 
-namespace graphics {
 class GLCommon;
 class GL10;
 class GL11;
 class GL20;
 class GLU;
-}
 
-namespace files {
-    class FileHandle;
-}
+class FileHandle;
 
 class Graphics {
 public:
@@ -110,15 +106,15 @@ public:
 
     virtual bool isGL20Available () = 0;
 
-    virtual graphics::GLCommon* getGLCommon () = 0;
+    virtual GLCommon* getGLCommon () = 0;
 
-    virtual graphics::GL10* getGL10 () = 0;
+    virtual GL10* getGL10 () = 0;
 
-    virtual graphics::GL11* getGL11 () = 0;
+    virtual GL11* getGL11 () = 0;
 
-    virtual graphics::GL20* getGL20 () = 0;
+    virtual GL20* getGL20 () = 0;
 
-    virtual graphics::GLU* getGLU () = 0;
+    virtual GLU* getGLU () = 0;
 
     virtual int getWidth () = 0;
 
@@ -152,7 +148,7 @@ public:
 
     virtual void setTitle (const std::string& title) = 0;
 
-    virtual void setIcon (graphics::Pixmap::ptr pixmap) = 0;
+    virtual void setIcon (Pixmap::ptr pixmap) = 0;
 
     virtual void setVSync (bool vsync) = 0;
 
@@ -161,14 +157,14 @@ public:
     virtual bool supportsExtension (const std::string& extension) = 0;
 
     
-    virtual graphics::TextureData::ptr resolveTextureData(files::FileHandle::ptr fileHandle,
-                                                          graphics::Pixmap::ptr preloadedPixmap,
-                                                          const gdx_cpp::graphics::Pixmap::Format* format,
+    virtual TextureData::ptr resolveTextureData(FileHandle::ptr fileHandle,
+                                                          Pixmap::ptr preloadedPixmap,
+                                                          const gdx::Pixmap::Format* format,
                                                           bool useMipMaps) = 0;
 
-    virtual graphics::Pixmap* resolvePixmap(const graphics::Pixmap& other) = 0;
-    virtual graphics::Pixmap* resolvePixmap(const files::FileHandle::ptr& file) = 0;
-    virtual graphics::Pixmap* resolvePixmap(int width, int height,  const gdx_cpp::graphics::Pixmap::Format& format, int pixType) = 0;
+    virtual Pixmap* resolvePixmap(const Pixmap& other) = 0;
+    virtual Pixmap* resolvePixmap(const FileHandle::ptr& file) = 0;
+    virtual Pixmap* resolvePixmap(int width, int height,  const gdx::Pixmap::Format& format, int pixType) = 0;
 };
 
 }

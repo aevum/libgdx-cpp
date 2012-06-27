@@ -21,35 +21,35 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_UI_SKIN_HPP_
 #define GDX_CPP_SCENES_SCENE2D_UI_SKIN_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace ui {
 
-class Skin: public gdx_cpp::utils::Disposable {
+class Skin: public gdx::Disposable {
 public:
     void dispose ();
-    void setTexture (const gdx_cpp::graphics::Texture& texture);
-    gdx_cpp::graphics::Texture& getTexture ();
-    void save (const gdx_cpp::files::FileHandle& skinFile);
-    void write (const gdx_cpp::utils::Json& json,const Object& object,const Class& valueType);
-    Object& read (const gdx_cpp::utils::Json& json,const Object& jsonData,const Class& type);
-    void write (const gdx_cpp::utils::Json& json,const Skin& skin,const Class& valueType);
-    Skin& read (const gdx_cpp::utils::Json& json,const Object& jsonData,const Class& ignored);
-    void write (const gdx_cpp::utils::Json& json,const gdx_cpp::graphics::g2d::TextureRegion& region,const Class& valueType);
-    gdx_cpp::graphics::g2d::TextureRegion& read (const gdx_cpp::utils::Json& json,const Object& jsonData,const Class& type);
-    void write (const gdx_cpp::utils::Json& json,const gdx_cpp::graphics::g2d::BitmapFont& font,const Class& valueType);
-    gdx_cpp::graphics::g2d::BitmapFont& read (const gdx_cpp::utils::Json& json,const Object& jsonData,const Class& type);
-    void write (const gdx_cpp::utils::Json& json,const gdx_cpp::graphics::g2d::NinePatch& ninePatch,const Class& valueType);
-    gdx_cpp::graphics::g2d::NinePatch& read (const gdx_cpp::utils::Json& json,const Object& jsonData,const Class& type);
+    void setTexture (const gdx::Texture& texture);
+    gdx::Texture& getTexture ();
+    void save (const gdx::FileHandle& skinFile);
+    void write (const gdx::Json& json,const Object& object,const Class& valueType);
+    Object& read (const gdx::Json& json,const Object& jsonData,const Class& type);
+    void write (const gdx::Json& json,const Skin& skin,const Class& valueType);
+    Skin& read (const gdx::Json& json,const Object& jsonData,const Class& ignored);
+    void write (const gdx::Json& json,const gdx::TextureRegion& region,const Class& valueType);
+    gdx::TextureRegion& read (const gdx::Json& json,const Object& jsonData,const Class& type);
+    void write (const gdx::Json& json,const gdx::BitmapFont& font,const Class& valueType);
+    gdx::BitmapFont& read (const gdx::Json& json,const Object& jsonData,const Class& type);
+    void write (const gdx::Json& json,const gdx::NinePatch& ninePatch,const Class& valueType);
+    gdx::NinePatch& read (const gdx::Json& json,const Object& jsonData,const Class& type);
     Skin ();
-    Skin (const gdx_cpp::files::FileHandle& skinFile,const gdx_cpp::files::FileHandle& textureFile);
-    Skin (const gdx_cpp::files::FileHandle& skinFile,const SkinData& data);
+    Skin (const gdx::FileHandle& skinFile,const gdx::FileHandle& textureFile);
+    Skin (const gdx::FileHandle& skinFile,const SkinData& data);
     ObjectMap<Class, ObjectMap<String, Object>> resources = new ObjectMap();
     Texture texture ;
 
 protected:
-    gdx_cpp::utils::Json& getJsonLoader (const final& FileHandle);
+    gdx::Json& getJsonLoader (const final& FileHandle);
     ObjectMap<Class, ObjectMap<String, Object>> styles = new ObjectMap();
     SkinData data ;
     ObjectMap<String, Object> typeResources = data.resources.get(resource.getClass());
@@ -60,10 +60,10 @@ protected:
     Object style = typeStyles.get(name);
 
 private:
-    void readTypeMap (const gdx_cpp::utils::Json& json,gdx_cpp::utils::ObjectMapString, ObjectMap>& typeToValueMap,bool isResource);
+    void readTypeMap (const gdx::Json& json,gdx::ObjectMapString, ObjectMap>& typeToValueMap,bool isResource);
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace ui

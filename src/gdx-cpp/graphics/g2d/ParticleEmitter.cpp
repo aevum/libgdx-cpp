@@ -30,7 +30,7 @@
 #include <stdexcept>
 #include <algorithm>
 
-using namespace gdx_cpp::graphics::g2d;
+using namespace gdx;
 
 
 ParticleEmitter::ParticleEmitter(): accumulator(0), minParticleCount(0), maxParticleCount(4), x(0),y(0),
@@ -360,8 +360,8 @@ void ParticleEmitter::activateParticle (int index) {
     if ((updateFlags & UPDATE_ANGLE) == 0) {
         angle = particle->angle + particle->angleDiff * angleValue.getScale(0);
         particle->angle = angle;
-        particle->angleCos = gdx_cpp::math::utils::cosDeg(angle);
-        particle->angleSin = gdx_cpp::math::utils::sinDeg(angle);
+        particle->angleCos = gdx::cosDeg(angle);
+        particle->angleSin = gdx::sinDeg(angle);
     }
 
     float spriteWidth = sprite->getWidth();
@@ -413,8 +413,8 @@ void ParticleEmitter::activateParticle (int index) {
     case square: {
         int width = spawnWidth + (int)(spawnWidthDiff * spawnWidthValue.getScale(percent));
         int height = spawnHeight + (int)(spawnHeightDiff * spawnHeightValue.getScale(percent));
-        x += gdx_cpp::math::utils::random(width) - width / 2;
-        y += gdx_cpp::math::utils::random(height) - height / 2;
+        x += gdx::random(width) - width / 2;
+        y += gdx::random(height) - height / 2;
         break;
     }
     case ellipse: {
@@ -428,22 +428,22 @@ void ParticleEmitter::activateParticle (int index) {
             float spawnAngle;
             switch (spawnShapeValue.side) {
             case top:
-                spawnAngle = -gdx_cpp::math::utils::random(179.f);
+                spawnAngle = -gdx::random(179.f);
                 break;
             case bottom:
-                spawnAngle = gdx_cpp::math::utils::random(179.f);
+                spawnAngle = gdx::random(179.f);
                 break;
             default:
-                spawnAngle = gdx_cpp::math::utils::random(360.f);
+                spawnAngle = gdx::random(360.f);
                 break;
             }
-            x += gdx_cpp::math::utils::cosDeg(spawnAngle) * radiusX;
-            y += gdx_cpp::math::utils::sinDeg(spawnAngle) * radiusX / scaleY;
+            x += gdx::cosDeg(spawnAngle) * radiusX;
+            y += gdx::sinDeg(spawnAngle) * radiusX / scaleY;
         } else {
             int radius2 = radiusX * radiusX;
             while (true) {
-                int px = gdx_cpp::math::utils::random(width) - radiusX;
-                int py = gdx_cpp::math::utils::random(width) - radiusX;
+                int px = gdx::random(width) - radiusX;
+                int py = gdx::random(width) - radiusX;
                 if (px * px + py * py <= radius2) {
                     x += px;
                     y += py / scaleY;
@@ -457,11 +457,11 @@ void ParticleEmitter::activateParticle (int index) {
         int width = spawnWidth + (int)(spawnWidthDiff * spawnWidthValue.getScale(percent));
         int height = spawnHeight + (int)(spawnHeightDiff * spawnHeightValue.getScale(percent));
         if (width != 0) {
-            float lineX = width * gdx_cpp::math::utils::random();
+            float lineX = width * gdx::random();
             x += lineX;
             y += lineX * (height / (float)width);
         } else
-            y += height * gdx_cpp::math::utils::random();
+            y += height * gdx::random();
         break;
     }
     case point:
@@ -491,8 +491,8 @@ bool ParticleEmitter::updateParticle (int index,float delta,int deltaMillis) {
         float velocityX, velocityY;
         if ((updateFlags & UPDATE_ANGLE) != 0) {
             float angle = particle->angle + particle->angleDiff * angleValue.getScale(percent);
-            velocityX = velocity * gdx_cpp::math::utils::cosDeg(angle);
-            velocityY = velocity * gdx_cpp::math::utils::sinDeg(angle);
+            velocityX = velocity * gdx::cosDeg(angle);
+            velocityY = velocity * gdx::sinDeg(angle);
             if ((updateFlags & UPDATE_ROTATION) != 0) {
                 float rotation = particle->rotation + particle->rotationDiff * rotationValue.getScale(percent);
                 if (aligned) rotation += angle;
@@ -547,7 +547,7 @@ void ParticleEmitter::setPosition (float x,float y) {
     this->y = y;
 }
 
-void ParticleEmitter::setSprite (gdx_cpp::graphics::g2d::Sprite::ptr sprite) {
+void ParticleEmitter::setSprite (gdx::Sprite::ptr sprite) {
     this->sprite = sprite;
     if (sprite == NULL) return;
     float originX = sprite->getOriginX();
@@ -566,7 +566,7 @@ void ParticleEmitter::allowCompletion () {
     durationTimer = duration;
 }
 
-gdx_cpp::graphics::g2d::Sprite::ptr ParticleEmitter::getSprite () {
+gdx::Sprite::ptr ParticleEmitter::getSprite () {
     return sprite;
 }
 
@@ -991,7 +991,7 @@ ParticleEmitter::RangedNumericValue::RangedNumericValue():lowMin(0), lowMax(0)
 }
 
 float ParticleEmitter::RangedNumericValue::newLowValue () {
-    return lowMin + (lowMax - lowMin) * gdx_cpp::math::utils::random();
+    return lowMin + (lowMax - lowMin) * gdx::random();
 }
 
 void ParticleEmitter::RangedNumericValue::setLow (float value) {
@@ -1050,7 +1050,7 @@ ParticleEmitter::ScaledNumericValue::ScaledNumericValue() : relative(false), hig
 }
 
 float ParticleEmitter::ScaledNumericValue::newHighValue () {
-    return highMin + (highMax - highMin) * gdx_cpp::math::utils::random();
+    return highMin + (highMax - highMin) * gdx::random();
 }
 
 void ParticleEmitter::ScaledNumericValue::setHigh (float value) {

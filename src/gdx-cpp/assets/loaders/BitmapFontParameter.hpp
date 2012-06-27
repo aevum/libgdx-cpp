@@ -23,16 +23,12 @@
 
 #include "Parameter.hpp"
 
-namespace gdx_cpp {
-namespace assets {
-namespace loaders {
+namespace gdx {
 
 struct BitmapFontParameter : public Parameter {
     bool flip = false;
 };
 
-} // namespace gdx_cpp
-} // namespace assets
-} // namespace loaders
+} // namespace gdx
 
 #endif // GDX_CPP_ASSETS_LOADERS_BITMAPFONTPARAMETER_HPP_

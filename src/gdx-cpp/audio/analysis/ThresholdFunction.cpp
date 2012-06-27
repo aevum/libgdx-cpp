@@ -22,7 +22,7 @@
 #include <cmath>
 #include <vector>
 
-using namespace gdx_cpp::audio::analysis;
+using namespace gdx;
 
 ThresholdFunction::ptr ThresholdFunction::calculate (std::vector< float >& spectralFlux) {
     ThresholdFunction::ptr thresholds(new std::vector< float > (spectralFlux.size()));

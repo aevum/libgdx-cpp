@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_LAYOUT_HPP_
 #define GDX_CPP_SCENES_SCENE2D_LAYOUT_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 
@@ -37,7 +37,7 @@ public:
     virtual   float getMaxHeight () = 0;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 

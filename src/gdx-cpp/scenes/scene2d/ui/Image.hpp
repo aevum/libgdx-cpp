@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_SCENES_SCENE2D_UI_IMAGE_HPP_
 #define GDX_CPP_SCENES_SCENE2D_UI_IMAGE_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace scenes {
 namespace scene2d {
 namespace ui {
@@ -29,9 +29,9 @@ namespace ui {
 class Image {
 public:
     void layout ();
-    void draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha);
-    void setRegion (const gdx_cpp::graphics::g2d::TextureRegion& region);
-    void setPatch (const gdx_cpp::graphics::g2d::NinePatch& patch);
+    void draw (const gdx::SpriteBatch& batch,float parentAlpha);
+    void setRegion (const gdx::TextureRegion& region);
+    void setPatch (const gdx::NinePatch& patch);
     float getMinWidth ();
     float getMinHeight ();
     float getPrefWidth ();
@@ -39,16 +39,16 @@ public:
     bool touchDown (float x,float y,int pointer);
     void touchUp (float x,float y,int pointer);
     void touchDragged (float x,float y,int pointer);
-    Image (const gdx_cpp::graphics::g2d::TextureRegion& region);
-    Image (const gdx_cpp::graphics::g2d::TextureRegion& region,const Scaling& scaling);
-    Image (const gdx_cpp::graphics::g2d::TextureRegion& region,const Scaling& scaling,int align);
-    Image (const gdx_cpp::graphics::g2d::TextureRegion& region,const Scaling& scaling,const std::string& name);
-    Image (const gdx_cpp::graphics::g2d::TextureRegion& region,const Scaling& scaling,int align,const std::string& name);
-    Image (const gdx_cpp::graphics::g2d::NinePatch& patch);
-    Image (const gdx_cpp::graphics::g2d::NinePatch& patch,const Scaling& scaling);
-    Image (const gdx_cpp::graphics::g2d::NinePatch& patch,const Scaling& scaling,int align);
-    Image (const gdx_cpp::graphics::g2d::NinePatch& patch,const Scaling& scaling,const std::string& name);
-    Image (const gdx_cpp::graphics::g2d::NinePatch& patch,const Scaling& scaling,int align,const std::string& name);
+    Image (const gdx::TextureRegion& region);
+    Image (const gdx::TextureRegion& region,const Scaling& scaling);
+    Image (const gdx::TextureRegion& region,const Scaling& scaling,int align);
+    Image (const gdx::TextureRegion& region,const Scaling& scaling,const std::string& name);
+    Image (const gdx::TextureRegion& region,const Scaling& scaling,int align,const std::string& name);
+    Image (const gdx::NinePatch& patch);
+    Image (const gdx::NinePatch& patch,const Scaling& scaling);
+    Image (const gdx::NinePatch& patch,const Scaling& scaling,int align);
+    Image (const gdx::NinePatch& patch,const Scaling& scaling,const std::string& name);
+    Image (const gdx::NinePatch& patch,const Scaling& scaling,int align,const std::string& name);
 
 protected:
 
@@ -60,7 +60,7 @@ private:
     int align = Align.CENTER;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace scenes
 } // namespace scene2d
 } // namespace ui

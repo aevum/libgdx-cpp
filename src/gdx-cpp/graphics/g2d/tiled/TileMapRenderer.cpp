@@ -20,9 +20,9 @@
 
 #include "TileMapRenderer.hpp"
 
-using namespace gdx_cpp::graphics::g2d::tiled;
+using namespace gdx;
 
-void TileMapRenderer::init (const TileAtlas& atlas,int tileWidth,int tileHeight,float unitsPerTileX,float unitsPerTileY,const gdx_cpp::utils::IntArray& blendedTiles,int tilesPerBlockX,int tilesPerBlockY,const gdx_cpp::graphics::glutils::ShaderProgram& shader) {
+void TileMapRenderer::init (const TileAtlas& atlas,int tileWidth,int tileHeight,float unitsPerTileX,float unitsPerTileY,const IntArray& blendedTiles,int tilesPerBlockX,int tilesPerBlockY,const ShaderProgram& shader) {
     this.atlas = atlas;
     this.tileWidth = tileWidth;
     this.tileHeight = tileHeight;
@@ -126,11 +126,11 @@ void TileMapRenderer::render (float x,float y,float width,float height) {
     render(x, y, width, height, allLayers);
 }
 
-void TileMapRenderer::render (const gdx_cpp::graphics::OrthographicCamera& cam) {
+void TileMapRenderer::render (const gdx::OrthographicCamera& cam) {
     render(cam, allLayers);
 }
 
-void TileMapRenderer::render (const gdx_cpp::graphics::OrthographicCamera& cam) {
+void TileMapRenderer::render (const gdx::OrthographicCamera& cam) {
     getProjectionMatrix().set(cam.combined);
     tmp.set(0, 0, 0);
     cam.unproject(tmp);
@@ -205,11 +205,11 @@ int TileMapRenderer::getLayerHeightInBlocks (int layer) {
     return Math.max(normalCacheHeight, blendedCacheHeight);
 }
 
-gdx_cpp::math::Matrix4& TileMapRenderer::getProjectionMatrix () {
+Matrix4& TileMapRenderer::getProjectionMatrix () {
     return cache.getProjectionMatrix();
 }
 
-gdx_cpp::math::Matrix4& TileMapRenderer::getTransformMatrix () {
+Matrix4& TileMapRenderer::getTransformMatrix () {
     return cache.getTransformMatrix();
 }
 
@@ -266,7 +266,7 @@ void TileMapRenderer::dispose () {
     cache.dispose();
 }
 
-gdx_cpp::utils::IntArray& TileMapRenderer::createFromCSV (const std::string& values) {
+IntArray& TileMapRenderer::createFromCSV (const std::string& values) {
     IntArray list = new IntArray(false, (values.length() + 1) / 2);
     StringTokenizer st = new StringTokenizer(values, ",");
     while (st.hasMoreTokens()) {

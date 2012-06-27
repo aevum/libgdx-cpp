@@ -21,9 +21,7 @@
 #ifndef GDX_CPP_UTILS_ATOMICQUEUE<T>_HPP_
 #define GDX_CPP_UTILS_ATOMICQUEUE<T>_HPP_
 
-namespace gdx_cpp {
-namespace utils {
-
+namespace gdx {
 class AtomicQueue {
 public:
     bool put (const T& value);
@@ -37,7 +35,5 @@ private:
     AtomicReferenceArray<T> queue;
 };
 
-} // namespace gdx_cpp
-} // namespace utils
-
+} // namespace gdx
 #endif // GDX_CPP_UTILS_ATOMICQUEUE<T>_HPP_

@@ -24,9 +24,7 @@
 
 #include <stdexcept>
 
-using namespace gdx_cpp::graphics::glutils;
-using namespace gdx_cpp::graphics;
-using namespace gdx_cpp;
+using namespace gdx;
 
 FrameBuffer::buffer_map FrameBuffer::buffers;
 
@@ -35,7 +33,7 @@ void FrameBuffer::build () {
     colorTexture->setFilter(Texture::TextureFilter::Linear, Texture::TextureFilter::Linear);
     colorTexture->setWrap(Texture::TextureWrap::ClampToEdge, Texture::TextureWrap::ClampToEdge);
 
-    GL20& gl = *Gdx::gl20;
+    GL20& gl = *gl20;
 
     int handle;
     gl.glGenFramebuffers(1, &handle);
@@ -87,7 +85,7 @@ void FrameBuffer::build () {
 }
 
 void FrameBuffer::dispose () {
-    GL20& gl = *Gdx::gl20;
+    GL20& gl = *gl20;
 
     int handle = 0;
 
@@ -101,26 +99,26 @@ void FrameBuffer::dispose () {
     
     gl.glDeleteFramebuffers(1, &handle);
 
-    if (buffers.count(Gdx::app) > 0) buffers[Gdx::app].erase(this);
+    if (buffers.count(app) > 0) buffers[app].erase(this);
 }
 
 void FrameBuffer::begin () {
-    Gdx::gl20->glViewport(0, 0, colorTexture->getWidth(), colorTexture->getHeight());
-    Gdx::gl20->glBindFramebuffer(GL20::GL_FRAMEBUFFER, framebufferHandle);
+    gl20->glViewport(0, 0, colorTexture->getWidth(), colorTexture->getHeight());
+    gl20->glBindFramebuffer(GL20::GL_FRAMEBUFFER, framebufferHandle);
 }
 
 void FrameBuffer::end () {
-    Gdx::gl20->glViewport(0, 0, Gdx::graphics->getWidth(), Gdx::graphics->getHeight());
-    Gdx::gl20->glBindFramebuffer(GL20::GL_FRAMEBUFFER, 0);
+    gl20->glViewport(0, 0, graphics->getWidth(), graphics->getHeight());
+    gl20->glBindFramebuffer(GL20::GL_FRAMEBUFFER, 0);
 }
 
-void FrameBuffer::addManagedFrameBuffer (gdx_cpp::Application* app,
-                                         gdx_cpp::graphics::glutils::FrameBuffer* frameBuffer) {
+void FrameBuffer::addManagedFrameBuffer (Application* app,
+                                         FrameBuffer* frameBuffer) {
     buffers[app].insert(frameBuffer);
 }
 
-void FrameBuffer::invalidateAllFrameBuffers (gdx_cpp::Application* app) {
-    if (Gdx::gl20 == NULL) return;
+void FrameBuffer::invalidateAllFrameBuffers (Application* app) {
+    if (gl20 == NULL) return;
 
     buffer_map::value_type::second_type::iterator it = buffers[app].begin();
     buffer_map::value_type::second_type::iterator end = buffers[app].end();
@@ -157,7 +155,7 @@ std::string FrameBuffer::getManagedStatus () {
     return builder.str();
 }
 
-gdx_cpp::graphics::Texture::ptr FrameBuffer::getColorBufferTexture () {
+Texture::ptr FrameBuffer::getColorBufferTexture () {
     return colorTexture;
 }
 
@@ -169,7 +167,7 @@ int FrameBuffer::getWidth () {
     return colorTexture->getWidth();
 }
 
-FrameBuffer::FrameBuffer(const gdx_cpp::graphics::Pixmap::Format& format, int width, int height, bool hasDepth)
+FrameBuffer::FrameBuffer(const Pixmap::Format& format, int width, int height, bool hasDepth)
  :
  width(width)
  ,height(height)
@@ -177,7 +175,7 @@ FrameBuffer::FrameBuffer(const gdx_cpp::graphics::Pixmap::Format& format, int wi
  ,hasDepth(hasDepth)
  {
     build();
-    addManagedFrameBuffer(Gdx::app, this);
+    addManagedFrameBuffer(app, this);
 }
 
 

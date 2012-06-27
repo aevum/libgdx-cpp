@@ -23,9 +23,7 @@
 #include <vector>
 #include "gdx-cpp/utils/Aliases.hpp"
 
-namespace gdx_cpp {
-namespace math {
-
+namespace gdx {
 class WindowedMean {
 public:
     WindowedMean (int window_size);
@@ -49,7 +47,6 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace math
+} // namespace gdx
 
 #endif // GDX_CPP_MATH_WINDOWEDMEAN_HPP_

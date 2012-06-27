@@ -20,7 +20,7 @@
 
 #include "MD5Quaternion.hpp"
 
-using namespace gdx_cpp::graphics::g3d::loaders::md5;
+using namespace gdx::g3d::md5;
 
 void MD5Quaternion::set (const MD5Quaternion& q) {
     this.w = q.w;
@@ -63,7 +63,7 @@ void MD5Quaternion::multiply (const MD5Quaternion& q) {
     z = tz;
 }
 
-void MD5Quaternion::multiply (const gdx_cpp::math::Vector3& v) {
+void MD5Quaternion::multiply (const gdx::Vector3& v) {
     float tw = -x * v.x - y * v.y - z * v.z;
     float tx = w * v.x + y * v.z - z * v.y;
     float ty = w * v.y + z * v.x - x * v.z;
@@ -75,7 +75,7 @@ void MD5Quaternion::multiply (const gdx_cpp::math::Vector3& v) {
     z = tz;
 }
 
-void MD5Quaternion::rotate (const gdx_cpp::math::Vector3& vec) {
+void MD5Quaternion::rotate (const gdx::Vector3& vec) {
     inv.x = -x;
     inv.y = -y;
     inv.z = -z;

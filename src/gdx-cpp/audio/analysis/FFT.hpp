@@ -24,9 +24,7 @@
 #include "FourierTransform.hpp"
 #include <vector>
 
-namespace gdx_cpp {
-namespace audio {
-namespace analysis {
+namespace gdx {
 
 class FFT : public FourierTransform{
 public:
@@ -54,8 +52,6 @@ private:
     std::vector<int> reverse;
 };
 
-} // namespace gdx_cpp
-} // namespace audio
-} // namespace analysis
+} // namespace gdx
 
 #endif // GDX_CPP_AUDIO_ANALYSIS_FFT_HPP_

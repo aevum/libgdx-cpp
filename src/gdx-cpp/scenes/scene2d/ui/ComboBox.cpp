@@ -20,7 +20,7 @@
 
 #include "ComboBox.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::ui;
+using namespace gdx::ui;
 
 void ComboBox::setStyle (const ComboBoxStyle& style) {
     this.style = style;
@@ -49,7 +49,7 @@ void ComboBox::setItems () {
 void ComboBox::layout () {
 }
 
-void ComboBox::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void ComboBox::draw (const gdx::SpriteBatch& batch,float parentAlpha) {
     final NinePatch background = style.background;
     final BitmapFont font = style.font;
     final Color fontColor = style.fontColor;
@@ -144,7 +144,7 @@ protected class ComboList extends Actor {
         y -= height;
     }
 
-    void ComboBox::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+    void ComboBox::draw (const gdx::SpriteBatch& batch,float parentAlpha) {
         final NinePatch listBackground = style.listBackground;
         final NinePatch listSelection = style.listSelection;
         final BitmapFont font = style.font;
@@ -191,7 +191,7 @@ protected class ComboList extends Actor {
         return true;
     }
 
-    gdx_cpp::scenes::scene2d::Actor& ComboBox::hit (float x,float y) {
+    gdx::Actor& ComboBox::hit (float x,float y) {
         return x > 0 && x < width && y > 0 && y < height ? this : null;
     }
 
@@ -221,15 +221,15 @@ protected class ComboList extends Actor {
         return prefHeight;
     }
 
-    ComboBox::ComboBox (const gdx_cpp::scenes::scene2d::Stage& stage,const Skin& skin) {
+    ComboBox::ComboBox (const gdx::Stage& stage,const Skin& skin) {
         this(items, stage, skin.getStyle(ComboBoxStyle.class), null);
     }
 
-    ComboBox::ComboBox (const gdx_cpp::scenes::scene2d::Stage& stage,const ComboBoxStyle& style) {
+    ComboBox::ComboBox (const gdx::Stage& stage,const ComboBoxStyle& style) {
         this(items, stage, style, null);
     }
 
-    ComboBox::ComboBox (const gdx_cpp::scenes::scene2d::Stage& stage,const ComboBoxStyle& style,const std::string& name) {
+    ComboBox::ComboBox (const gdx::Stage& stage,const ComboBoxStyle& style,const std::string& name) {
         super(name);
         setStyle(style);
         setItems(items);

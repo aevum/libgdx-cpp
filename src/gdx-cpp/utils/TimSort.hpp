@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_UTILS_TIMSORT<T>_HPP_
 #define GDX_CPP_UTILS_TIMSORT<T>_HPP_
 
-namespace gdx_cpp {
+namespace gdx {
 namespace utils {
 
 class TimSort {
@@ -46,7 +46,7 @@ private:
     int[] runLen;
 };
 
-} // namespace gdx_cpp
+} // namespace gdx
 } // namespace utils
 
 #endif // GDX_CPP_UTILS_TIMSORT<T>_HPP_

@@ -29,15 +29,9 @@
 #include "gdx-cpp/utils/XmlReader.hpp"
 #include "SvgParser.hpp"
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Log.hpp"
 
-
-namespace gdx_cpp {
-
-namespace graphics {
-
-namespace g2d {
-
-namespace svg {
+namespace gdx {
 
 /** Implements the SvgPixmapInterface using the AntiGrains Svg backend
  *
@@ -45,17 +39,17 @@ namespace svg {
 class AggSvgPixmap : public SvgPixmapInterface
 {
 public:
-    static AggSvgPixmap* newFromFile(const files::FileHandle::ptr& file) {
-        static utils::XmlReader reader;
+    static AggSvgPixmap* newFromFile(const FileHandle::ptr& file) {
+        static XmlReader reader;
 
-        gdx_cpp::Gdx::app->log("WreckingBaller", "%s", file->path().c_str());
+        gdx_log_debug("WreckingBaller", "%s", file->path().c_str());
 
         AggSvgPixmap* pix = new AggSvgPixmap;
-        uint64_t before = gdx_cpp::Gdx::system->nanoTime();
+        uint64_t before = gdx::system->nanoTime();
         SvgParser::render(reader.parse(*file).get(), pix);
-        uint64_t after = gdx_cpp::Gdx::system->nanoTime();
+        uint64_t after = gdx::system->nanoTime();
 
-        gdx_cpp::Gdx::app->log("WreckingBaller", "%s, took %f us", file->path().c_str(), (after - before) / 1000.0);
+        gdx_log_debug("WreckingBaller", "%s, took %f us", file->path().c_str(), (after - before) / 1000.0);
 
         return pix;
     }
@@ -124,9 +118,9 @@ public:
 
     void drawPixel(int x, int y) ;
 
-    void drawPixmap(const gdx_cpp::graphics::Pixmap& pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight) ;
+    void drawPixmap(const gdx::Pixmap& pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight) ;
 
-    void drawPixmap(const gdx_cpp::graphics::Pixmap& pixmap, int srcx, int srcy, int srcWidth, int srcHeight, int dstx, int dsty, int dstWidth, int dstHeight) ;
+    void drawPixmap(const gdx::Pixmap& pixmap, int srcx, int srcy, int srcWidth, int srcHeight, int dstx, int dsty, int dstWidth, int dstHeight) ;
 
     void drawRectangle(int x, int y, int width, int height) ;
 
@@ -136,7 +130,7 @@ public:
 
     void fillRectangle(int x, int y, int width, int height) ;
 
-    const gdx_cpp::graphics::Pixmap::Format& getFormat() ;
+    const gdx::Pixmap::Format& getFormat() ;
 
     int getGLFormat() const ;
 
@@ -154,11 +148,11 @@ public:
 
     virtual void boundingRect(float& x1, float& y1, float& x2, float& y2);
 
-    virtual void fillRadialGradient(const gdx_cpp::utils::SvgRendererHandler::RadialGradient& gradient) ;
+    virtual void fillRadialGradient(const gdx::SvgRendererHandler::RadialGradient& gradient) ;
 
-    virtual void fillLinearGradient(const gdx_cpp::utils::SvgRendererHandler::LinearGradient& gradient) ;
+    virtual void fillLinearGradient(const gdx::SvgRendererHandler::LinearGradient& gradient) ;
 
-    void setColor(const gdx_cpp::graphics::Color& color) ;
+    void setColor(const gdx::Color& color) ;
 
     PixmapType getType() const ;
 
@@ -183,12 +177,6 @@ private:
     int height;
     unsigned char* data;
 };
-
-}
-
-}
-
-}
 
 }
 #endif // GDX_CPP_GRAPHICS_G2D_AGGSVGPIXMAP_HPP

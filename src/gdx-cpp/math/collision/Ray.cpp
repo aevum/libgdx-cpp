@@ -25,12 +25,11 @@
 #include <sstream>
 #include <string>
 
-using namespace gdx_cpp::math::collision;
-using namespace gdx_cpp::math;
+using namespace gdx;
 
 Vector3 Ray::tmp = Vector3();
 
-gdx_cpp::math::collision::Ray::Ray()
+Ray::Ray()
 {
     direction.nor();
 }
@@ -47,12 +46,12 @@ Ray Ray::cpy () {
     return Ray(this->origin, this->direction);
 }
 
-gdx_cpp::math::Vector3& Ray::getEndPoint (float distance) {
-    gdx_cpp::math::Vector3 o(origin);
+Vector3& Ray::getEndPoint (float distance) {
+    Vector3 o(origin);
     return o.add(direction.tmp().mul(distance));
 }
 
-Ray& Ray::mul (const gdx_cpp::math::Matrix4& matrix) {
+Ray& Ray::mul (const Matrix4& matrix) {
     tmp.set(origin).add(direction);
     tmp.mul(matrix);
     origin.mul(matrix);
@@ -66,7 +65,7 @@ std::string Ray::toString () {
     return ss.str();
 }
 
-Ray& Ray::set (const gdx_cpp::math::Vector3& origin,const gdx_cpp::math::Vector3& direction) {
+Ray& Ray::set (const Vector3& origin,const Vector3& direction) {
     this->origin.set(origin);
     this->direction.set(direction);
     return *this;

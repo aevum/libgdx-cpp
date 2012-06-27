@@ -17,7 +17,7 @@
 
 #include "LinuxOpenALAudioDevice.hpp"
 
-using namespace gdx_cpp::backends::nix;
+using namespace gdx::nix;
 bool LinuxOpenALAudioDevice::isMono ()
 {
 

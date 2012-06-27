@@ -20,7 +20,7 @@
 
 #include "Label.hpp"
 
-using namespace gdx_cpp::scenes::scene2d::actors;
+using namespace gdx;
 
 void Label::setText (const std::string& text) {
     this.text = text;
@@ -39,7 +39,7 @@ void Label::setMultiLineText (const std::string& text) {
     height = bounds.height;
 }
 
-void Label::setWrappedText (const std::string& text,const gdx_cpp::graphics::g2d::BitmapFont::HAlignment& halign) {
+void Label::setWrappedText (const std::string& text,const BitmapFont::HAlignment& halign) {
     this.text = text;
     this.halign = halign;
     wrapType = WrapType.wrapped;
@@ -47,7 +47,7 @@ void Label::setWrappedText (const std::string& text,const gdx_cpp::graphics::g2d
     cache.setWrappedText(text, 0, cache.getFont().isFlipped() ? 0 : bounds.height, width, halign);
 }
 
-void Label::setFont (const gdx_cpp::graphics::g2d::BitmapFont& font) {
+void Label::setFont (const BitmapFont& font) {
     cache = new BitmapFontCache(font);
     switch (wrapType) {
     case singleLine:
@@ -62,7 +62,7 @@ void Label::setFont (const gdx_cpp::graphics::g2d::BitmapFont& font) {
     }
 }
 
-void Label::draw (const gdx_cpp::graphics::g2d::SpriteBatch& batch,float parentAlpha) {
+void Label::draw (const SpriteBatch& batch,float parentAlpha) {
     cache.setColor(color.r, color.g, color.b, color.a * parentAlpha);
     switch (valign) {
     case TOP:
@@ -95,7 +95,7 @@ void Label::touchUp (float x,float y,int pointer) {
 void Label::touchDragged (float x,float y,int pointer) {
 }
 
-gdx_cpp::scenes::scene2d::Actor& Label::hit (float x,float y) {
+Actor& Label::hit (float x,float y) {
     return x > 0 && y > 0 && x < width && y < height ? this : null;
 }
 
@@ -146,12 +146,12 @@ float Label::getMaxHeight () {
     return 0;
 }
 
-Label::Label (const std::string& name,const gdx_cpp::graphics::g2d::BitmapFont& font) {
+Label::Label (const std::string& name,const BitmapFont& font) {
     super(name);
     cache = new BitmapFontCache(font);
 }
 
-Label::Label (const std::string& name,const gdx_cpp::graphics::g2d::BitmapFont& font,const std::string& text) {
+Label::Label (const std::string& name,const BitmapFont& font,const std::string& text) {
     this(name, font);
     setText(text);
 }

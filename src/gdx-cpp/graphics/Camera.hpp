@@ -27,8 +27,7 @@
 #include "gdx-cpp/math/Frustum.hpp"
 #include "gdx-cpp/graphics/GL10.hpp"
 
-namespace gdx_cpp {
-namespace graphics {
+namespace gdx {
 
 class Camera {
 public:
@@ -41,21 +40,21 @@ public:
     void normalizeUp ();
     void rotate (float angle,float axisX,float axisY,float axisZ);
     void translate (float x,float y,float z);
-    void unproject (gdx_cpp::math::Vector3& vec, float viewportX, float viewportY, float viewportWidth, float viewportHeight);
-    void unproject (gdx_cpp::math::Vector3& vec);
-    void project (gdx_cpp::math::Vector3& vec);
-    void project (gdx_cpp::math::Vector3& vec, float viewportX, float viewportY, float viewportWidth, float viewportHeight);
-    math::collision::Ray& getPickRay (float x,float y,float viewportX,float viewportY,float viewportWidth,float viewportHeight);
-    math::collision::Ray& getPickRay (float x,float y);
+    void unproject (Vector3& vec, float viewportX, float viewportY, float viewportWidth, float viewportHeight);
+    void unproject (Vector3& vec);
+    void project (Vector3& vec);
+    void project (Vector3& vec, float viewportX, float viewportY, float viewportWidth, float viewportHeight);
+    Ray& getPickRay (float x,float y,float viewportX,float viewportY,float viewportWidth,float viewportHeight);
+    Ray& getPickRay (float x,float y);
     
-    math::Vector3 position;
-    math::Vector3 direction;
-    math::Vector3 up;
+    Vector3 position;
+    Vector3 direction;
+    Vector3 up;
     
-    math::Matrix4 projection;
-    math::Matrix4 view;
-    math::Matrix4 combined ;
-    math::Matrix4 invProjectionView;
+    Matrix4 projection;
+    Matrix4 view;
+    Matrix4 combined ;
+    Matrix4 invProjectionView;
     
     float near;
     float far;    
@@ -63,17 +62,16 @@ public:
     
     float viewportHeight;
     
-    math::Frustum frustum;
+    Frustum frustum;
 protected:
-    math::Vector3 right;
-    math::collision::Ray ray;
+    Vector3 right;
+    Ray ray;
     
 private:
-    math::Matrix4 tmpMat;
-    math::Vector3 tmpVec;
+    Matrix4 tmpMat;
+    Vector3 tmpVec;
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
+} // namespace gdx
 
 #endif // GDX_CPP_GRAPHICS_CAMERA_HPP_

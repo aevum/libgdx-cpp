@@ -21,9 +21,7 @@
 #ifndef GDX_CPP_GRAPHICS_G3D_ANIMATION_HPP_
 #define GDX_CPP_GRAPHICS_G3D_ANIMATION_HPP_
 
-namespace gdx_cpp {
-namespace graphics {
-namespace g3d {
+namespace gdx {
 
 class Animation {
 public:
@@ -37,8 +35,5 @@ private:
 
 };
 
-} // namespace gdx_cpp
-} // namespace graphics
-} // namespace g3d
-
+} // namespace gdx
 #endif // GDX_CPP_GRAPHICS_G3D_ANIMATION_HPP_
