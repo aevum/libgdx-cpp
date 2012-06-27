@@ -210,7 +210,7 @@ void gdx_cpp::backends::ios::IosInput::reset()
 void gdx_cpp::backends::ios::IosInput::handleTouchDrag(float x, float y, int button)
 {
     if (this->processor) {
-        this->processor->touchDragged(x, y, 0);
+        this->processor->touchDragged(x, y, button);
     }
 }
 
@@ -221,7 +221,7 @@ void gdx_cpp::backends::ios::IosInput::handleTouchDown(float x, float y, int but
     touching = true;
     
     if (this->processor) {
-        this->processor->touchDown(x, y, 0, button);
+        this->processor->touchDown(x, y, button, 0);
     }
 }
 
@@ -229,7 +229,7 @@ void gdx_cpp::backends::ios::IosInput::handleTouchUp(float x, float y, int butto
 {
     touching = false;
     if (this->processor) {
-        this->processor->touchUp(x, y, 0 , button);
+        this->processor->touchUp(x, y, button, 0);
     }
 }
 

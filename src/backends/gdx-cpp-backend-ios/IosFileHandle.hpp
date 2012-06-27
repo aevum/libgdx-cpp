@@ -36,6 +36,8 @@ public:
 	virtual int readBytes(gdx_cpp::files::FileHandle::buffer_ptr& c) const;
     
     bool exists() const;
+    
+    virtual int write ( const char* data, int lenght, bool append);
 };
 
 }

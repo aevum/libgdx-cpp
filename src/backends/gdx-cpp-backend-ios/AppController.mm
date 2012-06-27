@@ -45,9 +45,9 @@
 									 pixelFormat: kEAGLColorFormatRGBA8
 									 depthFormat: GL_DEPTH_COMPONENT16_OES
 							  preserveBackbuffer: NO
-									  sharegroup:nil
-								   multiSampling:NO
-								 numberOfSamples:0];
+									  sharegroup: nil
+								   multiSampling: NO
+								 numberOfSamples: 0];
     
 	
 	viewController = [[IosGdxViewController alloc] initWithNibName:nil bundle:nil];
@@ -65,7 +65,7 @@
 	gdx_cpp::Gdx::graphics->setDisplayMode(glView.viewWidth, glView.viewHeight, true);
 	gdxcpp_create_listener();
 	
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     
 	return YES;
 }

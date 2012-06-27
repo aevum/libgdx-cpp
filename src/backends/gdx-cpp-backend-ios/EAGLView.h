@@ -39,6 +39,8 @@
 	//fsaa addition
 	BOOL					multisampling_;
 	unsigned int requestedSamples_;
+    
+    NSMutableArray* toucheshHolder;
 }
 
 @property (nonatomic, retain) EAGLContext *context;

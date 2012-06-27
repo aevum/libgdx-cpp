@@ -19,12 +19,10 @@
 #ifndef GDX_CPP_BACKENDS_IOS_INIT_CPP
 #define GDX_CPP_BACKENDS_IOS_INIT_CPP
 
-#include <gdx-cpp/ApplicationListener.hpp>
-#include <string>
+#include <Foundation/Foundation.h>
 
-extern "C" void gdxcpp_init(int argc, char** argv);
-extern "C" void gdxcpp_create_application(gdx_cpp::ApplicationListener* listener, const std::string& applicationName, int width, int height);
-extern "C" void gdxcpp_initialize_application();
-extern "C" void gdxcpp_create_listener();
+NSString* gdxcpp_get_app_controller();
+void gdxcpp_initialize_application();
+void gdxcpp_create_listener();
 
 #endif //GDX_CPP_BACKENDS_IOS_INIT_CPP
