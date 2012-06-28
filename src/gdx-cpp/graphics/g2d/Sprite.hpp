@@ -104,6 +104,9 @@ public:
     static const int VERTEX_SIZE = 2 + 1 + 2;
     static const int SPRITE_SIZE = 4 * VERTEX_SIZE;
 
+    
+    virtual ~Sprite();
+    
 protected:
     float vertices[20];
     

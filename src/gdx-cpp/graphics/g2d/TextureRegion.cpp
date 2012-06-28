@@ -232,10 +232,10 @@ MatrixBase<TextureRegion::ptr> TextureRegion::split (int tileWidth, int tileHeig
     return matrix;
 }
 
-
-
 MatrixBase<TextureRegion::ptr> TextureRegion::split (Texture::ptr texture, int tileWidth, int tileHeight) {
     TextureRegion region(texture);
     return region.split(tileWidth, tileHeight);
 }
 
+TextureRegion::~TextureRegion() {
+}
