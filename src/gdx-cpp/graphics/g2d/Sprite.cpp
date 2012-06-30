@@ -530,4 +530,5 @@ Sprite::Sprite(const TextureRegion& region, int srcX, int srcY, int srcWidth, in
     setOrigin(width / 2, height / 2);
 }
 
-
+Sprite::~Sprite() {
+}
