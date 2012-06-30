@@ -22,7 +22,7 @@
 #include <Foundation/Foundation.h>
 
 NSString* gdxcpp_get_app_controller();
-void gdxcpp_initialize_application();
+void gdxcpp_initialize_application(int width, int height);
 void gdxcpp_create_listener();
 
 

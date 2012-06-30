@@ -35,7 +35,6 @@
 @synthesize window, viewController;
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application {
-	NSLog(@"Teste");	
 }
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
@@ -60,9 +59,15 @@
 	
 	window.rootViewController = viewController;
 	[window makeKeyAndVisible];
+    
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenScale = [[UIScreen mainScreen] scale];
+
+    CGFloat screenWidth = screenRect.size.width;
+    CGFloat screenHeight = screenRect.size.height;
 	
-	gdxcpp_initialize_application();	
-	gdx::graphics->setDisplayMode(glView.viewWidth, glView.viewHeight, true);
+	gdxcpp_initialize_application(screenWidth, screenHeight);
+	
 	gdxcpp_create_listener();
 	
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];

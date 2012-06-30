@@ -48,9 +48,9 @@ void gdxcpp_create_application(gdx::ApplicationListener* listener, const std::st
     g_Listener = listener;
 }
 
-void gdxcpp_initialize_application() {
+void gdxcpp_initialize_application(int width, int height) {
     gdxcpp_init(0, NULL);
-    new gdx::ios::IosApplication(g_Listener);
+    new gdx::ios::IosApplication(g_Listener, width, height);
 }
 
 void gdxcpp_create_listener() {

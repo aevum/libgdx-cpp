@@ -55,6 +55,8 @@ gl10(0)
 ,frameStart(0)
 ,frames(0)
 ,vsync(false)
+,width(0)
+,height(0)
 {
 }
 
