@@ -34,7 +34,7 @@ class SpriteBatch;
 class Sprite : public TextureRegion {
 public:
 
-    typedef ref_ptr_maker<Sprite>::type ptr;
+    typedef ref_ptr_maker<Sprite>::shared_ptr_def ptr;
   
     Sprite();
     Sprite(ptr);

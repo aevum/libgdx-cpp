@@ -28,7 +28,7 @@ namespace gdx {
 
 class AssetLoaderParameters : public Parameter {
 public:   
-    typedef ref_ptr_maker<AssetLoaderParameters>::type ptr;
+    typedef ref_ptr_maker<AssetLoaderParameters>::shared_ptr_def ptr;
 };
 
 } // namespace gdx

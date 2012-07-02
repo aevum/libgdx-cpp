@@ -22,6 +22,7 @@
 #define GDX_CPP_UTILS_ALIASES_HPP
 
 #include <tr1/memory>
+#include <memory>
 #include <cstdlib>
 
 struct shared_ptr_array_deleter {
@@ -45,8 +46,9 @@ template <typename T>
 struct ref_ptr_maker
 {
 public:
-  typedef std::tr1::shared_ptr< T > type;
-  typedef std::tr1::weak_ptr< T > weak_type;
+  typedef std::tr1::shared_ptr< T > shared_ptr_def;
+  typedef std::tr1::weak_ptr< T > weak_ptr_def;
+  typedef std::unique_ptr< T > unique_ptr_def;
 };
 
 /** A simple template class to create a Null Pointer to any sharedPtr

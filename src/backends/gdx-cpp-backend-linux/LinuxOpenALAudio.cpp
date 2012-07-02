@@ -61,7 +61,7 @@ void LinuxOpenALAudio::createAl() {
     alcMakeContextCurrent(context);
 }
 
-gdx::Sound * LinuxOpenALAudio::newSound (const ref_ptr_maker< gdx::FileHandle >::type file) {
+gdx::Sound * LinuxOpenALAudio::newSound (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_def file) {
 //     if (file == NULL) throw std::runtime_error("file cannot be null.");
     std::string extension = file->extension();
     if (extension == "ogg")
@@ -73,7 +73,7 @@ gdx::Sound * LinuxOpenALAudio::newSound (const ref_ptr_maker< gdx::FileHandle >:
     }
 }
 
-gdx::Music * LinuxOpenALAudio::newMusic (const ref_ptr_maker< gdx::FileHandle >::type file) {
+gdx::Music * LinuxOpenALAudio::newMusic (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_def file) {
     std::string extension = file->extension();
     if (extension == "ogg")
       return new LinuxOggMusic(this, file);

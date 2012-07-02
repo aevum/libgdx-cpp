@@ -2,15 +2,17 @@ project(gdx-cpp)
 
 cmake_minimum_required(VERSION 2.8)
 
-include(cmake/gdx.cmake)
-
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
+
+include(cmake/gdx.cmake)
 
 include_directories(src)
 
 link_directories(${LIBRARY_OUTPUT_PATH})
 
 set(ANDROID_NDK $ENV{ANDROID_NDK})
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --std=gnu++0x")
 
 option(BUILD_BOX2D "Builds Box2D" TRUE)
 option(BUILD_AS_SHARED_LIBRARIES "Build libraries as shared libraries instead of static" FALSE)

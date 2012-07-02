@@ -31,13 +31,13 @@ class LinuxOggInputStream;
 class LinuxOggSound : public LinuxOpenALSound
 {
 public :
-    LinuxOggSound(gdx::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx::FileHandle >::type file);
+    LinuxOggSound(gdx::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx::FileHandle >::shared_ptr_def file);
 };
 
 class LinuxOggMusic : public LinuxOpenALMusic
 {
 public :
-    LinuxOggMusic(gdx::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx::FileHandle >::type file);
+    LinuxOggMusic(gdx::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx::FileHandle >::shared_ptr_def file);
     ~LinuxOggMusic();
 protected:
     int read (char * buffer, int bufferSize);

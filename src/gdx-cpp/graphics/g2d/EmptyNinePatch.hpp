@@ -28,7 +28,7 @@ namespace gdx {
 
 class EmptyNinePatch : public NinePatch {
 public:
-    typedef ref_ptr_maker<EmptyNinePatch>::type ptr;
+    typedef ref_ptr_maker<EmptyNinePatch>::shared_ptr_def ptr;
     
     EmptyNinePatch& getInstance ();
     int getRegionWidth ();

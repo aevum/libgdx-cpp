@@ -29,10 +29,12 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <sys/stat.h>
-#include <sys/types.h>
+#include <stdint.h>
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/Application.hpp>
 #include <cassert>
+
+
 
 #include <android/log.h>
 

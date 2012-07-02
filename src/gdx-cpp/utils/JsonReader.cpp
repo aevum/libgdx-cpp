@@ -2809,10 +2809,7 @@ case 70:
             throw std::runtime_error("Error parsing JSON, unmatched bracket.");
     }
 
-    JsonValue::ptr _root = root;
-    root.reset();
-
-    return _root;
+    return std::move(root);
 }
 
 

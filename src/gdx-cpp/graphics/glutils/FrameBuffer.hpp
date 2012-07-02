@@ -35,7 +35,7 @@ class FrameBuffer:
     public Disposable,
     public std::tr1::enable_shared_from_this<FrameBuffer> {
 public:
-    typedef ref_ptr_maker<FrameBuffer>::type ptr;
+    typedef ref_ptr_maker<FrameBuffer>::shared_ptr_def ptr;
     
     FrameBuffer (const Pixmap::Format& format, int width, int height, bool hasDepth) ;
     

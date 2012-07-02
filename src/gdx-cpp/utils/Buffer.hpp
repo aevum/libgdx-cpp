@@ -29,7 +29,7 @@ namespace gdx {
 
 struct buffer_base {
 public:
-    typedef ref_ptr_maker<char>::type char_ptr;
+    typedef ref_ptr_maker<char>::shared_ptr_def char_ptr;
     buffer_base(char_ptr bf, int capacity, int position, int mark, int limit)
             : bf(bf)
             , _capacity(capacity)

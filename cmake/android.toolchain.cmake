@@ -616,10 +616,10 @@ if( BUILD_WITH_ANDROID_NDK )
  set( ANDROID_SYSROOT "${ANDROID_NDK}/platforms/android-${ANDROID_NATIVE_API_LEVEL}/arch-${ANDROID_ARCH_NAME}" )
  if( ANDROID_USE_STLPORT )
   set( __stlIncludePath "${ANDROID_NDK}/sources/cxx-stl/stlport/stlport" )
-  set( __stlLibPath "${ANDROID_NDK}/sources/cxx-stl/stlport/libs/${ANDROID_NDK_ABI_NAME}" )
+  set( __stlLibPath "${ANDROID_NDK}/sources/cxx-stl/stlport/libs/${ANDROID_NDK_ABI_NAME}/${ANDROID_NDK_ABI_VERSION}" )
  else()
-  set( __stlIncludePath "${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/include" )
-  set( __stlLibPath "${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/libs/${ANDROID_NDK_ABI_NAME}" )
+  set( __stlIncludePath "${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/include/${ANDROID_NDK_ABI_VERSION}" )
+  set( __stlLibPath "${ANDROID_NDK}/sources/cxx-stl/gnu-libstdc++/libs/${ANDROID_NDK_ABI_NAME}/${ANDROID_NDK_ABI_VERSION}" )
  endif()
 endif()
 
@@ -864,7 +864,7 @@ set( CMAKE_MODULE_LINKER_FLAGS "${LINKER_FLAGS}" CACHE STRING "linker flags" )
 set( CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -Wl,-z,nocopyreloc ${LINKER_FLAGS}" CACHE STRING "linker flags" )
 
 include_directories( SYSTEM ${ANDROID_SYSTEM_INCLUDE_DIRS} )
-link_directories( ${ANDROID_SYSTEM_LIB_DIRS} )
+link_directories( ${ANDROID_SYSTEM_LIB_DIRS})
 
 #finish flags
 set( ANDROID_CXX_FLAGS "${ANDROID_CXX_FLAGS}" CACHE INTERNAL "Extra Android falgs")

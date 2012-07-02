@@ -28,7 +28,7 @@ namespace gdx {
 class Thread
 {
 public:
-    typedef ref_ptr_maker<Thread>::type ptr;
+    typedef ref_ptr_maker<Thread>::shared_ptr_def ptr;
     
     virtual void start() = 0;
     virtual void yield() = 0;

@@ -29,7 +29,7 @@ namespace gdx {
 class ThresholdFunction {
 public:
 
-    typedef ref_ptr_maker<std::vector<float> >::type ptr;
+    typedef ref_ptr_maker<std::vector<float> >::shared_ptr_def ptr;
     ThresholdFunction::ptr calculate (std::vector<float>& spectralFlux);
 
 protected:

@@ -28,7 +28,7 @@ namespace gdx {
 
 class TextureRegion {
 public:
-    typedef ref_ptr_maker<TextureRegion>::type ptr;
+    typedef ref_ptr_maker<TextureRegion>::shared_ptr_def ptr;
 
     static ptr newFromTexture(Texture::ptr texture);
     static ptr newFromRegion(TextureRegion& region);

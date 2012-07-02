@@ -40,13 +40,13 @@ public:
         Absolute
     };
 
-    virtual ref_ptr_maker<FileHandle>::type getFileHandle (const std::string& path, FileType type) = 0;
+    virtual ref_ptr_maker<FileHandle>::shared_ptr_def getFileHandle (const std::string& path, FileType type) = 0;
 
-    virtual ref_ptr_maker<FileHandle>::type internal (const std::string& path) = 0;
+    virtual ref_ptr_maker<FileHandle>::shared_ptr_def internal (const std::string& path) = 0;
 
-    virtual ref_ptr_maker<FileHandle>::type external (const std::string& path) = 0;
+    virtual ref_ptr_maker<FileHandle>::shared_ptr_def external (const std::string& path) = 0;
 
-    virtual ref_ptr_maker<FileHandle>::type absolute (const std::string& path) = 0;
+    virtual ref_ptr_maker<FileHandle>::shared_ptr_def absolute (const std::string& path) = 0;
 
     virtual std::string getExternalStoragePath () = 0;
 

@@ -33,7 +33,7 @@ class Color;
 
 class Pixmap: public Disposable {
 public:
-    typedef ref_ptr_maker<Pixmap>::type ptr;
+    typedef ref_ptr_maker<Pixmap>::shared_ptr_def ptr;
 
     enum Blending {
         None, SourceOver

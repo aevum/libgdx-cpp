@@ -44,7 +44,7 @@ public:
      */
     class Element {
     public:        
-        typedef ref_ptr_maker<Element>::type ptr;
+        typedef ref_ptr_maker<Element>::shared_ptr_def ptr;
         typedef std::vector<Element::ptr> ElementVector;
         typedef std::tr1::unordered_map<std::string, std::string> AttributesMap;
         

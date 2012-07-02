@@ -50,7 +50,7 @@ class AssetDescriptor;
 class AssetManager: public Disposable
             , public Synchronizable
 {
-    typedef ref_ptr_maker<AssetDescriptor>::type AssetDescriptorPtr;
+    typedef ref_ptr_maker<AssetDescriptor>::shared_ptr_def AssetDescriptorPtr;
     typedef std::tr1::unordered_map<std::string, Asset::ptr> AssetMap;
     typedef std::list< AssetDescriptorPtr > PreloadQueueType;
     typedef std::tr1::unordered_map<std::string, int> AssetTypeMap;

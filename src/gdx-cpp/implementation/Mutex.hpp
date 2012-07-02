@@ -25,7 +25,7 @@ namespace gdx {
 class Mutex
 {
 public:
-    typedef ref_ptr_maker<Mutex>::type ptr;
+    typedef ref_ptr_maker<Mutex>::shared_ptr_def ptr;
     
     virtual void lock() = 0;
     virtual void unlock() = 0;

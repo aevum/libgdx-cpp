@@ -40,7 +40,7 @@ protected:
     static const int PAGES = 0x10000 / PAGE_SIZE;
 
 public:
-    typedef ref_ptr_maker<BitmapFont>::type ptr;
+    typedef ref_ptr_maker<BitmapFont>::shared_ptr_def ptr;
 
     enum HAlignment {
         HALIGNMENT_LEFT, HALIGNMENT_CENTER, HALIGNMENT_RIGHT

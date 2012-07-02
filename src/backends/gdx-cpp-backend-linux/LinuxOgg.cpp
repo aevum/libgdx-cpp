@@ -25,7 +25,7 @@
 
 using namespace gdx::nix;
 
-LinuxOggSound::LinuxOggSound(gdx::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx::FileHandle >::type file): LinuxOpenALSound(audio)
+LinuxOggSound::LinuxOggSound(gdx::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx::FileHandle >::shared_ptr_def file): LinuxOpenALSound(audio)
 {
     LinuxOggInputStream input;
     input.open(file->path());
@@ -49,7 +49,7 @@ LinuxOggSound::LinuxOggSound(gdx::nix::LinuxOpenALAudio* audio, const ref_ptr_ma
 }
 
 
-LinuxOggMusic::LinuxOggMusic(gdx::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx::FileHandle >::type file):
+LinuxOggMusic::LinuxOggMusic(gdx::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx::FileHandle >::shared_ptr_def file):
         LinuxOpenALMusic(audio, file)
 {
     input = new LinuxOggInputStream();

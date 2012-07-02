@@ -42,8 +42,8 @@ class LinuxOpenALAudio : public gdx::Audio
 public:
     gdx::AudioDevice * newAudioDevice (int samplingRate, bool isMono);
     gdx::AudioRecorder * newAudioRecoder (int samplingRate, bool isMono);
-    gdx::Sound * newSound (const ref_ptr_maker< gdx::FileHandle >::type file);
-    gdx::Music * newMusic (const ref_ptr_maker< gdx::FileHandle >::type file);
+    gdx::Sound * newSound (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_def file);
+    gdx::Music * newMusic (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_def file);
 
     LinuxOpenALAudio (int simultaneousSources = 16);
     

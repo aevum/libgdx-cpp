@@ -32,7 +32,7 @@ class CatmullRomSpline {
 public:
     CatmullRomSpline();
 
-    typedef ref_ptr_maker< std::vector<Vector3> >::type vector3_vector_ptr;
+    typedef ref_ptr_maker< std::vector<Vector3> >::shared_ptr_def vector3_vector_ptr;
     
     void add (const Vector3& point);
     std::vector<Vector3>& getControlPoints ();
