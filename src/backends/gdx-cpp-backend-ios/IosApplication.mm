@@ -36,7 +36,7 @@
 using namespace gdx::ios;
 using namespace gdx;
 
-gdx::ios::IosApplication::IosApplication(gdx::ApplicationListener* listener)
+gdx::ios::IosApplication::IosApplication(gdx::ApplicationListener* listener, int width, int height)
 :  Synchronizable(system->getMutexFactory())
 , listener(listener)
 , graphics(NULL)
@@ -44,25 +44,26 @@ gdx::ios::IosApplication::IosApplication(gdx::ApplicationListener* listener)
 , files(NULL)
 , logLevel(gdx::Application::LOG_INFO)
 {
-    initialize();
+    initialize(width, height);
 }
 
-void IosApplication::initialize() {
+void IosApplication::initialize(int width, int height) {
 	graphics = new IosGraphics();
 	input = new IosInput();
 	files = new IosFiles();
 	audio = new IosAudio();
 	
-	graphics->initialize();
 	graphics->setDisplayMode(width, height, false);
+	graphics->initialize();
 	
-	initialize(this, graphics, audio, input, files);
+    gdx::initialize(this, graphics, audio, input, files);
 }
 
 void IosApplication::onRunnableStop()
 {
     //DUMMY
 }
+
 
 void IosApplication::run()
 {    

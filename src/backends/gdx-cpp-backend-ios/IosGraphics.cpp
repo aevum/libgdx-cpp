@@ -17,9 +17,6 @@
 
 #include "IosGraphics.hpp"
 
-#include "IosGL10.hpp"
-#include "IosGL11.hpp"
-#include "IosGL20.hpp"
 #include "IosGLU.hpp"
 #include <stdexcept>
 
@@ -36,12 +33,15 @@
 #include <gdx-cpp/graphics/g2d/Gdx2DPixmap.hpp>
 #include <gdx-cpp/graphics/g2d/svg/AggSvgPixmap.hpp>
 
+#include <gdx-cpp/graphics/GL10.hpp>
+#include <gdx-cpp/graphics/GL11.hpp>
+#include <gdx-cpp/graphics/GL20.hpp>
+
 #include "IosGLU.hpp"
 
 #import <OpenGLES/ES1/gl.h>
 
 using namespace gdx::ios;
-using namespace gdx::graphics;
 using namespace gdx;
 
 gdx::ios::IosGraphics::IosGraphics() :
@@ -55,6 +55,8 @@ gl10(0)
 ,frameStart(0)
 ,frames(0)
 ,vsync(false)
+,width(0)
+,height(0)
 {
 }
 
@@ -219,9 +221,9 @@ void gdx::ios::IosGraphics::initialize()
 			
         } else {
             if (major == 1 && minor < 5) {
-                glCommon = gl10 = new IosGL10;
+                glCommon = gl10 = new GL10;
             } else {
-                glCommon = gl10 = gl11 = new IosGL11;
+                glCommon = gl10 = gl11 = new GL11;
             }
         }
 		
@@ -248,7 +250,7 @@ TextureData::ptr ios::IosGraphics::resolveTextureData(gdx::FileHandle::ptr fileH
                                                                   const gdx::Pixmap::Format* format,
                                                                   bool useMipMaps)
 {
-    return TextureData::ptr(new glFileTextureData(fileHandle, preloadedPixmap, format, useMipMaps));
+    return TextureData::ptr(new FileTextureData(fileHandle, preloadedPixmap, format, useMipMaps));
 }
 
 Pixmap* ios::IosGraphics::resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, int pixType)
@@ -257,7 +259,7 @@ Pixmap* ios::IosGraphics::resolvePixmap(int width, int height, const gdx::Pixmap
         case Pixmap::Gdx2d:
             return Gdx2DPixmap::newPixmap(width, height, Gdx2DPixmap::Format::toGdx2DPixmapFormat(format));
         case Pixmap::Svg:
-            return new svg::AggSvgPixmap(width, height);
+            return new gdx::AggSvgPixmap(width, height);
     }
     return NULL;
 }
@@ -283,7 +285,7 @@ Pixmap* ios::IosGraphics::resolvePixmap(const gdx::FileHandle::ptr& file)
 		return Gdx2DPixmap::pixmapFromByteArray((unsigned char*) buffer.get(), length, 0);
 	}
     else if (extension == "svg") {
-        return svg::AggSvgPixmap::newFromFile(file);        
+        return gdx::AggSvgPixmap::newFromFile(file);        
     } else {
         throw std::runtime_error("unsupported image format: " + extension);
     }

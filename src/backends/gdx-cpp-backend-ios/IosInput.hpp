@@ -23,8 +23,6 @@
 
 namespace gdx {
 
-namespace backends {
-
 namespace ios {
 
 class IosInput : public gdx::Input
@@ -113,8 +111,6 @@ protected:
     int touchY, deltaY;
     
 };
-
-}
 
 }
 

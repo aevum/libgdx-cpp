@@ -23,7 +23,6 @@
 #include <gdx-cpp/files/FileHandle.hpp>
 
 namespace gdx {
-namespace backends {
 namespace ios {
             
 class IosAudio : public gdx::Audio {
@@ -36,7 +35,6 @@ public:
 };
 
 }       
-}
 }
 
 

@@ -28,14 +28,29 @@
 
 static gdx::ApplicationListener* g_Listener = 0;
 
+class IosLog : public gdx::Log {
+public:
+    virtual void debug ( const std::string& tag, const std::string& line, const std::string& file, const char* format, ... ) {
+        
+    }
+
+    virtual void error ( const std::string& tag, const std::string& line, const std::string& file, const char* format, ... ) {
+        
+    }
+
+    virtual void info ( const std::string& tag, const std::string& line, const std::string& file, const char* format, ... ) {
+    
+    }
+};
+
 void gdxcpp_create_application(gdx::ApplicationListener* listener, const std::string& applicationName,
                                int width, int height) {
     g_Listener = listener;
 }
 
-void gdxcpp_initialize_application() {
+void gdxcpp_initialize_application(int width, int height) {
     gdxcpp_init(0, NULL);
-    new gdx::ios::IosApplication(g_Listener);
+    new gdx::ios::IosApplication(g_Listener, width, height);
 }
 
 void gdxcpp_create_listener() {
@@ -44,8 +59,17 @@ void gdxcpp_create_listener() {
 
 int main(int argc, char** argv) {
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-    gdx::initializeSystem(new gdx::ios::IosSystem);
-    int retVal = UIApplicationMain(argc, argv, nil, NSStringFromClass([AppController class]));
-    [pool release];
-    return retVal;
+
+    gdx::initializeSystem(new gdx::ios::IosSystem, new IosLog);
+    
+    NSString* controller = gdxcpp_get_app_controller();
+    
+    @try {
+        int retVal = UIApplicationMain(argc, argv, nil, controller != nil? controller : NSStringFromClass([AppController class]));
+        [pool release];
+        return retVal;
+    } @catch (NSException * e) {
+        NSLog([NSString stringWithFormat:@"Exception: %@", [e reason]]);
+    }
+    return -1;
 }

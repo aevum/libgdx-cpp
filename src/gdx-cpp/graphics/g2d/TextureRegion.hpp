@@ -69,6 +69,9 @@ public:
 
     float u, v;
     float u2, v2;
+    
+    
+    virtual ~TextureRegion();
 
 protected:
     Texture::ptr texture;

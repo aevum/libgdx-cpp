@@ -35,7 +35,6 @@
 @synthesize window, viewController;
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application {
-	NSLog(@"Teste");	
 }
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
@@ -45,9 +44,9 @@
 									 pixelFormat: kEAGLColorFormatRGBA8
 									 depthFormat: GL_DEPTH_COMPONENT16_OES
 							  preserveBackbuffer: NO
-									  sharegroup:nil
-								   multiSampling:NO
-								 numberOfSamples:0];
+									  sharegroup: nil
+								   multiSampling: NO
+								 numberOfSamples: 0];
     
 	
 	viewController = [[IosGdxViewController alloc] initWithNibName:nil bundle:nil];
@@ -60,11 +59,19 @@
 	
 	window.rootViewController = viewController;
 	[window makeKeyAndVisible];
+    
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenScale = [[UIScreen mainScreen] scale];
+
+    CGFloat screenWidth = screenRect.size.width;
+    CGFloat screenHeight = screenRect.size.height;
 	
-	gdxcpp_initialize_application();	
-	gdx::graphics->setDisplayMode(glView.viewWidth, glView.viewHeight, true);
+	gdxcpp_initialize_application(screenWidth, screenHeight);
+	
 	gdxcpp_create_listener();
 	
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
+    
 	return YES;
 }
 

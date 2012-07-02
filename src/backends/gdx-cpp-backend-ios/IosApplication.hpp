@@ -26,7 +26,6 @@
 #include <list>
 
 namespace gdx {
-namespace backends {
 namespace ios {
 	
 class IosGraphics;
@@ -36,7 +35,7 @@ class IosInput;
 			
 class IosApplication : public Application, public Synchronizable {
 public:		
-	IosApplication(ApplicationListener* p_listener);
+	IosApplication(ApplicationListener* p_listener, int width, int height);
 		
 	void error(const std::string& tag, const char* format, ...);
     void exit();
@@ -59,9 +58,6 @@ protected:
     bool useGL20iFAvailable;
     std::string title;
     
-	int height;
-    int width;
-    
 	ApplicationListener* listener;
     
 	IosGraphics* graphics;
@@ -73,11 +69,10 @@ protected:
 	
     gdx::Thread::ptr mainLoopThread;
     
-    void initialize();
+    void initialize(int width, int height);
 	
     int logLevel;
 };
-}
 }
 }
 

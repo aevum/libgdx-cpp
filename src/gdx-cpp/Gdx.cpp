@@ -69,15 +69,21 @@ void gdx::initializeSystem(gdx::System* system, Log* log)
 
 void gdx::internal_log_debug(const std::string& tag, const std::string& line, const std::string& file, const char* format, ...) {
     va_list ap;
+    va_start(ap, format);
     log->debug(tag, line, file, format, ap);
+    va_end(ap);
 }
 
 void gdx::internal_log_info(const std::string& tag, const std::string& line, const std::string& file, const char* format, ...) {
     va_list ap;
+    va_start(ap, format);
     log->info(tag, line, file, format, ap);
+    va_end(ap);
 }
 
 void gdx::internal_log_error(const std::string& tag, const std::string& line, const std::string& file, const char* format, ...) {
     va_list ap;
+    va_start(ap, format);
     log->info(tag, line, file, format, ap);
+    va_end(ap);
 }

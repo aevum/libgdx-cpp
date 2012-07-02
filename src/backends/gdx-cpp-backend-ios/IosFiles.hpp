@@ -28,8 +28,6 @@ namespace gdx {
 
 class Files;
 
-namespace backends {
-
 namespace ios {
 
   class IosFiles : public gdx::Files
@@ -58,9 +56,7 @@ namespace ios {
   };
     
 }
-
-}
-
+    
 }
 
 #endif // GDX_CPP_BACKENDS_IOS_IOSFILES_HPP

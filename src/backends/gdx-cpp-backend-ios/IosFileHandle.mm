@@ -23,16 +23,23 @@
 using namespace gdx::ios;
 
 IosFileHandle::IosFileHandle(const std::string& fileName, gdx::Files::FileType type)
-: gdx::files::FileHandle(fileName, type)
+: gdx::FileHandle(fileName, type)
 {	
 }
 
-int IosFileHandle::readBytes(gdx::files::FileHandle::buffer_ptr& c) const {
+int IosFileHandle::readBytes(gdx::FileHandle::buffer_ptr& c) const {
 	if (this->type == Files::Internal) {		
-		NSString *filePath = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String: file.nameWithoutExtension().c_str()] 
-															 ofType:[NSString stringWithUTF8String: file.extension().c_str()]
-														inDirectory:[NSString stringWithUTF8String: file.getParent().c_str()]];
-
+          
+       NSString* filePath = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String: file.nameWithoutExtension().c_str()] ofType:[NSString stringWithUTF8String: file.extension().c_str()]
+                                                            inDirectory:[NSString stringWithUTF8String: file.getParent().c_str()]];
+          
+        if (filePath == nil) {            
+            NSString* documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+            
+            filePath = [NSString stringWithFormat:@"%@/%s", 
+                                  documentsPath, name().c_str()];
+        }
+        
 		if (filePath) {
 			NSData* data = [NSData dataWithContentsOfFile:filePath];
 			if (data) {
@@ -40,7 +47,7 @@ int IosFileHandle::readBytes(gdx::files::FileHandle::buffer_ptr& c) const {
 				Byte *byteData = new Byte[len];
 				memcpy(byteData, [data bytes], len);
 				
-				gdx::files::FileHandle::buffer_ptr new_ptr((char*) byteData, shared_ptr_array_deleter());
+				gdx::FileHandle::buffer_ptr new_ptr((char*) byteData, shared_ptr_array_deleter());
 				c.swap(new_ptr);
 				
 				return len;
@@ -52,5 +59,21 @@ int IosFileHandle::readBytes(gdx::files::FileHandle::buffer_ptr& c) const {
 }
 
 bool IosFileHandle::exists() const {
-    return[[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String: file.getName().c_str()] ofType:[NSString stringWithUTF8String:file.extension().c_str()]];
+    NSString* documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+
+    return [[NSFileManager defaultManager] fileExistsAtPath:[documentsPath stringByAppendingPathComponent:[NSString stringWithUTF8String:name().c_str()]]];
+}
+
+int IosFileHandle::write(const char *data, int lenght, bool append) {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    
+    NSString *fileName = [NSString stringWithFormat:@"%@/%s", 
+                          documentsDirectory, name().c_str()];
+    
+    NSData* nsData = [NSData dataWithBytes:(void*)data length:lenght];
+    
+    [nsData writeToFile:fileName atomically:YES];
+    
+    return lenght;
 }
