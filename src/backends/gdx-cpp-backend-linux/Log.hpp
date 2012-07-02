@@ -1,7 +1,9 @@
 #ifndef LOG_LINUX_HPP
 #define LOG_LINUX_HPP
 
+#include <stdio.h>
 #include <gdx-cpp/Log.hpp>
+
 namespace gdx {
 namespace nix {
 class Log : public gdx::Log{

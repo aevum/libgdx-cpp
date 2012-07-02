@@ -26,6 +26,8 @@
 #include "graphics/GLCommon.hpp"
 #include "graphics/GLU.hpp"
 #include <cassert>
+#include <stdio.h>
+#include <stdarg.h>
 
 namespace gdx {
 Application* app = 0;
