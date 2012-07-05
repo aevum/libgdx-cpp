@@ -40,7 +40,7 @@ const std::string ShaderProgram::TEXCOORD_ATTRIBUTE = "a_texCoord";
 const std::string ShaderProgram::TANGENT_ATTRIBUTE = "a_tangent";
 const std::string ShaderProgram::BINORMAL_ATTRIBUTE = "a_binormal";
 
-gdx::unordered_map <Application *, std::set<ShaderProgram *> * > ShaderProgram::shaders;
+gdx_unordered_map <Application *, std::set<ShaderProgram *> * > ShaderProgram::shaders;
 
 bool ShaderProgram::pedantic = true;
 int ShaderProgram::intbuf = 0;
@@ -389,7 +389,7 @@ void ShaderProgram::clearAllShaderPrograms (Application* app) {
 std::string ShaderProgram::getManagedStatus () {
     std::stringstream builder;
     builder << "Managed shaders/app: { ";
-    gdx::unordered_map<Application *, std::set<ShaderProgram *> * >::iterator it;
+    gdx_unordered_map<Application *, std::set<ShaderProgram *> * >::iterator it;
     for (it = shaders.begin(); it != shaders.end(); ++it) {
         builder << it->second->size();
         builder << " ";

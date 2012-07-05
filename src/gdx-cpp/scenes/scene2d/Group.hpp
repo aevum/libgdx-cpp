@@ -100,7 +100,7 @@ protected:
     std::list<Group*> groups;
     std::list<Group*> immutableGroups;
 
-    gdx::unordered_map<std::string, Actor*> namesToActors;
+    gdx_unordered_map<std::string, Actor*> namesToActors;
 
     gdx::Matrix3 localTransform;
     gdx::Matrix3 worldTransform;

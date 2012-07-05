@@ -72,7 +72,7 @@ void Texture::create (TextureData::ptr data) {
     load(data);
 
     if (data->isManaged()) {
-        addManagedTexture(app, shared_from_this());
+        addManagedTexture(app, Texture::ptr(shared_from_this()));
     }
 }
 
@@ -230,7 +230,7 @@ void Texture::setEnforcePotImages (bool enforcePotImages) {
 }
 
 void Texture::addManagedTexture (Application* app,const Texture::ptr texture) {
-    managedTextures[app].push_back(texture);
+    managedTextures[app].push_back(Texture::weak_ptr(texture));
 }
 
 void Texture::clearAllTextures (Application* app) {

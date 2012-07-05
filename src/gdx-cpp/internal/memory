@@ -27,23 +27,33 @@
 #if defined(GDX_BACKEND_ANDROID) 
 
 #include <tr1/memory>
+#include <bits/unique_ptr.h>
 
-namespace gdx {
-    template <typename K > using enable_shared_from_this = std::tr1::enable_shared_from_this<K>;
-    template <typename K > using shared_ptr = std::tr1::shared_ptr<K>;
-}
+#define gdx_shared_ptr std::tr1::shared_ptr
+#define gdx_unique_ptr std::tr1::unique_ptr
+#define gdx_weak_ptr std::tr1::weak_ptr
+#define gdx_enable_shared_from_this std::tr1::enable_shared_from_this
+#define gdx_static_pointer_cast std::tr1::static_pointer_cast
 
-#endif
-#if defined(GDX_BACKEND_LINUX) || defined(GDX_BACKEND_IOS) 
+#elif defined(GDX_BACKEND_LINUX) 
 
 #include <memory>
 
-namespace gdx {
-    template <typename K > using enable_shared_from_this = std::enable_shared_from_this<K>;
-    template <typename K > using shared_ptr = std::shared_ptr<K>;
-    template <typename K > using unique_ptr = std::unique_ptr<K>;
-    template <typename K > using weak_ptr = std::weak_ptr<K>;
-}
+#define gdx_shared_ptr std::shared_ptr
+#define gdx_unique_ptr std::unique_ptr
+#define gdx_weak_ptr std::weak_ptr
+#define gdx_enable_shared_from_this std::enable_shared_from_this
+#define gdx_static_pointer_cast std::static_pointer_cast
+
+#elif defined(GDX_BACKEND_IOS) 
+
+#include <memory>
+
+template <typename K > using gdx_enable_shared_from_this = std::enable_shared_from_this<K>;
+template <typename K > using gdx_shared_ptr = std::shared_ptr<K>;
+template <typename K > using gdx_unique_ptr = std::unique_ptr<K>;
+template <typename K > using gdx_weak_ptr = std::weak_ptr<K>;
+template <typename K > using gdx_static_pointer_cast = std::gdx_static_pointer_cast<K>;
 
 #endif
 
@@ -68,9 +78,9 @@ template <typename T>
 struct ref_ptr_maker
 {
 public:
-  typedef gdx::shared_ptr< T > shared_ptr_def;
-  typedef gdx::weak_ptr< T > weak_ptr_def;
-  typedef gdx::unique_ptr< T > unique_ptr_def;
+  typedef gdx_shared_ptr< T > shared_ptr_def;
+  typedef gdx_weak_ptr< T > weak_ptr_def;
+  typedef gdx_unique_ptr< T > unique_ptr_def;
 };
 
 /** A simple template class to create a Null Pointer to any sharedPtr
@@ -79,8 +89,8 @@ public:
 struct null_shared_ptr {
 public:
     template<typename T>
-    operator gdx::shared_ptr<T>() {
-        return gdx::shared_ptr<T>();
+    operator gdx_shared_ptr<T>() {
+        return gdx_shared_ptr<T>();
     }
 };
 

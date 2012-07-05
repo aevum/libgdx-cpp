@@ -45,7 +45,7 @@ enum json_item_type {
 class JsonValue {
 public:
     typedef ref_ptr_maker< JsonValue >::shared_ptr_def ptr;
-    typedef gdx::unordered_map< std::string, ptr > item_map;
+    typedef gdx_unordered_map< std::string, ptr > item_map;
     typedef std::vector< ptr > array;
 
     JsonValue(int val) ;
@@ -166,7 +166,7 @@ private:
     void toString(std::ostream& out, bool prettyPrint, int ident) const;
     
     friend class JsonReader;
-    gdx::shared_ptr<void> item_val;
+    gdx_shared_ptr<void> item_val;
     json_item_type item_type;
     
     operator array& ();

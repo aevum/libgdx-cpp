@@ -46,7 +46,7 @@ public:
     public:        
         typedef ref_ptr_maker<Element>::shared_ptr_def ptr;
         typedef std::vector<Element::ptr> ElementVector;
-        typedef gdx::unordered_map<std::string, std::string> AttributesMap;
+        typedef gdx_unordered_map<std::string, std::string> AttributesMap;
         
         bool operator==(const Element& other) {
             return other.name == this->name;

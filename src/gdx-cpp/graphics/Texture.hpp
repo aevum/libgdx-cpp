@@ -39,7 +39,7 @@ namespace gdx {
 class FileHandle;
 class Texture
     : public Disposable,
-    public Asset , public gdx::enable_shared_from_this<Texture> {
+    public Asset , public gdx_enable_shared_from_this<Texture> {
 public:
     typedef ref_ptr_maker<Texture>::shared_ptr_def ptr;
     typedef ref_ptr_maker<Texture>::weak_ptr_def weak_ptr;
@@ -134,7 +134,7 @@ private:
     static AssetManager* assetManager;
 
     typedef std::list< Texture::weak_ptr > textureList;
-    typedef gdx::unordered_map< Application* , textureList > managedTextureMap;
+    typedef gdx_unordered_map< Application* , textureList > managedTextureMap;
 
     static managedTextureMap managedTextures;
 

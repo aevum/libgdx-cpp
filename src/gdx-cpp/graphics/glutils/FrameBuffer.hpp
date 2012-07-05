@@ -49,7 +49,7 @@ public:
     int getWidth ();
 
 private:
-    typedef gdx::unordered_map<Application*, std::set < FrameBuffer* > > buffer_map;
+    typedef gdx_unordered_map<Application*, std::set < FrameBuffer* > > buffer_map;
     static buffer_map buffers;
     void build ();
     void addManagedFrameBuffer (Application* app, FrameBuffer* frameBuffer);

@@ -97,7 +97,7 @@ protected:
     bool isVertexArray;
     bool disposed;
 private:
-    typedef gdx::unordered_map<Application*, std::set<Mesh*> > MeshMap;
+    typedef gdx_unordered_map<Application*, std::set<Mesh*> > MeshMap;
     static MeshMap meshes;
     static void addManagedMesh (Application* app, Mesh* mesh);
     

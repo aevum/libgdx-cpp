@@ -106,20 +106,20 @@ private:
     void fetchUniforms ();
     void fetchAttributes ();
 
-    static gdx::unordered_map <Application *, std::set< ShaderProgram* > * > shaders;
+    static gdx_unordered_map <Application *, std::set< ShaderProgram* > * > shaders;
 
     std::string log;
     bool isCompiledVar;
 
 //     const
-    gdx::unordered_map <std::string, int> uniforms;
+    gdx_unordered_map <std::string, int> uniforms;
 //     const
-    gdx::unordered_map <std::string, int> uniformTypes;
+    gdx_unordered_map <std::string, int> uniformTypes;
     std::vector<std::string> uniformNames;
 
-    gdx::unordered_map <std::string, int> attributes;
+    gdx_unordered_map <std::string, int> attributes;
 //     const
-    gdx::unordered_map <std::string, int> attributeTypes;
+    gdx_unordered_map <std::string, int> attributeTypes;
     std::vector<std::string> attributeNames;
 
     int program;

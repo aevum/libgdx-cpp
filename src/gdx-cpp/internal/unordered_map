@@ -22,22 +22,25 @@
 
 #include <gdx-cpp/config.hpp>
 
-#if defined(GDX_BACKEND_LINUX) || defined(GDX_BACKEND_ANDROID) 
+#if defined(GDX_BACKEND_ANDROID) 
 
 #include <tr1/unordered_map>
 
-namespace gdx {
-    template <typename K, typename V> using unordered_map = std::tr1::unordered_map<K,V>;
-}
+#define gdx_unordered_map std::tr1::unordered_map
 
-#endif
-#if defined(GDX_BACKEND_IOS) 
+#elif defined(GDX_BACKEND_IOS) 
 
 #include <unordered_map>
 
 namespace gdx {
     template <typename K, typename V> using unordered_map = std::unordered_map<K,V>;
 }
+
+#elif defined(GDX_BACKEND_LINUX)
+
+#include <unordered_map>
+
+#define gdx_unordered_map std::unordered_map
 
 #endif
 
