@@ -36,6 +36,7 @@ macro(gdx_setup_target target_type target_name sources)
         add_library(${target_name} SHARED ${sources})
 
     elseif(UNIX)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
         if (${target_type} STREQUAL "application")
             add_executable(${target_name} ${sources})
         else()

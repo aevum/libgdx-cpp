@@ -24,7 +24,7 @@
 #include <gdx-cpp/config.hpp>
 #include <cstdlib>
 
-#if defined(GDX_BACKEND_LINUX) || defined(GDX_BACKEND_ANDROID) 
+#if defined(GDX_BACKEND_ANDROID) 
 
 #include <tr1/memory>
 
@@ -34,7 +34,7 @@ namespace gdx {
 }
 
 #endif
-#if defined(GDX_BACKEND_IOS) 
+#if defined(GDX_BACKEND_LINUX) || defined(GDX_BACKEND_IOS) 
 
 #include <memory>
 
