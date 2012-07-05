@@ -22,7 +22,7 @@
 #include "LockGuard.hpp"
 #include "gdx-cpp/implementation/Mutex.hpp"
 #include "gdx-cpp/implementation/MutexFactory.hpp"
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 
 class Mutex;
 class Mutex;

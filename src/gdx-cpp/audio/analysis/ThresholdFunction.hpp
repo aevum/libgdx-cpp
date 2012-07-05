@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_AUDIO_ANALYSIS_THRESHOLDFUNCTION_HPP_
 #define GDX_CPP_AUDIO_ANALYSIS_THRESHOLDFUNCTION_HPP_
 
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 #include <vector>
 
 namespace gdx {

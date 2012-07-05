@@ -11,3 +11,5 @@ android/assets
 src/tests/backends/android/assets/
 gl.hpp
 Log.hpp
+
+src/gdx-cpp/config.hpp

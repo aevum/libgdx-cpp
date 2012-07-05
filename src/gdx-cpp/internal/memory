@@ -21,9 +21,31 @@
 #ifndef GDX_CPP_UTILS_ALIASES_HPP
 #define GDX_CPP_UTILS_ALIASES_HPP
 
-#include <tr1/memory>
-#include <memory>
+#include <gdx-cpp/config.hpp>
 #include <cstdlib>
+
+#if defined(GDX_BACKEND_LINUX) || defined(GDX_BACKEND_ANDROID) 
+
+#include <tr1/memory>
+
+namespace gdx {
+    template <typename K > using enable_shared_from_this = std::tr1::enable_shared_from_this<K>;
+    template <typename K > using shared_ptr = std::tr1::shared_ptr<K>;
+}
+
+#endif
+#if defined(GDX_BACKEND_IOS) 
+
+#include <memory>
+
+namespace gdx {
+    template <typename K > using enable_shared_from_this = std::enable_shared_from_this<K>;
+    template <typename K > using shared_ptr = std::shared_ptr<K>;
+    template <typename K > using unique_ptr = std::unique_ptr<K>;
+    template <typename K > using weak_ptr = std::weak_ptr<K>;
+}
+
+#endif
 
 struct shared_ptr_array_deleter {
     template <typename T>
@@ -46,9 +68,9 @@ template <typename T>
 struct ref_ptr_maker
 {
 public:
-  typedef std::tr1::shared_ptr< T > shared_ptr_def;
-  typedef std::tr1::weak_ptr< T > weak_ptr_def;
-  typedef std::unique_ptr< T > unique_ptr_def;
+  typedef gdx::shared_ptr< T > shared_ptr_def;
+  typedef gdx::weak_ptr< T > weak_ptr_def;
+  typedef gdx::unique_ptr< T > unique_ptr_def;
 };
 
 /** A simple template class to create a Null Pointer to any sharedPtr
@@ -57,10 +79,9 @@ public:
 struct null_shared_ptr {
 public:
     template<typename T>
-    operator std::tr1::shared_ptr<T>() {
-        return std::tr1::shared_ptr<T>();
+    operator gdx::shared_ptr<T>() {
+        return gdx::shared_ptr<T>();
     }
 };
-
 
 #endif // GDX_CPP_UTILS_ALIASES_HPP

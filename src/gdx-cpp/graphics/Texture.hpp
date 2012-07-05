@@ -27,10 +27,9 @@
 #include "gdx-cpp/Application.hpp"
 #include "TextureData.hpp"
 
-#include <tr1/unordered_map>
-#include <tr1/memory>
 #include <list>
 #include "gdx-cpp/assets/Asset.hpp"
+#include "gdx-cpp/internal/unordered_map"
 
 #undef GL_NEAREST
 #undef GL_LINEAR
@@ -40,8 +39,7 @@ namespace gdx {
 class FileHandle;
 class Texture
     : public Disposable,
-  public Asset,
-      public std::tr1::enable_shared_from_this<Texture> {
+    public Asset , public gdx::enable_shared_from_this<Texture> {
 public:
     typedef ref_ptr_maker<Texture>::shared_ptr_def ptr;
     typedef ref_ptr_maker<Texture>::weak_ptr_def weak_ptr;
@@ -136,7 +134,7 @@ private:
     static AssetManager* assetManager;
 
     typedef std::list< Texture::weak_ptr > textureList;
-    typedef std::tr1::unordered_map< Application* , textureList > managedTextureMap;
+    typedef gdx::unordered_map< Application* , textureList > managedTextureMap;
 
     static managedTextureMap managedTextures;
 

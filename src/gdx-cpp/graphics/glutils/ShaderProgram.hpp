@@ -24,9 +24,9 @@
 #include "gdx-cpp/utils/Disposable.hpp"
 #include <set>
 #include <string>
-#include <tr1/unordered_map>
 #include <gdx-cpp/Application.hpp>
 #include <gdx-cpp/utils/Buffer.hpp>
+#include "gdx-cpp/internal/unordered_map"
 
 namespace gdx {
 class Matrix4;
@@ -106,20 +106,20 @@ private:
     void fetchUniforms ();
     void fetchAttributes ();
 
-    static std::tr1::unordered_map <Application *, std::set< ShaderProgram* > * > shaders;
+    static gdx::unordered_map <Application *, std::set< ShaderProgram* > * > shaders;
 
     std::string log;
     bool isCompiledVar;
 
 //     const
-    std::tr1::unordered_map <std::string, int> uniforms;
+    gdx::unordered_map <std::string, int> uniforms;
 //     const
-    std::tr1::unordered_map <std::string, int> uniformTypes;
+    gdx::unordered_map <std::string, int> uniformTypes;
     std::vector<std::string> uniformNames;
 
-    std::tr1::unordered_map <std::string, int> attributes;
+    gdx::unordered_map <std::string, int> attributes;
 //     const
-    std::tr1::unordered_map <std::string, int> attributeTypes;
+    gdx::unordered_map <std::string, int> attributeTypes;
     std::vector<std::string> attributeNames;
 
     int program;

@@ -80,6 +80,7 @@
         
         self.multipleTouchEnabled = YES;
         toucheshHolder = [[NSMutableArray alloc] init];
+        scale = [[UIScreen mainScreen] scale];
 	}
 		
 	return self;
@@ -246,17 +247,16 @@
 	for (UITouch *touch in touches) {
         if (![toucheshHolder containsObject:touches]) {
             CGPoint pos = [touch locationInView:self];
-            ((gdx::ios::IosInput*)gdx::input)->handleTouchDown(pos.x, pos.y, [toucheshHolder count]);
+            ((gdx::ios::IosInput*)gdx::input)->handleTouchDown(pos.x * scale, pos.y * scale, [toucheshHolder count]);
             [toucheshHolder addObject:touch];
         }		
 	}
 }	
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-	int i = 0;
 	for (UITouch *touch in touches) {
 		CGPoint pos = [touch locationInView:self];
-		((gdx::ios::IosInput*)gdx::input)->handleTouchDrag(pos.x, pos.y, [toucheshHolder indexOfObject:touch]);
+		((gdx::ios::IosInput*)gdx::input)->handleTouchDrag(pos.x * scale, pos.y * scale, [toucheshHolder indexOfObject:touch]);
 	}
 }
 
@@ -265,7 +265,7 @@
     
 	for (UITouch *touch in touches) {
 		CGPoint pos = [touch locationInView:self];
-		((gdx::ios::IosInput*)gdx::input)->handleTouchUp(pos.x, pos.y, [toucheshHolder indexOfObject:touch]);
+		((gdx::ios::IosInput*)gdx::input)->handleTouchUp(pos.x * scale, pos.y * scale, [toucheshHolder indexOfObject:touch]);
         [toRemove addObject:touch];
 	}
     
@@ -278,7 +278,7 @@
 	int i = 0;
 	for (UITouch *touch in touches) {
 		CGPoint pos = [touch locationInView:self];
-		((gdx::ios::IosInput*)gdx::input)->handleTouchUp(pos.x, pos.y, i++);
+		((gdx::ios::IosInput*)gdx::input)->handleTouchUp(pos.x * scale, pos.y * scale, i++);
 	}
 }
 

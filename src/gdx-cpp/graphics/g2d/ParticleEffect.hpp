@@ -23,7 +23,7 @@
 #include "gdx-cpp/utils/Disposable.hpp"
 #include <vector>
 #include <string>
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 #include "gdx-cpp/graphics/Texture.hpp"
 
 namespace gdx {

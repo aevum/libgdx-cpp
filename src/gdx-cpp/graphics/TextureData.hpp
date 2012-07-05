@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_GRAPHICS_TEXTUREDATA_HPP_
 #define GDX_CPP_GRAPHICS_TEXTUREDATA_HPP_
 
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 #include "Pixmap.hpp"
 
 namespace gdx {

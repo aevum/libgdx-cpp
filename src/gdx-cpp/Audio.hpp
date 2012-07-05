@@ -18,7 +18,7 @@
 #ifndef GDX_CPP_AUDIO_H
 #define GDX_CPP_AUDIO_H
 
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 
 namespace gdx {
 class FileHandle;

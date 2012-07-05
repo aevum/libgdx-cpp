@@ -18,7 +18,7 @@
 #ifndef GDX_CPP_IMPLEMENTATION_MUTEX_HPP
 #define GDX_CPP_IMPLEMENTATION_MUTEX_HPP
 
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 
 namespace gdx {
 

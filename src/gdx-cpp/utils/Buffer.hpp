@@ -18,7 +18,7 @@
 #ifndef GDX_CPP_UTILS_BUFFER_HPP
 #define GDX_CPP_UTILS_BUFFER_HPP
 
-#include "Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 #include <stdexcept>
 #include <vector>
 #include <sstream>

@@ -33,7 +33,7 @@
 #include "gdx-cpp/math/Matrix4.hpp"
 #include "gdx-cpp/math/Vector2.hpp"
 
-#include <tr1/unordered_map>
+#include "gdx-cpp/internal/unordered_map"
 
 namespace gdx {
 namespace scenes {
@@ -100,7 +100,7 @@ protected:
     std::list<Group*> groups;
     std::list<Group*> immutableGroups;
 
-    std::tr1::unordered_map<std::string, Actor*> namesToActors;
+    gdx::unordered_map<std::string, Actor*> namesToActors;
 
     gdx::Matrix3 localTransform;
     gdx::Matrix3 worldTransform;

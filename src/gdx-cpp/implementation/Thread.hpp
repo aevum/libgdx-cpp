@@ -19,7 +19,7 @@
 #define GDX_CPP_IMPLEMENTATION_THREAD_HPP
 
 #include "gdx-cpp/utils/Runnable.hpp"
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 
 #include <string>
 

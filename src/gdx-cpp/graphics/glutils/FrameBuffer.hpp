@@ -23,17 +23,16 @@
 
 #include "gdx-cpp/graphics/Pixmap.hpp"
 #include "gdx-cpp/graphics/Texture.hpp"
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 
-#include <tr1/unordered_map>
+#include "gdx-cpp/internal/unordered_map"
 
 #include <set>
 
 namespace gdx {
 
 class FrameBuffer:
-    public Disposable,
-    public std::tr1::enable_shared_from_this<FrameBuffer> {
+    public Disposable {
 public:
     typedef ref_ptr_maker<FrameBuffer>::shared_ptr_def ptr;
     
@@ -50,7 +49,7 @@ public:
     int getWidth ();
 
 private:
-    typedef std::tr1::unordered_map<Application*, std::set < FrameBuffer* > > buffer_map;
+    typedef gdx::unordered_map<Application*, std::set < FrameBuffer* > > buffer_map;
     static buffer_map buffers;
     void build ();
     void addManagedFrameBuffer (Application* app, FrameBuffer* frameBuffer);

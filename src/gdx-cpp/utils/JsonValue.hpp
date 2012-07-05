@@ -21,14 +21,14 @@
 #ifndef GDX_CPP_UTILS_JSONITEM_HPP
 #define GDX_CPP_UTILS_JSONITEM_HPP
 
-#include <tr1/memory>
-#include <tr1/unordered_map>
+#include "gdx-cpp/internal/memory"
+#include "gdx-cpp/internal/unordered_map"
 #include <vector>
 #include <string>
 #include <fstream>
 #include <cassert>
 #include <stdexcept>
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 
 namespace gdx {
 
@@ -45,7 +45,7 @@ enum json_item_type {
 class JsonValue {
 public:
     typedef ref_ptr_maker< JsonValue >::shared_ptr_def ptr;
-    typedef std::tr1::unordered_map< std::string, ptr > item_map;
+    typedef gdx::unordered_map< std::string, ptr > item_map;
     typedef std::vector< ptr > array;
 
     JsonValue(int val) ;
@@ -166,7 +166,7 @@ private:
     void toString(std::ostream& out, bool prettyPrint, int ident) const;
     
     friend class JsonReader;
-    std::tr1::shared_ptr<void> item_val;
+    gdx::shared_ptr<void> item_val;
     json_item_type item_type;
     
     operator array& ();

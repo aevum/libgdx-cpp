@@ -25,7 +25,7 @@
 #include "gdx-cpp/graphics/Texture.hpp"
 #include "gdx-cpp/math/Rectangle.hpp"
 #include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 
 namespace gdx {
 

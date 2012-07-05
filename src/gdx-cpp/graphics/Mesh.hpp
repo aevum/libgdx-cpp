@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_GRAPHICS_MESH_HPP_
 #define GDX_CPP_GRAPHICS_MESH_HPP_
 
-#include <tr1/unordered_map>
+#include <unordered_map>
 #include <list>
 
 #include "gdx-cpp/utils/Disposable.hpp"
@@ -30,7 +30,7 @@
 #include "VertexAttribute.hpp"
 #include "VertexAttributes.hpp"
 #include <set>
-
+#include "gdx-cpp/internal/unordered_map"
 
 namespace gdx {
 
@@ -97,7 +97,7 @@ protected:
     bool isVertexArray;
     bool disposed;
 private:
-    typedef std::tr1::unordered_map<Application*, std::set<Mesh*> > MeshMap;
+    typedef gdx::unordered_map<Application*, std::set<Mesh*> > MeshMap;
     static MeshMap meshes;
     static void addManagedMesh (Application* app, Mesh* mesh);
     

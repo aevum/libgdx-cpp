@@ -23,7 +23,7 @@
 
 #include <vector>
 #include "Vector3.hpp"
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 
 namespace gdx {
 class Vector3;

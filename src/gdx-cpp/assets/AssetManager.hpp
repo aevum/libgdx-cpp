@@ -32,8 +32,8 @@
 #include "loaders/AssetLoader.hpp"
 #include "AssetDescriptor.hpp"
 #include "gdx-cpp/assets/AssetType.hpp"
+#include "gdx-cpp/internal/unordered_map"
 
-#include <tr1/unordered_map>
 #include <string>
 #include <list>
 #include <cassert>
@@ -51,9 +51,9 @@ class AssetManager: public Disposable
             , public Synchronizable
 {
     typedef ref_ptr_maker<AssetDescriptor>::shared_ptr_def AssetDescriptorPtr;
-    typedef std::tr1::unordered_map<std::string, Asset::ptr> AssetMap;
+    typedef gdx::unordered_map<std::string, Asset::ptr> AssetMap;
     typedef std::list< AssetDescriptorPtr > PreloadQueueType;
-    typedef std::tr1::unordered_map<std::string, int> AssetTypeMap;
+    typedef gdx::unordered_map<std::string, int> AssetTypeMap;
 
 public:
     AssetManager();
@@ -95,10 +95,10 @@ public:
 protected:
 
     //std::tr1::unordered_map<AssetType, AssetLoader* > loaders;
-    std::tr1::unordered_map<int, AssetMap > assets;
+    gdx::unordered_map<int, AssetMap > assets;
 
     AssetTypeMap assetTypes;
-    std::tr1::unordered_map<std::string, std::vector<std::string> > assetDependencies;
+    gdx::unordered_map<std::string, std::vector<std::string> > assetDependencies;
     PreloadQueueType preloadQueue;
     std::list<AssetLoadingTask*> tasks;
 

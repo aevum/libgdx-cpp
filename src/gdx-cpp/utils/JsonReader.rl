@@ -262,7 +262,7 @@ JsonValue::ptr JsonReader::parse (const char* data, int offset, int length) {
     JsonValue* _root = root;
     root = NULL;
 
-    return std::tr1::shared_ptr< JsonValue >(_root);
+    return gdx::shared_ptr< JsonValue >(_root);
 }
 
 

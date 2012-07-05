@@ -22,7 +22,7 @@
 #define GDX_CPP_MATH_QUATERNION_HPP
 
 #include <string>
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 
 namespace gdx {
 

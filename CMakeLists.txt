@@ -12,8 +12,6 @@ link_directories(${LIBRARY_OUTPUT_PATH})
 
 set(ANDROID_NDK $ENV{ANDROID_NDK})
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --std=gnu++0x")
-
 option(BUILD_BOX2D "Builds Box2D" TRUE)
 option(BUILD_AS_SHARED_LIBRARIES "Build libraries as shared libraries instead of static" FALSE)
 
@@ -32,8 +30,6 @@ elseif(GDX_LOG_ERROR)
     set(GDX_LOG_LEVEL_ERROR TRUE)
 endif()
 
-CONFIGURE_FILE(src/gdx-cpp/log.hpp.in ${CMAKE_SOURCE_DIR}/src/gdx-cpp/Log.hpp )
-
 if(APPLE)
     message("MacOSX (iOS) found. Setting the backend to IOS")
     SET(GDX_BACKEND_IOS ON)
@@ -42,8 +38,6 @@ if(APPLE)
     set(BOX2D_BUILD_STATIC TRUE)
     set(BOX2D_BUILD_SHARED FALSE)
 elseif (UNIX)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wall")
-
     if (ANDROID_NDK)        
         message("ANDROID_NDK Found. Setting the backend to ANDROID")
 
@@ -73,7 +67,8 @@ elseif(WIN32)
     SET(GDX_BACKEND_LIB gdx-cpp-backend-win32)
 endif()
 
-CONFIGURE_FILE(src/gdx-cpp/gl.hpp.in ${CMAKE_SOURCE_DIR}/src/gdx-cpp/gl.hpp )
+CONFIGURE_FILE(src/gdx-cpp/gl.hpp.in ${CMAKE_CURRENT_SOURCE_DIR}/src/gdx-cpp/gl.hpp )
+CONFIGURE_FILE(src/gdx-cpp/config.hpp.in ${CMAKE_CURRENT_SOURCE_DIR}/src/gdx-cpp/config.hpp )
 
 if (BUILD_BOX2D)
     set(BOX2D_INSTALL TRUE)

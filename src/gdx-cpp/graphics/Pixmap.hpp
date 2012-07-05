@@ -22,7 +22,7 @@
 #define GDX_CPP_GRAPHICS_PIXMAP_HPP_
 
 #include "gdx-cpp/utils/Disposable.hpp"
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 #include <string>
 
 #include "gdx-cpp/files/FileHandle.hpp"

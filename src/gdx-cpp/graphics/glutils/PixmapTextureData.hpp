@@ -23,7 +23,7 @@
 
 #include "gdx-cpp/graphics/TextureData.hpp"
 #include "gdx-cpp/graphics/Pixmap.hpp"
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 
 namespace gdx {
 

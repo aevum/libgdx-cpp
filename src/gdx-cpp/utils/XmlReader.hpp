@@ -24,10 +24,10 @@
 #include <string>
 #include <sstream>
 #include <fstream>
-#include <tr1/unordered_map>
+#include "gdx-cpp/internal/unordered_map"
 #include <vector>
 
-#include "Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 
 #include "gdx-cpp/files/FileHandle.hpp"
 
@@ -46,7 +46,7 @@ public:
     public:        
         typedef ref_ptr_maker<Element>::shared_ptr_def ptr;
         typedef std::vector<Element::ptr> ElementVector;
-        typedef std::tr1::unordered_map<std::string, std::string> AttributesMap;
+        typedef gdx::unordered_map<std::string, std::string> AttributesMap;
         
         bool operator==(const Element& other) {
             return other.name == this->name;

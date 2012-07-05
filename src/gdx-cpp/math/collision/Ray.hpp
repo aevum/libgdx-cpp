@@ -22,7 +22,7 @@
 #define GDX_CPP_MATH_COLLISION_RAY_HPP_
 
 #include "gdx-cpp/math/Vector3.hpp"
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 
 namespace gdx {
 class Matrix4;

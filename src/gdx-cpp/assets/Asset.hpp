@@ -18,7 +18,7 @@
 #ifndef GDX_CPP_ASSETS_ASSET_HPP
 #define GDX_CPP_ASSETS_ASSET_HPP
 
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 #include "AssetType.hpp"
 
 namespace gdx {

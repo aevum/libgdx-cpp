@@ -18,7 +18,7 @@
 #define GDX_CPP_FILES_H
 
 #include <string>
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 
 namespace gdx {
 class FileHandle;

@@ -1,11 +1,6 @@
 #ifndef GDX_GL_H
 #define GDX_GL_H
 
-#cmakedefine GDX_BACKEND_IOS
-#cmakedefine GDX_BACKEND_LINUX
-#cmakedefine GDX_BACKEND_ANDROID
-#cmakedefine GDX_BACKEND_WIN32
-
 #ifdef GDX_BACKEND_LINUX
 #define GL_GLEXT_PROTOTYPES
 

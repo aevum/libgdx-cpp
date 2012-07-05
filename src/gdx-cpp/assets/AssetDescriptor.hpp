@@ -23,7 +23,7 @@
 
 #include <string>
 #include "AssetLoaderParameters.hpp"
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 #include "AssetType.hpp"
 
 namespace gdx {

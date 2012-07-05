@@ -21,7 +21,7 @@
 #ifndef GDX_CPP_MATH_WINDOWEDMEAN_HPP_
 #define GDX_CPP_MATH_WINDOWEDMEAN_HPP_
 #include <vector>
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 
 namespace gdx {
 class WindowedMean {

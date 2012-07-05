@@ -29,7 +29,7 @@
 #include "gdx-cpp/Files.hpp"
 #include "gdx-cpp/Application.hpp"
 #include "gdx-cpp/files/File.hpp"
-#include "gdx-cpp/utils/Aliases.hpp"
+#include "gdx-cpp/internal/memory"
 
 #include <iosfwd>
 #include <string>
