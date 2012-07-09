@@ -32,9 +32,8 @@
 
 #include <unordered_map>
 
-namespace gdx {
-    template <typename K, typename V> using unordered_map = std::unordered_map<K,V>;
-}
+template <typename K, typename V> using gdx_unordered_map = std::unordered_map<K,V>;
+
 
 #elif defined(GDX_BACKEND_LINUX)
 

@@ -47,13 +47,15 @@
 
 #elif defined(GDX_BACKEND_IOS) 
 
-#include <memory>
+#include <memory>	
 
+//defining static_pointer_cast using "using" didn't worked =/
+#define gdx_static_pointer_cast std::static_pointer_cast
 template <typename K > using gdx_enable_shared_from_this = std::enable_shared_from_this<K>;
 template <typename K > using gdx_shared_ptr = std::shared_ptr<K>;
 template <typename K > using gdx_unique_ptr = std::unique_ptr<K>;
 template <typename K > using gdx_weak_ptr = std::weak_ptr<K>;
-template <typename K > using gdx_static_pointer_cast = std::gdx_static_pointer_cast<K>;
+
 
 #endif
 
@@ -61,7 +63,7 @@ struct shared_ptr_array_deleter {
     template <typename T>
     void operator ()(T* array) {
         delete [] array;
-    }
+    }	
 };
 
 struct shared_ptr_free_deleter {

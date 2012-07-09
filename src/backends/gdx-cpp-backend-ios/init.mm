@@ -30,16 +30,16 @@ static gdx::ApplicationListener* g_Listener = 0;
 
 class IosLog : public gdx::Log {
 public:
-    virtual void debug ( const std::string& tag, const std::string& line, const std::string& file, const char* format, ... ) {
-        
+    virtual void debug ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list) {
+        NSLogv([NSString stringWithFormat:@"%s [LINE: %s] %s", tag.c_str(), line.c_str(), format], list);
     }
 
-    virtual void error ( const std::string& tag, const std::string& line, const std::string& file, const char* format, ... ) {
-        
+    virtual void error ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list ) {
+         NSLogv([NSString stringWithFormat:@"%s [LINE: %s] %s", tag.c_str(), line.c_str(), format], list);
     }
 
-    virtual void info ( const std::string& tag, const std::string& line, const std::string& file, const char* format, ... ) {
-    
+    virtual void info ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list ) {
+         NSLogv([NSString stringWithFormat:@"%s [LINE: %s] %s", tag.c_str(), line.c_str(), format], list);
     }
 };
 
@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
         [pool release];
         return retVal;
     } @catch (NSException * e) {
-        NSLog([NSString stringWithFormat:@"Exception: %@", [e reason]]);
+        NSLog(@"Exception: %@", [e reason]);
     }
     return -1;
 }

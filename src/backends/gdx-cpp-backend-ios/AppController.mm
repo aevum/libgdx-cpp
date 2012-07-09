@@ -66,7 +66,7 @@
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;
 	
-	gdxcpp_initialize_application(screenWidth * scale, screenHeight * scale);
+	gdxcpp_initialize_application(screenWidth * screenScale, screenHeight * screenScale);
 	
 	gdxcpp_create_listener();
 	

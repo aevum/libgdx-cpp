@@ -1,3 +1,15 @@
+macro(gdx_add_ios_framework target_name framework) 
+        execute_process(COMMAND xcode-select -print-path OUTPUT_VARIABLE _output OUTPUT_STRIP_TRAILING_WHITESPACE)                
+        SET(DEVROOT "${_output}/Platforms/iPhoneOS.platform/Developer")
+        SET(SDKROOT "${DEVROOT}/SDKs/iPhoneOS${SDKVER}.sdk")
+        
+        find_library(FOUND_FRAMEWORK_${framework} NAMES ${framework} PATHS ${SDKROOT}/System/Library
+            PATH_SUFFIXES Frameworks
+            NO_DEFAULT_PATH)
+
+        target_link_libraries(${target_name} ${FOUND_FRAMEWORK_${framework}})
+endmacro()
+
 macro(gdx_setup_target target_type target_name sources)
     if (APPLE)
         if (NOT SDKVER)
@@ -18,16 +30,22 @@ macro(gdx_setup_target target_type target_name sources)
 
         SET (CMAKE_OSX_ARCHITECTURES "$(ARCHS_UNIVERSAL_IPHONE_OS)")
 
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -x objective-c++ -mno-thumb")
-
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework Foundation -framework AudioToolbox -framework CoreGraphics -framework  QuartzCore -framework UIKit -framework OpenGLES -framework AVFoundation")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -x objective-c++ -mno-thumb")      
+        set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvm.clang.1_0")
+        set(CLANG_CXX_LANGUAGE_STANDARD "c++11")
+        set(CLANG_CXX_LIBRARY "libc++")
 
         if (${target_type} STREQUAL "application")
             add_executable(${target_name} MACOSX_BUNDLE ${sources})
+            set(IOS_FRAMEWORKS "Foundation;AudioToolbox;CoreGraphics;QuartzCore;UIKit;OpenGLES;AVFoundation")
+        
+            foreach(FRAMEWORK ${IOS_FRAMEWORKS})
+                gdx_add_ios_framework(${target_name} ${FRAMEWORK})
+            endforeach()
         else()
             add_library(${target_name} ${sources})
         endif()
-
+      
         set_target_properties(${target_name} PROPERTIES
                         MACOSX_BUNDLE_GUI_IDENTIFIER "${COMPANY_NAME}\${PRODUCT_NAME:identifier}"
         )

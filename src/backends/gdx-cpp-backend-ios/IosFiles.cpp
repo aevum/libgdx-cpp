@@ -43,11 +43,7 @@ gdx::FileHandle::ptr IosFiles::absolute (const std::string &path)
 
 std::string IosFiles::getExternalStoragePath ()
 {
-    if(externalPath != "") return externalPath;
-    char buffer[36768];
-    getcwd(buffer, 36768);
-    externalPath = std::string(buffer) + "/";
-    return externalPath;
+    return "";
 }
 
 bool IosFiles::isExternalStorageAvailable ()

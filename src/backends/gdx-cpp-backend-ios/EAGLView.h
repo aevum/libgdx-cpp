@@ -39,7 +39,7 @@
 	//fsaa addition
 	BOOL					multisampling_;
 	unsigned int requestedSamples_;
-    const int scale;
+    int scale;
     NSMutableArray* toucheshHolder;
 }
 
