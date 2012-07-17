@@ -11,7 +11,7 @@ LinuxFiles.hpp LinuxFileHandle.hpp LinuxGLU.hpp LinuxSystem.hpp LinuxInput.hpp
 LinuxOpenALAudio.hpp LinuxOpenALSound.hpp LinuxOgg.hpp LinuxOggInputStream.hpp LinuxOpenALMusic.hpp Log.hpp
 )
 
-gdx_setup_library_target(gdx-cpp-backend-linux "${GDX_CPP_BACKEND_LINUX_SRC};${GDX_CPP_BACKEND_LINUX_HEADERS}")
+gdx_setup_target(gdx-cpp-backend-linux STATIC "${GDX_CPP_BACKEND_LINUX_SRC};${GDX_CPP_BACKEND_LINUX_HEADERS}")
 
 target_link_libraries(gdx-cpp-backend-linux openal ogg vorbis vorbisfile SDL pthread)
 

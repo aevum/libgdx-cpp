@@ -509,7 +509,7 @@ install(DIRECTORY . DESTINATION include/gdx-cpp
 install(DIRECTORY internal DESTINATION include/gdx-cpp
           FILES_MATCHING PATTERN "*")
           
-gdx_setup_library_target(gdx-cpp "${GDX_HEADERS};${GDX_SRC}")
+gdx_setup_target(gdx-cpp SHARED "${GDX_HEADERS};${GDX_SRC}")
 target_link_libraries(gdx-cpp z)
 
 if (ANDROID_NDK)

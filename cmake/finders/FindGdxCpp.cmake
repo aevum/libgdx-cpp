@@ -14,6 +14,7 @@ ENDIF(GDXCPP_LIBRARIES AND GDXCPP_INCLUDE_DIR)
 FIND_PATH(GDXCPP_INCLUDE_DIR
 gdx-cpp/Gdx.hpp
 PATHS
+${GDX_SOURCE}/src
 ${GDX_ROOT}/include
 /usr/local/include
 /usr/include
@@ -22,6 +23,16 @@ ${GDX_ROOT}/include
 /opt/csw/include
 /opt/include
 )
+
+find_file(GDX_CPP_GDX_MACRO NAME gdx.cmake
+PATHS
+${GDX_SOURCE}/cmake/
+${GDX_ROOT}/share/gdx/cmake/
+/usr/share/gdx/cmake/
+/usr/local/share/gdx/cmake/
+/opt/local/share/gdx/cmake)
+
+include(${GDX_CPP_GDX_MACRO})
 
 macro(find_libraries)
     foreach(lib ${ARGV0})

@@ -47,28 +47,45 @@ find_package(GdxCpp REQUIRED TRUE)
 include_directories(${GDXCPP_INCLUDE_DIR})
 ```
 
+If the library is not on a default location (/usr, /usr/local) you can specify a flag named GDX_ROOT pointing to the installation root or GDX_SOURCE pointing to the library source folder.
+
 To actually build, you'll have to use a custom macro that handles the way the libraries are generated on it's different targets:
 
 ```cmake
+#If you used the finder the macros required to create cross platform items are already included, so
+#to generate an "executable" (this setting will be changed to a shared library on android and a bundle on iOS), add the folowing code:
 
-#include the macro
-include(${GDX_ROOT}/share/gdx/cmake/gdx.cmake)
+set(SOURCES
+a.cpp
+b.cpp)
 
+set(HEADERs
+a.hpp
+b.hpp)
 
-#to generate a "executable" (could be a library if on iOS/android)
-#pay attention to the quotes and the semicolon while passing the sources and headers. 
-#This is a cmake limitation
+gdx_setup_target(mytarget EXECUTABLE "${SOURCES};${HEADERS}")
 
-gdx_setup_runnable_target(mytarget "${SOURCES};${HEADERS}")
+#pay attention to the quotes and the semicolon while passing variables as parameters to the macro (This is a cmake limitation).
 
 #then add linkage normally:
 target_link_libraries(mytarget ${GDXCPP_LIBRARIES})
+
+#to generate a shared/static library (note that a shared library on iOS will be converted to a static one)
+gdx_setup_target(mytarget STATIC "${SOURCES};${HEADERS}")
+gdx_setup_target(mytarget SHARED "${SOURCES};${HEADERS}")
+
 ```
 
 and when running the cmake command:
 
 ```bash
 cmake -DGDX_ROOT=build/local REST_OF_CONFIG_FLAGS
+```
+
+or:
+
+```bash
+cmake -DGDX_SOURCE=~/sourcecode/libgdx-cpp REST_OF_CONFIG_FLAGS
 ```
 
 ## Differences from libgdx
