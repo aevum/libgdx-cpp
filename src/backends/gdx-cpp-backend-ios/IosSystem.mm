@@ -30,6 +30,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include "gdx-cpp/Log.hpp"
 
 #import <mach/mach.h>
 #import <mach/mach_time.h>
@@ -213,6 +214,7 @@ std::string IosSystem::resolve(const gdx::File& f)
 		return std::string([filePath UTF8String], [filePath length]);
 	}
 	
+    gdx_log_error("gdx", "File %s not found", f.getName().c_str());
 	throw std::runtime_error("File " + f.getName() + " not found");
 }
 
