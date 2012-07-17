@@ -55,14 +55,19 @@ To actually build, you'll have to use a custom macro that handles the way the li
 include(${GDX_ROOT}/share/gdx/cmake/gdx.cmake)
 
 
-#to generate a "executable" (could be a library if on iOS/android)
+#to generate a "executable" (this setting will be changed to a shared library on android and a bundle on iOS)
 #pay attention to the quotes and the semicolon while passing the sources and headers. 
 #This is a cmake limitation
 
-gdx_setup_runnable_target(mytarget "${SOURCES};${HEADERS}")
+gdx_setup_target(mytarget EXECUTABLE "${SOURCES};${HEADERS}")
 
 #then add linkage normally:
 target_link_libraries(mytarget ${GDXCPP_LIBRARIES})
+
+#to generate a shared/static library (note that a shared library on iOS will be converted to a static one)
+gdx_setup_target(mytarget STATIC "${SOURCES};${HEADERS}")
+gdx_setup_target(mytarget SHARED "${SOURCES};${HEADERS}")
+
 ```
 
 and when running the cmake command:
