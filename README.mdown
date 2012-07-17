@@ -47,17 +47,14 @@ find_package(GdxCpp REQUIRED TRUE)
 include_directories(${GDXCPP_INCLUDE_DIR})
 ```
 
+If the library is not on a default location (/usr, /usr/local) you can specify a flag named GDX_ROOT pointing to the installation root or GDX_SOURCE pointing to the library source folder.
+
 To actually build, you'll have to use a custom macro that handles the way the libraries are generated on it's different targets:
 
 ```cmake
-
-#include the macro
-include(${GDX_ROOT}/share/gdx/cmake/gdx.cmake)
-
-
-#to generate a "executable" (this setting will be changed to a shared library on android and a bundle on iOS)
-#pay attention to the quotes and the semicolon while passing the sources and headers. 
-#This is a cmake limitation
+#If you used the finder the macros required to create cross platform items are already included, so
+#to generate an "executable" (this setting will be changed to a shared library on android and a bundle on iOS)
+#pay attention to the quotes and the semicolon while passing the sources and headers (This is a cmake limitation).
 
 gdx_setup_target(mytarget EXECUTABLE "${SOURCES};${HEADERS}")
 
