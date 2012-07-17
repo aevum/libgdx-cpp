@@ -82,6 +82,12 @@ and when running the cmake command:
 cmake -DGDX_ROOT=build/local REST_OF_CONFIG_FLAGS
 ```
 
+or:
+
+```bash
+cmake -DGDX_SOURCE=~/sourcecode/libgdx-cpp REST_OF_CONFIG_FLAGS
+```
+
 ## Differences from libgdx
 
 * The texture class constructors that received an managed texture data had to be changed to static constructors.
