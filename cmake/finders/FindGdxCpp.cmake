@@ -24,13 +24,25 @@ ${GDX_ROOT}/include
 /opt/include
 )
 
-find_file(GDX_CPP_GDX_MACRO NAME gdx.cmake
-PATHS
+#ok... I don't know, but when on android the macro find_files does not work, even if "if (EXISTS FILENAME)" works correctly
+#so I've replicated the behavior of find_files. Cmake is starting to bother me...
+SET(GDX_CPP_GDX_MACRO GDX_CPP_GDX_MACRO-NOTFOUND)
+SET(paths_to_check
 ${GDX_SOURCE}/cmake/
 ${GDX_ROOT}/share/gdx/cmake/
 /usr/share/gdx/cmake/
 /usr/local/share/gdx/cmake/
-/opt/local/share/gdx/cmake)
+/opt/local/share/gdx/cmake/)
+
+foreach(p ${paths_to_check})
+
+get_filename_component(norm_path ${p}/gdx.cmake ABSOLUTE)
+if (EXISTS ${norm_path})
+  set(GDX_CPP_GDX_MACRO ${norm_path})
+  break()
+endif()
+
+endforeach()
 
 include(${GDX_CPP_GDX_MACRO})
 
