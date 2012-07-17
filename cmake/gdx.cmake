@@ -10,6 +10,19 @@ macro(gdx_add_ios_framework target_name framework)
         target_link_libraries(${target_name} ${FOUND_FRAMEWORK_${framework}})
 endmacro()
 
+macro(gdx_ios_copy_resources target_name target_files destination)
+    execute_process(COMMAND xcode-select -print-path OUTPUT_VARIABLE _output OUTPUT_STRIP_TRAILING_WHITESPACE)                
+
+    set(APP_NAME $(TARGET_BUILD_DIR)/$(FULL_PRODUCT_NAME))
+
+    add_custom_command(
+        TARGET ${target_name}
+        POST_BUILD
+        COMMAND ${_output}/../../Contents/OtherFrameworks/DevToolsCore.framework/Versions/A/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks ${target_files} ${APP_NAME}/${destination}
+    )
+endmacro()
+
+
 macro(gdx_setup_target target_name target_type sources)
     string(TOUPPER ${target_type} target_type)
     if (APPLE)
