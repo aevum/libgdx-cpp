@@ -82,7 +82,7 @@ int Texture::createGLHandle () {
 }
 
 void Texture::load (const TextureData::ptr& data) {
-    if (this->data != NULL && data->isManaged() != this->data->isManaged()) {
+    if (this->data && data->isManaged() != this->data->isManaged()) {
         gdx_log_error("Texture.cpp", "New data must have the same managed status as the old data");
     }
 

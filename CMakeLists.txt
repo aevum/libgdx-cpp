@@ -90,7 +90,15 @@ elseif(GDX_BACKEND_WIN32)
     add_subdirectory(src/backends/windows)
 elseif(GDX_BACKEND_LINUX)
   if(CMAKE_COMPILER_IS_GNUCXX)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wdouble-promotion")
+    # get gnu compiler version number
+    exec_program(${CMAKE_C_COMPILER} ARGS --version OUTPUT_VARIABLE _gcc_version_info)
+    string (REGEX MATCH " [34]\\.[0-9]\\.[0-9]" _gcc_version "${_gcc_version_info}")
+    string(REGEX REPLACE "[^0-9]*([0-9]+)\\.[0-9]+.*" "\\1" gcc_major_vers "${_gcc_version}")
+    string(REGEX REPLACE "[^0-9]*[0-9]+\\.([0-9]+).*" "\\1" gcc_minor_vers "${_gcc_version}")
+    # g++' -Wdouble-promotion needs at least version 4.6
+    if(${gcc_major_vers} GREATER 3 AND ${gcc_minor_vers} GREATER 5)
+      SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wdouble-promotion")
+    endif()
   endif()
 
   SET(BUILD_AGG TRUE)

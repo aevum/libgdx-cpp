@@ -576,7 +576,7 @@ BitmapFont::BitmapFont ( BitmapFont::BitmapFontData* p_data, TextureRegion::ptr 
       flipped ( p_data->flipped ),
       color ( Color::WHITE.toFloatBits() ),
       tempColor ( 1,1,1,1 ) {
-    if ( region == NULL ) {
+    if ( !region ) {
         region = TextureRegion::newFromTexture ( Texture::newFromFile ( files->internal ( data->imagePath ), NULL, false ) );
     }
     load ( data );
@@ -586,7 +586,7 @@ BitmapFont* BitmapFont::fromFiles ( FileHandle::ptr fontFile, FileHandle::ptr im
     BitmapFontData* data = new BitmapFontData ( fontFile, flip );
     TextureRegion::ptr region;
 
-    if ( imageFile != NULL ) {
+    if ( imageFile ) {
         region = TextureRegion::newFromTexture ( Texture::newFromFile ( imageFile, NULL, false ) );
     }
 

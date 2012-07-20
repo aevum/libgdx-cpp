@@ -549,7 +549,7 @@ void ParticleEmitter::setPosition (float x,float y) {
 
 void ParticleEmitter::setSprite (gdx::Sprite::ptr sprite) {
     this->sprite = sprite;
-    if (sprite == NULL) return;
+    if (!sprite) return;
     float originX = sprite->getOriginX();
     float originY = sprite->getOriginY();
     Texture::ptr texture = sprite->getTexture();
