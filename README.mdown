@@ -37,7 +37,7 @@ make install
 
 ## Using GDX++ on your own projects
 
-On a typical Cmake project that would be using GDX++, first you have find the library:
+On a typical CMake project that would be using GDX++, first you have find the library:
 
 ### on CMakeLists.txt
 
@@ -59,7 +59,7 @@ set(SOURCES
 a.cpp
 b.cpp)
 
-set(HEADERs
+set(HEADERS
 a.hpp
 b.hpp)
 
@@ -117,14 +117,14 @@ how to load and create TextureData (etc1, wich is not supported in all platforms
 
 ### What's working
 
-* The linux backend has file,input and audio working
+* The linux backend has input, file and audio working
 * The android backend has input, file and audio working
 * SVG support through AntiGrainGeometry
 
 ### What has to be done
 
 * Backend polishing. Seriously, it's working, but there is a lot of stuff that is ugly and in a haste.
-* iOs support
-* GLEs 2. Check if it's working
+* iOS support
+* GLES 2. Check if it's working
 * etc
 
