@@ -2830,7 +2830,7 @@ void JsonReader::set (const std::string& name, JsonValue::ptr value) {
 void JsonReader::startObject (const std::string& name) {
     JsonValue::ptr value = JsonValue::newNodeAsJson();
 
-    if (current != NULL) {
+    if (current) {
         set(name, value);
     }
 
@@ -2841,7 +2841,7 @@ void JsonReader::startObject (const std::string& name) {
 void JsonReader::startArray (const std::string& name) {
     JsonValue::ptr array_item = JsonValue::newNodeAsArray();
 
-    if (current != NULL) {
+    if (current) {
         set(name, array_item);
     }
 

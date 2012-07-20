@@ -82,85 +82,85 @@ void NinePatch::checkValidity () {
 
 void NinePatch::draw (SpriteBatch& batch,float x,float y,float width,float height) {
     float centerColumnX = x;
-    if (patches[BOTTOM_LEFT] != NULL)
+    if (patches[BOTTOM_LEFT])
         centerColumnX += patches[BOTTOM_LEFT]->getRegionWidth();
-    else if (patches[MIDDLE_LEFT] != NULL)
+    else if (patches[MIDDLE_LEFT])
         centerColumnX += patches[MIDDLE_LEFT]->getRegionWidth();
-    else if (patches[TOP_LEFT] != NULL) //
+    else if (patches[TOP_LEFT]) //
         centerColumnX += patches[TOP_LEFT]->getRegionWidth();
 
     float rightColumnX = x + width;
-    if (patches[BOTTOM_RIGHT] != NULL)
+    if (patches[BOTTOM_RIGHT])
         rightColumnX -= patches[BOTTOM_RIGHT]->getRegionWidth();
-    else if (patches[MIDDLE_RIGHT] != NULL)
+    else if (patches[MIDDLE_RIGHT])
         rightColumnX += patches[MIDDLE_RIGHT]->getRegionWidth();
-    else if (patches[TOP_RIGHT] != NULL) //
+    else if (patches[TOP_RIGHT]) //
         rightColumnX += patches[TOP_RIGHT]->getRegionWidth();
 
     float middleRowY = y;
-    if (patches[TOP_LEFT] != NULL)
+    if (patches[TOP_LEFT])
         middleRowY += patches[TOP_LEFT]->getRegionHeight();
-    else if (patches[TOP_CENTER] != NULL)
+    else if (patches[TOP_CENTER])
         middleRowY += patches[TOP_CENTER]->getRegionHeight();
-    else if (patches[TOP_RIGHT] != NULL) //
+    else if (patches[TOP_RIGHT]) //
         middleRowY += patches[TOP_RIGHT]->getRegionHeight();
 
     float topRowY = y + height;
-    if (patches[TOP_LEFT] != NULL)
+    if (patches[TOP_LEFT])
         topRowY -= patches[TOP_LEFT]->getRegionHeight();
-    else if (patches[TOP_CENTER] != NULL)
+    else if (patches[TOP_CENTER])
         topRowY -= patches[TOP_CENTER]->getRegionHeight();
-    else if (patches[TOP_RIGHT] != NULL) //
+    else if (patches[TOP_RIGHT]) //
         topRowY -= patches[TOP_RIGHT]->getRegionHeight();
 
     // Bottom row
-    if (patches[BOTTOM_LEFT] != NULL) batch.draw(*patches[BOTTOM_LEFT], x, y, centerColumnX - x, middleRowY - y);
-    if (patches[BOTTOM_CENTER] != NULL)
+    if (patches[BOTTOM_LEFT]) batch.draw(*patches[BOTTOM_LEFT], x, y, centerColumnX - x, middleRowY - y);
+    if (patches[BOTTOM_CENTER])
         batch.draw(*patches[BOTTOM_CENTER], centerColumnX, y, rightColumnX - centerColumnX, middleRowY - y);
-    if (patches[BOTTOM_RIGHT] != NULL)
+    if (patches[BOTTOM_RIGHT])
         batch.draw(*patches[BOTTOM_RIGHT], rightColumnX, y, x + width - rightColumnX, middleRowY - y);
 
     // Middle row
-    if (patches[MIDDLE_LEFT] != NULL) batch.draw(*patches[MIDDLE_LEFT], x, middleRowY, centerColumnX - x, topRowY - middleRowY);
-    if (patches[MIDDLE_CENTER] != NULL)
+    if (patches[MIDDLE_LEFT]) batch.draw(*patches[MIDDLE_LEFT], x, middleRowY, centerColumnX - x, topRowY - middleRowY);
+    if (patches[MIDDLE_CENTER])
         batch.draw(*patches[MIDDLE_CENTER], centerColumnX, middleRowY, rightColumnX - centerColumnX, topRowY - middleRowY);
-    if (patches[MIDDLE_RIGHT] != NULL)
+    if (patches[MIDDLE_RIGHT])
         batch.draw(*patches[MIDDLE_RIGHT], rightColumnX, middleRowY, x + width - rightColumnX, topRowY - middleRowY);
 
     // Top row
-    if (patches[TOP_LEFT] != NULL) batch.draw(*patches[TOP_LEFT], x, topRowY, centerColumnX - x, y + height - topRowY);
-    if (patches[TOP_CENTER] != NULL)
+    if (patches[TOP_LEFT]) batch.draw(*patches[TOP_LEFT], x, topRowY, centerColumnX - x, y + height - topRowY);
+    if (patches[TOP_CENTER])
         batch.draw(*patches[TOP_CENTER], centerColumnX, topRowY, rightColumnX - centerColumnX, y + height - topRowY);
-    if (patches[TOP_RIGHT] != NULL)
+    if (patches[TOP_RIGHT])
         batch.draw(*patches[TOP_RIGHT], rightColumnX, topRowY, x + width - rightColumnX, y + height - topRowY);
 }
 
 float NinePatch::getLeftWidth () {
-    return patches[TOP_LEFT] == NULL ? 0 : patches[TOP_LEFT]->getRegionWidth();
+    return !patches[TOP_LEFT] ? 0 : patches[TOP_LEFT]->getRegionWidth();
 }
 
 float NinePatch::getRightWidth () {
-    return patches[TOP_RIGHT] == NULL ? 0 : patches[TOP_RIGHT]->getRegionWidth();
+    return !patches[TOP_RIGHT] ? 0 : patches[TOP_RIGHT]->getRegionWidth();
 }
 
 float NinePatch::getTopHeight () {
-    return patches[TOP_RIGHT] == NULL ? 0 : patches[TOP_RIGHT]->getRegionHeight();
+    return !patches[TOP_RIGHT] ? 0 : patches[TOP_RIGHT]->getRegionHeight();
 }
 
 float NinePatch::getBottomHeight () {
-    return patches[BOTTOM_RIGHT] == NULL ? 0 : patches[BOTTOM_RIGHT]->getRegionHeight();
+    return !patches[BOTTOM_RIGHT] ? 0 : patches[BOTTOM_RIGHT]->getRegionHeight();
 }
 
 float NinePatch::getTotalHeight () {
     float totalHeight = getTopHeight() + getBottomHeight();
-    if (patches[MIDDLE_CENTER] != NULL) totalHeight += patches[MIDDLE_CENTER]->getRegionHeight();
+    if (patches[MIDDLE_CENTER]) totalHeight += patches[MIDDLE_CENTER]->getRegionHeight();
     
     return totalHeight;
 }
 
 float NinePatch::getTotalWidth () {
     float totalWidth = getLeftWidth() + getRightWidth();
-    if (patches[MIDDLE_CENTER] != NULL) totalWidth += patches[MIDDLE_CENTER]->getRegionWidth();
+    if (patches[MIDDLE_CENTER]) totalWidth += patches[MIDDLE_CENTER]->getRegionWidth();
     
     return totalWidth;
 }

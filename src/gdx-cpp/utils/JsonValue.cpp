@@ -87,7 +87,7 @@ JsonValue& JsonValue::at(unsigned int idx)
         thisAsArray.resize(idx + 1);
     }
 
-    if (thisAsArray[idx] == NULL) {
+    if (!thisAsArray[idx]) {
         thisAsArray[idx] = ptr(new JsonValue);
     }
 
