@@ -29,7 +29,7 @@
 using namespace gdx;
 
 gdx::Pixmap::ptr FileTextureData::getPixmap () {
-    if (pixmap != NULL) {
+    if (pixmap) {
         Pixmap::ptr tmp = pixmap;
         this->pixmap.reset();
         return tmp;
@@ -86,7 +86,7 @@ file(file)
 , format(format)
 , pixmap(preloadedPixmap)
 {
-    if (pixmap != NULL) {
+    if (!pixmap) {
         width = pixmap->getWidth();
         height = pixmap->getHeight();
         if (format == NULL)

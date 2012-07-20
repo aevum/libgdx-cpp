@@ -322,7 +322,7 @@ _match:
 void XmlReader::open (const std::string& name) {
     Element::ptr child = Element::ptr(new Element(name));
 
-    if (current != NULL)
+    if (current)
         current->addChild(child);
     
     elements.push_back(child);
@@ -470,7 +470,7 @@ XmlReader::Element::ptr const XmlReader::Element::getChildByNameRecursive(const 
             return element;
 
         const Element::ptr& found = element->getChildByNameRecursive(name);
-        if (found != NULL) return found;
+        if (found) return found;
     }
     
     return null_shared_ptr();
@@ -532,7 +532,7 @@ std::string XmlReader::Element::get(const std::string& name, const std::string& 
     }
     
     Element::ptr child = getChildByName(name);
-    if (child == NULL)
+    if (!child)
         return defaultValue;
     const std::string& value = child->getText();
     if (value.empty())
