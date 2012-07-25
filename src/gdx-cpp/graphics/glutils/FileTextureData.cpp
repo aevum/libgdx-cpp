@@ -86,7 +86,7 @@ file(file)
 , format(format)
 , pixmap(preloadedPixmap)
 {
-    if (!pixmap) {
+    if (pixmap) {
         width = pixmap->getWidth();
         height = pixmap->getHeight();
         if (format == NULL)
