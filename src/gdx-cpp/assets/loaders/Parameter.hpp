@@ -22,6 +22,7 @@ namespace gdx {
 
 struct Parameter
 {
+    virtual ~Parameter() {}
 };
 
 }

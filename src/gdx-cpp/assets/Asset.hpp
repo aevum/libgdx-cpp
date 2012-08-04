@@ -32,6 +32,8 @@ public:
     virtual bool isRefCounted() {
         return true;
     }
+    
+    virtual ~Asset() { }    
 };
 
 }

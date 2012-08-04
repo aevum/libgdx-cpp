@@ -28,6 +28,8 @@ public:
     typedef Mutex::ptr mutex_ptr;
     typedef Mutex mutex_t;
     virtual Mutex::ptr createMutex() = 0;
+    
+    virtual ~MutexFactory() { }
 };
 
 }

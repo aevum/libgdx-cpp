@@ -27,6 +27,7 @@ namespace gdx {
 class FileHandleResolver {
 public:
     virtual  FileHandle& resolve (const std::string& fileName) const = 0;
+    virtual ~FileHandleResolver() { }
 };
 
 } // namespace gdx

@@ -43,6 +43,8 @@ public:
 
     virtual std::vector<AssetDescriptor> getDependencies (std::string fileName, const Parameter* parameter) = 0;
 
+    
+    virtual ~AssetLoader() {}
 private:
     const FileHandleResolver& resolver;
 };

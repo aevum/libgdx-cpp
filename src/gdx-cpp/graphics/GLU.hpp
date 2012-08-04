@@ -31,11 +31,7 @@ public:
     virtual bool gluProject (float objX,float objY,float objZ, float* model, float* projection, int* view, float* winX, float* winY, float* winZ) const = 0;
     virtual bool gluUnProject (float winX,float winY,float winZ,float* model,float* proj, int* view,float* objX,float* objY,float* objZ) const = 0;
 
-protected:
-
-
-private:
-
+    virtual ~GLU() { }
 };
 
 } // namespace gdx

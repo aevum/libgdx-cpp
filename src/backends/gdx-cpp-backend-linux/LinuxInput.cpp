@@ -25,18 +25,10 @@
 
 using namespace gdx::nix;
 
+LinuxInput::LinuxInput() : _justTouched(false), touching(false), touchX(0), deltaX(0), touchY(0), deltaY(0)     {
+    }
 
-gdx::nix::LinuxInput::LinuxInput()
-        :
-        touching(false)
-        ,touchX(0)
-        ,touchY(0)
-        ,_justTouched(false)
-        ,processor(0)
-        ,deltaX(0)
-        ,deltaY(0)
-{    
-}
+
 
 void gdx::nix::LinuxInput::cancelVibrate()
 {

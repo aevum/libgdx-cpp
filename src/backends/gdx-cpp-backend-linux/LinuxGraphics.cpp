@@ -54,6 +54,10 @@ gl10(0)
 ,frames(0)
 ,vsync(false)
 ,title("GDX-CPP")
+,window(0)
+,width(0)
+,height(0)
+,iconPixmap(0)
 {
 }
 

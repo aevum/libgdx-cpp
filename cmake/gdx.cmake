@@ -22,9 +22,20 @@ macro(gdx_ios_copy_resources target_name target_files destination)
     )
 endmacro()
 
-
 macro(gdx_setup_target target_name target_type sources)
     string(TOUPPER ${target_type} target_type)
+    
+    if(GDX_LOG_INFO)
+        add_definitions(-DGDX_LOG_LEVEL_INFO)
+        add_definitions(-DGDX_LOG_LEVEL_ERROR)
+    elseif(GDX_LOG_ERROR)
+        add_definitions(-DGDX_LOG_LEVEL_ERROR)
+    else()
+        add_definitions(-DGDX_LOG_LEVEL_DEBUG)
+        add_definitions(-DGDX_LOG_LEVEL_INFO)
+        add_definitions(-DGDX_LOG_LEVEL_ERROR)
+    endif()
+
     if (APPLE)
         if (NOT SDKVER)
             message(FATAL_ERROR "Missing SDKVER variable. Please define it with the latest version of the ios SDK")

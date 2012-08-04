@@ -303,6 +303,10 @@ std::string File::nameWithoutExtension () const {
     return name.substr(0, dotIndex);
 }
 
+File::~File() {
+}
+
+
 //static std::string slashify(const std::string &path, const bool &isDirectory);
     /*
      * // lazy initialization of SecureRandom and temporary file directory

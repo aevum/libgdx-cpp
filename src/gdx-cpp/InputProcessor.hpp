@@ -33,6 +33,8 @@ public:
   virtual bool touchMoved (int x, int y) = 0;
   virtual bool scrolled (int amount) = 0;
   virtual void onBackPressed() = 0;
+  
+  virtual ~InputProcessor() { }
 };
 
 }

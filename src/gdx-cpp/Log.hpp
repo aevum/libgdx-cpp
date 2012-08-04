@@ -1,6 +1,8 @@
 #ifndef GDX_CPP_LOG
 #define GDX_CPP_LOG
 
+#include <gdx-cpp/config.hpp>
+
 #define S(x) #x
 #define S_(x) S(x)
 #define S_LINE_ S_(__LINE__)
@@ -30,6 +32,8 @@ public:
     virtual void debug ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list ) = 0;
     virtual void error ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list ) = 0;
     virtual void info ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list ) = 0;
+    
+    virtual ~Log() { }
 };
 }
 

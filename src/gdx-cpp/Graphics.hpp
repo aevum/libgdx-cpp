@@ -165,6 +165,8 @@ public:
     virtual Pixmap* resolvePixmap(const Pixmap& other) = 0;
     virtual Pixmap* resolvePixmap(const FileHandle::ptr& file) = 0;
     virtual Pixmap* resolvePixmap(int width, int height,  const gdx::Pixmap::Format& format, int pixType) = 0;
+    
+    virtual ~Graphics() { }
 };
 
 }
