@@ -34,9 +34,6 @@
 
 @synthesize window, viewController;
 
-- (void) applicationDidFinishLaunching:(UIApplication *)application {
-}
-
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
 	self.window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
 	

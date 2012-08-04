@@ -25,12 +25,15 @@
 
 #include "gdx-cpp/utils/ArrayUtils.hpp"
 
+#define LOG2_PAGE_SIZE 9
+#define PAGE_SIZE  1 << LOG2_PAGE_SIZE
+#define PAGES 0x10000 / PAGE_SIZE
+
+#define xChars "xeaonsrcumvwz"
+#define capChars "MNBDCEFKAGHIJLOPTUVWXYZ"
+
 using namespace gdx;
 
-const char BitmapFont::xChars[] = {'x', 'e', 'a', 'o', 'n', 's', 'r', 'c', 'u', 'm', 'v', 'w', 'z'};
-const char BitmapFont::capChars[] = {'M', 'N', 'B', 'D', 'C', 'E', 'F', 'K', 'A', 'G', 'H', 'I', 'J', 'L', 'O', 'P', 'Q', 'R', 'S',
-                                     'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-                                    };
 
 void BitmapFont::BitmapFontData::setGlyph ( int ch, BitmapFont::Glyph* glyph ) {
     Glyph** page = glyphs[ch / PAGE_SIZE];

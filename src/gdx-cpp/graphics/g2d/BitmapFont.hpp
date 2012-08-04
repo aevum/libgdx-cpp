@@ -34,10 +34,6 @@ class BitmapFontCache;
 
 class BitmapFont: public Disposable {
     friend class BitmapFontCache;
-protected:
-    static const int LOG2_PAGE_SIZE = 9;
-    static const int PAGE_SIZE = 1 << LOG2_PAGE_SIZE;
-    static const int PAGES = 0x10000 / PAGE_SIZE;
 
 public:
     typedef ref_ptr_maker<BitmapFont>::shared_ptr_def ptr;
@@ -162,9 +158,6 @@ public:
 protected:
 
     BitmapFont (BitmapFontData* data, TextureRegion::ptr region, bool integer);
-
-    static const char xChars[];
-    static const char capChars[];
 
     TextureRegion::ptr region;
     TextBounds textBounds;
