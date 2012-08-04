@@ -36,6 +36,8 @@ public:
     virtual void join() = 0;
     
     virtual const std::string getThreadName() = 0;
+    
+    virtual ~Thread() { }
 };
 
 }

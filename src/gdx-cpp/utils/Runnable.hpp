@@ -29,6 +29,8 @@ public:
     
     virtual void run() = 0;
     virtual void onRunnableStop() = 0;
+    
+    virtual ~Runnable() { }
 };
 
 #endif // GDX_CPP_UTILS_RUNNABLE_HPP

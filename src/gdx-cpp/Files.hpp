@@ -51,6 +51,8 @@ public:
     virtual std::string getExternalStoragePath () = 0;
 
     virtual bool isExternalStorageAvailable () = 0;
+    
+    virtual ~Files() { }
 };
 
 }

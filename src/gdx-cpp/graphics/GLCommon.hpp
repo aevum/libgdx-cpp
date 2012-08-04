@@ -77,12 +77,18 @@ public:
 
     GLCommon();
     
+    virtual ~GLCommon();
+    
 protected:
     unsigned char vertex_states;
     const void* last_vertex_pointer;
     const void* last_tex_coord_pointer;
     const void* last_color_pointer;
     std::set<int> enabled_states;
+    
+private:
+    GLCommon(const GLCommon&) = delete;
+    GLCommon& operator=(const GLCommon& other) = delete;
 };
 
 } // namespace gdx

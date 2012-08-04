@@ -31,6 +31,7 @@ public:
     class TextInputListener {
     public:
         virtual void input(const std::string& text) = 0;
+        virtual ~TextInputListener() { }
     };
 
     struct Button {
@@ -274,6 +275,8 @@ public:
     virtual bool isCursorCatched () = 0;
 
     virtual void setCursorPosition (int x, int y) = 0;
+    
+    virtual ~Input() { }
 };
 
 }

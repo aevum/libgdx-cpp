@@ -29,8 +29,4 @@
 #error "No platform was detected when configuring. Make sure you are on a supported platform." 
 #endif
 
-#cmakedefine GDX_LOG_LEVEL_DEBUG
-#cmakedefine GDX_LOG_LEVEL_INFO
-#cmakedefine GDX_LOG_LEVEL_ERROR
-
 #endif //GDX_CPP_CONFIG

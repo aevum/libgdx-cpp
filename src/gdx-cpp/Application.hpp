@@ -69,6 +69,8 @@ public:
     virtual void exit () = 0;
     virtual void update() = 0;
     virtual void pause() = 0;
+    
+    virtual ~Application() {}
 };
 
 }

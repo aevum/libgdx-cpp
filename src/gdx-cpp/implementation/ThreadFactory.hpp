@@ -27,6 +27,7 @@ class ThreadFactory
 {
 public:
     virtual Thread::ptr createThread(Runnable* t) = 0;
+    virtual ~ThreadFactory() {}
 };
 
 }

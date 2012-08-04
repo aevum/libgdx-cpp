@@ -45,7 +45,8 @@ public:
     bool mkdirs();
     bool renameTo(const gdx::File& dest);
     std::string toString();
-        
+    
+    virtual ~File();
 private:
 
     std::string path;

@@ -39,6 +39,8 @@ public:
     virtual void debug ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list ) = 0;
     virtual void error ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list ) = 0;
     virtual void info ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list ) = 0;
+    
+    virtual ~Log() { }
 };
 }
 

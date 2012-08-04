@@ -203,3 +203,5 @@ GLCommon::GLCommon() : vertex_states(0) , last_vertex_pointer((void*) -1), last_
 {
 }
 
+GLCommon::~GLCommon() {
+}

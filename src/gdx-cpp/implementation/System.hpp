@@ -64,6 +64,7 @@ public:
     virtual uint64_t nanoTime() = 0;
     virtual MutexFactory* getMutexFactory() = 0;
     virtual ThreadFactory* getThreadFactory() = 0;
+    virtual ~System() { }
 };
 
 }

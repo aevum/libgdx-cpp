@@ -68,7 +68,7 @@ template <typename MutexFactory>
 struct Synchronizable {
     typedef lock_guard<typename MutexFactory::mutex_t> lock_holder;
     
-    Synchronizable(MutexFactory* fact) :
+    Synchronizable(MutexFactory* const fact) :
         mutex(fact->createMutex())
     {        
     }
@@ -81,6 +81,8 @@ struct Synchronizable {
     lock_holder synchronize() {
         return lock_holder(*mutex);
     }
+    
+    virtual ~Synchronizable() { }
 
 private:
     typename MutexFactory::mutex_ptr mutex;
