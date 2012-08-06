@@ -2,6 +2,8 @@
 #define GDX_CPP_LOG
 
 #include <gdx-cpp/config.hpp>
+#include <gdx-cpp/utils/ScopedGuard.hpp>
+#include <string>
 #include <stdexcept>
 
 #define S(x) #x
@@ -14,6 +16,11 @@ namespace gdx {
     void internal_log_error(const std::string&, const std::string&, const std::string&, const char*, ...);
 }
 
+struct RuntimeLogErrorExecutor {
+    void operator()() const {
+        throw std::runtime_error("gdx runtime error, see the error output for detail");
+    }
+};
 
 #ifdef GDX_LOG_LEVEL_DEBUG
 #define gdx_log_debug(tag, format, ...) gdx::internal_log_debug(tag, S_LINE_, __FILE__, format, ##__VA_ARGS__);
@@ -28,12 +35,11 @@ namespace gdx {
 #endif
 
 #ifdef GDX_LOG_LEVEL_ERROR
-#define gdx_log_error(tag, format, ...) gdx::internal_log_error(tag, S_LINE_, __FILE__, format,  ##__VA_ARGS__), throw std::runtime_error("gdx runtime error, see the error output for detail");
+#define gdx_log_error(tag, format, ...) gdx::internal_log_error(tag, S_LINE_, __FILE__, format,  ##__VA_ARGS__); gdx::ScopedGuard<RuntimeLogErrorExecutor> guard(RuntimeLogErrorExecutor());
 #else
 #define gdx_log_error(tag, format, ...) ((void) 0)
 #endif
 
-#include <string>
 namespace gdx {
 class Log {
 public:
