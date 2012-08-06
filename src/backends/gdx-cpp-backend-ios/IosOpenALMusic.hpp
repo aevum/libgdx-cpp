@@ -44,7 +44,6 @@ public:
     void update ();
     
 protected:
-    virtual int read (char * buffer, int bufferSize);
     virtual void reset ();
 
 private:

@@ -148,7 +148,9 @@ gdx::Sound * IosOpenALAudio::newSound (const ref_ptr_maker< gdx::FileHandle >::s
     ALsizei sampleRate;
     ALsizei channels;
     
-    audioData = GetOpenALAudioData((CFURLRef)[NSURL fileURLWithPath:[NSString stringWithCString:file->name().c_str() encoding:NSUTF8StringEncoding]], &dataSize, &sampleRate, &audioLoaded, &channels);
+    gdx_log_debug("IosOpenALAudio", "File is %s", file->path().c_str());
+                  
+    audioData = GetOpenALAudioData((CFURLRef)[NSURL fileURLWithPath:[NSString stringWithCString:file->path().c_str() encoding:NSUTF8StringEncoding]], &dataSize, &sampleRate, &audioLoaded, &channels);
     
     if (audioData != NULL) {
     
@@ -168,7 +170,9 @@ gdx::Music * IosOpenALAudio::newMusic (const ref_ptr_maker< gdx::FileHandle >::s
     ALsizei sampleRate;
     ALsizei channels;
     
-    audioData = GetOpenALAudioData((CFURLRef)[NSURL fileURLWithPath:[NSString stringWithCString:file->name().c_str() encoding:NSUTF8StringEncoding]], &dataSize, &sampleRate, &audioLoaded, &channels);
+    gdx_log_debug("IosOpenALAudio", "File is %s", file->path().c_str());
+    
+    audioData = GetOpenALAudioData((CFURLRef)[NSURL fileURLWithPath:[NSString stringWithCString:file->path().c_str() encoding:NSUTF8StringEncoding]], &dataSize, &sampleRate, &audioLoaded, &channels);
     
     
     if (audioLoaded) {        

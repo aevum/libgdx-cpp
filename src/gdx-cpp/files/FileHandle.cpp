@@ -56,7 +56,7 @@ FileHandle::FileHandle (const gdx::File &file, gdx::Files::FileType type)
 {
 }
 
-const std::string& FileHandle::path () const {
+const std::string FileHandle::path () const {
     return file.getPath();
 }
 

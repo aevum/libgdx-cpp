@@ -29,7 +29,7 @@ namespace gdx {
 namespace ios {
 	
 class IosGraphics;
-class IosAudio;
+class IosOpenALAudio;
 class IosFiles;
 class IosInput;
 			
@@ -63,7 +63,7 @@ protected:
 	IosGraphics* graphics;
     IosInput* input;
     IosFiles* files;
-    IosAudio* audio;
+    IosOpenALAudio* audio;
     
     std::list< Runnable::ptr > runnables;
 	

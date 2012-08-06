@@ -27,6 +27,20 @@ IosFileHandle::IosFileHandle(const std::string& fileName, gdx::Files::FileType t
 {	
 }
 
+const std::string IosFileHandle::path () const {
+    NSString* filePath = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String: file.nameWithoutExtension().c_str()] ofType:[NSString stringWithUTF8String: file.extension().c_str()]
+                                                    inDirectory:[NSString stringWithUTF8String: file.getParent().c_str()]];
+    
+    if (filePath == nil) {            
+        NSString* documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        
+        filePath = [NSString stringWithFormat:@"%@/%s", 
+                    documentsPath, name().c_str()];
+    }
+    
+    return std::string([filePath cStringUsingEncoding:NSUTF8StringEncoding]);    
+}
+
 int IosFileHandle::readBytes(gdx::FileHandle::buffer_ptr& c) const {
 	if (this->type == Files::Internal) {		
           

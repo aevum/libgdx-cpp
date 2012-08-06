@@ -26,7 +26,7 @@
 #include <list>
 #include <stdexcept>
 
-#include "IosAudio.hpp"
+#include "IosOpenALAudio.hpp"
 #include "IosGraphics.hpp"
 #include "IosFiles.hpp"
 #include "IosInput.hpp"
@@ -48,10 +48,10 @@ gdx::ios::IosApplication::IosApplication(gdx::ApplicationListener* listener, int
 }
 
 void IosApplication::initialize(int width, int height) {
-	graphics = new IosGraphics();
-	input = new IosInput();
-	files = new IosFiles();
-	audio = new IosAudio();
+	this->graphics = new IosGraphics();
+	this->input = new IosInput();
+	this->files = new IosFiles();
+	this->audio = new IosOpenALAudio();
 	
 	graphics->setDisplayMode(width, height, false);
 	graphics->initialize();

@@ -50,11 +50,11 @@ public:
     FileHandle (const std::string &fileName);
     FileHandle (const gdx::File &file);
     
-    const std::string& path () const;
-    std::string name () const;
-    std::string extension () const;
-    std::string nameWithoutExtension () const;
-    std::string typetoString () const;
+    virtual const std::string path () const;
+    virtual std::string name () const;
+    virtual std::string extension () const;
+    virtual std::string nameWithoutExtension () const;
+    virtual std::string typetoString () const;
     gdx::Files::FileType getType () const;
 
     virtual int readBytes (gdx::FileHandle::buffer_ptr& c) const;
