@@ -2,6 +2,7 @@
 #define GDX_CPP_LOG
 
 #include <gdx-cpp/config.hpp>
+#include <stdexcept>
 
 #define S(x) #x
 #define S_(x) S(x)
