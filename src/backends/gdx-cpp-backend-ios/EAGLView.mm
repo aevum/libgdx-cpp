@@ -1,10 +1,18 @@
-//
-//  EAGLView.m
-//  test1
-//
-//  Created by Henrique Vieira e Sousa on 30/09/11.
-//  Copyright 2011 Universidade Federal de Uberlandia. All rights reserved.
-//
+/*
+ Copyright 2011 Aevum Software aevum @ aevumlab.com
+ 
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -64,7 +72,7 @@
 	return [self initWithFrame:frame pixelFormat:format depthFormat:0 preserveBackbuffer:NO sharegroup:nil multiSampling:NO numberOfSamples:0];
 }
 
-- (id) initWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth preserveBackbuffer:(BOOL)retained sharegroup:(EAGLSharegroup*)sharegroup multiSampling:(BOOL)sampling numberOfSamples:(unsigned int)nSamples;
+- (id) initWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth preserveBackbuffer:(BOOL)retained sharegroup:(EAGLSharegroup*)sharegroup multiSampling:(BOOL)sampling numberOfSamples:(unsigned int)nSamples
 {
 	if((self = [super initWithFrame:frame]))
 	{
@@ -118,21 +126,19 @@
 									[NSNumber numberWithBool:preserveBackbuffer_], kEAGLDrawablePropertyRetainedBacking,
 									pixelformat_, kEAGLDrawablePropertyColorFormat, nil];
 	
+    eaglLayer.contentsScale = scale;
 	
-	EAGLContext *aContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+	self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
 	
-	if (!aContext)
+	if (!self.context)
 		NSLog(@"Failed to create ES context");
-	else if (![EAGLContext setCurrentContext:aContext])
+	else if (![EAGLContext setCurrentContext:self.context])
 		NSLog(@"Failed to set ES context current");
-	
-	self.context = aContext;
-	[aContext release];
-	
-	[self.context renderbufferStorage:GL_RENDERBUFFER_OES fromDrawable:eaglLayer];
 		
-	[self createFramebuffer];
+	[self.context renderbufferStorage:GL_RENDERBUFFER_OES fromDrawable:eaglLayer];
 	
+    [EAGLContext setCurrentContext:context];
+    
 	return YES;
 }
 
@@ -180,6 +186,25 @@
         glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &framebufferHeight);
         
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer);
+               
+        if (multiSampling_) {
+            //Generate our MSAA Frame and Render buffers
+            glGenFramebuffers(1, &msaaFrameBuffer);
+            glBindFramebuffer(GL_FRAMEBUFFER, msaaFrameBuffer);
+        
+            glGenFramebuffers(1, &msaaRenderBuffer);
+            glBindRenderbuffer(GL_RENDERBUFFER, msaaRenderBuffer);
+        
+            
+            GLint maxSamples;
+            glGetIntegerv(GL_MAX_SAMPLES_APPLE, &maxSamples);
+            int resultSamples = MIN(requestedSamples_, maxSamples);
+            
+            // Generate the msaaDepthBuffer.
+            // 4 will be the number of pixels that the MSAA buffer will use in order to make one pixel on the render buffer.
+            glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, resultSamples, GL_RGB5_A1, framebufferWidth, framebufferHeight);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, msaaRenderBuffer);
+        }
         
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
             NSLog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
@@ -203,6 +228,21 @@
             glDeleteRenderbuffers(1, &colorRenderbuffer);
             colorRenderbuffer = 0;
         }
+        
+        if (msaaFrameBuffer) {
+            glDeleteFramebuffers(1, &msaaFrameBuffer);
+            msaaFrameBuffer = 0;
+        }
+        
+        if (msaaRenderBuffer) {
+            glDeleteRenderbuffers(1, &msaaRenderBuffer);
+            msaaRenderBuffer = 0;
+        }
+        
+        if (msaaDepthBuffer) {
+            glDeleteRenderbuffers(1, &msaaDepthBuffer);
+            msaaDepthBuffer = 0;
+        }
     }
 }
 
@@ -215,8 +255,7 @@
         if (!defaultFramebuffer)
             [self createFramebuffer];
         
-        glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
-        
+        glBindFramebuffer(GL_FRAMEBUFFER, multiSampling_ ? msaaFrameBuffer : defaultFramebuffer);
         glViewport(0, 0, framebufferWidth, framebufferHeight);
     }
 }
@@ -228,6 +267,16 @@
     if (context)
     {
         [EAGLContext setCurrentContext:context];
+                
+        if (multiSampling_) {
+            glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, msaaFrameBuffer);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, defaultFramebuffer);
+        
+            glResolveMultisampleFramebufferAPPLE();
+        
+            GLenum attachments[] = { GL_COLOR_ATTACHMENT0 };
+            glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, 1, attachments);
+        }
         
         glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
         

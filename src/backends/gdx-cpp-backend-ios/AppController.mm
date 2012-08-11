@@ -36,34 +36,20 @@
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
 	self.window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
-	
-	EAGLView *glView = [EAGLView viewWithFrame: [window bounds]
-									 pixelFormat: kEAGLColorFormatRGBA8
-									 depthFormat: GL_DEPTH_COMPONENT16_OES
-							  preserveBackbuffer: NO
-									  sharegroup: nil
-								   multiSampling: NO
-								 numberOfSamples: 0];
     
-	
-	viewController = [[IosGdxViewController alloc] initWithNibName:nil bundle:nil];
-	[viewController retain];
-	
+    viewController = [[IosGdxViewController alloc] initWithNibName:nil bundle:nil];
 	viewController.wantsFullScreenLayout = YES;
-	[viewController setView:glView];
-	[glView setFramebuffer];
-	[glView retain];
-	
+    
 	window.rootViewController = viewController;
 	[window makeKeyAndVisible];
     
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenScale = [[UIScreen mainScreen] scale];
-
-    CGFloat screenWidth = screenRect.size.width;
-    CGFloat screenHeight = screenRect.size.height;
-	
-	gdxcpp_initialize_application(screenWidth * screenScale, screenHeight * screenScale);
+    CGFloat scale = [UIScreen mainScreen].scale;
+    CGRect screenRect = [UIScreen mainScreen].bounds;
+    
+    screenRect.size.width *= scale;
+    screenRect.size.height *= scale;
+        
+	gdxcpp_initialize_application(screenRect.size.width, screenRect.size.height);
 	
 	gdxcpp_create_listener();
 	

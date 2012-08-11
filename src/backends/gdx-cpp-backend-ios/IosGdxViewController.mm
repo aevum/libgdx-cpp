@@ -34,6 +34,20 @@
 - (id) initWithNibName:(NSString* ) nibNameOrNil bundle:(NSBundle*)nibBundleOrNil {
 	if (self = [ super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
 		isRunning = FALSE;
+        
+        CGFloat scale = [UIScreen mainScreen].scale;
+        CGRect screenRect = [UIScreen mainScreen].bounds;
+
+        screenRect.size.width *= scale;
+        screenRect.size.height *= scale;
+        
+        self.view = [EAGLView viewWithFrame: [UIScreen mainScreen].bounds
+                             pixelFormat: kEAGLColorFormatRGBA8
+                             depthFormat: GL_DEPTH_COMPONENT16_OES
+                      preserveBackbuffer: NO
+                              sharegroup: nil
+                           multiSampling: NO
+                            numberOfSamples: 0];
 	}
 	return self;
 }
@@ -43,7 +57,7 @@
 }
 
 - (void) viewDidLoad {
-	[super viewDidLoad];	 
+	[super viewDidLoad];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -82,13 +96,15 @@
         [self.displayLink invalidate];
         self.displayLink = nil;
         isRunning = FALSE;
-    }	
+    }
 }
 
 - (void) mainLoop {
-	[(EAGLView*)self.view setFramebuffer];
+    EAGLView* gl = (EAGLView*)self.view;
+    
+	[gl setFramebuffer];
 	gdx::app->update();
-	[(EAGLView*)self.view presentFramebuffer];
+	[gl presentFramebuffer];
 }
 
 @end

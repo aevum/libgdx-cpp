@@ -31,6 +31,8 @@ gdx::ios::IosInput::IosInput()
  ,processor(0)
  ,deltaX(0)
  ,deltaY(0)
+ ,lastDeltaY(0)
+ ,lastDeltaX(0)
 {
 }
 
@@ -209,6 +211,11 @@ void gdx::ios::IosInput::reset()
 
 void gdx::ios::IosInput::handleTouchDrag(float x, float y, int button)
 {
+    deltaX = x - lastDeltaX;
+    deltaY = y - lastDeltaY;
+    lastDeltaX = x;
+    lastDeltaY = y;
+    
     if (this->processor) {
         this->processor->touchDragged(x, y, button);
     }
@@ -216,8 +223,8 @@ void gdx::ios::IosInput::handleTouchDrag(float x, float y, int button)
 
 void gdx::ios::IosInput::handleTouchDown(float x, float y, int button)
 {
-    touchX = x;
-    touchY = y;
+    lastDeltaX = touchX = x;
+    lastDeltaX = touchY = y;
     touching = true;
     
     if (this->processor) {
@@ -232,7 +239,6 @@ void gdx::ios::IosInput::handleTouchUp(float x, float y, int button)
         this->processor->touchUp(x, y, button, 0);
     }
 }
-
 
 void IosInput::setKeyboardRepeat(int delay, int repeatInterval) {
     

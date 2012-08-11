@@ -107,8 +107,8 @@ protected:
 
     bool _justTouched;
     bool touching;
-    int touchX, deltaX;
-    int touchY, deltaY;
+    int touchX, deltaX, lastDeltaX;
+    int touchY, deltaY, lastDeltaY;
     
 };
 
