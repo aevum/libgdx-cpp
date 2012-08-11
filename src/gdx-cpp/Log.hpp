@@ -35,7 +35,7 @@ struct RuntimeLogErrorExecutor {
 #endif
 
 #ifdef GDX_LOG_LEVEL_ERROR
-#define gdx_log_error(tag, format, ...) gdx::internal_log_error(tag, S_LINE_, __FILE__, format,  ##__VA_ARGS__); gdx::ScopedGuard<RuntimeLogErrorExecutor> guard(RuntimeLogErrorExecutor());
+#define gdx_log_error(tag, format, ...) gdx::internal_log_error(tag, S_LINE_, __FILE__, format,  ##__VA_ARGS__); gdx::ScopedGuard<RuntimeLogErrorExecutor> guard( (RuntimeLogErrorExecutor()) );
 #else
 #define gdx_log_error(tag, format, ...) ((void) 0)
 #endif
