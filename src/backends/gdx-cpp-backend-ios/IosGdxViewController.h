@@ -18,11 +18,13 @@
 
 #import <UIKit/UIKit.h>
 #import <OpenGLES/EAGL.h>
+#import "EAGLView.h"
 
 @interface IosGdxViewController: UIViewController {
 	EAGLContext *context;
 	CADisplayLink *displayLink;
 	BOOL isRunning;
+    EAGLView* glView;
 }
 
 - (void) resume;

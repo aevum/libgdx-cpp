@@ -126,7 +126,7 @@
 									[NSNumber numberWithBool:preserveBackbuffer_], kEAGLDrawablePropertyRetainedBacking,
 									pixelformat_, kEAGLDrawablePropertyColorFormat, nil];
 	
-    eaglLayer.contentsScale = scale;
+    eaglLayer.contentsScale = [[UIScreen mainScreen] scale];
 	
 	self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
 	

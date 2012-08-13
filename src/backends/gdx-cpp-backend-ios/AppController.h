@@ -21,11 +21,11 @@
 @class IosGdxViewController;
 
 @interface AppController: NSObject <UIAccelerometerDelegate, UIAlertViewDelegate, UITextFieldDelegate, UIApplicationDelegate> {
-	UIWindow* window;
 	IosGdxViewController* viewController;
+    UIWindow* window;
 }
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet IosGdxViewController *viewController;
+@property (nonatomic, retain) IBOutlet UIWindow* window;
 
 @end

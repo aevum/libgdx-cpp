@@ -36,12 +36,9 @@
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
 	self.window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
-    
+ 
     viewController = [[IosGdxViewController alloc] initWithNibName:nil bundle:nil];
 	viewController.wantsFullScreenLayout = YES;
-    
-	window.rootViewController = viewController;
-	[window makeKeyAndVisible];
     
     CGFloat scale = [UIScreen mainScreen].scale;
     CGRect screenRect = [UIScreen mainScreen].bounds;
@@ -52,8 +49,11 @@
 	gdxcpp_initialize_application(screenRect.size.width, screenRect.size.height);
 	
 	gdxcpp_create_listener();
-	
+    
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
+    
+    [window setRootViewController:viewController];
+	[window makeKeyAndVisible];
     
 	return YES;
 }
@@ -88,7 +88,5 @@
     
     [super dealloc];
 }
-
-
 
 @end

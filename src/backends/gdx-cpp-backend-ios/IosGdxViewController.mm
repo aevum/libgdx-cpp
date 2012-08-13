@@ -32,22 +32,14 @@
 @synthesize context, displayLink;
 
 - (id) initWithNibName:(NSString* ) nibNameOrNil bundle:(NSBundle*)nibBundleOrNil {
-	if (self = [ super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-		isRunning = FALSE;
-        
-        CGFloat scale = [UIScreen mainScreen].scale;
-        CGRect screenRect = [UIScreen mainScreen].bounds;
-
-        screenRect.size.width *= scale;
-        screenRect.size.height *= scale;
-        
-        self.view = [EAGLView viewWithFrame: [UIScreen mainScreen].bounds
+	if (self = [ super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {        
+        self.view = glView = [[EAGLView viewWithFrame: [UIScreen mainScreen].bounds
                              pixelFormat: kEAGLColorFormatRGBA8
                              depthFormat: GL_DEPTH_COMPONENT16_OES
                       preserveBackbuffer: NO
                               sharegroup: nil
                            multiSampling: NO
-                            numberOfSamples: 0];
+                            numberOfSamples: 0] retain];
 	}
 	return self;
 }
@@ -77,6 +69,7 @@
         [EAGLContext setCurrentContext:nil];
     
     [context release];
+    [glView release];
     
     [super dealloc];
 }
@@ -99,12 +92,10 @@
     }
 }
 
-- (void) mainLoop {
-    EAGLView* gl = (EAGLView*)self.view;
-    
-	[gl setFramebuffer];
+- (void) mainLoop {   
+	[glView setFramebuffer];
 	gdx::app->update();
-	[gl presentFramebuffer];
+	[glView presentFramebuffer];
 }
 
 @end
