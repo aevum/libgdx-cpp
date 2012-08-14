@@ -38,6 +38,8 @@ public:
     virtual int write ( const char* data, int lenght, bool append);
     
     virtual const std::string path () const;
+ 
+    virtual bool deleteFile ();
 };
 
 }

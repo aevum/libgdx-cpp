@@ -91,3 +91,15 @@ int IosFileHandle::write(const char *data, int lenght, bool append) {
     
     return lenght;
 }
+
+bool IosFileHandle::deleteFile() {
+    if (exists()) {
+        NSFileManager *fileMgr = [NSFileManager defaultManager];
+        NSError* error = NULL;
+        [fileMgr removeItemAtPath:[[NSString alloc] initWithCString:path().c_str() encoding:NSUTF8StringEncoding] error:&error];
+        
+        return error != 0;
+    }
+    
+    return false;
+}

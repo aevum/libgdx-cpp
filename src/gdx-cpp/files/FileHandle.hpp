@@ -55,24 +55,26 @@ public:
     virtual std::string extension () const;
     virtual std::string nameWithoutExtension () const;
     virtual std::string typetoString () const;
+   
     gdx::Files::FileType getType () const;
 
     virtual int readBytes (gdx::FileHandle::buffer_ptr& c) const;
     virtual int write ( const char* data, int lenght, bool append);
     
-    void list (std::vector<FileHandle> &handles);
-    void list (const std::string& suffix, std::vector<FileHandle> &handles);
-    bool isDirectory ();
-    FileHandle child (const std::string &name);
-    FileHandle parent ();
-    void mkdirs ();
+    virtual void list (std::vector<FileHandle> &handles);
+    virtual void list (const std::string& suffix, std::vector<FileHandle> &handles);
+    virtual bool isDirectory ();
+    virtual FileHandle child (const std::string &name);
+    virtual FileHandle parent ();
+    virtual void mkdirs ();
     virtual bool exists () const;
-    bool deleteFile ();
-    bool deleteDirectory ();
+    virtual bool deleteFile ();
+    virtual bool deleteDirectory ();
     virtual void copyTo (FileHandle& dest);
-    void moveTo (FileHandle& dest);
+    virtual void moveTo (FileHandle& dest);
     virtual int64_t length () const;
-    std::string toString () const;
+    virtual std::string toString () const;
+   
     FileHandle (const std::string &fileName, gdx::Files::FileType type);
     FileHandle (const gdx::File &file, gdx::Files::FileType type);
 
