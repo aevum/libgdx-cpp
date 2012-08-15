@@ -15,10 +15,6 @@ set(ANDROID_NDK $ENV{ANDROID_NDK})
 option(BUILD_BOX2D "Builds Box2D" TRUE)
 option(BUILD_AS_SHARED_LIBRARIES "Build libraries as shared libraries instead of static" FALSE)
 
-option(GDX_LOG_DEBUG "Enables the output of debug logs" TRUE)
-option(GDX_LOG_INFO "Enables the output of debug logs" FALSE)
-option(GDX_LOG_ERROR "Enables the output of debug logs" FALSE)
-
 if(APPLE)
     message("MacOSX (iOS) found. Setting the backend to IOS")
     SET(GDX_BACKEND_IOS ON)

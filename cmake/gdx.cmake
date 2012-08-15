@@ -15,16 +15,16 @@ macro(gdx_ios_copy_resources target_name target_files destination)
     add_custom_command(
         TARGET ${target_name}
         POST_BUILD
-        COMMAND rsync -r --exclude .DS_Store --exclude CVS --exclude .svn --exclude .git  ${target_files} "\${BUILT_PRODUCTS_DIR}/\${CONTENTS_FOLDER_PATH}/${destination}")
+        COMMAND rsync -r --exclude .DS_Store --exclude CVS --exclude .svn --exclude .git --exclude *~ ${target_files} "\${BUILT_PRODUCTS_DIR}/\${CONTENTS_FOLDER_PATH}/${destination}")
 endmacro()
 
 macro(gdx_setup_target target_name target_type sources)
     string(TOUPPER ${target_type} target_type)
     
-    if(GDX_LOG_INFO)
+    if(${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo" OR GDX_LOG_LEVEL STREQUAL "INFO")
         add_definitions(-DGDX_LOG_LEVEL_INFO)
         add_definitions(-DGDX_LOG_LEVEL_ERROR)
-    elseif(GDX_LOG_ERROR)
+    elseif(${CMAKE_BUILD_TYPE} STREQUAL "Release" OR GDX_LOG_LEVEL STREQUAL "RELEASE")
         add_definitions(-DGDX_LOG_LEVEL_ERROR)
     else()
         add_definitions(-DGDX_LOG_LEVEL_DEBUG)
