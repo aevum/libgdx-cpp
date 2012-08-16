@@ -80,6 +80,7 @@
 		[aDisplayLink setFrameInterval:1];
 		[aDisplayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 		self.displayLink = aDisplayLink;
+        isRunning = TRUE;
 	}
 }
 

@@ -75,10 +75,12 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+    [self.viewController pause];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
+    [self.viewController resume];
 }
 
 - (void)dealloc
