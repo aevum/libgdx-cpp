@@ -55,6 +55,22 @@ endif()
 CONFIGURE_FILE(src/gdx-cpp/gl.hpp.in ${CMAKE_CURRENT_SOURCE_DIR}/src/gdx-cpp/gl.hpp )
 CONFIGURE_FILE(src/gdx-cpp/config.hpp.in ${CMAKE_CURRENT_SOURCE_DIR}/src/gdx-cpp/config.hpp )
 
+if(CMAKE_COMPILER_IS_GNUCXX)
+    # get gnu compiler version number
+    exec_program(${CMAKE_C_COMPILER} ARGS --version OUTPUT_VARIABLE _gcc_version_info)
+
+    string (REGEX MATCH " [34]\\.[0-9]" _gcc_version "${_gcc_version_info}")
+    string(REGEX REPLACE "[^0-9]*([0-9]+)\\.[0-9]+.*" "\\1" gcc_major_vers "${_gcc_version}")
+    string(REGEX REPLACE "[^0-9]*[0-9]+\\.([0-9]+).*" "\\1" gcc_minor_vers "${_gcc_version}")
+    # g++' -Wdouble-promotion needs at least version 4.6
+    
+    if(${gcc_major_vers} LESS 4 AND ${gcc_minor_vers} LESS 6)
+        message(FATAL_ERROR "gdx++ requires a gcc that's newer than 4.5 to fully support the new c++11 standard. Please upgrade your ndk to r8b or newer if using android.")
+    endif()
+    
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wreorder")
+endif()
+
 if (BUILD_BOX2D)
     set(BOX2D_INSTALL TRUE)
 
@@ -74,20 +90,8 @@ elseif(GDX_BACKEND_ANDROID)
 elseif(GDX_BACKEND_WIN32)
     add_subdirectory(src/backends/windows)
 elseif(GDX_BACKEND_LINUX)
-  if(CMAKE_COMPILER_IS_GNUCXX)
-    # get gnu compiler version number
-    exec_program(${CMAKE_C_COMPILER} ARGS --version OUTPUT_VARIABLE _gcc_version_info)
-    string (REGEX MATCH " [34]\\.[0-9]\\.[0-9]" _gcc_version "${_gcc_version_info}")
-    string(REGEX REPLACE "[^0-9]*([0-9]+)\\.[0-9]+.*" "\\1" gcc_major_vers "${_gcc_version}")
-    string(REGEX REPLACE "[^0-9]*[0-9]+\\.([0-9]+).*" "\\1" gcc_minor_vers "${_gcc_version}")
-    # g++' -Wdouble-promotion needs at least version 4.6
-    if(${gcc_major_vers} GREATER 3 AND ${gcc_minor_vers} GREATER 5)
-      #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wdouble-promotion -Wall -Werror -Wextra -Weffc++")
-    endif()
-  endif()
-
   SET(BUILD_AGG TRUE)
-    add_subdirectory(src/backends/gdx-cpp-backend-linux)
+  add_subdirectory(src/backends/gdx-cpp-backend-linux)
 endif()
 
 if (BUILD_AGG)
