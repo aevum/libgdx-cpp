@@ -45,18 +45,18 @@ using namespace gdx::ios;
 using namespace gdx;
 
 gdx::ios::IosGraphics::IosGraphics() :
-gl10(0)
-,gl11(0)
-,gl20(0)
-,glu(new IosGLU)
-,glCommon(0)
-,deltaTime(0)
-,lastTime(0)
-,frameStart(0)
-,frames(0)
-,vsync(false)
-,width(0)
-,height(0)
+vsync(false),
+width(0),
+height(0),
+gl10(0),
+gl11(0),
+gl20(0),
+glu(new IosGLU),
+glCommon(0),
+lastTime(0),
+frames(0),
+frameStart(0),
+deltaTime(0)
 {
 }
 

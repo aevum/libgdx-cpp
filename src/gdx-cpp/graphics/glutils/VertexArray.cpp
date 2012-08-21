@@ -132,8 +132,8 @@ VertexAttributes& VertexArray::getAttributes () {
 VertexArray::VertexArray(int numVertices, const VertexAttributes& attributes)
 :
 attributes(attributes),
+byteBuffer(this->attributes.vertexSize * numVertices),
 isBound(false)
-, byteBuffer(this->attributes.vertexSize * numVertices)
 {
     buffer = byteBuffer.convert<float>();
     buffer.flip();

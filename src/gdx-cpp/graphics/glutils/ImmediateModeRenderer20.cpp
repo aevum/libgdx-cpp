@@ -182,20 +182,20 @@ void ImmediateModeRenderer20::dispose () {
 
 ImmediateModeRenderer20::ImmediateModeRenderer20 (bool hasNormals,bool hasColors,int numTexCoords, int maxVertices)
 : primitiveType(0),
-maxVertices(maxVertices),
-attribs(buildVertexAttributes(hasNormals, hasColors, numTexCoords)),
-mesh(false, maxVertices, 0, attribs),
-vertexShader(createVertexShader(hasNormals, hasColors, numTexCoords)),
-fragmentShader(createFragmentShader(hasNormals, hasColors, numTexCoords)),
-defaultShader(new ShaderProgram(vertexShader, fragmentShader)),
-numTexCoords(numTexCoords),
 vertexIdx(0),
 numSetTexCoords(0),
+maxVertices(maxVertices),
 numVertices(0),
+mesh(false, maxVertices, 0, attribs),
+numTexCoords(numTexCoords),
 vertexSize(0),
 normalOffset(0),
 colorOffset(0),
-texCoordOffset(0)
+texCoordOffset(0),
+defaultShader(new ShaderProgram(vertexShader, fragmentShader)),
+attribs(buildVertexAttributes(hasNormals, hasColors, numTexCoords)),
+vertexShader(createVertexShader(hasNormals, hasColors, numTexCoords)),
+fragmentShader(createFragmentShader(hasNormals, hasColors, numTexCoords))
 {
     if (!defaultShader->isCompiled())
         throw std::runtime_error("Couldn't compile immediate mode default shader!\n" + defaultShader->getLog());

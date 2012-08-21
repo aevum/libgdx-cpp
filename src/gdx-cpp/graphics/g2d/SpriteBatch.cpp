@@ -38,21 +38,21 @@
 using namespace gdx;
 
 SpriteBatch::SpriteBatch(int size) :
-        color(Color::WHITE.toFloatBits())
-        , maxSpritesInBatch(0)
-        , renderCalls(0)
-        , tempColor(1,1,1,1)
-        , blendSrcFunc(GL_SRC_ALPHA)
-        , blendDstFunc(GL_ONE_MINUS_SRC_ALPHA)
-        , blendingDisabled(false)
-        , drawing(false)
-        , currBufferIdx(0)
-        , idx(0)
-        , invTexWidth(0)
-        , invTexHeight(0)
-        , mesh(0)
-        , shader(0)
-        , customShader(0)
+        renderCalls(0),
+maxSpritesInBatch(0),
+color(Color::WHITE.toFloatBits()),
+mesh(0),
+invTexWidth(0),
+invTexHeight(0),
+idx(0),
+currBufferIdx(0),
+drawing(false),
+blendingDisabled(false),
+blendSrcFunc(GL_SRC_ALPHA),
+blendDstFunc(GL_ONE_MINUS_SRC_ALPHA),
+shader(0),
+tempColor(1,1,1,1),
+customShader(0)
 {
 
     std::vector<VertexAttribute> attributes;
@@ -952,21 +952,21 @@ bool SpriteBatch::isBlendingEnabled () {
 }
 
 SpriteBatch::SpriteBatch(int size, int buffers) :
-        color(Color::WHITE.toFloatBits())
-        , maxSpritesInBatch(0)
-        , renderCalls(0)
-        , tempColor(1,1,1,1)
-        , blendSrcFunc(GL_SRC_ALPHA)
-        , blendDstFunc(GL_ONE_MINUS_SRC_ALPHA)
-        , blendingDisabled(false)
-        , drawing(false)
-        , currBufferIdx(0)
-        , idx(0)
-        , invTexWidth(0)
-        , invTexHeight(0)
-        , mesh(0)
-        , shader(0)
-        , customShader(0)
+        renderCalls(0),
+maxSpritesInBatch(0),
+color(Color::WHITE.toFloatBits()),
+mesh(0),
+invTexWidth(0),
+invTexHeight(0),
+idx(0),
+currBufferIdx(0),
+drawing(false),
+blendingDisabled(false),
+blendSrcFunc(GL_SRC_ALPHA),
+blendDstFunc(GL_ONE_MINUS_SRC_ALPHA),
+shader(0),
+tempColor(1,1,1,1),
+customShader(0)
 {
     this->buffers.reserve(buffers);
 

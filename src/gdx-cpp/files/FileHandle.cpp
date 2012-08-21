@@ -34,25 +34,25 @@ FileHandle::FileHandle()
 
 FileHandle::FileHandle (const std::string &fileName)
   :   file(fileName),
-      type(gdx::Files::Absolute)
+type(gdx::Files::Absolute)
 {
 }
 
 FileHandle::FileHandle (File const& file)
   : file(file),
-    type(gdx::Files::Absolute)
+type(gdx::Files::Absolute)
 {
 }
 
 FileHandle::FileHandle (const std::string &fileName, gdx::Files::FileType _type)
-  : type(_type),
-    file(fileName)
+  : file(fileName),
+type(_type)
 {
 }
 
 FileHandle::FileHandle (const gdx::File &file, gdx::Files::FileType type)
   : file(file),
-    type(type)
+type(type)
 {
 }
 

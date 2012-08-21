@@ -35,30 +35,48 @@ TextureRegion::ptr TextureRegion::newFromRegion(TextureRegion& region)
 }
 
 /** Constructs a region with no texture and no coordinates defined. */
-TextureRegion::TextureRegion ():  u(0.0), v(0.0), u2(0.0), v2(0.0)
+TextureRegion::TextureRegion ():  u(0.0),
+v(0.0),
+u2(0.0),
+v2(0.0)
 {
 }
 
 /** Constructs a region the size of the specified texture. */
-TextureRegion::TextureRegion (Texture::ptr _texture) : texture(_texture), u(0.0), v(0.0), u2(0.0), v2(0.0)
+TextureRegion::TextureRegion (Texture::ptr _texture) : u(0.0),
+v(0.0),
+u2(0.0),
+v2(0.0),
+texture(_texture)
 {
     setRegion(0, 0, _texture->getWidth(), _texture->getHeight());
 }
 
 /** @param width The width of the texture region. May be negative to flip the sprite when drawn.
  * @param height The height of the texture region. May be negative to flip the sprite when drawn. */
-TextureRegion::TextureRegion (Texture::ptr _texture, int x, int y, int width, int height): texture(_texture), u(0.0), v(0.0), u2(0.0), v2(0.0)
+TextureRegion::TextureRegion (Texture::ptr _texture, int x, int y, int width, int height): u(0.0),
+v(0.0),
+u2(0.0),
+v2(0.0),
+texture(_texture)
 {
     setRegion(x, y, width, height);
 }
 
-TextureRegion::TextureRegion (Texture::ptr _texture, float u, float v, float u2, float v2):texture(_texture), u(0.0), v(0.0), u2(0.0), v2(0.0)
+TextureRegion::TextureRegion (Texture::ptr _texture, float u, float v, float u2, float v2):u(0.0),
+v(0.0),
+u2(0.0),
+v2(0.0),
+texture(_texture)
 {
     setRegion(u, v, u2, v2);
 }
 
 /** Constructs a region with the same texture and coordinates of the specified region. */
-TextureRegion::TextureRegion (TextureRegion& region):u(0.0), v(0.0), u2(0.0), v2(0.0)
+TextureRegion::TextureRegion (TextureRegion& region):u(0.0),
+v(0.0),
+u2(0.0),
+v2(0.0)
 {
     setRegion(region);
 }
@@ -66,7 +84,10 @@ TextureRegion::TextureRegion (TextureRegion& region):u(0.0), v(0.0), u2(0.0), v2
 /** Constructs a region with the same texture as the specified region and sets the coordinates relative to the specified region.
  * @param width The width of the texture region. May be negative to flip the sprite when drawn.
  * @param height The height of the texture region. May be negative to flip the sprite when drawn. */
-TextureRegion::TextureRegion (TextureRegion& region, int x, int y, int width, int height):u(0.0), v(0.0), u2(0.0), v2(0.0)
+TextureRegion::TextureRegion (TextureRegion& region, int x, int y, int width, int height):u(0.0),
+v(0.0),
+u2(0.0),
+v2(0.0)
 {
     setRegion(region, x, y, width, height);
 }

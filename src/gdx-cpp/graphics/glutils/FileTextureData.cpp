@@ -81,10 +81,10 @@ void FileTextureData::uploadCompressedData () {
 FileTextureData::FileTextureData(FileHandle::ptr file, gdx::Pixmap::ptr preloadedPixmap,
                                  const Pixmap::Format* format, bool useMipMaps)
 :
-file(file)
-, _useMipMaps(useMipMaps)
-, format(format)
-, pixmap(preloadedPixmap)
+file(file),
+format(format),
+pixmap(preloadedPixmap),
+_useMipMaps(useMipMaps)
 {
     if (pixmap) {
         width = pixmap->getWidth();

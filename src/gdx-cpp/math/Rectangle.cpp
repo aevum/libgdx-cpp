@@ -22,13 +22,19 @@
 
 using namespace gdx;
 
-Rectangle::Rectangle(): x(0.0), y(0.0),width(0.0),height(0.0)
+Rectangle::Rectangle(): x(0.0),
+y(0.0),
+width(0.0),
+height(0.0)
 {
 
 }
 
 
-Rectangle::Rectangle (float _x, float _y, float _width, float _height): x(_x), y(_y),width(_width),height(_height)
+Rectangle::Rectangle (float _x, float _y, float _width, float _height): x(_x),
+y(_y),
+width(_width),
+height(_height)
 {
 
 }

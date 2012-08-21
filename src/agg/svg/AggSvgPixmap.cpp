@@ -38,14 +38,12 @@ public:
     
     AggTransform()
             : transform(new agg::trans_affine),
-            should_del(true)
-    {
+should_del(true) {
     }
 
     AggTransform(agg::trans_affine& _transform)
             : transform(&_transform),
-            should_del(false)
-    {
+should_del(false) {
     }
 
     virtual void affine(const std::vector< float >& matrix) {
@@ -108,7 +106,11 @@ struct AggSvgPixmap::impl {
 
 AggSvgPixmap::AggSvgPixmap(int width, int height)
         : pimpl(new  AggSvgPixmap::impl),
-        width(width), height(height) , data(0)  , scaleX(1), scaleY(1)
+scaleX(1),
+scaleY(1),
+width(width),
+height(height),
+data(0)
 {
 }
 
@@ -135,7 +137,12 @@ void AggSvgPixmap::setImageDimension(int width, int height) {
     this->height = height;
 }
 
-AggSvgPixmap::AggSvgPixmap() : pimpl(new AggSvgPixmap::impl), width(0), height(0) , data(0) , scaleX(1), scaleY(1)
+AggSvgPixmap::AggSvgPixmap() : pimpl(new AggSvgPixmap::impl),
+scaleX(1),
+scaleY(1),
+width(0),
+height(0),
+data(0)
 {
 }
 

@@ -70,13 +70,13 @@ ShaderProgram* SpriteCache::createDefaultShader () {
 }
 
 SpriteCache::SpriteCache ( int size, bool useIndices, ShaderProgram* shader ) :
-    color ( Color::WHITE.toFloatBits() )
-    , tempColor ( 1,1,1,1 )
-    , customShader ( 0 )
-    , shader ( shader )
-    , mesh ( 0 )
-    , drawing ( false )
-    , currentCache ( 0 ) {
+    mesh ( 0 ),
+drawing ( false ),
+shader ( shader ),
+currentCache ( 0 ),
+color ( Color::WHITE.toFloatBits() ),
+tempColor ( 1,1,1,1 ),
+customShader ( 0 ) {
     textures.reserve ( 8 );
     counts.reserve ( 8 );
 

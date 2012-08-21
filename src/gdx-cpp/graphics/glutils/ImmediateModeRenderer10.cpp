@@ -29,8 +29,15 @@ using namespace gdx;
 
 
 ImmediateModeRenderer10::ImmediateModeRenderer10 (int maxVertices) :
-primitiveType(false), idxPos(0), idxCols(0), idxNors(0), idxTexCoords(0),
-hasCols(false), hasNors(false), hasTexCoords(false), maxVertices(maxVertices)
+primitiveType(false),
+idxPos(0),
+idxCols(0),
+idxNors(0),
+idxTexCoords(0),
+maxVertices(maxVertices),
+hasCols(false),
+hasNors(false),
+hasTexCoords(false)
 {
     this->positions = new float[3 * maxVertices];
     this->positionsBuffer = allocateBuffer(3 * maxVertices);

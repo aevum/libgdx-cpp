@@ -30,17 +30,17 @@
 using namespace gdx;
 
 Sprite::Sprite()
- : color(1,1,1,1)
- , scaleX(1)
- , scaleY(1)
- , x(0)
- , y(0)
- , originX(0)
- , originY(0)
- , width(0)
- , height(0)
- , rotation(0)
- , dirty(true)
+ : color(1,1,1,1),
+x(0),
+y(0),
+width(0),
+height(0),
+originX(0),
+originY(0),
+rotation(0),
+scaleX(1),
+scaleY(1),
+dirty(true)
 {
     setColor(1, 1, 1, 1);
 }

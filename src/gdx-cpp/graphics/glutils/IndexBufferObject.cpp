@@ -127,13 +127,13 @@ void IndexBufferObject::dispose () {
 }
 
 IndexBufferObject::IndexBufferObject(bool isStatic, int maxIndices)
-    : byteBuffer(maxIndices * 2)   
-    , isDirty(true)
-    , isBound(false)
-    , usage(0)
-    , tmpHandle(0)
-    , bufferHandle(0)
-    , isDirect(true)
+    : byteBuffer(maxIndices * 2),
+bufferHandle(0),
+isDirect(true),
+isDirty(true),
+isBound(false),
+usage(0),
+tmpHandle(0)
 {
     isDirect = true;
 
@@ -145,13 +145,13 @@ IndexBufferObject::IndexBufferObject(bool isStatic, int maxIndices)
 }
 
 IndexBufferObject::IndexBufferObject(int maxIndices)
-: byteBuffer(maxIndices * 2)
-, isDirty(true)
-, isBound(false)
-, usage(0)
-, tmpHandle(0)
-, bufferHandle(0)
-, isDirect(true)
+: byteBuffer(maxIndices * 2),
+bufferHandle(0),
+isDirect(true),
+isDirty(true),
+isBound(false),
+usage(0),
+tmpHandle(0)
 {
     buffer = byteBuffer.convert<short>();
     buffer.flip();

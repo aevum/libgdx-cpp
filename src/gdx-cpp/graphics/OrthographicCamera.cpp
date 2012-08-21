@@ -28,17 +28,20 @@
 using namespace gdx;
 
 OrthographicCamera::OrthographicCamera()
- : Camera(0, 0, 0, 100), zoom(1)
+ : Camera(0, 0, 0, 100),
+zoom(1)
 {
 }
 
 OrthographicCamera::OrthographicCamera(float viewportWidth, float viewportHeight)
-: Camera(viewportHeight, viewportWidth, 0, 100), zoom(1)
+: Camera(viewportHeight, viewportWidth, 0, 100),
+zoom(1)
 {
 }
 
 OrthographicCamera::OrthographicCamera(float viewportWidth, float viewportHeight, float diamondAngle)
-: Camera(viewportHeight, viewportWidth, 0, 100), zoom(1)
+: Camera(viewportHeight, viewportWidth, 0, 100),
+zoom(1)
 {
     findDirectionForIsoView(diamondAngle, 0.00000001f, 20);
 }

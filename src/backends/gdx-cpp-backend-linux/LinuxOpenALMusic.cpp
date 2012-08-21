@@ -26,8 +26,17 @@ using namespace gdx::nix;
 char LinuxOpenALMusic::tempBytes[bufferSize];
 
 LinuxOpenALMusic::LinuxOpenALMusic(LinuxOpenALAudio * _audio, ref_ptr_maker< gdx::FileHandle >::shared_ptr_def _file) :
-        isLoopingVar(false), isPlayingVar(false), sourceID(-1), format(0), sampleRate(0), volume(1), renderedSeconds(0), secondsPerBuffer(0),
-        audio(_audio), file(_file), buffers(NULL)
+        file(_file),
+audio(_audio),
+buffers(NULL),
+sourceID(-1),
+format(0),
+sampleRate(0),
+isLoopingVar(false),
+isPlayingVar(false),
+volume(1),
+renderedSeconds(0),
+secondsPerBuffer(0)
 {
     audio->music.push_back(this);
 }

@@ -253,7 +253,7 @@ void GL10::glTexEnvfv(int target, int pname, const float* params) const {
 void GL10::glTranslatef(float x, float y, float z) const {
     ::glTranslatef(x,y , z);
 }
-void GL10::glVertexPointer(int size, int type, int stride, const void* pointer) {
+void GL10::glVertexPointer( int size, unsigned int type, int stride, const void* pointer ) {
     if (pointer != last_vertex_pointer) {
         last_vertex_pointer = pointer;
         ::glVertexPointer(size, type, stride,  pointer);

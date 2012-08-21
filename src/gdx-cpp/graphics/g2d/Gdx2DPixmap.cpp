@@ -77,10 +77,10 @@ void Gdx2DPixmap::setStrokeWidth(int width)
 
 Gdx2DPixmap::Gdx2DPixmap (FileHandle::ptr fhandle, int requestedFormat)
         :
-        pixData(0)
-        ,width(0)
-        ,height(0)
-        ,format(0)
+        width(0),
+height(0),
+format(0),
+pixData(0)
 {
     FileHandle::buffer_ptr buffer;    
     int readed = fhandle->readBytes(buffer);
@@ -100,10 +100,10 @@ Gdx2DPixmap::Gdx2DPixmap (FileHandle::ptr fhandle, int requestedFormat)
 }
 
 Gdx2DPixmap::Gdx2DPixmap (int width, int height, int format)
-        : pixData(0)
-        ,width(width)
-        ,height(height)
-        ,format(format)
+        : width(width),
+height(height),
+format(format),
+pixData(0)
 {
     pixData = ::newPixmap(width, height, format);
     assert(pixData);

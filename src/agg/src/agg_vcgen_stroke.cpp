@@ -26,14 +26,13 @@ namespace agg
     //------------------------------------------------------------------------
     vcgen_stroke::vcgen_stroke() :
         m_stroker(),
-        m_src_vertices(),
-        m_out_vertices(),
-        m_shorten(0.0),
-        m_closed(0),
-        m_status(initial),
-        m_src_vertex(0),
-        m_out_vertex(0)
-    {
+m_src_vertices(),
+m_out_vertices(),
+m_shorten(0.0),
+m_closed(0),
+m_status(initial),
+m_src_vertex(0),
+m_out_vertex(0) {
     }
 
     //------------------------------------------------------------------------

@@ -43,17 +43,17 @@ using namespace gdx::android;
 using namespace gdx;
 
 gdx::android::AndroidGraphics::AndroidGraphics() :
-gl10(0)
-,gl11(0)
-,gl20(0)
-,glu(new AndroidGLU)
-,glCommon(0)
-,deltaTime(0)
-,lastTime(0)
-,frameStart(0)
-,frames(0)
-,vsync(false)
-,title("GDX-ANDROID")
+vsync(false),
+title("GDX-ANDROID"),
+gl10(0),
+gl11(0),
+gl20(0),
+glu(new AndroidGLU),
+glCommon(0),
+lastTime(0),
+frames(0),
+frameStart(0),
+deltaTime(0)
 {
 }
 

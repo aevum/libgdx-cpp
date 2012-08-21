@@ -38,7 +38,7 @@ struct TextureParameter : public Parameter {
     /** The texture to put the {@link TextureData} in **/
     Texture::ptr texture;
 
-    TextureParameter() : genMipMaps(true) , format(0) {
+    TextureParameter() : format(0), genMipMaps(true) {
     }
 };
 

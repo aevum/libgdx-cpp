@@ -25,7 +25,8 @@ using namespace gdx::nix;
 
 class LinuxOpenALAudio;
 
-LinuxOpenALSound::LinuxOpenALSound(LinuxOpenALAudio * _audio) : audio(_audio), bufferID(-1)
+LinuxOpenALSound::LinuxOpenALSound(LinuxOpenALAudio * _audio) : bufferID(-1),
+audio(_audio)
 {
 
 }

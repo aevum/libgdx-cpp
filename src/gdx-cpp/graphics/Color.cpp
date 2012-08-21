@@ -176,10 +176,10 @@ int Color::rgba8888 (float r,float g,float b,float a) {
 }
 
 Color::Color(float r, float g, float b, float a)
-  : r(r)
-  , g(g)
-  , b(b)
-  , a(a)
+  : r(r),
+g(g),
+b(b),
+a(a)
 {
     clamp();
 }

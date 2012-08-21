@@ -25,11 +25,10 @@ namespace agg
     //------------------------------------------------------------------------
     vcgen_smooth_poly1::vcgen_smooth_poly1() :
         m_src_vertices(),
-        m_smooth_value(0.5),
-        m_closed(0),
-        m_status(initial),
-        m_src_vertex(0)
-    {
+m_smooth_value(0.5),
+m_closed(0),
+m_status(initial),
+m_src_vertex(0) {
     }
 
 

@@ -21,13 +21,12 @@ namespace agg
     //------------------------------------------------------------------------
     vcgen_bspline::vcgen_bspline() :
         m_src_vertices(),
-        m_spline_x(),
-        m_spline_y(),
-        m_interpolation_step(1.0/50.0),
-        m_closed(0),
-        m_status(initial),
-        m_src_vertex(0)
-    {
+m_spline_x(),
+m_spline_y(),
+m_interpolation_step(1.0/50.0),
+m_closed(0),
+m_status(initial),
+m_src_vertex(0) {
     }
 
 

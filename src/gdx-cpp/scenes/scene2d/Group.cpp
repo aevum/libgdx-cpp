@@ -516,20 +516,20 @@ void Group::disableDebugging () {
 }
 
 Group::Group ()
-    : Actor("")
-    , transform(true)
-    , lastTouchedChild(NULL)
-    , keyboardFocusedActor(NULL)
-    , scrollFocusedActor(NULL)
+    : Actor(""),
+transform(true),
+lastTouchedChild(NULL),
+keyboardFocusedActor(NULL),
+scrollFocusedActor(NULL)
 {
 }
 
 Group::Group (const std::string& name)
-    : Actor(name)
-    , transform(true)
-    , lastTouchedChild(NULL)
-    , keyboardFocusedActor(NULL)
-    , scrollFocusedActor(NULL)
+    : Actor(name),
+transform(true),
+lastTouchedChild(NULL),
+keyboardFocusedActor(NULL),
+scrollFocusedActor(NULL)
 {
 }
 

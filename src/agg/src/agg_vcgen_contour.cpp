@@ -26,15 +26,14 @@ namespace agg
     //------------------------------------------------------------------------
     vcgen_contour::vcgen_contour() :
         m_stroker(),
-        m_width(1),
-        m_src_vertices(),
-        m_out_vertices(),
-        m_status(initial),
-        m_src_vertex(0),
-        m_closed(0),
-        m_orientation(0),
-        m_auto_detect(false)
-    {
+m_width(1),
+m_src_vertices(),
+m_out_vertices(),
+m_status(initial),
+m_src_vertex(0),
+m_closed(0),
+m_orientation(0),
+m_auto_detect(false) {
     }
 
     //------------------------------------------------------------------------

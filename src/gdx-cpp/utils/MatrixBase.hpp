@@ -35,7 +35,7 @@ public:
       value = new T[size];
     }
     
-    Row(T *_value, int _size): value(_value), size(_size)
+    Row(T *_value, int _size): size(_size), value(_value)
     {
     }
 

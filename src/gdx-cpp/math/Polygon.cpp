@@ -30,15 +30,15 @@
 using namespace gdx;
 
 Polygon::Polygon(const std::vector< float >& vertices)
-  : vertices(vertices)
-  , x(0)
-  , y(0)
-  , originX(0)
-  , originY(0)
-  , rotation(0)
-  , scaleX(1)
-  , scaleY(1)  
-  , dirty(false)
+  : vertices(vertices),
+x(0),
+y(0),
+originX(0),
+originY(0),
+rotation(0),
+scaleX(1),
+scaleY(1),
+dirty(false)
 {
   if (vertices.size() < 6) {
      std::cerr << "polygons must contain at least 3 points." << std::endl;

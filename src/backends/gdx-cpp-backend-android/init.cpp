@@ -79,15 +79,13 @@ extern "C" {
     public:
         EventRunnable(float _x, float _y, int _button, char _type) :
         x(_x),
-        y(_y),
-        button(_button),
-        type(_type)
-        {
+y(_y),
+button(_button),
+type(_type) {
         }
         
         EventRunnable(char _type) :
-        type(_type)
-        {
+        type(_type) {
         }
         
         virtual void onRunnableStop() {

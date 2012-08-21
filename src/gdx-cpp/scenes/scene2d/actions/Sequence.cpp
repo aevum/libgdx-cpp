@@ -80,7 +80,7 @@ gdx::Actor* Sequence::getTarget () {
 }
 
 Sequence::Sequence()
-: target(0)
-, currAction(0)
+: target(0),
+currAction(0)
 {
 }

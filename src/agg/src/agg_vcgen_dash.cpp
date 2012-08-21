@@ -27,16 +27,15 @@ namespace agg
     //------------------------------------------------------------------------
     vcgen_dash::vcgen_dash() :
         m_total_dash_len(0.0),
-        m_num_dashes(0),
-        m_dash_start(0.0),
-        m_shorten(0.0),
-        m_curr_dash_start(0.0),
-        m_curr_dash(0),
-        m_src_vertices(),
-        m_closed(0),
-        m_status(initial),
-        m_src_vertex(0)
-    {
+m_num_dashes(0),
+m_dash_start(0.0),
+m_shorten(0.0),
+m_curr_dash_start(0.0),
+m_curr_dash(0),
+m_src_vertices(),
+m_closed(0),
+m_status(initial),
+m_src_vertex(0) {
     }
 
 

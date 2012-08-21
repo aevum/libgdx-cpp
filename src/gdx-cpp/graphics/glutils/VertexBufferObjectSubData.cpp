@@ -248,16 +248,16 @@ int VertexBufferObjectSubData::getBufferHandle () {
 
 VertexBufferObjectSubData::VertexBufferObjectSubData(bool isStatic, int numVertices, const std::vector< VertexAttribute >& attributes)
         :
-        bufferHandle(0)
-        , tmpHandle(0)
-        , isDirect(true)
-        , usage(isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW)
-        , isDirty(false)
-        , isBound(false)
-        , attributes(attributes)
-        , isStatic(isStatic)
-        , byteBuffer(this->attributes.vertexSize * numVertices)
-        , buffer(byteBuffer.convert<float>())
+        attributes(attributes),
+buffer(byteBuffer.convert<float>()),
+byteBuffer(this->attributes.vertexSize * numVertices),
+bufferHandle(0),
+isDirect(true),
+isStatic(isStatic),
+usage(isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW),
+isDirty(false),
+isBound(false),
+tmpHandle(0)
 {
     bufferHandle = createBufferObject();
     buffer.flip();

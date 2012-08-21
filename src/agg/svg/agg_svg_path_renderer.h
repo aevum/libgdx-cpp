@@ -95,8 +95,8 @@ public:
     {
     }
     svg_gradient(const svg_gradient& other) :
-            gradient_type(other.gradient_type),
             stops(other.stops),
+            gradient_type(other.gradient_type),
             transform(other.transform)
     {
     }

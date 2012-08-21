@@ -27,22 +27,22 @@ using namespace gdx;
 #include "gdx-cpp/gl.hpp"
 
 Camera::Camera()
-: direction(0, 0, -1)
-, up(0, 1, 0)
-, near(1)
-, far(100)
-, viewportWidth(0)
-, viewportHeight(0)
+: direction(0, 0, -1),
+up(0, 1, 0),
+near(1),
+far(100),
+viewportWidth(0),
+viewportHeight(0)
 {
 }
 
 Camera::Camera(float viewportHeight, float viewportWidth, float near, float far)
-: direction(0, 0, -1)
-, up(0, 1, 0)
-, near(near)
-, far(far)
-, viewportWidth(viewportWidth)
-, viewportHeight(viewportHeight)
+: direction(0, 0, -1),
+up(0, 1, 0),
+near(near),
+far(far),
+viewportWidth(viewportWidth),
+viewportHeight(viewportHeight)
 {
 }
 

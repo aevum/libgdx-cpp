@@ -23,9 +23,9 @@
 using namespace gdx;
 
 VertexAttribute::VertexAttribute(int usage, int numComponents, const std::string& alias)
-        : usage(usage)
-        , numComponents(numComponents)
-        , offset(0)
-        , alias(alias)        
+        : usage(usage),
+numComponents(numComponents),
+offset(0),
+alias(alias)
 {
 }

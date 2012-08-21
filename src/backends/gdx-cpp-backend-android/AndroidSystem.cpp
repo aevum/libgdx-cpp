@@ -68,8 +68,8 @@ void* run_runnable(void* runnable) {
 class AndroidThread : public gdx::Thread {
 public:
     AndroidThread(Runnable* theRunnable)
-        : runnable(theRunnable)
-        , thread(0) {
+        : runnable(theRunnable),
+thread(0) {
     }
     
     const std::string getThreadName() {

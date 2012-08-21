@@ -61,8 +61,8 @@ gdx::Action* FadeOut::copy () {
 }
 
 gdx::actions::FadeOut::FadeOut()
-: startAlpha(0)
-, deltaAlpha(0)
+: startAlpha(0),
+deltaAlpha(0)
 {
 }
 

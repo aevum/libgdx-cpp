@@ -36,28 +36,34 @@ JsonValue::JsonValue(int val) : item_type(json_int) {
     item_val = gdx_shared_ptr<void>( new int(val), json_deleter<int>() );
 }
 
-JsonValue::JsonValue(int* val) : item_val(gdx_shared_ptr<void>(val, json_deleter<int>())), item_type(json_int) {
+JsonValue::JsonValue(int* val) : item_val(gdx_shared_ptr<void>(val, json_deleter<int>())),
+item_type(json_int) {
 
 }
 
-JsonValue::JsonValue(float val) : item_val(gdx_shared_ptr<void>( new float(val), json_deleter<float>() ) ), item_type(json_float) {
+JsonValue::JsonValue(float val) : item_val(gdx_shared_ptr<void>( new float(val), json_deleter<float>() ) ),
+item_type(json_float) {
 
 }
 
-JsonValue::JsonValue(float* val) : item_val(gdx_shared_ptr<void>(val, json_deleter<float>())), item_type(json_float)
+JsonValue::JsonValue(float* val) : item_val(gdx_shared_ptr<void>(val, json_deleter<float>())),
+item_type(json_float)
 {
 }
 
-JsonValue::JsonValue(bool* val) : item_val(gdx_shared_ptr<void>( val, json_deleter<bool>() )), item_type(json_bool)  {
+JsonValue::JsonValue(bool* val) : item_val(gdx_shared_ptr<void>( val, json_deleter<bool>() )),
+item_type(json_bool) {
 }
 
 JsonValue::JsonValue(const std::string& val)
-    : item_val(gdx_shared_ptr<void>( new std::string(val), json_deleter<std::string>())) , item_type(json_string)
+    : item_val(gdx_shared_ptr<void>( new std::string(val), json_deleter<std::string>())),
+item_type(json_string)
 {
 }
 
 JsonValue::JsonValue(std::string* val)
-    : item_val(gdx_shared_ptr<void>( val , json_deleter<std::string>())),item_type(json_string)
+    : item_val(gdx_shared_ptr<void>( val , json_deleter<std::string>())),
+item_type(json_string)
 {
 }
 
@@ -69,7 +75,8 @@ JsonValue::JsonValue(const array& val) : item_type(json_list) {
     item_val = gdx_shared_ptr<void>( new array(val), json_deleter<item_map>() );
 }
 
-JsonValue::JsonValue(bool val) : item_val(gdx_shared_ptr<void>(new bool(val), json_deleter<bool>())), item_type(json_bool) {
+JsonValue::JsonValue(bool val) : item_val(gdx_shared_ptr<void>(new bool(val), json_deleter<bool>())),
+item_type(json_bool) {
 }
 
 JsonValue& JsonValue::at(unsigned int idx)
@@ -295,11 +302,13 @@ JsonValue& JsonValue::operator+=(const JsonValue& other) {
 
     return *this;
 }
-JsonValue::JsonValue(JsonValue::item_map* val) : item_val(gdx_shared_ptr<void>( val , json_deleter<item_map>() )), item_type(json_json) {
+JsonValue::JsonValue(JsonValue::item_map* val) : item_val(gdx_shared_ptr<void>( val , json_deleter<item_map>() )),
+item_type(json_json) {
     
 }
 
-JsonValue::JsonValue(JsonValue::array* val) : item_val(gdx_shared_ptr<void>( val, json_deleter<array>() )), item_type(json_list) {    
+JsonValue::JsonValue(JsonValue::array* val) : item_val(gdx_shared_ptr<void>( val, json_deleter<array>() )),
+item_type(json_list) {    
 }
 
 JsonValue& JsonValue::operator=(const std::string& other) {

@@ -28,15 +28,15 @@ using namespace gdx;
 gdx::nix::LinuxApplication::LinuxApplication(gdx::ApplicationListener* listener,
         const std::string& title, int width, int height,
         bool useGL20IfAvailable)
-    :  Synchronizable(gdx::system->getMutexFactory())
-    , width(width)
-    , height(height)
-    , title(title)
-    , useGL20iFAvailable(useGL20IfAvailable)
-    , listener(listener)
-    , graphics(0)
-    , input(0)
-    , logLevel(gdx::Application::LOG_INFO)
+    :  Synchronizable(gdx::system->getMutexFactory()),
+useGL20iFAvailable(useGL20IfAvailable),
+title(title),
+height(height),
+width(width),
+listener(listener),
+graphics(0),
+input(0),
+logLevel(gdx::Application::LOG_INFO)
 {
 }
 

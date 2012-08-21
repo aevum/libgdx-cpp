@@ -26,13 +26,13 @@ using namespace gdx::android;
 
 gdx::android::AndroidInput::AndroidInput()
  :
- touching(false)
- ,touchX(0)
- ,touchY(0)
- ,_justTouched(false)
- ,processor(0)
- ,deltaX(0)
- ,deltaY(0)
+ processor(0),
+_justTouched(false),
+touching(false),
+touchX(0),
+deltaX(0),
+touchY(0),
+deltaY(0)
 {
 }
 

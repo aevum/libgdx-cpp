@@ -25,7 +25,12 @@
 
 using namespace gdx::nix;
 
-LinuxInput::LinuxInput() : _justTouched(false), touching(false), touchX(0), deltaX(0), touchY(0), deltaY(0)     {
+LinuxInput::LinuxInput() : _justTouched(false),
+touching(false),
+touchX(0),
+deltaX(0),
+touchY(0),
+deltaY(0) {
     }
 
 

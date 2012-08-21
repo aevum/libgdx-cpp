@@ -169,11 +169,10 @@ int FrameBuffer::getWidth () {
 
 FrameBuffer::FrameBuffer(const Pixmap::Format& format, int width, int height, bool hasDepth)
  :
- width(width)
- ,height(height)
- ,format(format)
- ,hasDepth(hasDepth)
- {
+ width(width),
+height(height),
+hasDepth(hasDepth),
+format(format) {
     build();
     addManagedFrameBuffer(app, this);
 }
