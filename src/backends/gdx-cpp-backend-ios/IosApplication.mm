@@ -48,10 +48,10 @@ gdx::ios::IosApplication::IosApplication(gdx::ApplicationListener* listener, int
 }
 
 void IosApplication::initialize(int width, int height) {
+	this->audio = new IosOpenALAudio();
 	this->graphics = new IosGraphics();
 	this->input = new IosInput();
 	this->files = new IosFiles();
-	this->audio = new IosOpenALAudio();
 	
 	graphics->setDisplayMode(width, height, false);
 	graphics->initialize();

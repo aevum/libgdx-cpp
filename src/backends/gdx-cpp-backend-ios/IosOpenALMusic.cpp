@@ -18,14 +18,21 @@
 #include "IosOpenALMusic.hpp"
 #include "IosOpenALAudio.hpp"
 #include <gdx-cpp/files/FileHandle.hpp>
+
+
 #include <OpenAL/al.h>
 #include <stdexcept>
 
+
+#define GDX_IOS_OPENALMUSIC_BUFFER_SIZE 40960.0f
+#define GDX_IOS_OPENALMUSIC_BUFFER_COUNT 1
+#define GDX_IOS_OPENALMUSIC_BYTES_PER_SAMPLE 2.0f
+
 using namespace gdx::ios;
+
 
 IosOpenALMusic::IosOpenALMusic(IosOpenALAudio * _audio, int channels, void* buffer, int length, int _sampleRate) :
 audio(_audio),
-buffers(NULL),
 musicBuffer(buffer),
 bufferLength(length),
 sourceID(-1),
@@ -34,53 +41,42 @@ isLoopingVar(false),
 isPlayingVar(false),
 volume(1),
 renderedSeconds(0),
-secondsPerBuffer(0)
+secondsPerBuffer(0),
+alBuffer(0)
 {
     audio->music.push_back(this);
     
-    secondsPerBuffer = (float)bufferSize / bytesPerSample / channels / sampleRate;
-    
     sourceID = audio->obtainSource(true);
-    if (sourceID == -1) return;
-    if (buffers == NULL) {
-        buffers =  new unsigned[bufferCount];
-        alGenBuffers(bufferCount,  buffers);
-        if (alGetError() != AL_NO_ERROR) throw std::runtime_error("Unabe to allocate audio buffers.");
-    }
-    
-    alSourcei(sourceID, AL_LOOPING, AL_FALSE);
-    
-    alSourcef(sourceID, AL_GAIN, volume);
-    
-    for (int i = 0; i < bufferCount; i++) {
-        ALuint bufferID = buffers[i];
         
-        alBufferData(bufferID, format, musicBuffer, bufferLength, sampleRate);
-        alSourceQueueBuffers(sourceID, 1, &bufferID);
-    }
+    this->format = channels > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16;
     
-    if (alGetError() != AL_NO_ERROR) {
-        stop();
-        return;
-    }
+    CHECK_OPENAL_ERROR(alGenBuffers(GDX_IOS_OPENALMUSIC_BUFFER_COUNT, &alBuffer));
+    
+    CHECK_OPENAL_ERROR(alSourcei(sourceID, AL_LOOPING, AL_FALSE));
+    
+    CHECK_OPENAL_ERROR(alSourcef(sourceID, AL_GAIN, volume));   
+    
+    CHECK_OPENAL_ERROR(alBufferData(alBuffer, format, musicBuffer, bufferLength, sampleRate));
+    
+    CHECK_OPENAL_ERROR(alSourceQueueBuffers(sourceID, 1, &alBuffer));
 }
 
 void IosOpenALMusic::play ()
 {
-    alSourcePlay(sourceID);
+    CHECK_OPENAL_ERROR(alSourcePlay(sourceID));
     isPlayingVar = true;
     
 }
 
 void IosOpenALMusic::pause ()
 {
-    if (sourceID != -1) alSourcePause(sourceID);
+    if (sourceID != -1) CHECK_OPENAL_ERROR(alSourcePause(sourceID));
     isPlayingVar = false;
 }
 
 void IosOpenALMusic::stop ()
 {
-    alSourceStop(sourceID);
+    CHECK_OPENAL_ERROR(alSourceStop(sourceID));
     renderedSeconds = 0;
     isPlayingVar = false; 
 }
@@ -93,6 +89,9 @@ bool IosOpenALMusic::isPlaying ()
 void IosOpenALMusic::setLooping (bool isLooping)
 {
     isLoopingVar = isLooping;
+    if (sourceID != -1) {
+        CHECK_OPENAL_ERROR(alSourcei(sourceID, AL_LOOPING, isLooping ? AL_TRUE : AL_FALSE));
+    }
 }
 
 bool IosOpenALMusic::isLooping ()
@@ -103,7 +102,7 @@ bool IosOpenALMusic::isLooping ()
 void IosOpenALMusic::setVolume (float volume)
 {
     this->volume = volume;
-    if (sourceID != -1) alSourcef(sourceID, AL_GAIN, volume);
+    if (sourceID != -1) CHECK_OPENAL_ERROR(alSourcef(sourceID, AL_GAIN, volume));
 }
 
 float IosOpenALMusic::getPosition ()
@@ -116,7 +115,7 @@ float IosOpenALMusic::getPosition ()
 
 void IosOpenALMusic::dispose ()
 {   
-    if (buffers == NULL) return;
+    if (alBuffer == 0) return;
     if (sourceID != -1) {
         reset();
         unsigned length = audio->music.size();
@@ -131,9 +130,8 @@ void IosOpenALMusic::dispose ()
         audio->freeSource(sourceID);
         sourceID = -1;
     }
-    alDeleteBuffers(bufferCount, buffers);
-    delete [] buffers;
-    buffers = NULL;
+    
+    CHECK_OPENAL_ERROR(alDeleteBuffers(GDX_IOS_OPENALMUSIC_BUFFER_COUNT, &alBuffer));
 }
 
 void IosOpenALMusic::reset() {
@@ -146,25 +144,25 @@ void IosOpenALMusic::update()
     
     bool end = false;
     int buffers;
-    alGetSourcei(sourceID, AL_BUFFERS_PROCESSED, &buffers);
+    CHECK_OPENAL_ERROR(alGetSourcei(sourceID, AL_BUFFERS_PROCESSED, &buffers));
     while (buffers-- > 0) {
         unsigned bufferID;
-        alSourceUnqueueBuffers(sourceID, 1, &bufferID);
+        (alSourceUnqueueBuffers(sourceID, 1, &bufferID));
         if (bufferID == AL_INVALID_VALUE) break;
         renderedSeconds += secondsPerBuffer;
         if (end) continue;
         
         
-        alBufferData(bufferID, format, musicBuffer, bufferLength, sampleRate);
-        alSourceQueueBuffers(sourceID, 1, &bufferID);
+        CHECK_OPENAL_ERROR(alBufferData(bufferID, format, musicBuffer, bufferLength, sampleRate));
+        CHECK_OPENAL_ERROR(alSourceQueueBuffers(sourceID, 1, &bufferID));
     }
 
     int abq;
-    alGetSourcei(sourceID, AL_BUFFERS_QUEUED, &abq);
+    CHECK_OPENAL_ERROR(alGetSourcei(sourceID, AL_BUFFERS_QUEUED, &abq));
     if (end && abq == 0) stop();
     
     // A buffer underflow will cause the source to stop.
     int ss;
-    alGetSourcei(sourceID, AL_SOURCE_STATE, &ss);
-    if (isPlayingVar && ss != AL_PLAYING) alSourcePlay(sourceID);
+    CHECK_OPENAL_ERROR(alGetSourcei(sourceID, AL_SOURCE_STATE, &ss));
+    if (isPlayingVar && ss != AL_PLAYING) CHECK_OPENAL_ERROR(alSourcePlay(sourceID));
 }

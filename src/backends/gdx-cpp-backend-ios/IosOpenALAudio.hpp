@@ -21,6 +21,16 @@
 #include <gdx-cpp/Audio.hpp>
 #include <set>
 #include <vector>
+#include <gdx-cpp/Log.hpp>
+
+#define CHECK_OPENAL_ERROR(func) do { \
+  func;\
+  ALenum al_error = alGetError(); \
+  if (al_error != AL_NO_ERROR) { \
+    gdx_log_error("IosMusic", "Error [%d] %s", al_error, alGetString(al_error));\
+  }\
+} while (false)
+
 
 struct ALCdevice_struct;
 class ALCcontext_struct;
@@ -31,8 +41,8 @@ class FileHandle;
 class Music;
 class Sound;
 class Device;
-class Recorder;
-
+class Recorder;   
+    
 namespace ios {
   class IosOpenALMusic;
 
@@ -57,6 +67,7 @@ public:
 
     std::vector<IosOpenALMusic * > music;
 
+    ALCcontext_struct * getContext();
 private :
     void createAl();
     std::set<int> idleSources, allSources;

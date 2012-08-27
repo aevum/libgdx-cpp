@@ -30,8 +30,32 @@
 
 using namespace gdx::ios;
 
+void OpenALInterruptionListener(void * inClientData, UInt32 inInterruptionState) {
+   
+    IosOpenALAudio* audio = (IosOpenALAudio *) inClientData;
+    
+    if (inInterruptionState == kAudioSessionBeginInterruption)
+    {
+        AudioSessionSetActive(false);
+        alcMakeContextCurrent(NULL);
+        alcSuspendContext(audio->getContext());
+    }
+    else if (inInterruptionState == kAudioSessionEndInterruption)
+    {
+        AudioSessionSetActive(true);
+        alcMakeContextCurrent(audio->getContext());
+        alcProcessContext(audio->getContext());
+    }
+}
+
+ALCcontext_struct * IosOpenALAudio::getContext(){
+    return this->context; 
+}
+
 IosOpenALAudio::IosOpenALAudio (int simultaneousSources)
 {
+    AudioSessionInitialize(NULL, NULL, OpenALInterruptionListener, this);
+    
     createAl();
 
     for (int i = 0; i < simultaneousSources; i++) {

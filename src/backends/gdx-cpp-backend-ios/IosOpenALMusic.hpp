@@ -47,12 +47,8 @@ protected:
     virtual void reset ();
 
 private:
-    const static int bufferSize = 40960;
-    const static int bufferCount = 3;
-    const static int bytesPerSample = 2;
-
     IosOpenALAudio * audio;
-    unsigned int  * buffers;
+    unsigned int alBuffer;
     void* musicBuffer;
     int bufferLength;
     int sourceID;
