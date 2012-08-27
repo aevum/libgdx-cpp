@@ -30,7 +30,9 @@
 
 using namespace gdx;
 
-AssetManager::AssetManager() : errorListener(0), toLoad(0), loaded(0)
+AssetManager::AssetManager() : errorListener(0),
+toLoad(0),
+loaded(0)
 {
     setLoader(AssetType::BitmapFont, new BitmapFontLoader(new InternalFileHandleResolver()));
     setLoader(AssetType::Music, new MusicLoader(new InternalFileHandleResolver()));

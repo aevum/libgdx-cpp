@@ -28,19 +28,18 @@ namespace agg
     slider_ctrl_impl::slider_ctrl_impl(double x1, double y1, 
                                        double x2, double y2, bool flip_y) :
         ctrl(x1, y1, x2, y2, flip_y),
-        m_border_width(1.0),
-        m_border_extra((y2 - y1) / 2),
-        m_text_thickness(1.0),
-        m_pdx(0.0),
-        m_mouse_move(false),
-        m_value(0.5),
-        m_preview_value(0.5),
-        m_min(0.0),
-        m_max(1.0),
-        m_num_steps(0),
-        m_descending(false),
-        m_text_poly(m_text)
-    {
+m_border_width(1.0),
+m_border_extra((y2 - y1) / 2),
+m_text_thickness(1.0),
+m_value(0.5),
+m_preview_value(0.5),
+m_min(0.0),
+m_max(1.0),
+m_num_steps(0),
+m_descending(false),
+m_pdx(0.0),
+m_mouse_move(false),
+m_text_poly(m_text) {
         m_label[0] = 0;
         calc_box();
     }

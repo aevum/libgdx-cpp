@@ -96,26 +96,26 @@ bool Actor::isMarkedToRemove () {
 }
 
 Actor::Actor ()
- : toRemove(false)
- , color(1,1,1,1)
- , touchable(true)
- , visible(true)
- , parent(NULL)
- , actions(10)
- , scaleX(1)
- ,scaleY(1)
+ : parent(NULL),
+touchable(true),
+visible(true),
+scaleX(1),
+scaleY(1),
+color(1,1,1,1),
+actions(10),
+toRemove(false)
 {    
 }
 
 Actor::Actor (const std::string& name)
-: toRemove(false)
-, color(1,1,1,1)
-, touchable(true)
-, visible(true)
-, parent(NULL)
-, actions(10)
-, scaleX(1)
-, scaleY(1)
+: parent(NULL),
+touchable(true),
+visible(true),
+scaleX(1),
+scaleY(1),
+color(1,1,1,1),
+actions(10),
+toRemove(false)
 {
     this->name = name;
 }

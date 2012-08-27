@@ -30,7 +30,5 @@ AssetDescriptor::AssetDescriptor(const std::string& filename,
                                  AssetManager::AssetType& type,
                                  gdx::AssetLoaderParameters& params)
     : fileName(filename)
-    , type(type)
-    , params(params)
 {
 }

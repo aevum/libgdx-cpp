@@ -105,7 +105,7 @@ void VertexBufferObject::bind () {
         switch (attribute.usage) {
         case VertexAttributes::Usage::Position:
             gl.glEnableClientState(GL_VERTEX_ARRAY);
-            gl.glVertexPointer(attribute.numComponents, GL_FLOAT, attributes.vertexSize, (void *) attribute.offset);
+            gl.glVertexPointer(attribute.numComponents, GL_FLOAT, attributes.vertexSize, (const void *) (intptr_t) attribute.offset);
             break;
 
         case VertexAttributes::Usage::Color:
@@ -115,19 +115,19 @@ void VertexBufferObject::bind () {
             if (attribute.usage == VertexAttributes::Usage::ColorPacked) colorType = GL_UNSIGNED_BYTE;
 
             gl.glEnableClientState(GL_COLOR_ARRAY);
-            gl.glColorPointer(attribute.numComponents, colorType, attributes.vertexSize, (void *) attribute.offset);
+            gl.glColorPointer(attribute.numComponents, colorType, attributes.vertexSize, (const void *) (intptr_t) attribute.offset);
         }
             break;
 
         case VertexAttributes::Usage::Normal:
             gl.glEnableClientState(GL_NORMAL_ARRAY);
-            gl.glNormalPointer(GL_FLOAT, attributes.vertexSize, (void *) attribute.offset);
+            gl.glNormalPointer(GL_FLOAT, attributes.vertexSize, (const void *) (intptr_t) attribute.offset);
             break;
 
         case VertexAttributes::Usage::TextureCoordinates:
             gl.glClientActiveTexture(GL_TEXTURE0 + textureUnit);
             gl.glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-            gl.glTexCoordPointer(attribute.numComponents, GL_FLOAT, attributes.vertexSize, (void *) attribute.offset);
+            gl.glTexCoordPointer(attribute.numComponents, GL_FLOAT, attributes.vertexSize, (void *) (intptr_t) attribute.offset);
             textureUnit++;
             break;
 
@@ -234,15 +234,15 @@ void VertexBufferObject::dispose () {
 
 VertexBufferObject::VertexBufferObject(bool isStatic, int numVertices, const VertexAttributes& attributes)
 :
-  bufferHandle(0)
-, tmpHandle(0)
-, isDirect(true)
-, usage(0)
-, isDirty(false)
-, attributes(attributes)
-, isBound(false)
-, isStatic(isStatic)
-, byteBuffer(attributes.vertexSize * numVertices)
+  bufferHandle(0),
+tmpHandle(0),
+isDirect(true),
+usage(0),
+isDirty(false),
+attributes(attributes),
+isBound(false),
+isStatic(isStatic),
+byteBuffer(attributes.vertexSize * numVertices)
 {
 //TODO:     byteBuffer.order(ByteOrder.nativeOrder());
     byteBuffer.flip();
@@ -256,15 +256,15 @@ VertexBufferObject::VertexBufferObject(bool isStatic, int numVertices, const Ver
 
 VertexBufferObject::VertexBufferObject(bool isStatic, int numVertices, const std::vector< VertexAttribute >& attributes)
 :
-bufferHandle(0)
-, tmpHandle(0)
-, isDirect(true)
-, usage(0)
-, isDirty(false)
-, attributes(attributes)
-, isBound(false)
-, isStatic(isStatic)
-, byteBuffer(this->attributes.vertexSize * numVertices)
+bufferHandle(0),
+tmpHandle(0),
+isDirect(true),
+usage(0),
+isDirty(false),
+attributes(attributes),
+isBound(false),
+isStatic(isStatic),
+byteBuffer(this->attributes.vertexSize * numVertices)
 {
     buffer = byteBuffer.convert<float>();
     

@@ -25,18 +25,17 @@ namespace agg
     //------------------------------------------------------------------------
     arrowhead::arrowhead() :
         m_head_d1(1.0),
-        m_head_d2(1.0),
-        m_head_d3(1.0),
-        m_head_d4(0.0),
-        m_tail_d1(1.0),
-        m_tail_d2(1.0),
-        m_tail_d3(1.0),
-        m_tail_d4(0.0),
-        m_head_flag(false),
-        m_tail_flag(false),
-        m_curr_id(0),
-        m_curr_coord(0)
-    {
+m_head_d2(1.0),
+m_head_d3(1.0),
+m_head_d4(0.0),
+m_tail_d1(1.0),
+m_tail_d2(1.0),
+m_tail_d3(1.0),
+m_tail_d4(0.0),
+m_head_flag(false),
+m_tail_flag(false),
+m_curr_id(0),
+m_curr_coord(0) {
     }
 
 

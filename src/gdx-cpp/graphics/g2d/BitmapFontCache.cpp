@@ -312,13 +312,13 @@ bool BitmapFontCache::usesIntegerPositions () {
 }
 
 BitmapFontCache::BitmapFontCache (BitmapFont* font, bool integer)
-: color(Color::WHITE.toFloatBits()),
-tmpColor(Color::WHITE),
+: font(font),
 idx(0),
+color(Color::WHITE.toFloatBits()),
+tmpColor(Color::WHITE),
+integer(integer),
 x(0),
-y(0),
-font(font),
-integer(integer)
+y(0)
 {
 }
 

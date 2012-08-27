@@ -27,10 +27,9 @@ namespace agg
     //------------------------------------------------------------------------
     bezier_ctrl_impl::bezier_ctrl_impl() :
         ctrl(0,0,1,1,false),
-        m_stroke(m_curve),
-        m_poly(4, 5.0),
-        m_idx(0)
-    {
+m_stroke(m_curve),
+m_poly(4, 5.0),
+m_idx(0) {
         m_poly.in_polygon_check(false);
         m_poly.xn(0) = 100.0;
         m_poly.yn(0) =   0.0;
@@ -204,10 +203,9 @@ namespace agg
     //------------------------------------------------------------------------
     curve3_ctrl_impl::curve3_ctrl_impl() :
         ctrl(0,0,1,1,false),
-        m_stroke(m_curve),
-        m_poly(3, 5.0),
-        m_idx(0)
-    {
+m_stroke(m_curve),
+m_poly(3, 5.0),
+m_idx(0) {
         m_poly.in_polygon_check(false);
         m_poly.xn(0) = 100.0;
         m_poly.yn(0) =   0.0;

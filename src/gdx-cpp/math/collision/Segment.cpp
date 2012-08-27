@@ -23,15 +23,15 @@
 using namespace gdx;
 
 Segment::Segment (const Vector3& a, const Vector3& b)
-: a(a)
-, b(b)
+: a(a),
+b(b)
 {
 }
 
 Segment::Segment (float aX, float aY, float aZ, float bX, float bY, float bZ)
 :
-a(aX, aY, aZ)
-,b(bX,bY,bZ)
+a(aX, aY, aZ),
+b(bX,bY,bZ)
 {
     this->a.set(aX, aY, aZ);
     this->b.set(bX, bY, bZ);

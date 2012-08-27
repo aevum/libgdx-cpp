@@ -24,15 +24,15 @@ using namespace gdx::ios;
 
 gdx::ios::IosInput::IosInput()
  :
- touching(false)
- ,touchX(0)
- ,touchY(0)
- ,_justTouched(false)
- ,processor(0)
- ,deltaX(0)
- ,deltaY(0)
- ,lastDeltaY(0)
- ,lastDeltaX(0)
+ processor(0),
+_justTouched(false),
+touching(false),
+touchX(0),
+deltaX(0),
+lastDeltaX(0),
+touchY(0),
+deltaY(0),
+lastDeltaY(0)
 {
 }
 

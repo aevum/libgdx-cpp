@@ -112,7 +112,9 @@ Pixmap& ETC1::decodeImage (const ETC1Data& etc1Data,const Pixmap::Format& format
 
 
 ETC1::ETC1Data::ETC1Data(int width, int height, const char* compressedData, int dataOffset)
-    : width(width), height(height), compressedData(compressedData), dataOffset(dataOffset)
+    : width(width),
+height(height),
+dataOffset(dataOffset)
 {
 }
 

@@ -143,14 +143,14 @@ void IndexBufferObjectSubData::dispose () {
 
 IndexBufferObjectSubData::IndexBufferObjectSubData(bool isStatic, int maxIndices)
 :
-tmpHandle(0)
-, byteBuffer(maxIndices * 2)
-, buffer(byteBuffer.convert<short>())
-, bufferHandle(0)
-, isDirect(true)
-, isDirty(true)
-, isBound(false)
-, usage(isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW)
+tmpHandle(0),
+buffer(byteBuffer.convert<short>()),
+byteBuffer(maxIndices * 2),
+bufferHandle(0),
+isDirect(true),
+isDirty(true),
+isBound(false),
+usage(isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW)
 {
     // if (Gdx.app.getType() == ApplicationType.Android
     // && Gdx.app.getVersion() < 5) {
@@ -166,14 +166,14 @@ tmpHandle(0)
 
 IndexBufferObjectSubData::IndexBufferObjectSubData(int maxIndices)
 :
-tmpHandle(0)
-, byteBuffer(maxIndices * 2)
-, buffer(byteBuffer.convert<short>())
-, bufferHandle(0)
-, isDirect(true)
-, isDirty(true)
-, isBound(false)
-, usage(GL_STATIC_DRAW)
+tmpHandle(0),
+buffer(byteBuffer.convert<short>()),
+byteBuffer(maxIndices * 2),
+bufferHandle(0),
+isDirect(true),
+isDirty(true),
+isBound(false),
+usage(GL_STATIC_DRAW)
 {
     buffer.flip();
     byteBuffer.flip();

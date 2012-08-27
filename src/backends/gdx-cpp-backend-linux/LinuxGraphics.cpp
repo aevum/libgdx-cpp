@@ -43,21 +43,21 @@ using namespace gdx::nix;
 using namespace gdx;
 
 gdx::nix::LinuxGraphics::LinuxGraphics() :
-gl10(0)
-,gl11(0)
-,gl20(0)
-,glu(new LinuxGLU)
-,glCommon(0)
-,deltaTime(0)
-,lastTime(0)
-,frameStart(0)
-,frames(0)
-,vsync(false)
-,title("GDX-CPP")
-,window(0)
-,width(0)
-,height(0)
-,iconPixmap(0)
+vsync(false),
+title("GDX-CPP"),
+window(0),
+width(0),
+height(0),
+gl10(0),
+gl11(0),
+gl20(0),
+glu(new LinuxGLU),
+glCommon(0),
+iconPixmap(0),
+lastTime(0),
+frames(0),
+frameStart(0),
+deltaTime(0)
 {
 }
 

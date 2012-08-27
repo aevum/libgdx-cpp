@@ -23,7 +23,8 @@
 using namespace gdx;
 
 Animation::Animation(float frameDuration, const std::vector< TextureRegion::ptr >& keyFrames)
- : keyFrames(keyFrames), frameDuration(frameDuration)
+ : frameDuration(frameDuration),
+keyFrames(keyFrames)
 {
 }
 

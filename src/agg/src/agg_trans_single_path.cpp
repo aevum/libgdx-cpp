@@ -23,10 +23,9 @@ namespace agg
     //------------------------------------------------------------------------
     trans_single_path::trans_single_path() :
         m_base_length(0.0),
-        m_kindex(0.0),
-        m_status(initial),
-        m_preserve_x_scale(true)
-    {
+m_kindex(0.0),
+m_status(initial),
+m_preserve_x_scale(true) {
     }
 
     //------------------------------------------------------------------------

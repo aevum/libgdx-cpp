@@ -24,8 +24,17 @@
 using namespace gdx::ios;
 
 IosOpenALMusic::IosOpenALMusic(IosOpenALAudio * _audio, int channels, void* buffer, int length, int _sampleRate) :
-sourceID(-1),  isLoopingVar(false), format(channels > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16), sampleRate(_sampleRate), volume(1), 
-audio(_audio), isPlayingVar(false), buffers(NULL), renderedSeconds(0),  secondsPerBuffer(0), musicBuffer(buffer), bufferLength(length)
+audio(_audio),
+buffers(NULL),
+musicBuffer(buffer),
+bufferLength(length),
+sourceID(-1),
+sampleRate(_sampleRate),
+isLoopingVar(false),
+isPlayingVar(false),
+volume(1),
+renderedSeconds(0),
+secondsPerBuffer(0)
 {
     audio->music.push_back(this);
     

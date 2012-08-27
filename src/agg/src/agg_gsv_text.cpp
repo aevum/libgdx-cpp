@@ -485,21 +485,20 @@ namespace agg
     //-------------------------------------------------------------------------
     gsv_text::gsv_text() :
       m_x(0.0),
-      m_y(0.0),
-      m_start_x(0.0),
-      m_width(10.0),
-      m_height(0.0),
-      m_space(0.0),
-      m_line_space(0.0),
-      m_text(m_chr),
-      m_text_buf(),
-      m_cur_chr(m_chr),
-      m_font(gsv_default_font),
-      m_loaded_font(),
-      m_status(initial),
-      m_big_endian(false),
-      m_flip(false)
-    {
+m_y(0.0),
+m_start_x(0.0),
+m_width(10.0),
+m_height(0.0),
+m_space(0.0),
+m_line_space(0.0),
+m_text(m_chr),
+m_text_buf(),
+m_cur_chr(m_chr),
+m_font(gsv_default_font),
+m_loaded_font(),
+m_status(initial),
+m_big_endian(false),
+m_flip(false) {
         m_chr[0] = m_chr[1] = 0;
 
         int t = 1;

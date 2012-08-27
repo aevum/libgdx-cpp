@@ -47,9 +47,15 @@ int ShaderProgram::intbuf = 0;
 
 
 ShaderProgram::ShaderProgram(const std::string& vertexShader, const std::string& fragmentShader)
-: params(0), type (0),
-  isCompiledVar(false), program(0), vertexShaderHandle(0),
-  fragmentShaderHandle(0), invalidated(false), refCount(0), matrix(16)
+: params(0),
+type (0),
+isCompiledVar(false),
+program(0),
+vertexShaderHandle(0),
+fragmentShaderHandle(0),
+matrix(16),
+invalidated(false),
+refCount(0)
 {
     compileShaders(vertexShader, fragmentShader);
     if (isCompiled()) {

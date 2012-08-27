@@ -300,20 +300,20 @@ std::string Texture::getManagedStatus () {
 
 Texture::Texture(const TextureData::ptr data)
     :
-    minFilter(TextureFilter::Nearest)
-    ,magFilter(TextureFilter::Nearest)
-    ,uWrap(TextureWrap::ClampToEdge)
-    ,vWrap(TextureWrap::ClampToEdge)
+    minFilter(TextureFilter::Nearest),
+magFilter(TextureFilter::Nearest),
+uWrap(TextureWrap::ClampToEdge),
+vWrap(TextureWrap::ClampToEdge)
 {
     create(data);
 }
 
 Texture::Texture(int width, int height, const Pixmap::Format& format, Pixmap::PixmapType pixType)
     :
-    minFilter(TextureFilter::Nearest)
-    ,magFilter(TextureFilter::Nearest)
-    ,uWrap(TextureWrap::ClampToEdge)
-    ,vWrap(TextureWrap::ClampToEdge)
+    minFilter(TextureFilter::Nearest),
+magFilter(TextureFilter::Nearest),
+uWrap(TextureWrap::ClampToEdge),
+vWrap(TextureWrap::ClampToEdge)
 {
     Pixmap::ptr pixmap = Pixmap::newFromRect(width, height, format, pixType);
     PixmapTextureData::ptr ptd(new PixmapTextureData(pixmap, NULL, false, true));
@@ -322,29 +322,29 @@ Texture::Texture(int width, int height, const Pixmap::Format& format, Pixmap::Pi
 
 Texture::Texture(Pixmap::ptr pixmap, const Pixmap::Format& format, bool useMipMaps)
     :
-    minFilter(TextureFilter::Nearest)
-    ,magFilter(TextureFilter::Nearest)
-    ,uWrap(TextureWrap::ClampToEdge)
-    ,vWrap(TextureWrap::ClampToEdge)
+    minFilter(TextureFilter::Nearest),
+magFilter(TextureFilter::Nearest),
+uWrap(TextureWrap::ClampToEdge),
+vWrap(TextureWrap::ClampToEdge)
 {
     create(PixmapTextureData::ptr(new PixmapTextureData(pixmap, &format, useMipMaps, false)));
 }
 
 Texture::Texture()
     :
-    minFilter(TextureFilter::Nearest)
-    ,magFilter(TextureFilter::Nearest)
-    ,uWrap(TextureWrap::ClampToEdge)
-    ,vWrap(TextureWrap::ClampToEdge)
+    minFilter(TextureFilter::Nearest),
+magFilter(TextureFilter::Nearest),
+uWrap(TextureWrap::ClampToEdge),
+vWrap(TextureWrap::ClampToEdge)
 {
 }
 
 Texture::Texture(const Pixmap::ptr pixmap, bool useMipMaps)
     :
-    minFilter(TextureFilter::Nearest)
-    ,magFilter(TextureFilter::Nearest)
-    ,uWrap(TextureWrap::ClampToEdge)
-    ,vWrap(TextureWrap::ClampToEdge)
+    minFilter(TextureFilter::Nearest),
+magFilter(TextureFilter::Nearest),
+uWrap(TextureWrap::ClampToEdge),
+vWrap(TextureWrap::ClampToEdge)
 {
     create(PixmapTextureData::ptr(new PixmapTextureData(pixmap, NULL , useMipMaps, false)));
 }

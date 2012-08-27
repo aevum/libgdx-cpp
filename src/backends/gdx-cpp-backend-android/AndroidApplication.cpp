@@ -30,17 +30,17 @@ using namespace gdx;
 
 gdx::android::AndroidApplication::AndroidApplication(gdx::ApplicationListener* listener,
         const std::string& title, int width, int height, bool useGL20IfAvailable)
-        :  Synchronizable(system->getMutexFactory())
-        , title(title)
-        , useGL20iFAvailable(useGL20IfAvailable)
-        , width(width)
-        , height(height)
-        , listener(listener)
-        , graphics(NULL)
-        , input(NULL)
-        , logLevel(gdx::Application::LOG_INFO)
-        , files(NULL)
-        , audio(NULL)
+        :  Synchronizable(system->getMutexFactory()),
+useGL20iFAvailable(useGL20IfAvailable),
+title(title),
+height(height),
+width(width),
+listener(listener),
+graphics(NULL),
+input(NULL),
+files(NULL),
+audio(NULL),
+logLevel(gdx::Application::LOG_INFO)
 {
     initialize();
 }

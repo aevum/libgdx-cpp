@@ -25,7 +25,8 @@ using namespace gdx::ios;
 
 class IosOpenALAudio;
 
-IosOpenALSound::IosOpenALSound(IosOpenALAudio * _audio) : bufferID(-1), audio(_audio)
+IosOpenALSound::IosOpenALSound(IosOpenALAudio * _audio) : bufferID(-1),
+audio(_audio)
 {
 
 }

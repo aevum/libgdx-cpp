@@ -25,10 +25,18 @@ namespace agg
 {
     //------------------------------------------------------------------------
     rounded_rect::rounded_rect(double x1, double y1, double x2, double y2, double r) :
-        m_x1(x1), m_y1(y1), m_x2(x2), m_y2(y2),
-        m_rx1(r), m_ry1(r), m_rx2(r), m_ry2(r), 
-        m_rx3(r), m_ry3(r), m_rx4(r), m_ry4(r)
-    {
+        m_x1(x1),
+m_y1(y1),
+m_x2(x2),
+m_y2(y2),
+m_rx1(r),
+m_ry1(r),
+m_rx2(r),
+m_ry2(r),
+m_rx3(r),
+m_ry3(r),
+m_rx4(r),
+m_ry4(r) {
         if(x1 > x2) { m_x1 = x2; m_x2 = x1; }
         if(y1 > y2) { m_y1 = y2; m_y2 = y1; }
     }

@@ -55,7 +55,7 @@ public:
     virtual void glTexParameteri (int target,int pname,int param) const;
     virtual void glTexParameteriv (int target,int pname,const int* params) const;
     virtual void glPointSizePointerOES (int type,int stride,const char* pointer) const;
-    virtual void glDrawElements (int mode,int count,int type,void* indices) const;
+    virtual void glDrawElements (int mode,int count, unsigned int type,void* indices) const;
 };
 
 } // namespace gdx

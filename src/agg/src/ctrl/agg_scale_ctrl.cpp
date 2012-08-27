@@ -26,15 +26,14 @@ namespace agg
     scale_ctrl_impl::scale_ctrl_impl(double x1, double y1, 
                                      double x2, double y2, bool flip_y) :
         ctrl(x1, y1, x2, y2, flip_y),
-        m_border_thickness(1.0),
-        m_border_extra((fabs(x2 - x1) > fabs(y2 - y1)) ? (y2 - y1) / 2 : (x2 - x1) / 2),
-        m_pdx(0.0),
-        m_pdy(0.0),
-        m_move_what(move_nothing),
-        m_value1(0.3),
-        m_value2(0.7),
-        m_min_d(0.01)
-    {
+m_border_thickness(1.0),
+m_border_extra((fabs(x2 - x1) > fabs(y2 - y1)) ? (y2 - y1) / 2 : (x2 - x1) / 2),
+m_value1(0.3),
+m_value2(0.7),
+m_min_d(0.01),
+m_pdx(0.0),
+m_pdy(0.0),
+m_move_what(move_nothing) {
         calc_box();
     }
 

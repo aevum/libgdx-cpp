@@ -33,33 +33,108 @@
 using namespace gdx;
 
 
-ParticleEmitter::ParticleEmitter(): accumulator(0), minParticleCount(0), maxParticleCount(4), x(0),y(0),
-        activeCount(0), firstUpdate(false), flipX(false), flipY(false), updateFlags(0),
-        allowCompletionVar(false), emission(0), emissionDiff(0), emissionDelta(0), lifeOffset(0),
-        lifeOffsetDiff(0), life(0), lifeDiff(0), spawnWidth(0), spawnWidthDiff(0), spawnHeight(0),
-        spawnHeightDiff(0), delay(0), delayTimer(0), attached(false), continuous(false), aligned(false),
-        behind(false), additive(true), duration(1), durationTimer(0)
+ParticleEmitter::ParticleEmitter(): duration(1),
+durationTimer(0),
+accumulator(0),
+minParticleCount(0),
+maxParticleCount(4),
+x(0),
+y(0),
+activeCount(0),
+firstUpdate(false),
+flipX(false),
+flipY(false),
+updateFlags(0),
+allowCompletionVar(false),
+emission(0),
+emissionDiff(0),
+emissionDelta(0),
+lifeOffset(0),
+lifeOffsetDiff(0),
+life(0),
+lifeDiff(0),
+spawnWidth(0),
+spawnWidthDiff(0),
+spawnHeight(0),
+spawnHeightDiff(0),
+delay(0),
+delayTimer(0),
+attached(false),
+continuous(false),
+aligned(false),
+behind(false),
+additive(true)
 {
     initialize();
 }
 
-ParticleEmitter::ParticleEmitter(std::istream& reader): accumulator(0), minParticleCount(0), maxParticleCount(4), x(0),y(0),
-        activeCount(0), firstUpdate(false), flipX(false), flipY(false), updateFlags(0),
-        allowCompletionVar(false), emission(0), emissionDiff(0), emissionDelta(0), lifeOffset(0),
-        lifeOffsetDiff(0), life(0), lifeDiff(0), spawnWidth(0), spawnWidthDiff(0), spawnHeight(0),
-        spawnHeightDiff(0), delay(0), delayTimer(0), attached(false), continuous(false), aligned(false),
-        behind(false), additive(true), duration(1), durationTimer(0)
+ParticleEmitter::ParticleEmitter(std::istream& reader): duration(1),
+durationTimer(0),
+accumulator(0),
+minParticleCount(0),
+maxParticleCount(4),
+x(0),
+y(0),
+activeCount(0),
+firstUpdate(false),
+flipX(false),
+flipY(false),
+updateFlags(0),
+allowCompletionVar(false),
+emission(0),
+emissionDiff(0),
+emissionDelta(0),
+lifeOffset(0),
+lifeOffsetDiff(0),
+life(0),
+lifeDiff(0),
+spawnWidth(0),
+spawnWidthDiff(0),
+spawnHeight(0),
+spawnHeightDiff(0),
+delay(0),
+delayTimer(0),
+attached(false),
+continuous(false),
+aligned(false),
+behind(false),
+additive(true)
 {
     initialize();
     load(reader);
 }
 
-ParticleEmitter::ParticleEmitter(ParticleEmitter& emitter): accumulator(0), minParticleCount(0), maxParticleCount(4), x(0),y(0),
-        activeCount(0), firstUpdate(false), flipX(false), flipY(false), updateFlags(0),
-        allowCompletionVar(false), emission(0), emissionDiff(0), emissionDelta(0), lifeOffset(0),
-        lifeOffsetDiff(0), life(0), lifeDiff(0), spawnWidth(0), spawnWidthDiff(0), spawnHeight(0),
-        spawnHeightDiff(0), delay(0), delayTimer(0), attached(false), continuous(false), aligned(false),
-        behind(false), additive(true), duration(1), durationTimer(0)
+ParticleEmitter::ParticleEmitter(ParticleEmitter& emitter): duration(1),
+durationTimer(0),
+accumulator(0),
+minParticleCount(0),
+maxParticleCount(4),
+x(0),
+y(0),
+activeCount(0),
+firstUpdate(false),
+flipX(false),
+flipY(false),
+updateFlags(0),
+allowCompletionVar(false),
+emission(0),
+emissionDiff(0),
+emissionDelta(0),
+lifeOffset(0),
+lifeOffsetDiff(0),
+life(0),
+lifeDiff(0),
+spawnWidth(0),
+spawnWidthDiff(0),
+spawnHeight(0),
+spawnHeightDiff(0),
+delay(0),
+delayTimer(0),
+attached(false),
+continuous(false),
+aligned(false),
+behind(false),
+additive(true)
 {
     sprite = emitter.sprite;
     name = emitter.name;
@@ -904,14 +979,31 @@ void ParticleEmitter::load (std::istream& reader) {
 }
 
 //------------------------Particle-----------------------------------
-ParticleEmitter::Particle::Particle(Sprite::ptr s) : Sprite(s), life(0), currentLife(0),scale(0), scaleDiff(0),rotation(0), rotationDiff(0),
-        velocity(0), velocityDiff(0),angle(0), angleDiff(0),angleCos(0), angleSin(0),
-        transparency(0), transparencyDiff(0),wind(0), windDiff(0),gravity(0), gravityDiff(0)
+ParticleEmitter::Particle::Particle(Sprite::ptr s) : Sprite(s),
+life(0),
+currentLife(0),
+scale(0),
+scaleDiff(0),
+rotation(0),
+rotationDiff(0),
+velocity(0),
+velocityDiff(0),
+angle(0),
+angleDiff(0),
+angleCos(0),
+angleSin(0),
+transparency(0),
+transparencyDiff(0),
+wind(0),
+windDiff(0),
+gravity(0),
+gravityDiff(0)
 {
 
 }
 //------------------------ParticleValue-----------------------------------
-ParticleEmitter::ParticleValue::ParticleValue():active(false), alwaysActive(false)
+ParticleEmitter::ParticleValue::ParticleValue():active(false),
+alwaysActive(false)
 {
 
 }
@@ -985,7 +1077,8 @@ void ParticleEmitter::NumericValue::load (NumericValue& value) {
 
 
 //----------------RangedNumericValue--------------------------------------
-ParticleEmitter::RangedNumericValue::RangedNumericValue():lowMin(0), lowMax(0)
+ParticleEmitter::RangedNumericValue::RangedNumericValue():lowMin(0),
+lowMax(0)
 {
 
 }
@@ -1042,7 +1135,9 @@ void ParticleEmitter::RangedNumericValue::load (RangedNumericValue& value) {
 
 //---------------------------ParticleEmitter::ScaledNumericValue--------------------------
 
-ParticleEmitter::ScaledNumericValue::ScaledNumericValue() : relative(false), highMin(0), highMax(0)
+ParticleEmitter::ScaledNumericValue::ScaledNumericValue() : highMin(0),
+highMax(0),
+relative(false)
 {
   timeline.push_back(0.f);
   scaling.push_back(1.f);
@@ -1246,7 +1341,9 @@ void ParticleEmitter::GradientColorValue::load (GradientColorValue& value) {
 }
 
 //---------------------------------SpawnShapeValue-------------------------------
-ParticleEmitter::SpawnShapeValue::SpawnShapeValue() : shape(ParticleEmitter::point), edges(false), side(ParticleEmitter::both)
+ParticleEmitter::SpawnShapeValue::SpawnShapeValue() : shape(ParticleEmitter::point),
+edges(false),
+side(ParticleEmitter::both)
 {
 
 }

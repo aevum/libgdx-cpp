@@ -44,9 +44,9 @@ bool Mesh::forceVBO = false;
 Mesh::MeshMap Mesh::meshes;
 
 Mesh::Mesh(bool isStatic, int maxVertices, int maxIndices, const std::vector< VertexAttribute >& attributes)
-: vertices(0)
-, autoBind(true)
-, disposed(false)
+: vertices(0),
+autoBind(true),
+disposed(false)
 {
     if (gl20 != NULL || gl11 != NULL || Mesh::forceVBO) {
         vertices = new VertexBufferObject(isStatic, maxVertices, attributes);
@@ -188,7 +188,7 @@ void Mesh::render (int primitiveType,int offset,int count) {
     } else {
         if (indices->getNumIndices() > 0) {
             int newoffset = offset * 2;
-            gl11->glDrawElements(primitiveType, count, GL_UNSIGNED_SHORT, (void *) newoffset );
+            gl11->glDrawElements(primitiveType, count, GL_UNSIGNED_SHORT, (void *) (intptr_t) newoffset );
         }
         else
             gl11->glDrawArrays(primitiveType, offset, count);
@@ -353,9 +353,9 @@ void Mesh::scale (float scaleX,float scaleY,float scaleZ) {
     setVertices(vertices);
 }
 Mesh::Mesh(int type, bool isStatic, int maxVertices, int maxIndices, const std::vector< VertexAttribute >& attributes)
-: vertices(0)
-, autoBind(true)
-, disposed(false)
+: vertices(0),
+autoBind(true),
+disposed(false)
 {
     if (type == VertexDataType::VertexArray && graphics->isGL20Available())
         type = VertexDataType::VertexBufferObject;

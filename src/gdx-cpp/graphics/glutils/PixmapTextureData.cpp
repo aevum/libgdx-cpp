@@ -63,10 +63,10 @@ void PixmapTextureData::uploadCompressedData () {
 PixmapTextureData::PixmapTextureData(Pixmap::ptr _pixmap,
                                      const Pixmap::Format* format,
                                      bool useMipMaps, bool disposePixmap)
-: _useMipMaps(useMipMaps)
-, _disposePixmap(disposePixmap)
-, format(format == NULL ? _pixmap->getFormat() : *format)
-, pixmap(_pixmap)
+: pixmap(_pixmap),
+format(format == NULL ? _pixmap->getFormat() : *format),
+_useMipMaps(useMipMaps),
+_disposePixmap(disposePixmap)
 {
 }
 

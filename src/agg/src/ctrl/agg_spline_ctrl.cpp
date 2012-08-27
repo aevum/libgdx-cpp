@@ -27,19 +27,18 @@ namespace agg
     spline_ctrl_impl::spline_ctrl_impl(double x1, double y1, double x2, double y2, 
                                        unsigned num_pnt, bool flip_y) :
         ctrl(x1, y1, x2, y2, flip_y),
-        m_num_pnt(num_pnt),
-        m_border_width(1.0),
-        m_border_extra(0.0),
-        m_curve_width(1.0),
-        m_point_size(3.0),
-        m_curve_poly(m_curve_pnt),
-        m_idx(0),
-        m_vertex(0),
-        m_active_pnt(-1),
-        m_move_pnt(-1),
-        m_pdx(0.0),
-        m_pdy(0.0)
-    {
+m_num_pnt(num_pnt),
+m_border_width(1.0),
+m_border_extra(0.0),
+m_curve_width(1.0),
+m_point_size(3.0),
+m_curve_poly(m_curve_pnt),
+m_idx(0),
+m_vertex(0),
+m_active_pnt(-1),
+m_move_pnt(-1),
+m_pdx(0.0),
+m_pdy(0.0) {
         if(m_num_pnt < 4)  m_num_pnt = 4;
         if(m_num_pnt > 32) m_num_pnt = 32;
 

@@ -277,8 +277,8 @@ void* run_runnable(void* runnable) {
 class LinuxThread : public gdx::Thread {
 public:
     LinuxThread(Runnable* theRunnable)
-        : runnable(theRunnable)
-        , thread(0) {
+        : runnable(theRunnable),
+thread(0) {
     }
     
     const std::string getThreadName() {

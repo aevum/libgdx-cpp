@@ -573,12 +573,12 @@ BitmapFont::BitmapFontData* BitmapFont::getData () {
 }
 
 BitmapFont::BitmapFont ( BitmapFont::BitmapFontData* p_data, TextureRegion::ptr p_region, bool p_integer )
-    : data ( p_data ),
-      region ( p_region ),
-      integer ( p_integer ),
-      flipped ( p_data->flipped ),
-      color ( Color::WHITE.toFloatBits() ),
-      tempColor ( 1,1,1,1 ) {
+    : region ( p_region ),
+color ( Color::WHITE.toFloatBits() ),
+tempColor ( 1,1,1,1 ),
+flipped ( p_data->flipped ),
+integer ( p_integer ),
+data ( p_data ) {
     if ( !region ) {
         region = TextureRegion::newFromTexture ( Texture::newFromFile ( files->internal ( data->imagePath ), NULL, false ) );
     }
@@ -598,15 +598,15 @@ BitmapFont* BitmapFont::fromFiles ( FileHandle::ptr fontFile, FileHandle::ptr im
 
 BitmapFont::BitmapFontData::BitmapFontData ( FileHandle::ptr fontFile, bool flip )
     : fontFile ( fontFile ),
-      flipped ( flip ),
-      capHeight ( 1 ),
-      scaleX ( 1 ),
-      scaleY ( 1 ),
-      ascent ( 0 ),
-      descent ( 0 ),
-      down ( 0 ),
-      spaceWidth ( 0 ),
-      xHeight ( 1 ) {
+flipped ( flip ),
+capHeight ( 1 ),
+ascent ( 0 ),
+descent ( 0 ),
+down ( 0 ),
+scaleX ( 1 ),
+scaleY ( 1 ),
+spaceWidth ( 0 ),
+xHeight ( 1 ) {
     glyphs = new Glyph**[PAGES];
     memset ( glyphs, 0, sizeof ( Glyph* ) * PAGES );
 
@@ -760,7 +760,8 @@ void BitmapFont::TextBounds::set ( const BitmapFont::TextBounds& bounds ) {
     height = bounds.height;
 }
 
-BitmapFont::TextBounds::TextBounds() : width ( 0 ), height ( 0 ) {
+BitmapFont::TextBounds::TextBounds() : width ( 0 ),
+height ( 0 ) {
 }
 
 void BitmapFont::Glyph::setKerning ( int ch, int value ) {
@@ -825,7 +826,16 @@ BitmapFont::Glyph::~Glyph() {
 }
 
 
-BitmapFont::Glyph::Glyph() : srcX ( 0 ) , srcY ( 0 ) , width ( 0 ) , height ( 0 )
-    , u ( 0 ) , v ( 0 ), u2 ( 0 ), v2 ( 0 ), xoffset ( 0 ),
-    yoffset ( 0 ), xadvance ( 0 ), kerning ( NULL ) {
+BitmapFont::Glyph::Glyph() : srcX ( 0 ),
+srcY ( 0 ),
+width ( 0 ),
+height ( 0 ),
+u ( 0 ),
+v ( 0 ),
+u2 ( 0 ),
+v2 ( 0 ),
+xoffset ( 0 ),
+yoffset ( 0 ),
+xadvance ( 0 ),
+kerning ( NULL ) {
 }

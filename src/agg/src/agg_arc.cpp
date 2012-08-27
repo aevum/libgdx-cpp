@@ -28,8 +28,11 @@ namespace agg
              double rx, double ry, 
              double a1, double a2, 
              bool ccw) :
-        m_x(x), m_y(y), m_rx(rx), m_ry(ry), m_scale(1.0)
-    {
+        m_x(x),
+m_y(y),
+m_rx(rx),
+m_ry(ry),
+m_scale(1.0) {
         normalize(a1, a2, ccw);
     }
 

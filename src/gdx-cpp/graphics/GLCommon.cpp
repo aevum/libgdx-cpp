@@ -199,7 +199,10 @@ void GLCommon::glViewport(int x, int y, int width, int height) const {
     ::glViewport ( x, y, width, height);
 }
 
-GLCommon::GLCommon() : vertex_states(0) , last_vertex_pointer((void*) -1), last_tex_coord_pointer((void*) -1), last_color_pointer((void*) -1)
+GLCommon::GLCommon() : vertex_states(0),
+last_vertex_pointer((void*) -1),
+last_tex_coord_pointer((void*) -1),
+last_color_pointer((void*) -1)
 {
 }
 

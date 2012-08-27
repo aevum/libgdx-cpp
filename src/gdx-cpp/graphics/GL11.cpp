@@ -130,7 +130,7 @@ void GL11::glPointSizePointerOES (int type,int stride,const char* pointer) const
     //     ::glPointSize (type, stride, pointer);
 }
 
-void GL11::glDrawElements (int mode,int count,int type,void* indices) const {
+void GL11::glDrawElements ( int mode, int count, unsigned int type, void* indices ) const {
     ::glDrawElements (mode, count, type, indices);
 }
 

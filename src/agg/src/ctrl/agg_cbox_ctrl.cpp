@@ -29,12 +29,11 @@ namespace agg
                                    const char* l, 
                                    bool flip_y) :
         ctrl(x, y, x + 9.0 * 1.5, y + 9.0 * 1.5, flip_y),
-        m_text_thickness(1.5),
-        m_text_height(9.0),
-        m_text_width(0.0),
-        m_status(false),
-        m_text_poly(m_text)
-    {
+m_text_thickness(1.5),
+m_text_height(9.0),
+m_text_width(0.0),
+m_status(false),
+m_text_poly(m_text) {
         label(l);
     }
 

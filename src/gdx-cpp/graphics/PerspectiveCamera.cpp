@@ -29,7 +29,7 @@ PerspectiveCamera::PerspectiveCamera()
 }
 
 PerspectiveCamera::PerspectiveCamera(float fieldOfView, float viewportWidth, float viewportHeight)
-: Camera(viewportHeight, viewportWidth, 1, 100) ,
+: Camera(viewportHeight, viewportWidth, 1, 100),
 fieldOfView(fieldOfView)
 {
     update();

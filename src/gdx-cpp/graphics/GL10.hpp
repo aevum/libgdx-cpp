@@ -74,7 +74,7 @@ public:
     virtual void glTexEnvf (int target,int pname,float param) const ;
     virtual void glTexEnvfv (int target,int pname,const float* params) const ;
     virtual void glTranslatef (float x,float y,float z) const ;
-    virtual void glVertexPointer (int size,int type,int stride,const void* pointer) ;
+    virtual void glVertexPointer (int size, unsigned int type,int stride,const void* pointer) ;
     virtual void glPolygonMode (int face,int mode) const ;
 };
 
