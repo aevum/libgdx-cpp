@@ -72,25 +72,29 @@ void IosApplication::run()
 }
 
 void IosApplication::update()
-{    
-	graphics->updateTime();
+{
+    try {
+        graphics->updateTime();
 	
-	{
-		lock_holder hnd = synchronize();
+        if (runnables.size())
+        {
+            lock_holder hnd = synchronize();
+            
+            std::list < Runnable::ptr >::iterator it = runnables.begin();
+            std::list < Runnable::ptr >::iterator end = runnables.end();
 		
-		std::list < Runnable::ptr >::iterator it = runnables.begin();
-		std::list < Runnable::ptr >::iterator end = runnables.end();
+            for(;it != end; ++it) {
+                (*it)->run();
+            }
 		
-		for(;it != end; ++it) {
-			(*it)->run();
-		}
-		
-		runnables.clear();
-	}
+            runnables.clear();
+        }
 	
-	listener->render();
-	graphics->update();
-	//audio->update();    
+        listener->render();
+        graphics->update();
+    } catch( std::exception& e ) {
+        gdx_log_error("IosApplication", "Exception: %s", e.what());
+    }
 }
 
 void IosApplication::pause()

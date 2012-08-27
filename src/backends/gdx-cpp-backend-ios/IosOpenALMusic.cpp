@@ -58,7 +58,6 @@ audio(_audio), isPlayingVar(false), buffers(NULL), renderedSeconds(0),  secondsP
 
 void IosOpenALMusic::play ()
 {
-    
     alSourcePlay(sourceID);
     isPlayingVar = true;
     
@@ -72,18 +71,14 @@ void IosOpenALMusic::pause ()
 
 void IosOpenALMusic::stop ()
 {
-    if (sourceID == -1) return;
-    reset();
-    audio->freeSource(sourceID);
-    sourceID = -1;
+    alSourceStop(sourceID);
     renderedSeconds = 0;
-    isPlayingVar = false;
+    isPlayingVar = false; 
 }
 
 bool IosOpenALMusic::isPlaying ()
 {
-    if (sourceID == -1) return false;
-    return isPlayingVar;
+    return sourceID != -1 && isPlayingVar;
 }
 
 void IosOpenALMusic::setLooping (bool isLooping)
@@ -111,7 +106,7 @@ float IosOpenALMusic::getPosition ()
 }
 
 void IosOpenALMusic::dispose ()
-{
+{   
     if (buffers == NULL) return;
     if (sourceID != -1) {
         reset();
