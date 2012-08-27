@@ -15,9 +15,15 @@ set(ANDROID_NDK $ENV{ANDROID_NDK})
 option(BUILD_BOX2D "Builds Box2D" TRUE)
 option(BUILD_AS_SHARED_LIBRARIES "Build libraries as shared libraries instead of static" FALSE)
 
+SET(GDX_BACKEND_IOS 0)
+SET(GDX_BACKEND_ANDROID 0)
+SET(GDX_BACKEND_LINUX 0)
+SET(GDX_BACKEND_WIN32 0)
+
 if(APPLE)
     message("MacOSX (iOS) found. Setting the backend to IOS")
-    SET(GDX_BACKEND_IOS ON)
+    SET(GDX_BACKEND_IOS 1)
+    SET(GDX_BACKEND_SUFFIX "ios")
     SET(GDX_BACKEND_LIB gdx-cpp-backend-ios)
     
     set(BOX2D_BUILD_STATIC TRUE)
@@ -25,8 +31,10 @@ if(APPLE)
 elseif (UNIX)
     if (ANDROID_NDK)        
         message("ANDROID_NDK Found. Setting the backend to ANDROID")
-
-        SET(GDX_BACKEND_ANDROID ON)
+        
+        SET(GDX_BACKEND_SUFFIX "android")
+        
+        SET(GDX_BACKEND_ANDROID 1)
         SET(GDX_BACKEND_LIB gdx-cpp-backend-android)
         set(BOX2D_BUILD_STATIC FALSE)
         set(BOX2D_BUILD_SHARED TRUE)        
@@ -34,7 +42,9 @@ elseif (UNIX)
         message("Linux found. Setting the backend to LINUX")
         add_definitions(-DLIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES)        
 
-        SET(GDX_BACKEND_LINUX ON)
+        SET(GDX_BACKEND_SUFFIX "linux")
+
+        SET(GDX_BACKEND_LINUX 1)
         SET(GDX_BACKEND_LIB gdx-cpp-backend-linux)
 
         if (BUILD_AS_SHARED_LIBRARIES)
@@ -48,7 +58,8 @@ elseif (UNIX)
 
 elseif(WIN32)
     message("Win32 found. Setting the backend to WIN32")
-    SET(GDX_BACKEND_WIN32 ON)
+    SET(GDX_BACKEND_WIN32 1)
+     SET(GDX_BACKEND_SUFFIX "win32")
     SET(GDX_BACKEND_LIB gdx-cpp-backend-win32)
 endif()
 
@@ -68,7 +79,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
         message(FATAL_ERROR "gdx++ requires a gcc that's newer than 4.5 to fully support the new c++11 standard. Please upgrade your ndk to r8b or newer if using android.")
     endif()
     
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wreorder")
+    #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wreorder")
 endif()
 
 if (BUILD_BOX2D)
