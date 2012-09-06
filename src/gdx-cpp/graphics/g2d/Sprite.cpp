@@ -45,8 +45,8 @@ dirty(true)
     setColor(1, 1, 1, 1);
 }
 
-void Sprite::set (ptr sprite) {
-    memcpy(vertices, sprite->vertices, SPRITE_SIZE * sizeof(float));
+void Sprite::set (const ptr& sprite) {
+    memcpy(&vertices[0], &sprite->vertices[0], SPRITE_SIZE * sizeof(float));
     texture = sprite->texture;
     x = sprite->x;
     y = sprite->y;
@@ -214,7 +214,7 @@ void Sprite::scale (float amount) {
     dirty = true;
 }
 
-float* const Sprite::getVertices () {
+const Sprite::vertex_array_t& Sprite::getVertices () {
     if (dirty) {
         dirty = false;
 
@@ -316,7 +316,7 @@ const Rectangle& Sprite::getBoundingRectangle () {
 }
 
 void Sprite::draw (SpriteBatch& spriteBatch) {
-    spriteBatch.draw(*texture, getVertices(), 20, 0, SPRITE_SIZE);
+    spriteBatch.draw(*texture, getVertices().data(), 20, 0, SPRITE_SIZE);
 }
 
 void Sprite::draw (SpriteBatch& spriteBatch,float alphaModulation) {

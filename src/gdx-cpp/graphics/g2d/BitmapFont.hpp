@@ -128,7 +128,7 @@ public:
     void scale (float amount);
     float getScaleX ();
     float getScaleY ();
-    TextureRegion::ptr getRegion ();
+    const TextureRegion& getRegion ();
     float getLineHeight ();
     float getSpaceWidth ();
     float getXHeight ();
@@ -157,9 +157,9 @@ public:
 
 protected:
 
-    BitmapFont (BitmapFontData* data, TextureRegion::ptr region, bool integer);
+    BitmapFont ( gdx::BitmapFont::BitmapFontData* p_data, gdx::TextureRegion p_region, bool p_integer );
 
-    TextureRegion::ptr region;
+    TextureRegion region;
     TextBounds textBounds;
     float color;
     Color tempColor;

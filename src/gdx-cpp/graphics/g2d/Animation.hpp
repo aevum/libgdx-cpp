@@ -29,13 +29,13 @@ namespace gdx {
 class Animation {
 public:
 
-    Animation (float frameDuration, const std::vector<TextureRegion::ptr>& keyFrames);
+    Animation (float frameDuration, const std::vector<TextureRegion>& keyFrames);
     
-    TextureRegion::ptr getKeyFrame (float stateTime,bool looping);
+    const TextureRegion& getKeyFrame ( float stateTime, bool looping );
     
     float frameDuration;
 protected:
-    std::vector<TextureRegion::ptr> keyFrames;
+    std::vector<TextureRegion> keyFrames;
 
 private:
 

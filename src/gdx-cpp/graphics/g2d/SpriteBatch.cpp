@@ -1026,7 +1026,7 @@ SpriteBatch::~SpriteBatch()
     delete [] vertices;
 }
 
-void SpriteBatch::draw(const Texture& texture, float* const spriteVertices, int size, int offset, int length) {
+void SpriteBatch::draw( const Texture& texture, const float* spriteVertices, int size, int offset, int length ) {
     if (!drawing)
         throw std::runtime_error("SpriteBatch.begin must be called before draw.");
 

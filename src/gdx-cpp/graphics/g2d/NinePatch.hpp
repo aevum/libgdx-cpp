@@ -24,7 +24,7 @@
 #include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
 #include "gdx-cpp/graphics/Texture.hpp"
 
-#include<vector>
+#include <array>
 
 namespace gdx {
 class Texture;
@@ -34,21 +34,22 @@ class TextureRegion;
 
 class NinePatch {
 public:
-
-    const static int TOP_LEFT = 0;
-    const static int TOP_CENTER = 1;
-    const static int TOP_RIGHT = 2;
-    const static int MIDDLE_LEFT = 3;
-    const static int MIDDLE_CENTER = 4;
-    const static int MIDDLE_RIGHT = 5;
-    const static int BOTTOM_LEFT = 6;
-    const static int BOTTOM_CENTER = 7;
-    const static int BOTTOM_RIGHT = 8;
-
-    NinePatch (Texture::ptr texture, int left, int right, int top, int bottom);
-    NinePatch (TextureRegion::ptr texture, int left, int right, int top, int bottom);
-    NinePatch (std::vector< TextureRegion::ptr >& _patches);
-    NinePatch(TextureRegion::ptr region);
+    enum {
+        TOP_LEFT = 0,
+        TOP_CENTER,
+        TOP_RIGHT,
+        MIDDLE_LEFT,
+        MIDDLE_CENTER,
+        MIDDLE_RIGHT,
+        BOTTOM_LEFT,
+        BOTTOM_CENTER,
+        BOTTOM_RIGHT
+    };
+        
+    NinePatch (const Texture::ptr& texture, int left, int right, int top, int bottom);
+    NinePatch (TextureRegion texture, int left, int right, int top, int bottom);
+    NinePatch (std::array<TextureRegion ,9 >& _patches);
+    NinePatch(TextureRegion region);
     
     void draw (gdx::SpriteBatch& batch, float x, float y, float width, float height);
     float getLeftWidth ();
@@ -58,11 +59,11 @@ public:
     float getTotalHeight ();
     float getTotalWidth ();
 
-    std::vector<TextureRegion::ptr> getPatches();
-    
+    std::array<TextureRegion, 9 > getPatches();
+
 private:
-    std::vector<TextureRegion::ptr> patches;
-    void initialize(TextureRegion::ptr region, int left, int right, int top, int bottom);
+    std::array<TextureRegion, 9 > patches;
+    void initialize(TextureRegion region, int left, int right, int top, int bottom);
     void checkValidity ();
     NinePatch();
 };

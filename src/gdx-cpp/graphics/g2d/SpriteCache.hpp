@@ -56,18 +56,18 @@ public:
     int endCache ();
     void clear ();
 
-    void add (const Texture::ptr texture, float* vertices, int size, int offset, int length) ;
-    void add (Texture::ptr texture,float x,float y);
-    void add (const Texture::ptr texture, float* vertices, int offset, int length);
-    void add (TextureRegion& region, float x, float y, float width, float height);
-    void add (const Texture::ptr texture,float x,float y,int srcWidth,int srcHeight,float u,float v,float u2,float v2,float color);
-    void add (Texture::ptr texture,float x,float y,int srcX,int srcY,int srcWidth,int srcHeight);
-    void add (Texture::ptr texture, float x, float y, float width, float height, int srcX, int srcY, int srcWidth, int srcHeight, bool flipX, bool flipY);
-    void add (Texture::ptr texture, float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float rotation, int srcX, int srcY, int srcWidth, int srcHeight, bool flipX, bool flipY);
-    void add (TextureRegion::ptr region, float x, float y);
-    void add (TextureRegion::ptr region, float x, float y, float width, float height);
-    void add (TextureRegion::ptr region,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation);
-    void add (Sprite& sprite);
+    void add (const Texture::ptr& texture, const float* vertices, int size, int offset, int length) ;
+    void add (const Texture::ptr& texture, float x,float y);
+    void add (const Texture::ptr& texture, const float* vertices, int offset, int length);
+    void add (const Texture::ptr& texture, float x,float y,int srcWidth,int srcHeight,float u,float v,float u2,float v2,float color);
+    void add (const Texture::ptr& texture, float x,float y,int srcX,int srcY,int srcWidth,int srcHeight);
+    void add (const Texture::ptr& texture, float x, float y, float width, float height, int srcX, int srcY, int srcWidth, int srcHeight, bool flipX, bool flipY);
+    void add (const Texture::ptr& texture, float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float rotation, int srcX, int srcY, int srcWidth, int srcHeight, bool flipX, bool flipY);
+    
+    void add (const TextureRegion& region, float x, float y, float width, float height);
+    void add (const TextureRegion& region, float x, float y);
+    void add (const TextureRegion& region,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation);
+    void add ( gdx::Sprite& sprite );
     void begin ();
     void end ();
     void draw (int cacheID);

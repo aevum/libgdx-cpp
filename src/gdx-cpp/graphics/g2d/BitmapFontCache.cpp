@@ -70,7 +70,7 @@ void BitmapFontCache::setColor (float r,float g,float b,float a) {
 }
 
 void BitmapFontCache::draw (SpriteBatch& spriteBatch) {
-    spriteBatch.draw(*font->getRegion()->getTexture(), &vertices[0], vertices.size(), 0, idx);
+    spriteBatch.draw(*font->getRegion().getTexture(), &vertices[0], vertices.size(), 0, idx);
 }
 
 void BitmapFontCache::draw (SpriteBatch& spriteBatch,float alphaModulation) {

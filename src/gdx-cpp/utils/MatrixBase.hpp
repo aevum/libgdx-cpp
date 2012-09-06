@@ -21,50 +21,29 @@
 #ifndef GDX_CPP_UTILS_MATRIXBASE_HPP
 #define GDX_CPP_UTILS_MATRIXBASE_HPP
 
-#include "ArrayBase.hpp"
-#include <vector>
+#include <array>
 
 namespace gdx {
-template <class T>
-struct Row
-{
+/** Bounds checked multidimensional array
+ *
+ */
+template <class T, std::size_t Cols, std::size_t Rows>
+struct MatrixBase {
 public:
-
-    Row(int _size): size(_size)
-    {
-      value = new T[size];
-    }
-    
-    Row(T *_value, int _size): size(_size), value(_value)
-    {
+    std::array< T , Rows > operator[] ( unsigned i ) {
+        static_assert ( i >= 0 && i < Cols, "Invalid column size" );
+        return std::array<T, Rows> ( value[i] );
     }
 
-    T operator[] (unsigned i) {
-        return value[i];
+    constexpr std::size_t cols() {
+        return Cols;
+    }
+    constexpr std::size_t rows() {
+        return Rows;
     }
 
-  int size;
 private:
-  T * value;
-};
-
-template <class T>
-struct MatrixBase
-{
-public:
-    MatrixBase(int _rows, int _cols): rows(_rows), cols(_cols)
-    {
-        value = new T[rows * cols];
-    }
-
-    Row<T> operator[] (unsigned i) {
-       return Row<T>(&value[i*cols], cols);
-    }
-        
-  int rows;
-  int cols;
-private:
-  T * value;
+    std::array< std::array < T, Rows >, Cols> value;
 };
 } //namespace gdx
 #endif // GDX_CPP_UTILS_MATRIXBASE_HPP

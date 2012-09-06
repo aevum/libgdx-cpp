@@ -22,14 +22,14 @@
 
 using namespace gdx;
 
-Animation::Animation(float frameDuration, const std::vector< TextureRegion::ptr >& keyFrames)
+Animation::Animation( float frameDuration, const std::vector< TextureRegion >& keyFrames )
  : frameDuration(frameDuration),
 keyFrames(keyFrames)
 {
 }
 
 
-TextureRegion::ptr Animation::getKeyFrame (float stateTime, bool looping) {
+const TextureRegion& Animation::getKeyFrame (float stateTime, bool looping) {
     int frameNumber = (int)(stateTime / frameDuration);
 
     if (!looping) {

@@ -110,6 +110,10 @@ if (BUILD_AGG)
   add_subdirectory(src/agg)
 endif()
 
+if (GLM_ROOT)
+    include_directories(${GLM_ROOT})
+endif()
+
 add_subdirectory(src/gdx-cpp)
 
 install(FILES cmake/finders/FindGdxCpp.cmake

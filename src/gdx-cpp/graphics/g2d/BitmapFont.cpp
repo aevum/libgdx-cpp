@@ -84,10 +84,10 @@ FileHandle::ptr BitmapFont::BitmapFontData::getFontFile () {
 }
 
 void BitmapFont::load ( BitmapFontData* data ) {
-    float invTexWidth = 1.0f / region->getTexture()->getWidth();
-    float invTexHeight = 1.0f / region->getTexture()->getHeight();
-    float u = region->u;
-    float v = region->v;
+    float invTexWidth = 1.0f / region.getTexture()->getWidth();
+    float invTexHeight = 1.0f / region.getTexture()->getHeight();
+    float u = region.u;
+    float v = region.v;
 
     for ( int i = 0; i < PAGES; i++ ) {
         Glyph** page = data->glyphs[i];
@@ -121,7 +121,7 @@ BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch,const std::s
 BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch,const std::string& str,float x,float y,int start,int end ) {
     float batchColor = spriteBatch.color;
     spriteBatch.setColor ( color );
-    Texture::ptr texture = region->getTexture();
+    Texture::ptr texture = region.getTexture();
     y += data->ascent;
     float startX = x;
 
@@ -504,7 +504,7 @@ float BitmapFont::getScaleY () {
     return data->scaleY;
 }
 
-TextureRegion::ptr BitmapFont::getRegion () {
+const TextureRegion& BitmapFont::getRegion () {
     return region;
 }
 
@@ -537,7 +537,7 @@ bool BitmapFont::isFlipped () {
 }
 
 void BitmapFont::dispose () {
-//     region->getTexture()->dispose();
+//     region.getTexture()->dispose();
 }
 
 void BitmapFont::setFixedWidthGlyphs ( const std::string& glyphs ) {
@@ -572,14 +572,14 @@ BitmapFont::BitmapFontData* BitmapFont::getData () {
     return data;
 }
 
-BitmapFont::BitmapFont ( BitmapFont::BitmapFontData* p_data, TextureRegion::ptr p_region, bool p_integer )
+BitmapFont::BitmapFont ( BitmapFont::BitmapFontData* p_data, TextureRegion p_region, bool p_integer )
     : region ( p_region ),
 color ( Color::WHITE.toFloatBits() ),
 tempColor ( 1,1,1,1 ),
 flipped ( p_data->flipped ),
 integer ( p_integer ),
 data ( p_data ) {
-    if ( !region ) {
+    if ( !region.isValid() ) {
         region = TextureRegion::newFromTexture ( Texture::newFromFile ( files->internal ( data->imagePath ), NULL, false ) );
     }
     load ( data );
@@ -587,7 +587,7 @@ data ( p_data ) {
 
 BitmapFont* BitmapFont::fromFiles ( FileHandle::ptr fontFile, FileHandle::ptr imageFile, bool flip, bool integer ) {
     BitmapFontData* data = new BitmapFontData ( fontFile, flip );
-    TextureRegion::ptr region;
+    TextureRegion region;
 
     if ( imageFile ) {
         region = TextureRegion::newFromTexture ( Texture::newFromFile ( imageFile, NULL, false ) );

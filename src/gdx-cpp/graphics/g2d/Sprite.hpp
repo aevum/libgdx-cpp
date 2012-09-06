@@ -33,35 +33,35 @@ class SpriteBatch;
 
 class Sprite : public TextureRegion {
 public:
-
+    typedef std::array<float, 20> vertex_array_t;
     typedef ref_ptr_maker<Sprite>::shared_ptr_def ptr;
-  
+
     Sprite();
-    Sprite(ptr);
-    Sprite (Texture::ptr texture) ;
-    Sprite (Texture::ptr texture, int srcWidth, int srcHeight) ;
-    Sprite (Texture::ptr texture, int srcX, int srcY, int srcWidth, int srcHeight) ;
-    Sprite (const TextureRegion& region) ;
-    Sprite (const TextureRegion& region, int srcX, int srcY, int srcWidth, int srcHeight) ;
-    
-    void set (ptr sprite);
-    void setBounds (float x,float y,float width,float height);
-    void setSize (float width,float height);
-    void setPosition (float x,float y);
-    void translate (float xAmount,float yAmount);
-    void setColor (const Color& tint);
-    void setColor (float r,float g,float b,float a);
-    void setOrigin (float originX,float originY);
-    void setRotation (float degrees);
-    void rotate (float degrees);
-    void rotate90 (bool clockwise);
-    void setScale (float scaleXY);
-    void setScale (float scaleX,float scaleY);
-    void scale (float amount);
-    float* const getVertices ();
+    Sprite ( ptr );
+    Sprite ( Texture::ptr texture ) ;
+    Sprite ( Texture::ptr texture, int srcWidth, int srcHeight ) ;
+    Sprite ( Texture::ptr texture, int srcX, int srcY, int srcWidth, int srcHeight ) ;
+    Sprite ( const TextureRegion& region ) ;
+    Sprite ( const TextureRegion& region, int srcX, int srcY, int srcWidth, int srcHeight ) ;
+
+    void set ( const gdx::Sprite::ptr& sprite );
+    void setBounds ( float x,float y,float width,float height );
+    void setSize ( float width,float height );
+    void setPosition ( float x,float y );
+    void translate ( float xAmount,float yAmount );
+    void setColor ( const Color& tint );
+    void setColor ( float r,float g,float b,float a );
+    void setOrigin ( float originX,float originY );
+    void setRotation ( float degrees );
+    void rotate ( float degrees );
+    void rotate90 ( bool clockwise );
+    void setScale ( float scaleXY );
+    void setScale ( float scaleX,float scaleY );
+    void scale ( float amount );
+    const vertex_array_t& getVertices();
     const Rectangle& getBoundingRectangle ();
-    void draw (SpriteBatch& spriteBatch);
-    void draw (SpriteBatch& spriteBatch, float alphaModulation);
+    void draw ( SpriteBatch& spriteBatch );
+    void draw ( SpriteBatch& spriteBatch, float alphaModulation );
     float getX ();
     float getY ();
     float getWidth ();
@@ -72,45 +72,47 @@ public:
     float getScaleX ();
     float getScaleY ();
     const Color& getColor ();
-    void setRegion (float u,float v,float u2,float v2);
-    void setU (float u);
-    void setV (float v);
-    void setU2 (float u2);
-    void setV2 (float v2);
-    void flip (bool x,bool y);
-    void scroll (float xAmount,float yAmount);
+    void setRegion ( float u,float v,float u2,float v2 );
+    void setU ( float u );
+    void setV ( float v );
+    void setU2 ( float u2 );
+    void setV2 ( float v2 );
+    void flip ( bool x,bool y );
+    void scroll ( float xAmount,float yAmount );
 
-    static const int X1 = 0;
-    static const int Y1 = 1;
-    static const int C1 = 2;
-    static const int U1 = 3;
-    static const int V1 = 4;
-    static const int X2 = 5;
-    static const int Y2 = 6;
-    static const int C2 = 7;
-    static const int U2 = 8;
-    static const int V2 = 9;
-    static const int X3 = 10;
-    static const int Y3 = 11;
-    static const int C3 = 12;
-    static const int U3 = 13;
-    static const int V3 = 14;
-    static const int X4 = 15;
-    static const int Y4 = 16;
-    static const int C4 = 17;
-    static const int U4 = 18;
-    static const int V4 = 19;
+    enum {
+        X1 = 0,
+        Y1 = 1,
+        C1 = 2,
+        U1 = 3,
+        V1 = 4,
+        X2 = 5,
+        Y2 = 6,
+        C2 = 7,
+        U2 = 8,
+        V2 = 9,
+        X3 = 10,
+        Y3 = 11,
+        C3 = 12,
+        U3 = 13,
+        V3 = 14,
+        X4 = 15,
+        Y4 = 16,
+        C4 = 17,
+        U4 = 18,
+        V4 = 19
+    };
 
     static const int VERTEX_SIZE = 2 + 1 + 2;
     static const int SPRITE_SIZE = 4 * VERTEX_SIZE;
 
-    
+
     virtual ~Sprite();
-    
+
 protected:
-    float vertices[20];
-    
-private:   
+    vertex_array_t vertices;
+
+private:
     Color color;
     float x, y;
     float width, height;
@@ -118,8 +120,8 @@ private:
     float rotation;
     float scaleX, scaleY;
     bool dirty;
-    Rectangle bounds;   
-    void initialize(Texture::ptr arg1, int arg2, int arg3, int arg4, int arg5);
+    Rectangle bounds;
+    void initialize ( Texture::ptr arg1, int arg2, int arg3, int arg4, int arg5 );
 };
 
 } // namespace gdx

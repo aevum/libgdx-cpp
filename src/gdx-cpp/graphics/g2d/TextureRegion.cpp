@@ -24,14 +24,14 @@
 
 using namespace gdx;
 
-TextureRegion::ptr TextureRegion::newFromTexture(Texture::ptr texture)
+TextureRegion TextureRegion::newFromTexture(Texture::ptr texture)
 {
-    return ptr(new TextureRegion(texture));
+    return TextureRegion(texture);
 }
 
-TextureRegion::ptr TextureRegion::newFromRegion(TextureRegion& region)
+TextureRegion TextureRegion::newFromRegion(TextureRegion& region)
 {
-    return ptr(new TextureRegion(region));
+    return TextureRegion(region);
 }
 
 /** Constructs a region with no texture and no coordinates defined. */
@@ -73,7 +73,7 @@ texture(_texture)
 }
 
 /** Constructs a region with the same texture and coordinates of the specified region. */
-TextureRegion::TextureRegion (TextureRegion& region):u(0.0),
+TextureRegion::TextureRegion ( const TextureRegion& region ):u(0.0),
 v(0.0),
 u2(0.0),
 v2(0.0)
@@ -92,11 +92,9 @@ v2(0.0)
     setRegion(region, x, y, width, height);
 }
 
-
-
-void TextureRegion::setRegion (Texture::ptr _texture) {
-    this->texture = _texture;
-    setRegion(0, 0, _texture->getWidth(), _texture->getHeight());
+void TextureRegion::setRegion ( const Texture::ptr& texture ) {
+    this->texture = texture;
+    setRegion(0, 0, texture->getWidth(), texture->getHeight());
 }
 
 void TextureRegion::setRegion (int x,int y,int width,int height) {
@@ -122,11 +120,11 @@ void TextureRegion::setRegion (const TextureRegion& region, int x, int y, int wi
     setRegion(region.getRegionX() + x, region.getRegionY() + y, width, height);
 }
 
-Texture::ptr TextureRegion::getTexture () const {
+const Texture::ptr& TextureRegion::getTexture () const {
     return texture;
 }
 
-void TextureRegion::setTexture (Texture::ptr) {
+void TextureRegion::setTexture ( const Texture::ptr& texture ) {
     this->texture = texture;
 }
 
@@ -218,44 +216,6 @@ void TextureRegion::scroll (float xAmount,float yAmount) {
         v = std::fmod((v + yAmount), 1);
         v2 = v + height / texture->getHeight();
     }
-}
-
-MatrixBase<TextureRegion::ptr> TextureRegion::split (int tileWidth, int tileHeight)
-{
-    int x = getRegionX();
-    int y = getRegionY();
-    int width = getRegionWidth();
-    int height = getRegionHeight();
-
-    if (width < 0) {
-        x = x - width;
-        width = -width;
-    }
-
-    if (height < 0) {
-        y = y - height;
-        height = -height;
-    }
-
-    const int rows = height / tileHeight;
-    const int cols = width / tileWidth;
-
-    int startX = x;
-    MatrixBase<TextureRegion::ptr> matrix(rows, cols);
-
-    for (int row = 0; row < rows; row++, y += tileHeight) {
-        x = startX;
-        for (int col = 0; col < cols; col++, x += tileWidth) {
-            matrix[row][col] = TextureRegion::ptr(new TextureRegion(texture, x, y, tileWidth, tileHeight));
-        }
-    }
-
-    return matrix;
-}
-
-MatrixBase<TextureRegion::ptr> TextureRegion::split (Texture::ptr texture, int tileWidth, int tileHeight) {
-    TextureRegion region(texture);
-    return region.split(tileWidth, tileHeight);
 }
 
 TextureRegion::~TextureRegion() {
