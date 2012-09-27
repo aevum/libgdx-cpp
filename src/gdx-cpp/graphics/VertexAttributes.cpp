@@ -32,7 +32,7 @@ VertexAttributes::VertexAttributes (const std::vector<VertexAttribute>& attribut
         : attributes(attributes)
 {
     if (attributes.size() == 0) {
-        throw std::runtime_error("attributes must be >= 1");
+        gdx_log_error("gdx","attributes must be >= 1");
     }
 
     checkValidity();
@@ -62,7 +62,7 @@ void VertexAttributes::checkValidity () {
         const VertexAttribute& attribute = attributes[i];
         if (attribute.usage == Usage::Position) {
             if (pos) {
-                throw std::runtime_error("two position attributes were specified");
+                gdx_log_error("gdx","two position attributes were specified");
             }
 
             pos = true;
@@ -70,17 +70,17 @@ void VertexAttributes::checkValidity () {
 
         if (attribute.usage == Usage::Normal) {
             if (nors) {
-                throw std::runtime_error("two normal attributes were specified");
+                gdx_log_error("gdx","two normal attributes were specified");
             }
         }
 
         if (attribute.usage == Usage::Color || attribute.usage == Usage::ColorPacked) {
             if (attribute.numComponents != 4) {
-                throw std::runtime_error("color attribute must have 4 components");
+                gdx_log_error("gdx","color attribute must have 4 components");
             }
 
             if (cols) {
-                throw std::runtime_error("two color attributes were specified");
+                gdx_log_error("gdx","two color attributes were specified");
             }
 
             cols = true;
@@ -88,7 +88,7 @@ void VertexAttributes::checkValidity () {
     }
 
     if (pos == false) {
-      throw std::runtime_error("no position attribute was specified");
+      gdx_log_error("gdx","no position attribute was specified");
     }
 }
 

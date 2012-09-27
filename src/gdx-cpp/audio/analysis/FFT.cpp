@@ -32,7 +32,7 @@ FFT::FFT(int ts, float sr): FourierTransform(ts, sr)
 {
     if ((ts & (ts - 1)) != 0)
     {
-        throw std::runtime_error("FFT: timeSize must be a power of two.");
+        gdx_log_error("gdx","FFT: timeSize must be a power of two.");
     }
     buildReverseTable();
     buildTrigTables();
@@ -46,7 +46,7 @@ void FFT::allocateArrays () {
 
 void FFT::scaleBand (int i,float s) {
     if (s < 0) {
-       throw std::runtime_error("Can't scale a frequency band by a negative value.");
+       gdx_log_error("gdx","Can't scale a frequency band by a negative value.");
     }
     if (spectrum[i] != 0) {
         real[i] /= spectrum[i];
@@ -63,7 +63,7 @@ void FFT::scaleBand (int i,float s) {
 
 void FFT::setBand (int i,float a) {
     if (a < 0) {
-        throw std::runtime_error("Can't set a frequency band to a negative value.");
+        gdx_log_error("gdx","Can't set a frequency band to a negative value.");
     }
     if (real[i] == 0 && imag[i] == 0) {
         real[i] = a;
@@ -112,7 +112,7 @@ void FFT::fft () {
 
 void FFT::forward (std::vector<float>& buffer) {
     if (buffer.size() != timeSizeVar) {
-        throw std::runtime_error("FFT.forward: The length of the passed sample buffer must be equal to timeSize().");
+        gdx_log_error("gdx","FFT.forward: The length of the passed sample buffer must be equal to timeSize().");
     }
     doWindow(buffer);
     // copy samples to real/imag in bit-reversed order
@@ -125,7 +125,7 @@ void FFT::forward (std::vector<float>& buffer) {
 
 void FFT::forward (std::vector<float>& buffReal, std::vector<float>& buffImag) {
     if (buffReal.size() != timeSizeVar || buffImag.size() != timeSizeVar) {
-       throw std::runtime_error("FFT.forward: The length of the passed buffers must be equal to timeSize().");
+       gdx_log_error("gdx","FFT.forward: The length of the passed buffers must be equal to timeSize().");
     }
     setComplex(buffReal, buffImag);
     bitReverseComplex();
@@ -135,7 +135,7 @@ void FFT::forward (std::vector<float>& buffReal, std::vector<float>& buffImag) {
 
 void FFT::inverse (std::vector<float>& buffer) {
     if (buffer.size() > real.size()) {
-        throw std::runtime_error("FFT.inverse: the passed array's length must equal FFT.timeSize().");
+        gdx_log_error("gdx","FFT.inverse: the passed array's length must equal FFT.timeSize().");
     }
     // conjugate
     for (int i = 0; i < timeSizeVar; i++) {

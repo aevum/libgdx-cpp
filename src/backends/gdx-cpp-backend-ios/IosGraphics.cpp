@@ -82,7 +82,7 @@ gdx::GLU* gdx::ios::IosGraphics::getGLU()
 
 gdx::Graphics::BufferFormat gdx::ios::IosGraphics::getBufferFormat()
 {
-    throw std::runtime_error("not implemented yet");
+    gdx_log_error("gdx","not implemented yet");
 }
 
 float gdx::ios::IosGraphics::getDeltaTime()
@@ -97,12 +97,12 @@ float gdx::ios::IosGraphics::getDensity()
 
 gdx::Graphics::DisplayMode gdx::ios::IosGraphics::getDesktopDisplayMode()
 {
-    throw std::runtime_error("not implemented yet");
+    gdx_log_error("gdx","not implemented yet");
 }
 
 std::vector< gdx::Graphics::DisplayMode >& gdx::ios::IosGraphics::getDisplayModes()
 {
-    throw std::runtime_error("not implemented yet");
+    gdx_log_error("gdx","not implemented yet");
 }
 
 int gdx::ios::IosGraphics::getFramesPerSecond()
@@ -229,7 +229,7 @@ void gdx::ios::IosGraphics::initialize()
 		
         glCommon->glViewport(0, 0, width, height);
     } else {
-        throw std::runtime_error("IosGraphics: Failed to recover the GL_VERSION, aborting");
+        gdx_log_error("gdx","IosGraphics: Failed to recover the GL_VERSION, aborting");
     } 
 }
 
@@ -287,6 +287,6 @@ Pixmap* ios::IosGraphics::resolvePixmap(const gdx::FileHandle::ptr& file)
     else if (extension == "svg") {
         return gdx::AggSvgPixmap::newFromFile(file);        
     } else {
-        throw std::runtime_error("unsupported image format: " + extension);
+        gdx_log_error("gdx","unsupported image format: " + extension);
     }
 }

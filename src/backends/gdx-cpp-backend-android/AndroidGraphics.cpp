@@ -276,7 +276,7 @@ Pixmap* android::AndroidGraphics::resolvePixmap(const gdx::Pixmap& other)
             return new Gdx2DPixmap((Gdx2DPixmap&)other);
         case Pixmap::Svg:
         default:
-            throw std::runtime_error("Pixmap of type Svg doesnt provide a copy constructor");
+            gdx_log_error("gdx","Pixmap of type Svg doesnt provide a copy constructor");
     } 
 }
 
@@ -291,6 +291,6 @@ Pixmap* android::AndroidGraphics::resolvePixmap(const gdx::FileHandle::ptr& file
     } else if (extension == "svg") {
         return AggSvgPixmap::newFromFile(file);
     } else {
-        throw std::runtime_error("unsupported image format: " + extension);
+        gdx_log_error("gdx","unsupported image format: %s", extension.c_str());
     }
 }

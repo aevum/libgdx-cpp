@@ -53,7 +53,7 @@ LinuxOpenALAudio::LinuxOpenALAudio (int simultaneousSources)
 void LinuxOpenALAudio::createAl() {
     device = alcOpenDevice(NULL);
     if (device == NULL) {
-        throw std::runtime_error("Could not open ALC device");
+        gdx_log_error("gdx","Could not open ALC device");
     }
 
     context = alcCreateContext(device, NULL);
@@ -62,14 +62,14 @@ void LinuxOpenALAudio::createAl() {
 }
 
 gdx::Sound * LinuxOpenALAudio::newSound (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_def file) {
-//     if (file == NULL) throw std::runtime_error("file cannot be null.");
+//     if (file == NULL) gdx_log_error("gdx","file cannot be null.");
     std::string extension = file->extension();
     if (extension == "ogg")
       return new LinuxOggSound(this, file);
     else {
       std::stringstream ss;
       ss << "Unknown file extension for sound: " << file->name();
-      throw std::runtime_error(ss.str());
+      gdx_log_error("gdx",ss.str());
     }
 }
 
@@ -80,7 +80,7 @@ gdx::Music * LinuxOpenALAudio::newMusic (const ref_ptr_maker< gdx::FileHandle >:
     else {
       std::stringstream ss;
       ss << "Unknown file extension for sound: " << file->name();
-      throw std::runtime_error(ss.str());
+      gdx_log_error("gdx",ss.str());
     }
 }
 

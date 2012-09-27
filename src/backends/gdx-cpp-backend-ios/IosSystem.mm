@@ -42,7 +42,7 @@ using namespace gdx::ios;
 std::string IosSystem::canonicalize(const std::string& path)    
 {
     char buffer[32768];
-    if(realpath(path.c_str(), buffer) == NULL) throw std::runtime_error("Error trying to canonicalize path: " + path);
+    if(realpath(path.c_str(), buffer) == NULL) gdx_log_error("gdx","Error trying to canonicalize path: " + path);
     return std::string(buffer);
 }
 
@@ -57,7 +57,7 @@ void IosSystem::checkDelete(const std::string& path)
        if(found == testPath.npos) break;
        else testPath = testPath.substr(0, found);
     }
-    throw std::runtime_error("Delete permission denied on file: " + path);
+    gdx_log_error("gdx","Delete permission denied on file: " + path);
 }
 
 void IosSystem::checkRead(const std::string& path)
@@ -71,7 +71,7 @@ void IosSystem::checkRead(const std::string& path)
        if(found == testPath.npos) break;
        else testPath = testPath.substr(0, found);
     }
-    throw std::runtime_error("Read permission denied on file: " + path);
+    gdx_log_error("gdx","Read permission denied on file: " + path);
 }
 
 bool IosSystem::createDirectory(const gdx::File& f)
@@ -152,7 +152,7 @@ bool IosSystem::isAbsolute(const gdx::File& f)
 
 void IosSystem::list(const gdx::File& f, std::vector< std::string > &paths)
 {
-    throw std::runtime_error("Not implemented");
+    gdx_log_error("gdx","Not implemented");
 }
 
 std::string IosSystem::normalize(const std::string &pathname, const int &len, const int &off)
@@ -215,7 +215,7 @@ std::string IosSystem::resolve(const gdx::File& f)
 	}
 	
     gdx_log_error("gdx", "File %s not found", f.getName().c_str());
-	throw std::runtime_error("File " + f.getName() + " not found");
+	gdx_log_error("gdx","File " + f.getName() + " not found");
 }
 
 std::string IosSystem::resolve(const std::string& parent, const std::string& child)
@@ -237,7 +237,7 @@ void IosSystem::checkWrite(const std::string& path)
         if(found == testPath.npos) break;
         else testPath = testPath.substr(0, found);
      }
-     throw std::runtime_error("Write permission denied on file: " + path);
+     gdx_log_error("gdx","Write permission denied on file: " + path);
 }
 
 class IosMutex : public gdx::Mutex {
@@ -278,14 +278,14 @@ public:
 
     void start() {
         if (pthread_create(&thread, NULL, run_runnable, (void*) runnable) != 0) {
-            throw std::runtime_error("pthread_create failed");
+            gdx_log_error("gdx","pthread_create failed");
         }
     }
 
     void join() {
         std::cout << "antes do join" << std::endl;
         if( pthread_join(thread, NULL) != 0) {
-            throw std::runtime_error("pthread_join failed");
+            gdx_log_error("gdx","pthread_join failed");
         }
         std::cout << "depois do join" << std::endl;
     }

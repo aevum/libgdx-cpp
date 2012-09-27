@@ -56,7 +56,7 @@ void LinuxOpenALMusic::play ()
         if (buffers == NULL) {
             buffers =  new unsigned[bufferCount];
             alGenBuffers(bufferCount,  buffers);
-            if (alGetError() != AL_NO_ERROR) throw std::runtime_error("Unabe to allocate audio buffers.");
+            if (alGetError() != AL_NO_ERROR) gdx_log_error("gdx","Unabe to allocate audio buffers.");
         }
         alSourcei(sourceID, AL_LOOPING, AL_FALSE);
         alSourcef(sourceID, AL_GAIN, volume);

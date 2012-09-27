@@ -144,7 +144,7 @@ Input* IosApplication::getInput()
 
 Preferences* IosApplication::getPreferences(std::string& name)
 {
-	throw std::runtime_error("not implemented yet");
+	gdx_log_error("gdx","not implemented yet");
 }
 
 gdx::Application::ApplicationType IosApplication::getType()

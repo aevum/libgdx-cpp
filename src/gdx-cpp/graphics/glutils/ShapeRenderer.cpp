@@ -79,7 +79,7 @@ void ShapeRenderer::scale (float scaleX,float scaleY,float scaleZ) {
 }
 
 void ShapeRenderer::begin (const ShapeType& type) {
-    if(currType != NULL) throw std::runtime_error("Call end() before beginning a new shape batch");
+    if(currType != NULL) gdx_log_error("gdx","Call end() before beginning a new shape batch");
     currType = &type;
     if(matrixDirty) {
         combined.set(projView);
@@ -99,7 +99,7 @@ void ShapeRenderer::begin (const ShapeType& type) {
 }
 
 void ShapeRenderer::point (float x,float y,float z) {
-    if(*currType != ShapeType::Point) throw std::runtime_error("Must call begin(ShapeType::Point)");
+    if(*currType != ShapeType::Point) gdx_log_error("gdx","Must call begin(ShapeType::Point)");
     checkDirty();
     checkFlush(1);
     renderer->color(color.r, color.g, color.b, color.a);
@@ -107,7 +107,7 @@ void ShapeRenderer::point (float x,float y,float z) {
 }
 
 void ShapeRenderer::line (float x,float y,float z,float x2,float y2,float z2) {
-    if(*currType != ShapeType::Line) throw std::runtime_error("Must call begin(ShapeType::Line)");
+    if(*currType != ShapeType::Line) gdx_log_error("gdx","Must call begin(ShapeType::Line)");
     checkDirty();
     checkFlush(2);
     renderer->color(color.r, color.g, color.b, color.a);
@@ -117,10 +117,10 @@ void ShapeRenderer::line (float x,float y,float z,float x2,float y2,float z2) {
 }
 
 void ShapeRenderer::line (float x,float y,float x2,float y2) {
-    if(*currType != ShapeType::Line) throw std::runtime_error("Must call begin(ShapeType::Line)");
+    if(*currType != ShapeType::Line) gdx_log_error("gdx","Must call begin(ShapeType::Line)");
     checkDirty();
     checkFlush(2);
-    if(*currType != ShapeType::Line) throw std::runtime_error("Must call begin(ShapeType::Line)");
+    if(*currType != ShapeType::Line) gdx_log_error("gdx","Must call begin(ShapeType::Line)");
     renderer->color(color.r, color.g, color.b, color.a);
     renderer->vertex(x, y, 0);
     renderer->color(color.r, color.g, color.b, color.a);
@@ -128,7 +128,7 @@ void ShapeRenderer::line (float x,float y,float x2,float y2) {
 }
 
 void ShapeRenderer::rect (float x,float y,float width,float height) {
-    if(*currType != ShapeType::Rectangle) throw std::runtime_error("Must call begin(ShapeType::Rectangle)");
+    if(*currType != ShapeType::Rectangle) gdx_log_error("gdx","Must call begin(ShapeType::Rectangle)");
     checkDirty();
     checkFlush(8);
     renderer->color(color.r, color.g, color.b, color.a);
@@ -153,7 +153,7 @@ void ShapeRenderer::rect (float x,float y,float width,float height) {
 }
 
 void ShapeRenderer::filledRect (float x,float y,float width,float height) {
-    if(*currType != ShapeType::FilledRectangle) throw std::runtime_error("Must call begin(ShapeType::FilledRectangle)");
+    if(*currType != ShapeType::FilledRectangle) gdx_log_error("gdx","Must call begin(ShapeType::FilledRectangle)");
     checkDirty();
     checkFlush(8);
     renderer->color(color.r, color.g, color.b, color.a);
@@ -172,7 +172,7 @@ void ShapeRenderer::filledRect (float x,float y,float width,float height) {
 }
 
 void ShapeRenderer::box (float x,float y,float z,float width,float height,float depth) {
-    if(*currType != ShapeType::Box) throw std::runtime_error("Must call begin(ShapeType::Box)");
+    if(*currType != ShapeType::Box) gdx_log_error("gdx","Must call begin(ShapeType::Box)");
     checkDirty();
     checkFlush(16);
 

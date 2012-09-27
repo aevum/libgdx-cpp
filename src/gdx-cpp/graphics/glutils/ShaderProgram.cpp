@@ -167,7 +167,9 @@ int ShaderProgram::fetchUniformLocation (const std::string& name) {
     int location;
     if (uniforms.count(name) == 0) {
         location = gl->glGetUniformLocation(program, name);
-        if (location == -1 && pedantic)throw std::runtime_error("no uniform with name '" + name + "' in shader");
+        if (location == -1 && pedantic) {
+            gdx_log_error("gdx","No uniform with name '%s' in shader", name.c_str());
+        }
         uniforms[name] = location;
     }else
     {

@@ -485,7 +485,7 @@ Sprite::Sprite(const Texture::ptr& texture, int srcX, int srcY, int srcWidth, in
 void Sprite::initialize(const Texture::ptr& texture, int srcX, int srcY, int srcWidth, int srcHeight)
 {
     if (!texture)
-        throw std::runtime_error("texture cannot be null.");
+        gdx_log_error("gdx","texture cannot be null.");
 
     this->scaleX = 1;
     this->scaleY = 1;

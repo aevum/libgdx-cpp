@@ -108,7 +108,7 @@ void Texture::uploadImageData (const Pixmap::ptr& pixmap) {
     if (enforcePotImages && gl20 == NULL
             && (! isPowerOfTwo(data->getWidth()) || !isPowerOfTwo(data->getHeight())))
     {
-        throw std::runtime_error("Texture.cpp: texture width and height must be powers of two");
+        gdx_log_error("gdx","Texture.cpp: texture width and height must be powers of two");
     }
 
     bool disposePixmap = false;

@@ -67,9 +67,9 @@ int IosFileHandle::readBytes(gdx::FileHandle::buffer_ptr& c) const {
 				return len;
 			}
 		}
-		throw std::runtime_error("Failed to load contents of file: " + this->file.getAbsolutePath());
+		gdx_log_error("gdx","Failed to load contents of file: " + this->file.getAbsolutePath());
 	}
-	throw std::runtime_error("Not implemented yet");
+	gdx_log_error("gdx","Not implemented yet");
 }
 
 bool IosFileHandle::exists() const {

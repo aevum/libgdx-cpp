@@ -111,7 +111,7 @@ Input* gdx::android::AndroidApplication::getInput()
 
 Preferences* gdx::android::AndroidApplication::getPreferences(std::string& name)
 {
-    throw std::runtime_error("not implemented");
+    gdx_log_error("gdx","not implemented");
 }
 
 gdx::Application::ApplicationType gdx::android::AndroidApplication::getType()

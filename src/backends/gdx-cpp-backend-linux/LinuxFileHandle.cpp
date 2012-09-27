@@ -54,7 +54,7 @@ int LinuxFileHandle::readBytes(gdx::FileHandle::buffer_ptr& c) const
     FILE* f = fopen(filepath.c_str(), "r");
 
     if (f == NULL) {
-        throw std::runtime_error("File not found: " + path());
+        gdx_log_error("gdx","File not found: " + path());
     }
 
     int position = 0;
@@ -79,7 +79,7 @@ int LinuxFileHandle::write(const char* data, int length, bool append)
     FILE* f = fopen(file.getPath().c_str(), append ? "a" : "w");
 
     if (f == NULL) {
-        throw std::runtime_error("File not found: " + path());
+        gdx_log_error("gdx","File not found: " + path());
     }
 
     int written =fwrite(data, 1, length, f);

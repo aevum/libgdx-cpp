@@ -77,7 +77,7 @@ IosOpenALAudio::IosOpenALAudio (int simultaneousSources)
 void IosOpenALAudio::createAl() {
     device = alcOpenDevice(NULL);
     if (device == NULL) {
-        throw std::runtime_error("Could not open ALC device");
+        gdx_log_error("gdx","Could not open ALC device");
     }
 
     context = alcCreateContext(device, NULL);

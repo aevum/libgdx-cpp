@@ -21,7 +21,7 @@
 #include "XmlWriter.hpp"
 #include "XmlReader.hpp"
 
-#include <stdexcept>
+#include <gdx-cpp/Log.hpp>
 
 using namespace gdx;
 
@@ -62,7 +62,7 @@ bool XmlWriter::startElementContent () {
 }
 
 XmlWriter& XmlWriter::attribute (const std::string& name, const XmlReader::Element* value) {
-    if (currentElement.empty()) throw std::runtime_error("Empty element");
+    if (currentElement.empty()) gdx_log_error("gdx","Empty element");
     writer << (' ');
     writer << (name);
     writer << ("=\"");

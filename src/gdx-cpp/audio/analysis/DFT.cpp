@@ -30,7 +30,7 @@ DFT::DFT(int ts, float sr): FourierTransform(ts, sr)
 {
     if (ts % 2 != 0)
     {
-      throw std::runtime_error("DFT: timeSize must be even.");
+      gdx_log_error("gdx","DFT: timeSize must be even.");
     }
     buildTrigTables();
 }
@@ -51,7 +51,7 @@ void DFT::setBand (int i,float a) {
 void DFT::forward (std::vector<float>& samples) {
     if (samples.size() != timeSizeVar)
     {
-        throw std::runtime_error("DFT.forward: The length of the passed sample buffer must be equal to DFT.timeSize().");
+        gdx_log_error("gdx","DFT.forward: The length of the passed sample buffer must be equal to DFT.timeSize().");
     }
     doWindow(samples);
     int N = samples.size();

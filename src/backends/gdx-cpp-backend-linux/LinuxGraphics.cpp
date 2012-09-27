@@ -83,7 +83,7 @@ gdx::GLU* gdx::nix::LinuxGraphics::getGLU()
 
 gdx::Graphics::BufferFormat gdx::nix::LinuxGraphics::getBufferFormat()
 {
-    throw std::runtime_error("not implemented yet");
+    gdx_log_error("gdx","not implemented yet");
 }
 
 float gdx::nix::LinuxGraphics::getDeltaTime()
@@ -98,12 +98,12 @@ float gdx::nix::LinuxGraphics::getDensity()
 
 gdx::Graphics::DisplayMode gdx::nix::LinuxGraphics::getDesktopDisplayMode()
 {
-    throw std::runtime_error("not implemented yet");
+    gdx_log_error("gdx","not implemented yet");
 }
 
 std::vector< gdx::Graphics::DisplayMode >& gdx::nix::LinuxGraphics::getDisplayModes()
 {
-    throw std::runtime_error("not implemented yet");
+    gdx_log_error("gdx","not implemented yet");
 }
 
 int gdx::nix::LinuxGraphics::getFramesPerSecond()
@@ -211,7 +211,7 @@ bool gdx::nix::LinuxGraphics::supportsExtension(const std::string& extension)
 void gdx::nix::LinuxGraphics::initialize()
 {   
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        throw std::runtime_error("Failed to initialize SDL video");
+        gdx_log_error("gdx","Failed to initialize SDL video");
     }
 }
 
@@ -235,7 +235,7 @@ bool gdx::nix::LinuxGraphics::setDisplayMode(int width, int height, bool fullscr
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
     
     if (!SDL_SetVideoMode(width, height, info->vfmt->BitsPerPixel, flags)) {
-        throw std::runtime_error("Failed to initialize SDL video");
+        gdx_log_error("gdx","Failed to initialize SDL video");
     }
 
     return setupGLModes();
@@ -281,7 +281,7 @@ Pixmap* nix::LinuxGraphics::resolvePixmap(const FileHandle::ptr& file)
     else if (extension == "svg") {
         return AggSvgPixmap::newFromFile(file);        
     } else {
-        throw std::runtime_error("unsupported image format: " + extension);
+        gdx_log_error("gdx","unsupported image format: " + extension);
     }
 }
 

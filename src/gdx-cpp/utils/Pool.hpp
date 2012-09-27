@@ -50,7 +50,7 @@ public:
     }
 
     void free (T* const object) {
-        if (object == NULL) throw std::runtime_error("object cannot be null.");
+        if (object == NULL) gdx_log_error("gdx","object cannot be null.");
         if (freeObjects.size() < max)
         {
             freeObjects.push_back(object);

@@ -105,7 +105,7 @@ bool SvgParser::beginElement(XmlReader::Element*const currentNode)
     {
         if (m_pathFlag)
         {
-            throw std::runtime_error("start_element: Nested path");
+            gdx_log_error("gdx","start_element: Nested path");
         }
 
         handler->beginPath();
@@ -321,7 +321,7 @@ std::string::size_type gdx::SvgParser::parse_rotate(std::string rotateArgs, SvgR
     } else if (res.size() == 3) {
         transform.rotate_trasnlate(toRadians(res[0]), res[1], res[2]);
     } else {
-        throw std::runtime_error("SvgParser::parse_rotate: invalid number of arguments");
+        gdx_log_error("gdx","SvgParser::parse_rotate: invalid number of arguments");
     }
 
     return result;
@@ -400,9 +400,9 @@ gdx::Color gdx::SvgParser::parse_color(const std::string& colorValue)
 
         return Color::fromRgb(color);
     } else if ((pos = colorValue.find("rgb")) != std::string::npos) {
-        throw std::runtime_error("No implemented yet");
+        gdx_log_error("gdx","No implemented yet");
     } else {
-        throw std::runtime_error("No implemented yet");
+        gdx_log_error("gdx","No implemented yet");
     }
 }
 
@@ -460,12 +460,12 @@ void gdx::SvgParser::parse_rect(gdx::XmlReader::Element* node)
         if(w < 0.0) {
             char buffer[1204];
             sprintf(buffer, "parse_rect: Invalid width: %f", w);
-            throw std::runtime_error(buffer);
+            gdx_log_error("gdx",buffer);
         }
         if(h < 0.0) {
             char buffer[1204];
             sprintf(buffer, "parse_rect: Invalid height: %f", h);
-            throw std::runtime_error(buffer);
+            gdx_log_error("gdx",buffer);
         }
 
         handler->moveTo(x,  y);
@@ -558,7 +558,7 @@ void gdx::SvgParser::parse_path(gdx::XmlReader::Element* node)
 //                                 break;
 //
 //                             case 'A': case 'a':
-//                                 throw std::runtime_error("parse_path: Command A: NOT IMPLEMENTED YET");
+//                                 gdx_log_error("gdx","parse_path: Command A: NOT IMPLEMENTED YET");
 //
 //                             case 'Z': case 'z':
 //                                 handler->closeSubPath();
@@ -568,7 +568,7 @@ void gdx::SvgParser::parse_path(gdx::XmlReader::Element* node)
 //                             {
 //                                     char buf[100];
 //                                     sprintf(buf, "parse_path: Invalid Command %c", cmd);
-//                                     throw std::runtime_error(buf);
+//                                     gdx_log_error("gdx",buf);
 //                                 }
 //                             }
 //                         }

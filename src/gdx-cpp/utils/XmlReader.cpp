@@ -306,11 +306,11 @@ _match:
         int lineNumber = 1;
         for (int i = 0; i < p; i++)
             if (data[i] == '\n') lineNumber++;
-        throw std::runtime_error("Error parsing XML on line " + to_string(lineNumber) + " near: " + std::string(&data[p], std::min(32, pe - p)));
+        gdx_log_error("gdx","Error parsing XML on line %d near: %s", lineNumber, std::string(&data[p], std::min(32, pe - p)).c_str());
     } else if (elements.size() != 0) {
         Element::ptr element = elements.back();
         elements.clear();
-        throw std::runtime_error("Error parsing XML, unclosed element: " + element->getName());
+        gdx_log_error("gdx","Error parsing XML, unclosed element: %s", element->getName().c_str());
     }
 
     Element::ptr root = this->root;
@@ -361,14 +361,10 @@ std::string XmlReader::Element::getName() {
     return name;
 }
 std::string XmlReader::Element::getAttribute(const std::string& name) {
-    if (attributes.empty())
-        throw std::runtime_error("Element " + this->name + " doesn't have attribute: " + name);
+    if (attributes.empty() || !attributes.count(name))
+        gdx_log_error("gdx","Element %s doesn't have attribute: %s", this->name.c_str(), name.c_str());
 
-    if (attributes.count(name)) {
-        return attributes[name];
-    }
-
-    throw std::runtime_error("Element " + this->name + " doesn't have attribute: " + name);
+    return attributes[name];
 }
 
 std::string XmlReader::Element::getAttribute(const std::string& name, const std::string& defaultValue) {
@@ -391,7 +387,7 @@ int XmlReader::Element::getChildCount() {
 }
 
 XmlReader::Element::ptr const XmlReader::Element::getChild(int i) {
-    if (children.size() == 0) throw std::runtime_error("Element has no children: " + name);
+    if (children.size() == 0) gdx_log_error("gdx","Element has no children: %s", name.c_str());
     return children[i];
 }
 
@@ -522,7 +518,7 @@ bool XmlReader::Element::getBooleanAttribute(const std::string& name, bool defau
 }
 std::string XmlReader::Element::get(const std::string& name) {
     if (!hasAttribute(name))
-        throw std::runtime_error("Element " + this->name + " doesn't have attribute or child: " + name);
+        gdx_log_error("gdx","Element %s doesn't have attribute or child: %s", name.c_str());
     return getAttribute(name, "");
 }
 
@@ -545,7 +541,7 @@ int XmlReader::Element::getInt(const std::string& name) {
     std::string value = get(name, "");
     
     if (value.empty())
-        throw std::runtime_error("Element " + this->name + " doesn't have attribute or child: " + name);
+        gdx_log_error("gdx","Element %s doesn't have attribute or child: %s", this->name.c_str(), name.c_str());
     
     return from_string< int>(value);
 }
@@ -562,7 +558,7 @@ int XmlReader::Element::getInt(const std::string& name, int defaultValue) {
 float XmlReader::Element::getFloat(const std::string& name) {
     std::string value = get(name, "");
     if (value.empty())
-        throw std::runtime_error("Element " + this->name + " doesn't have attribute or child: " + name);
+        gdx_log_error("gdx","Element %s doesn't have attribute or child: %s", this->name.c_str(), name.c_str());
 
     return from_string< float >(value);
 }
@@ -579,7 +575,8 @@ float XmlReader::Element::getFloat(const std::string& name, float defaultValue) 
 bool XmlReader::Element::getBolean(const std::string& name) {
     std::string value = get(name, "");
     if (value.empty())
-        throw std::runtime_error("Element " + this->name + " doesn't have attribute or child: " + name);
+        gdx_log_error("gdx","Element %s doesn't have attribute or child: %s", this->name.c_str(), name.c_str());
+    
     return from_string< bool >(value);
 }
 bool XmlReader::Element::getBoolean(const std::string& name, bool defaultValue) {

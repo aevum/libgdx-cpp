@@ -198,7 +198,7 @@ vertexShader(createVertexShader(hasNormals, hasColors, numTexCoords)),
 fragmentShader(createFragmentShader(hasNormals, hasColors, numTexCoords))
 {
     if (!defaultShader->isCompiled())
-        throw std::runtime_error("Couldn't compile immediate mode default shader!\n" + defaultShader->getLog());
+        gdx_log_error("gdx", "Couldn't compile immediate mode default shader:\n %s", defaultShader->getLog().c_str());
 
     vertices = new float[maxVertices * (mesh.getVertexAttributes().vertexSize / 4)];
     vertexSize = mesh.getVertexAttributes().vertexSize / 4;

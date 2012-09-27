@@ -76,11 +76,11 @@ void FrameBuffer::build () {
         gl.glDeleteFramebuffers(1, &handle);
 
         if (result == GL20::GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
-            throw std::runtime_error("frame buffer couldn't be constructed: incomplete attachment");
+            gdx_log_error("gdx","frame buffer couldn't be constructed: incomplete attachment");
         if (result == GL20::GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS)
-            throw std::runtime_error("frame buffer couldn't be constructed: incomplete dimensions");
+            gdx_log_error("gdx","frame buffer couldn't be constructed: incomplete dimensions");
         if (result == GL20::GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
-            throw std::runtime_error("frame buffer couldn't be constructed: missing attachment");
+            gdx_log_error("gdx","frame buffer couldn't be constructed: missing attachment");
     }
 }
 

@@ -24,6 +24,7 @@
 #include <sstream>
 #include <string.h>
 #include <cassert>
+#include <gdx-cpp/Log.hpp>
 
 namespace gdx {
 
@@ -70,9 +71,7 @@ struct buffer : public buffer_base {
         position(pos);
         if (mark >= 0) {
             if (mark > pos) {
-                std::stringstream ss;
-                ss << " mark > position: (" << mark << " > " << pos + ")";
-                throw std::runtime_error(ss.str());
+                gdx_log_error("gdx","mark > position: %d > %d", mark, pos);
             }
         }
     }
@@ -88,9 +87,7 @@ struct buffer : public buffer_base {
         position(pos);
         if (mark >= 0) {
             if (mark > pos) {
-                std::stringstream ss;
-                ss << " mark > position: (" << mark << " > " << pos + ")";
-                throw std::runtime_error(ss.str());
+                gdx_log_error("gdx","mark > position: %d > %d", mark, pos);
             }
         }
     }
@@ -127,7 +124,7 @@ struct buffer : public buffer_base {
     buffer<T>& get(T* dst, int dstSize, int offset, int length) {
         checkBounds(offset, length, dstSize);
         if (length > remaining())
-            throw std::runtime_error("buffer underflow");
+            gdx_log_error("gdx","buffer underflow");
         int end = offset + length;
         for (int i = offset; i < end; i++)
             dst[i] = get();
@@ -148,7 +145,7 @@ struct buffer : public buffer_base {
     
     buffer<T>& position(int newPosition) {
         if ((newPosition > _limit) || (newPosition < 0))
-            throw std::runtime_error("");
+            gdx_log_error("gdx","");
         _position = newPosition;
         if (_mark > _position) clearMark();
         return *this;
@@ -161,7 +158,7 @@ struct buffer : public buffer_base {
     buffer<T>& limit(int newLimit)
     {
         if ((newLimit > _capacity) || (newLimit < 0))
-            throw std::runtime_error("");
+            gdx_log_error("gdx","");
         _limit = newLimit;
         if (_position > _limit) _position = _limit;
         if (_mark > _position) clearMark();
@@ -201,7 +198,7 @@ struct buffer : public buffer_base {
     buffer<T>& reset() {
         int m = _mark;
         if (m < 0)
-            throw std::runtime_error("buffer underflow");
+            gdx_log_error("gdx","buffer underflow");
         _position = m;
         return *this;
     }
@@ -249,7 +246,7 @@ struct buffer : public buffer_base {
     buffer<T>& put(const T* src, int size, int offset, int length) {
         checkBounds(offset, length, size);
         if (length > remaining())
-            throw std::runtime_error("buffer overflow");
+            gdx_log_error("gdx","buffer overflow");
 
         T* casted_array = (T*) bf.get();
         memcpy(&casted_array[_position], &src[offset], sizeof(T) * length);
@@ -270,7 +267,7 @@ struct buffer : public buffer_base {
     buffer<T>& put(const std::vector<T>& src, int offset, int length) {
         checkBounds(offset, length, src.size());
         if (length > remaining())
-            throw std::runtime_error("buffer overflow");
+            gdx_log_error("gdx","buffer overflow");
 
         T* casted_array = (T*) bf.get();
         memcpy(&casted_array[_position], &src[offset], sizeof(T) * length);
@@ -287,13 +284,13 @@ struct buffer : public buffer_base {
 
     int nextGetIndex() {
         if (_position >= _limit)
-            throw std::runtime_error("buffer underflow");
+            gdx_log_error("gdx","buffer underflow");
         return _position++;
     }
 
     int nextGetIndex(int nb) {
         if (_limit - _position < nb)
-            throw std::runtime_error("buffer underflow");
+            gdx_log_error("gdx","buffer underflow");
         int p = _position;
         _position += nb;
         return p;
@@ -301,13 +298,13 @@ struct buffer : public buffer_base {
 
     int nextPutIndex() {
         if (_position >= _limit)
-            throw std::runtime_error("buffer overflow");
+            gdx_log_error("gdx","buffer overflow");
         return _position++;
     }
 
     int nextPutIndex(int nb) {
         if (_limit - _position < nb)
-            throw std::runtime_error("buffer overflow");
+            gdx_log_error("gdx","buffer overflow");
         int p = _position;
         _position += nb;
         return p;
@@ -315,13 +312,13 @@ struct buffer : public buffer_base {
 
     int checkIndex(int i) {
         if ((i < 0) || (i >= _limit))
-            throw std::runtime_error("invalid index");
+            gdx_log_error("gdx","invalid index");
         return i;
     }
 
     int checkIndex(int i, int nb) {
         if ((i < 0) || (nb > _limit - i))
-            throw std::runtime_error("wrong index");
+            gdx_log_error("gdx","wrong index");
         return i;
     }
 
@@ -331,7 +328,7 @@ struct buffer : public buffer_base {
 
     static void checkBounds(int off, int len, int size) {
         if ((off | len | (off + len) | (size - (off + len))) < 0)
-            throw std::runtime_error("index out of bounds");
+            gdx_log_error("gdx","index out of bounds");
     }
 
     int _markValue() {

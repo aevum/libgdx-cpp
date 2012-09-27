@@ -89,7 +89,7 @@ File FileHandle::getFile () const {
 }
 
 int FileHandle::readBytes (buffer_ptr &c) const {
-    throw std::runtime_error("Not implemented, if you're seeing this error your backend"
+    gdx_log_error("gdx","Not implemented, if you're seeing this error your backend"
                              " hasn't implemented the readBytes method, wich he should");
     
 //     int Length = (int) length();
@@ -124,7 +124,7 @@ int FileHandle::readBytes (buffer_ptr &c) const {
 //     catch(std::runtime_error e)
 //     {
 //         if(input->is_open()) input->close();
-//         throw std::runtime_error("Error reading file: " + this->toString());
+//         gdx_log_error("gdx","Error reading file: " + this->toString());
 //     }
 //     
 //     if(input->is_open()) {
@@ -144,10 +144,10 @@ int FileHandle::readBytes (buffer_ptr &c) const {
 
 
 int FileHandle::write ( const char* data, int lenght, bool append) {
-    throw std::runtime_error("Not implemented, if you're seeing this error your backend"
+    gdx_log_error("gdx","Not implemented, if you're seeing this error your backend"
                              " hasn't implemented the write method, wich he should");
     
-//     if (type == gdx::Files::Internal) throw std::runtime_error("Cannot write to an internal file: " + file.getPath());
+//     if (type == gdx::Files::Internal) gdx_log_error("gdx","Cannot write to an internal file: " + file.getPath());
 //     ofstream_ptr output;
 //     try
 //     {
@@ -156,8 +156,8 @@ int FileHandle::write ( const char* data, int lenght, bool append) {
 //     }
 //     catch(std::runtime_error e)
 //     {
-//         if(getFile().isDirectory()) throw std::runtime_error("Cannot open a stream to a directory: " + file.getPath() + " (" + typetoString() + ")");
-//         else throw std::runtime_error("Error writing file: " + file.getPath() + " (" + typetoString() + ")");
+//         if(getFile().isDirectory()) gdx_log_error("gdx","Cannot open a stream to a directory: " + file.getPath() + " (" + typetoString() + ")");
+//         else gdx_log_error("gdx","Error writing file: " + file.getPath() + " (" + typetoString() + ")");
 //     }
 //     return output;
 }
@@ -209,7 +209,7 @@ FileHandle FileHandle::parent () {
 }
 
 void FileHandle::mkdirs () {
-    if (type == gdx::Files::Internal) throw std::runtime_error("Cannot mkdirs with an internal file: " + file.getPath());
+    if (type == gdx::Files::Internal) gdx_log_error("gdx","Cannot mkdirs with an internal file: %s", file.getPath().c_str());
     getFile().mkdirs();
 }
 
@@ -226,18 +226,18 @@ bool FileHandle::exists () const {
 
 bool FileHandle::deleteFile ()
 {
-    if (type == gdx::Files::Internal) throw std::runtime_error("Cannot delete an internal file: " + file.getPath());
+    if (type == gdx::Files::Internal) gdx_log_error("gdx","Cannot delete an internal file: ", file.getPath().c_str());
     return getFile().deleteFile();
 }
 
 bool FileHandle::deleteDirectory () {
-    if (type == gdx::Files::Internal) throw std::runtime_error("Cannot delete an internal file: " + file.getPath());
+    if (type == gdx::Files::Internal) gdx_log_error("gdx","Cannot delete an internal file: ", file.getPath().c_str());
     File target = getFile();
     return deleteDirectory(target);
 }
 
 void FileHandle::copyTo (FileHandle& dest) {
-    throw std::runtime_error("Not implemented, if you're seeing this error your backend"
+    gdx_log_error("gdx","Not implemented, if you're seeing this error your backend"
                              " hasn't implemented the readBytes method, wich he should");    
 //     ifstream_ptr input;
 //     ofstream_ptr output;
@@ -253,20 +253,20 @@ void FileHandle::copyTo (FileHandle& dest) {
 //     } catch(std::runtime_error ex) {
 //         if(input->is_open()) input->close();
 //         if(output->is_open()) output->close();
-//         throw std::runtime_error("Error copying source file: " + path() + " (" + typetoString() + ")\n" + "To destination: " + dest.path() + " (" + dest.typetoString() + ")");
+//         gdx_log_error("gdx","Error copying source file: " + path() + " (" + typetoString() + ")\n" + "To destination: " + dest.path() + " (" + dest.typetoString() + ")");
 //     }
 //    if(input->is_open()) input->close();
 //    if(output->is_open()) output->close();
 }
 
 void FileHandle::moveTo (FileHandle& dest) {
-    if (type == gdx::Files::Internal) throw std::runtime_error("Cannot move an internal file: " + file.getPath());
+    if (type == gdx::Files::Internal) gdx_log_error("gdx","Cannot move an internal file: %s", file.getPath().c_str());
     copyTo(dest);
     deleteFile();
 }
 
 int64_t FileHandle::length () const {
-    throw std::runtime_error("Not implemented, if you're seeing this error your backend"
+    gdx_log_error("gdx","Not implemented, if you're seeing this error your backend"
     " hasn't implemented the length method, wich he should");
     
 //     if ((type == gdx::Files::Internal && !file.exists())) {

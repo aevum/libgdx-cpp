@@ -133,9 +133,7 @@ void VertexBufferObjectSubData::bind () {
             break;
 
         default:{
-            std::stringstream ss;
-            ss << "unkown vertex attribute type: " << attribute.usage;
-            throw std::runtime_error(ss.str());
+            gdx_log_error("gdx","unkown vertex attribute type: %d", attribute.usage);
         }
         }
     }
@@ -195,11 +193,7 @@ void VertexBufferObjectSubData::unbind () {
             textureUnit++;
             break;
         default:
-        {
-            std::stringstream ss;
-            ss << "unkown vertex attribute type: " << attribute.usage;
-            throw std::runtime_error(ss.str());
-        }
+            gdx_log_error("gdx", "unkown vertex attribute type: %d", attribute.usage);        
         }
     }
 

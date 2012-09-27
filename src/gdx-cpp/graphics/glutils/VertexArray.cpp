@@ -86,7 +86,7 @@ void VertexArray::bind () {
             break;
 
         default:
-            throw std::runtime_error("unkown vertex attribute type");
+            gdx_log_error("gdx","unkown vertex attribute type");
         }
     }
 

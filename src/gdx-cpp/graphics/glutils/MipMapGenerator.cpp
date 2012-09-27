@@ -71,7 +71,7 @@ void MipMapGenerator::generateMipMapDesktop (Pixmap::ptr pixmap,int textureWidth
         if (disposePixmap) pixmap->dispose();
     } else if (graphics->supportsExtension("GL_SGIS_generate_mipmap")) {
         if ((gl20 == NULL) && textureWidth != textureHeight) {
-            throw std::runtime_error("texture width and height must be square when using mipmapping in OpenGL ES 1.x");
+            gdx_log_error("gdx","texture width and height must be square when using mipmapping in OpenGL ES 1.x");
         }
         
         gl->glTexParameterf(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
@@ -87,7 +87,7 @@ void MipMapGenerator::generateMipMapCPU (Pixmap::ptr pixmap,int textureWidth,int
     gl->glTexImage2D(GL_TEXTURE_2D, 0, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
                         pixmap->getGLFormat(), pixmap->getGLType(), pixmap->getPixels());
     if ((gl20 == NULL) && textureWidth != textureHeight) { 
-        throw std::runtime_error("texture width and height must be square when using mipmapping.");
+        gdx_log_error("gdx","texture width and height must be square when using mipmapping.");
     }
     
     int width = pixmap->getWidth() / 2;

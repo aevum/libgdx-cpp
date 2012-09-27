@@ -85,7 +85,7 @@ gdx::short_buffer& IndexBufferObjectSubData::getBuffer () {
 }
 
 void IndexBufferObjectSubData::bind () {
-    if (bufferHandle == 0) throw std::runtime_error("buuh");
+    if (bufferHandle == 0) gdx_log_error("gdx","buuh");
 
     if (gl11 != NULL) {
         GL11& gl = *gl11;

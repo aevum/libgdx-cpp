@@ -21,6 +21,7 @@
 #include "agg_svg_path_renderer.h"
 #include <iostream>
 #include <stdexcept>
+#include <gdx-cpp/Log.hpp>
 
 namespace agg
 {
@@ -62,7 +63,7 @@ m_curved_trans_contour(m_curved_trans) {
 
         if(m_attr_storage.size() == 0) 
         {
-            throw std::runtime_error("end_path : The path was not begun");
+            gdx_log_error("gdx","end_path : The path was not begun");
         }
         path_attributes& attr = cur_attr();
 
@@ -184,7 +185,7 @@ m_curved_trans_contour(m_curved_trans) {
     {
         if(m_attr_stack.size() == 0)
         {
-            throw std::runtime_error("cur_attr : Attribute stack is empty");
+            gdx_log_error("gdx","cur_attr : Attribute stack is empty");
         }
 
         return m_attr_stack[m_attr_stack.size() - 1];
@@ -203,7 +204,7 @@ m_curved_trans_contour(m_curved_trans) {
     {        
         if(m_attr_stack.size() == 0)
         {
-            throw std::runtime_error("pop_attr : Attribute stack is empty");
+            gdx_log_error("gdx","pop_attr : Attribute stack is empty");
         }
         m_attr_stack.remove_last();
     }

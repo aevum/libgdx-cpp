@@ -78,13 +78,13 @@ thread(0) {
 
     void start() {
         if (pthread_create(&thread, NULL, run_runnable, (void*) runnable) != 0) {
-            throw std::runtime_error("pthread_create failed");
+            gdx_log_error("gdx","pthread_create failed");
         }
     }
 
     void join() {
         if( pthread_join(thread, NULL) != 0) {
-            throw std::runtime_error("pthread_join failed");
+            gdx_log_error("gdx","pthread_join failed");
         }
     }
 
@@ -129,7 +129,7 @@ uint64_t gdx::android::AndroidSystem::nanoTime()
 std::string gdx::android::AndroidSystem::canonicalize(const std::string& path)
 {
     char buffer[32768];
-    if(realpath(path.c_str(), buffer) == NULL) throw std::runtime_error("Error trying to canonicalize path: " + path);
+    if(realpath(path.c_str(), buffer) == NULL) gdx_log_error("gdx","Error trying to canonicalize path: %s", path.c_str());
     return std::string(buffer);
 }
 
@@ -144,7 +144,7 @@ void gdx::android::AndroidSystem::checkDelete(const std::string& path)
         if(found == testPath.npos) break;
         else testPath = testPath.substr(0, found);
     }
-    throw std::runtime_error("Delete permission denied on file: " + path);
+    gdx_log_error("gdx","Delete permission denied on file: %s", path.c_str());
 }
 
 void gdx::android::AndroidSystem::checkRead(const std::string& path)
@@ -158,7 +158,7 @@ void gdx::android::AndroidSystem::checkRead(const std::string& path)
         if(found == testPath.npos) break;
         else testPath = testPath.substr(0, found);
     }
-    throw std::runtime_error("Read permission denied on file: " + path);
+    gdx_log_error("gdx","Read permission denied on file: %s", path.c_str());
 }
 
 void gdx::android::AndroidSystem::checkWrite(const std::string& path)
@@ -172,7 +172,7 @@ void gdx::android::AndroidSystem::checkWrite(const std::string& path)
         if(found == testPath.npos) break;
           else testPath = testPath.substr(0, found);
     }
-    throw std::runtime_error("Write permission denied on file: " + path);
+    gdx_log_error("gdx","Write permission denied on file: %s", path.c_str());
 }
 
 bool gdx::android::AndroidSystem::createDirectory(const gdx::File& f)
@@ -253,7 +253,7 @@ bool gdx::android::AndroidSystem::isAbsolute(const gdx::File& f)
 
 void gdx::android::AndroidSystem::list(const gdx::File& f, std::vector< std::string >& paths)
 {
-   throw std::runtime_error("Not supported yet");
+   gdx_log_error("gdx","Not supported yet");
 }
 
 std::string gdx::android::AndroidSystem::normalize(const std::string& path)
@@ -316,7 +316,7 @@ std::string gdx::android::AndroidSystem::resolve(const gdx::File& f)
 {
     if (isAbsolute(f)) return f.getPath();
     char buffer[2048];
-    if(getcwd(buffer, 2048) == NULL) throw std::runtime_error("Error trying to resolve path: " + f.getPath());
+    if(getcwd(buffer, 2048) == NULL) gdx_log_error("gdx","Error trying to resolve path: %s", f.getPath().c_str());
     return resolve(std::string(buffer), f.getPath());
 }
 

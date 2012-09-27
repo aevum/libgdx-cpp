@@ -850,7 +850,7 @@ std::string readString (std::istream& reader, const std::string& name) {
     std::string line;
     std::getline(reader, line);
     std::size_t found;
-    if (line.length() == 0 ) throw std::runtime_error("Missing value: " + name);
+    if (line.length() == 0 ) gdx_log_error("gdx", "Missing value: %s", name.c_str());
     found = line.find(":", 0);
     if (found == std::string::npos)
         found = -1;
@@ -867,7 +867,7 @@ bool readBoolean (std::istream& reader, const std::string& name) { //TODO GAMBIS
     {
       return false;
     }
-    throw std::runtime_error("Invalid boolean value for: " + name);
+    gdx_log_error("gdx","Invalid boolean value for: ", name.c_str());
 }
 
 int readInt (std::istream& reader, const std::string& name) {

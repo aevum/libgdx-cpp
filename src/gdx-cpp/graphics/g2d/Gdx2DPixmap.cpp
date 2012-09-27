@@ -94,7 +94,7 @@ pixData(0)
     format = pixData->format;
 
     if (pixData == NULL) {
-        throw std::runtime_error("couldn't load pixmap");
+        gdx_log_error("gdx","couldn't load pixmap");
 
     }
 }
@@ -129,7 +129,7 @@ Gdx2DPixmap::Gdx2DPixmap (unsigned char* encodedData, int offset, int len, int r
     this->format = pixData->format;
 
     if (!pixData) {
-        throw std::runtime_error("Failed loading pixmap");
+        gdx_log_error("gdx","Failed loading pixmap");
     }
 }
 
@@ -207,7 +207,7 @@ void Gdx2DPixmap::drawPixmap (const Pixmap& src, int srcX, int srcY, int srcWidt
     if (src.getType() == Pixmap::Gdx2d) {    
         gdx2d_draw_pixmap((gdx2d_pixmap*)((Gdx2DPixmap&) src).pixData, (gdx2d_pixmap*)pixData, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight);
     } else {
-        throw std::runtime_error("Unsupported conversion: expected a Gdx2DPixmap");
+        gdx_log_error("gdx","Unsupported conversion: expected a Gdx2DPixmap");
     }
 }
 
@@ -256,9 +256,7 @@ int Gdx2DPixmap::getGLInternalFormat () const {
         return GL_RGBA;
     default:
     {
-        std::stringstream ss;
-//         ss << "unknown format: " << pixData->format;
-        throw std::runtime_error(ss.str());
+        gdx_log_error("gdx","unknown format: %d",pixData->format);
     }
     }
 }
@@ -279,11 +277,7 @@ int Gdx2DPixmap::getGLType () const {
     case GDX2D_FORMAT_RGBA4444:
         return GL_UNSIGNED_SHORT_4_4_4_4;
     default:
-    {
-        std::stringstream ss;
-        ss << "unknown format: " << pixData->format;
-        throw std::runtime_error(ss.str());
-    }
+        gdx_log_error("gdx","unknown format: %d", pixData->format);    
     }
 }
 
@@ -318,7 +312,7 @@ void Gdx2DPixmap::setColor(const Color& color)
 
 void Gdx2DPixmap::setScale(float scaleX, float scaleY)
 {
-    throw std::runtime_error("Gdx2DPixmap::setScale: unsupported operation");
+    gdx_log_error("gdx","Gdx2DPixmap::setScale: unsupported operation");
 }
 
 Gdx2DPixmap* Gdx2DPixmap::newPixmapFromBuffer(unsigned char* data, int len, int requestedFormat)

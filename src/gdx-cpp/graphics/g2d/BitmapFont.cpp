@@ -626,22 +626,22 @@ xHeight ( 1 ) {
         char* line = strtok_r ( &n_buffer[0], "\n", &line_r );
 
         if ( ( line = strtok_r ( NULL, "\n", &line_r ) ) == NULL ) {
-            throw std::runtime_error ( "Invalid font file: " + fontFile->toString() );
+            gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
         }
 
         char* common = strtok ( line, " " );
 
         if ( sscanf ( strtok ( NULL, " " ), "lineHeight=%f", &lineHeight ) != 1 ) {
-            throw std::runtime_error ( "Invalid font file: " + fontFile->toString() );
+            gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
         }
 
         int baseLine = 0;
         if ( sscanf ( strtok ( NULL, " " ), "base=%d", &baseLine ) != 1 ) {
-            throw std::runtime_error ( "Invalid font file: " + fontFile->toString() );
+            gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
         }
 
         if ( ( line = strtok_r ( NULL, "\n", &line_r ) ) == NULL ) {
-            throw std::runtime_error ( "Invalid font file: " + fontFile->toString() );
+            gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
         }
 
         strtok ( line, " " );
@@ -649,7 +649,7 @@ xHeight ( 1 ) {
 
         char file[1024];
         if ( sscanf ( strtok ( NULL, " " ), "file=%s", file ) < 0 ) {
-            throw std::runtime_error ( "Invalid font file: " + fontFile->toString() );
+            gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
         }
 
         //removing the quotes (") from start and end of the string
@@ -678,7 +678,7 @@ xHeight ( 1 ) {
                           &ch, &glyph->srcX, &glyph->srcY, &glyph->width, &glyph->height, &glyph->xoffset, &glyph->yoffset, &glyph->xadvance ) != 8 ) {
 
                 delete glyph;
-                throw std::runtime_error ( "Invalid font file: " + fontFile->toString() );
+                gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
             }
 
             if ( ch <= 0xffff ) {
@@ -706,7 +706,7 @@ xHeight ( 1 ) {
             int first = 0, second = 0, amount = 0;
 
             if ( sscanf ( line, "kerning first=%d second=%d amount=%d", &first, &second, &amount ) != 3 ) {
-                throw std::runtime_error ( "Invalid font file: " + fontFile->toString() );
+                gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
             }
 
             if ( first < 0 || first > 0xffff || second < 0 || second > 0xffff )
@@ -751,7 +751,7 @@ xHeight ( 1 ) {
         }
     } catch ( std::exception e ) {
        gdx_log_debug ( "BitmapFont", "Constructor exception: %s", e.what() );
-        throw std::runtime_error ( "Error loading font file: " + fontFile->name() );
+        gdx_log_error("gdx", "Error loading font file: %s", fontFile->name().c_str() );
     }
 }
 

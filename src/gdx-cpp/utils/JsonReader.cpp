@@ -65,7 +65,7 @@ JsonValue::ptr JsonReader::parse (const FileHandle& file) {
 
         return parse(buffer.get(), 0, size);
     } catch (...) {
-        throw std::runtime_error("Error parsing file: " + file.name());
+        gdx_log_error("gdx","Error parsing file: %s", file.name().c_str());
     }
 }
 
@@ -2797,16 +2797,16 @@ case 70:
         int lineNumber = 1;
         for (char* aux = p; aux < pe; aux++)
             if (*aux == '\n') lineNumber++;
-        throw std::runtime_error("Error parsing JSON on line " + to_string(lineNumber) + " near: " + std::string(p, pe - p));
+        gdx_log_error("gdx","Error parsing JSON on line %d near: %s", lineNumber, std::string(p, pe - p).c_str());
     } else if (elements.size() != 0) {
         int element_type = elements.front()->item_type;
 
         elements.clear();
 
         if (element_type == json_json)
-            throw std::runtime_error("Error parsing JSON, unmatched brace.");
+            gdx_log_error("gdx","Error parsing JSON, unmatched brace.");
         else
-            throw std::runtime_error("Error parsing JSON, unmatched bracket.");
+            gdx_log_error("gdx","Error parsing JSON, unmatched bracket.");
     }
 
     return std::move(root);
@@ -2904,7 +2904,7 @@ std::string JsonReader::unescape (const std::string& value) {
             c = '\t';
             break;
         default:
-            throw std::runtime_error("Illegal escaped character: \\" + c);
+            gdx_log_error("gdx","Illegal escaped character: \\" + c);
         }
 
         buffer << c;

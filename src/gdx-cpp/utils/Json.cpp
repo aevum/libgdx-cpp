@@ -80,7 +80,7 @@ void Json::toJson (const JsonValue& object,const Class& knownType,const Class& e
         toJson(object, knownType, elementType, writer);
         writer->close();
     } catch (...) {
-        throw std::runtime_error("Error writing file: " + file.name());
+        gdx_log_error("gdx","Error writing file: " + file.name());
     }
 }
 

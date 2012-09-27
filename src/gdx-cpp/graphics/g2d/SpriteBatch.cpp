@@ -117,7 +117,7 @@ void SpriteBatch::createShader () {
 
     shader = new ShaderProgram(vertexShader, fragmentShader);
     if (shader->isCompiled() == false)
-        throw std::runtime_error("couldn't compile shader: " + shader->getLog());
+        gdx_log_error("gdx","couldn't compile shader:%s ", shader->getLog().c_str());
 }
 
 void SpriteBatch::begin () {
@@ -143,7 +143,7 @@ void SpriteBatch::begin () {
 
 void SpriteBatch::end () {
     if (!drawing)
-        throw std::runtime_error("SpriteBatch.begin must be called before end.");
+        gdx_log_error("gdx","SpriteBatch.begin must be called before end.");
     if (idx > 0) renderMesh();
     lastTexture = NULL;
     idx = 0;
@@ -315,7 +315,7 @@ void SpriteBatch::draw (const Texture& texture,float x,float y,float originX,flo
 
 void SpriteBatch::draw (const Texture& texture,float x,float y,float width,float height,int srcX,int srcY,int srcWidth,int srcHeight,bool flipX,bool flipY) {
     if (!drawing)
-        throw std::runtime_error("SpriteBatch.begin must be called before draw.");
+        gdx_log_error("gdx","SpriteBatch.begin must be called before draw.");
 
     if (&texture != lastTexture) {
         renderMesh();
@@ -370,7 +370,7 @@ void SpriteBatch::draw (const Texture& texture,float x,float y,float width,float
 
 void SpriteBatch::draw (const Texture& texture,float x,float y,int srcX,int srcY,int srcWidth,int srcHeight) {
     if (!drawing)
-        throw std::runtime_error("SpriteBatch.begin must be called before draw.");
+        gdx_log_error("gdx","SpriteBatch.begin must be called before draw.");
 
     if (&texture != lastTexture) {
         renderMesh();
@@ -413,7 +413,7 @@ void SpriteBatch::draw (const Texture& texture,float x,float y,int srcX,int srcY
 
 void SpriteBatch::draw (const Texture& texture,float x,float y,float width,float height,float u,float v,float u2,float v2) {
     if (!drawing)
-        throw std::runtime_error("SpriteBatch.begin must be called before draw.");
+        gdx_log_error("gdx","SpriteBatch.begin must be called before draw.");
 
     if (&texture != lastTexture) {
         renderMesh();
@@ -452,7 +452,7 @@ void SpriteBatch::draw (const Texture& texture,float x,float y,float width,float
 
 void SpriteBatch::draw (const Texture& texture,float x,float y) {
     if (!drawing)
-        throw std::runtime_error("SpriteBatch.begin must be called before draw.");
+        gdx_log_error("gdx","SpriteBatch.begin must be called before draw.");
 
     if (&texture != lastTexture) {
         renderMesh();
@@ -491,7 +491,7 @@ void SpriteBatch::draw (const Texture& texture,float x,float y) {
 
 void SpriteBatch::draw (const Texture& texture,float x,float y,float width,float height) {
     if (!drawing)
-        throw std::runtime_error("SpriteBatch.begin must be called before draw.");
+        gdx_log_error("gdx","SpriteBatch.begin must be called before draw.");
 
     if (&texture != lastTexture) {
         renderMesh();
@@ -535,7 +535,7 @@ void SpriteBatch::draw (const Texture& texture,float x,float y,float width,float
 
 void SpriteBatch::draw (const Texture& texture,const std::vector<float>& spriteVertices, int offset,int length) {
     if (!drawing)
-        throw std::runtime_error("SpriteBatch.begin must be called before draw.");
+        gdx_log_error("gdx","SpriteBatch.begin must be called before draw.");
 
     if (&texture != lastTexture) {
         renderMesh();
@@ -555,7 +555,7 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y) {
 
 void SpriteBatch::draw (const TextureRegion& region,float x,float y,float width,float height) {
     if (!drawing)
-        throw std::runtime_error("SpriteBatch.begin must be called before draw.");
+        gdx_log_error("gdx","SpriteBatch.begin must be called before draw.");
 
     Texture::ptr texture = region.getTexture();
     if (texture.get() != lastTexture) {
@@ -603,7 +603,7 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float width,
 
 void SpriteBatch::draw (const TextureRegion& region,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation) {
     if (!drawing)
-        throw std::runtime_error("SpriteBatch.begin must be called before draw.");
+        gdx_log_error("gdx","SpriteBatch.begin must be called before draw.");
 
     Texture::ptr texture = region.getTexture();
     if (texture.get() != lastTexture) {
@@ -720,7 +720,7 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float origin
 
 void SpriteBatch::draw (const TextureRegion& region,float x,float y,float originX,float originY,float width,float height,float scaleX,float scaleY,float rotation,bool clockwise) {
     if (!drawing)
-        throw std::runtime_error("SpriteBatch.begin must be called before draw.");
+        gdx_log_error("gdx","SpriteBatch.begin must be called before draw.");
 
     Texture::ptr texture = region.getTexture();
     if (texture.get() != lastTexture) {
@@ -931,14 +931,14 @@ const Matrix4& SpriteBatch::getTransformMatrix () {
 
 void SpriteBatch::setProjectionMatrix (const Matrix4& projection) {
     if (drawing)
-        throw std::runtime_error("Can't set the matrix within begin()/end() block");
+        gdx_log_error("gdx","Can't set the matrix within begin()/end() block");
 
     projectionMatrix.set(projection);
 }
 
 void SpriteBatch::setTransformMatrix (const Matrix4& transform) {
     if (drawing)
-        throw std::runtime_error("Can't set the matrix within begin()/end() block");
+        gdx_log_error("gdx","Can't set the matrix within begin()/end() block");
 
     transformMatrix.set(transform);
 }
@@ -1028,7 +1028,7 @@ SpriteBatch::~SpriteBatch()
 
 void SpriteBatch::draw( const Texture& texture, const float* spriteVertices, int size, int offset, int length ) {
     if (!drawing)
-        throw std::runtime_error("SpriteBatch.begin must be called before draw.");
+        gdx_log_error("gdx","SpriteBatch.begin must be called before draw.");
 
     if (&texture != lastTexture) {
         renderMesh();

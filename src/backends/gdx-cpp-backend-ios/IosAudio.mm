@@ -126,10 +126,10 @@ gdx::Music* IosAudio::newMusic(const ref_ptr_maker<gdx::FileHandle>::shared_ptr_
 
 
 gdx::AudioDevice * IosAudio::newAudioDevice (int samplingRate, bool isMono){
-    throw std::runtime_error("Not implemented");
+    gdx_log_error("gdx","Not implemented");
 }
 
 gdx::AudioRecorder *  IosAudio::newAudioRecoder (int samplingRate, bool isMono) {
-    throw std::runtime_error("Not implemented");
+    gdx_log_error("gdx","Not implemented");
 }
 

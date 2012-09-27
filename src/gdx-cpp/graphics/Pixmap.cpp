@@ -48,9 +48,7 @@ int Pixmap::Format::toGdx2DPixmapFormat(const Pixmap::Format& format) {
     if (format == Pixmap::Format::RGB888) return GDX2D_FORMAT_RGB888;
     if (format == Pixmap::Format::RGBA8888) return GDX2D_FORMAT_RGBA8888;
 
-    std::stringstream ss;
-    ss << "Unknown Format: " << format.toString();
-    throw std::runtime_error(ss.str());
+    gdx_log_error("gdx","Unknown Format: %s", format.toString().c_str());
 }
 
 const Pixmap::Format& Pixmap::Format::fromGdx2DPixmapFormat(int format) {
@@ -61,9 +59,7 @@ const Pixmap::Format& Pixmap::Format::fromGdx2DPixmapFormat(int format) {
     if (format == GDX2D_FORMAT_RGB888) return Pixmap::Format::RGB888;
     if (format == GDX2D_FORMAT_RGBA8888) return Pixmap::Format::RGBA8888;
 
-    std::stringstream ss;
-    ss << "Unknown Gdx2DPixmap Format: " << format;
-    throw std::runtime_error(ss.str());
+    gdx_log_error("gdx","Unknown Gdx2DPixmap Format: %d", format);
 }
 
 // Pixmap::Pixmap(int width, int height, const Pixmap::Format& format)

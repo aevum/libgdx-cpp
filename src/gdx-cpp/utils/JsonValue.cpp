@@ -22,6 +22,7 @@
 
 #include <cassert>
 #include <algorithm>
+#include <gdx-cpp/Log.hpp>
 
 using namespace gdx;
 
@@ -133,7 +134,7 @@ const JsonValue& JsonValue::operator[](const char* name) const
     item_map::const_iterator found = this->as_item_map().find(name);
     
     if (found == this->as_item_map().end()) {
-        throw std::runtime_error("Missing field named [" + std::string(name) + "]");
+        gdx_log_error("gdx","Missing field named [%s]", name);
     }
     
     return *found->second;

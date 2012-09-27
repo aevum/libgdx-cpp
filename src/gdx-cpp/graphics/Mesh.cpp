@@ -72,11 +72,7 @@ void Mesh::setVertices (const std::vector<float>& vertices, int offset,int count
 void Mesh::getVertices (std::vector<float>& vertices) {
     if (vertices.size() < getNumVertices() * getVertexSize() / 4)
     {
-        std::stringstream ss;
-        ss <<"not enough room in vertices array, has " << vertices.size() << " floats, needs "
-        << getNumVertices() * getVertexSize() / 4;
-        
-        throw std::runtime_error(ss.str());
+        gdx_log_error("gdx", "not enough room in vertices array, has %d floats, needs %d", vertices.size(), getNumVertices() * getVertexSize() / 4);
     }
     
     int pos = getVerticesBuffer().position();
@@ -97,10 +93,7 @@ void Mesh::setIndices (std::vector<short>& indices, int offset,int count) {
 void Mesh::getIndices (std::vector<short>& indices) {
     if (indices.size() < getNumIndices())
     {
-        std::stringstream ss;
-        ss << "not enough room in indices array, has " << indices.size() << " floats, needs "
-        << getNumIndices();
-        throw std::runtime_error(ss.str());
+        gdx_log_error("gdx", "not enough room in indices array, has %d floats, needs ",  indices.size(), getNumIndices());
     }
 
     short_buffer& indices_buffer = getIndicesBuffer();
@@ -137,28 +130,28 @@ void Mesh::setAutoBind (bool autoBind) {
 
 void Mesh::bind () {
     if (graphics->isGL20Available())
-        throw std::runtime_error("can't use this render method with OpenGL ES 2.0");
+        gdx_log_error("gdx","can't use this render method with OpenGL ES 2.0");
     vertices->bind();
     if (!isVertexArray && indices->getNumIndices() > 0) indices->bind();
 }
 
 void Mesh::unbind () {
     if (graphics->isGL20Available())
-        throw std::runtime_error("can't use this render method with OpenGL ES 2.0");
+        gdx_log_error("gdx","can't use this render method with OpenGL ES 2.0");
     vertices->unbind();
     if (!isVertexArray && indices->getNumIndices() > 0) indices->unbind();
 }
 
 void Mesh::bind (ShaderProgram& shader) {
     if (!graphics->isGL20Available())
-        throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
+        gdx_log_error("gdx","can't use this render method with OpenGL ES 1.x");
 
     ((VertexBufferObject*)vertices)->bind(shader);
     if (indices->getNumIndices() > 0) indices->bind();
 }
 
 void Mesh::unbind (ShaderProgram& shader) {
-    if (!graphics->isGL20Available()) throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
+    if (!graphics->isGL20Available()) gdx_log_error("gdx","can't use this render method with OpenGL ES 1.x");
 
     ((VertexBufferObject*)vertices)->unbind(shader);
     if (indices->getNumIndices() > 0) indices->unbind();
@@ -169,7 +162,7 @@ void Mesh::render (int primitiveType) {
 }
 
 void Mesh::render (int primitiveType,int offset,int count) {
-    if (graphics->isGL20Available()) throw std::runtime_error("can't use this render method with OpenGL ES 2.0");
+    if (graphics->isGL20Available()) gdx_log_error("gdx","can't use this render method with OpenGL ES 2.0");
 
     if (autoBind) bind();
 
@@ -202,7 +195,7 @@ void Mesh::render (ShaderProgram& shader,int primitiveType) {
 }
 
 void Mesh::render (ShaderProgram& shader,int primitiveType,int offset,int count) {
-    if (!graphics->isGL20Available()) throw std::runtime_error("can't use this render method with OpenGL ES 1.x");
+    if (!graphics->isGL20Available()) gdx_log_error("gdx","can't use this render method with OpenGL ES 1.x");
 
     if (autoBind) bind(shader);
 
@@ -245,7 +238,7 @@ float_buffer& Mesh::getVerticesBuffer () {
 
 void Mesh::calculateBoundingBox (BoundingBox& bbox) {
     int numVertices = getNumVertices();
-    if (numVertices == 0) throw std::runtime_error("No vertices defined");
+    if (numVertices == 0) gdx_log_error("gdx","No vertices defined");
 
     float_buffer verts = vertices->getBuffer();
     bbox.inf();

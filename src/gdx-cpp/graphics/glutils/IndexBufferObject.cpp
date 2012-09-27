@@ -74,7 +74,7 @@ short_buffer& IndexBufferObject::getBuffer () {
 
 void IndexBufferObject::bind () {
     if (bufferHandle == 0)
-        throw std::runtime_error(__FILE__ ": Buffer handler is not initialized?");
+        gdx_log_error("gdx",__FILE__ ": Buffer handler is not initialized?");
 
     if (gl11 != NULL) {
         GL11& gl = *gl11;

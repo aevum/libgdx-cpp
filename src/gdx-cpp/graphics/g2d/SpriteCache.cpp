@@ -65,7 +65,7 @@ ShaderProgram* SpriteCache::createDefaultShader () {
 
     ShaderProgram* shader = new ShaderProgram ( vertexShader, fragmentShader );
     if ( shader->isCompiled() == false )
-        throw std::runtime_error ( "Error compiling shader: " + shader->getLog() );
+        gdx_log_error("gdx", "Error compiling shader: %s", shader->getLog().c_str() );
     return shader;
 }
 
@@ -132,7 +132,7 @@ Color& SpriteCache::getColor () {
 
 void SpriteCache::beginCache () {
     if ( currentCache != NULL )
-        throw std::runtime_error ( "endCache must be called before begin." );
+        gdx_log_error("gdx", "endCache must be called before begin." );
 
     int verticesPerImage = mesh->getNumIndices() > 0 ? 4 : 6;
     currentCache = new Cache ( caches.size(), mesh->getVerticesBuffer().limit() );
@@ -142,7 +142,7 @@ void SpriteCache::beginCache () {
 
 void SpriteCache::beginCache ( unsigned int cacheID ) {
     if ( currentCache != NULL )
-        throw std::runtime_error ( "endCache must be called before begin." );
+        gdx_log_error("gdx", "endCache must be called before begin." );
 
     if ( cacheID == caches.size() - 1 ) {
         Cache* oldCache = caches[cacheID];
@@ -157,7 +157,7 @@ void SpriteCache::beginCache ( unsigned int cacheID ) {
 
 int SpriteCache::endCache () {
     if ( currentCache == NULL )
-        throw std::runtime_error ( "beginCache must be called before endCache." );
+        gdx_log_error("gdx", "beginCache must be called before endCache." );
 
     int cacheCount = mesh->getVerticesBuffer().position() - currentCache->offset;
     if ( currentCache->textures.size() == 0 ) {
@@ -172,7 +172,7 @@ int SpriteCache::endCache () {
             std::stringstream ss;
             ss << "If a cache is not the last created, it cannot be redefined with more entries than when it was first created: "
                << cacheCount << " (" + currentCache->maxCount  << " max)";
-            throw std::runtime_error ( ss.str() );
+            gdx_log_error("gdx", ss.str().c_str() );
         }
 
         if ( currentCache->textures.size() < textures.size() ) {
@@ -783,7 +783,7 @@ void SpriteCache::add ( Sprite& sprite ) {
 
 void SpriteCache::begin () {
     if ( drawing )
-        throw std::runtime_error ( "end must be called before begin." );
+        gdx_log_error("gdx", "end must be called before begin." );
 
     if ( graphics->isGL20Available() == false ) {
         GL10& gl = *gl10;
@@ -822,7 +822,7 @@ void SpriteCache::begin () {
 
 void SpriteCache::end () {
     if ( !drawing )
-        throw std::runtime_error ( "begin must be called before end." );
+        gdx_log_error("gdx", "begin must be called before end." );
 
     drawing = false;
 
@@ -842,7 +842,7 @@ void SpriteCache::end () {
 
 void SpriteCache::draw ( int cacheID ) {
     if ( !drawing )
-        throw std::runtime_error ( "SpriteCache.begin must be called before draw." );
+        gdx_log_error("gdx", "SpriteCache.begin must be called before draw." );
 
     Cache* cache = caches[cacheID];
 
@@ -875,7 +875,7 @@ void SpriteCache::draw ( int cacheID ) {
 
 void SpriteCache::draw ( int cacheID,int offset,int length ) {
     if ( !drawing )
-        throw std::runtime_error ( "SpriteCache.begin must be called before draw." );
+        gdx_log_error("gdx", "SpriteCache.begin must be called before draw." );
 
     Cache* cache = caches[cacheID];
     offset = offset * 6 + cache->offset;
@@ -923,7 +923,7 @@ Matrix4& SpriteCache::getProjectionMatrix () {
 
 void SpriteCache::setProjectionMatrix ( const Matrix4& projection ) {
     if ( drawing )
-        throw std::runtime_error ( "Can't set the matrix within begin/end." );
+        gdx_log_error("gdx", "Can't set the matrix within begin/end." );
     projectionMatrix.set ( projection );
 }
 
@@ -933,7 +933,7 @@ Matrix4& SpriteCache::getTransformMatrix () {
 
 void SpriteCache::setTransformMatrix ( const Matrix4& transform ) {
     if ( drawing )
-        throw std::runtime_error ( "Can't set the matrix within begin/end." );
+        gdx_log_error("gdx", "Can't set the matrix within begin/end." );
     transformMatrix.set ( transform );
 }
 
@@ -943,7 +943,7 @@ void SpriteCache::setShader ( ShaderProgram* shader ) {
 
 void SpriteCache::add ( const Texture::ptr& texture, const float* vertices, int size, int offset, int length ) {
     if ( currentCache == NULL )
-        throw std::runtime_error ( "beginCache must be called before add." );
+        gdx_log_error("gdx", "beginCache must be called before add." );
 
     int verticesPerImage = mesh->getNumIndices() > 0 ? 4 : 6;
     int count = length / ( verticesPerImage * Sprite::VERTEX_SIZE ) * 6;

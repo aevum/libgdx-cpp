@@ -58,7 +58,7 @@ gdx::Music* gdx::android::AndroidAudio::newMusic(const gdx::FileHandle::ptr file
         return new AndroidMusic(jobjMusic);
     }
     
-    throw std::runtime_error("Could not load file: " + file->path());
+    gdx_log_error("gdx","Could not load file: %s", file->path().c_str());
 }
 
 gdx::Sound* gdx::android::AndroidAudio::newSound(const gdx::FileHandle::ptr fileHandle)
@@ -73,7 +73,7 @@ gdx::Sound* gdx::android::AndroidAudio::newSound(const gdx::FileHandle::ptr file
         return new AndroidSound(jobjSound);
     }
 
-    throw std::runtime_error("Could not load file: " + fileHandle->path());
+    gdx_log_error("gdx","Could not load file: %s", fileHandle->path().c_str());
 }
 
 void gdx::android::AndroidAudio::setupJNI(jobject androidAudioObj)

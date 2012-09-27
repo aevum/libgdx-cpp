@@ -75,7 +75,7 @@ const TextureData::TextureDataType& FileTextureData::getType () {
 }
 
 void FileTextureData::uploadCompressedData () {
-    throw std::runtime_error("This TextureData implementation does not upload data itself");
+    gdx_log_error("gdx","This TextureData implementation does not upload data itself");
 }
 
 FileTextureData::FileTextureData(FileHandle::ptr file, gdx::Pixmap::ptr preloadedPixmap,

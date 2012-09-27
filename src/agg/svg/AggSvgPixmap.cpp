@@ -311,7 +311,7 @@ const unsigned char* AggSvgPixmap::getPixels() {
     typedef agg::renderer_scanline_aa_solid<renderer_base> renderer_solid;
 
     if (width <= 0 || height <= 0) {
-        throw std::runtime_error("Missing width or height values to render svg");
+        gdx_log_error("gdx","Missing width or height values to render svg");
     }
 
     int scaledWidth = width * scaleX;

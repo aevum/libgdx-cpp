@@ -10,13 +10,13 @@ void LinuxOggInputStream::open(std::string path)
     int result;
 
     if (!(oggFile = fopen(path.c_str(), "rb")))
-        throw std::runtime_error("Could not open Ogg file.");
+        gdx_log_error("gdx","Could not open Ogg file.");
 
     if ((result = ov_open(oggFile, &oggStream, NULL, 0)) < 0)
     {
         fclose(oggFile);
 
-        throw std::runtime_error("Could not open Ogg stream. ");
+        gdx_log_error("gdx","Could not open Ogg stream. ");
     }
 
     vorbisInfo = ov_info(&oggStream, -1);
@@ -59,7 +59,7 @@ int LinuxOggInputStream::read(char * pcm, int max)
             size += result;
         else
             if (result < 0)
-                throw std::runtime_error("Error reading file.");
+                gdx_log_error("gdx","Error reading file.");
             else
                 break;
     }

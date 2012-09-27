@@ -37,7 +37,7 @@ using namespace gdx::nix;
 std::string LinuxSystem::canonicalize(const std::string& path)    
 {
     char buffer[32768];
-    if(realpath(path.c_str(), buffer) == NULL) throw std::runtime_error("Error trying to canonicalize path: " + path);
+    if(realpath(path.c_str(), buffer) == NULL) gdx_log_error("gdx","Error trying to canonicalize path: " + path);
     return std::string(buffer);
 }
 
@@ -52,7 +52,7 @@ void LinuxSystem::checkDelete(const std::string& path)
        if(found == testPath.npos) break;
        else testPath = testPath.substr(0, found);
     }
-    throw std::runtime_error("Delete permission denied on file: " + path);
+    gdx_log_error("gdx","Delete permission denied on file: " + path);
 }
 
 void LinuxSystem::checkRead(const std::string& path)
@@ -66,7 +66,7 @@ void LinuxSystem::checkRead(const std::string& path)
        if(found == testPath.npos) break;
        else testPath = testPath.substr(0, found);
     }
-    throw std::runtime_error("Read permission denied on file: " + path);
+    gdx_log_error("gdx","Read permission denied on file: " + path);
 }
 
 bool LinuxSystem::createDirectory(const gdx::File& f)
@@ -153,7 +153,7 @@ void LinuxSystem::list(const gdx::File& f, std::vector< std::string > &paths)
     std::string fname;
     struct direct **files;
     count = scandir(f.getCanonicalPath().c_str(), &files, NULL, NULL);
-    if(count == -1) throw std::runtime_error("Cannot retrieve fileList in directory " + f.getCanonicalPath());
+    if(count == -1) gdx_log_error("gdx","Cannot retrieve fileList in directory " + f.getCanonicalPath());
     for(int i=0;i<count; ++i)
     {
         fname = std::string(files[i]->d_name);
@@ -223,7 +223,7 @@ std::string LinuxSystem::resolve(const gdx::File& f)
 {
     if (isAbsolute(f)) return f.getPath();
     char buffer[2048];
-    if(getcwd(buffer, 2048) == NULL) throw std::runtime_error("Error trying to resolve path: " + f.getPath());
+    if(getcwd(buffer, 2048) == NULL) gdx_log_error("gdx","Error trying to resolve path: " + f.getPath());
     return resolve(std::string(buffer), f.getPath());
 }
 
@@ -246,7 +246,7 @@ void LinuxSystem::checkWrite(const std::string& path)
         if(found == testPath.npos) break;
         else testPath = testPath.substr(0, found);
      }
-     throw std::runtime_error("Write permission denied on file: " + path);
+     gdx_log_error("gdx","Write permission denied on file: " + path);
 }
 
 class LinuxMutex : public gdx::Mutex {
@@ -287,13 +287,13 @@ thread(0) {
 
     void start() {
         if (pthread_create(&thread, NULL, run_runnable, (void*) runnable) != 0) {
-            throw std::runtime_error("pthread_create failed");
+            gdx_log_error("gdx","pthread_create failed");
         }
     }
 
     void join() {
         if( pthread_join(thread, NULL) != 0) {
-            throw std::runtime_error("pthread_join failed");
+            gdx_log_error("gdx","pthread_join failed");
         }
     }
 
