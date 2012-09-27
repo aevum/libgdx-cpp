@@ -35,7 +35,7 @@ namespace gdx {
 
 class Gdx2DPixmap: public Pixmap {
 public:
-    typedef ref_ptr_maker<Gdx2DPixmap>::shared_ptr_def ptr;
+    typedef ref_ptr_maker<Gdx2DPixmap>::shared_ptr_t ptr;
 
     static const int GDX2D_SCALE_LINEAR = 1;
 

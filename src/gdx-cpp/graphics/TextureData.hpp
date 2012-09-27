@@ -28,7 +28,7 @@ namespace gdx {
 
 class TextureData {
 public:
-    typedef ref_ptr_maker< TextureData >::shared_ptr_def ptr;
+    typedef ref_ptr_maker< TextureData >::shared_ptr_t ptr;
 
     struct TextureDataType {
         const static TextureDataType Pixmap;

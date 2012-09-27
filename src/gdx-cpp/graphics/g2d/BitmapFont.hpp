@@ -36,7 +36,7 @@ class BitmapFont: public Disposable {
     friend class BitmapFontCache;
 
 public:
-    typedef ref_ptr_maker<BitmapFont>::shared_ptr_def ptr;
+    typedef ref_ptr_maker<BitmapFont>::shared_ptr_t ptr;
 
     enum HAlignment {
         HALIGNMENT_LEFT, HALIGNMENT_CENTER, HALIGNMENT_RIGHT

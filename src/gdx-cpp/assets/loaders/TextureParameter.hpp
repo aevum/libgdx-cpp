@@ -29,7 +29,7 @@
 namespace gdx {
 
 struct TextureParameter : public Parameter {
-    typedef ref_ptr_maker<TextureParameter>::shared_ptr_def ptr;
+    typedef ref_ptr_maker<TextureParameter>::shared_ptr_t ptr;
     
     /** the format of the final Texture. Uses the source images format if null **/
     Pixmap::Format* format;

@@ -43,8 +43,8 @@ class File;
   
 class FileHandle {
 public:
-    typedef ref_ptr_maker<FileHandle>::shared_ptr_def ptr;
-    typedef ref_ptr_maker< char >::shared_ptr_def buffer_ptr;
+    typedef ref_ptr_maker<FileHandle>::shared_ptr_t ptr;
+    typedef ref_ptr_maker< char >::shared_ptr_t buffer_ptr;
 
     FileHandle();
     FileHandle (const std::string &fileName);

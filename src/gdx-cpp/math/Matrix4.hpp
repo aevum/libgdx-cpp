@@ -48,7 +48,7 @@ public:
     static const int M32 = 11;
     static const int M33 = 15;
 
-    typedef ref_ptr_maker<Matrix4>::shared_ptr_def ptr;
+    typedef ref_ptr_maker<Matrix4>::shared_ptr_t ptr;
 
     Matrix4(const Matrix4& other);
     ~Matrix4();

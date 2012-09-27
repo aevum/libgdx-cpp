@@ -30,7 +30,7 @@ class   LinuxOpenALAudio;
 class LinuxOpenALMusic : public gdx::Music
 {
 public:
-    LinuxOpenALMusic(gdx::nix::LinuxOpenALAudio* _audio, ref_ptr_maker< gdx::FileHandle >::shared_ptr_def file);
+    LinuxOpenALMusic(gdx::nix::LinuxOpenALAudio* _audio, ref_ptr_maker< gdx::FileHandle >::shared_ptr_t file);
 
     void setup (int _channels, int _sampleRate);
     
@@ -50,7 +50,7 @@ public:
 protected:
     virtual int read (char * buffer, int bufferSize) = 0;
     virtual void reset () = 0;
-    ref_ptr_maker< gdx::FileHandle >::shared_ptr_def file;
+    ref_ptr_maker< gdx::FileHandle >::shared_ptr_t file;
 private:
     const static int bufferSize = 40960;
     const static int bufferCount = 3;

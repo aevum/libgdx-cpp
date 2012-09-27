@@ -281,7 +281,7 @@ Pixmap* nix::LinuxGraphics::resolvePixmap(const FileHandle::ptr& file)
     else if (extension == "svg") {
         return AggSvgPixmap::newFromFile(file);        
     } else {
-        gdx_log_error("gdx","unsupported image format: " + extension);
+        gdx_log_error("gdx","unsupported image format: %s", extension.c_str());
     }
 }
 

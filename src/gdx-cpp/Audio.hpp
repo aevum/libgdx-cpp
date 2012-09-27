@@ -33,8 +33,8 @@ public:
     virtual gdx::AudioDevice * newAudioDevice (int samplingRate, bool isMono) = 0;
     virtual gdx::AudioRecorder * newAudioRecoder (int samplingRate, bool isMono) = 0;
 
-    virtual gdx::Sound * newSound (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_def fileHandle) = 0;
-    virtual gdx::Music * newMusic (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_def file) = 0;
+    virtual gdx::Sound * newSound (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_t fileHandle) = 0;
+    virtual gdx::Music * newMusic (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_t file) = 0;
     
     virtual ~Audio() { }
 };

@@ -46,9 +46,9 @@ template <typename T>
 struct ref_ptr_maker
 {
 public:
-  typedef std::shared_ptr< T > shared_ptr_def;
-  typedef std::weak_ptr< T > weak_ptr_def;
-  typedef std::unique_ptr< T > unique_ptr_def;
+  typedef std::shared_ptr< T > shared_ptr_t;
+  typedef std::weak_ptr< T > weak_ptr_t;
+  typedef std::unique_ptr< T > unique_ptr_t;
 };
 
 #endif // GDX_CPP_UTILS_ALIASES_HPP

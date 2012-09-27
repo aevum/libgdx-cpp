@@ -23,6 +23,8 @@
 #include <stdexcept>
 #include <sys/stat.h>
 
+#include <gdx-cpp/Log.hpp>
+
 using namespace gdx::nix;
 
 LinuxFileHandle::LinuxFileHandle (const std::string &fileName, gdx::Files::FileType type)
@@ -54,7 +56,7 @@ int LinuxFileHandle::readBytes(gdx::FileHandle::buffer_ptr& c) const
     FILE* f = fopen(filepath.c_str(), "r");
 
     if (f == NULL) {
-        gdx_log_error("gdx","File not found: " + path());
+        gdx_log_error("gdx","File not found: %s", path().c_str());
     }
 
     int position = 0;
@@ -79,7 +81,7 @@ int LinuxFileHandle::write(const char* data, int length, bool append)
     FILE* f = fopen(file.getPath().c_str(), append ? "a" : "w");
 
     if (f == NULL) {
-        gdx_log_error("gdx","File not found: " + path());
+        gdx_log_error("gdx","File not found: %s", path().c_str());
     }
 
     int written =fwrite(data, 1, length, f);

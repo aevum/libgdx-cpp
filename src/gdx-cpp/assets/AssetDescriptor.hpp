@@ -30,7 +30,7 @@ namespace gdx {
     
 class AssetDescriptor {
 public:
-    typedef ref_ptr_maker<AssetDescriptor>::shared_ptr_def ptr;
+    typedef ref_ptr_maker<AssetDescriptor>::shared_ptr_t ptr;
     
     
     AssetDescriptor(const std::string& filename, AssetType& type, AssetLoaderParameters::ptr params);

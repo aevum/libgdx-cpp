@@ -29,7 +29,7 @@ class Mutex;
 template <typename Object, typename MutexType>
 class synchronized {
     typedef lock_guard<MutexType> lock_type;
-    typedef typename ref_ptr_maker<Object>::shared_ptr_def obj_ptr;
+    typedef typename ref_ptr_maker<Object>::shared_ptr_t obj_ptr;
 public:
     synchronized(obj_ptr obj, MutexType& mutex) :
         ref_object(obj), lock(mutex)

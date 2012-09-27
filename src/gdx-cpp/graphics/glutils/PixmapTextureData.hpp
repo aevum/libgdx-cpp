@@ -29,7 +29,7 @@ namespace gdx {
 
 class PixmapTextureData: public TextureData {
 public:
-    typedef ref_ptr_maker<PixmapTextureData>::shared_ptr_def ptr;
+    typedef ref_ptr_maker<PixmapTextureData>::shared_ptr_t ptr;
 
     PixmapTextureData (Pixmap::ptr pixmap,
                        const Pixmap::Format* format,

@@ -44,7 +44,7 @@ enum json_item_type {
 
 class JsonValue {
 public:
-    typedef ref_ptr_maker< JsonValue >::shared_ptr_def ptr;
+    typedef ref_ptr_maker< JsonValue >::shared_ptr_t ptr;
     typedef gdx_unordered_map< std::string, ptr > item_map;
     typedef std::vector< ptr > array;
 

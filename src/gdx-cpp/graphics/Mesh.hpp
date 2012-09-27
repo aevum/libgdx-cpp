@@ -43,7 +43,7 @@ class ShaderProgram;
 
 class Mesh: public Disposable {
 public:
-    typedef ref_ptr_maker<Mesh>::shared_ptr_def ptr;
+    typedef ref_ptr_maker<Mesh>::shared_ptr_t ptr;
     
     struct VertexDataType {
         static const int VertexArray = 0;

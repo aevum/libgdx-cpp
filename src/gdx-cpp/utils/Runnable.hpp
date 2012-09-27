@@ -25,7 +25,7 @@
 
 class Runnable {
 public:
-    typedef ref_ptr_maker<Runnable>::shared_ptr_def ptr;
+    typedef ref_ptr_maker<Runnable>::shared_ptr_t ptr;
     
     virtual void run() = 0;
     virtual void onRunnableStop() = 0;

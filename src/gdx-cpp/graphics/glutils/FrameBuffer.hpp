@@ -34,7 +34,7 @@ namespace gdx {
 class FrameBuffer:
     public Disposable {
 public:
-    typedef ref_ptr_maker<FrameBuffer>::shared_ptr_def ptr;
+    typedef ref_ptr_maker<FrameBuffer>::shared_ptr_t ptr;
     
     FrameBuffer (const Pixmap::Format& format, int width, int height, bool hasDepth) ;
     

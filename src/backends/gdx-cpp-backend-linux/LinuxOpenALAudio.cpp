@@ -61,26 +61,22 @@ void LinuxOpenALAudio::createAl() {
     alcMakeContextCurrent(context);
 }
 
-gdx::Sound * LinuxOpenALAudio::newSound (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_def file) {
+gdx::Sound * LinuxOpenALAudio::newSound (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_t file) {
 //     if (file == NULL) gdx_log_error("gdx","file cannot be null.");
     std::string extension = file->extension();
     if (extension == "ogg")
       return new LinuxOggSound(this, file);
     else {
-      std::stringstream ss;
-      ss << "Unknown file extension for sound: " << file->name();
-      gdx_log_error("gdx",ss.str());
+      gdx_log_error("gdx", "Unknown file extension for sound: ", file->name().c_str());
     }
 }
 
-gdx::Music * LinuxOpenALAudio::newMusic (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_def file) {
+gdx::Music * LinuxOpenALAudio::newMusic (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_t file) {
     std::string extension = file->extension();
     if (extension == "ogg")
       return new LinuxOggMusic(this, file);
     else {
-      std::stringstream ss;
-      ss << "Unknown file extension for sound: " << file->name();
-      gdx_log_error("gdx",ss.str());
+      gdx_log_error("gdx","Unknown file extension for sound: %s", file->name().c_str());
     }
 }
 

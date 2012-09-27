@@ -19,188 +19,270 @@
 */
 
 #include "TextureAtlas.hpp"
+#include <climits>
+#include <unordered_map>
 
 using namespace gdx;
 
-ArrayPage& TextureAtlas::getPages () {
-    return pages;
-}
-
-ArrayRegion>& TextureAtlas::getRegion () {
-    return regions;
-}
-
 void TextureAtlas::load (const TextureAtlasData& data) {
-    ObjectMap<Page, Texture> pageToTexture = new ObjectMap<Page, Texture>();
-for (Page page : data.pages) {
-        Texture texture = null;
-        if (page.texture == null) {
-            texture = new Texture(page.textureFile, page.format, page.useMipMaps);
-            texture.setFilter(page.minFilter, page.magFilter);
-            texture.setWrap(page.uWrap, page.vWrap);
+    std::unordered_map< TextureAtlasData::Page::shared_ptr_t, Texture::ptr > pageToTexture;
+    for (auto page = data.pages.begin(); page != data.pages.end(); page++) {
+        Texture::ptr texture = nullptr;
+        if ((*page)->texture == nullptr) {
+            texture = Texture::newFromFile((*page)->textureFile, &(*page)->format, (*page)->useMipMaps);
+            texture->setFilter((*page)->minFilter, (*page)->magFilter);
+            texture->setWrap((*page)->uWrap, (*page)->vWrap);
         } else {
-            texture = page.texture;
-            texture.setFilter(page.minFilter, page.magFilter);
-            texture.setWrap(page.uWrap, page.vWrap);
+            texture = (*page)->texture;
+            texture->setFilter((*page)->minFilter, (*page)->magFilter);
+            texture->setWrap((*page)->uWrap, (*page)->vWrap);
         }
-        textures.add(texture);
-        pageToTexture.put(page, texture);
+        
+        textures.insert(texture);
+        pageToTexture[*page] = texture;
     }
 
-for (Region region : data.regions) {
-        AtlasRegion atlasRegion = new AtlasRegion(pageToTexture.get(region.page), region.left, region.top, region.width,
-                region.height);
-        atlasRegion.index = region.index;
-        atlasRegion.name = region.name;
-        atlasRegion.offsetX = region.offsetX;
-        atlasRegion.offsetY = region.offsetY;
-        atlasRegion.originalHeight = region.originalHeight;
-        atlasRegion.originalWidth = region.originalWidth;
-        atlasRegion.rotate = region.rotate;
-        regions.add(atlasRegion);
+    for (auto region = data.regions.begin(); region != data.regions.end(); ++region) {
+        AtlasRegion::shared_ptr_t atlasRegion = std::make_shared<AtlasRegion>(pageToTexture[(*region)->page], (*region)->left, (*region)->top, (*region)->width,
+                (*region)->height);
+        atlasRegion->index = (*region)->index;
+        atlasRegion->name = (*region)->name;
+        atlasRegion->offsetX = (*region)->offsetX;
+        atlasRegion->offsetY = (*region)->offsetY;
+        atlasRegion->originalHeight = (*region)->originalHeight;
+        atlasRegion->originalWidth = (*region)->originalWidth;
+        atlasRegion->rotate = (*region)->rotate;
+        regions.push_back(atlasRegion);
     }
 }
 
-AtlasRegion& TextureAtlas::addRegion (const std::string& name,const Texture& texture,int x,int y,int width,int height) {
-    textures.add(texture);
-    AtlasRegion region = new AtlasRegion(texture, x, y, width, height);
-    region.name = name;
-    region.originalWidth = width;
-    region.originalHeight = height;
-    region.index = -1;
-    regions.add(region);
+TextureAtlas::AtlasRegion::shared_ptr_t TextureAtlas::addRegion (const std::string& name, const Texture::ptr& texture, int x, int y, int width, int height) {
+    textures.insert(texture);
+    
+    AtlasRegion::shared_ptr_t region = std::make_shared<AtlasRegion>(texture, x, y, width, height);    
+    region->name = name;
+    region->originalWidth = width;
+    region->originalHeight = height;
+    region->index = -1;
+    regions.push_back(region);
+    
     return region;
 }
 
-AtlasRegion& TextureAtlas::addRegion (const std::string& name,const TextureRegion& textureRegion) {
-    return addRegion(name, textureRegion.texture, textureRegion.getRegionX(), textureRegion.getRegionY(),
+TextureAtlas::AtlasRegion::shared_ptr_t TextureAtlas::addRegion (const std::string& name, TextureRegion textureRegion) {
+    return addRegion(name, textureRegion.getTexture(), textureRegion.getRegionX(), textureRegion.getRegionY(),
                      textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
 }
 
-std::list<AtlasRegion>& TextureAtlas::getRegions () {
-    return regions;
-}
-
-AtlasRegion& TextureAtlas::findRegion (const std::string& name) {
+TextureAtlas::AtlasRegion::shared_ptr_t TextureAtlas::findRegion (const std::string& name) {
     for (int i = 0, n = regions.size(); i < n; i++)
-        if (regions.get(i).name.equals(name)) return regions.get(i);
-    return null;
+        if (regions[i]->name == name) {
+            return regions[i];
+        }
+    
+    return nullptr;
 }
 
-AtlasRegion& TextureAtlas::findRegion (const std::string& name,int index) {
+TextureAtlas::AtlasRegion::shared_ptr_t TextureAtlas::findRegion (const std::string& name, int index) {
     for (int i = 0, n = regions.size(); i < n; i++) {
-        AtlasRegion region = regions.get(i);
-        if (!region.name.equals(name)) continue;
-        if (region.index != index) continue;
+        AtlasRegion::shared_ptr_t& region = regions[i];
+        if (region->name != name) continue;
+        if (region->index != index) continue;
         return region;
     }
-    return null;
+    
+    return nullptr;
 }
 
-std::list<AtlasRegion>& TextureAtlas::findRegions (const std::string& name) {
-    ArrayList<AtlasRegion> matched = new ArrayList();
+std::vector< TextureAtlas::AtlasRegion::shared_ptr_t > TextureAtlas::findRegions (const std::string& name) {
+    std::vector< TextureAtlas::AtlasRegion::shared_ptr_t > matched;
+    
     for (int i = 0, n = regions.size(); i < n; i++) {
-        AtlasRegion region = regions.get(i);
-        if (region.name.equals(name)) matched.add(new AtlasRegion(region));
+        AtlasRegion::shared_ptr_t& region = regions[i];
+        if (region->name == name) matched.push_back(region);
     }
+    
     return matched;
 }
 
-std::list<Sprite>& TextureAtlas::createSprites () {
-    ArrayList sprites = new ArrayList(regions.size());
-    for (int i = 0, n = regions.size(); i < n; i++)
-        sprites.add(newSprite(regions.get(i)));
+std::vector< Sprite::ptr > TextureAtlas::createSprites () {
+    std::vector< Sprite::ptr > sprites;
+    for (int i = 0, n = regions.size(); i < n; i++) {
+        sprites.push_back(newSprite(*regions[i]));
+    }
+    
     return sprites;
 }
 
-Sprite& TextureAtlas::createSprite (const std::string& name) {
+Sprite::ptr TextureAtlas::createSprite (const std::string& name) {
     for (int i = 0, n = regions.size(); i < n; i++)
-        if (regions.get(i).name.equals(name)) return newSprite(regions.get(i));
-    return null;
+        if (regions[i]->name == name) return newSprite(*regions[i]);
+    
+    return nullptr;
 }
 
-Sprite& TextureAtlas::createSprite (const std::string& name,int index) {
+Sprite::ptr TextureAtlas::createSprite (const std::string& name,int index) {
     for (int i = 0, n = regions.size(); i < n; i++) {
-        AtlasRegion region = regions.get(i);
-        if (!region.name.equals(name)) continue;
-        if (region.index != index) continue;
-        return newSprite(regions.get(i));
+        AtlasRegion::shared_ptr_t& region = regions[i];
+        if (region->name != name) continue;
+        if (region->index != index) continue;
+        return newSprite(*regions[i]);
     }
-    return null;
+    
+    return nullptr;
 }
 
-std::list<Sprite>& TextureAtlas::createSprites (const std::string& name) {
-    ArrayList<Sprite> matched = new ArrayList();
+std::vector< Sprite::ptr > TextureAtlas::createSprites (const std::string& name) {
+    std::vector< Sprite::ptr > matched;
+    
     for (int i = 0, n = regions.size(); i < n; i++) {
-        AtlasRegion region = regions.get(i);
-        if (region.name.equals(name)) matched.add(newSprite(region));
+        const AtlasRegion::shared_ptr_t& region = regions[i];
+        if (region->name == name) matched.push_back(newSprite(*region));
     }
+    
     return matched;
 }
 
-Sprite& TextureAtlas::newSprite (const AtlasRegion& region) {
+Sprite::ptr TextureAtlas::newSprite (const TextureAtlas::AtlasRegion& region) {
     if (region.packedWidth == region.originalWidth && region.packedHeight == region.originalHeight) {
-        Sprite sprite = new Sprite(region);
-        if (region.rotate) sprite.rotate90(true);
+        Sprite::ptr sprite = Sprite::ptr(new Sprite(region));
+        if (region.rotate) sprite->rotate90(true);
         return sprite;
     }
-    return new AtlasSprite(region);
+    return Sprite::ptr(new AtlasSprite(region));
 }
 
 void TextureAtlas::dispose () {
-for (Texture texture : textures)
-        texture.dispose();
     textures.clear();
 }
 
 int TextureAtlas::compare (const TextureAtlas::TextureAtlasData::Region& region1,const TextureAtlas::TextureAtlasData::Region& region2) {
     int i1 = region1.index;
-    if (i1 == -1) i1 = Integer.MAX_VALUE;
+    if (i1 == -1) i1 = INT_MAX;
+    
     int i2 = region2.index;
-    if (i2 == -1) i2 = Integer.MAX_VALUE;
+    if (i2 == -1) i2 = INT_MAX;
+
     return i1 - i2;
 }
 
-void TextureAtlas::flip (bool x,bool y) {
-    super.flip(x, y);
+std::vector< TextureAtlas::TextureAtlasData::Page::shared_ptr_t  >& TextureAtlas::TextureAtlasData::getPages() {
+    return pages;
+}
+std::vector< TextureAtlas::TextureAtlasData::Region::shared_ptr_t  >& TextureAtlas::TextureAtlasData::getRegions() {
+    return regions;
+}
+TextureAtlas::TextureAtlasData::Page::Page(const FileHandle::ptr& _handle, bool _useMipMaps, Pixmap::Format _format, Texture::TextureFilter _minFilter, Texture::TextureFilter _magFilter, Texture::TextureWrap _uWrap, Texture::TextureWrap _vWrap) :
+    textureFile(_handle),
+    useMipMaps(_useMipMaps),
+    format(_format),
+    minFilter(_minFilter),
+    magFilter(_magFilter),
+    uWrap(_uWrap),
+    vWrap(_vWrap)
+{
+}
+TextureAtlas::AtlasRegion::AtlasRegion(const Texture::ptr& texture, int x, int y, int width, int height) : gdx::TextureRegion(texture, x, y, width, height) {
+    packedWidth = width;
+    packedHeight = height;
+}
+TextureAtlas::AtlasRegion::AtlasRegion(const TextureAtlas::AtlasRegion& region) {
+    setRegion(region);
+    index = region.index;
+    name = region.name;
+    offsetX = region.offsetX;
+    offsetY = region.offsetY;
+    packedWidth = region.packedWidth;
+    packedHeight = region.packedHeight;
+    originalWidth = region.originalWidth;
+    originalHeight = region.originalHeight;
+    rotate = region.rotate;
+}
+void TextureAtlas::AtlasRegion::flip(bool x, bool y) {
+    gdx::TextureRegion::flip(x, y);
     if (x) offsetX = originalWidth - offsetX - packedWidth;
     if (y) offsetY = originalHeight - offsetY - packedHeight;
 }
+TextureAtlas::AtlasSprite::AtlasSprite(TextureAtlas::AtlasRegion _region) :
+    region(_region)
+{
+    originalOffsetX = region.offsetX;
+    originalOffsetY = region.offsetY;
+    setRegion(region);
+    setOrigin(region.originalWidth / 2.f, region.originalHeight / 2.f);
+    int width = std::abs(region.getRegionWidth());
+    int height = std::abs(region.getRegionHeight());
 
-void TextureAtlas::setPosition (float x,float y) {
-    super.setPosition(x + region.offsetX, y + region.offsetY);
+    if (region.rotate) {
+        rotate90(true);
+        Sprite::setBounds(region.offsetX, region.offsetY, height, width);
+    } else
+        Sprite::setBounds(region.offsetX, region.offsetY, width, height);
+
+    setColor(1, 1, 1, 1);
 }
-
-void TextureAtlas::setBounds (float x,float y,float width,float height) {
-    super.setBounds(x + region.offsetX, y + region.offsetY, width, height);
+void TextureAtlas::AtlasSprite::setPosition(float x, float y) {
+    Sprite::setPosition(x + region.offsetX, y + region.offsetY);
 }
-
-void TextureAtlas::setOrigin (float originX,float originY) {
-    super.setOrigin(originX + region.offsetX, originY + region.offsetY);
+void TextureAtlas::AtlasSprite::setBounds(float x, float y, float width, float height) {
+    float widthRatio = width / region.originalWidth;
+    float heightRatio = height / region.originalHeight;
+    region.offsetX = originalOffsetX * widthRatio;
+    region.offsetY = originalOffsetY * heightRatio;
+    int packedWidth = region.rotate ? region.packedHeight : region.packedWidth;
+    int packedHeight = region.rotate ? region.packedWidth : region.packedHeight;
+    Sprite::setBounds(x + region.offsetX, y + region.offsetY, packedWidth * widthRatio, packedHeight
+                      * heightRatio);
 }
-
-void TextureAtlas::flip (bool x,bool y) {
+void TextureAtlas::AtlasSprite::setSize(float width, float height) {
+    setBounds(getX(), getY(), width, height);
+}
+void TextureAtlas::AtlasSprite::setOrigin(float originX, float originY) {
+    Sprite::setOrigin(originX - region.offsetX, originY - region.offsetY);
+}
+void TextureAtlas::AtlasSprite::flip(bool x, bool y) {
     // Flip texture.
-    super.flip(x, y);
+    Sprite::flip(x, y);
 
+    float oldOriginX = getOriginX();
+    float oldOriginY = getOriginY();
     float oldOffsetX = region.offsetX;
     float oldOffsetY = region.offsetY;
-    // Update x and y offsets.
+
+    float widthRatio = getWidth() / region.originalWidth;
+    float heightRatio = getHeight() / region.originalHeight;
+
+    region.offsetX /= widthRatio;
+    region.offsetY /= heightRatio;
+    // Updates x and y offsets.
     region.flip(x, y);
+    region.offsetX *= widthRatio;
+    region.offsetY *= heightRatio;
 
-    // Update position with new offsets.
+    // Update position and origin with new offsets.
     translate(region.offsetX - oldOffsetX, region.offsetY - oldOffsetY);
+    setOrigin(oldOriginX, oldOriginY);
 }
-
-float TextureAtlas::getX () {
-    return super.getX() - region.offsetX;
+float TextureAtlas::AtlasSprite::getX() {
+    return Sprite::getX() - region.offsetX;
 }
-
-float TextureAtlas::getY () {
-    return super.getY() - region.offsetY;
+float TextureAtlas::AtlasSprite::getY() {
+    return Sprite::getY() - region.offsetY;
 }
-
-AtlasRegion& TextureAtlas::getAtlasRegion () {
+float TextureAtlas::AtlasSprite::getOriginX() {
+    return Sprite::getOriginX() + region.offsetX;
+}
+float TextureAtlas::AtlasSprite::getOriginY() {
+    return Sprite::getOriginY() + region.offsetY;
+}
+float TextureAtlas::AtlasSprite::getWidth() {
+    float packedWidth = region.rotate ? region.packedHeight : region.packedWidth;
+    return Sprite::getWidth() / packedWidth * region.originalWidth;
+}
+float TextureAtlas::AtlasSprite::getHeight() {
+    float packedHeight = region.rotate ? region.packedWidth : region.packedHeight;
+    return Sprite::getHeight() / packedHeight * region.originalHeight;
+}
+TextureAtlas::AtlasRegion TextureAtlas::AtlasSprite::getAtlasRegion() {
     return region;
 }
-

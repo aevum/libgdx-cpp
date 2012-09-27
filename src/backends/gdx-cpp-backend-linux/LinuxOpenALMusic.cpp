@@ -20,12 +20,13 @@
 #include <gdx-cpp/files/FileHandle.hpp>
 #include <AL/al.h>
 #include <stdexcept>
+#include <gdx-cpp/Log.hpp>
 
 using namespace gdx::nix;
 
 char LinuxOpenALMusic::tempBytes[bufferSize];
 
-LinuxOpenALMusic::LinuxOpenALMusic(LinuxOpenALAudio * _audio, ref_ptr_maker< gdx::FileHandle >::shared_ptr_def _file) :
+LinuxOpenALMusic::LinuxOpenALMusic(LinuxOpenALAudio * _audio, ref_ptr_maker< gdx::FileHandle >::shared_ptr_t _file) :
         file(_file),
 audio(_audio),
 buffers(NULL),

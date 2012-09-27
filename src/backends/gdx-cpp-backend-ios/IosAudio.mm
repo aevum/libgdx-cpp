@@ -107,7 +107,7 @@ private:
     AVAudioPlayer *audioPlayer;
 };
 
-gdx::Sound* IosAudio::newSound(const ref_ptr_maker<gdx::FileHandle>::shared_ptr_def fileHandle) {
+gdx::Sound* IosAudio::newSound(const ref_ptr_maker<gdx::FileHandle>::shared_ptr_t fileHandle) {
     
     std::string path = fileHandle->path();  
     
@@ -116,7 +116,7 @@ gdx::Sound* IosAudio::newSound(const ref_ptr_maker<gdx::FileHandle>::shared_ptr_
     return new AvAudioPlayerSound(file);
 }
 
-gdx::Music* IosAudio::newMusic(const ref_ptr_maker<gdx::FileHandle>::shared_ptr_def file) {
+gdx::Music* IosAudio::newMusic(const ref_ptr_maker<gdx::FileHandle>::shared_ptr_t file) {
     std::string path = file->path();  
     
     NSURL* fileUrl = [[NSURL alloc] initWithString:[NSString stringWithCString:path.c_str() encoding:NSASCIIStringEncoding]];

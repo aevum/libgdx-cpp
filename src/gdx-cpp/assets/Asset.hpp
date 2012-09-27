@@ -26,7 +26,7 @@ namespace gdx {
 class Asset
 {
 public:
-    typedef ref_ptr_maker<Asset>::shared_ptr_def ptr;    
+    typedef ref_ptr_maker<Asset>::shared_ptr_t ptr;    
     virtual const AssetType& getAssetType() = 0;
 
     virtual bool isRefCounted() {

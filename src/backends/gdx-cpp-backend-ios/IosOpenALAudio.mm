@@ -165,7 +165,7 @@ void* GetOpenALAudioData(CFURLRef fileURL, ALsizei* dataSize,
     return data;
 }
 
-gdx::Sound * IosOpenALAudio::newSound (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_def file) {
+gdx::Sound * IosOpenALAudio::newSound (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_t file) {
     bool audioLoaded;
     void* audioData;
     ALsizei dataSize;
@@ -188,7 +188,7 @@ gdx::Sound * IosOpenALAudio::newSound (const ref_ptr_maker< gdx::FileHandle >::s
     gdx_log_error("IosOpenALAudio", "Failed to load sound: %s", file->name().c_str());
 }
 
-gdx::Music * IosOpenALAudio::newMusic (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_def file) {
+gdx::Music * IosOpenALAudio::newMusic (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_t file) {
     bool audioLoaded;
     void* audioData;
     ALsizei dataSize;

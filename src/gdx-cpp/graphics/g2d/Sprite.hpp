@@ -34,7 +34,7 @@ class SpriteBatch;
 class Sprite : public TextureRegion {
 public:
     typedef std::array<float, 20> vertex_array_t;
-    typedef ref_ptr_maker<Sprite>::shared_ptr_def ptr;
+    typedef ref_ptr_maker<Sprite>::shared_ptr_t ptr;
 
     Sprite();
     Sprite ( const gdx::Sprite::ptr& sprite );
@@ -46,39 +46,40 @@ public:
 
     virtual void set ( const gdx::Sprite::ptr& sprite );
     virtual void setBounds ( float x,float y,float width,float height );
-    void setSize ( float width,float height );
-    void setPosition ( float x,float y );
-    void translate ( float xAmount,float yAmount );
-    void setColor ( const Color& tint );
-    void setColor ( float r,float g,float b,float a );
-    void setOrigin ( float originX,float originY );
-    void setRotation ( float degrees );
-    void rotate ( float degrees );
-    void rotate90 ( bool clockwise );
-    void setScale ( float scaleXY );
-    void setScale ( float scaleX,float scaleY );
-    void scale ( float amount );
+    virtual void setSize ( float width,float height );
+    virtual void setPosition ( float x,float y );
+    virtual void translate ( float xAmount,float yAmount );
+    virtual void setColor ( const Color& tint );
+    virtual void setColor ( float r,float g,float b,float a );
+    virtual void setOrigin ( float originX,float originY );
+    virtual void setRotation ( float degrees );
+    virtual void rotate ( float degrees );
+    virtual void rotate90 ( bool clockwise );
+    virtual void setScale ( float scaleXY );
+    virtual void setScale ( float scaleX,float scaleY );
+    virtual void scale ( float amount );
     const vertex_array_t& getVertices();
     const Rectangle& getBoundingRectangle ();
-    void draw ( SpriteBatch& spriteBatch );
-    void draw ( SpriteBatch& spriteBatch, float alphaModulation );
-    float getX ();
-    float getY ();
-    float getWidth ();
-    float getHeight ();
-    float getOriginX ();
-    float getOriginY ();
-    float getRotation ();
-    float getScaleX ();
-    float getScaleY ();
-    const Color& getColor ();
-    void setRegion ( float u,float v,float u2,float v2 );
-    void setU ( float u );
-    void setV ( float v );
-    void setU2 ( float u2 );
-    void setV2 ( float v2 );
-    void flip ( bool x,bool y );
-    void scroll ( float xAmount,float yAmount );
+    virtual void draw ( SpriteBatch& spriteBatch );
+    virtual void draw ( SpriteBatch& spriteBatch, float alphaModulation );
+    virtual float getX ();
+    virtual float getY ();
+    virtual float getWidth ();
+    virtual float getHeight ();
+    virtual float getOriginX ();
+    virtual float getOriginY ();
+    virtual float getRotation ();
+    virtual float getScaleX ();
+    virtual float getScaleY ();
+    virtual const Color& getColor ();
+    virtual void setRegion ( float u,float v,float u2,float v2 );
+    virtual void setRegion ( const TextureRegion& other );
+    virtual void setU ( float u );
+    virtual void setV ( float v );
+    virtual void setU2 ( float u2 );
+    virtual void setV2 ( float v2 );
+    virtual void flip ( bool x,bool y );
+    virtual void scroll ( float xAmount,float yAmount );
 
     enum {
         X1 = 0,

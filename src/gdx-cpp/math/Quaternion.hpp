@@ -32,7 +32,7 @@ class Quaternion
 {
   
 public:
-    typedef ref_ptr_maker<Quaternion>::shared_ptr_def ptr;
+    typedef ref_ptr_maker<Quaternion>::shared_ptr_t ptr;
   
     Quaternion();
     Quaternion(float x, float y, float z, float w);

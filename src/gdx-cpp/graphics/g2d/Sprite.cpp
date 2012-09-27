@@ -532,3 +532,9 @@ Sprite::Sprite(const TextureRegion& region, int srcX, int srcY, int srcWidth, in
 
 Sprite::~Sprite() {
 }
+
+void Sprite::setRegion(const TextureRegion& other)
+{
+    texture = other.getTexture();
+    setRegion(other.u, other.v, other.u2, other.v2);
+}
