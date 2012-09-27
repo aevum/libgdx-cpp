@@ -20,16 +20,22 @@
 
 #ifndef GDX_CPP_GRAPHICS_FPSLOGGER_HPP_
 #define GDX_CPP_GRAPHICS_FPSLOGGER_HPP_
+
 #include <stdint.h>
+#include <gdx-cpp/Gdx.hpp>
 
 namespace gdx {
 
 class FPSLogger {
 public:
-    void log ();
+    void log () {
+        if ( gdx::system->nanoTime() - startTime > 1000000000 ) {
+            gdx_log_info ( "FPSLogger", "fps: %u", gdx::graphics->getFramesPerSecond() );
+            startTime = gdx::system->nanoTime();
+        }
+    }
 
-    FPSLogger();
-    
+    FPSLogger() : startTime(gdx::system->nanoTime()) { }
 
 protected:
     uint64_t startTime;

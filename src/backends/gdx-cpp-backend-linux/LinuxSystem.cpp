@@ -328,7 +328,7 @@ gdx::Mutex::ptr gdx::nix::LinuxSystem::LinuxMutexFactory::createMutex()
 uint64_t gdx::nix::LinuxSystem::nanoTime()
 {
     static timespec ts;
-    ::clock_gettime(CLOCK_MONOTONIC, &ts);
+    ::clock_gettime(CLOCK_MONOTONIC_COARSE, &ts);
 
     return (uint64_t)ts.tv_sec * 1000000000LL + (uint64_t)ts.tv_nsec;
 }

@@ -461,28 +461,28 @@ void Sprite::scroll (float xAmount,float yAmount) {
     }
 }
 
-Sprite::Sprite(ptr _sprite) :
+Sprite::Sprite( const Sprite::ptr& sprite) :
  color(1,1,1,1)
 {
-    this->set(_sprite);
+    this->set(sprite);
 }
-Sprite::Sprite(Texture::ptr texture) :
+Sprite::Sprite(const Texture::ptr& texture) :
  color(1,1,1,1)
 {
     initialize(texture, 0, 0, texture->getWidth(), texture->getHeight());
 }
 
-Sprite::Sprite(Texture::ptr texture, int srcWidth, int srcHeight) :
+Sprite::Sprite(const Texture::ptr& texture, int srcWidth, int srcHeight) :
     color(1,1,1,1)
 {
     initialize(texture, 0, 0, srcWidth, srcHeight);
 }
 
-Sprite::Sprite(Texture::ptr texture, int srcX, int srcY, int srcWidth, int srcHeight) : color(1,1,1,1) {
+Sprite::Sprite(const Texture::ptr& texture, int srcX, int srcY, int srcWidth, int srcHeight) : color(1,1,1,1) {
     initialize(texture, srcX, srcY, srcWidth, srcHeight);
 }
 
-void Sprite::initialize(Texture::ptr texture, int srcX, int srcY, int srcWidth, int srcHeight)
+void Sprite::initialize(const Texture::ptr& texture, int srcX, int srcY, int srcWidth, int srcHeight)
 {
     if (!texture)
         throw std::runtime_error("texture cannot be null.");

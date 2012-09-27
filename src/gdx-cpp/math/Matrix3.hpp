@@ -19,6 +19,7 @@
 #define GDX_CPP_MATH_MATRIX3_HPP
 
 #include <string>
+#include <gdx-cpp/math/Vector2.hpp>
 
 namespace gdx {
 
@@ -48,7 +49,8 @@ public:
     void translate(float x, float y);
     void rotate(float angle);
     void scale(float scaleX, float scaleY);
-
+    
+    void getTranslation(Vector2& position) ;
     
     const static int length = 9;
     float vals[length];

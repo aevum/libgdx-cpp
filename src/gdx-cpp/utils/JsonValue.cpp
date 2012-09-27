@@ -286,8 +286,6 @@ std::ostream& operator<< (std::ostream& out, const JsonValue& item) {
 }
 
 JsonValue& JsonValue::operator+=(const JsonValue& other) {
-    assert(item_type == json_json && other.item_type == json_json);
-
     item_map& thisAsMap = this->as_item_map();
     const item_map& otherAsMap = other.as_item_map();
 

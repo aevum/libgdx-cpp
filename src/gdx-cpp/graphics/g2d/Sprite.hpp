@@ -37,10 +37,10 @@ public:
     typedef ref_ptr_maker<Sprite>::shared_ptr_def ptr;
 
     Sprite();
-    Sprite ( ptr );
-    Sprite ( Texture::ptr texture ) ;
-    Sprite ( Texture::ptr texture, int srcWidth, int srcHeight ) ;
-    Sprite ( Texture::ptr texture, int srcX, int srcY, int srcWidth, int srcHeight ) ;
+    Sprite ( const gdx::Sprite::ptr& sprite );
+    Sprite ( const gdx::Texture::ptr& texture ) ;
+    Sprite ( const gdx::Texture::ptr& texture, int srcWidth, int srcHeight ) ;
+    Sprite ( const gdx::Texture::ptr& texture, int srcX, int srcY, int srcWidth, int srcHeight ) ;
     Sprite ( const TextureRegion& region ) ;
     Sprite ( const TextureRegion& region, int srcX, int srcY, int srcWidth, int srcHeight ) ;
 
@@ -121,7 +121,7 @@ private:
     float scaleX, scaleY;
     bool dirty;
     Rectangle bounds;
-    void initialize ( Texture::ptr arg1, int arg2, int arg3, int arg4, int arg5 );
+    void initialize ( const gdx::Texture::ptr& texture, int srcX, int srcY, int srcWidth, int srcHeight );
 };
 
 } // namespace gdx

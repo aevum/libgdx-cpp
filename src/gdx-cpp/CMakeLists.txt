@@ -408,7 +408,7 @@ graphics/glutils/ImmediateModeRenderer20.cpp
 # graphics/glutils/ETC1TextureData.cpp
 graphics/glutils/VertexArray.cpp
 # graphics/TextureDict.cpp
-graphics/FPSLogger.cpp
+# graphics/FPSLogger.cpp
 graphics/Pixmap.cpp
 # graphics/g3d/decals/DefaultGroupStrategy.cpp
 # graphics/g3d/decals/SimpleOrthoGroupStrategy.cpp

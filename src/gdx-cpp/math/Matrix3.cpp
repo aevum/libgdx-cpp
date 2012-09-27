@@ -38,6 +38,7 @@ Matrix3::Matrix3()
 
 Matrix3::Matrix3(const Matrix3& other)
 {
+    memcpy(vals, other.vals, sizeof(float) * 9);
 }
 
 Matrix3::~Matrix3()
@@ -303,6 +304,13 @@ void gdx::Matrix3::mul(float* mata, float* matb)
     mata[7] = v12;
     mata[8] = v22;
 }
+
+void Matrix3::getTranslation(Vector2& position) {
+    position.x = vals[6];
+    position.y = vals[7];
+}
+
+
 
 
 

@@ -18,6 +18,24 @@ macro(gdx_ios_copy_resources target_name target_files destination)
         COMMAND rsync -r --exclude .DS_Store --exclude CVS --exclude .svn --exclude .git --exclude *~ ${target_files} "\${BUILT_PRODUCTS_DIR}/\${CONTENTS_FOLDER_PATH}/${destination}")
 endmacro()
 
+macro(gdx_make_resources target_name target_files destination)
+    if (APPLE) 
+        gdx_ios_copy_resources(${target_name} ${target_files} ${destination})
+    elseif(ANDROID_NDK)
+        if (NOT GDX_JAVA_APPLICATION_DIR)
+            message(FATAL_ERROR "Please specify the folder where the eclipse project it's located on the variable GDX_JAVA_APPLICATION_DIR")
+        endif()        
+        if (NOT EXISTS ${GDX_JAVA_APPLICATION_DIR}/assets/${destination}) 
+            execute_process(COMMAND ln -s ${target_files} ${GDX_JAVA_APPLICATION_DIR}/assets/${destination})     
+        endif()
+    else()
+        add_custom_command(
+            TARGET ${target_name}
+            POST_BUILD
+            COMMAND  if [!-e ${PROJECT_BINARY_DIR}/${destination}]; then ln -s ${target_files} ${PROJECT_BINARY_DIR}/${destination}; fi;)    
+    endif()
+endmacro()
+
 macro(gdx_setup_target target_name target_type sources)
     string(TOUPPER ${target_type} target_type)
     
