@@ -23,30 +23,7 @@
 
 #include <gdx-cpp/config.hpp>
 #include <cstdlib>
-
-#if defined(GDX_BACKEND_ANDROID) or defined(GDX_BACKEND_LINUX)
-
 #include <memory>
-
-#define gdx_shared_ptr std::shared_ptr
-#define gdx_unique_ptr std::unique_ptr
-#define gdx_weak_ptr std::weak_ptr
-#define gdx_enable_shared_from_this std::enable_shared_from_this
-#define gdx_static_pointer_cast std::static_pointer_cast
-
-#elif defined(GDX_BACKEND_IOS) 
-
-#include <memory>	
-
-//defining static_pointer_cast using "using" didn't worked =/
-#define gdx_static_pointer_cast std::static_pointer_cast
-template <typename K > using gdx_enable_shared_from_this = std::enable_shared_from_this<K>;
-template <typename K > using gdx_shared_ptr = std::shared_ptr<K>;
-template <typename K > using gdx_unique_ptr = std::unique_ptr<K>;
-template <typename K > using gdx_weak_ptr = std::weak_ptr<K>;
-
-
-#endif
 
 struct shared_ptr_array_deleter {
     template <typename T>
@@ -69,20 +46,9 @@ template <typename T>
 struct ref_ptr_maker
 {
 public:
-  typedef gdx_shared_ptr< T > shared_ptr_def;
-  typedef gdx_weak_ptr< T > weak_ptr_def;
-  typedef gdx_unique_ptr< T > unique_ptr_def;
-};
-
-/** A simple template class to create a Null Pointer to any sharedPtr
- * 
- */
-struct null_shared_ptr {
-public:
-    template<typename T>
-    operator gdx_shared_ptr<T>() {
-        return gdx_shared_ptr<T>();
-    }
+  typedef std::shared_ptr< T > shared_ptr_def;
+  typedef std::weak_ptr< T > weak_ptr_def;
+  typedef std::unique_ptr< T > unique_ptr_def;
 };
 
 #endif // GDX_CPP_UTILS_ALIASES_HPP

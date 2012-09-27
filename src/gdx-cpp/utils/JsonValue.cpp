@@ -33,49 +33,49 @@ struct json_deleter {
 };
 
 JsonValue::JsonValue(int val) : item_type(json_int) {
-    item_val = gdx_shared_ptr<void>( new int(val), json_deleter<int>() );
+    item_val = std::shared_ptr<void>( new int(val), json_deleter<int>() );
 }
 
-JsonValue::JsonValue(int* val) : item_val(gdx_shared_ptr<void>(val, json_deleter<int>())),
+JsonValue::JsonValue(int* val) : item_val(std::shared_ptr<void>(val, json_deleter<int>())),
 item_type(json_int) {
 
 }
 
-JsonValue::JsonValue(float val) : item_val(gdx_shared_ptr<void>( new float(val), json_deleter<float>() ) ),
+JsonValue::JsonValue(float val) : item_val(std::shared_ptr<void>( new float(val), json_deleter<float>() ) ),
 item_type(json_float) {
 
 }
 
-JsonValue::JsonValue(float* val) : item_val(gdx_shared_ptr<void>(val, json_deleter<float>())),
+JsonValue::JsonValue(float* val) : item_val(std::shared_ptr<void>(val, json_deleter<float>())),
 item_type(json_float)
 {
 }
 
-JsonValue::JsonValue(bool* val) : item_val(gdx_shared_ptr<void>( val, json_deleter<bool>() )),
+JsonValue::JsonValue(bool* val) : item_val(std::shared_ptr<void>( val, json_deleter<bool>() )),
 item_type(json_bool) {
 }
 
 JsonValue::JsonValue(const std::string& val)
-    : item_val(gdx_shared_ptr<void>( new std::string(val), json_deleter<std::string>())),
+    : item_val(std::shared_ptr<void>( new std::string(val), json_deleter<std::string>())),
 item_type(json_string)
 {
 }
 
 JsonValue::JsonValue(std::string* val)
-    : item_val(gdx_shared_ptr<void>( val , json_deleter<std::string>())),
+    : item_val(std::shared_ptr<void>( val , json_deleter<std::string>())),
 item_type(json_string)
 {
 }
 
 JsonValue::JsonValue(const item_map& val) : item_type(json_json) {
-    item_val = gdx_shared_ptr<void>( new item_map(val), json_deleter<item_map>() );
+    item_val = std::shared_ptr<void>( new item_map(val), json_deleter<item_map>() );
 }
 
 JsonValue::JsonValue(const array& val) : item_type(json_list) {
-    item_val = gdx_shared_ptr<void>( new array(val), json_deleter<item_map>() );
+    item_val = std::shared_ptr<void>( new array(val), json_deleter<item_map>() );
 }
 
-JsonValue::JsonValue(bool val) : item_val(gdx_shared_ptr<void>(new bool(val), json_deleter<bool>())),
+JsonValue::JsonValue(bool val) : item_val(std::shared_ptr<void>(new bool(val), json_deleter<bool>())),
 item_type(json_bool) {
 }
 
@@ -83,7 +83,7 @@ JsonValue& JsonValue::at(unsigned int idx)
 {
     if (this->item_type == json_null) {
         array* new_array = new array;
-        this->item_val = gdx_shared_ptr<void>(new_array, json_deleter<array>());
+        this->item_val = std::shared_ptr<void>(new_array, json_deleter<array>());
         this->item_type = json_list;
     }
 
@@ -142,7 +142,7 @@ const JsonValue& JsonValue::operator[](const char* name) const
 JsonValue& JsonValue::operator[](const char* name)
 {
     if (this->item_type == json_null) {
-        this->item_val = gdx_shared_ptr<void>(new item_map, json_deleter<item_map>());
+        this->item_val = std::shared_ptr<void>(new item_map, json_deleter<item_map>());
         this->item_type = json_json;
     }
     
@@ -300,18 +300,18 @@ JsonValue& JsonValue::operator+=(const JsonValue& other) {
 
     return *this;
 }
-JsonValue::JsonValue(JsonValue::item_map* val) : item_val(gdx_shared_ptr<void>( val , json_deleter<item_map>() )),
+JsonValue::JsonValue(JsonValue::item_map* val) : item_val(std::shared_ptr<void>( val , json_deleter<item_map>() )),
 item_type(json_json) {
     
 }
 
-JsonValue::JsonValue(JsonValue::array* val) : item_val(gdx_shared_ptr<void>( val, json_deleter<array>() )),
+JsonValue::JsonValue(JsonValue::array* val) : item_val(std::shared_ptr<void>( val, json_deleter<array>() )),
 item_type(json_list) {    
 }
 
 JsonValue& JsonValue::operator=(const std::string& other) {
     if (item_type == json_null) {
-        this->item_val = gdx_shared_ptr<void>(new std::string(other), json_deleter<std::string>());
+        this->item_val = std::shared_ptr<void>(new std::string(other), json_deleter<std::string>());
         this->item_type = json_string;
     } else {
         this->as_string() = other;
@@ -321,7 +321,7 @@ JsonValue& JsonValue::operator=(const std::string& other) {
 
 JsonValue& JsonValue::operator=(const char* other) {
     if (item_type == json_null) {
-        this->item_val = gdx_shared_ptr<void>(new std::string(other), json_deleter<std::string>());
+        this->item_val = std::shared_ptr<void>(new std::string(other), json_deleter<std::string>());
         this->item_type = json_string;
     } else {
         this->as_string() = other;
@@ -331,7 +331,7 @@ JsonValue& JsonValue::operator=(const char* other) {
 
 JsonValue& JsonValue::operator=(int other) {
     if (item_type == json_null) {
-        this->item_val = gdx_shared_ptr<void>(new int(other), json_deleter<int>());
+        this->item_val = std::shared_ptr<void>(new int(other), json_deleter<int>());
         this->item_type = json_int;
     } else {
         this->as_int() = other;
@@ -341,7 +341,7 @@ JsonValue& JsonValue::operator=(int other) {
 
 JsonValue& JsonValue::operator=(bool other) {
     if (item_type == json_null) {
-        this->item_val = gdx_shared_ptr<void>(new bool(other), json_deleter<bool>());
+        this->item_val = std::shared_ptr<void>(new bool(other), json_deleter<bool>());
         this->item_type = json_bool;
     } else {
         this->as_bool() = other;
@@ -351,7 +351,7 @@ JsonValue& JsonValue::operator=(bool other) {
 
 JsonValue& JsonValue::operator=(float other) {
     if (item_type == json_null) {
-        this->item_val = gdx_shared_ptr<void>(new float(other), json_deleter<float>());
+        this->item_val = std::shared_ptr<void>(new float(other), json_deleter<float>());
         this->item_type = json_float;
     } else {
         this->as_float() = other;
@@ -361,7 +361,7 @@ JsonValue& JsonValue::operator=(float other) {
 
 JsonValue& JsonValue::operator=(const JsonValue::array& other) {
     if (item_type == json_null) {
-        this->item_val = gdx_shared_ptr<void>(new array(other), json_deleter<array>());
+        this->item_val = std::shared_ptr<void>(new array(other), json_deleter<array>());
         this->item_type = json_list;
     } else {
         this->as_array() = other;

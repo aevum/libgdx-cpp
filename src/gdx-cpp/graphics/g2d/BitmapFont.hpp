@@ -144,7 +144,7 @@ public:
     BitmapFontData* getData ();
 
     static BitmapFont* fromFiles (FileHandle::ptr fontFile,
-                                  FileHandle::ptr imageFile = null_shared_ptr(),
+                                  FileHandle::ptr imageFile = nullptr,
                                   bool flip = false,
                                   bool integer = true);
 

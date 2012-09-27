@@ -44,8 +44,8 @@ public:
     Sprite ( const TextureRegion& region ) ;
     Sprite ( const TextureRegion& region, int srcX, int srcY, int srcWidth, int srcHeight ) ;
 
-    void set ( const gdx::Sprite::ptr& sprite );
-    void setBounds ( float x,float y,float width,float height );
+    virtual void set ( const gdx::Sprite::ptr& sprite );
+    virtual void setBounds ( float x,float y,float width,float height );
     void setSize ( float width,float height );
     void setPosition ( float x,float y );
     void translate ( float xAmount,float yAmount );

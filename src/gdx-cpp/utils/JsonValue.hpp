@@ -166,7 +166,7 @@ private:
     void toString(std::ostream& out, bool prettyPrint, int ident) const;
     
     friend class JsonReader;
-    gdx_shared_ptr<void> item_val;
+    std::shared_ptr<void> item_val;
     json_item_type item_type;
     
     operator array& ();

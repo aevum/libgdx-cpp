@@ -351,7 +351,7 @@ void XmlReader::text (std::string text) {
 void XmlReader::close () {
     root = elements.back();
     elements.pop_back();
-    current = elements.size() > 0 ? elements.back() : null_shared_ptr();
+    current = elements.size() > 0 ? elements.back() : nullptr;
 }
 
 XmlReader::Element::Element(const std::string& name) {
@@ -448,7 +448,7 @@ std::string XmlReader::Element::toString(const std::string& indent) const {
 
 XmlReader::Element::ptr const XmlReader::Element::getChildByName(const std::string& name) {
     if (children.empty())
-        return null_shared_ptr();
+        return nullptr;
 
     for (unsigned int i = 0; i < children.size(); i++) {
         Element::ptr& element = children[i];
@@ -456,12 +456,12 @@ XmlReader::Element::ptr const XmlReader::Element::getChildByName(const std::stri
             return element;
     }
     
-    return null_shared_ptr();
+    return nullptr;
 }
 
 XmlReader::Element::ptr const XmlReader::Element::getChildByNameRecursive(const std::string& name) {
     if (children.empty())
-        return null_shared_ptr();
+        return nullptr;
 
     for (unsigned int i = 0; i < children.size(); i++) {
         const Element::ptr& element = children[i];
@@ -473,7 +473,7 @@ XmlReader::Element::ptr const XmlReader::Element::getChildByNameRecursive(const 
         if (found) return found;
     }
     
-    return null_shared_ptr();
+    return nullptr;
 }
 
 std::vector< XmlReader::Element::ptr > XmlReader::Element::getChildrenByName(const std::string& name) {

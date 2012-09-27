@@ -356,7 +356,7 @@ void Texture::initialize(const FileHandle::ptr file, const Pixmap::Format* forma
     this->useHWMipMap = true;
     this->assetManager = 0;
 
-    create(TextureData::ptr(graphics->resolveTextureData(file, null_shared_ptr(), format, useMipMaps)));
+    create(TextureData::ptr(graphics->resolveTextureData(file, nullptr, format, useMipMaps)));
 }
 
 Texture::~Texture()

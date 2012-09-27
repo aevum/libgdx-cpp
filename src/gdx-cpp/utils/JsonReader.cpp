@@ -2852,7 +2852,7 @@ void JsonReader::startArray (const std::string& name) {
 void JsonReader::pop () {
     root = elements.back();
     elements.pop_back();
-    current = elements.size() > 0 ? elements.back() : null_shared_ptr();
+    current = elements.size() > 0 ? elements.back() : nullptr;
 }
 
 void JsonReader::string (const std::string& name,const std::string& value) {
