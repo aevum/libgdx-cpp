@@ -52,7 +52,7 @@ Texture::managedTextureMap Texture::managedTextures;
 unsigned int Texture::buffer = 0;
 AssetManager* Texture::assetManager = 0;
 
-Texture::ptr Texture::newFromFile(const FileHandle::ptr file,
+Texture::ptr Texture::newFromFile(const FileHandle::ptr& file,
                                   const Pixmap::Format* format,
                                   bool useMipMaps)
 {
@@ -62,7 +62,7 @@ Texture::ptr Texture::newFromFile(const FileHandle::ptr file,
     return newTex;
 }
 
-void Texture::create (TextureData::ptr data) {
+void Texture::create (const TextureData::ptr& data) {
     this->glHandle = 0;
     this->enforcePotImages = true;
     this->useHWMipMap = true;
@@ -229,7 +229,7 @@ void Texture::setEnforcePotImages (bool enforcePotImages) {
     Texture::enforcePotImages = enforcePotImages;
 }
 
-void Texture::addManagedTexture (Application* app,const Texture::ptr texture) {
+void Texture::addManagedTexture (Application* app, const Texture::ptr& texture) {
     managedTextures[app].push_back(Texture::weak_ptr(texture));
 }
 
@@ -298,7 +298,7 @@ std::string Texture::getManagedStatus () {
     return builder.str();
 }
 
-Texture::Texture(const TextureData::ptr data)
+Texture::Texture(const TextureData::ptr& data)
     :
     minFilter(TextureFilter::Nearest),
 magFilter(TextureFilter::Nearest),
@@ -339,7 +339,7 @@ vWrap(TextureWrap::ClampToEdge)
 {
 }
 
-Texture::Texture(const Pixmap::ptr pixmap, bool useMipMaps)
+Texture::Texture(const Pixmap::ptr& pixmap, bool useMipMaps)
     :
     minFilter(TextureFilter::Nearest),
 magFilter(TextureFilter::Nearest),
@@ -349,7 +349,7 @@ vWrap(TextureWrap::ClampToEdge)
     create(PixmapTextureData::ptr(new PixmapTextureData(pixmap, NULL , useMipMaps, false)));
 }
 
-void Texture::initialize(const FileHandle::ptr file, const Pixmap::Format* format, bool useMipMaps)
+void Texture::initialize(const FileHandle::ptr& file, const Pixmap::Format* format, bool useMipMaps)
 {
     this->glHandle = 0;
     this->enforcePotImages = true;

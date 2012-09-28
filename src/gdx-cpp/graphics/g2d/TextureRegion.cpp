@@ -24,7 +24,7 @@
 
 using namespace gdx;
 
-TextureRegion TextureRegion::newFromTexture(Texture::ptr texture)
+TextureRegion TextureRegion::newFromTexture(const Texture::ptr& texture)
 {
     return TextureRegion(texture);
 }
@@ -43,7 +43,7 @@ v2(0.0)
 }
 
 /** Constructs a region the size of the specified texture. */
-TextureRegion::TextureRegion (Texture::ptr _texture) : u(0.0),
+TextureRegion::TextureRegion (const Texture::ptr& _texture) : u(0.0),
 v(0.0),
 u2(0.0),
 v2(0.0),
@@ -54,7 +54,7 @@ texture(_texture)
 
 /** @param width The width of the texture region. May be negative to flip the sprite when drawn.
  * @param height The height of the texture region. May be negative to flip the sprite when drawn. */
-TextureRegion::TextureRegion (Texture::ptr _texture, int x, int y, int width, int height): u(0.0),
+TextureRegion::TextureRegion (const Texture::ptr& _texture, int x, int y, int width, int height): u(0.0),
 v(0.0),
 u2(0.0),
 v2(0.0),
@@ -63,7 +63,7 @@ texture(_texture)
     setRegion(x, y, width, height);
 }
 
-TextureRegion::TextureRegion (Texture::ptr _texture, float u, float v, float u2, float v2):u(0.0),
+TextureRegion::TextureRegion (const Texture::ptr& _texture, float u, float v, float u2, float v2):u(0.0),
 v(0.0),
 u2(0.0),
 v2(0.0),

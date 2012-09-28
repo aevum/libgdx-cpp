@@ -29,10 +29,9 @@ macro(gdx_make_resources target_name target_files destination)
             execute_process(COMMAND ln -s ${target_files} ${GDX_JAVA_APPLICATION_DIR}/assets/${destination})     
         endif()
     else()
-        add_custom_command(
-            TARGET ${target_name}
-            POST_BUILD
-            COMMAND  if [!-e ${PROJECT_BINARY_DIR}/${destination}]; then ln -s ${target_files} ${PROJECT_BINARY_DIR}/${destination}; fi;)    
+        if (NOT EXISTS ${PROJECT_BINARY_DIR}/${destination}) 
+            execute_process(COMMAND ln -s ${target_files} ${PROJECT_BINARY_DIR}/${destination})     
+        endif()
     endif()
 endmacro()
 

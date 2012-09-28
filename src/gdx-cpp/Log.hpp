@@ -35,8 +35,8 @@ namespace gdx {
 #endif
 
 struct RuntimeLogErrorExecutor {
-    void operator()() const {
-        gdx_log_error("gdx","gdx runtime error, see the error output for detail");
+    void operator()() const {         
+         throw std::runtime_error("gdx runtime error, see the error output for detail");
     }
 };
 

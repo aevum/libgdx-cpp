@@ -85,9 +85,9 @@ public:
         }
     };
 
-    Texture (const TextureData::ptr data) ;
+    Texture (const gdx::TextureData::ptr& data) ;
     Texture (int width, int height, const Pixmap::Format& format, Pixmap::PixmapType pixType) ;
-    Texture (const Pixmap::ptr pixmap, bool useMipMaps) ;
+    Texture (const gdx::Pixmap::ptr& pixmap, bool useMipMaps) ;
     Texture (const Pixmap::ptr pixmap, const Pixmap::Format& format, bool useMipMaps) ;
     Texture (const TextureData& data) ;
 
@@ -115,7 +115,7 @@ public:
     std::string getManagedStatus ();
     static int createGLHandle ();
 
-    static ptr newFromFile(const FileHandle::ptr file,
+    static ptr newFromFile(const FileHandle::ptr& file,
                            const Pixmap::Format* format = NULL,
                            bool useMipMaps = false);
 
@@ -123,14 +123,14 @@ public:
 
 protected:
     void dispose ();
-    void initialize(const FileHandle::ptr file, const Pixmap::Format* format, bool useMipMaps);
+    void initialize(const gdx::FileHandle::ptr& file, const gdx::Pixmap::Format* format, bool useMipMaps);
     Texture ();
 
 private:
-    void create (TextureData::ptr data);
+    void create (const gdx::TextureData::ptr& data);
     void uploadImageData (const Pixmap::ptr& pixmap);
     void reload ();
-    static void addManagedTexture (Application* app, const Texture::ptr texture);
+    static void addManagedTexture (gdx::Application* app, const gdx::Texture::ptr& texture);
     static AssetManager* assetManager;
 
     typedef std::list< Texture::weak_ptr > textureList;

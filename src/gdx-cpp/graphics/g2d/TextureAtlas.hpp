@@ -37,8 +37,8 @@
 namespace gdx {
 
 class TextureAtlas: public gdx::Disposable {
-public:   
-    class AtlasRegion : public gdx::TextureRegion, public ref_ptr_maker<AtlasRegion> {
+public:
+    class AtlasRegion : public gdx::TextureRegion {
     public:
         int index;
         std::string name;
@@ -50,54 +50,16 @@ public:
         int originalHeight;
         bool rotate;
 
+        AtlasRegion();
         AtlasRegion (const gdx::Texture::ptr& texture, int x, int y, int width, int height);
         AtlasRegion (const AtlasRegion& region);
 
         void flip (bool x, bool y);
-    };    
-    
-    struct TextureAtlasData {
-      friend class TextureAtlas;
-      
-      struct Page : public ref_ptr_maker<Page> {
-            gdx::FileHandle::ptr textureFile;
-            gdx::Texture::ptr texture;
-            bool useMipMaps;
-            gdx::Pixmap::Format format;
-            gdx::Texture::TextureFilter minFilter;
-            gdx::Texture::TextureFilter magFilter;
-            gdx::Texture::TextureWrap uWrap;
-            gdx::Texture::TextureWrap vWrap;
+    };
 
-            Page (const FileHandle::ptr& _handle, bool _useMipMaps, gdx::Pixmap::Format _format, 
-                  gdx::Texture::TextureFilter _minFilter, gdx::Texture::TextureFilter _magFilter,
-                  gdx::Texture::TextureWrap _uWrap, gdx::Texture::TextureWrap _vWrap) ;          
-      };
-      
-      struct Region : public ref_ptr_maker<Region> {
-          Page::shared_ptr_t page;
-          int index;
-          std::string name;
-          float offsetX;
-          float offsetY;
-          int originalWidth;
-          int originalHeight;
-          bool rotate;
-          int left;
-          int top;
-          int width;
-          int height;
-          bool flip;
-      };
-            
-      virtual void read(const gdx::FileHandle::ptr& packFile, const gdx::FileHandle::ptr& imagesDir, bool flip);
-      
-        std::vector< TextureAtlas::TextureAtlasData::Page::shared_ptr_t >& getPages();
-        std::vector< TextureAtlas::TextureAtlasData::Region::shared_ptr_t >& getRegions();
-      
-    private:
-      std::vector< TextureAtlasData::Page::shared_ptr_t > pages;
-      std::vector< TextureAtlasData::Region::shared_ptr_t > regions;
+    class TextureAtlasDataProvider {
+    public:
+        virtual std::vector< AtlasRegion > loadAtlasRegions() = 0;
     };
     
     class AtlasSprite: public gdx::Sprite {
@@ -118,33 +80,27 @@ public:
         virtual float getOriginY();
         virtual float getWidth();
         virtual float getHeight();
-        
+
         AtlasRegion getAtlasRegion();
-    };    
-    
-    ref_ptr_maker< AtlasRegion >::shared_ptr_t addRegion (const std::string& name, const gdx::Texture::ptr& texture, int x, int y, int width, int height);
-    ref_ptr_maker< AtlasRegion >::shared_ptr_t addRegion (const std::string& name, gdx::TextureRegion textureRegion);
-    std::vector<AtlasRegion> getRegions();
-    ref_ptr_maker< AtlasRegion >::shared_ptr_t findRegion (const std::string& name);
-    AtlasRegion::shared_ptr_t findRegion (const std::string& name,int index);
-    std::vector< AtlasRegion::shared_ptr_t > findRegions (const std::string& name);
+    };
+
+    AtlasRegion addRegion (const std::string& name, const gdx::Texture::ptr& texture, int x, int y, int width, int height);
+    AtlasRegion addRegion (const std::string& name, gdx::TextureRegion textureRegion);
+    bool findRegion (const std::string& name, AtlasRegion& placement);
+    bool findRegion (const std::string& name, int index, AtlasRegion& placement);
+    std::vector< AtlasRegion > findRegions (const std::string& name);
     std::vector< Sprite::ptr > createSprites ();
     Sprite::ptr createSprite (const std::string& name);
     Sprite::ptr createSprite (const std::string& name,int index);
     std::vector< Sprite::ptr > createSprites (const std::string& name);
     void dispose ();
-    
-    static int compare(const TextureAtlasData::Region& a, const TextureAtlasData::Region& b);
-    
-    static std::unique_ptr<TextureAtlas> newAtlasFrom() {
-    }
-    
+
+    static std::unique_ptr<TextureAtlas> newAtlasFromProvider(TextureAtlasDataProvider& provider) ;
+
 private:
-    std::string tuple[2];
     std::set<Texture::ptr> textures;
-    std::vector<AtlasRegion::shared_ptr_t> regions;
-    
-    void load (const TextureAtlasData& data);
+    std::vector< AtlasRegion > regions;
+
     Sprite::ptr newSprite (const gdx::TextureAtlas::AtlasRegion& region);
 };
 
