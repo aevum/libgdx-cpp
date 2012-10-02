@@ -270,17 +270,13 @@ protected:
     pthread_mutex_t mutex;
 };
 
-void* run_runnable(void* runnable) {
-    ((Runnable*)runnable)->run();
-
-    return NULL;
-}
+void* run_runnable(void* runnable);
 
 class LinuxThread : public gdx::Thread {
 public:
     LinuxThread(Runnable* theRunnable)
         : runnable(theRunnable),
-thread(0) {
+    thread(0) {
     }
     
     const std::string getThreadName() {
@@ -288,7 +284,8 @@ thread(0) {
     }
 
     void start() {
-        if (pthread_create(&thread, NULL, run_runnable, (void*) runnable) != 0) {
+        self = shared_from_this();
+        if (pthread_create(&thread, NULL, run_runnable, (void*) this) != 0) {
             gdx_log_error("gdx","pthread_create failed");
         }
     }
@@ -308,18 +305,27 @@ thread(0) {
     }
 
     virtual ~LinuxThread() {
-        join();
-        runnable->onRunnableStop();
+        std::cout << "morreu" << std::endl;
     }    
     
-private:
     Runnable* runnable;
     pthread_t thread;
+    ptr self;
 };
+
+void* run_runnable(void* runnable) {
+    ((LinuxThread*)runnable)->runnable->run();        
+    ((LinuxThread*)runnable)->self = nullptr;    
+    return NULL;
+}
 
 gdx::Thread::ptr gdx::nix::LinuxSystem::LinuxThreadFactory::createThread(Runnable* t)
 {
     return gdx::Thread::ptr(new LinuxThread(t));
+}
+
+gdx::Thread::ptr gdx::nix::LinuxSystem::LinuxThreadFactory::createThread(std::function< void() > func) {
+     return gdx::Thread::ptr(new LinuxThread(new RunnableFunctionExecutor(func)));
 }
 
 gdx::Mutex::ptr gdx::nix::LinuxSystem::LinuxMutexFactory::createMutex()

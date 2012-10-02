@@ -35,6 +35,8 @@ class LinuxSystem  : public gdx::System
 class LinuxThreadFactory : public gdx::ThreadFactory {
 public: 
         Thread::ptr createThread(Runnable* t);
+        Thread::ptr createThread(std::function< void() > func);
+        
 };
 
 class LinuxMutexFactory : public gdx::MutexFactory {

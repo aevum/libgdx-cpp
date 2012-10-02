@@ -20,6 +20,7 @@
 
 #include "Thread.hpp"
 #include "gdx-cpp/utils/Runnable.hpp"
+#include <functional>
 
 namespace gdx {
 
@@ -27,6 +28,7 @@ class ThreadFactory
 {
 public:
     virtual Thread::ptr createThread(Runnable* t) = 0;
+    virtual Thread::ptr createThread(std::function< void() > func) = 0;
     virtual ~ThreadFactory() {}
 };
 

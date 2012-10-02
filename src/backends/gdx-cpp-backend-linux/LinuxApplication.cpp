@@ -208,3 +208,8 @@ LinuxApplication::~LinuxApplication()
     delete files;
     delete input;
 }
+
+void LinuxApplication::postRunnable(std::function< void() > runnable)
+{
+    this->postRunnable(Runnable::ptr(new RunnableFunctionExecutor(runnable)));
+}

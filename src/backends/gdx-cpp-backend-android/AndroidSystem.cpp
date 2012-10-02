@@ -34,8 +34,6 @@
 #include <gdx-cpp/Application.hpp>
 #include <cassert>
 
-
-
 #include <android/log.h>
 
 using namespace gdx::android;
@@ -59,17 +57,13 @@ protected:
     pthread_mutex_t mutex;
 };
 
-void* run_runnable(void* runnable) {
-    ((Runnable*)runnable)->run();
-
-    return NULL;
-}
+void* run_runnable(void* runnable);
 
 class AndroidThread : public gdx::Thread {
 public:
     AndroidThread(Runnable* theRunnable)
         : runnable(theRunnable),
-thread(0) {
+    thread(0) {
     }
     
     const std::string getThreadName() {
@@ -77,7 +71,8 @@ thread(0) {
     }
 
     void start() {
-        if (pthread_create(&thread, NULL, run_runnable, (void*) runnable) != 0) {
+        self = shared_from_this();
+        if (pthread_create(&thread, NULL, run_runnable, (void*) this) != 0) {
             gdx_log_error("gdx","pthread_create failed");
         }
     }
@@ -97,18 +92,33 @@ thread(0) {
     }
 
     virtual ~AndroidThread() {
-        join();
-        runnable->onRunnableStop();
     }    
     
-private:
     Runnable* runnable;
     pthread_t thread;
+    ptr self;
 };
+
+void* run_runnable(void* runnable) {
+    AndroidThread* thread =(AndroidThread*)runnable;    
+    
+    if(thread->runnable) {
+        thread->runnable->run();
+        thread->runnable->onRunnableStop();
+    }
+    
+    thread->self = nullptr;
+    
+    return NULL;
+}
 
 gdx::Thread::ptr gdx::android::AndroidSystem::AndroidThreadFactory::createThread(Runnable* t)
 {
     return gdx::Thread::ptr(new AndroidThread(t));
+}
+
+gdx::Thread::ptr gdx::android::AndroidSystem::AndroidThreadFactory::createThread(std::function< void() > func) {
+    return gdx::Thread::ptr(new AndroidThread(new RunnableFunctionExecutor(func)));
 }
 
 gdx::Mutex::ptr gdx::android::AndroidSystem::AndroidMutexFactory::createMutex()

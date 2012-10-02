@@ -25,7 +25,7 @@
 
 namespace gdx {
 
-class Thread
+class Thread : public std::enable_shared_from_this< Thread >
 {
 public:
     typedef ref_ptr_maker<Thread>::shared_ptr_t ptr;

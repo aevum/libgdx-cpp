@@ -47,7 +47,10 @@ public:
     Preferences* getPreferences(std::string& name);
     ApplicationType getType();
     int getVersion();
+    
     void postRunnable(Runnable::ptr runnable);
+    virtual void postRunnable(std::function< void() > runnable);
+    
     void setLogLevel(int logLevel);
 
     void onRunnableStop();

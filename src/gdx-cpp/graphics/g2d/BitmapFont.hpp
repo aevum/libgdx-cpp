@@ -146,7 +146,8 @@ public:
     static BitmapFont* fromFiles (FileHandle::ptr fontFile,
                                   FileHandle::ptr imageFile = nullptr,
                                   bool flip = false,
-                                  bool integer = true);
+                                  bool integer = true,
+                                  bool generateMipmaps = false);
 
     static int indexOf (const std::string& text, char ch, int start) {
         int n = text.length();

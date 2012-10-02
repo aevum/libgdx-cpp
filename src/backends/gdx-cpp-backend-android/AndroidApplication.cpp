@@ -156,3 +156,7 @@ void gdx::android::AndroidApplication::setLogLevel(int logLevel)
     this->logLevel = logLevel;
 }
 
+void AndroidApplication::postRunnable(std::function< void() > runnable)
+{
+    this->postRunnable(Runnable::ptr(new RunnableFunctionExecutor(runnable)));
+}

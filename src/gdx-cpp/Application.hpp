@@ -65,6 +65,7 @@ public:
     virtual Preferences* getPreferences (std::string& name) = 0;
     
     virtual void postRunnable (Runnable::ptr runnable) = 0;
+    virtual void postRunnable (std::function< void() > runnable) = 0;
     
     virtual void exit () = 0;
     virtual void update() = 0;

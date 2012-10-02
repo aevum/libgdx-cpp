@@ -585,12 +585,14 @@ data ( p_data ) {
     load ( data );
 }
 
-BitmapFont* BitmapFont::fromFiles ( FileHandle::ptr fontFile, FileHandle::ptr imageFile, bool flip, bool integer ) {
+BitmapFont* BitmapFont::fromFiles ( FileHandle::ptr fontFile, FileHandle::ptr imageFile, bool flip, bool integer , bool generateMipmaps ) {
     BitmapFontData* data = new BitmapFontData ( fontFile, flip );
+    
     TextureRegion region;
-
-    if ( imageFile ) {
-        region = TextureRegion::newFromTexture ( Texture::newFromFile ( imageFile, NULL, false ) );
+    if (!imageFile) {
+        region = TextureRegion::newFromTexture ( Texture::newFromFile ( gdx::files->internal(data->imagePath) , NULL, generateMipmaps ) );
+    } else {
+        region = TextureRegion::newFromTexture ( Texture::newFromFile ( imageFile , NULL, generateMipmaps ) );
     }
 
     return new BitmapFont ( data, region, integer );

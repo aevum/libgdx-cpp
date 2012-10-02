@@ -36,6 +36,7 @@ class AndroidSystem  : public gdx::System
 class AndroidThreadFactory : public gdx::ThreadFactory {
 public: 
         Thread::ptr createThread(Runnable* t);
+        Thread::ptr createThread(std::function< void() > func);
 };
 
 class AndroidMutexFactory : public gdx::MutexFactory {

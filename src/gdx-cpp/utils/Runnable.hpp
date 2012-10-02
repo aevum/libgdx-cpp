@@ -22,6 +22,7 @@
 #define GDX_CPP_UTILS_RUNNABLE_HPP
 
 #include "gdx-cpp/internal/memory"
+#include <functional>
 
 class Runnable {
 public:
@@ -31,6 +32,17 @@ public:
     virtual void onRunnableStop() = 0;
     
     virtual ~Runnable() { }
+};
+
+class RunnableFunctionExecutor : public Runnable {
+public:
+    RunnableFunctionExecutor(std::function< void() > func) : function(func) { }
+    virtual void onRunnableStop() { }
+    virtual void run() { 
+        function(); 
+    }
+private:
+    std::function< void() > function;
 };
 
 #endif // GDX_CPP_UTILS_RUNNABLE_HPP

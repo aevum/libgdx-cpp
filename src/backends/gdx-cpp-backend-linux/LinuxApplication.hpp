@@ -50,6 +50,7 @@ public:
     int getVersion();
     void log(const std::string& tag, const char* format, ...);
     void postRunnable(Runnable::ptr runnable);
+    virtual void postRunnable(std::function< void() > runnable);
     void setLogLevel(int logLevel);
 
     void onRunnableStop();

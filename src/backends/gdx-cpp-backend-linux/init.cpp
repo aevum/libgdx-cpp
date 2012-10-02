@@ -16,8 +16,6 @@ int main(int argc, char** argv);
 
 extern "C" int default_main(int argc, char** argv) {
     gdx::initializeSystem(new LinuxSystem, new gdx::nix::Log);
-
-    std::cout << &gdx::system << std::endl;
     
     gdxcpp_init(argc, argv);
 
