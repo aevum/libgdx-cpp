@@ -1,0 +1,37 @@
+#include <gdx-cpp/Gdx.hpp>
+#include <gdx-cpp/Log.hpp>
+#include <gdx-cpp/Application.hpp>
+#include <gdx-cpp/ApplicationListener.hpp>
+
+
+using namespace gdx;
+
+class {ProjectName}Application : public gdx::ApplicationListener {{
+public:
+    {ProjectName}Application() {{
+
+    }}
+    
+    void create() {{
+    }}
+    
+    void dispose() {{
+    }}
+    
+    void pause() {{
+    }}
+    
+    void render() {{
+    }}
+
+    void resize(int width, int height) {{
+    }}
+    
+    void resume() {{
+    }}
+private:
+}};
+
+void gdxcpp_init(int argc, char** argv) {{
+    gdxcpp_create_application(new {ProjectName}Application, "{ProjectName}", 640, 480);
+}}

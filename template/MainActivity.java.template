@@ -1,0 +1,79 @@
+package {PackageName};
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.os.Looper;
+import android.view.Window;
+import android.view.WindowManager;
+
+import com.aevumlab.gdxcpp.ApplicationManager;
+
+public class {ProjectName}Activity extends Activity {{
+	ApplicationManager manager;
+
+	boolean canResume;
+	boolean canPause = true;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {{
+		super.onCreate(savedInstanceState);
+
+		//requesting some features from android
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().clearFlags(
+				WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+
+		manager = new ApplicationManager();
+
+		//use this if you want to initialize any binding after the engine was
+		//loaded
+		manager.initialize({ProjectName}Activity.this, new Runnable() {{
+
+			@Override
+			public void run() {{
+				Looper.prepare();
+			}}
+		}});
+
+		//Uncomment if you use Box2D
+		//do not forget to make the symbolic link on /libs 
+		//System.loadLibrary("Box2D");
+
+		manager.initializeWithSharedLib("{ProjectName}", getAssets());
+		setContentView(manager.createView({ProjectName}Activity.this));
+	}}
+
+	@Override
+	protected void onPause() {{
+		super.onPause();
+		if (this.canPause) {{
+			this.manager.pause();
+		}}
+	}}
+
+	@Override
+	protected void onResume() {{
+		super.onResume();
+		if (canResume) {{
+			this.manager.resume();
+		}}
+	}}
+
+	@Override
+	public void finish() {{
+		this.canPause = false;
+		super.finish();
+	}}
+
+	@Override
+	protected void onDestroy() {{
+		super.onDestroy();
+	}}
+
+	@Override
+	public void onBackPressed() {{
+		manager.backPressed();
+	}}
+}}
