@@ -12,28 +12,19 @@ def write_template(origin_file, dest_dir, dest_name, **kwargs):
 	f.write(template)
 	f.close()
 
-def cleanup(project_path):
+def cleanup(project_path, enforce=False):
 	if os.path.exists(project_path):
 		answer = raw_input(project_path + " already exists. Delete it? <y/N>:")
-		if answer == 'y' or answer == 'Y':
+		
+		if enforce:
+			answer = raw_input(project_path + " already exists, and is important.Are you REALLY sure?? <yes/Nope>:")
+			if answer.lower() == 'yes':
+				shutil.rmtree(project_path)	
+		elif answer == 'y' or answer == 'Y':
 			shutil.rmtree(project_path)
 		else:
 			print 'exiting.'
 			sys.exit(1)
-
-def gen_source(root_path, args):
-	cleanup(root_path)
-	os.mkdir(root_path)
-	os.mkdir(root_path + '/src')
-	os.mkdir(root_path + '/src/native')
-
-	write_template('template/CMakeLists.txt', root_path + '/src/native',
-					'CMakeLists.txt',
-					ProjectName = args.project_name )
-
-	write_template('template/main.cpp', root_path + '/src/native',
-				   'main.cpp',
-				   ProjectName = args.project_name )
 
 def setup(): 
 	parser = argparse.ArgumentParser(description='gdx++ project setup tool')
@@ -55,8 +46,26 @@ def setup():
 	if not os.path.exists(root_path + '/src'):
 		args.gen_mode.append('source')
 
+	data_path = root_path + '/data'
+	source_path = root_path + '/src/' + args.project_name
+
 	if 'source' in args.gen_mode:
-		gen_source(root_path, args)
+		cleanup(root_path, True)
+
+		os.mkdir(root_path)
+		os.mkdir(root_path + '/src')
+		os.mkdir(source_path)
+		os.mkdir(data_path)
+
+		write_template('template/CMakeLists.txt', source_path,
+						'CMakeLists.txt',
+						ProjectName = args.project_name )
+
+		write_template('template/main.cpp', source_path,
+				   'main.cpp',
+				   ProjectName = args.project_name )
+
+		call(['cp', gdx_source_dir + '/etc/assets/data/logo.png', data_path])
 
 	if 'linux' in args.gen_mode:					
 		project_path = root_path + '/linux/'
@@ -64,7 +73,7 @@ def setup():
 		gdx_build_path = project_path + '/gdx' 
 
 		cleanup(project_path)
-	
+		
 		os.mkdir(project_path)
 		os.mkdir(project_build_path)
 		os.mkdir(gdx_build_path)
@@ -76,8 +85,11 @@ def setup():
 		
 		os.chdir(project_build_path)
 
-		call(['cmake', '-DGDX_SOURCE=' + gdx_source_dir,
-			  '-DGDX_ROOT=' + gdx_build_path, root_path + '/src/native'])
+		call(['cmake', '-DCMAKE_BUILD_TYPE=Release',
+			  '-DGDX_SOURCE=' + gdx_source_dir,
+			  '-DGDX_ROOT=' + gdx_build_path, root_path + '/src/' + args.project_name])
+		
+		call(['ln', '-s', data_path, '.'])
 
 	if 'android' in args.gen_mode:
 		if not args.android_ndk:
@@ -94,7 +106,7 @@ def setup():
 
 		project_path = root_path + '/android/'
 		gdx_build_path = project_path + '/gdx'
-		project_build_path  = project_path + '/native/'
+		project_build_path  = project_path + '/' + args.project_name
 
 		if not os.path.exists(root_path + '/src/java'):
 			args.gen_mode.append('android-src')
@@ -118,10 +130,9 @@ def setup():
 		os.chdir(project_build_path)
 
 		call(['cmake', '-DGDX_SOURCE=' + gdx_source_dir, '-DCMAKE_TOOLCHAIN_FILE=' + gdx_source_dir + '/cmake/android.toolchain.cmake',
-			  '-DGDX_ROOT=' + gdx_build_path, root_path + '/src/native'])
+			  '-DGDX_ROOT=' + gdx_build_path, source_path])
 
 		call(['make', '-j' + str(multiprocessing.cpu_count())])
-
 
 	if 'android-src' in args.gen_mode:
 		os.chdir(root_path)
@@ -137,8 +148,10 @@ def setup():
 
 		os.chdir(java_src_path)
 		os.mkdir('libs/armeabi-v7a')
+		os.mkdir('assets')
 
-		call(['ln', '-s', root_path + '/android/native/lib/lib' + args.project_name + '.so', 'libs/armeabi-v7a' ])
+		call(['ln', '-s', root_path + '/android/'+ args.project_name +'/lib/lib' + args.project_name + '.so', 'libs/armeabi-v7a' ])
+		call(['ln', '-s', root_path + '/data', java_src_path + '/assets/data' ])
 
 		os.chdir(gdx_source_dir)
 
