@@ -19,6 +19,7 @@
 #include "IosFileHandle.hpp"
 #import <UIKit/UIKit.h>
 #include <stdexcept>
+#include <gdx-cpp/Log.hpp>
 
 using namespace gdx::ios;
 
@@ -67,7 +68,7 @@ int IosFileHandle::readBytes(gdx::FileHandle::buffer_ptr& c) const {
 				return len;
 			}
 		}
-		gdx_log_error("gdx","Failed to load contents of file: " + this->file.getAbsolutePath());
+		gdx_log_error("gdx","Failed to load contents of file: %s", this->file.getAbsolutePath().c_str());
 	}
 	gdx_log_error("gdx","Not implemented yet");
 }

@@ -287,6 +287,6 @@ Pixmap* ios::IosGraphics::resolvePixmap(const gdx::FileHandle::ptr& file)
     else if (extension == "svg") {
         return gdx::AggSvgPixmap::newFromFile(file);        
     } else {
-        gdx_log_error("gdx","unsupported image format: " + extension);
+        gdx_log_error("gdx","unsupported image format: %s", extension.c_str());
     }
 }

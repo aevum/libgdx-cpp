@@ -22,42 +22,38 @@ ${GDX_ROOT}/include
 /opt/local/include
 /opt/csw/include
 /opt/include
+NO_CMAKE_FIND_ROOT_PATH
 )
 
-#ok... I don't know, but when on android the macro find_files does not work, even if "if (EXISTS FILENAME)" works correctly
-#so I've replicated the behavior of find_files. Cmake is starting to bother me...
-SET(GDX_CPP_GDX_MACRO GDX_CPP_GDX_MACRO-NOTFOUND)
-SET(paths_to_check
+FIND_PATH(GDX_CPP_GDX_MACRO
+gdx.cmake 
+PATH_SUFFIXES
+gdx/cmake
+PATHS
 ${GDX_SOURCE}/cmake/
 ${GDX_ROOT}/share/gdx/cmake/
 /usr/share/gdx/cmake/
 /usr/local/share/gdx/cmake/
-/opt/local/share/gdx/cmake/)
+/opt/local/share/gdx/cmake/
+NO_CMAKE_FIND_ROOT_PATH
+)
 
-foreach(p ${paths_to_check})
-
-get_filename_component(norm_path ${p}/gdx.cmake ABSOLUTE)
-if (EXISTS ${norm_path})
-  set(GDX_CPP_GDX_MACRO ${norm_path})
-  break()
-endif()
-
-endforeach()
-
-include(${GDX_CPP_GDX_MACRO})
+include(${GDX_CPP_GDX_MACRO}/gdx.cmake)
 
 macro(find_libraries)
     foreach(lib ${ARGV0})
         FIND_LIBRARY(GDXCPP_${lib}
             NAMES
             ${lib}
+            libgdx-cpp-backend-android.a
             PATHS
-            /usr/local/lib
-            /usr/lib
-            /opt/local/lib
-            /opt/lib
-            /usr/lib/x86_64-linux-gnu
-            ${GDX_ROOT}/lib
+            ${GDX_ROOT}
+            /Users/mahmood1/Documents/test/android/gdx/lib
+            PATH_SUFFIXES 
+            lib
+            lib/Release
+            lib/Debug
+            NO_CMAKE_FIND_ROOT_PATH
             )
 
         if (GDXCPP_${lib})
@@ -84,7 +80,7 @@ elseif (UNIX)
     endif()
     
     if (ANDROID_NDK)
-         set(GDXCPP_LIBRARIES "${GDXCPP_LIBRARIES};dl;log;GLESv1_CM;GLESv2;")
+        set(GDXCPP_LIBRARIES "${GDXCPP_LIBRARIES};dl;log;GLESv1_CM;GLESv2;")
         find_libraries("gdx-cpp-backend-android;gdx-cpp-agg-svg;")
     else(ANDROID_NDK)
         if (GdxCpp_BUILD_GRAPHICS_GLES)

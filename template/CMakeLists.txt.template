@@ -11,6 +11,14 @@ include_directories(${{GDXCPP_INCLUDE_DIR}})
 
 set({ProjectName}_SRCS main.cpp)
 
-gdx_setup_target({ProjectName} EXECUTABLE ${{{ProjectName}_SRCS}})
+if (APPLE)
+  set(ADDITIONAL_SRCS bind.mm)
+endif()
+
+gdx_setup_target({ProjectName} EXECUTABLE "${{{ProjectName}_SRCS}};${{ADDITIONAL_SRCS}}")
+
+if (APPLE)
+  set_target_properties({ProjectName} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${{CMAKE_CURRENT_SOURCE_DIR}}/Info.plist)
+endif()
 
 target_link_libraries({ProjectName} ${{GDXCPP_LIBRARIES}})

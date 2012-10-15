@@ -62,10 +62,10 @@ int main(int argc, char** argv) {
 
     gdx::initializeSystem(new gdx::ios::IosSystem, new IosLog);
     
-    NSString* controller = gdxcpp_get_app_controller();
+    const char* controller = gdxcpp_get_app_controller();
     
     @try {
-        int retVal = UIApplicationMain(argc, argv, nil, controller != nil? controller : NSStringFromClass([AppController class]));
+        int retVal = UIApplicationMain(argc, argv, nil, controller != nil? [NSString stringWithCString:controller encoding:NSASCIIStringEncoding] : NSStringFromClass([AppController class]));
         [pool release];
         return retVal;
     } @catch (NSException * e) {

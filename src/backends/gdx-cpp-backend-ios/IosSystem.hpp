@@ -37,6 +37,7 @@ class IosSystem  : public gdx::System
 class IosThreadFactory : public gdx::ThreadFactory {
 public: 
         Thread::ptr createThread(Runnable* t);
+        Thread::ptr createThread(std::function< void() > func);
 };
 
 class IosMutexFactory : public gdx::MutexFactory {

@@ -179,7 +179,13 @@ void IosApplication::postRunnable(Runnable::ptr runnable)
     runnables.push_back(runnable);
 }
 
+void IosApplication::postRunnable(std::function< void() > func)
+{
+    lock_holder hnd = synchronize();
+    runnables.push_back(std::make_shared<RunnableFunctionExecutor>(func));
+}
+
 void IosApplication::setLogLevel(int logLevel)
 {
-    logLevel = logLevel;
+    this->logLevel = logLevel;
 }

@@ -42,7 +42,7 @@ using namespace gdx::ios;
 std::string IosSystem::canonicalize(const std::string& path)    
 {
     char buffer[32768];
-    if(realpath(path.c_str(), buffer) == NULL) gdx_log_error("gdx","Error trying to canonicalize path: " + path);
+    if(realpath(path.c_str(), buffer) == NULL) gdx_log_error("gdx","Error trying to canonicalize path: %s",  path.c_str());
     return std::string(buffer);
 }
 
@@ -57,7 +57,7 @@ void IosSystem::checkDelete(const std::string& path)
        if(found == testPath.npos) break;
        else testPath = testPath.substr(0, found);
     }
-    gdx_log_error("gdx","Delete permission denied on file: " + path);
+    gdx_log_error("gdx","Delete permission denied on file: %s", path.c_str());
 }
 
 void IosSystem::checkRead(const std::string& path)
@@ -71,7 +71,7 @@ void IosSystem::checkRead(const std::string& path)
        if(found == testPath.npos) break;
        else testPath = testPath.substr(0, found);
     }
-    gdx_log_error("gdx","Read permission denied on file: " + path);
+    gdx_log_error("gdx","Read permission denied on file: %s", path.c_str());
 }
 
 bool IosSystem::createDirectory(const gdx::File& f)
@@ -215,7 +215,7 @@ std::string IosSystem::resolve(const gdx::File& f)
 	}
 	
     gdx_log_error("gdx", "File %s not found", f.getName().c_str());
-	gdx_log_error("gdx","File " + f.getName() + " not found");
+	gdx_log_error("gdx","File %s not found", f.getName().c_str());
 }
 
 std::string IosSystem::resolve(const std::string& parent, const std::string& child)
@@ -237,7 +237,7 @@ void IosSystem::checkWrite(const std::string& path)
         if(found == testPath.npos) break;
         else testPath = testPath.substr(0, found);
      }
-     gdx_log_error("gdx","Write permission denied on file: " + path);
+     gdx_log_error("gdx","Write permission denied on file: %s", path.c_str());
 }
 
 class IosMutex : public gdx::Mutex {
@@ -311,6 +311,11 @@ private:
 gdx::Thread::ptr gdx::ios::IosSystem::IosThreadFactory::createThread(Runnable* t)
 {
     return gdx::Thread::ptr(new IosThread(t));
+}
+
+gdx::Thread::ptr gdx::ios::IosSystem::IosThreadFactory::createThread(std::function< void() > func)
+{
+    return gdx::Thread::ptr(new IosThread(new RunnableFunctionExecutor(func)));
 }
 
 gdx::Mutex::ptr gdx::ios::IosSystem::IosMutexFactory::createMutex()

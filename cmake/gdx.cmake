@@ -1,14 +1,21 @@
-macro(gdx_add_ios_framework target_name framework additional_paths) 
+macro(gdx_add_ios_framework target_name framework additional_paths)
+    if (APPLE)
         execute_process(COMMAND xcode-select -print-path OUTPUT_VARIABLE _output OUTPUT_STRIP_TRAILING_WHITESPACE)                
         SET(DEVROOT "${_output}/Platforms/iPhoneOS.platform/Developer")
         SET(SDKROOT "${DEVROOT}/SDKs/iPhoneOS${SDKVER}.sdk")
         
+        if (NOT EXISTS ${SDKROOT})
+            message(FATAL_ERROR "Could not find the base SDK for version ${SDKVER}. Please verify if you have it correctly installed")
+        endif()
+
         find_library(FOUND_FRAMEWORK_${framework} NAMES ${framework} PATHS ${SDKROOT}/System/Library
             ${additional_paths}
             PATH_SUFFIXES Frameworks
             NO_DEFAULT_PATH)
 
+        message("Library: " ${FOUND_FRAMEWORK_${framework}})
         target_link_libraries(${target_name} ${FOUND_FRAMEWORK_${framework}})
+    endif()
 endmacro()
 
 macro(gdx_ios_copy_resources target_name target_files destination)
@@ -64,28 +71,26 @@ macro(gdx_setup_target target_name target_type sources)
 
         SET(DEVROOT "${_output}/Platforms/iPhoneOS.platform/Developer")
         SET(SDKROOT "${DEVROOT}/SDKs/iPhoneOS${SDKVER}.sdk")
-        SET(CMAKE_OSX_SYSROOT "${SDKROOT}")
+        SET(CMAKE_OSX_SYSROOT ${SDKROOT})
 
         SET (CMAKE_OSX_ARCHITECTURES "$(ARCHS_UNIVERSAL_IPHONE_OS)")
 
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -x objective-c++ -mno-thumb")      
-        set(CLANG_CXX_LANGUAGE_STANDARD "c++11")
-        set(CLANG_CXX_LIBRARY "libc++")
-
+        set(CMAKE_CXX_FLAGS "-x objective-c++ -mno-thumb")      
+        set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11")
+        set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
+        
         if (${target_type} STREQUAL "EXECUTABLE")
             add_executable(${target_name} MACOSX_BUNDLE ${sources})
-            set(IOS_FRAMEWORKS "Foundation;AudioToolbox;CoreGraphics;QuartzCore;UIKit;OpenGLES;AVFoundation")
+            set(IOS_FRAMEWORKS "Foundation;AudioToolbox;CoreGraphics;QuartzCore;UIKit;OpenGLES;AVFoundation;OpenAL")
         
             foreach(FRAMEWORK ${IOS_FRAMEWORKS})
                 gdx_add_ios_framework(${target_name} ${FRAMEWORK} "")
             endforeach()
+
+            set_target_properties(${target_name} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer")
         else()
             add_library(${target_name} STATIC ${sources})
         endif()
-      
-        #set_target_properties(${target_name} PROPERTIES
-        #                MACOSX_BUNDLE_GUI_IDENTIFIER "${COMPANY_NAME}\${PRODUCT_NAME:identifier}"
-        #)
     elseif (ANDROID_NDK)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu++0x")
