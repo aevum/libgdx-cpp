@@ -93,7 +93,6 @@ macro(gdx_setup_target target_name target_type sources)
         endif()
     elseif (ANDROID_NDK)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu++0x")
         
         if (${target_type} STREQUAL "EXECUTABLE")
             add_library(${target_name} SHARED ${sources})

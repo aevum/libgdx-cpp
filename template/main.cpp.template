@@ -2,7 +2,9 @@
 #include <gdx-cpp/Log.hpp>
 #include <gdx-cpp/Application.hpp>
 #include <gdx-cpp/ApplicationListener.hpp>
-
+#include <gdx-cpp/graphics/g2d/Sprite.hpp>
+#include <gdx-cpp/graphics/g2d/SpriteBatch.hpp>
+#include <gdx-cpp/gl.hpp>
 
 using namespace gdx;
 
@@ -13,6 +15,9 @@ public:
     }}
     
     void create() {{
+        batch = std::unique_ptr<gdx::SpriteBatch>(new gdx::SpriteBatch);
+        gdxLogo = std::make_shared<gdx::Sprite>(gdx::Texture::newFromFile(gdx::files->internal("data/logo.png")));
+        gdxLogo->setPosition(100, 100);
     }}
     
     void dispose() {{
@@ -22,6 +27,11 @@ public:
     }}
     
     void render() {{
+        gdx::gl10->glClearColor(1,1,1,1);
+        gdx::gl->glClear(GL_COLOR_BUFFER_BIT);
+        batch->begin();
+        gdxLogo->draw(*batch);
+        batch->end();
     }}
 
     void resize(int width, int height) {{
@@ -30,6 +40,8 @@ public:
     void resume() {{
     }}
 private:
+    gdx::Sprite::ptr gdxLogo;
+    std::unique_ptr<gdx::SpriteBatch> batch;
 }};
 
 void gdxcpp_init(int argc, char** argv) {{
