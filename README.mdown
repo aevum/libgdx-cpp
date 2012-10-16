@@ -27,6 +27,9 @@ python gdx-wizard.py --gen-mode ios,android --root-dir ~/projects/ --project-nam
 To generate for android and linux, just change the gen-mode to android,linux. You can safely call the script many times 
 as it will try to only include missing stuff, never remove them. So you can start on linux and later on migrate to Mac without problems (I hope :)
 
+### iOS Note
+When using Xcode to edit your new project, ensure that the "Base SDK" configuration is correctly pointed to the iOS SDK. I haven't found a way to magically set
+this parameter from cmake yet, so this is needed by now.
 
 # Building GDX++ (Linux/Ubuntu)
 
