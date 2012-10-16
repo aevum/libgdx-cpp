@@ -21,7 +21,7 @@ assets already built in. You can just modify it's source to your needs after tha
 #call this on libgdx source folder
 python gdx-wizard.py --gen-mode ios,android --root-dir ~/projects/ --project-name Test  \
 --android-sdk /data/applications/android-sdk-linux_x86/ --package-name com.aevumlab.test \
---android-ndk /data/applications/android-ndk/ --ios-sdk-ver 6.0 
+--android-ndk /data/applications/android-ndk/ --ios-sdk-ver 6.0 --android-target android-10
 ```
 
 To generate for android and linux, just change the gen-mode to android,linux. You can safely call the script many times 
