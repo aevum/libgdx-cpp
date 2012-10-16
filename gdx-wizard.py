@@ -39,6 +39,7 @@ def setup():
 	parser.add_argument('--android-ndk', type=str, help="The path to the android ndk")
 	parser.add_argument('--package-name', type=str, help="The package name when generating Android/iOS deps")
 	parser.add_argument('--ios-sdk-ver', type=str, help="The sdk version in which the project will be built (ios 5.0 or later)")
+	parser.add_argument('--android-target', type=str, help="The android target. ex: 'android-10'")
 
 	args = parser.parse_args()
 	args.gen_mode = args.gen_mode.split(',')
@@ -136,8 +137,8 @@ def setup():
 		activity = args.project_name[0].upper() + args.project_name[1:] + 'Activity'
 
 		if cleanup_and_prepare(java_src_path):
-			call(args.android_sdk + '/tools/android create project --target android-10 ' + 
-				'--path ' + java_src_path + ' --activity ' + activity + ' --package ' + args.package_name, shell=True)
+			call(args.android_sdk + '/tools/android create project --target ' + args.android_target + 
+				' --path ' + java_src_path + ' --activity ' + activity + ' --package ' + args.package_name, shell=True)
 
 			os.chdir(java_src_path)
 			os.mkdir('libs/armeabi-v7a')
