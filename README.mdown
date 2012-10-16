@@ -12,7 +12,23 @@
 * libvorbisfile-dev
 * zlib1g-dev
 
-## Building GDX++ (Linux/Ubuntu)
+## Creating your cross-platform project (the easy way)
+
+You can use the python gdx-wizard script that will setup a project containing all dependencies, paths, symbolical links and 
+assets already built in. You can just modify it's source to your needs after that. A sample call to setup an ios and an android project on a Mac would be:
+
+```bash
+#call this on libgdx source folder
+python gdx-wizard.py --gen-mode ios,android --root-dir ~/projects/ --project-name Test  \
+--android-sdk /data/applications/android-sdk-linux_x86/ --package-name com.aevumlab.test \
+--android-ndk /data/applications/android-ndk/ --ios-sdk-ver 6.0 
+```
+
+To generate for android and linux, just change the gen-mode to android,linux. You can safely call the script many times 
+as it will try to only include missing stuff, never remove them. So you can start on linux and later on migrate to Mac without problems (I hope :)
+
+
+# Building GDX++ (Linux/Ubuntu)
 
 Assuming you have the latest Android NDK on "ANDROID_NDK_HOME" and the android SDK on "ANDROID_SDK_HOME"
 
