@@ -28,8 +28,14 @@ To generate for android and linux, just change the gen-mode to android,linux. Yo
 as it will try to only include missing stuff, never remove them. So you can start on linux and later on migrate to Mac without problems (I hope :)
 
 ### iOS Note
+
 When using Xcode to edit your new project, ensure that the "Base SDK" configuration is correctly pointed to the iOS SDK. I haven't found a way to magically set
 this parameter from cmake yet, so this is needed by now.
+
+### Android Note
+
+You'll still have to add the Gdx-Android backend which is located under src/backends/gdx-cpp-backend-android/android_support to your eclipse workspace and add it as a library
+dependency to your project.
 
 # Building GDX++ (Linux/Ubuntu)
 
