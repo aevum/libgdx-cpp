@@ -13,8 +13,6 @@ def write_template(origin_file, dest_dir, dest_name, **kwargs):
 	f.close()
 
 def cleanup_and_prepare(path, enforce=False):
-	removed = False
-	
 	if os.path.exists(path):
 		answer = raw_input(path + " already exists. Delete it? <y/N>:")
 		
@@ -24,14 +22,13 @@ def cleanup_and_prepare(path, enforce=False):
 				if answer != 'yes':
 					return False
 			shutil.rmtree(path)
-			removed = True
 		else:
 			os.chdir(path)
 			return False
 
 	os.mkdir(path)
 	os.chdir(path)
-	return removed
+	return True
 
 def setup(): 
 	parser = argparse.ArgumentParser(description='gdx++ project setup tool')
@@ -62,11 +59,8 @@ def setup():
 	source_path = root_path + '/src/' + args.project_name
 
 	if 'source' in args.gen_mode or not os.path.exists(source_path):
-		if cleanup_and_prepare(source_path, True):
-			os.mkdir(source_path)
-		
-		if cleanup_and_prepare(data_path):
-			os.mkdir(data_path)
+		cleanup_and_prepare(source_path, True)		
+		cleanup_and_prepare(data_path)
 
 		write_template(gdx_source_dir + '/template/CMakeLists.txt', source_path,
 						'CMakeLists.txt',
