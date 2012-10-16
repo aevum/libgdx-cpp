@@ -6,7 +6,6 @@ import multiprocessing
 
 #
 def write_template(origin_file, dest_dir, dest_name, **kwargs):
-	os.chdir(gdx_dir)
 	template = open(origin_file + '.template').read().format(**kwargs)
 
 	f = open(dest_dir + '/' + dest_name, 'w')
