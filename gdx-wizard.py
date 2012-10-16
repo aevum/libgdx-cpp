@@ -140,27 +140,23 @@ def setup():
 	if 'android-src' in args.gen_mode:
 		os.chdir(root_path)
 		java_src_path = root_path + '/src/java'
-
-		cleanup_and_prepare(java_src_path)
-
 		activity = args.project_name[0].upper() + args.project_name[1:] + 'Activity'
- 
- 		os.mkdir(java_src_path)
 
-		call(args.android_sdk + '/tools/android create project --target android-10 ' + 
+		if cleanup_and_prepare(java_src_path):
+			call(args.android_sdk + '/tools/android create project --target android-10 ' + 
 				'--path ' + java_src_path + ' --activity ' + activity + ' --package ' + args.package_name, shell=True)
 
-		os.chdir(java_src_path)
-		os.mkdir('libs/armeabi-v7a')
-		os.mkdir('assets')
+			os.chdir(java_src_path)
+			os.mkdir('libs/armeabi-v7a')
+			os.mkdir('assets')
 
-		call(['ln', '-s', root_path + '/android/'+ args.project_name +'/lib/lib' + args.project_name + '.so', 'libs/armeabi-v7a' ])
-		call(['ln', '-s', root_path + '/data', java_src_path + '/assets/data' ])
+			call(['ln', '-s', root_path + '/android/'+ args.project_name +'/lib/lib' + args.project_name + '.so', 'libs/armeabi-v7a' ])
+			call(['ln', '-s', root_path + '/data', java_src_path + '/assets/data' ])
 
-		write_template(gdx_source_dir + '/template/MainActivity.java', 
-			root_path + '/src/java/src/' + args.package_name.replace('.','/'),
-			activity + '.java', PackageName = args.package_name,
-			ProjectName = args.project_name )
+			write_template(gdx_source_dir + '/template/MainActivity.java', 
+				root_path + '/src/java/src/' + args.package_name.replace('.','/'),
+				activity + '.java', PackageName = args.package_name,
+				ProjectName = args.project_name )
 
 	if 'ios' in args.gen_mode:
 		project_path = root_path + '/ios'
