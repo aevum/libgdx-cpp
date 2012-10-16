@@ -6,6 +6,7 @@ import multiprocessing
 
 #
 def write_template(origin_file, dest_dir, dest_name, **kwargs):
+	os.chdir(gdx_dir)
 	template = open(origin_file + '.template').read().format(**kwargs)
 
 	f = open(dest_dir + '/' + dest_name, 'w')
@@ -68,11 +69,11 @@ def setup():
 		if cleanup_and_prepare(data_path):
 			os.mkdir(data_path)
 
-		write_template('template/CMakeLists.txt', source_path,
+		write_template(gdx_source_dir + '/template/CMakeLists.txt', source_path,
 						'CMakeLists.txt',
 						ProjectName = args.project_name )
 
-		write_template('template/main.cpp', source_path,
+		write_template(gdx_source_dir + '/template/main.cpp', source_path,
 				   'main.cpp',
 				   ProjectName = args.project_name )
 
@@ -156,9 +157,7 @@ def setup():
 		call(['ln', '-s', root_path + '/android/'+ args.project_name +'/lib/lib' + args.project_name + '.so', 'libs/armeabi-v7a' ])
 		call(['ln', '-s', root_path + '/data', java_src_path + '/assets/data' ])
 
-		os.chdir(gdx_source_dir)
-
-		write_template('template/MainActivity.java', 
+		write_template(gdx_source_dir + '/template/MainActivity.java', 
 			root_path + '/src/java/src/' + args.package_name.replace('.','/'),
 			activity + '.java', PackageName = args.package_name,
 			ProjectName = args.project_name )
@@ -172,7 +171,7 @@ def setup():
 			os.mkdir(project_path)
 
 		if not os.path.exists(source_path + '/Info.plist'):
-			write_template('template/Info.plist', source_path, 'Info.plist', 
+			write_template(gdx_source_dir + '/template/Info.plist', source_path, 'Info.plist', 
 				PackageName = args.package_name)
 		
 		if not os.path.exists(source_path + '/bind.mm'):
