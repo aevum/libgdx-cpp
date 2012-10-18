@@ -21,15 +21,21 @@ assets already built in. You can just modify it's source to your needs after tha
 #call this on libgdx source folder
 python gdx-wizard.py --gen-mode ios,android --root-dir ~/projects/ --project-name Test  \
 --android-sdk /data/applications/android-sdk-linux_x86/ --package-name com.aevumlab.test \
---android-ndk /data/applications/android-ndk/ --ios-sdk-ver 6.0 
+--android-ndk /data/applications/android-ndk/ --ios-sdk-ver 6.0 --android-target android-10
 ```
 
 To generate for android and linux, just change the gen-mode to android,linux. You can safely call the script many times 
 as it will try to only include missing stuff, never remove them. So you can start on linux and later on migrate to Mac without problems (I hope :)
 
 ### iOS Note
+
 When using Xcode to edit your new project, ensure that the "Base SDK" configuration is correctly pointed to the iOS SDK. I haven't found a way to magically set
 this parameter from cmake yet, so this is needed by now.
+
+### Android Note
+
+You'll still have to add the Gdx-Android backend which is located under src/backends/gdx-cpp-backend-android/android_support to your eclipse workspace and add it as a library
+dependency to your project.
 
 # Building GDX++ (Linux/Ubuntu)
 
