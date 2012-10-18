@@ -26,14 +26,14 @@
 using namespace gdx::nix;
 
 LinuxInput::LinuxInput() : _justTouched(false),
-touching(false),
-touchX(0),
-deltaX(0),
-touchY(0),
-deltaY(0) {
-    }
-
-
+    touching(false),
+    touchX(0),
+    deltaX(0),
+    touchY(0),
+    deltaY(0),
+    processor(nullptr)
+{
+}
 
 void gdx::nix::LinuxInput::cancelVibrate()
 {
@@ -111,7 +111,7 @@ int gdx::nix::LinuxInput::getRotation()
 }
 
 void gdx::nix::LinuxInput::getTextInput(const gdx::Input::TextInputListener& listener,
-        const std::string& title, const std::string& text)
+                                        const std::string& title, const std::string& text)
 {
 
 }
@@ -213,29 +213,33 @@ void gdx::nix::LinuxInput::processEvents(SDL_Event& evt)
     static struct transalte_button {
         int operator()(int sdl_button) {
             switch(sdl_button) {
-                case 1:
-                    return gdx::Input::Button::LEFT;
-                case 2:
-                    return gdx::Input::Button::MIDDLE;
-                case 3:
-                    return gdx::Input::Button::RIGHT;
-                default:
-                    return sdl_button;
+            case 1:
+                return gdx::Input::Button::LEFT;
+            case 2:
+                return gdx::Input::Button::MIDDLE;
+            case 3:
+                return gdx::Input::Button::RIGHT;
+            default:
+                return sdl_button;
             }
         }
-    }tb;
-    
-    if (evt.type == SDL_MOUSEMOTION) {
-        if (processor) {
-            deltaX = evt.motion.xrel;
-            deltaY = evt.motion.yrel;
+    } tb;
 
-            if (this->touching) {
-                this->processor->touchDragged(evt.motion.x, evt.motion.y, tb(evt.button.button));
-            } else {
-                this->processor->touchMoved(evt.motion.x, evt.motion.y);
-            }
+    if (processor == nullptr) {
+        return;
+    }
+
+    if (evt.type == SDL_MOUSEMOTION) {
+
+        deltaX = evt.motion.xrel;
+        deltaY = evt.motion.yrel;
+
+        if (this->touching) {
+            this->processor->touchDragged(evt.motion.x, evt.motion.y, tb(evt.button.button));
+        } else {
+            this->processor->touchMoved(evt.motion.x, evt.motion.y);
         }
+
     } else if (evt.type == SDL_MOUSEBUTTONDOWN) {
         this->touching = true;
         touchX = evt.motion.x;
@@ -244,35 +248,25 @@ void gdx::nix::LinuxInput::processEvents(SDL_Event& evt)
         deltaY = evt.motion.yrel;
         this->_justTouched = true;
 
-        if (this->processor) {
-            this->processor->touchDown(evt.motion.x, evt.motion.y, 0, tb(evt.button.button));
-        }
+        this->processor->touchDown(evt.motion.x, evt.motion.y, 0, tb(evt.button.button));
 
     } else if (evt.type == SDL_MOUSEBUTTONUP) {
         this->touching = false;
         touchY =touchX = 0;
 
-        if (this->processor) {
-            this->processor->touchUp(evt.motion.x, evt.motion.y, 0, tb(evt.button.button));
-        }
+        this->processor->touchUp(evt.motion.x, evt.motion.y, 0, tb(evt.button.button));
     }
     else if (evt.type == SDL_KEYDOWN) {
-        if (this->processor) {
-	    if (gdx::Input::Keys::ESCAPE == getGdxEventKey(evt)) {
-		this->processor->onBackPressed();
-	    } else {
-		this->processor->keyDown(getGdxEventKey(evt));
-	    }
+        if (gdx::Input::Keys::ESCAPE == getGdxEventKey(evt)) {
+            this->processor->onBackPressed();
+        } else {
+            this->processor->keyDown(getGdxEventKey(evt));
         }
     } else if (evt.type == SDL_KEYUP) {
-        if (this->processor) {
-	    if (gdx::Input::Keys::ESCAPE != getGdxEventKey(evt)) {
-		this->processor->keyUp(getGdxEventKey(evt));
-	    }
+        if (gdx::Input::Keys::ESCAPE != getGdxEventKey(evt)) {
+            this->processor->keyUp(getGdxEventKey(evt));
         }
     }
-    
-
 }
 
 void gdx::nix::LinuxInput::reset()
@@ -750,7 +744,7 @@ int gdx::nix::LinuxInput::getGdxEventKey(SDL_Event& eventkey) {
 //     case SDLK_UNDO:
 //         return gdx::Input::Keys::UNDO;
     default:
-      return gdx::Input::Keys::UNKNOWN;
+        return gdx::Input::Keys::UNKNOWN;
     }
 }
 
