@@ -205,7 +205,7 @@ bool gdx::nix::LinuxGraphics::supportsDisplayModeChange()
 
 bool gdx::nix::LinuxGraphics::supportsExtension(const std::string& extension)
 {
-    return false;
+    return gdx::gl->glGetString(GL_EXTENSIONS).find(extension) != std::string::npos;
 }
 
 void gdx::nix::LinuxGraphics::initialize()

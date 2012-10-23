@@ -143,7 +143,7 @@ public:
     bool usesIntegerPositions ();
     BitmapFontData* getData ();
 
-    static BitmapFont* fromFiles (FileHandle::ptr fontFile,
+    static std::unique_ptr<BitmapFont> fromFiles (FileHandle::ptr fontFile,
                                   FileHandle::ptr imageFile = nullptr,
                                   bool flip = false,
                                   bool integer = true,

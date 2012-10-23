@@ -585,7 +585,7 @@ data ( p_data ) {
     load ( data );
 }
 
-BitmapFont* BitmapFont::fromFiles ( FileHandle::ptr fontFile, FileHandle::ptr imageFile, bool flip, bool integer , bool generateMipmaps ) {
+std::unique_ptr< BitmapFont > BitmapFont::fromFiles ( FileHandle::ptr fontFile, FileHandle::ptr imageFile, bool flip, bool integer, bool generateMipmaps ) {
     BitmapFontData* data = new BitmapFontData ( fontFile, flip );
     
     TextureRegion region;
@@ -595,7 +595,7 @@ BitmapFont* BitmapFont::fromFiles ( FileHandle::ptr fontFile, FileHandle::ptr im
         region = TextureRegion::newFromTexture ( Texture::newFromFile ( imageFile , NULL, generateMipmaps ) );
     }
 
-    return new BitmapFont ( data, region, integer );
+    return std::unique_ptr<BitmapFont>(new BitmapFont ( data, region, integer ));
 }
 
 BitmapFont::BitmapFontData::BitmapFontData ( FileHandle::ptr fontFile, bool flip )
