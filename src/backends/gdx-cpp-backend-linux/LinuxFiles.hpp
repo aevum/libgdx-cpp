@@ -52,6 +52,8 @@ namespace nix {
         bool isExternalStorageAvailable ();
 
         
+        virtual ref_ptr_maker< FileHandle >::shared_ptr_t internal_private(const std::string& path);
+        
         
     private:
         std::string externalPath;

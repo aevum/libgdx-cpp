@@ -57,3 +57,8 @@ bool LinuxFiles::isExternalStorageAvailable ()
 {
     return true;
 }
+
+ref_ptr_maker< gdx::FileHandle >::shared_ptr_t LinuxFiles::internal_private(const std::string& path)
+{
+    return internal(path);
+}

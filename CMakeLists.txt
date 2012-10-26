@@ -122,6 +122,3 @@ install(FILES cmake/finders/FindGdxCpp.cmake
 
 install(FILES cmake/gdx.cmake
         DESTINATION share/gdx/cmake)
-
-
-

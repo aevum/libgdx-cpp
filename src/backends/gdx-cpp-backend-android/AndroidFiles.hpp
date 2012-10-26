@@ -45,6 +45,8 @@ public:
     
     FileHandle::ptr absolute (const std::string& path);
     
+    virtual FileHandle::ptr internal_private(const std::string& path);
+    
     std::string getExternalStoragePath ();
     
     bool isExternalStorageAvailable ();    

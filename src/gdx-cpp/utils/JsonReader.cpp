@@ -32,9 +32,9 @@
 using namespace gdx;
 
 
-JsonValue::ptr JsonReader::root;
-JsonValue::ptr JsonReader::current;
-std::list< JsonValue::ptr > JsonReader::elements;
+JsonValue JsonReader::root;
+JsonValue* JsonReader::current = nullptr;
+std::list< JsonValue* > JsonReader::elements;
 
 
 /* #line 42 "JsonReader.cpp" */
@@ -54,11 +54,11 @@ JsonReader::JsonReader()
 {
 }
 
-JsonValue::ptr JsonReader::parse (const std::string& json) {
+JsonValue JsonReader::parse (const std::string& json) {
     return parse(json.c_str(), 0, json.length());
 }
 
-JsonValue::ptr JsonReader::parse (const FileHandle& file) {
+JsonValue JsonReader::parse (const FileHandle& file) {
     try {
         FileHandle::buffer_ptr buffer;
         int size = file.readBytes(buffer);
@@ -69,7 +69,10 @@ JsonValue::ptr JsonReader::parse (const FileHandle& file) {
     }
 }
 
-JsonValue::ptr JsonReader::parse (const char* data, int offset, int length) {
+JsonValue JsonReader::parse (const char* data, int offset, int length) {
+    root = JsonValue();
+    current = nullptr;
+    
     elements.clear();
 
     unsigned int cs, top = 0;
@@ -386,7 +389,7 @@ tr156:
                         if (debug) {
                            gdx_log_debug("JsonReader","nulll: %s", name.c_str());
                         }
-                        string(name, "");
+                        null(name);
                 }
 	goto st71;
 tr160:
@@ -1056,7 +1059,7 @@ tr80:
                         if (debug) {
                            gdx_log_debug("JsonReader","nulll: %s", name.c_str());
                         }
-                        string(name, "");
+                        null(name);
                 }
 	goto st16;
 tr86:
@@ -1149,7 +1152,7 @@ tr81:
                         if (debug) {
                            gdx_log_debug("JsonReader","nulll: %s", name.c_str());
                         }
-                        string(name, "");
+                        null(name);
                 }
 	goto st17;
 tr87:
@@ -1306,7 +1309,7 @@ tr82:
                         if (debug) {
                            gdx_log_debug("JsonReader","nulll: %s", name.c_str());
                         }
-                        string(name, "");
+                        null(name);
                 }
 /* #line 180 "JsonReader.rl" */
 	{
@@ -1931,7 +1934,7 @@ tr133:
                         if (debug) {
                            gdx_log_debug("JsonReader","nulll: %s", name.c_str());
                         }
-                        string(name, "");
+                        null(name);
                 }
 	goto st46;
 tr139:
@@ -2024,7 +2027,7 @@ tr134:
                         if (debug) {
                            gdx_log_debug("JsonReader","nulll: %s", name.c_str());
                         }
-                        string(name, "");
+                        null(name);
                 }
 	goto st47;
 tr140:
@@ -2191,7 +2194,7 @@ tr135:
                         if (debug) {
                            gdx_log_debug("JsonReader","nulll: %s", name.c_str());
                         }
-                        string(name, "");
+                        null(name);
                 }
 /* #line 200 "JsonReader.rl" */
 	{
@@ -2775,7 +2778,7 @@ case 70:
                         if (debug) {
                            gdx_log_debug("JsonReader","nulll: %s", name.c_str());
                         }
-                        string(name, "");
+                        null(name);
                 }
 	break;
 /* #line 2783 "JsonReader.cpp" */
@@ -2799,72 +2802,68 @@ case 70:
             if (*aux == '\n') lineNumber++;
         gdx_log_error("gdx","Error parsing JSON on line %d near: %s", lineNumber, std::string(p, pe - p).c_str());
     } else if (elements.size() != 0) {
-        int element_type = elements.front()->item_type;
+        int element_type = elements.front()->getType();
 
         elements.clear();
 
-        if (element_type == json_json)
+        if (element_type == JsonValue::json_json)
             gdx_log_error("gdx","Error parsing JSON, unmatched brace.");
         else
             gdx_log_error("gdx","Error parsing JSON, unmatched bracket.");
     }
 
-    return std::move(root);
-}
-
-
-void JsonReader::set (const std::string& name, JsonValue::ptr value) {
-    switch (current->item_type) {
-        case json_json:
-            current->as_item_map()[name] = value;
-            break;
-        case json_list:
-            current->as_array().push_back(value);
-            break;
-        default:
-            current = value;
-            break;
-    }
+    return root;
 }
 
 void JsonReader::startObject (const std::string& name) {
-    JsonValue::ptr value = JsonValue::newNodeAsJson();
-
     if (current) {
-        set(name, value);
+        (*current)[name] = JsonValue::item_map();
+        elements.push_back(&(*current)[name]);        
+    } else {
+        root = JsonValue::item_map();
+        elements.push_back(&root);
     }
 
-    elements.push_back(value);
-    current = value;
+    current = elements.back();
 }
 
-void JsonReader::startArray (const std::string& name) {
-    JsonValue::ptr array_item = JsonValue::newNodeAsArray();
-
+void JsonReader::startArray (const std::string& name) {   
     if (current) {
-        set(name, array_item);
+        (*current)[name] = JsonValue::array();
+        elements.push_back(&(*current)[name]);
+    } else {
+        root = JsonValue::array();
+        elements.push_back(&root);
     }
-
-    elements.push_back(array_item);
-    current = array_item;
+    
+    current = elements.back();
 }
 
 void JsonReader::pop () {
-    root = elements.back();
     elements.pop_back();
-    current = elements.size() > 0 ? elements.back() : nullptr;
+    current = elements.size() > 0 ? elements.back() : &root;
 }
 
 void JsonReader::string (const std::string& name,const std::string& value) {
-    set(name, JsonValue::newNodeAsString(new std::string(value)));
+    set(name, value);
 }
 
 void JsonReader::number (const std::string& name, float value) {
-    set(name, JsonValue::newNodeAsFloat(new float(value)));
+    set(name, value);
 }
 
 void JsonReader::boolean (const std::string& name, bool value) {
-    set(name, JsonValue::newNodeAsBool(new bool(value)));
+    set(name, value);
+}
+
+void JsonReader::number(const std::string& name, int value)
+{
+    set(name, value);
+}
+
+void JsonReader::null(const std::string& name)
+{
+    set(name, JsonValue());
 }
 
 std::string JsonReader::unescape (const std::string& value) {
@@ -2912,8 +2911,15 @@ std::string JsonReader::unescape (const std::string& value) {
     return buffer.str();
 }
 
-void JsonReader::number(const std::string& name, int value)
+void JsonReader::set(const std::string& name, const JsonValue& value)
 {
-    set(name, JsonValue::newNodeAsInt(new int(value)));
+    if (current->getType() == gdx::JsonValue::json_list) {
+        (*current).as_array().push_back(value);
+    } else if (current->getType() == gdx::JsonValue::json_json) {
+        (*current)[name] = value;
+    } else {
+        (*current) = value;
+    }
 }
+
 

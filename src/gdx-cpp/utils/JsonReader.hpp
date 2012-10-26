@@ -33,9 +33,9 @@ class JsonReader {
 public:
     JsonReader();
     
-    static JsonValue::ptr parse (const std::string& json);
-    static JsonValue::ptr parse (const gdx::FileHandle& file);
-    static JsonValue::ptr parse (const char* data, int offset, int length);
+    static JsonValue parse (const std::string& json);
+    static JsonValue parse (const gdx::FileHandle& file);
+    static JsonValue parse (const char* data, int offset, int length);
 
 protected:
     static void startObject (const std::string& name);
@@ -47,16 +47,16 @@ protected:
     static void number (const std::string& name,  float value);
     static void number (const std::string& name,  int value);
     static void boolean (const std::string& name, bool value);
-
-private:    
-    static void set (const std::string& name, gdx::JsonValue::ptr value);
+    static void null (const std::string& name);
     
+private:    
     static std::string unescape (const std::string& value);
+    static void set(const std::string& name, const JsonValue& value);
+    
+    static JsonValue root;
+    static JsonValue* current;
 
-    static JsonValue::ptr root;
-    static JsonValue::ptr current;
-
-    static std::list< JsonValue::ptr > elements;
+    static std::list< JsonValue* > elements;
 };
 
 } // namespace gdx

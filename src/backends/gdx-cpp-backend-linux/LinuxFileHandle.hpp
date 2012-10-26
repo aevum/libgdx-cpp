@@ -31,9 +31,7 @@ namespace nix {
 
 class LinuxFileHandle : public gdx::FileHandle
 {
-
 public:
-
     LinuxFileHandle (const std::string &fileName, gdx::Files::FileType type);
     LinuxFileHandle (const gdx::File &file, gdx::Files::FileType type);
 
@@ -41,7 +39,6 @@ public:
     virtual int write(const char* data, int length, bool append);
     virtual void copyTo(FileHandle& dest);
     virtual int64_t length() const;
-    int f;
 private:
     void runtime_error(const char* arg1);
 };

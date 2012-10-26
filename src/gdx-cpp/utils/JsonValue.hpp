@@ -22,66 +22,191 @@
 #define GDX_CPP_UTILS_JSONITEM_HPP
 
 #include "gdx-cpp/internal/memory"
-#include "gdx-cpp/internal/unordered_map"
 #include <vector>
 #include <string>
 #include <fstream>
 #include <cassert>
 #include <stdexcept>
-#include "gdx-cpp/internal/memory"
+#include <map>
 
 namespace gdx {
 
-enum json_item_type {
-    json_string,
-    json_int,
-    json_bool,
-    json_list,
-    json_json,
-    json_float,
-    json_null
-};
-
-class JsonValue {
+/**
+ * 
+ * 
+ */
+class JsonValue {   
 public:
+    enum json_item_type {        
+        json_null,
+        json_string,
+        json_int,
+        json_bool,
+        json_list,
+        json_json,
+        json_float
+    };
+
     typedef ref_ptr_maker< JsonValue >::shared_ptr_t ptr;
-    typedef gdx_unordered_map< std::string, ptr > item_map;
-    typedef std::vector< ptr > array;
-
-    JsonValue(int val) ;
-    JsonValue(int* val) ;
-    JsonValue(float val) ;
-    JsonValue(float* val) ;
-    JsonValue(bool val) ;
-    JsonValue(bool* val) ;
-    JsonValue(const std::string& val) ;
-    JsonValue(std::string* val) ;
-    JsonValue(const item_map& val) ;
-    JsonValue(item_map* val) ;
-    JsonValue(const array& val) ;
-    JsonValue(array* val) ;
-    JsonValue(const JsonValue& other) : item_val(other.item_val), item_type(other.item_type)
-    {
-    }
-   
-    JsonValue& operator = (const std::string& other) ;
-
-    JsonValue& operator = (const char* other) ;
     
-    JsonValue& operator = (int other) ;
+    typedef std::map< std::string, JsonValue > item_map;
+    typedef std::vector< JsonValue > array;
 
-    JsonValue& operator = (bool other) ;
+protected:
+    union json_internal_type_u {
+        explicit json_internal_type_u() { }
+        ~json_internal_type_u() { }
+        
+        int int_val;
+        float float_val;
+        std::string string_val;
+        item_map item_map_val;
+        array array_val;
+        bool bool_val;
+    };
+    
+    struct json_value_t {
+        json_item_type type;
+        json_internal_type_u value;
+                
+        template <typename T>
+        explicit json_value_t(const T& val) {
+            *this = val;
+        }        
 
-    JsonValue& operator = (float other) ;
+        json_value_t() : type(json_null) {
+        }
+        
+        json_value_t& operator=(const char* val) {
+            type = json_string;
+            new (&value.string_val) std::string(val);
+            return * this;
+        }
+        
+        json_value_t& operator=(const std::string& val) {
+            type = json_string;
+            new (&value.string_val) std::string(val);
+            return * this;
+        }
+                
+        json_value_t& operator=(int val) {
+            type = json_int;
+            new (&value.int_val) int(val);
+            return * this;
+        }
+        
+        json_value_t& operator=(bool val) {
+            type = json_bool;
+            new (&value.bool_val) bool(val);
+            return *this;
+        }
+        
+        json_value_t& operator=(float val) {
+            type = json_float;
+            new (&value.float_val) float(val);
+            return *this;
+        }
+        
+        json_value_t& operator =(const item_map& val) {
+            type = json_json;
+            new (&value.item_map_val) item_map(val);
+            return *this;
+        }
+        
+        json_value_t& operator = (const array& val) {
+            type = json_list;
+            new (&value.array_val) array(val);
+            return *this;
+        }
+                
+        json_value_t& operator = (const json_value_t& other) {
+             switch(other.type) {
+                case json_bool:
+                    new (&value.bool_val) bool(other.value.bool_val);
+                    break;
+                case json_float:
+                    new (&value.float_val) float(other.value.float_val);
+                    break;
+                case json_int:
+                    new (&value.int_val) int(other.value.int_val);
+                    break;
+                case json_json:
+                    new (&value.item_map_val) item_map(other.value.item_map_val);
+                    break;
+                case json_list:
+                    new (&value.array_val) array(other.value.array_val);
+                    break;
+                case json_string:
+                    new (&value.string_val) std::string(other.value.string_val);
+                    break;
+            }
+            
+            this->type = other.type;            
+            return *this;
+        }
+        
+        json_value_t(const json_value_t& other) {
+            *this = other;
+        }
+    };
+    
+public:
+    static JsonValue make_array(std::initializer_list< JsonValue > items) {
+        JsonValue val;
+        for (const auto& item : items) {
+            val.as_array().push_back(item);
+        }
+        return val;
+    }
+    
+    JsonValue();  
+    
+    JsonValue(std::initializer_list<JsonValue> list) {
+        assert(list.size() % 2 == 0 && "JsonValue initializer list must be in key, pair form");
+        int i = 0;
+        JsonValue key;
+        for(auto item : list) {
+            if (i++ % 2 == 0) {
+                assert(item.getType() == json_string);
+                key = item;
+                
+            } else {                
+                this->as_item_map()[key.as_string()] = item;
+            }
+        }
+    }
+    
+    
+    
+    //we don't want implicit conversions to any other types than the ones specified
+    template <typename T>
+    JsonValue(const T& value) = delete;
+    
+    JsonValue(const char* char_data) : item_val(char_data) { }    
+    JsonValue(int value) : item_val(value) { }
+    JsonValue(bool value) : item_val(value) { }
+    JsonValue(float value) : item_val(value) { }    
+    JsonValue(const array& value) : item_val(value) { }
+    JsonValue(const item_map& value) : item_val(value) { }
+    JsonValue(const std::string& value) : item_val(value) { }    
+    JsonValue(const JsonValue::ptr& other) : item_val(other->item_val) { }    
+    JsonValue(const JsonValue& other) : item_val(other.item_val) { }
 
-    JsonValue& operator = (const array& other) ;
+    //we don't want implicit assignment's too
+    template <typename T>
+    JsonValue& operator = (const T& other) = delete;
 
+    JsonValue& operator = (int value) { this->item_val = value;  }
+    JsonValue& operator = (bool value) { this->item_val = value;  }    
+    JsonValue& operator = (float value) { this->item_val = value;  }
+    JsonValue& operator = (const array& value) { this->item_val = value;  }
+    JsonValue& operator = (const item_map& value) { this->item_val = value;  }
+    JsonValue& operator = (const std::string& value) { this->item_val = value;  }
+    
+    
     JsonValue& operator = (const JsonValue& other) ;
 
-    JsonValue& operator = (const ptr& other) ;
-
     JsonValue& operator + (const JsonValue& other) ;
-
     JsonValue& operator += (const JsonValue& other) ;
    
     int& as_int();
@@ -112,10 +237,11 @@ public:
     const JsonValue& at(unsigned int index) const;
 
     void removeChild(const std::string& childName);
-    JsonValue() ;
 
     void toString(std::ostream& out, bool prettyPrint = false) const;
 
+    std::string toString() const;
+    
     item_map::const_iterator begin() const;
     item_map::const_iterator end() const;
 
@@ -123,58 +249,27 @@ public:
 
     bool contains(const std::string& name) const;
 
-    static JsonValue::ptr newNodeAsJson(JsonValue::item_map* preset = NULL) {
-        return ptr(new JsonValue(preset == NULL ? new JsonValue::item_map : preset));
-    }
-
-    static JsonValue::ptr newNodeAsInt(int* val = NULL) {
-        return ptr(new JsonValue(val == NULL ? new int(0) : val));
-    }
-
-    static JsonValue::ptr newNodeAsArray(JsonValue::array* preset = NULL) {
-        return ptr(new JsonValue(preset == NULL ? new JsonValue::array : preset));
-    }
-
-    static JsonValue::ptr newNodeAsString(std::string* preset = NULL) {
-        return ptr(new JsonValue(preset == NULL ? new std::string : preset));
-    }
-
-    static JsonValue::ptr newNodeAsBool(bool* preset = NULL) {
-        return ptr(new JsonValue(preset == NULL ? new bool : preset));
-    }
-
-    static JsonValue::ptr newNodeAsFloat(float* preset = NULL) {
-        return ptr(new JsonValue(preset == NULL ? new float : preset));
-    }
-
     json_item_type getType() const {
-        return (json_item_type) item_type;
+        return item_val.type;
     }
 
     ~JsonValue() ;
 
     friend std::ostream& operator<< (std::ostream &out, const JsonValue& item);
-
+    
 private:
-    template <typename T>
-    void build_from_null() {
-        if ( item_type == json_null) {
-            *this = T();
-        }
-    }
-
     void toString(std::ostream& out, bool prettyPrint, int ident) const;
     
     friend class JsonReader;
-    std::shared_ptr<void> item_val;
-    json_item_type item_type;
     
-    operator array& ();
-    operator item_map& ();
-    operator int&();
-    operator bool&();
-    operator float&();
-    operator std::string&();
+    operator array& () = delete;
+    operator item_map& () = delete;
+    operator int&() = delete;
+    operator bool&() = delete;
+    operator float&() = delete;
+    operator std::string&() = delete;
+    
+    json_value_t item_val;
 };
 
 }
