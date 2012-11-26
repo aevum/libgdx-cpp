@@ -2817,8 +2817,7 @@ case 70:
 
 void JsonReader::startObject (const std::string& name) {
     if (current) {
-        (*current)[name] = JsonValue::item_map();
-        elements.push_back(&(*current)[name]);        
+        elements.push_back(set(name, JsonValue::item_map()));        
     } else {
         root = JsonValue::item_map();
         elements.push_back(&root);
@@ -2827,10 +2826,9 @@ void JsonReader::startObject (const std::string& name) {
     current = elements.back();
 }
 
-void JsonReader::startArray (const std::string& name) {   
-    if (current) {
-        (*current)[name] = JsonValue::array();
-        elements.push_back(&(*current)[name]);
+void JsonReader::startArray (const std::string& name) {
+    if (current) {        
+        elements.push_back(set(name, JsonValue::array()));
     } else {
         root = JsonValue::array();
         elements.push_back(&root);
@@ -2911,14 +2909,17 @@ std::string JsonReader::unescape (const std::string& value) {
     return buffer.str();
 }
 
-void JsonReader::set(const std::string& name, const JsonValue& value)
+JsonValue* JsonReader::set(const std::string& name, const JsonValue& value)
 {
     if (current->getType() == gdx::JsonValue::json_list) {
         (*current).as_array().push_back(value);
+        return &(*current).as_array().back();
     } else if (current->getType() == gdx::JsonValue::json_json) {
         (*current)[name] = value;
+        return &(*current)[name];
     } else {
         (*current) = value;
+        return current;
     }
 }
 

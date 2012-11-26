@@ -51,7 +51,7 @@ protected:
     
 private:    
     static std::string unescape (const std::string& value);
-    static void set(const std::string& name, const JsonValue& value);
+    static JsonValue* set( const std::string& name, const gdx::JsonValue& value );
     
     static JsonValue root;
     static JsonValue* current;

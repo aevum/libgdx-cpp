@@ -305,7 +305,6 @@ public:
     }
 
     virtual ~LinuxThread() {
-        std::cout << "morreu" << std::endl;
     }    
     
     Runnable* runnable;
