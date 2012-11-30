@@ -31,8 +31,7 @@ namespace gdx {
 
 template <typename returnType>
 returnType from_string(const std::string& str) {
-    static std::stringstream ss;
-    ss.clear();
+    std::stringstream ss;
     ss << str;
     returnType retval;
     ss >> retval;
