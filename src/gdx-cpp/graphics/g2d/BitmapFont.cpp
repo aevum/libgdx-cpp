@@ -221,7 +221,7 @@ BitmapFont::TextBounds& BitmapFont::drawMultiLine ( SpriteBatch& spriteBatch,con
     return drawMultiLine ( spriteBatch, str, x, y, 0, HALIGNMENT_LEFT );
 }
 
-BitmapFont::TextBounds& BitmapFont::drawMultiLine ( SpriteBatch& spriteBatch,const std::string& str,float x,float y,float alignmentWidth, int alignment ) {
+BitmapFont::TextBounds& BitmapFont::drawMultiLine ( SpriteBatch& spriteBatch, const std::string& str, float x, float y, float alignmentWidth, const BitmapFont::HAlignment& alignment ) {
     float batchColor = spriteBatch.color;
     float down = this->data->down;
     int start = 0;
@@ -572,6 +572,11 @@ BitmapFont::BitmapFontData* BitmapFont::getData () {
     return data;
 }
 
+float BitmapFont::BitmapFontData::getFontSize() const
+{
+    return fontSize;
+}
+
 BitmapFont::BitmapFont ( BitmapFont::BitmapFontData* p_data, TextureRegion p_region, bool p_integer )
     : region ( p_region ),
 color ( Color::WHITE.toFloatBits() ),
@@ -608,7 +613,8 @@ down ( 0 ),
 scaleX ( 1 ),
 scaleY ( 1 ),
 spaceWidth ( 0 ),
-xHeight ( 1 ) {
+xHeight ( 1 ),
+fontSize(0) {
     glyphs = new Glyph**[PAGES];
     memset ( glyphs, 0, sizeof ( Glyph* ) * PAGES );
 
@@ -626,7 +632,14 @@ xHeight ( 1 ) {
 
     try {
         char* line = strtok_r ( &n_buffer[0], "\n", &line_r );
-
+        
+        strtok ( line, " " );
+        strtok ( NULL, " " );        
+        
+        if ( sscanf ( strtok ( NULL, " " ), "size=%f", &fontSize ) != 1 ) {
+            gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
+        }
+        
         if ( ( line = strtok_r ( NULL, "\n", &line_r ) ) == NULL ) {
             gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
         }

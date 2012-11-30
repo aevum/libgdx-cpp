@@ -84,10 +84,12 @@ public:
         Glyph* getGlyph (char ch);
         std::string getImagePath ();
         FileHandle::ptr getFontFile ();
-
+        float getFontSize() const;
+        
     private:
         void setGlyph (int ch,Glyph* glyph);
         Glyph* getFirstGlyph ();
+        float fontSize;
     };
 
     struct TextBounds {
@@ -107,7 +109,7 @@ public:
     TextBounds& draw (SpriteBatch& spriteBatch, const std::string& str, float x, float y);
     TextBounds& draw (SpriteBatch& spriteBatch, const std::string& str, float x, float y, int start, int end);
     TextBounds& drawMultiLine (SpriteBatch& spriteBatch, const std::string& str, float x, float y);
-    TextBounds& drawMultiLine (SpriteBatch& spriteBatch, const std::string& str, float x, float y, float alignmentWidth, int alignment);
+    TextBounds& drawMultiLine (SpriteBatch& spriteBatch, const std::string& str, float x, float y, float alignmentWidth, const BitmapFont::HAlignment& alignment);
     TextBounds& drawWrapped (SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth);
     TextBounds& drawWrapped (SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth, const BitmapFont::HAlignment& alignment);
     TextBounds& getBounds (const std::string& str);
@@ -141,6 +143,8 @@ public:
     bool containsCharacter (char character);
     void setUseIntegerPositions (bool use);
     bool usesIntegerPositions ();
+    
+    
     BitmapFontData* getData ();
 
     static std::unique_ptr<BitmapFont> fromFiles (FileHandle::ptr fontFile,
@@ -167,7 +171,8 @@ protected:
     bool flipped;
     bool integer;
     BitmapFontData* data;
-
+    int fontSize;
+    
 private:
     void load (BitmapFontData* data);
 };
