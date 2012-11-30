@@ -34,7 +34,7 @@ class TextureRegion;
 
 class NinePatch {
 public:
-    enum {
+    enum class Sides {
         TOP_LEFT = 0,
         TOP_CENTER,
         TOP_RIGHT,

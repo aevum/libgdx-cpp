@@ -31,7 +31,7 @@
 namespace gdx {
 class ImmediateModeRenderer20 : public ImmediateModeRenderer {
 public:
-    RendererType getRendererType() { return IMMEDIATE_GLES20; }
+    RendererType getRendererType() { return RendererType::IMMEDIATE_GLES20; }
     
     std::string createVertexShader (bool hasNormals, bool hasColors, int numTexCoords);
     void begin (Matrix4& projModelView,int primitiveType);

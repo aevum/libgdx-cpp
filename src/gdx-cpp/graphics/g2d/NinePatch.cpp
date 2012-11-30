@@ -58,108 +58,108 @@ NinePatch::NinePatch ( std::array< TextureRegion, 9 >& _patches ): patches(_patc
 }
 
 void NinePatch::checkValidity () {
-    if (patches[BOTTOM_LEFT].getRegionWidth() != patches[TOP_LEFT].getRegionWidth()
-            || patches[BOTTOM_LEFT].getRegionWidth() != patches[MIDDLE_LEFT].getRegionWidth()) {
+    if (patches[(int)Sides::BOTTOM_LEFT].getRegionWidth() != patches[(int)Sides::TOP_LEFT].getRegionWidth()
+            || patches[(int)Sides::BOTTOM_LEFT].getRegionWidth() != patches[(int)Sides::MIDDLE_LEFT].getRegionWidth()) {
         gdx_log_error("NinePatch","Left side patches must have the same width");
     }
 
-    if (patches[BOTTOM_RIGHT].getRegionWidth() != patches[TOP_RIGHT].getRegionWidth()
-            || patches[BOTTOM_RIGHT].getRegionWidth() != patches[MIDDLE_RIGHT].getRegionWidth()) {
+    if (patches[(int)Sides::BOTTOM_RIGHT].getRegionWidth() != patches[(int)Sides::TOP_RIGHT].getRegionWidth()
+            || patches[(int)Sides::BOTTOM_RIGHT].getRegionWidth() != patches[(int)Sides::MIDDLE_RIGHT].getRegionWidth()) {
         gdx_log_error("NinePatch","Right side patches must have the same width");
     }
 
-    if (patches[BOTTOM_LEFT].getRegionHeight() != patches[BOTTOM_CENTER].getRegionHeight()
-            || patches[BOTTOM_LEFT].getRegionHeight() != patches[BOTTOM_RIGHT].getRegionHeight()) {
+    if (patches[(int)Sides::BOTTOM_LEFT].getRegionHeight() != patches[(int)Sides::BOTTOM_CENTER].getRegionHeight()
+            || patches[(int)Sides::BOTTOM_LEFT].getRegionHeight() != patches[(int)Sides::BOTTOM_RIGHT].getRegionHeight()) {
         gdx_log_error("NinePatch","Bottom patches must have the same height");
     }
 
-    if (patches[TOP_LEFT].getRegionHeight() != patches[TOP_CENTER].getRegionHeight()
-            || patches[TOP_LEFT].getRegionHeight() != patches[TOP_RIGHT].getRegionHeight()) {
+    if (patches[(int)Sides::TOP_LEFT].getRegionHeight() != patches[(int)Sides::TOP_CENTER].getRegionHeight()
+            || patches[(int)Sides::TOP_LEFT].getRegionHeight() != patches[(int)Sides::TOP_RIGHT].getRegionHeight()) {
         gdx_log_error("NinePatch","Top patches must have the same height");
     }
 }
 
 void NinePatch::draw (SpriteBatch& batch,float x,float y,float width,float height) {
     float centerColumnX = x;
-    if (patches[BOTTOM_LEFT].isValid())
-        centerColumnX += patches[BOTTOM_LEFT].getRegionWidth();
-    else if (patches[MIDDLE_LEFT].isValid())
-        centerColumnX += patches[MIDDLE_LEFT].getRegionWidth();
-    else if (patches[TOP_LEFT].isValid()) //
-        centerColumnX += patches[TOP_LEFT].getRegionWidth();
+    if (patches[(int)Sides::BOTTOM_LEFT].isValid())
+        centerColumnX += patches[(int)Sides::BOTTOM_LEFT].getRegionWidth();
+    else if (patches[(int)Sides::MIDDLE_LEFT].isValid())
+        centerColumnX += patches[(int)Sides::MIDDLE_LEFT].getRegionWidth();
+    else if (patches[(int)Sides::TOP_LEFT].isValid()) //
+        centerColumnX += patches[(int)Sides::TOP_LEFT].getRegionWidth();
 
     float rightColumnX = x + width;
-    if (patches[BOTTOM_RIGHT].isValid())
-        rightColumnX -= patches[BOTTOM_RIGHT].getRegionWidth();
-    else if (patches[MIDDLE_RIGHT].isValid())
-        rightColumnX += patches[MIDDLE_RIGHT].getRegionWidth();
-    else if (patches[TOP_RIGHT].isValid()) //
-        rightColumnX += patches[TOP_RIGHT].getRegionWidth();
+    if (patches[(int)Sides::BOTTOM_RIGHT].isValid())
+        rightColumnX -= patches[(int)Sides::BOTTOM_RIGHT].getRegionWidth();
+    else if (patches[(int)Sides::MIDDLE_RIGHT].isValid())
+        rightColumnX += patches[(int)Sides::MIDDLE_RIGHT].getRegionWidth();
+    else if (patches[(int)Sides::TOP_RIGHT].isValid()) //
+        rightColumnX += patches[(int)Sides::TOP_RIGHT].getRegionWidth();
 
     float middleRowY = y;
-    if (patches[TOP_LEFT].isValid())
-        middleRowY += patches[TOP_LEFT].getRegionHeight();
-    else if (patches[TOP_CENTER].isValid())
-        middleRowY += patches[TOP_CENTER].getRegionHeight();
-    else if (patches[TOP_RIGHT].isValid()) //
-        middleRowY += patches[TOP_RIGHT].getRegionHeight();
+    if (patches[(int)Sides::TOP_LEFT].isValid())
+        middleRowY += patches[(int)Sides::TOP_LEFT].getRegionHeight();
+    else if (patches[(int)Sides::TOP_CENTER].isValid())
+        middleRowY += patches[(int)Sides::TOP_CENTER].getRegionHeight();
+    else if (patches[(int)Sides::TOP_RIGHT].isValid()) //
+        middleRowY += patches[(int)Sides::TOP_RIGHT].getRegionHeight();
 
     float topRowY = y + height;
-    if (patches[TOP_LEFT].isValid())
-        topRowY -= patches[TOP_LEFT].getRegionHeight();
-    else if (patches[TOP_CENTER].isValid())
-        topRowY -= patches[TOP_CENTER].getRegionHeight();
-    else if (patches[TOP_RIGHT].isValid()) //
-        topRowY -= patches[TOP_RIGHT].getRegionHeight();
+    if (patches[(int)Sides::TOP_LEFT].isValid())
+        topRowY -= patches[(int)Sides::TOP_LEFT].getRegionHeight();
+    else if (patches[(int)Sides::TOP_CENTER].isValid())
+        topRowY -= patches[(int)Sides::TOP_CENTER].getRegionHeight();
+    else if (patches[(int)Sides::TOP_RIGHT].isValid()) //
+        topRowY -= patches[(int)Sides::TOP_RIGHT].getRegionHeight();
 
     // Bottom row
-    if (patches[BOTTOM_LEFT].isValid()) batch.draw(patches[BOTTOM_LEFT], x, y, centerColumnX - x, middleRowY - y);
-    if (patches[BOTTOM_CENTER].isValid())
-        batch.draw(patches[BOTTOM_CENTER], centerColumnX, y, rightColumnX - centerColumnX, middleRowY - y);
-    if (patches[BOTTOM_RIGHT].isValid())
-        batch.draw(patches[BOTTOM_RIGHT], rightColumnX, y, x + width - rightColumnX, middleRowY - y);
+    if (patches[(int)Sides::BOTTOM_LEFT].isValid()) batch.draw(patches[(int)Sides::BOTTOM_LEFT], x, y, centerColumnX - x, middleRowY - y);
+    if (patches[(int)Sides::BOTTOM_CENTER].isValid())
+        batch.draw(patches[(int)Sides::BOTTOM_CENTER], centerColumnX, y, rightColumnX - centerColumnX, middleRowY - y);
+    if (patches[(int)Sides::BOTTOM_RIGHT].isValid())
+        batch.draw(patches[(int)Sides::BOTTOM_RIGHT], rightColumnX, y, x + width - rightColumnX, middleRowY - y);
 
     // Middle row
-    if (patches[MIDDLE_LEFT].isValid()) batch.draw(patches[MIDDLE_LEFT], x, middleRowY, centerColumnX - x, topRowY - middleRowY);
-    if (patches[MIDDLE_CENTER].isValid())
-        batch.draw(patches[MIDDLE_CENTER], centerColumnX, middleRowY, rightColumnX - centerColumnX, topRowY - middleRowY);
-    if (patches[MIDDLE_RIGHT].isValid())
-        batch.draw(patches[MIDDLE_RIGHT], rightColumnX, middleRowY, x + width - rightColumnX, topRowY - middleRowY);
+    if (patches[(int)Sides::MIDDLE_LEFT].isValid()) batch.draw(patches[(int)Sides::MIDDLE_LEFT], x, middleRowY, centerColumnX - x, topRowY - middleRowY);
+    if (patches[(int)Sides::MIDDLE_CENTER].isValid())
+        batch.draw(patches[(int)Sides::MIDDLE_CENTER], centerColumnX, middleRowY, rightColumnX - centerColumnX, topRowY - middleRowY);
+    if (patches[(int)Sides::MIDDLE_RIGHT].isValid())
+        batch.draw(patches[(int)Sides::MIDDLE_RIGHT], rightColumnX, middleRowY, x + width - rightColumnX, topRowY - middleRowY);
 
     // Top row
-    if (patches[TOP_LEFT].isValid()) batch.draw(patches[TOP_LEFT], x, topRowY, centerColumnX - x, y + height - topRowY);
-    if (patches[TOP_CENTER].isValid())
-        batch.draw(patches[TOP_CENTER], centerColumnX, topRowY, rightColumnX - centerColumnX, y + height - topRowY);
-    if (patches[TOP_RIGHT].isValid())
-        batch.draw(patches[TOP_RIGHT], rightColumnX, topRowY, x + width - rightColumnX, y + height - topRowY);
+    if (patches[(int)Sides::TOP_LEFT].isValid()) batch.draw(patches[(int)Sides::TOP_LEFT], x, topRowY, centerColumnX - x, y + height - topRowY);
+    if (patches[(int)Sides::TOP_CENTER].isValid())
+        batch.draw(patches[(int)Sides::TOP_CENTER], centerColumnX, topRowY, rightColumnX - centerColumnX, y + height - topRowY);
+    if (patches[(int)Sides::TOP_RIGHT].isValid())
+        batch.draw(patches[(int)Sides::TOP_RIGHT], rightColumnX, topRowY, x + width - rightColumnX, y + height - topRowY);
 }
 
 float NinePatch::getLeftWidth () {
-    return !patches[TOP_LEFT].isValid() ? 0 : patches[TOP_LEFT].getRegionWidth();
+    return !patches[(int)Sides::TOP_LEFT].isValid() ? 0 : patches[(int)Sides::TOP_LEFT].getRegionWidth();
 }
 
 float NinePatch::getRightWidth () {
-    return !patches[TOP_RIGHT].isValid() ? 0 : patches[TOP_RIGHT].getRegionWidth();
+    return !patches[(int)Sides::TOP_RIGHT].isValid() ? 0 : patches[(int)Sides::TOP_RIGHT].getRegionWidth();
 }
 
 float NinePatch::getTopHeight () {
-    return !patches[TOP_RIGHT].isValid() ? 0 : patches[TOP_RIGHT].getRegionHeight();
+    return !patches[(int)Sides::TOP_RIGHT].isValid() ? 0 : patches[(int)Sides::TOP_RIGHT].getRegionHeight();
 }
 
 float NinePatch::getBottomHeight () {
-    return !patches[BOTTOM_RIGHT].isValid() ? 0 : patches[BOTTOM_RIGHT].getRegionHeight();
+    return !patches[(int)Sides::BOTTOM_RIGHT].isValid() ? 0 : patches[(int)Sides::BOTTOM_RIGHT].getRegionHeight();
 }
 
 float NinePatch::getTotalHeight () {
     float totalHeight = getTopHeight() + getBottomHeight();
-    if (patches[MIDDLE_CENTER].isValid()) totalHeight += patches[MIDDLE_CENTER].getRegionHeight();
+    if (patches[(int)Sides::MIDDLE_CENTER].isValid()) totalHeight += patches[(int)Sides::MIDDLE_CENTER].getRegionHeight();
     
     return totalHeight;
 }
 
 float NinePatch::getTotalWidth () {
     float totalWidth = getLeftWidth() + getRightWidth();
-    if (patches[MIDDLE_CENTER].isValid()) totalWidth += patches[MIDDLE_CENTER].getRegionWidth();
+    if (patches[(int)Sides::MIDDLE_CENTER].isValid()) totalWidth += patches[(int)Sides::MIDDLE_CENTER].getRegionWidth();
     
     return totalWidth;
 }

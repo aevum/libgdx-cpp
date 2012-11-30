@@ -87,7 +87,7 @@ void ShapeRenderer::begin (const ShapeType& type) {
         matrixDirty = false;
     }
     
-    if(renderer->getRendererType() == ImmediateModeRenderer::IMMEDIATE_GLES10) {
+    if(renderer->getRendererType() == ImmediateModeRenderer::RendererType::IMMEDIATE_GLES10) {
         gl10->glMatrixMode(GL_PROJECTION);
         gl10->glLoadMatrixf(combined.val);
         gl10->glMatrixMode(GL_MODELVIEW);

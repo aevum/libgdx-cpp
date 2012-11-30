@@ -27,7 +27,7 @@ namespace gdx {
 
 class ImmediateModeRenderer {
 public:
-    enum RendererType {
+    enum class RendererType {
         IMMEDIATE_GLES10,
         IMMEDIATE_GLES20
     };

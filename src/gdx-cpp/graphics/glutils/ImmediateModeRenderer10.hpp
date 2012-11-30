@@ -33,7 +33,7 @@ public:
     ImmediateModeRenderer10(int maxVertices = 2000);
     ~ImmediateModeRenderer10();
 
-    RendererType getRendererType() { return IMMEDIATE_GLES10; }
+    RendererType getRendererType() { return RendererType::IMMEDIATE_GLES10; }
     
     void begin (Matrix4& projModelView, int primitiveType);
     void begin (int primitiveType);

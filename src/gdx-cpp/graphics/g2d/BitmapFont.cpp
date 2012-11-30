@@ -218,7 +218,7 @@ BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch,const std::s
 }
 
 BitmapFont::TextBounds& BitmapFont::drawMultiLine ( SpriteBatch& spriteBatch,const std::string& str,float x,float y ) {
-    return drawMultiLine ( spriteBatch, str, x, y, 0, HALIGNMENT_LEFT );
+    return drawMultiLine ( spriteBatch, str, x, y, 0, HAlignment::HALIGNMENT_LEFT );
 }
 
 BitmapFont::TextBounds& BitmapFont::drawMultiLine ( SpriteBatch& spriteBatch, const std::string& str, float x, float y, float alignmentWidth, const BitmapFont::HAlignment& alignment ) {
@@ -231,10 +231,10 @@ BitmapFont::TextBounds& BitmapFont::drawMultiLine ( SpriteBatch& spriteBatch, co
     while ( start < length ) {
         int lineEnd = indexOf ( str, '\n', start );
         float xOffset = 0;
-        if ( alignment != HALIGNMENT_LEFT ) {
+        if ( alignment != HAlignment::HALIGNMENT_LEFT ) {
             float lineWidth = getBounds ( str, start, lineEnd ).width;
             xOffset = alignmentWidth - lineWidth;
-            if ( alignment == HALIGNMENT_CENTER ) xOffset = xOffset / 2;
+            if ( alignment == HAlignment::HALIGNMENT_CENTER ) xOffset = xOffset / 2;
         }
         float lineWidth = draw ( spriteBatch, str, x + xOffset, y, start, lineEnd ).width;
         maxWidth = std::max ( maxWidth, lineWidth );
@@ -250,7 +250,7 @@ BitmapFont::TextBounds& BitmapFont::drawMultiLine ( SpriteBatch& spriteBatch, co
 }
 
 BitmapFont::TextBounds& BitmapFont::drawWrapped ( SpriteBatch& spriteBatch,const std::string& str,float x,float y,float wrapWidth ) {
-    return drawWrapped ( spriteBatch, str, x, y, wrapWidth, HALIGNMENT_LEFT );
+    return drawWrapped ( spriteBatch, str, x, y, wrapWidth, HAlignment::HALIGNMENT_LEFT );
 }
 
 BitmapFont::TextBounds& BitmapFont::drawWrapped ( SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth, const BitmapFont::HAlignment& alignment ) {
@@ -281,10 +281,10 @@ BitmapFont::TextBounds& BitmapFont::drawWrapped ( SpriteBatch& spriteBatch, cons
             nextLineStart = length;
         }
         float xOffset = 0;
-        if ( alignment != HALIGNMENT_LEFT ) {
+        if ( alignment != HAlignment::HALIGNMENT_LEFT ) {
             float lineWidth = getBounds ( str, start, lineEnd ).width;
             xOffset = wrapWidth - lineWidth;
-            if ( alignment == HALIGNMENT_CENTER ) xOffset /= 2;
+            if ( alignment ==  HAlignment::HALIGNMENT_CENTER ) xOffset /= 2;
         }
         float lineWidth = draw ( spriteBatch, str, x + xOffset, y, start, lineEnd ).width;
         maxWidth = std::max ( maxWidth, lineWidth );

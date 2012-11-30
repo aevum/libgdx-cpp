@@ -210,7 +210,7 @@ BitmapFont::TextBounds& BitmapFontCache::setText (const std::string& str,float x
 }
 
 BitmapFont::TextBounds& BitmapFontCache::setMultiLineText (const std::string& str,float x,float y) {
-    return setMultiLineText(str, x, y, 0, BitmapFont::HALIGNMENT_LEFT);
+    return setMultiLineText(str, x, y, 0, BitmapFont::HAlignment::HALIGNMENT_LEFT);
 }
 
 BitmapFont::TextBounds& BitmapFontCache::setMultiLineText (const std::string& str,float x,float y,float alignmentWidth,const BitmapFont::HAlignment& alignment) {
@@ -226,10 +226,10 @@ BitmapFont::TextBounds& BitmapFontCache::setMultiLineText (const std::string& st
     while (start < length) {
         int lineEnd = BitmapFont::indexOf(str, '\n', start);
         float xOffset = 0;
-        if (alignment != BitmapFont::HALIGNMENT_LEFT) {
+        if (alignment != BitmapFont::HAlignment::HALIGNMENT_LEFT) {
             float lineWidth = font->getBounds(str, start, lineEnd).width;
             xOffset = alignmentWidth - lineWidth;
-            if (alignment == BitmapFont::HALIGNMENT_CENTER) xOffset /= 2;
+            if (alignment == BitmapFont::HAlignment::HALIGNMENT_CENTER) xOffset /= 2;
         }
         float lineWidth = addToCache(str, x + xOffset, y, start, lineEnd);
         maxWidth = std::max(maxWidth, lineWidth);
@@ -243,7 +243,7 @@ BitmapFont::TextBounds& BitmapFontCache::setMultiLineText (const std::string& st
 }
 
 BitmapFont::TextBounds& BitmapFontCache::setWrappedText (const std::string& str,float x,float y,float wrapWidth) {
-    return setWrappedText(str, x, y, wrapWidth, BitmapFont::HALIGNMENT_LEFT);
+    return setWrappedText(str, x, y, wrapWidth, BitmapFont::HAlignment::HALIGNMENT_LEFT);
 }
 
 BitmapFont::TextBounds& BitmapFontCache::setWrappedText (const std::string& str,float x,float y,float wrapWidth,const BitmapFont::HAlignment& alignment) {
@@ -267,10 +267,10 @@ BitmapFont::TextBounds& BitmapFontCache::setWrappedText (const std::string& str,
         }
         if (lineEnd == start) lineEnd++;
         float xOffset = 0;
-        if (alignment != BitmapFont::HALIGNMENT_LEFT) {
+        if (alignment != BitmapFont::HAlignment::HALIGNMENT_LEFT) {
             float lineWidth = font->getBounds(str, start, lineEnd).width;
             xOffset = wrapWidth - lineWidth;
-            if (alignment == BitmapFont::HALIGNMENT_CENTER) xOffset /= 2;
+            if (alignment == BitmapFont::HAlignment::HALIGNMENT_CENTER) xOffset /= 2;
         }
         float lineWidth = addToCache(str, x + xOffset, y, start, lineEnd);
         maxWidth = std::max(maxWidth, lineWidth);
