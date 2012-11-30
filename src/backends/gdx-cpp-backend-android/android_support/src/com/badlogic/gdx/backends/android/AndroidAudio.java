@@ -88,7 +88,7 @@ public final class AndroidAudio {
 	 * {@inheritDoc}
 	 */
 	public Music newMusic (String path, int fileType) {
-		AndroidFileHandle file = new AndroidFileHandle(assets, path, FileType.values()[fileType]);
+		AndroidFileHandle file = new AndroidFileHandle(assets, path, FileType.values()[fileType], null);
 
 		MediaPlayer mediaPlayer = new MediaPlayer();
 
@@ -124,7 +124,7 @@ public final class AndroidAudio {
 	 * {@inheritDoc}
 	 */
 	public Sound newSound (String path, int fileType) {
-		AndroidFileHandle file = new AndroidFileHandle(assets, path, FileType.values()[fileType]);
+		AndroidFileHandle file = new AndroidFileHandle(assets, path, FileType.values()[fileType], null);
 		if (file.type() == FileType.Internal) {
 			try {
 				AssetFileDescriptor descriptor = file.assets.openFd(file.path());

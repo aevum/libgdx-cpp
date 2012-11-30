@@ -23,7 +23,7 @@
 
 #include <gdx-cpp/files/FileHandle.hpp>
 #include <sys/types.h>
-
+#include <jni.h>
 namespace gdx {
 
 namespace android {
@@ -33,6 +33,14 @@ class AndroidFileHandle : public gdx::FileHandle
 public:
     AndroidFileHandle(const std::string& fileName, gdx::Files::FileType type);
     virtual int readBytes(buffer_ptr& c) const;
+    
+    virtual bool exists() const;
+    
+    virtual int write(const char* data, int length, bool append);
+
+    static void bindClasses(JNIEnv* env);
+private:
+    static jclass managerClass;
 };
 
 }

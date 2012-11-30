@@ -42,7 +42,9 @@ public interface Files {
 
 		/** Path that is a fully qualified, absolute filesystem path. To ensure portability across platforms use absolute files only
 		 * when absolutely (heh) necessary. */
-		Absolute;
+		Absolute,
+		
+		Private
 	}
 
 	/** Returns a handle representing a file or directory.
@@ -70,4 +72,6 @@ public interface Files {
 	/** Returns true if the external storage is ready for file IO. Eg, on Android, the SD card is not available when mounted for use
 	 * with a PC. */
 	public boolean isExternalStorageAvailable ();
+
+	public FileHandle private_internal(String path);
 }

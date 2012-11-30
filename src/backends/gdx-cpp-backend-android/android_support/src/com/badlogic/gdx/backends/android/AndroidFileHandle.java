@@ -17,9 +17,12 @@
 package com.badlogic.gdx.backends.android;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 
 import com.badlogic.gdx.Files.FileType;
@@ -33,23 +36,27 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 public class AndroidFileHandle extends FileHandle {
 	// The asset manager, or null if this is not an internal file.
 	final AssetManager assets;
+	private Context context;
 
-	public AndroidFileHandle (AssetManager assets, String fileName, FileType type) {
+	public AndroidFileHandle(AssetManager assets, String fileName,
+			FileType type, Context context) {
 		super(fileName, type);
 		this.assets = assets;
+		this.context = context;
 	}
 
-	AndroidFileHandle (AssetManager assets, File file, FileType type) {
+	AndroidFileHandle(AssetManager assets, File file, FileType type) {
 		super(file, type);
 		this.assets = assets;
 	}
 
-	public FileHandle child (String name) {
-		if (file.getPath().length() == 0) return new AndroidFileHandle(assets, new File(name), type);
+	public FileHandle child(String name) {
+		if (file.getPath().length() == 0)
+			return new AndroidFileHandle(assets, new File(name), type);
 		return new AndroidFileHandle(assets, new File(file, name), type);
 	}
 
-	public FileHandle parent () {
+	public FileHandle parent() {
 		File parent = file.getParentFile();
 		if (parent == null) {
 			if (type == FileType.Absolute)
@@ -60,33 +67,38 @@ public class AndroidFileHandle extends FileHandle {
 		return new AndroidFileHandle(assets, parent, type);
 	}
 
-	public InputStream read () {
-		if (type == FileType.Internal) {
-			try {
+	public InputStream read() {
+		try {
+			if (type == FileType.Internal) {
 				return assets.open(file.getPath());
-			} catch (IOException ex) {
-				throw new GdxRuntimeException("Error reading file: " + file + " (" + type + ")", ex);
+			} else if (type == FileType.Private) {
+				return context.openFileInput(file.getPath());
 			}
+		} catch (IOException ex) {
+			throw new GdxRuntimeException("Error reading file: " + file + " ("
+					+ type + ")", ex);
 		}
 		return super.read();
 	}
 
-	public FileHandle[] list () {
+	public FileHandle[] list() {
 		if (type == FileType.Internal) {
 			try {
 				String[] relativePaths = assets.list(file.getPath());
 				FileHandle[] handles = new FileHandle[relativePaths.length];
 				for (int i = 0, n = handles.length; i < n; i++)
-					handles[i] = new AndroidFileHandle(assets, new File(file, relativePaths[i]), type);
+					handles[i] = new AndroidFileHandle(assets, new File(file,
+							relativePaths[i]), type);
 				return handles;
 			} catch (Exception ex) {
-				throw new GdxRuntimeException("Error listing children: " + file + " (" + type + ")", ex);
+				throw new GdxRuntimeException("Error listing children: " + file
+						+ " (" + type + ")", ex);
 			}
 		}
 		return super.list();
 	}
 
-	public boolean isDirectory () {
+	public boolean isDirectory() {
 		if (type == FileType.Internal) {
 			try {
 				return assets.list(file.getPath()).length > 0;
@@ -97,20 +109,41 @@ public class AndroidFileHandle extends FileHandle {
 		return super.isDirectory();
 	}
 
-	public boolean exists () {
+	public boolean exists() {
 		if (type == FileType.Internal) {
-			String fileName = file.getPath();
+			String filename = file.getPath();
 			try {
-				assets.open(fileName).close(); // Check if file exists.
+				assets.open(filename).close(); // Check if file exists.
 				return true;
 			} catch (Exception ex) {
 				try {
-					return assets.list(fileName).length > 0;
+					return assets.list(filename).length > 0;
 				} catch (Exception ignored) {
 					return false;
 				}
 			}
+		} else if (type == FileType.Private){
+			String filename = file.getPath();
+			for (String str : this.context.fileList()) {				
+				if (str.equals(filename)) {
+					return true;
+				}
+			}
+			return false;
 		}
 		return super.exists();
+	}
+	
+	@Override
+	public OutputStream write(boolean append) {
+		if (type == FileType.Private) {
+			try {
+				return context.openFileOutput(file.getPath(), Context.MODE_PRIVATE);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		return super.write(append);
 	}
 }

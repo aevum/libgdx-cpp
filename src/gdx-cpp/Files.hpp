@@ -37,7 +37,9 @@ public:
 
         /** Path that is a fully qualified, absolute filesystem path. To ensure portability across platforms use absolute files only
          * when absolutely (heh) necessary. */
-        Absolute
+        Absolute,
+        
+        Private
     };
 
     virtual ref_ptr_maker<FileHandle>::shared_ptr_t getFileHandle (const std::string& path, FileType type) = 0;

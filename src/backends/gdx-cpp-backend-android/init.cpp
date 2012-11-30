@@ -12,6 +12,7 @@
 #include "AndroidAudio.hpp"
 #include "Android.hpp"
 #include "Log.hpp"
+#include "AndroidFileHandle.hpp"
 
 
 #include <unistd.h>
@@ -143,6 +144,12 @@ type(_type) {
     JNIEXPORT jint JNICALL
     JNI_OnLoad(JavaVM *jvm, void *reserved) {
         vm = jvm;
+        
+        JNIEnv* env;
+        vm->GetEnv((void**)&env, JNI_VERSION_1_2);
+        
+        gdx::android::AndroidFileHandle::bindClasses(env);
+        
         return JNI_VERSION_1_2;
     }
 }

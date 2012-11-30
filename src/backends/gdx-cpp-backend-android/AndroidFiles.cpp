@@ -65,7 +65,6 @@ bool gdx::android::AndroidFiles::isExternalStorageAvailable()
 
 FileHandle::ptr gdx::android::AndroidFiles::internal_private(const std::string& path)
 {   
-    //TODO
-    return gdx::FileHandle::ptr(new AndroidFileHandle(path, gdx::Files::Internal));
+    return gdx::FileHandle::ptr(new AndroidFileHandle(path, gdx::Files::Private));
 }
 

@@ -215,7 +215,9 @@ void FileHandle::mkdirs () {
 
 bool FileHandle::exists () const {
     switch (type) {
-    case gdx::Files::Internal:
+    case gdx::Files::Private:
+        return true;
+    case gdx::Files::Internal:    
         if (file.exists()) return true;
         break;
     default:

@@ -1,5 +1,13 @@
 package com.aevumlab.gdxcpp;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -116,7 +124,7 @@ public class ApplicationManager {
 	}
 
 	public void initializeWithSharedLib(String library, AssetManager assetManager) {
-		files = new AndroidFiles(assetManager);
+		files = new AndroidFiles(assetManager, activity);
 
 		System.loadLibrary(library);
 		nativeInitSystem();
@@ -185,9 +193,57 @@ public class ApplicationManager {
 		FileHandle handle = files.getFileHandle(filename, FileType.values()[fileType]);
 
 		if (handle != null) {
-			return handle.readBytes();
+			InputStream is = handle.read();
+			ByteArrayOutputStream bos = new ByteArrayOutputStream(); 
+			
+			try {
+				byte[] buffer = new byte[8192];
+				int readed = 0;
+				while((readed = is.read(buffer)) >= 0) {				
+					bos.write(buffer, 0, readed);
+				}
+				
+				
+			} catch (IOException e) {
+				return null;
+			} finally {
+				try {
+					is.close();
+				} catch (IOException e) {
+				}
+			}
+						
+			return bos.toByteArray();
 		}
 
 		return null;
+	}
+	
+	static boolean fileExists(String filename, int fileType) {
+		return files.getFileHandle(filename, FileType.values()[fileType]).exists();
+	}
+	
+	static int writeFile(String filename, byte[] data, boolean append, int fileType) {		
+		OutputStream os = files.getFileHandle(filename, FileType.values()[fileType]).write(append);
+		
+		if (os == null) {
+			return 0;
+		}
+		
+		try {
+			os.write(data);
+			os.flush();
+			
+			return data.length;
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				os.close();
+			} catch (IOException e) {
+			}
+		}
+		
+		return 0;
 	}
 }

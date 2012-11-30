@@ -42,16 +42,28 @@ class AndroidMutex : public gdx::Mutex {
 public:
     AndroidMutex()
     {
-        pthread_mutex_init(&mutex, NULL);
+        pthread_mutexattr_t attributes;
+        if (!pthread_mutexattr_init(&attributes)) {
+            pthread_mutexattr_settype(&attributes, PTHREAD_MUTEX_RECURSIVE);
+            pthread_mutex_init(&mutex, &attributes);
+            pthread_mutexattr_destroy(&attributes);
+        } else {
+            gdx_log_info("AndroidMutex", "Failed to initialize mutex attributes, mutex will not be recursive");
+            pthread_mutex_init(&mutex, &attributes);
+        }
     }
-    
-    void lock(){
+
+    void lock() {
         pthread_mutex_lock(&mutex);
     }
 
-   void unlock() {
-       pthread_mutex_unlock(&mutex);
-   }
+    void unlock() {
+        pthread_mutex_unlock(&mutex);
+    }
+
+    virtual ~AndroidMutex() {
+        pthread_mutex_destroy(&mutex);
+    }
 
 protected:
     pthread_mutex_t mutex;
@@ -63,9 +75,9 @@ class AndroidThread : public gdx::Thread {
 public:
     AndroidThread(Runnable* theRunnable)
         : runnable(theRunnable),
-    thread(0) {
+          thread(0) {
     }
-    
+
     const std::string getThreadName() {
         return "TODO";
     }
@@ -92,23 +104,24 @@ public:
     }
 
     virtual ~AndroidThread() {
-    }    
-    
+        static_cast<AndroidSystem*>(gdx::system)->getJavaVM()->DetachCurrentThread();
+    }
+
     Runnable* runnable;
     pthread_t thread;
     ptr self;
 };
 
 void* run_runnable(void* runnable) {
-    AndroidThread* thread =(AndroidThread*)runnable;    
-    
+    AndroidThread* thread =(AndroidThread*)runnable;
+
     if(thread->runnable) {
         thread->runnable->run();
         thread->runnable->onRunnableStop();
     }
-    
+
     thread->self = nullptr;
-    
+
     return NULL;
 }
 
@@ -132,7 +145,7 @@ uint64_t gdx::android::AndroidSystem::nanoTime()
     ::clock_gettime(CLOCK_MONOTONIC, &ts);
 
 //     __android_log_print(ANDROID_LOG_DEBUG, "nanoTime", "tv_sec: %llu, tv_usec: %llu, %llu", ts.tv_sec, ts.tv_nsec, (uint64_t)ts.tv_sec * 1000000000LL + (uint64_t)ts.tv_nsec);
-    
+
     return ts.tv_sec * 1000000000LL + ts.tv_nsec;
 }
 
@@ -178,9 +191,9 @@ void gdx::android::AndroidSystem::checkWrite(const std::string& path)
     while(testPath != "")
     {
         if (access(testPath.c_str(), W_OK) == 0) return;
-          found = testPath.rfind(getSeparator());
+        found = testPath.rfind(getSeparator());
         if(found == testPath.npos) break;
-          else testPath = testPath.substr(0, found);
+        else testPath = testPath.substr(0, found);
     }
     gdx_log_error("gdx","Write permission denied on file: %s", path.c_str());
 }
@@ -203,14 +216,14 @@ int gdx::android::AndroidSystem::getBooleanAttributes(const gdx::File& f)
     int attribs = 0;
     struct stat fileStat;
     std::string absPath = f.getAbsolutePath();
-    
+
     if(stat(absPath.c_str(), &fileStat) == -1)
     {
         return attribs;
     }
-    
+
     attribs = attribs | this->BA_EXISTS;
-    
+
     if(S_ISREG(fileStat.st_mode))
     {
         attribs = attribs | this->BA_REGULAR;
@@ -263,7 +276,7 @@ bool gdx::android::AndroidSystem::isAbsolute(const gdx::File& f)
 
 void gdx::android::AndroidSystem::list(const gdx::File& f, std::vector< std::string >& paths)
 {
-   gdx_log_error("gdx","Not supported yet");
+    gdx_log_error("gdx","Not supported yet");
 }
 
 std::string gdx::android::AndroidSystem::normalize(const std::string& path)
@@ -278,7 +291,7 @@ std::string gdx::android::AndroidSystem::normalize(const std::string& path)
         prevChar = c;
     }
     if (prevChar == '/') return normalize(pathname, n, n - 1);
-             return pathname;
+    return pathname;
 }
 
 std::string gdx::android::AndroidSystem::normalize(const std::string& pathname, const int& len, const int& off)
@@ -286,14 +299,14 @@ std::string gdx::android::AndroidSystem::normalize(const std::string& pathname, 
     if (len == 0) return pathname;
     int n = len;
     while ((n > 0) && (pathname[n - 1] == '/')) n--;
-           if (n == 0) return "/";
-           std::string sb = "";
+    if (n == 0) return "/";
+    std::string sb = "";
     if (off > 0) sb.append(pathname.substr(0, off));
-           char prevChar = 0;
+    char prevChar = 0;
     for (int i = off; i < n; i++) {
         char c = pathname[i];
         if ((prevChar == '/') && (c == '/')) continue;
-           sb.append(1, c);
+        sb.append(1, c);
         prevChar = c;
     }
     return sb;
@@ -342,10 +355,10 @@ void gdx::android::AndroidSystem::setJavaVM(JavaVM* _vm)
 
 JNIEnv* gdx::android::AndroidSystem::getJniEnv()
 {
-    JNIEnv* env;
+    JNIEnv* env = NULL;
     assert(this->vm);
-    
-    this->vm->GetEnv((void**)&env, JNI_VERSION_1_2);
+
+    this->vm->AttachCurrentThread(&env, NULL);
     
     return env;
 }
