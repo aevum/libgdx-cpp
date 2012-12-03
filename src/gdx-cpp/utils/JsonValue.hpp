@@ -77,6 +77,11 @@ protected:
         json_value_t() : type(json_null) {
         }
         
+        json_value_t& operator=(std::nullptr_t val) {
+            type = json_null;            
+            return * this;
+        }
+        
         json_value_t& operator=(const char* val) {
             type = json_string;
             new (&value.string_val) std::string(val);
@@ -182,7 +187,8 @@ public:
     template <typename T>
     JsonValue(const T& value) = delete;
     
-    JsonValue(const char* char_data) : item_val(char_data) { }    
+    JsonValue(std::nullptr_t null) : item_val(null) { }
+    JsonValue(const char* char_data) : item_val(char_data) { }
     JsonValue(int value) : item_val(value) { }
     JsonValue(bool value) : item_val(value) { }
     JsonValue(float value) : item_val(value) { }    
@@ -202,7 +208,7 @@ public:
     JsonValue& operator = (const array& value) { this->item_val = value;  }
     JsonValue& operator = (const item_map& value) { this->item_val = value;  }
     JsonValue& operator = (const std::string& value) { this->item_val = value;  }
-    
+    JsonValue& operator = (std::nullptr_t value) { this->item_val = nullptr;  }
     
     JsonValue& operator = (const JsonValue& other) ;
 

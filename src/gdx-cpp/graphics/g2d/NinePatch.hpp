@@ -34,6 +34,8 @@ class TextureRegion;
 
 class NinePatch {
 public:
+    typedef ref_ptr_maker < NinePatch >::shared_ptr_t ptr;
+    
     enum class Sides {
         TOP_LEFT = 0,
         TOP_CENTER,

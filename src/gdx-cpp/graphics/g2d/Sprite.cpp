@@ -329,39 +329,39 @@ void Sprite::draw (SpriteBatch& spriteBatch,float alphaModulation) {
     setColor(color);
 }
 
-float Sprite::getX () {
+float Sprite::getX () const {
     return x;
 }
 
-float Sprite::getY () {
+float Sprite::getY () const {
     return y;
 }
 
-float Sprite::getWidth () {
+float Sprite::getWidth () const {
     return width;
 }
 
-float Sprite::getHeight () {
+float Sprite::getHeight () const {
     return height;
 }
 
-float Sprite::getOriginX () {
+float Sprite::getOriginX () const {
     return originX;
 }
 
-float Sprite::getOriginY () {
+float Sprite::getOriginY () const {
     return originY;
 }
 
-float Sprite::getRotation () {
+float Sprite::getRotation () const {
     return rotation;
 }
 
-float Sprite::getScaleX () {
+float Sprite::getScaleX () const {
     return scaleX;
 }
 
-float Sprite::getScaleY () {
+float Sprite::getScaleY () const {
     return scaleY;
 }
 
