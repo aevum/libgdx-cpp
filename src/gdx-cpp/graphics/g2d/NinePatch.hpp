@@ -23,6 +23,7 @@
 
 #include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
 #include "gdx-cpp/graphics/Texture.hpp"
+#include "gdx-cpp/graphics/Color.hpp"
 
 #include <array>
 
@@ -36,7 +37,7 @@ class NinePatch {
 public:
     typedef ref_ptr_maker < NinePatch >::shared_ptr_t ptr;
     
-    enum class Sides {
+    enum class Sides : unsigned int {
         TOP_LEFT = 0,
         TOP_CENTER,
         TOP_RIGHT,
@@ -62,12 +63,16 @@ public:
     float getTotalWidth ();
 
     std::array<TextureRegion, 9 > getPatches();
-
+    
+    void setColor(const gdx::Color& _color);
+    void setBlending(bool value);
 private:
+    gdx::Color color;
+    bool blending;
     std::array<TextureRegion, 9 > patches;
     void initialize(TextureRegion region, int left, int right, int top, int bottom);
     void checkValidity ();
-    NinePatch();
+    NinePatch() = delete;
 };
 
 } // namespace gdx

@@ -26,11 +26,11 @@
 
 using namespace gdx;
 
-NinePatch::NinePatch ( const Texture::ptr& texture, int left, int right, int top, int bottom ) {
+NinePatch::NinePatch ( const Texture::ptr& texture, int left, int right, int top, int bottom ) : blending(true) , color(gdx::Color::WHITE) {
     initialize(TextureRegion(texture), left, right, top, bottom);
 }
 
-NinePatch::NinePatch (TextureRegion region, int left, int right, int top, int bottom) {
+NinePatch::NinePatch (TextureRegion region, int left, int right, int top, int bottom) : blending(true) , color(gdx::Color::WHITE) {
     initialize(region, left, right, top, bottom);
 }
 
@@ -38,19 +38,39 @@ void NinePatch::initialize(TextureRegion region, int left, int right, int top, i
 {
     int middleWidth = region.getRegionWidth() - left - right;
     int middleHeight = region.getRegionHeight() - top - bottom;
+
+    if (top > 0) {
+        if (left > 0) patches[0] = TextureRegion(region, 0, 0, left, top);
+        if (middleWidth > 0) patches[1] = TextureRegion(region, left, 0, middleWidth, top);
+        if (right > 0) patches[2] = TextureRegion(region, left + middleWidth, 0, right, top);
+    }
+    if (middleHeight > 0) {
+        if (left > 0) patches[3] = TextureRegion(region, 0, top, left, middleHeight);
+        if (middleWidth > 0) patches[4] = TextureRegion(region, left, top, middleWidth, middleHeight);
+        if (right > 0) patches[5] = TextureRegion(region, left + middleWidth, top, right, middleHeight);
+    }
+    if (bottom > 0) {
+        if (left > 0) patches[6] = TextureRegion(region, 0, top + middleHeight, left, bottom);
+        if (middleWidth > 0) patches[7] = TextureRegion(region, left, top + middleHeight, middleWidth, bottom);
+        if (right > 0) patches[8] = TextureRegion(region, left + middleWidth, top + middleHeight, right, bottom);
+    }
+
+    // If split only vertical, move splits from right to center.
+    if (left == 0 && middleWidth == 0) {
+        patches[(uint32_t) Sides::TOP_CENTER] = patches[(uint32_t) Sides::TOP_RIGHT];
+        patches[(uint32_t) Sides::MIDDLE_CENTER] = patches[(uint32_t) Sides::MIDDLE_RIGHT];
+        patches[(uint32_t) Sides::BOTTOM_CENTER] = patches[(uint32_t) Sides::BOTTOM_RIGHT];
+    }
     
-    patches[0] = TextureRegion(region, 0, 0, left, top);
-    patches[1] = TextureRegion(region, left, 0, middleWidth, top);
-    patches[2] = TextureRegion(region, left + middleWidth, 0, right, top);
-    patches[3] = TextureRegion(region, 0, top, left, middleHeight);
-    patches[4] = TextureRegion(region, left, top, middleWidth, middleHeight);
-    patches[5] = TextureRegion(region, left + middleWidth, top, right, middleHeight);
-    patches[6] = TextureRegion(region, 0, top + middleHeight, left, bottom);
-    patches[7] = TextureRegion(region, left, top + middleHeight, middleWidth, bottom);
-    patches[8] = TextureRegion(region, left + middleWidth, top + middleHeight, right, bottom);
+    // If split only horizontal, move splits from bottom to center.
+    if (top == 0 && middleHeight == 0) {
+        patches[(uint32_t) Sides::MIDDLE_LEFT] = patches[(uint32_t) Sides::BOTTOM_LEFT];
+        patches[(uint32_t) Sides::MIDDLE_CENTER] = patches[(uint32_t) Sides::BOTTOM_CENTER];
+        patches[(uint32_t) Sides::MIDDLE_RIGHT] = patches[(uint32_t) Sides::BOTTOM_RIGHT];        
+    }
 }
 
-NinePatch::NinePatch ( std::array< TextureRegion, 9 >& _patches ): patches(_patches)
+NinePatch::NinePatch ( std::array< TextureRegion, 9 >& _patches ): patches(_patches), color(gdx::Color::WHITE), blending(true)
 {
     if (patches.size() != 9) gdx_log_error("NinePatch","NinePatch needs nine TextureRegions");
     this->patches = patches;
@@ -112,6 +132,17 @@ void NinePatch::draw (SpriteBatch& batch,float x,float y,float width,float heigh
     else if (patches[(int)Sides::TOP_RIGHT].isValid()) //
         topRowY -= patches[(int)Sides::TOP_RIGHT].getRegionHeight();
 
+    bool wasBlendingEnabled =  batch.isBlendingEnabled();
+    gdx::Color batchColor = batch.getColor();
+    
+    if (wasBlendingEnabled && !blending) {
+        batch.disableBlending();
+    }
+    
+    if (color.toIntBits() != gdx::Color::WHITE.toIntBits()) {
+        batch.setColor(color.r, color.g, color.b, batchColor.a * color.a);
+    }
+    
     // Bottom row
     if (patches[(int)Sides::BOTTOM_LEFT].isValid()) batch.draw(patches[(int)Sides::BOTTOM_LEFT], x, y, centerColumnX - x, middleRowY - y);
     if (patches[(int)Sides::BOTTOM_CENTER].isValid())
@@ -128,10 +159,25 @@ void NinePatch::draw (SpriteBatch& batch,float x,float y,float width,float heigh
 
     // Top row
     if (patches[(int)Sides::TOP_LEFT].isValid()) batch.draw(patches[(int)Sides::TOP_LEFT], x, topRowY, centerColumnX - x, y + height - topRowY);
+    
     if (patches[(int)Sides::TOP_CENTER].isValid())
         batch.draw(patches[(int)Sides::TOP_CENTER], centerColumnX, topRowY, rightColumnX - centerColumnX, y + height - topRowY);
+    
     if (patches[(int)Sides::TOP_RIGHT].isValid())
         batch.draw(patches[(int)Sides::TOP_RIGHT], rightColumnX, topRowY, x + width - rightColumnX, y + height - topRowY);
+
+    if(wasBlendingEnabled && !blending) {
+        batch.enableBlending();
+    }
+    
+    if (color.toIntBits() != batchColor.toIntBits()) {
+        batch.setColor(batchColor);
+    }
+}
+
+void NinePatch::setColor(const Color& _color)
+{
+    color = _color;
 }
 
 float NinePatch::getLeftWidth () {
@@ -153,14 +199,14 @@ float NinePatch::getBottomHeight () {
 float NinePatch::getTotalHeight () {
     float totalHeight = getTopHeight() + getBottomHeight();
     if (patches[(int)Sides::MIDDLE_CENTER].isValid()) totalHeight += patches[(int)Sides::MIDDLE_CENTER].getRegionHeight();
-    
+
     return totalHeight;
 }
 
 float NinePatch::getTotalWidth () {
     float totalWidth = getLeftWidth() + getRightWidth();
     if (patches[(int)Sides::MIDDLE_CENTER].isValid()) totalWidth += patches[(int)Sides::MIDDLE_CENTER].getRegionWidth();
-    
+
     return totalWidth;
 }
 
@@ -169,7 +215,12 @@ std::array< TextureRegion, 9 > NinePatch::getPatches()
     return patches;
 }
 
-NinePatch::NinePatch( TextureRegion region )
+NinePatch::NinePatch( TextureRegion region ) : blending(true), color(gdx::Color::WHITE)
 {
     patches[4] = region;
+}
+
+void NinePatch::setBlending(bool value)
+{
+    this->blending = value;
 }
