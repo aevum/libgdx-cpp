@@ -255,7 +255,15 @@ class LinuxMutex : public gdx::Mutex {
 public:
     LinuxMutex()
     {
-        pthread_mutex_init(&mutex, NULL);
+        pthread_mutexattr_t attributes;
+        if (!pthread_mutexattr_init(&attributes)) {
+            pthread_mutexattr_settype(&attributes, PTHREAD_MUTEX_RECURSIVE);
+            pthread_mutex_init(&mutex, &attributes);
+            pthread_mutexattr_destroy(&attributes);
+        } else {
+            gdx_log_info("LinuxMutex", "Failed to initialize mutex attributes, mutex will not be recursive");
+            pthread_mutex_init(&mutex, &attributes);
+        }
     }
     
     void lock(){
