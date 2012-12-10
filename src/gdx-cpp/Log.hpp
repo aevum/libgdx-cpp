@@ -6,9 +6,9 @@
 #include <string>
 #include <stdexcept>
 
-#define S(x) #x
-#define S_(x) S(x)
-#define S_LINE_ S_(__LINE__)
+#define GDX_TO_STRING_MACRO(x) #x
+#define GDX_TO_STRING_MACRO_(x) GDX_TO_STRING_MACRO(x)
+#define GDX_TO_STRING_MACRO_LINE_ GDX_TO_STRING_MACRO_(__LINE__)
 
 namespace gdx {
     void internal_log_debug(const std::string&, const std::string&, const std::string&, const char*, ...);
@@ -17,19 +17,19 @@ namespace gdx {
 }
 
 #ifdef GDX_LOG_LEVEL_DEBUG
-#define gdx_log_debug(tag, format, ...) gdx::internal_log_debug(tag, S_LINE_, __FILE__, format, ##__VA_ARGS__)
+#define gdx_log_debug(tag, format, ...) gdx::internal_log_debug(tag, GDX_TO_STRING_MACRO_LINE_, __FILE__, format, ##__VA_ARGS__)
 #else
 #define gdx_log_debug(tag, format, ...) ((void) 0)
 #endif
 
 #ifdef GDX_LOG_LEVEL_INFO
-#define gdx_log_info(tag, format, ...) gdx::internal_log_info(tag, S_LINE_, __FILE__, format, ##__VA_ARGS__)
+#define gdx_log_info(tag, format, ...) gdx::internal_log_info(tag, GDX_TO_STRING_MACRO_LINE_, __FILE__, format, ##__VA_ARGS__)
 #else
 #define gdx_log_info(tag, format, ...) ((void) 0)
 #endif
 
 #ifdef GDX_LOG_LEVEL_ERROR
-#define gdx_log_error(tag, format, ...) do { gdx::internal_log_error(tag, S_LINE_, __FILE__, format,  ##__VA_ARGS__); gdx::ScopedGuard<RuntimeLogErrorExecutor> guard( (RuntimeLogErrorExecutor()) ); } while (false)
+#define gdx_log_error(tag, format, ...) do { gdx::internal_log_error(tag, GDX_TO_STRING_MACRO_LINE_, __FILE__, format,  ##__VA_ARGS__); gdx::ScopedGuard<RuntimeLogErrorExecutor> guard( (RuntimeLogErrorExecutor()) ); } while (false)
 #else
 #define gdx_log_error(tag, format, ...) ((void) 0)
 #endif
