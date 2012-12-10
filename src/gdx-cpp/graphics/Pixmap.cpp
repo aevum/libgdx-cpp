@@ -30,6 +30,7 @@
 #include <sstream>
 #include <iostream>
 #include <iostream>
+#include <gdx-cpp/graphics/g2d/detail/gdx2d.h>
 
 using namespace gdx;
 

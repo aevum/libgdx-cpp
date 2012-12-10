@@ -20,9 +20,12 @@
 
 #include "Gdx2DPixmap.hpp"
 
+#include <gdx-cpp/graphics/g2d/detail/gdx2d.h>
+
 #include "gdx-cpp/graphics/GL10.hpp"
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/gl.hpp"
+
 
 #include <cassert>
 #include <fstream>
@@ -319,3 +322,10 @@ Gdx2DPixmap* Gdx2DPixmap::newPixmapFromBuffer(unsigned char* data, int len, int 
 {
     return new Gdx2DPixmap(data, 0, len, requestedFormat);
 }
+
+Gdx2DPixmap::init::init() {
+    Gdx2DPixmap::setBlend ( GDX2D_BLEND_SRC_OVER );
+    Gdx2DPixmap::setScale ( GDX2D_SCALE_LINEAR );
+}
+
+

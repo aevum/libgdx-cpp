@@ -23,13 +23,14 @@
 
 #include "gdx-cpp/utils/Disposable.hpp"
 #include "gdx-cpp/internal/memory"
-#include "gdx-cpp/graphics/g2d/detail/gdx2d.h"
 
 #include <string>
 #include <vector>
 #include <istream>
 #include "gdx-cpp/graphics/Pixmap.hpp"
 #include "gdx-cpp/graphics/Color.hpp"
+
+extern "C" struct gdx2d_pixmap;
 
 namespace gdx {
 
@@ -90,11 +91,7 @@ public:
     static void setScale ( int scale );
 
     static struct init {
-        init() {
-            Gdx2DPixmap::setBlend ( GDX2D_BLEND_SRC_OVER );
-            Gdx2DPixmap::setScale ( GDX2D_SCALE_LINEAR );
-        }
-
+        init() ;
     } init;
 
     virtual ~Gdx2DPixmap();
@@ -104,9 +101,8 @@ protected:
     int height;
     int format;
     int color;
-
+    
     gdx2d_pixmap* pixData;
-
 private:
     static Blending blending;
 };
