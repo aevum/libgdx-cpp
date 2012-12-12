@@ -47,6 +47,7 @@ Matrix3::~Matrix3()
 
 Matrix3& Matrix3::operator=(const Matrix3& other)
 {
+    memcpy(vals, other.vals, sizeof(float) * 9);
     return *this;
 }
 
