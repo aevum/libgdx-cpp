@@ -41,7 +41,7 @@ dependency to your project.
 
 Assuming you have the latest Android NDK on "ANDROID_NDK_HOME" and the android SDK on "ANDROID_SDK_HOME"
 
-__Optional__: I'm installing the builded libraries and includes under build/local for convenience purposes as you won't need to sudo to install them.
+__Optional__: I'm installing the built libraries and includes under build/local for convenience purposes as you won't need to sudo to install them.
 
 ```bash
 git clone git://github.com/aevum/libgdx-cpp.git 
@@ -55,7 +55,7 @@ make install
 
 cd ../../android/gdx
 
-cmake ../../../libgdx-cpp -DCMAKE_TOOLCHAIN_FILE=../../../libgdx-cpp/cmake/android.toolchain.cmake -DANDROID_NDK=ANDROID_NDK_HOME -DCMAKE_BUILD_TYPE=Release
+ANDROID_NDK=PATH_TO_ANDROID_NDK cmake ../../../libgdx-cpp -DCMAKE_TOOLCHAIN_FILE=../../../libgdx-cpp/cmake/android.toolchain.cmake -DCMAKE_BUILD_TYPE=Release
 
 make install
 ```
