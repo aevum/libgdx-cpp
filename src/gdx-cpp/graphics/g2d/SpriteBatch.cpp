@@ -70,7 +70,6 @@ customShader(0)
 
     vertices = new float[size * Sprite::SPRITE_SIZE];
     verticesSize  = size * Sprite::SPRITE_SIZE;
-
     int len = size * 6;
     std::vector<short> indices(len);
 

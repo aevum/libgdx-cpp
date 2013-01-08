@@ -36,11 +36,11 @@ void FrameBuffer::build () {
     GL20& gl = *gl20;
 
     int handle;
-    gl.glGenFramebuffers(1, &handle);
+    gl.glGenFramebuffers(1, (unsigned int*) &handle);
     framebufferHandle = handle;
 
     if (hasDepth) {
-        gl.glGenRenderbuffers(1, &handle);
+        gl.glGenRenderbuffers(1, (unsigned int*)&handle);
         depthbufferHandle = handle;
     }
 
@@ -68,12 +68,12 @@ void FrameBuffer::build () {
         colorTexture.reset();
         if (hasDepth) {
             handle = depthbufferHandle;
-            gl.glDeleteRenderbuffers(1, &handle);
+            gl.glDeleteRenderbuffers(1, (const unsigned int*) &handle);
         }
 
         handle = framebufferHandle;
         
-        gl.glDeleteFramebuffers(1, &handle);
+        gl.glDeleteFramebuffers(1, (const unsigned int*) &handle);
 
         if (result == GL20::GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
             gdx_log_error("gdx","frame buffer couldn't be constructed: incomplete attachment");
@@ -92,12 +92,12 @@ void FrameBuffer::dispose () {
     colorTexture.reset();
     if (hasDepth) {
         handle = depthbufferHandle;
-        gl.glDeleteRenderbuffers(1, &handle);
+        gl.glDeleteRenderbuffers(1, (const unsigned int*) &handle);
     }
 
     handle = framebufferHandle;
     
-    gl.glDeleteFramebuffers(1, &handle);
+    gl.glDeleteFramebuffers(1, (const unsigned int*) &handle);
 
     if (buffers.count(app) > 0) buffers[app].erase(this);
 }

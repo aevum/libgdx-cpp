@@ -29,7 +29,7 @@ using namespace gdx;
 
 int IndexBufferObject::createBufferObject () {
     if (gl20 != NULL) {
-        gl20->glGenBuffers(1, &tmpHandle);
+        gl20->glGenBuffers(1, (unsigned int*) &tmpHandle);
         return tmpHandle;
     } else if (gl11 != NULL) {
         gl11->glGenBuffers(1, &tmpHandle);
@@ -115,7 +115,7 @@ void IndexBufferObject::dispose () {
         tmpHandle = bufferHandle;
         GL20& gl = *gl20;
         gl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-        gl.glDeleteBuffers(1, &tmpHandle);
+        gl.glDeleteBuffers(1, (unsigned int*) &tmpHandle);
         bufferHandle = 0;
     } else if (gl11 != NULL) {
         tmpHandle = bufferHandle;
