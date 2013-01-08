@@ -72,6 +72,7 @@ public:
             return name;
         }
     private:
+        Format& operator = (const Format&) = delete;
         std::string name;
         Format(const std::string& p_name) : name(p_name) {
         }

@@ -26,8 +26,8 @@
 #include "gdx-cpp/utils/ArrayUtils.hpp"
 
 #define LOG2_PAGE_SIZE 9
-#define PAGE_SIZE  (1 << LOG2_PAGE_SIZE)
-#define PAGES 0x10000 / PAGE_SIZE
+#define GDX_BITMAPFONT_PAGE_SIZE  (1 << LOG2_PAGE_SIZE)
+#define GDX_BITMAPFONT_PAGES 0x10000 / GDX_BITMAPFONT_PAGE_SIZE
 
 #define xChars "xeaonsrcumvwz"
 #define capChars "MNBDCEFKAGHIJLOPTUVWXYZ"
@@ -36,25 +36,25 @@ using namespace gdx;
 
 
 void BitmapFont::BitmapFontData::setGlyph ( int ch, BitmapFont::Glyph* glyph ) {
-    Glyph** page = glyphs[ch / PAGE_SIZE];
+    Glyph** page = glyphs[ch / GDX_BITMAPFONT_PAGE_SIZE];
 
     if ( page == NULL ) {
-        glyphs[ch / PAGE_SIZE] = page = new Glyph*[PAGE_SIZE];
-        memset ( page, 0, sizeof ( Glyph** ) * PAGE_SIZE );
+        glyphs[ch / GDX_BITMAPFONT_PAGE_SIZE] = page = new Glyph*[GDX_BITMAPFONT_PAGE_SIZE];
+        memset ( page, 0, sizeof ( Glyph** ) * GDX_BITMAPFONT_PAGE_SIZE );
     }
 
-    page[ch & ( PAGE_SIZE - 1 )] = glyph;
+    page[ch & ( GDX_BITMAPFONT_PAGE_SIZE - 1 )] = glyph;
 }
 
 BitmapFont::Glyph* BitmapFont::BitmapFontData::getFirstGlyph () {
-    for ( int i = 0; i < PAGES; ++i ) {
+    for ( int i = 0; i < GDX_BITMAPFONT_PAGES; ++i ) {
         Glyph** page = glyphs[i];
 
         if ( page == NULL ) {
             continue;
         }
 
-        for ( int j = 0; j < PAGE_SIZE; ++j ) {
+        for ( int j = 0; j < GDX_BITMAPFONT_PAGE_SIZE; ++j ) {
             Glyph* glyph = page[j];
 
             if ( glyph == NULL ) {
@@ -68,9 +68,9 @@ BitmapFont::Glyph* BitmapFont::BitmapFontData::getFirstGlyph () {
 }
 
 BitmapFont::Glyph* BitmapFont::BitmapFontData::getGlyph ( char ch ) {
-    Glyph** page = glyphs[ch / PAGE_SIZE];
+    Glyph** page = glyphs[ch / GDX_BITMAPFONT_PAGE_SIZE];
 
-    if ( page != NULL ) return page[ch & ( PAGE_SIZE - 1 )];
+    if ( page != NULL ) return page[ch & ( GDX_BITMAPFONT_PAGE_SIZE - 1 )];
 
     return NULL;
 }
@@ -89,12 +89,12 @@ void BitmapFont::load ( BitmapFontData* data ) {
     float u = region.u;
     float v = region.v;
 
-    for ( int i = 0; i < PAGES; i++ ) {
+    for ( int i = 0; i < GDX_BITMAPFONT_PAGES; i++ ) {
         Glyph** page = data->glyphs[i];
 
         if ( page == NULL )
             continue;
-        for ( int j = 0; j < PAGE_SIZE; ++j ) {
+        for ( int j = 0; j < GDX_BITMAPFONT_PAGE_SIZE; ++j ) {
             Glyph* glyph = page[j];
 
             if ( glyph == NULL )
@@ -615,8 +615,8 @@ scaleY ( 1 ),
 spaceWidth ( 0 ),
 xHeight ( 1 ),
 fontSize(0) {
-    glyphs = new Glyph**[PAGES];
-    memset ( glyphs, 0, sizeof ( Glyph* ) * PAGES );
+    glyphs = new Glyph**[GDX_BITMAPFONT_PAGES];
+    memset ( glyphs, 0, sizeof ( Glyph* ) * GDX_BITMAPFONT_PAGES );
 
     std::vector <char> n_buffer;
     
@@ -781,25 +781,25 @@ height ( 0 ) {
 
 void BitmapFont::Glyph::setKerning ( int ch, int value ) {
     if ( kerning == NULL ) {
-        kerning = new char*[PAGES];
-        memset ( kerning, 0, sizeof ( char* ) * PAGES );
+        kerning = new char*[GDX_BITMAPFONT_PAGES];
+        memset ( kerning, 0, sizeof ( char* ) * GDX_BITMAPFONT_PAGES );
     }
 
     char* page = kerning[ch >> LOG2_PAGE_SIZE];
 
     if ( page == NULL ) {
-        kerning[ch >> LOG2_PAGE_SIZE] = page = new char[PAGE_SIZE];
-        memset ( kerning, 0, sizeof ( char ) * PAGE_SIZE );
+        kerning[ch >> LOG2_PAGE_SIZE] = page = new char[GDX_BITMAPFONT_PAGE_SIZE];
+        memset ( kerning, 0, sizeof ( char ) * GDX_BITMAPFONT_PAGE_SIZE );
     }
 
-    page[ch & ( PAGE_SIZE - 1 )] = ( char ) value;
+    page[ch & ( GDX_BITMAPFONT_PAGE_SIZE - 1 )] = ( char ) value;
 }
 
 int BitmapFont::Glyph::getKerning ( char ch ) {
     if ( kerning != NULL ) {
         char* page = kerning[ch >> LOG2_PAGE_SIZE];
         if ( page != NULL ) {
-            return page[ch & ( PAGE_SIZE - 1 )];
+            return page[ch & ( GDX_BITMAPFONT_PAGE_SIZE - 1 )];
         }
     }
 
@@ -807,11 +807,11 @@ int BitmapFont::Glyph::getKerning ( char ch ) {
 }
 
 BitmapFont::BitmapFontData::~BitmapFontData() {
-    for ( int  i = 0; i < PAGES; ++i ) {
+    for ( int  i = 0; i < GDX_BITMAPFONT_PAGES; ++i ) {
         Glyph** page = glyphs[i];
 
         if ( page != NULL ) {
-            for ( int j = 0; j < PAGE_SIZE; ++j ) {
+            for ( int j = 0; j < GDX_BITMAPFONT_PAGE_SIZE; ++j ) {
                 Glyph* glyph = page[j];
 
                 if ( glyph != NULL ) {
@@ -828,7 +828,7 @@ BitmapFont::BitmapFontData::~BitmapFontData() {
 
 BitmapFont::Glyph::~Glyph() {
     if ( kerning ) {
-        for ( int  i = 0; i < PAGES; ++i ) {
+        for ( int  i = 0; i < GDX_BITMAPFONT_PAGES; ++i ) {
             char* _kerning = kerning[i];
 
             if ( _kerning != NULL ) {
