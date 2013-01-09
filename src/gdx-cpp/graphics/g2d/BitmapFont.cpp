@@ -26,8 +26,8 @@
 #include "gdx-cpp/utils/ArrayUtils.hpp"
 
 #define LOG2_PAGE_SIZE 9
-#define PAGE_SIZE  (1 << LOG2_PAGE_SIZE)
-#define PAGES 0x10000 / PAGE_SIZE
+#define GDX_BITMAPFONT_PAGE_SIZE  (1 << LOG2_PAGE_SIZE)
+#define GDX_BITMAPFONT_PAGES 0x10000 / GDX_BITMAPFONT_PAGE_SIZE
 
 #define xChars "xeaonsrcumvwz"
 #define capChars "MNBDCEFKAGHIJLOPTUVWXYZ"
@@ -35,44 +35,45 @@
 using namespace gdx;
 
 
-void BitmapFont::BitmapFontData::setGlyph ( int ch, BitmapFont::Glyph* glyph ) {
-    Glyph** page = glyphs[ch / PAGE_SIZE];
+void BitmapFont::BitmapFontData::setGlyph ( int ch, BitmapFont::Glyph::unique_ptr& glyph ) {
+    auto& page = glyphs[ch / GDX_BITMAPFONT_PAGE_SIZE];
 
-    if ( page == NULL ) {
-        glyphs[ch / PAGE_SIZE] = page = new Glyph*[PAGE_SIZE];
-        memset ( page, 0, sizeof ( Glyph** ) * PAGE_SIZE );
+    if ( page.empty() ) {
+        page.resize(GDX_BITMAPFONT_PAGE_SIZE);
     }
 
-    page[ch & ( PAGE_SIZE - 1 )] = glyph;
+    page[ch & ( GDX_BITMAPFONT_PAGE_SIZE - 1 )].swap(glyph);
 }
 
 BitmapFont::Glyph* BitmapFont::BitmapFontData::getFirstGlyph () {
-    for ( int i = 0; i < PAGES; ++i ) {
-        Glyph** page = glyphs[i];
+    for ( int i = 0; i < GDX_BITMAPFONT_PAGES; ++i ) {
+        auto& page = glyphs[i];
 
-        if ( page == NULL ) {
+        if ( page.empty() ) {
             continue;
         }
 
-        for ( int j = 0; j < PAGE_SIZE; ++j ) {
-            Glyph* glyph = page[j];
+        for ( int j = 0; j < GDX_BITMAPFONT_PAGE_SIZE; ++j ) {
+            auto& glyph = page[j];
 
-            if ( glyph == NULL ) {
+            if ( glyph == nullptr ) {
                 continue;
             }
 
-            return glyph;
+            return glyph.get();
         }
     }
-    throw new std::runtime_error ( "No glyphs found!" );
+
+    gdx_log_error ("BitmapFontData::getFirstGlyph", "No glyphs found!" );
 }
 
-BitmapFont::Glyph* BitmapFont::BitmapFontData::getGlyph ( char ch ) {
-    Glyph** page = glyphs[ch / PAGE_SIZE];
+BitmapFont::Glyph* BitmapFont::BitmapFontData::getGlyph ( unsigned int ch ) {
+    auto& page = glyphs[ch / GDX_BITMAPFONT_PAGE_SIZE];
 
-    if ( page != NULL ) return page[ch & ( PAGE_SIZE - 1 )];
+    if ( !page.empty() ) 
+        return page[ch & ( GDX_BITMAPFONT_PAGE_SIZE - 1 )].get();
 
-    return NULL;
+    return nullptr;
 }
 
 std::string BitmapFont::BitmapFontData::getImagePath () {
@@ -89,15 +90,16 @@ void BitmapFont::load ( BitmapFontData* data ) {
     float u = region.u;
     float v = region.v;
 
-    for ( int i = 0; i < PAGES; i++ ) {
-        Glyph** page = data->glyphs[i];
+    for ( int i = 0; i < GDX_BITMAPFONT_PAGES; i++ ) {
+        auto& page = data->glyphs[i];
 
-        if ( page == NULL )
+        if ( page.empty() )
             continue;
-        for ( int j = 0; j < PAGE_SIZE; ++j ) {
-            Glyph* glyph = page[j];
 
-            if ( glyph == NULL )
+        for ( int j = 0; j < GDX_BITMAPFONT_PAGE_SIZE; ++j ) {
+            auto& glyph = page[j];
+
+            if ( glyph == nullptr )
                 continue;
 
             glyph->u = u + glyph->srcX * invTexWidth;
@@ -125,7 +127,7 @@ BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch,const std::s
     y += data->ascent;
     float startX = x;
 
-    Glyph* lastGlyph = NULL;
+    Glyph* lastGlyph = nullptr;
 
     if ( data->scaleX == 1 && data->scaleY == 1 ) {
         if ( integer ) {
@@ -146,8 +148,8 @@ BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch,const std::s
         }
         while ( start < end ) {
             char ch = str[start++];
-            Glyph* g = data->getGlyph ( ch );
-            if ( g == NULL ) {
+            auto g = data->getGlyph ( ch );
+            if ( g == nullptr ) {
                 continue;
             }
             x += lastGlyph->getKerning ( ch );
@@ -163,7 +165,7 @@ BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch,const std::s
         float scaleX = this->data->scaleX, scaleY = this->data->scaleY;
         while ( start < end ) {
             lastGlyph = data->getGlyph ( str[start++] );
-            if ( lastGlyph != NULL ) {
+            if ( lastGlyph != nullptr ) {
                 if ( !integer ) {
                     spriteBatch.draw ( *texture, //
                                        x + lastGlyph->xoffset * scaleX, //
@@ -185,7 +187,7 @@ BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch,const std::s
         }
         while ( start < end ) {
             char ch = str[start++];
-            Glyph* g = data->getGlyph ( ch );
+            auto g = data->getGlyph ( ch );
             if ( g == NULL ) {
                 continue;
             }
@@ -552,11 +554,11 @@ void BitmapFont::setFixedWidthGlyphs ( const std::string& glyphs ) {
             continue;
         g->xoffset += ( maxAdvance - g->xadvance ) / 2;
         g->xadvance = maxAdvance;
-        g->kerning = NULL;
+        g->kerning.release();
     }
 }
 
-bool BitmapFont::containsCharacter ( char character ) {
+bool BitmapFont::containsCharacter ( unsigned int character ) {
     return data->getGlyph ( character ) != NULL;
 }
 
@@ -615,9 +617,6 @@ scaleY ( 1 ),
 spaceWidth ( 0 ),
 xHeight ( 1 ),
 fontSize(0) {
-    glyphs = new Glyph**[PAGES];
-    memset ( glyphs, 0, sizeof ( Glyph* ) * PAGES );
-
     std::vector <char> n_buffer;
     
     {
@@ -685,29 +684,24 @@ fontSize(0) {
             if ( strstr ( line, "kernings " ) != NULL ) break;
             if ( strstr ( line, "char " ) == NULL ) continue;
 
-            Glyph* glyph = new Glyph();
+            Glyph::unique_ptr glyph = std::unique_ptr<Glyph>(new Glyph());
 
             int ch = 0;
 
             if ( sscanf ( line, "char id=%d x=%d y=%d width=%d height=%d xoffset=%d yoffset=%d xadvance=%d page=%*s chnl=%*s",
                           &ch, &glyph->srcX, &glyph->srcY, &glyph->width, &glyph->height, &glyph->xoffset, &glyph->yoffset, &glyph->xadvance ) != 8 ) {
 
-                delete glyph;
                 gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
             }
 
             if ( ch <= 0xffff ) {
+                if ( !flip ) {
+                    glyph->yoffset = - ( glyph->height + glyph->yoffset );
+                }
+
+                descent = std::min ( ( float ) ( baseLine + glyph->yoffset ), descent );                
                 setGlyph ( ch, glyph );
-            } else {
-                delete glyph;
-                continue;
-            }
-
-            if ( !flip ) {
-                glyph->yoffset = - ( glyph->height + glyph->yoffset );
-            }
-
-            descent = std::min ( ( float ) ( baseLine + glyph->yoffset ), descent );
+            }            
         }
 
         while ( true ) {
@@ -727,19 +721,22 @@ fontSize(0) {
             if ( first < 0 || first > 0xffff || second < 0 || second > 0xffff )
                 continue;
 
-            Glyph* glyph = getGlyph ( ( char ) first );
+            Glyph* glyph = getGlyph ( first );
             glyph->setKerning ( second, amount );
         }
 
         Glyph* spaceGlyph = getGlyph ( ' ' );
-        if ( spaceGlyph == NULL ) {
+        
+        if ( spaceGlyph == nullptr ) {
             spaceGlyph = new Glyph();
             Glyph* xadvanceGlyph = getGlyph ( 'l' );
-            if ( xadvanceGlyph == NULL ) xadvanceGlyph = getFirstGlyph();
+            if ( xadvanceGlyph == nullptr ) xadvanceGlyph = getFirstGlyph();
             spaceGlyph->xadvance = xadvanceGlyph->xadvance;
-            setGlyph ( ' ', spaceGlyph );
+            auto uptr = std::unique_ptr<Glyph>(spaceGlyph);
+            setGlyph ( ' ', uptr);
         }
-        spaceWidth = spaceGlyph != NULL ? spaceGlyph->xadvance + spaceGlyph->width : 1;
+
+        spaceWidth = spaceGlyph != nullptr ? spaceGlyph->xadvance + spaceGlyph->width : 1;
 
         Glyph* xGlyph = NULL;
         for ( int i = 0; i < array_size ( xChars ); i++ ) {
@@ -780,26 +777,24 @@ height ( 0 ) {
 }
 
 void BitmapFont::Glyph::setKerning ( int ch, int value ) {
-    if ( kerning == NULL ) {
-        kerning = new char*[PAGES];
-        memset ( kerning, 0, sizeof ( char* ) * PAGES );
+    if ( kerning == nullptr ) {
+        kerning = kerning_t(new kerning_t::element_type);
     }
 
-    char* page = kerning[ch >> LOG2_PAGE_SIZE];
+    auto& page = (*kerning)[ch >> LOG2_PAGE_SIZE];
 
-    if ( page == NULL ) {
-        kerning[ch >> LOG2_PAGE_SIZE] = page = new char[PAGE_SIZE];
-        memset ( kerning, 0, sizeof ( char ) * PAGE_SIZE );
+    if ( page.empty() ) {
+        page.resize(GDX_BITMAPFONT_PAGE_SIZE);
     }
 
-    page[ch & ( PAGE_SIZE - 1 )] = ( char ) value;
+    page[ch & ( GDX_BITMAPFONT_PAGE_SIZE - 1 )] = ( char ) value;
 }
 
 int BitmapFont::Glyph::getKerning ( char ch ) {
-    if ( kerning != NULL ) {
-        char* page = kerning[ch >> LOG2_PAGE_SIZE];
-        if ( page != NULL ) {
-            return page[ch & ( PAGE_SIZE - 1 )];
+    if ( kerning != nullptr ) {
+        auto& page = (*kerning)[ch >> LOG2_PAGE_SIZE];
+        if ( page.empty() ) {
+            return page[ch & ( GDX_BITMAPFONT_PAGE_SIZE - 1 )];
         }
     }
 
@@ -807,39 +802,10 @@ int BitmapFont::Glyph::getKerning ( char ch ) {
 }
 
 BitmapFont::BitmapFontData::~BitmapFontData() {
-    for ( int  i = 0; i < PAGES; ++i ) {
-        Glyph** page = glyphs[i];
-
-        if ( page != NULL ) {
-            for ( int j = 0; j < PAGE_SIZE; ++j ) {
-                Glyph* glyph = page[j];
-
-                if ( glyph != NULL ) {
-                    delete glyph;
-                }
-            }
-
-            delete [] page;
-        }
-    }
-
-    delete [] glyphs;
 }
 
 BitmapFont::Glyph::~Glyph() {
-    if ( kerning ) {
-        for ( int  i = 0; i < PAGES; ++i ) {
-            char* _kerning = kerning[i];
-
-            if ( _kerning != NULL ) {
-                delete [] _kerning;
-            }
-        }
-
-        delete [] kerning;
-    }
 }
-
 
 BitmapFont::Glyph::Glyph() : srcX ( 0 ),
 srcY ( 0 ),
@@ -851,6 +817,5 @@ u2 ( 0 ),
 v2 ( 0 ),
 xoffset ( 0 ),
 yoffset ( 0 ),
-xadvance ( 0 ),
-kerning ( NULL ) {
+xadvance ( 0 ) {
 }

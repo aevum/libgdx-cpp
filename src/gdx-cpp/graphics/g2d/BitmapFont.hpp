@@ -35,21 +35,29 @@ class BitmapFontCache;
 class BitmapFont: public Disposable {
     friend class BitmapFontCache;
 
+    static const unsigned LOG2_PAGE_SIZE = 9;
+    static const unsigned GDX_BITMAPFONT_PAGE_SIZE  = 1 << LOG2_PAGE_SIZE;
+    static const unsigned GDX_BITMAPFONT_PAGES = 0x10000 / GDX_BITMAPFONT_PAGE_SIZE;
+   
 public:
     typedef ref_ptr_maker<BitmapFont>::shared_ptr_t ptr;
-
+    
     enum class HAlignment {
         HALIGNMENT_LEFT, HALIGNMENT_CENTER, HALIGNMENT_RIGHT
     };
 
     struct Glyph {
+        typedef ref_ptr_maker<Glyph>::unique_ptr_t unique_ptr;
+        
         int srcX;
         int srcY;
         int width, height;
         float u, v, u2, v2;
         int xoffset, yoffset;
         int xadvance;
-        char** kerning;
+        
+        typedef std::unique_ptr< std::array< std::vector<char>, GDX_BITMAPFONT_PAGES> > kerning_t;
+        kerning_t kerning;
 
         int getKerning (char ch);
         void setKerning (int ch, int value);
@@ -57,6 +65,7 @@ public:
         Glyph();
         ~Glyph();
     };
+    
 
     class BitmapFontData {
         friend class BitmapFont;
@@ -72,7 +81,7 @@ public:
         float down;
         float scaleX , scaleY;
 
-        Glyph*** glyphs;
+        std::array< std::vector< Glyph::unique_ptr >, GDX_BITMAPFONT_PAGES > glyphs;
 
         float spaceWidth;
         float xHeight;
@@ -81,13 +90,13 @@ public:
         ~BitmapFontData();
 
         BitmapFontData (FileHandle::ptr fontFile, bool flip);
-        Glyph* getGlyph (char ch);
+        Glyph* getGlyph (unsigned ch);
         std::string getImagePath ();
         FileHandle::ptr getFontFile ();
         float getFontSize() const;
         
     private:
-        void setGlyph (int ch,Glyph* glyph);
+        void setGlyph (int ch, BitmapFont::Glyph::unique_ptr& glyph);
         Glyph* getFirstGlyph ();
         float fontSize;
     };
@@ -140,7 +149,7 @@ public:
     bool isFlipped ();
     void dispose ();
     void setFixedWidthGlyphs (const std::string& glyphs);
-    bool containsCharacter (char character);
+    bool containsCharacter (unsigned int character);
     void setUseIntegerPositions (bool use);
     bool usesIntegerPositions ();
     
