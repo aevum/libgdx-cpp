@@ -120,15 +120,23 @@ int ShaderProgram::linkProgram () {
     gl->glAttachShader(program, fragmentShaderHandle);
     gl->glLinkProgram(program);
 
+    int intbuf[4];
+
 //     ByteBuffer tmp = ByteBuffer.allocateDirect(4);
 //     tmp.order(ByteOrder.nativeOrder());
 //     IntBuffer intbuf = tmp.asIntBuffer();
 //
-//     gl->glGetProgramiv(program, GL20.GL_LINK_STATUS, intbuf);
+     gl->glGetProgramiv(program, GL20::GL_LINK_STATUS, intbuf);
 //     int linked = intbuf.get(0);
 //     if (linked == 0) {
 //         return -1;
 //     }
+
+     if (intbuf[0] == 0)
+     {
+    	 gdx_log_info("gdx", "%s", gl->glGetShaderInfoLog(program).c_str());
+    	 return -1;
+     }
 
     return program;
 }
@@ -431,7 +439,6 @@ void ShaderProgram::fetchUniforms () {
         params=256;
         type=0;
         std::string name =  gl20->glGetActiveUniform(program, i, &params, (char *) &type);
-        gdx_log_info("gdx", "uniform name is %s", name.c_str());
         int location = gl20->glGetUniformLocation(program, name);
         uniforms[name] =  location;
         uniformTypes[name] = type;

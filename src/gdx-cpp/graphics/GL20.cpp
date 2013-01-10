@@ -830,10 +830,11 @@ void GL20::glGetShaderiv (int shader,int pname, int* params) const
 
 std::string GL20::glGetShaderInfoLog (int shader) const
 {
-	char buf[512];
 	int length = 0;
-	::glGetShaderInfoLog(shader, 512, &length, buf);
-	return string(buf);
+	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
+	char buf[length];
+	::glGetShaderInfoLog(shader, length, NULL, buf);
+	return buf;
 }
 void GL20::glGetShaderPrecisionFormat (int shadertype,int precisiontype, int* range, int* precision) const
 {

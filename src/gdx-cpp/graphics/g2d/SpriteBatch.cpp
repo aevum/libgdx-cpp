@@ -125,12 +125,15 @@ void SpriteBatch::begin () {
 
     renderCalls = 0;
     gl->glDepthMask(false);
-    gl->glEnable(GL_TEXTURE_2D);
 
     if (graphics->isGL20Available()) {
         if (customShader != NULL)
             customShader->begin();
-        else shader->begin();
+        else
+        	shader->begin();
+    }else
+    {
+    	gl->glEnable(GL_TEXTURE_2D);
     }
     
     setupMatrices();
@@ -151,13 +154,16 @@ void SpriteBatch::end () {
     GLCommon& gl = *::gl;
     gl.glDepthMask(true);
     if (isBlendingEnabled()) gl.glDisable(GL_BLEND);
-    gl.glDisable(GL_TEXTURE_2D);
 
     if (graphics->isGL20Available()) {
         if (customShader != NULL)
             customShader->end();
         else
             shader->end();
+    }
+    else
+    {
+    	gl.glDisable(GL_TEXTURE_2D);
     }
 }
 
@@ -188,10 +194,7 @@ void SpriteBatch::draw (const Texture& texture,float x,float y,float originX,flo
         throw new std::runtime_error("SpriteBatch.begin must be called before draw.");
 
     if (&texture != lastTexture) {
-        renderMesh();
-        lastTexture = const_cast<Texture*>(&texture);
-        invTexWidth = 1.0f / texture.getWidth();
-        invTexHeight = 1.0f / texture.getHeight();
+       switchTexture(texture);
     } else if (idx == 20000) {
         renderMesh();
     }
@@ -317,10 +320,7 @@ void SpriteBatch::draw (const Texture& texture,float x,float y,float width,float
         gdx_log_error("gdx","SpriteBatch.begin must be called before draw.");
 
     if (&texture != lastTexture) {
-        renderMesh();
-        lastTexture = const_cast<Texture*>(&texture);
-        invTexWidth = 1.0f / texture.getWidth();
-        invTexHeight = 1.0f / texture.getHeight();
+        switchTexture(texture);
     } else if (idx == verticesSize) renderMesh();
 
     float u = srcX * invTexWidth;
@@ -372,10 +372,7 @@ void SpriteBatch::draw (const Texture& texture,float x,float y,int srcX,int srcY
         gdx_log_error("gdx","SpriteBatch.begin must be called before draw.");
 
     if (&texture != lastTexture) {
-        renderMesh();
-        lastTexture = const_cast<Texture*>(&texture);
-        invTexWidth = 1.0f / texture.getWidth();
-        invTexHeight = 1.0f / texture.getHeight();
+        switchTexture(texture);
     } else if (idx == verticesSize) renderMesh();
 
     float u = srcX * invTexWidth;
@@ -415,10 +412,7 @@ void SpriteBatch::draw (const Texture& texture,float x,float y,float width,float
         gdx_log_error("gdx","SpriteBatch.begin must be called before draw.");
 
     if (&texture != lastTexture) {
-        renderMesh();
-        lastTexture = const_cast<Texture*>(&texture);
-        invTexWidth = 1.0f / texture.getWidth();
-        invTexHeight = 1.0f / texture.getHeight();
+        switchTexture(texture);
     } else if (idx == verticesSize) renderMesh();
 
     float fx2 = x + width;
@@ -454,10 +448,7 @@ void SpriteBatch::draw (const Texture& texture,float x,float y) {
         gdx_log_error("gdx","SpriteBatch.begin must be called before draw.");
 
     if (&texture != lastTexture) {
-        renderMesh();
-        lastTexture = const_cast<Texture*>(&texture);
-        invTexWidth = 1.0f / texture.getWidth();
-        invTexHeight = 1.0f / texture.getHeight();
+        switchTexture(texture);
     } else if (idx == verticesSize) renderMesh();
 
     float fx2 = x + texture.getWidth();
@@ -493,10 +484,7 @@ void SpriteBatch::draw (const Texture& texture,float x,float y,float width,float
         gdx_log_error("gdx","SpriteBatch.begin must be called before draw.");
 
     if (&texture != lastTexture) {
-        renderMesh();
-        lastTexture = const_cast<Texture*>(&texture);
-        invTexWidth = 1.0f / texture.getWidth();
-        invTexHeight = 1.0f / texture.getHeight();
+        switchTexture(texture);
     } else if (idx == verticesSize) //
         renderMesh();
 
@@ -537,10 +525,7 @@ void SpriteBatch::draw (const Texture& texture,const std::vector<float>& spriteV
         gdx_log_error("gdx","SpriteBatch.begin must be called before draw.");
 
     if (&texture != lastTexture) {
-        renderMesh();
-        lastTexture = const_cast<Texture*>(&texture);
-        invTexWidth = 1.0f / texture.getWidth();
-        invTexHeight = 1.0f / texture.getHeight();
+        switchTexture(texture);
     } else if (idx + length >= verticesSize) renderMesh();
 
 
@@ -558,10 +543,7 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float width,
 
     Texture::ptr texture = region.getTexture();
     if (texture.get() != lastTexture) {
-        renderMesh();
-        lastTexture = texture.get();
-        invTexWidth = 1.0f / texture->getWidth();
-        invTexHeight = 1.0f / texture->getHeight();
+        switchTexture(*texture.get());
     } else if (idx == verticesSize) //
         renderMesh();
 
@@ -606,10 +588,7 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float origin
 
     Texture::ptr texture = region.getTexture();
     if (texture.get() != lastTexture) {
-        renderMesh();
-        lastTexture = texture.get();
-        invTexWidth = 1.0f / texture->getWidth();
-        invTexHeight = 1.0f / texture->getHeight();
+        switchTexture(*texture.get());
     } else if (idx == verticesSize) //
         renderMesh();
 
@@ -723,10 +702,7 @@ void SpriteBatch::draw (const TextureRegion& region,float x,float y,float origin
 
     Texture::ptr texture = region.getTexture();
     if (texture.get() != lastTexture) {
-        renderMesh();
-        lastTexture = texture.get();
-        invTexWidth = 1.0f / texture->getWidth();
-        invTexHeight = 1.0f / texture->getHeight();
+        switchTexture(*texture.get());
     } else if (idx == verticesSize) {
         renderMesh();
     }
@@ -865,28 +841,31 @@ void SpriteBatch::renderMesh () {
     lastTexture->bind();
 
     mesh->setVertices(vertices, idx);
+    mesh->getIndicesBuffer().position(0);
+    mesh->getIndicesBuffer().limit(spritesInBatch * 6);
+
+    if (blendingDisabled) {
+		gdx::gl->glDisable(GL_BLEND);
+	} else {
+		//GL20& gl20 = *::gl20;
+		gdx::gl->glEnable(GL_BLEND);
+		if (blendSrcFunc != -1) gdx::gl->glBlendFunc(blendSrcFunc, blendDstFunc);
+	}
 
     if (graphics->isGL20Available()) {
-        if (blendingDisabled) {
-            gl20->glDisable(GL_BLEND);
-        } else {
-            GL20& gl20 = *::gl20;
-            gl20.glEnable(GL_BLEND);
-            gl20.glBlendFunc(blendSrcFunc, blendDstFunc);
-        }
 
         if (customShader != NULL)
             mesh->render(*customShader, GL_TRIANGLES, 0, spritesInBatch * 6);
         else
             mesh->render(*shader, GL_TRIANGLES, 0, spritesInBatch * 6);
     } else {
-        if (blendingDisabled) {
-            gl10->glDisable(GL_BLEND);
-        } else {
-            GL10& gl10 = *::gl10;
-            gl10.glEnable(GL_BLEND);
-            gl10.glBlendFunc(blendSrcFunc, blendDstFunc);
-        }
+//        if (blendingDisabled) {
+//            gl10->glDisable(GL_BLEND);
+//        } else {
+//            GL10& gl10 = *::gl10;
+//            gl10.glEnable(GL_BLEND);
+//            gl10.glBlendFunc(blendSrcFunc, blendDstFunc);
+//        }
         mesh->render(GL_TRIANGLES, 0, spritesInBatch * 6);
     }
 
@@ -1107,7 +1086,11 @@ void SpriteBatch::setProjectionMatrix(Matrix4& projection)
     }
 }
 
-
-
-
+void SpriteBatch::switchTexture(const Texture& texture)
+{
+	renderMesh();
+	lastTexture = const_cast<Texture*>(&texture);
+	invTexWidth = 1.0f / texture.getWidth();
+	invTexHeight = 1.0f / texture.getHeight();
+}
 

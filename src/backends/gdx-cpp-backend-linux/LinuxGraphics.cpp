@@ -463,5 +463,26 @@ bool gdx::nix::LinuxGraphics::setupGLModes()
 
 LinuxGraphics::~LinuxGraphics()
 {
-    SDL_Quit();
+	if (isUseOpenGLES2)
+	{
+		if(g_eglDisplay)
+		{
+		  eglMakeCurrent(g_eglDisplay, NULL, NULL, EGL_NO_CONTEXT);
+		  if(g_eglContext)
+			 eglDestroyContext(g_eglDisplay, g_eglContext);
+		  if(g_eglSurface)
+			 eglDestroySurface(g_eglDisplay, g_eglSurface);
+		  eglTerminate(g_eglDisplay);
+
+		  g_eglSurface = 0;
+		  g_eglContext = 0;
+		  g_eglDisplay = 0;
+		}
+
+		if(x11Disp)
+		  XCloseDisplay(x11Disp);
+		x11Disp = NULL;
+	}
+	else
+		SDL_Quit();
 }

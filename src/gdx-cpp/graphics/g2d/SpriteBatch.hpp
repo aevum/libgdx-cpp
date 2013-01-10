@@ -107,6 +107,7 @@ private:
     int blendDstFunc;
 
     void setupMatrices();
+    void switchTexture(const Texture& texture);
     
     ShaderProgram *shader;
     Color tempColor;
