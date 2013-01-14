@@ -34,6 +34,133 @@
 
 using namespace gdx;
 
+#define IS_IN_RANGE(c, f, l)    (((c) >= (f)) && ((c) <= (l)))
+
+//function grabbed on http://stackoverflow.com/questions/2948308/how-do-i-read-utf-8-characters-via-a-pointer/2953960#2953960
+ulong readNextChar (const char* p, unsigned int& index) 
+{  
+    // TODO: since UTF-8 is a variable-length
+    // encoding, you should pass in the input
+    // buffer's actual byte length so that you
+    // can determine if a malformed UTF-8
+    // sequence would exceed the end of the buffer...
+
+    unsigned char c1, c2, *ptr = (unsigned char*) p;
+    ulong uc = 0;
+    int seqlen;
+    // int datalen = ... available length of p ...;    
+
+    /*
+    if( datalen < 1 )
+    {
+        // malformed data, do something !!!
+        return (u_long) -1;
+    }
+    */
+
+    c1 = ptr[0];
+
+    if( (c1 & 0x80) == 0 )
+    {
+        uc = (ulong) (c1 & 0x7F);
+        seqlen = 1;
+    }
+    else if( (c1 & 0xE0) == 0xC0 )
+    {
+        uc = (ulong) (c1 & 0x1F);
+        seqlen = 2;
+    }
+    else if( (c1 & 0xF0) == 0xE0 )
+    {
+        uc = (ulong) (c1 & 0x0F);
+        seqlen = 3;
+    }
+    else if( (c1 & 0xF8) == 0xF0 )
+    {
+        uc = (ulong) (c1 & 0x07);
+        seqlen = 4;
+    }
+    else
+    {
+        // malformed data, do something !!!
+        return (ulong) -1;
+    }
+
+    /*
+    if( seqlen > datalen )
+    {
+        // malformed data, do something !!!
+        return (u_long) -1;
+    }
+    */
+
+    for(int i = 1; i < seqlen; ++i)
+    {
+        c1 = ptr[i];
+
+        if( (c1 & 0xC0) != 0x80 )
+        {
+            // malformed data, do something !!!
+            return (ulong) -1;
+        }
+    }
+
+    switch( seqlen )
+    {
+        case 2:
+        {
+            c1 = ptr[0];
+
+            if( !IS_IN_RANGE(c1, 0xC2, 0xDF) )
+            {
+                // malformed data, do something !!!
+                return (ulong) -1;
+            }
+
+            break;
+        }
+
+        case 3:
+        {
+            c1 = ptr[0];
+            c2 = ptr[1];
+
+            if( ((c1 == 0xE0) && !IS_IN_RANGE(c2, 0xA0, 0xBF)) ||
+                ((c1 == 0xED) && !IS_IN_RANGE(c2, 0x80, 0x9F)) ||
+                (!IS_IN_RANGE(c1, 0xE1, 0xEC) && !IS_IN_RANGE(c1, 0xEE, 0xEF)) )
+            {
+                // malformed data, do something !!!
+                return (ulong) -1;
+            }
+
+            break;
+        }
+
+        case 4:
+        {
+            c1 = ptr[0];
+            c2 = ptr[1];
+
+            if( ((c1 == 0xF0) && !IS_IN_RANGE(c2, 0x90, 0xBF)) ||
+                ((c1 == 0xF4) && !IS_IN_RANGE(c2, 0x80, 0x8F)) ||
+                !IS_IN_RANGE(c1, 0xF1, 0xF3) )
+            {
+                // malformed data, do something !!!
+                return (ulong) -1;
+            }
+
+            break;
+        }
+    }
+
+    for(int i = 1; i < seqlen; ++i)
+    {
+        uc = ((uc << 6) | (ulong)(ptr[i] & 0x3F));
+    }
+
+    index += seqlen;
+    return uc; 
+}
 
 void BitmapFont::BitmapFontData::setGlyph ( int ch, BitmapFont::Glyph::unique_ptr& glyph ) {
     auto& page = glyphs[ch / GDX_BITMAPFONT_PAGE_SIZE];
@@ -67,13 +194,35 @@ BitmapFont::Glyph* BitmapFont::BitmapFontData::getFirstGlyph () {
     gdx_log_error ("BitmapFontData::getFirstGlyph", "No glyphs found!" );
 }
 
-BitmapFont::Glyph* BitmapFont::BitmapFontData::getGlyph ( wchar_t ch ) {
+BitmapFont::Glyph* BitmapFont::BitmapFontData::getGlyph(unsigned int ch)
+{
     auto& page = glyphs[ch / GDX_BITMAPFONT_PAGE_SIZE];
 
-    if ( !page.empty() ) 
+    if ( !page.empty() ) {
         return page[ch & ( GDX_BITMAPFONT_PAGE_SIZE - 1 )].get();
+    }
 
     return nullptr;
+}
+
+unsigned int BitmapFont::BitmapFontData::getGlyph ( const std::string& str, unsigned int& pos, BitmapFont::Glyph*& result ) {
+    result = nullptr;
+    
+    unsigned int ch = 0;
+    if (isascii(str[pos])) {
+        ch = str[pos];        
+        pos++;
+    } else if (pos + 1 < str.length()) { //we're handling utf-8
+        ch = readNextChar(&str[pos], pos);        
+    }
+    
+    auto& page = glyphs[ch / GDX_BITMAPFONT_PAGE_SIZE];
+
+    if ( !page.empty() ) {
+        result = page[ch & ( GDX_BITMAPFONT_PAGE_SIZE - 1 )].get();
+    }
+
+    return ch;
 }
 
 std::string BitmapFont::BitmapFontData::getImagePath () {
@@ -116,11 +265,11 @@ void BitmapFont::load ( BitmapFontData* data ) {
     }
 }
 
-BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch, const std::wstring& str, float x, float y ) {
+BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch, const std::string& str, float x, float y ) {
     return draw ( spriteBatch, str, x, y, 0, str.length() );
 }
 
-BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch, const std::wstring& str, float x, float y, int start, int end ) {
+BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch, const std::string& str, float x, float y, unsigned int start, unsigned int end ) {
     float batchColor = spriteBatch.color;
     spriteBatch.setColor ( color );
     Texture::ptr texture = region.getTexture();
@@ -135,8 +284,8 @@ BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch, const std::
             x = ( int ) x;
         }
 
-        while ( start < end ) {
-            lastGlyph = data->getGlyph ( str[start++] );
+        while ( start < end ) {            
+            data->getGlyph ( str, start, lastGlyph );
             if ( lastGlyph != NULL ) {
                 spriteBatch.draw ( *texture, //
                                    x + lastGlyph->xoffset, y + lastGlyph->yoffset, //
@@ -147,8 +296,9 @@ BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch, const std::
             }
         }
         while ( start < end ) {
-            unsigned int ch = str[start++];
-            auto g = data->getGlyph ( ch );
+            Glyph* g = nullptr;
+            unsigned int ch = data->getGlyph ( str, start, g);
+            
             if ( g == nullptr ) {
                 continue;
             }
@@ -163,8 +313,8 @@ BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch, const std::
         }
     } else {
         float scaleX = this->data->scaleX, scaleY = this->data->scaleY;
-        while ( start < end ) {
-            lastGlyph = data->getGlyph ( str[start++] );
+        while ( start < end ) {            
+            data->getGlyph ( str, start , lastGlyph);
             if ( lastGlyph != nullptr ) {
                 if ( !integer ) {
                     spriteBatch.draw ( *texture, //
@@ -186,9 +336,9 @@ BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch, const std::
             }
         }
         while ( start < end ) {
-            unsigned int ch = str[start++];
-            auto g = data->getGlyph ( ch );
-            if ( g == NULL ) {
+            Glyph* g = nullptr;
+            unsigned int ch = data->getGlyph ( str, start, g);            
+            if ( g == nullptr ) {
                 continue;
             }
             x += lastGlyph->getKerning ( ch ) * scaleX;
@@ -219,11 +369,11 @@ BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch, const std::
     return textBounds;
 }
 
-BitmapFont::TextBounds& BitmapFont::drawMultiLine ( SpriteBatch& spriteBatch,const std::wstring& str,float x,float y ) {
+BitmapFont::TextBounds& BitmapFont::drawMultiLine ( SpriteBatch& spriteBatch,const std::string& str,float x,float y ) {
     return drawMultiLine ( spriteBatch, str, x, y, 0, HAlignment::HALIGNMENT_LEFT );
 }
 
-BitmapFont::TextBounds& BitmapFont::drawMultiLine ( SpriteBatch& spriteBatch, const std::wstring& str, float x, float y, float alignmentWidth, const BitmapFont::HAlignment& alignment ) {
+BitmapFont::TextBounds& BitmapFont::drawMultiLine ( SpriteBatch& spriteBatch, const std::string& str, float x, float y, float alignmentWidth, const BitmapFont::HAlignment& alignment ) {
     float batchColor = spriteBatch.color;
     float down = this->data->down;
     int start = 0;
@@ -251,11 +401,11 @@ BitmapFont::TextBounds& BitmapFont::drawMultiLine ( SpriteBatch& spriteBatch, co
     return textBounds;
 }
 
-BitmapFont::TextBounds& BitmapFont::drawWrapped ( SpriteBatch& spriteBatch, const std::wstring& str, float x, float y, float wrapWidth ) {
+BitmapFont::TextBounds& BitmapFont::drawWrapped ( SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth ) {
     return drawWrapped ( spriteBatch, str, x, y, wrapWidth, HAlignment::HALIGNMENT_LEFT );
 }
 
-BitmapFont::TextBounds& BitmapFont::drawWrapped ( SpriteBatch& spriteBatch, const std::wstring& str, float x, float y, float wrapWidth, const BitmapFont::HAlignment& alignment ) {
+BitmapFont::TextBounds& BitmapFont::drawWrapped ( SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth, const BitmapFont::HAlignment& alignment ) {
     float batchColor = spriteBatch.color;
     float down = this->data->down;
     int start = 0;
@@ -300,23 +450,23 @@ BitmapFont::TextBounds& BitmapFont::drawWrapped ( SpriteBatch& spriteBatch, cons
     return textBounds;
 }
 
-BitmapFont::TextBounds& BitmapFont::getBounds ( const std::wstring& str ) {
+BitmapFont::TextBounds& BitmapFont::getBounds ( const std::string& str ) {
     return getBounds ( str, 0, str.length() );
 }
 
-BitmapFont::TextBounds& BitmapFont::getBounds ( const std::wstring& str, int start, int end ) {
+BitmapFont::TextBounds& BitmapFont::getBounds ( const std::string& str, unsigned int start, unsigned  int end ) {
     float width = 0;
     Glyph* lastGlyph = NULL;
     while ( start < end ) {
-        lastGlyph = data->getGlyph ( str[start++] );
+        data->getGlyph ( str, start, lastGlyph );
         if ( lastGlyph != NULL ) {
             width = lastGlyph->xadvance;
             break;
         }
     }
     while ( start < end ) {
-        unsigned int ch = str[start++];
-        Glyph* g = data->getGlyph ( ch );
+        Glyph* g = nullptr;         
+        unsigned int ch = data->getGlyph ( str, start, g );
         if ( g != NULL ) {
             width += lastGlyph->getKerning ( ch );
             lastGlyph = g;
@@ -328,7 +478,7 @@ BitmapFont::TextBounds& BitmapFont::getBounds ( const std::wstring& str, int sta
     return textBounds;
 }
 
-BitmapFont::TextBounds& BitmapFont::getMultiLineBounds ( const std::wstring& str ) {
+BitmapFont::TextBounds& BitmapFont::getMultiLineBounds ( const std::string& str ) {
     int start = 0;
     float maxWidth = 0;
     int numLines = 0;
@@ -345,7 +495,7 @@ BitmapFont::TextBounds& BitmapFont::getMultiLineBounds ( const std::wstring& str
     return textBounds;
 }
 
-BitmapFont::TextBounds& BitmapFont::getWrappedBounds ( const std::wstring& str, float wrapWidth ) {
+BitmapFont::TextBounds& BitmapFont::getWrappedBounds ( const std::string& str, float wrapWidth ) {
     int start = 0;
     int numLines = 0;
     int length = str.length();
@@ -380,20 +530,22 @@ BitmapFont::TextBounds& BitmapFont::getWrappedBounds ( const std::wstring& str, 
     return textBounds;
 }
 
-void BitmapFont::computeGlyphAdvancesAndPositions ( const std::wstring& str,
+void BitmapFont::computeGlyphAdvancesAndPositions ( const std::string& str,
         std::vector<float>& glyphAdvances,
         std::vector<float>& glyphPositions ) {
     glyphAdvances.clear();
     glyphPositions.clear();
-    int index = 0;
-    int end = str.length();
+    
+    unsigned int index = 0;
+    unsigned int end = str.length();
+    
     float width = 0;
     Glyph* lastGlyph = NULL;
 
     if ( data->scaleX == 1 ) {
-        for ( ; index < end; index++ ) {
-            unsigned int ch = str[index];
-            Glyph* g = data->getGlyph ( ch );
+        for ( ; index < end;) {
+            Glyph* g = nullptr;            
+            unsigned int ch = data->getGlyph ( str , index, g  );
             if ( g != NULL ) {
                 if ( lastGlyph != NULL ) width += lastGlyph->getKerning ( ch );
                 lastGlyph = g;
@@ -406,9 +558,9 @@ void BitmapFont::computeGlyphAdvancesAndPositions ( const std::wstring& str,
         glyphPositions.push_back ( width );
     } else {
         float scaleX = this->data->scaleX;
-        for ( ; index < end; index++ ) {
-            unsigned int ch = str[index];
-            Glyph* g = data->getGlyph ( ch );
+        for ( ; index < end; ) {
+            Glyph* g = nullptr;            
+            unsigned int ch = data->getGlyph ( str , index, g  );
             if ( g != NULL ) {
                 if ( lastGlyph != NULL ) {
                     width += lastGlyph->getKerning ( ch ) * scaleX;
@@ -424,14 +576,14 @@ void BitmapFont::computeGlyphAdvancesAndPositions ( const std::wstring& str,
     }
 }
 
-int BitmapFont::computeVisibleGlyphs ( const std::wstring& str, int start, int end, float availableWidth ) {
-    int index = start;
+int BitmapFont::computeVisibleGlyphs ( const std::string& str, unsigned int start, unsigned int end, float availableWidth ) {
+    unsigned int index = start;
     float width = 0;
     Glyph* lastGlyph = NULL;
     if ( data->scaleX == 1 ) {
-        for ( ; index < end; index++ ) {
-            unsigned int ch = str[index];
-            Glyph* g = data->getGlyph ( ch );
+        for ( ; index < end; ) {
+            Glyph* g = nullptr;            
+            unsigned int ch = data->getGlyph ( str , index, g  );
             if ( g != NULL ) {
                 if ( lastGlyph != NULL ) width += lastGlyph->getKerning ( ch );
                 lastGlyph = g;
@@ -441,9 +593,9 @@ int BitmapFont::computeVisibleGlyphs ( const std::wstring& str, int start, int e
         }
     } else {
         float scaleX = this->data->scaleX;
-        for ( ; index < end; index++ ) {
-            unsigned int ch = str[index];
-            Glyph* g = data->getGlyph ( ch );
+        for ( ; index < end; ) {
+            Glyph* g = nullptr;            
+            unsigned int ch = data->getGlyph ( str , index, g  );
             if ( g != NULL ) {
                 if ( lastGlyph != NULL ) width += lastGlyph->getKerning ( ch ) * scaleX;
                 lastGlyph = g;
@@ -542,15 +694,17 @@ void BitmapFont::dispose () {
 //     region.getTexture()->dispose();
 }
 
-void BitmapFont::setFixedWidthGlyphs ( const std::wstring& glyphs ) {
+void BitmapFont::setFixedWidthGlyphs ( const std::string& glyphs ) {
     int maxAdvance = 0;
-    for ( int index = 0, end = glyphs.length(); index < end; index++ ) {
-        Glyph* g = data->getGlyph ( glyphs[index] );
+    for ( unsigned int index = 0, end = glyphs.length(); index < end; ) {
+        Glyph* g = nullptr;
+        data->getGlyph ( glyphs, index, g );
         if ( g != NULL && g->xadvance > maxAdvance ) maxAdvance = g->xadvance;
     }
-    for ( int index = 0, end = glyphs.length(); index < end; index++ ) {
-        Glyph* g = data->getGlyph ( glyphs[index] );
-        if ( g == NULL )
+    for ( unsigned int index = 0, end = glyphs.length(); index < end; ) {
+        Glyph* g = nullptr;
+        data->getGlyph ( glyphs, index, g );
+        if ( g == nullptr )
             continue;
         g->xoffset += ( maxAdvance - g->xadvance ) / 2;
         g->xadvance = maxAdvance;
@@ -712,7 +866,7 @@ fontSize(0) {
 
             if ( strstr ( line, "kerning " ) == NULL ) break;
 
-            int first = 0, second = 0, amount = 0;
+            unsigned int first = 0, second = 0, amount = 0;
 
             if ( sscanf ( line, "kerning first=%d second=%d amount=%d", &first, &second, &amount ) != 3 ) {
                 gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );

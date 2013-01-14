@@ -90,10 +90,15 @@ public:
         ~BitmapFontData();
 
         BitmapFontData (FileHandle::ptr fontFile, bool flip);
-        Glyph* getGlyph (wchar_t ch);
+        
+        unsigned int getGlyph (const std::string& str, unsigned int& pos, Glyph*& result);
+
         std::string getImagePath ();
         FileHandle::ptr getFontFile ();
         float getFontSize() const;
+
+    protected:
+        Glyph* getGlyph( unsigned int ch );
         
     private:
         void setGlyph (int ch, BitmapFont::Glyph::unique_ptr& glyph);
@@ -115,19 +120,19 @@ public:
     };
 
 
-    TextBounds& draw (SpriteBatch& spriteBatch, const std::wstring& str, float x, float y);
-    TextBounds& draw (SpriteBatch& spriteBatch, const std::wstring& str, float x, float y, int start, int end);
-    TextBounds& drawMultiLine (SpriteBatch& spriteBatch, const std::wstring& str, float x, float y);
-    TextBounds& drawMultiLine (SpriteBatch& spriteBatch, const std::wstring& str, float x, float y, float alignmentWidth, const BitmapFont::HAlignment& alignment);
-    TextBounds& drawWrapped (SpriteBatch& spriteBatch, const std::wstring& str, float x, float y, float wrapWidth);
-    TextBounds& drawWrapped (SpriteBatch& spriteBatch, const std::wstring& str, float x, float y, float wrapWidth, const BitmapFont::HAlignment& alignment);
-    TextBounds& getBounds (const std::wstring& str);
-    TextBounds& getBounds (const std::wstring& str,int start,int end);
-    TextBounds& getMultiLineBounds (const std::wstring& str);
-    TextBounds& getWrappedBounds (const std::wstring& str,float wrapWidth);
+    TextBounds& draw (SpriteBatch& spriteBatch, const std::string& str, float x, float y);
+    TextBounds& draw (gdx::SpriteBatch& spriteBatch, const std::string& str, float x, float y, unsigned int start, unsigned int end);
+    TextBounds& drawMultiLine (SpriteBatch& spriteBatch, const std::string& str, float x, float y);
+    TextBounds& drawMultiLine (SpriteBatch& spriteBatch, const std::string& str, float x, float y, float alignmentWidth, const BitmapFont::HAlignment& alignment);
+    TextBounds& drawWrapped (SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth);
+    TextBounds& drawWrapped (SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth, const BitmapFont::HAlignment& alignment);
+    TextBounds& getBounds (const std::string& str);
+    TextBounds& getBounds (const std::string& str, unsigned int start, unsigned int end);
+    TextBounds& getMultiLineBounds (const std::string& str);
+    TextBounds& getWrappedBounds (const std::string& str,float wrapWidth);
 
-    void computeGlyphAdvancesAndPositions (const std::wstring& str, std::vector< float >& glyphAdvances, std::vector< float >& glyphPositions);
-    int computeVisibleGlyphs (const std::wstring& str,int start,int end,float availableWidth);
+    void computeGlyphAdvancesAndPositions (const std::string& str, std::vector< float >& glyphAdvances, std::vector< float >& glyphPositions);
+    int computeVisibleGlyphs (const std::string& str, unsigned int start, unsigned int end, float availableWidth);
 
     void setColor (float color);
     void setColor (const Color& tint);
@@ -148,7 +153,7 @@ public:
     float getDescent ();
     bool isFlipped ();
     void dispose ();
-    void setFixedWidthGlyphs (const std::wstring& glyphs);
+    void setFixedWidthGlyphs (const std::string& glyphs);
     bool containsCharacter (unsigned int character);
     void setUseIntegerPositions (bool use);
     bool usesIntegerPositions ();
@@ -162,7 +167,7 @@ public:
                                   bool integer = true,
                                   bool generateMipmaps = false);
 
-    static int indexOf (const std::wstring& text, wchar_t ch, int start) {
+    static int indexOf (const std::string& text, wchar_t ch, int start) {
         int n = text.length();
         for (; start < n; start++)
             if (text[start] == ch) return start;

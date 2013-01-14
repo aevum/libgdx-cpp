@@ -103,12 +103,13 @@ void BitmapFontCache::reset (int glyphCount) {
     if (vertices.empty() || vertices.size() < vertexCount) vertices.resize(vertexCount);
 }
 
-float BitmapFontCache::addToCache (const std::wstring& str,float x,float y,int start,int end) {
+float BitmapFontCache::addToCache (const std::string& str,float x,float y, unsigned int start, unsigned int end) {
     float startX = x;
     BitmapFont::Glyph* lastGlyph = NULL;
     if (font->data->scaleX == 1 && font->data->scaleY == 1) {
         while (start < end) {
-            lastGlyph = font->data->getGlyph(str[start++]);
+            font->data->getGlyph(str, start , lastGlyph);
+            
             if (lastGlyph != NULL) {
                 addGlyph(lastGlyph, x + lastGlyph->xoffset, y + lastGlyph->yoffset, lastGlyph->width, lastGlyph->height);
                 x += lastGlyph->xadvance;
@@ -116,8 +117,9 @@ float BitmapFontCache::addToCache (const std::wstring& str,float x,float y,int s
             }
         }
         while (start < end) {
-            char ch = str[start++];
-            BitmapFont::Glyph* g = font->data->getGlyph(ch);
+            BitmapFont::Glyph* g = nullptr;            
+            unsigned int ch = font->data->getGlyph(str, start, g);
+            
             if (g != NULL) {
                 x += lastGlyph->getKerning(ch);
                 lastGlyph = g;
@@ -127,8 +129,8 @@ float BitmapFontCache::addToCache (const std::wstring& str,float x,float y,int s
         }
     } else {
         float scaleX = font->data->scaleX, scaleY = font->data->scaleY;
-        while (start < end) {
-            lastGlyph = font->data->getGlyph(str[start++]);
+        while (start < end) {            
+            font->data->getGlyph(str, start, lastGlyph);
             if (lastGlyph != NULL) {
                 addGlyph(lastGlyph, //
                          x + lastGlyph->xoffset * scaleX, //
@@ -140,8 +142,9 @@ float BitmapFontCache::addToCache (const std::wstring& str,float x,float y,int s
             }
         }
         while (start < end) {
-            char ch = str[start++];
-            BitmapFont::Glyph* g = font->data->getGlyph(ch);
+            BitmapFont::Glyph* g = nullptr;            
+            unsigned int ch = font->data->getGlyph(str, start, g);
+
             if (g != NULL) {
                 x += lastGlyph->getKerning(ch) * scaleX;
                 lastGlyph = g;
@@ -197,11 +200,11 @@ void BitmapFontCache::addGlyph (BitmapFont::Glyph* glyph, float x, float y, floa
     vertices[idx++] = v;
 }
 
-BitmapFont::TextBounds& BitmapFontCache::setText (const std::wstring& str,float x,float y) {
+BitmapFont::TextBounds& BitmapFontCache::setText (const std::string& str,float x,float y) {
     return setText(str, x, y, 0, str.length());
 }
 
-BitmapFont::TextBounds& BitmapFontCache::setText (const std::wstring& str,float x,float y,int start,int end) {
+BitmapFont::TextBounds& BitmapFontCache::setText (const std::string& str,float x,float y,int start,int end) {
     reset(end - start);
     y += font->data->ascent;
     textBounds.width = addToCache(str, x, y, start, end);
@@ -209,11 +212,11 @@ BitmapFont::TextBounds& BitmapFontCache::setText (const std::wstring& str,float 
     return textBounds;
 }
 
-BitmapFont::TextBounds& BitmapFontCache::setMultiLineText (const std::wstring& str,float x,float y) {
+BitmapFont::TextBounds& BitmapFontCache::setMultiLineText (const std::string& str,float x,float y) {
     return setMultiLineText(str, x, y, 0, BitmapFont::HAlignment::HALIGNMENT_LEFT);
 }
 
-BitmapFont::TextBounds& BitmapFontCache::setMultiLineText (const std::wstring& str,float x,float y,float alignmentWidth,const BitmapFont::HAlignment& alignment) {
+BitmapFont::TextBounds& BitmapFontCache::setMultiLineText (const std::string& str,float x,float y,float alignmentWidth,const BitmapFont::HAlignment& alignment) {
     int length = str.length();
     reset(length);
 
@@ -242,11 +245,11 @@ BitmapFont::TextBounds& BitmapFontCache::setMultiLineText (const std::wstring& s
     return textBounds;
 }
 
-BitmapFont::TextBounds& BitmapFontCache::setWrappedText (const std::wstring& str,float x,float y,float wrapWidth) {
+BitmapFont::TextBounds& BitmapFontCache::setWrappedText (const std::string& str,float x,float y,float wrapWidth) {
     return setWrappedText(str, x, y, wrapWidth, BitmapFont::HAlignment::HALIGNMENT_LEFT);
 }
 
-BitmapFont::TextBounds& BitmapFontCache::setWrappedText (const std::wstring& str,float x,float y,float wrapWidth,const BitmapFont::HAlignment& alignment) {
+BitmapFont::TextBounds& BitmapFontCache::setWrappedText (const std::string& str,float x,float y,float wrapWidth,const BitmapFont::HAlignment& alignment) {
     int length = str.length();
     reset(length);
 

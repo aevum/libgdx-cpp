@@ -40,12 +40,12 @@ public:
     void draw (SpriteBatch& spriteBatch);
     void draw (SpriteBatch& spriteBatch,float alphaModulation);
     Color& getColor ();
-    BitmapFont::TextBounds& setText (const std::wstring& str, float x, float y);
-    BitmapFont::TextBounds& setText (const std::wstring& str, float x, float y, int start, int end);
-    BitmapFont::TextBounds& setMultiLineText (const std::wstring& str, float x, float y);
-    BitmapFont::TextBounds& setMultiLineText (const std::wstring& str, float x, float y, float alignmentWidth, const gdx::BitmapFont::HAlignment& alignment);
-    BitmapFont::TextBounds& setWrappedText (const std::wstring& str, float x, float y, float wrapWidth);
-    BitmapFont::TextBounds& setWrappedText (const std::wstring& str, float x, float y, float wrapWidth, const gdx::BitmapFont::HAlignment& alignment);
+    BitmapFont::TextBounds& setText (const std::string& str, float x, float y);
+    BitmapFont::TextBounds& setText (const std::string& str, float x, float y, int start, int end);
+    BitmapFont::TextBounds& setMultiLineText (const std::string& str, float x, float y);
+    BitmapFont::TextBounds& setMultiLineText (const std::string& str, float x, float y, float alignmentWidth, const gdx::BitmapFont::HAlignment& alignment);
+    BitmapFont::TextBounds& setWrappedText (const std::string& str, float x, float y, float wrapWidth);
+    BitmapFont::TextBounds& setWrappedText (const std::string& str, float x, float y, float wrapWidth, const gdx::BitmapFont::HAlignment& alignment);
     BitmapFont::TextBounds& getBounds ();
     float getX ();
     float getY ();
@@ -58,7 +58,7 @@ public:
 
 private:
     void reset (int glyphCount);
-    float addToCache (const std::wstring& str, float x, float y, int start, int end);
+    float addToCache (const std::string& str, float x, float y, unsigned int start, unsigned int end);
     void addGlyph (BitmapFont::Glyph* glyph,float x,float y,float width,float height);
     BitmapFont* font;
 
