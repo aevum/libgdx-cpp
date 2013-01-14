@@ -78,6 +78,7 @@ void VertexBufferObject::setVertices (const float* vertices, int offset, int cou
         if (gl20 != NULL) {
             GL20& gl = *gl20;
             gl.glBufferData(GL_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
+            gdx_log_info("gdx", gl.glGetString(gl.glGetError()).c_str());
         } else {
             GL11& gl = *gl11;
             gl.glBufferData(GL_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
@@ -148,6 +149,7 @@ void VertexBufferObject::bind (ShaderProgram& shader) {
     	gdx_log_debug("VertexBufferObject", "********************** limit %d", buffer.limit() * 4);
         byteBuffer.limit(buffer.limit() * 4);
         gl.glBufferData(GL_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
+        gdx_log_info("gdx", gl.glGetString(gl.glGetError()).c_str());
         isDirty = false;
     }
 

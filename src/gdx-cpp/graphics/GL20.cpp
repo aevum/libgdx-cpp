@@ -679,7 +679,7 @@ void GL20::glBlendFuncSeparate (int srcRGB,int dstRGB,int srcAlpha,int dstAlpha)
 {
 	::glBlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
 }
-void GL20::glBufferData (int target,int size,const char* data,int usage) const
+void GL20::glBufferData (int target,int size,const unsigned char* data,int usage) const
 {
 	::glBufferData(target, size, data, usage);
 }

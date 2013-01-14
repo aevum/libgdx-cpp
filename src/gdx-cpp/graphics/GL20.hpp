@@ -349,7 +349,7 @@ public:
     virtual void glBlendEquation (int mode) const;
     virtual void glBlendEquationSeparate (int modeRGB,int modeAlpha) const;
     virtual void glBlendFuncSeparate (int srcRGB,int dstRGB,int srcAlpha,int dstAlpha) const;
-    virtual void glBufferData (int target,int size,const char* data,int usage) const;
+    virtual void glBufferData (int target,int size,const unsigned char* data,int usage) const;
     virtual void glBufferSubData (int target,int offset,int size,const char* data) const;
     virtual int glCheckFramebufferStatus (int target) const;
     virtual void glCompileShader (int shader) const;

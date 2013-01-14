@@ -59,7 +59,7 @@ void IndexBufferObject::setIndices (const std::vector< short int >& indices, int
         if (gl11 != NULL) {
             GL11& gl = *gl11;
             gl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
-        } else if (gl11 != NULL) {
+        } else if (gl20 != NULL) {
             GL20& gl = *gl20;
             gl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
         }
