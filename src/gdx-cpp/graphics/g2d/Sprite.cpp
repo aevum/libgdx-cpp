@@ -320,7 +320,6 @@ void Sprite::draw (SpriteBatch& spriteBatch) {
 }
 
 void Sprite::draw (SpriteBatch& spriteBatch,float alphaModulation) {
-    Color color = getColor();
     float oldAlpha = color.a;
     color.a *= alphaModulation;
     setColor(color);
@@ -365,13 +364,20 @@ float Sprite::getScaleY () const {
     return scaleY;
 }
 
-const Color& Sprite::getColor () {
-    float floatBits = vertices[C1];
+
+Color& Sprite::getColor()
+{
     int intBits = NumberUtils::floatToRawIntBits(vertices[C1]);
+
     color.r = (intBits & 0xff) / 255.0f;
     color.g = (((unsigned int )intBits >> 8) & 0xff) / 255.0f;
     color.b = (((unsigned int )intBits >> 16) & 0xff) / 255.0f;
     color.a = (((unsigned int)intBits >> 24) & 0xff) / 255.0f;
+    
+    return color;
+}
+
+const Color& Sprite::getColor () const {
     return color;
 }
 

@@ -71,7 +71,8 @@ public:
     virtual float getRotation () const;
     virtual float getScaleX () const;
     virtual float getScaleY () const;
-    virtual const Color& getColor ();
+    virtual Color& getColor ();
+    virtual const Color& getColor () const;
     virtual void setRegion ( float u,float v,float u2,float v2 );
     virtual void setRegion ( const TextureRegion& other );
     virtual void setU ( float u );

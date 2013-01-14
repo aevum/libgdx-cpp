@@ -66,6 +66,8 @@ public:
     
     void setColor(const gdx::Color& _color);
     void setBlending(bool value);
+    
+    gdx::Color getColor() const;
 private:
     gdx::Color color;
     bool blending;

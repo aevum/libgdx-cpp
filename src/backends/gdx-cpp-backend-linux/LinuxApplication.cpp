@@ -68,6 +68,7 @@ void nix::LinuxApplication::run()
     listener->create();
     listener->resize(graphics->getWidth(), graphics->getHeight());
 
+    graphics->updateTime(); // ensuring that the first loop will came with no time difference
     while (true) {
         graphics->updateTime();
 

@@ -224,3 +224,8 @@ void NinePatch::setBlending(bool value)
 {
     this->blending = value;
 }
+
+Color NinePatch::getColor() const
+{
+    return this->color;
+}

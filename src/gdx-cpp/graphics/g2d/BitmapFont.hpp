@@ -56,11 +56,11 @@ public:
         int xoffset, yoffset;
         int xadvance;
         
-        typedef std::unique_ptr< std::array< std::vector<char>, GDX_BITMAPFONT_PAGES> > kerning_t;
+        typedef std::unique_ptr< std::array< std::vector<unsigned int>, GDX_BITMAPFONT_PAGES> > kerning_t;
         kerning_t kerning;
 
-        int getKerning (char ch);
-        void setKerning (int ch, int value);
+        int getKerning (unsigned int ch);
+        void setKerning (unsigned int ch, unsigned int value);
 
         Glyph();
         ~Glyph();
@@ -90,7 +90,7 @@ public:
         ~BitmapFontData();
 
         BitmapFontData (FileHandle::ptr fontFile, bool flip);
-        Glyph* getGlyph (unsigned ch);
+        Glyph* getGlyph (wchar_t ch);
         std::string getImagePath ();
         FileHandle::ptr getFontFile ();
         float getFontSize() const;
@@ -115,19 +115,19 @@ public:
     };
 
 
-    TextBounds& draw (SpriteBatch& spriteBatch, const std::string& str, float x, float y);
-    TextBounds& draw (SpriteBatch& spriteBatch, const std::string& str, float x, float y, int start, int end);
-    TextBounds& drawMultiLine (SpriteBatch& spriteBatch, const std::string& str, float x, float y);
-    TextBounds& drawMultiLine (SpriteBatch& spriteBatch, const std::string& str, float x, float y, float alignmentWidth, const BitmapFont::HAlignment& alignment);
-    TextBounds& drawWrapped (SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth);
-    TextBounds& drawWrapped (SpriteBatch& spriteBatch, const std::string& str, float x, float y, float wrapWidth, const BitmapFont::HAlignment& alignment);
-    TextBounds& getBounds (const std::string& str);
-    TextBounds& getBounds (const std::string& str,int start,int end);
-    TextBounds& getMultiLineBounds (const std::string& str);
-    TextBounds& getWrappedBounds (const std::string& str,float wrapWidth);
+    TextBounds& draw (SpriteBatch& spriteBatch, const std::wstring& str, float x, float y);
+    TextBounds& draw (SpriteBatch& spriteBatch, const std::wstring& str, float x, float y, int start, int end);
+    TextBounds& drawMultiLine (SpriteBatch& spriteBatch, const std::wstring& str, float x, float y);
+    TextBounds& drawMultiLine (SpriteBatch& spriteBatch, const std::wstring& str, float x, float y, float alignmentWidth, const BitmapFont::HAlignment& alignment);
+    TextBounds& drawWrapped (SpriteBatch& spriteBatch, const std::wstring& str, float x, float y, float wrapWidth);
+    TextBounds& drawWrapped (SpriteBatch& spriteBatch, const std::wstring& str, float x, float y, float wrapWidth, const BitmapFont::HAlignment& alignment);
+    TextBounds& getBounds (const std::wstring& str);
+    TextBounds& getBounds (const std::wstring& str,int start,int end);
+    TextBounds& getMultiLineBounds (const std::wstring& str);
+    TextBounds& getWrappedBounds (const std::wstring& str,float wrapWidth);
 
-    void computeGlyphAdvancesAndPositions (const std::string& str, std::vector< float >& glyphAdvances, std::vector< float >& glyphPositions);
-    int computeVisibleGlyphs (const std::string& str,int start,int end,float availableWidth);
+    void computeGlyphAdvancesAndPositions (const std::wstring& str, std::vector< float >& glyphAdvances, std::vector< float >& glyphPositions);
+    int computeVisibleGlyphs (const std::wstring& str,int start,int end,float availableWidth);
 
     void setColor (float color);
     void setColor (const Color& tint);
@@ -148,7 +148,7 @@ public:
     float getDescent ();
     bool isFlipped ();
     void dispose ();
-    void setFixedWidthGlyphs (const std::string& glyphs);
+    void setFixedWidthGlyphs (const std::wstring& glyphs);
     bool containsCharacter (unsigned int character);
     void setUseIntegerPositions (bool use);
     bool usesIntegerPositions ();
@@ -162,7 +162,7 @@ public:
                                   bool integer = true,
                                   bool generateMipmaps = false);
 
-    static int indexOf (const std::string& text, char ch, int start) {
+    static int indexOf (const std::wstring& text, wchar_t ch, int start) {
         int n = text.length();
         for (; start < n; start++)
             if (text[start] == ch) return start;
