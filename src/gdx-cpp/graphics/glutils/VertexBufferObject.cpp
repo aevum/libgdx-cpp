@@ -149,7 +149,6 @@ void VertexBufferObject::bind (ShaderProgram& shader) {
     	gdx_log_debug("VertexBufferObject", "********************** limit %d", buffer.limit() * 4);
         byteBuffer.limit(buffer.limit() * 4);
         gl.glBufferData(GL_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
-        gdx_log_info("gdx", gl.glGetString(gl.glGetError()).c_str());
         isDirty = false;
     }
 
