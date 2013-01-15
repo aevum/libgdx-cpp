@@ -120,15 +120,23 @@ int ShaderProgram::linkProgram () {
     gl->glAttachShader(program, fragmentShaderHandle);
     gl->glLinkProgram(program);
 
+    int intbuf[4];
+
 //     ByteBuffer tmp = ByteBuffer.allocateDirect(4);
 //     tmp.order(ByteOrder.nativeOrder());
 //     IntBuffer intbuf = tmp.asIntBuffer();
 //
-//     gl->glGetProgramiv(program, GL20.GL_LINK_STATUS, intbuf);
+     gl->glGetProgramiv(program, GL20::GL_LINK_STATUS, intbuf);
 //     int linked = intbuf.get(0);
 //     if (linked == 0) {
 //         return -1;
 //     }
+
+     if (intbuf[0] == 0)
+     {
+    	 gdx_log_info("gdx", "%s", gl->glGetShaderInfoLog(program).c_str());
+    	 return -1;
+     }
 
     return program;
 }
@@ -153,7 +161,7 @@ int ShaderProgram::fetchAttributeLocation (const std::string& name) {
     int location;
     if (attributes.count(name) == 0)
     {
-        location = gl->glGetAttribLocation(program, name);
+        location = gl->glGetAttribLocation(program, name.c_str());
         if (location != -1) attributes[name] = location;
     } else
     {
@@ -425,7 +433,7 @@ void ShaderProgram::fetchUniforms () {
     gl20->glGetProgramiv(program, GL20::GL_ACTIVE_UNIFORMS, &params);
     int numUniforms = params;
 
-    uniformNames.reserve(numUniforms);
+    //uniformNames.reserve(numUniforms);
 
     for (int i = 0; i < numUniforms; i++) {
         params=256;
@@ -434,7 +442,8 @@ void ShaderProgram::fetchUniforms () {
         int location = gl20->glGetUniformLocation(program, name);
         uniforms[name] =  location;
         uniformTypes[name] = type;
-        uniformNames[i] = name;
+        //uniformNames[i] = name;
+        uniformNames.push_back(name);
     }
 }
 
@@ -442,17 +451,16 @@ void ShaderProgram::fetchAttributes () {
     params = 0;
     gl20->glGetProgramiv(program, GL20::GL_ACTIVE_ATTRIBUTES, &params);
     int numAttributes = params;
-
-    attributeNames.reserve(numAttributes);
-
+    //attributeNames.reserve(numAttributes);
     for (int i = 0; i < numAttributes; i++) {
         params = 256;
         type = 0;
         std::string name = gl20->glGetActiveAttrib(program, i, &params, (char*) &type);
-        int location = gl20->glGetAttribLocation(program, name);
+        int location = gl20->glGetAttribLocation(program, name.c_str());
         attributes[name] = location;
         attributeTypes[name] = type;
-        attributeNames[i] = name;
+        //attributeNames[i] = name;
+        attributeNames.push_back(name);
     }
 }
 

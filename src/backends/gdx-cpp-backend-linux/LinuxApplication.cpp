@@ -42,7 +42,7 @@ logLevel(gdx::Application::LOG_INFO)
 
 void LinuxApplication::initialize() {
 
-    graphics = new LinuxGraphics();
+    graphics = new LinuxGraphics(useGL20iFAvailable);
     input = new LinuxInput();
     files = new LinuxFiles();
     audio = new LinuxOpenALAudio();

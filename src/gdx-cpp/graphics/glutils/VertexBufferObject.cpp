@@ -31,7 +31,7 @@ using namespace gdx;
 
 int VertexBufferObject::createBufferObject () {
     if (gl20 != NULL)
-        gl20->glGenBuffers(1, &tmpHandle);
+        gl20->glGenBuffers(1, (unsigned int*) &tmpHandle);
     else
         gl11->glGenBuffers(1, &tmpHandle);
 
@@ -78,6 +78,7 @@ void VertexBufferObject::setVertices (const float* vertices, int offset, int cou
         if (gl20 != NULL) {
             GL20& gl = *gl20;
             gl.glBufferData(GL_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
+            gdx_log_info("gdx", gl.glGetString(gl.glGetError()).c_str());
         } else {
             GL11& gl = *gl11;
             gl.glBufferData(GL_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
@@ -145,7 +146,7 @@ void VertexBufferObject::bind (ShaderProgram& shader) {
 
     gl.glBindBuffer(GL_ARRAY_BUFFER, bufferHandle);
     if (isDirty) {
-       gdx_log_debug("VertexBufferObject", "********************** limit %d", buffer.limit() * 4);
+    	gdx_log_debug("VertexBufferObject", "********************** limit %d", buffer.limit() * 4);
         byteBuffer.limit(buffer.limit() * 4);
         gl.glBufferData(GL_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
         isDirty = false;
@@ -220,7 +221,7 @@ void VertexBufferObject::dispose () {
         tmpHandle = bufferHandle;
         GL20& gl = *gl20;
         gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
-        gl.glDeleteBuffers(1, &tmpHandle);
+        gl.glDeleteBuffers(1, (unsigned int*) &tmpHandle);
         bufferHandle = 0;
     } else {
         tmpHandle = bufferHandle;

@@ -69,6 +69,7 @@ void Texture::create (const TextureData::ptr& data) {
     this->assetManager = 0;
 
     glHandle = createGLHandle();
+    std::cerr << glHandle;
     load(data);
 
     if (data->isManaged()) {
