@@ -21,6 +21,315 @@
 #include "GL20.hpp"
 
 using namespace gdx;
+using namespace std;
+
+#include <EGL/egl.h>
+#include <GLES2/gl2.h>
+
+#undef GL_ES_VERSION_2_0
+#undef GL_DEPTH_BUFFER_BIT
+#undef GL_STENCIL_BUFFER_BIT
+#undef GL_COLOR_BUFFER_BIT
+#undef GL_FALSE
+#undef GL_TRUE
+#undef GL_POINTS
+#undef GL_LINES
+#undef GL_LINE_LOOP
+#undef GL_LINE_STRIP
+#undef GL_TRIANGLES
+#undef GL_TRIANGLE_STRIP
+#undef GL_TRIANGLE_FAN
+#undef GL_ZERO
+#undef GL_ONE
+#undef GL_SRC_COLOR
+#undef GL_ONE_MINUS_SRC_COLOR
+#undef GL_SRC_ALPHA
+#undef GL_ONE_MINUS_SRC_ALPHA
+#undef GL_DST_ALPHA
+#undef GL_ONE_MINUS_DST_ALPHA
+#undef GL_DST_COLOR
+#undef GL_ONE_MINUS_DST_COLOR
+#undef GL_SRC_ALPHA_SATURATE
+#undef GL_FUNC_ADD
+#undef GL_BLEND_EQUATION
+#undef GL_BLEND_EQUATION_RGB
+#undef GL_BLEND_EQUATION_ALPHA
+#undef GL_FUNC_SUBTRACT
+#undef GL_FUNC_REVERSE_SUBTRACT
+#undef GL_BLEND_DST_RGB
+#undef GL_BLEND_SRC_RGB
+#undef GL_BLEND_DST_ALPHA
+#undef GL_BLEND_SRC_ALPHA
+#undef GL_CONSTANT_COLOR
+#undef GL_ONE_MINUS_CONSTANT_COLOR
+#undef GL_CONSTANT_ALPHA
+#undef GL_ONE_MINUS_CONSTANT_ALPHA
+#undef GL_BLEND_COLOR
+#undef GL_ARRAY_BUFFER
+#undef GL_ELEMENT_ARRAY_BUFFER
+#undef GL_ARRAY_BUFFER_BINDING
+#undef GL_ELEMENT_ARRAY_BUFFER_BINDING
+#undef GL_STREAM_DRAW
+#undef GL_STATIC_DRAW
+#undef GL_DYNAMIC_DRAW
+#undef GL_BUFFER_SIZE
+#undef GL_BUFFER_USAGE
+#undef GL_CURRENT_VERTEX_ATTRIB
+#undef GL_FRONT
+#undef GL_BACK
+#undef GL_FRONT_AND_BACK
+#undef GL_TEXTURE_2D
+#undef GL_CULL_FACE
+#undef GL_BLEND
+#undef GL_DITHER
+#undef GL_STENCIL_TEST
+#undef GL_DEPTH_TEST
+#undef GL_SCISSOR_TEST
+#undef GL_POLYGON_OFFSET_FILL
+#undef GL_SAMPLE_ALPHA_TO_COVERAGE
+#undef GL_SAMPLE_COVERAGE
+#undef GL_NO_ERROR
+#undef GL_INVALID_ENUM
+#undef GL_INVALID_VALUE
+#undef GL_INVALID_OPERATION
+#undef GL_OUT_OF_MEMORY
+#undef GL_CW
+#undef GL_CCW
+#undef GL_LINE_WIDTH
+#undef GL_ALIASED_POINT_SIZE_RANGE
+#undef GL_ALIASED_LINE_WIDTH_RANGE
+#undef GL_CULL_FACE_MODE
+#undef GL_FRONT_FACE
+#undef GL_DEPTH_RANGE
+#undef GL_DEPTH_WRITEMASK
+#undef GL_DEPTH_CLEAR_VALUE
+#undef GL_DEPTH_FUNC
+#undef GL_STENCIL_CLEAR_VALUE
+#undef GL_STENCIL_FUNC
+#undef GL_STENCIL_FAIL
+#undef GL_STENCIL_PASS_DEPTH_FAIL
+#undef GL_STENCIL_PASS_DEPTH_PASS
+#undef GL_STENCIL_REF
+#undef GL_STENCIL_VALUE_MASK
+#undef GL_STENCIL_WRITEMASK
+#undef GL_STENCIL_BACK_FUNC
+#undef GL_STENCIL_BACK_FAIL
+#undef GL_STENCIL_BACK_PASS_DEPTH_FAIL
+#undef GL_STENCIL_BACK_PASS_DEPTH_PASS
+#undef GL_STENCIL_BACK_REF
+#undef GL_STENCIL_BACK_VALUE_MASK
+#undef GL_STENCIL_BACK_WRITEMASK
+#undef GL_VIEWPORT
+#undef GL_SCISSOR_BOX
+#undef GL_COLOR_CLEAR_VALUE
+#undef GL_COLOR_WRITEMASK
+#undef GL_UNPACK_ALIGNMENT
+#undef GL_PACK_ALIGNMENT
+#undef GL_MAX_TEXTURE_SIZE
+#undef GL_MAX_VIEWPORT_DIMS
+#undef GL_SUBPIXEL_BITS
+#undef GL_RED_BITS
+#undef GL_GREEN_BITS
+#undef GL_BLUE_BITS
+#undef GL_ALPHA_BITS
+#undef GL_DEPTH_BITS
+#undef GL_STENCIL_BITS
+#undef GL_POLYGON_OFFSET_UNITS
+#undef GL_POLYGON_OFFSET_FACTOR
+#undef GL_TEXTURE_BINDING_2D
+#undef GL_SAMPLE_BUFFERS
+#undef GL_SAMPLES
+#undef GL_SAMPLE_COVERAGE_VALUE
+#undef GL_SAMPLE_COVERAGE_INVERT
+#undef GL_NUM_COMPRESSED_TEXTURE_FORMATS
+#undef GL_COMPRESSED_TEXTURE_FORMATS
+#undef GL_DONT_CARE
+#undef GL_FASTEST
+#undef GL_NICEST
+#undef GL_GENERATE_MIPMAP_HINT
+#undef GL_BYTE
+#undef GL_UNSIGNED_BYTE
+#undef GL_SHORT
+#undef GL_UNSIGNED_SHORT
+#undef GL_INT
+#undef GL_UNSIGNED_INT
+#undef GL_FLOAT
+#undef GL_FIXED
+#undef GL_DEPTH_COMPONENT
+#undef GL_ALPHA
+#undef GL_RGB
+#undef GL_RGBA
+#undef GL_LUMINANCE
+#undef GL_LUMINANCE_ALPHA
+#undef GL_UNSIGNED_SHORT_4_4_4_4
+#undef GL_UNSIGNED_SHORT_5_5_5_1
+#undef GL_UNSIGNED_SHORT_5_6_5
+#undef GL_FRAGMENT_SHADER
+#undef GL_VERTEX_SHADER
+#undef GL_MAX_VERTEX_ATTRIBS
+#undef GL_MAX_VERTEX_UNIFORM_VECTORS
+#undef GL_MAX_VARYING_VECTORS
+#undef GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS
+#undef GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS
+#undef GL_MAX_TEXTURE_IMAGE_UNITS
+#undef GL_MAX_FRAGMENT_UNIFORM_VECTORS
+#undef GL_SHADER_TYPE
+#undef GL_DELETE_STATUS
+#undef GL_LINK_STATUS
+#undef GL_VALIDATE_STATUS
+#undef GL_ATTACHED_SHADERS
+#undef GL_ACTIVE_UNIFORMS
+#undef GL_ACTIVE_UNIFORM_MAX_LENGTH
+#undef GL_ACTIVE_ATTRIBUTES
+#undef GL_ACTIVE_ATTRIBUTE_MAX_LENGTH
+#undef GL_SHADING_LANGUAGE_VERSION
+#undef GL_CURRENT_PROGRAM
+#undef GL_NEVER
+#undef GL_LESS
+#undef GL_EQUAL
+#undef GL_LEQUAL
+#undef GL_GREATER
+#undef GL_NOTEQUAL
+#undef GL_GEQUAL
+#undef GL_ALWAYS
+#undef GL_KEEP
+#undef GL_REPLACE
+#undef GL_INCR
+#undef GL_DECR
+#undef GL_INVERT
+#undef GL_INCR_WRAP
+#undef GL_DECR_WRAP
+#undef GL_VENDOR
+#undef GL_RENDERER
+#undef GL_VERSION
+#undef GL_EXTENSIONS
+#undef GL_NEAREST
+#undef GL_LINEAR
+#undef GL_NEAREST_MIPMAP_NEAREST
+#undef GL_LINEAR_MIPMAP_NEAREST
+#undef GL_NEAREST_MIPMAP_LINEAR
+#undef GL_LINEAR_MIPMAP_LINEAR
+#undef GL_TEXTURE_MAG_FILTER
+#undef GL_TEXTURE_MIN_FILTER
+#undef GL_TEXTURE_WRAP_S
+#undef GL_TEXTURE_WRAP_T
+#undef GL_TEXTURE
+#undef GL_TEXTURE_CUBE_MAP
+#undef GL_TEXTURE_BINDING_CUBE_MAP
+#undef GL_TEXTURE_CUBE_MAP_POSITIVE_X
+#undef GL_TEXTURE_CUBE_MAP_NEGATIVE_X
+#undef GL_TEXTURE_CUBE_MAP_POSITIVE_Y
+#undef GL_TEXTURE_CUBE_MAP_NEGATIVE_Y
+#undef GL_TEXTURE_CUBE_MAP_POSITIVE_Z
+#undef GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+#undef GL_MAX_CUBE_MAP_TEXTURE_SIZE
+#undef GL_TEXTURE0
+#undef GL_TEXTURE1
+#undef GL_TEXTURE2
+#undef GL_TEXTURE3
+#undef GL_TEXTURE4
+#undef GL_TEXTURE5
+#undef GL_TEXTURE6
+#undef GL_TEXTURE7
+#undef GL_TEXTURE8
+#undef GL_TEXTURE9
+#undef GL_TEXTURE10
+#undef GL_TEXTURE11
+#undef GL_TEXTURE12
+#undef GL_TEXTURE13
+#undef GL_TEXTURE14
+#undef GL_TEXTURE15
+#undef GL_TEXTURE16
+#undef GL_TEXTURE17
+#undef GL_TEXTURE18
+#undef GL_TEXTURE19
+#undef GL_TEXTURE20
+#undef GL_TEXTURE21
+#undef GL_TEXTURE22
+#undef GL_TEXTURE23
+#undef GL_TEXTURE24
+#undef GL_TEXTURE25
+#undef GL_TEXTURE26
+#undef GL_TEXTURE27
+#undef GL_TEXTURE28
+#undef GL_TEXTURE29
+#undef GL_TEXTURE30
+#undef GL_TEXTURE31
+#undef GL_ACTIVE_TEXTURE
+#undef GL_REPEAT
+#undef GL_CLAMP_TO_EDGE
+#undef GL_MIRRORED_REPEAT
+#undef GL_FLOAT_VEC2
+#undef GL_FLOAT_VEC3
+#undef GL_FLOAT_VEC4
+#undef GL_INT_VEC2
+#undef GL_INT_VEC3
+#undef GL_INT_VEC4
+#undef GL_BOOL
+#undef GL_BOOL_VEC2
+#undef GL_BOOL_VEC3
+#undef GL_BOOL_VEC4
+#undef GL_FLOAT_MAT2
+#undef GL_FLOAT_MAT3
+#undef GL_FLOAT_MAT4
+#undef GL_SAMPLER_2D
+#undef GL_SAMPLER_CUBE
+#undef GL_VERTEX_ATTRIB_ARRAY_ENABLED
+#undef GL_VERTEX_ATTRIB_ARRAY_SIZE
+#undef GL_VERTEX_ATTRIB_ARRAY_STRIDE
+#undef GL_VERTEX_ATTRIB_ARRAY_TYPE
+#undef GL_VERTEX_ATTRIB_ARRAY_NORMALIZED
+#undef GL_VERTEX_ATTRIB_ARRAY_POINTER
+#undef GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING
+#undef GL_IMPLEMENTATION_COLOR_READ_TYPE
+#undef GL_IMPLEMENTATION_COLOR_READ_FORMAT
+#undef GL_COMPILE_STATUS
+#undef GL_INFO_LOG_LENGTH
+#undef GL_SHADER_SOURCE_LENGTH
+#undef GL_SHADER_COMPILER
+#undef GL_SHADER_BINARY_FORMATS
+#undef GL_NUM_SHADER_BINARY_FORMATS
+#undef GL_LOW_FLOAT
+#undef GL_MEDIUM_FLOAT
+#undef GL_HIGH_FLOAT
+#undef GL_LOW_INT
+#undef GL_MEDIUM_INT
+#undef GL_HIGH_INT
+#undef GL_FRAMEBUFFER
+#undef GL_RENDERBUFFER
+#undef GL_RGBA4
+#undef GL_RGB5_A1
+#undef GL_RGB565
+#undef GL_DEPTH_COMPONENT16
+#undef GL_STENCIL_INDEX
+#undef GL_STENCIL_INDEX8
+#undef GL_RENDERBUFFER_WIDTH
+#undef GL_RENDERBUFFER_HEIGHT
+#undef GL_RENDERBUFFER_INTERNAL_FORMAT
+#undef GL_RENDERBUFFER_RED_SIZE
+#undef GL_RENDERBUFFER_GREEN_SIZE
+#undef GL_RENDERBUFFER_BLUE_SIZE
+#undef GL_RENDERBUFFER_ALPHA_SIZE
+#undef GL_RENDERBUFFER_DEPTH_SIZE
+#undef GL_RENDERBUFFER_STENCIL_SIZE
+#undef GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE
+#undef GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME
+#undef GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL
+#undef GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE
+#undef GL_COLOR_ATTACHMENT0
+#undef GL_DEPTH_ATTACHMENT
+#undef GL_STENCIL_ATTACHMENT
+#undef GL_NONE
+#undef GL_FRAMEBUFFER_COMPLETE
+#undef GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+#undef GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT
+#undef GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS
+#undef GL_FRAMEBUFFER_UNSUPPORTED
+#undef GL_FRAMEBUFFER_BINDING
+#undef GL_RENDERBUFFER_BINDING
+#undef GL_MAX_RENDERBUFFER_SIZE
+#undef GL_INVALID_FRAMEBUFFER_OPERATION
+#undef GL_VERTEX_PROGRAM_POINT_SIZE
 
  const int GL20::GL_ES_VERSION_2_0 = 1;
  const int GL20::GL_DEPTH_BUFFER_BIT = 0x00000100;
@@ -324,8 +633,449 @@ using namespace gdx;
  const int GL20::GL_FRAMEBUFFER_BINDING = 0x8CA6;
  const int GL20::GL_RENDERBUFFER_BINDING = 0x8CA7;
  const int GL20::GL_MAX_RENDERBUFFER_SIZE = 0x84E8;
- const int GL20::GL_INVALID_FRAMEBUFFER_OPERATION = 0x0506;
+ const int GL20::GL_INVALID_FRAMEBUFFER_OPERATION = GL_INVALID_FRAMEBUFFER_OPERATION;
  const int GL20::GL_VERTEX_PROGRAM_POINT_SIZE = 0x8642;
 
 // Extensions
  const int GL20::GL_COVERAGE_BUFFER_BIT_NV = 0x8000;
+
+void GL20::glAttachShader(int program, int shader) const
+{
+	::glAttachShader(program, shader);
+}
+
+void GL20::glBindAttribLocation(int program, int index, const string& name) const
+{
+	::glBindAttribLocation(program, index, name.c_str());
+}
+
+void GL20::glBindBuffer (int target,int buffer) const
+{
+	::glBindBuffer(target, buffer);
+}
+
+void GL20::glBindFramebuffer (int target,int framebuffer) const
+{
+	::glBindFramebuffer(target, framebuffer);
+}
+
+void GL20::glBindRenderbuffer (int target,int renderbuffer) const
+{
+	::glBindRenderbuffer(target, renderbuffer);
+}
+void GL20::glBlendColor (float red,float green,float blue,float alpha) const
+{
+	::glBlendColor(red, green, blue, alpha);
+}
+void GL20::glBlendEquation (int mode) const
+{
+	::glBlendEquation(mode);
+}
+void GL20::glBlendEquationSeparate (int modeRGB,int modeAlpha) const
+{
+	::glBlendEquationSeparate(modeRGB, modeAlpha);
+}
+void GL20::glBlendFuncSeparate (int srcRGB,int dstRGB,int srcAlpha,int dstAlpha) const
+{
+	::glBlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
+}
+void GL20::glBufferData (int target,int size,const unsigned char* data,int usage) const
+{
+	::glBufferData(target, size, data, usage);
+}
+void GL20::glBufferSubData (int target,int offset,int size,const char* data) const
+{
+	::glBufferSubData(target, offset, size, data);
+}
+int GL20::glCheckFramebufferStatus (int target) const
+{
+	return ::glCheckFramebufferStatus(target);
+}
+void GL20::glCompileShader (int shader) const
+{
+	::glCompileShader(shader);
+}
+int GL20::glCreateProgram () const
+{
+	return ::glCreateProgram();
+}
+int GL20::glCreateShader (int type) const
+{
+	return ::glCreateShader(type);
+}
+void GL20::glDeleteBuffers(int n, unsigned int* buffers) const
+{
+	::glDeleteBuffers(n, buffers);
+}
+void GL20::glDeleteFramebuffers (int n,const unsigned int* framebuffers) const
+{
+	::glDeleteFramebuffers(n, framebuffers);
+}
+void GL20::glDeleteProgram (int program) const
+{
+	::glDeleteProgram(program);
+}
+void GL20::glDeleteRenderbuffers (int n,const unsigned int* renderbuffers) const
+{
+	::glDeleteRenderbuffers(n, renderbuffers);
+}
+void GL20::glDeleteShader (int shader) const
+{
+	::glDeleteShader(shader);
+}
+void GL20::glDetachShader (int program,int shader) const
+{
+	::glDetachShader(program, shader);
+}
+void GL20::glDisableVertexAttribArray (int index) const
+{
+	::glDisableVertexAttribArray(index);
+}
+void GL20::glDrawElements (int mode,int count,int type, const void* indices) const
+{
+	::glDrawElements(mode, count, type, indices);
+}
+void GL20::glEnableVertexAttribArray (int index) const
+{
+	::glEnableVertexAttribArray(index);
+}
+void GL20::glFramebufferRenderbuffer (int target,int attachment,int renderbuffertarget,int renderbuffer) const
+{
+	::glFramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
+}
+void GL20::glFramebufferTexture2D (int target,int attachment,int textarget,int texture,int level) const
+{
+	::glFramebufferTexture2D(target, attachment, textarget, texture, level);
+}
+void GL20::glGenBuffers (int n, unsigned int* buffers) const
+{
+
+	::glGenBuffers(n, buffers);
+}
+void GL20::glGenerateMipmap (int target) const
+{
+	::glGenerateMipmap(target);
+}
+void GL20::glGenFramebuffers (int n, unsigned int* framebuffers) const
+{
+	::glGenFramebuffers(n, framebuffers);
+}
+void GL20::glGenRenderbuffers (int n, unsigned int* renderbuffers) const
+{
+	::glGenRenderbuffers(n, renderbuffers);
+}
+
+std::string GL20::glGetActiveAttrib (int program,int index, const int* size, const char* type) const
+{
+	GLint max_length;
+	glGetProgramiv(program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &max_length);
+	char* buf = new char[max_length + 1];
+	::glGetActiveAttrib(program, index, max_length + 1, NULL, (int *) size, (unsigned int*)type, buf);
+	return buf;
+}
+
+std::string GL20::glGetActiveUniform (int program,int index,const int* size,const char* type) const
+{
+	GLint max_length;
+	glGetProgramiv(program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &max_length);
+	char* buf = new char[max_length + 1];
+	::glGetActiveUniform(program, index, max_length + 1, NULL, (int*) size, (unsigned int*) type, buf);
+	return buf;
+}
+
+void GL20::glGetAttachedShaders (int program,int maxcount, int* count, unsigned int* shaders) const
+{
+	::glGetAttachedShaders(program, maxcount, count, shaders);
+}
+int GL20::glGetAttribLocation (int program, const char* name) const
+{
+	return ::glGetAttribLocation(program, name);
+}
+void GL20::glGetBooleanv (unsigned int pname, unsigned char* params) const
+{
+	::glGetBooleanv(pname, params);
+}
+void GL20::glGetBufferParameteriv (unsigned int target, unsigned int pname, int* params) const
+{
+	::glGetBufferParameteriv(target, pname, params);
+}
+void GL20::glGetFloatv (int pname, float* params) const
+{
+	::glGetFloatv(pname, params);
+}
+void GL20::glGetFramebufferAttachmentParameteriv (int target,int attachment,int pname, int* params) const
+{
+	::glGetFramebufferAttachmentParameteriv(target, attachment, pname, params);
+}
+void GL20::glGetProgramiv (int program, int pname, int* params) const
+{
+	::glGetProgramiv(program, pname, params);
+}
+std::string GL20::glGetProgramInfoLog (int program) const
+{
+	char buf[512];
+	int length = 0;
+	::glGetProgramInfoLog(program, 512, &length, buf);
+	return string(buf);
+}
+
+void GL20::glGetRenderbufferParameteriv (int target,int pname, int* params) const
+{
+	::glGetRenderbufferParameteriv(target, pname, params);
+}
+void GL20::glGetShaderiv (int shader,int pname, int* params) const
+{
+	::glGetShaderiv(shader, pname, params);
+}
+
+std::string GL20::glGetShaderInfoLog (int shader) const
+{
+	int length = 0;
+	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
+	char buf[length];
+	::glGetShaderInfoLog(shader, length, NULL, buf);
+	return buf;
+}
+void GL20::glGetShaderPrecisionFormat (int shadertype,int precisiontype, int* range, int* precision) const
+{
+	::glGetShaderPrecisionFormat(shadertype, precisiontype, range, precision);
+}
+void GL20::glGetShaderSource (unsigned int shader,int bufsize, int* length, char* source) const
+{
+	::glGetShaderSource(shader, bufsize, length, source);
+}
+void GL20::glGetTexParameterfv (int target,int pname, float* params) const
+{
+	::glGetTexParameterfv(target, pname, params);
+}
+void GL20::glGetTexParameteriv (int target,int pname, int* params) const
+{
+	::glGetTexParameteriv(target, pname, params);
+}
+void GL20::glGetUniformfv (int program,int location, float* params) const
+{
+	::glGetUniformfv(program, location, params);
+}
+void GL20::glGetUniformiv (int program,int location, int* params) const
+{
+	::glGetUniformiv(program, location, params);
+}
+int GL20::glGetUniformLocation (int program,const std::string& name) const
+{
+	return ::glGetUniformLocation(program, name.c_str());
+}
+void GL20::glGetVertexAttribfv (int index,int pname, float* params) const
+{
+	::glGetVertexAttribfv(index, pname, params);
+}
+void GL20::glGetVertexAttribiv (int index,int pname, int* params) const
+{
+	::glGetVertexAttribiv(index, pname, params);
+}
+void GL20::glGetVertexAttribPointerv (int index,int pname, void* pointer) const
+{
+	::glGetVertexAttribPointerv(index, pname, &pointer);
+}
+bool GL20::glIsBuffer (int buffer) const
+{
+	return ::glIsBuffer(buffer);
+}
+bool GL20::glIsEnabled (int cap) const
+{
+	return ::glIsEnabled(cap);
+}
+bool GL20::glIsFramebuffer (int framebuffer) const
+{
+	return ::glIsFramebuffer(framebuffer);
+}
+bool GL20::glIsProgram (int program) const
+{
+	return ::glIsProgram(program);
+}
+bool GL20::glIsRenderbuffer (int renderbuffer) const
+{
+	return ::glIsRenderbuffer(renderbuffer);
+}
+bool GL20::glIsShader (int shader) const
+{
+	return ::glIsShader(shader);
+}
+bool GL20::glIsTexture (int texture) const
+{
+	return ::glIsTexture(texture);
+}
+void GL20::glLinkProgram (int program) const
+{
+	::glLinkProgram(program);
+}
+void GL20::glReleaseShaderCompiler () const
+{
+	::glReleaseShaderCompiler();
+}
+void GL20::glRenderbufferStorage (int target,int internalformat,int width,int height) const
+{
+	::glRenderbufferStorage(target, internalformat, width, height);
+}
+void GL20::glSampleCoverage (float value,bool invert) const
+{
+	::glSampleCoverage(value, invert);
+}
+void GL20::glShaderBinary (int n,const unsigned int* shaders, int binaryformat,const void* binary,int length) const
+{
+	::glShaderBinary(n, shaders, binaryformat, binary, length);
+}
+
+void GL20::glShaderSource (int shader, const std::string& shaderString) const
+{
+	int length = shaderString.size();
+	const char* buf = shaderString.c_str();
+	::glShaderSource(shader, 1, &buf, &length);
+}
+void GL20::glStencilFuncSeparate (int face,int func,int ref,int mask) const
+{
+	::glStencilFuncSeparate(face, func, ref, mask);
+}
+void GL20::glStencilMaskSeparate (int face,int mask) const
+{
+	::glStencilMaskSeparate(face, mask);
+}
+void GL20::glStencilOpSeparate (int face,int fail,int zfail,int zpass) const
+{
+	::glStencilOpSeparate(face, fail, zfail, zpass);
+}
+void GL20::glTexParameterfv (int target,int pname,const float* params) const
+{
+	::glTexParameterfv(target, pname, params);
+}
+void GL20::glTexParameteri (int target,int pname,int param) const
+{
+	::glTexParameteri(target, pname, param);
+}
+void GL20::glTexParameteriv (int target,int pname,const int* params) const
+{
+	::glTexParameteriv(target, pname, params);
+}
+void GL20::glUniform1f (int location,float x) const
+{
+	::glUniform1f(location, x);
+}
+void GL20::glUniform1fv (int location,int count,const float* v) const
+{
+	::glUniform1fv(location, count, v);
+}
+void GL20::glUniform1i (int location,int x) const
+{
+	::glUniform1i(location, x);
+}
+void GL20::glUniform1iv (int location,int count,const int* v) const
+{
+	::glUniform1iv(location, count, v);
+}
+void GL20::glUniform2f (int location,float x,float y) const
+{
+	::glUniform2f(location, x, y);
+}
+void GL20::glUniform2fv (int location,int count,const float* v) const
+{
+	::glUniform2fv(location, count, v);
+}
+void GL20::glUniform2i (int location,int x,int y) const
+{
+	::glUniform2i(location, x, y);
+}
+void GL20::glUniform2iv (int location,int count,const int* v) const
+{
+	::glUniform2iv(location, count, v);
+}
+void GL20::glUniform3f (int location,float x,float y,float z) const
+{
+	::glUniform3f(location, x, y, z);
+}
+void GL20::glUniform3fv (int location,int count,const float* v) const
+{
+	::glUniform3fv(location, count, v);
+}
+void GL20::glUniform3i (int location,int x,int y,int z) const
+{
+	::glUniform3i(location, x, y, z);
+}
+void GL20::glUniform3iv (int location,int count,const int* v) const
+{
+	::glUniform3iv(location, count, v);
+}
+void GL20::glUniform4f (int location,float x,float y,float z,float w) const
+{
+	::glUniform4f(location, x, y, z, w);
+}
+void GL20::glUniform4fv (int location,int count,const float* v) const
+{
+	::glUniform4fv(location, count, v);
+}
+void GL20::glUniform4i (int location,int x,int y,int z,int w) const
+{
+	::glUniform4i(location, x, y, z, w);
+}
+void GL20::glUniform4iv (int location,int count,const int* v) const
+{
+	::glUniform4iv(location, count, v);
+}
+void GL20::glUniformMatrix2fv (int location,int count,bool transpose,const float* value) const
+{
+	::glUniformMatrix2fv(location, count, transpose, value);
+}
+void GL20::glUniformMatrix3fv (int location,int count,bool transpose,const float* value) const
+{
+	::glUniformMatrix3fv(location, count, transpose, value);
+}
+void GL20::glUniformMatrix4fv (int location,int count,bool transpose,const float* value) const
+{
+	::glUniformMatrix4fv(location, count, transpose, value);
+}
+void GL20::glUseProgram (int program) const
+{
+	::glUseProgram(program);
+}
+void GL20::glValidateProgram (int program) const
+{
+	::glValidateProgram(program);
+}
+void GL20::glVertexAttrib1f (int indx,float x) const
+{
+	::glVertexAttrib1f(indx, x);
+}
+void GL20::glVertexAttrib1fv (int indx,const float* values) const
+{
+	::glVertexAttrib1fv(indx, values);
+}
+void GL20::glVertexAttrib2f (int indx,float x,float y) const
+{
+	::glVertexAttrib2f(indx, x, y);
+}
+void GL20::glVertexAttrib2fv (int indx,const float* values) const
+{
+	::glVertexAttrib2fv(indx, values);
+}
+void GL20::glVertexAttrib3f (int indx,float x,float y,float z) const
+{
+	::glVertexAttrib3f(indx, x, y, z);
+}
+void GL20::glVertexAttrib3fv (int indx,const float* values) const
+{
+	::glVertexAttrib3fv(indx, values);
+}
+void GL20::glVertexAttrib4f (int indx,float x,float y,float z,float w) const
+{
+	::glVertexAttrib4f(indx, x, y, z, w);
+}
+void GL20::glVertexAttrib4fv (int indx,const float* values) const
+{
+	::glVertexAttrib4fv(indx, values);
+}
+void GL20::glVertexAttribPointer (int indx,int size,int type,bool normalized,int stride,const void* ptr) const
+{
+	::glVertexAttribPointer(indx, size, type, normalized, stride, ptr);
+}
+void GL20::glVertexAttribPointer (int indx,int size,int type,bool normalized,int stride,int ptr) const
+{
+	::glVertexAttribPointer(indx, size, type, normalized, stride, (void*)ptr);
+}

@@ -22,14 +22,22 @@
 #include <SDL/SDL.h>
 #include <gdx-cpp/graphics/Pixmap.hpp>
 
+#include <EGL/egl.h>
+#include <X11/Xlib.h>
+
 namespace gdx {
 
 namespace nix {
 
 class LinuxGraphics : public Graphics
 {
+static EGLDisplay g_eglDisplay;
+static EGLContext g_eglContext;
+static EGLSurface g_eglSurface;
+
+static Display* x11Disp;
 public:
-    LinuxGraphics();
+    LinuxGraphics(bool isUseOpenGLES2);
 
     virtual void initialize();
     bool isGL11Available ();
@@ -88,6 +96,7 @@ protected:
     uint64_t frameStart;
     uint32_t fps;
     float deltaTime;
+    bool isUseOpenGLES2;
 };
 
 }

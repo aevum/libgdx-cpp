@@ -38,11 +38,21 @@
 #include <gdx-cpp/graphics/GL11.hpp>
 
 #include <gdx-cpp/gl.hpp>
+#include <SDL/SDL_syswm.h>
+
 
 using namespace gdx::nix;
 using namespace gdx;
 
-gdx::nix::LinuxGraphics::LinuxGraphics() :
+#define g_totalConfigsIn 10
+
+EGLDisplay gdx::nix::LinuxGraphics::g_eglDisplay;
+EGLContext gdx::nix::LinuxGraphics::g_eglContext;
+EGLSurface gdx::nix::LinuxGraphics::g_eglSurface;
+
+Display* gdx::nix::LinuxGraphics::x11Disp = NULL;
+
+gdx::nix::LinuxGraphics::LinuxGraphics(bool UseOpenGLES2) :
 vsync(false),
 title("GDX-CPP"),
 window(0),
@@ -57,7 +67,8 @@ iconPixmap(0),
 lastTime(0),
 frames(0),
 frameStart(0),
-deltaTime(0)
+deltaTime(0),
+isUseOpenGLES2(UseOpenGLES2)
 {
 }
 
@@ -113,7 +124,7 @@ int gdx::nix::LinuxGraphics::getFramesPerSecond()
 
 gdx::GLCommon* gdx::nix::LinuxGraphics::getGLCommon()
 {
-    return gl10;
+    return glCommon;
 }
 
 int gdx::nix::LinuxGraphics::getHeight()
@@ -220,22 +231,149 @@ bool gdx::nix::LinuxGraphics::setDisplayMode(int width, int height, bool fullscr
     this->lastTime = system->nanoTime();
     this->width = width;
     this->height = height;
+    const SDL_VideoInfo* info = SDL_GetVideoInfo();
     
     Uint32 flags = SDL_OPENGL | SDL_HWSURFACE;
     if (fullscreen)
         flags |= SDL_FULLSCREEN;
 
-    const SDL_VideoInfo* info = SDL_GetVideoInfo();
+    if (isUseOpenGLES2)
+    {
+		x11Disp        = NULL;
+		g_eglSurface   = 0;
+		g_eglContext   = 0;
+		g_eglDisplay   = 0;
 
-    SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
-    SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
-    SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
-    SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
-    SDL_GL_SetAttribute( SDL_GL_BUFFER_SIZE, 32 );
-    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-    
-    if (!SDL_SetVideoMode(width, height, info->vfmt->BitsPerPixel, flags)) {
-        gdx_log_error("gdx","Failed to initialize SDL video");
+		x11Disp        = XOpenDisplay(0);
+		if(!x11Disp)
+		{
+			gdx_log_error("WINDOW", "Failed to open X display");
+			return false;
+		}
+
+		g_eglDisplay = eglGetDisplay((EGLNativeDisplayType)x11Disp);
+		if(g_eglDisplay == EGL_NO_DISPLAY)
+		{
+			gdx_log_error("WINDOW", "Failed to get EGL display");
+			return false;
+		}
+
+		if(!eglInitialize(g_eglDisplay, NULL, NULL))
+		{
+			gdx_log_error("WINDOW", "Failed to initialize EGL");
+			return false;
+		}
+
+		uint8_t rgb[4];
+		switch(info->vfmt->BitsPerPixel)
+	   {
+		  case 8:
+			 rgb[0] = 2;
+			 rgb[1] = 3;
+			 rgb[2] = 3;
+			 rgb[3] = 8;
+			 break;
+		  case 15:
+		  case 16:
+			 rgb[0] = 5;
+			 rgb[1] = 5;
+			 rgb[2] = 5;
+			 rgb[3] = 16;
+			 break;
+		  default:
+			 rgb[0] = 8;
+			 rgb[1] = 8;
+			 rgb[2] = 8;
+			 rgb[3] = 24;
+			 break;
+	   }
+
+		if (!SDL_SetVideoMode(width, height, info->vfmt->BitsPerPixel, flags)) {
+			gdx_log_error("gdx","Failed to initialize SDL video");
+			return false;
+		}
+
+		static EGLint s_configAttribs[] =
+		{
+		  EGL_RED_SIZE,           0,
+		  EGL_GREEN_SIZE,         0,
+		  EGL_BLUE_SIZE,          0,
+		  EGL_DEPTH_SIZE,         0,
+		  EGL_SURFACE_TYPE,       EGL_WINDOW_BIT,
+		  EGL_RENDERABLE_TYPE,    EGL_OPENGL_ES2_BIT,
+		  EGL_NONE
+		};
+
+		s_configAttribs[1] = rgb[0];
+		s_configAttribs[3] = rgb[1];
+		s_configAttribs[5] = rgb[2];
+		s_configAttribs[7] = rgb[3];
+
+		EGLint numConfigsOut = 0;
+
+		EGLConfig g_allConfigs[g_totalConfigsIn];
+		EGLConfig g_eglConfig;
+
+		/* Choose configuration */
+		if(eglChooseConfig(g_eglDisplay, s_configAttribs, g_allConfigs, g_totalConfigsIn, &numConfigsOut) != EGL_TRUE
+		  || numConfigsOut == 0)
+		{
+			gdx_log_error("WINDOW", "Could not find suitable EGL configuration");
+			return false;
+		}
+
+		/* Bind GLES API */
+		g_eglConfig = g_allConfigs[0];
+		eglBindAPI(EGL_OPENGL_ES_API);
+
+		EGLint contextParams[] = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE};
+
+		/* Create EGL Context */
+		g_eglContext = eglCreateContext(g_eglDisplay, g_eglConfig, EGL_NO_CONTEXT, contextParams);
+		if(g_eglContext == EGL_NO_CONTEXT)
+		{
+		  gdx_log_error("WINDOW", "Failed to create EGL context");
+		  return false;
+		}
+
+		/* Get window manager information */
+		SDL_SysWMinfo sysInfo;
+		SDL_VERSION(&sysInfo.version);
+		if(SDL_GetWMInfo(&sysInfo) <= 0)
+		{
+			gdx_log_error("WINDOW", "SDL_GetWMInfo failed");
+			return false;
+		}
+
+		/* Create surface */
+		g_eglSurface = eglCreateWindowSurface(g_eglDisplay, g_eglConfig, (EGLNativeWindowType)sysInfo.info.x11.window, NULL);
+		if(g_eglSurface == EGL_NO_SURFACE)
+		{
+			gdx_log_error("WINDOW", "Failed to create EGL surface");
+		  return false;
+		}
+
+		/* Make EGL current */
+		if(eglMakeCurrent(g_eglDisplay, g_eglSurface, g_eglSurface, g_eglContext) == EGL_FALSE)
+		{
+			gdx_log_error("WINDOW", "Failed to make EGL current");
+		  return false;
+		}
+    }
+    else
+    {
+
+	    SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
+	    SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
+	    SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
+	    SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
+	    SDL_GL_SetAttribute( SDL_GL_BUFFER_SIZE, 32 );
+	    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
+
+		if (!SDL_SetVideoMode(width, height, info->vfmt->BitsPerPixel, flags)) {
+			gdx_log_error("gdx","Failed to initialize SDL video");
+			return false;
+		}
     }
 
     return setupGLModes();
@@ -243,7 +381,10 @@ bool gdx::nix::LinuxGraphics::setDisplayMode(int width, int height, bool fullscr
 
 void gdx::nix::LinuxGraphics::update()
 {
-    SDL_GL_SwapBuffers();
+	if (isUseOpenGLES2)
+		eglSwapBuffers(g_eglDisplay, g_eglSurface);
+	else
+		SDL_GL_SwapBuffers();
 }
 
 TextureData::ptr nix::LinuxGraphics::resolveTextureData(FileHandle::ptr fileHandle,
@@ -254,7 +395,7 @@ TextureData::ptr nix::LinuxGraphics::resolveTextureData(FileHandle::ptr fileHand
     return TextureData::ptr(new FileTextureData(fileHandle, preloadedPixmap, format, useMipMaps));
 }
 
-Pixmap* nix::LinuxGraphics::resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, int pixType)
+gdx::Pixmap* nix::LinuxGraphics::resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, int pixType)
 {
     switch(pixType) {
         case Pixmap::Gdx2d:
@@ -264,7 +405,7 @@ Pixmap* nix::LinuxGraphics::resolvePixmap(int width, int height, const gdx::Pixm
     }
 }
 
-Pixmap* nix::LinuxGraphics::resolvePixmap(const gdx::Pixmap& other)
+gdx::Pixmap* nix::LinuxGraphics::resolvePixmap(const gdx::Pixmap& other)
 {
     switch(other.getType()) {
         case Pixmap::Gdx2d:
@@ -272,7 +413,7 @@ Pixmap* nix::LinuxGraphics::resolvePixmap(const gdx::Pixmap& other)
     } 
 }
 
-Pixmap* nix::LinuxGraphics::resolvePixmap(const FileHandle::ptr& file)
+gdx::Pixmap* nix::LinuxGraphics::resolvePixmap(const FileHandle::ptr& file)
 {
     std::string extension = file->extension();
     
@@ -287,35 +428,61 @@ Pixmap* nix::LinuxGraphics::resolvePixmap(const FileHandle::ptr& file)
 
 bool gdx::nix::LinuxGraphics::setupGLModes()
 {
-    std::string version =  (const char*) ::glGetString(GL_VERSION);
+	if (isUseOpenGLES2) {
+		gl20 = new GL20;
+		glCommon = gl20;
+		std::string version =  (const char*) ::glGetString(GL_VERSION);
+		std::cerr << version;
+		if (glCommon == NULL)
+			gdx_log_error("gdx", "error init gl");
 
-    if (!version.empty()) {
+	} else {
+		std::string version =  (const char*) ::glGetString(GL_VERSION);
 
-        int major = atoi((const char*) version.c_str());
-        int minor = atoi((const char*) &version.c_str()[2]);
+		if (!version.empty()) {
 
-        if (false && major >= 2) {
+			int major = atoi((const char*) version.c_str());
+			int minor = atoi((const char*) &version.c_str()[2]);
+			std::cerr << version;
+			if (major == 1 && minor < 5) {
+				glCommon = gl10 = new GL10;
+			} else {
+				glCommon = gl10 = gl11 = new GL11;
+			}
+		} else {
+		        std::cerr << "Failed to recover the GL_VERSION, aborting" << std::endl;
+		        return false;
+		    }
+	}
 
+	SDL_WM_SetCaption(this->title.c_str(), NULL);
+	glCommon->glViewport(0, 0, width, height);
 
-        } else {
-            if (major == 1 && minor < 5) {
-                glCommon = gl10 = new GL10;
-            } else {
-                glCommon = gl10 = gl11 = new GL11;
-            }
-        }
-
-        SDL_WM_SetCaption(this->title.c_str(), NULL);
-        glCommon->glViewport(0, 0, width, height);
-
-        return true;
-    } else {
-        std::cerr << "Failed to recover the GL_VERSION, aborting" << std::endl;
-        return false;
-    }
+	return true;
 }
 
 LinuxGraphics::~LinuxGraphics()
 {
-    SDL_Quit();
+	if (isUseOpenGLES2)
+	{
+		if(g_eglDisplay)
+		{
+		  eglMakeCurrent(g_eglDisplay, NULL, NULL, EGL_NO_CONTEXT);
+		  if(g_eglContext)
+			 eglDestroyContext(g_eglDisplay, g_eglContext);
+		  if(g_eglSurface)
+			 eglDestroySurface(g_eglDisplay, g_eglSurface);
+		  eglTerminate(g_eglDisplay);
+
+		  g_eglSurface = 0;
+		  g_eglContext = 0;
+		  g_eglDisplay = 0;
+		}
+
+		if(x11Disp)
+		  XCloseDisplay(x11Disp);
+		x11Disp = NULL;
+	}
+	else
+		SDL_Quit();
 }

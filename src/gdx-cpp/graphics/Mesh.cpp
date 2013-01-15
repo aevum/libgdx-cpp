@@ -164,6 +164,9 @@ void Mesh::render (int primitiveType) {
 void Mesh::render (int primitiveType,int offset,int count) {
     if (graphics->isGL20Available()) gdx_log_error("gdx","can't use this render method with OpenGL ES 2.0");
 
+    if (count == 0)
+    	return;
+
     if (autoBind) bind();
 
     if (isVertexArray) {
@@ -200,7 +203,7 @@ void Mesh::render (ShaderProgram& shader,int primitiveType,int offset,int count)
     if (autoBind) bind(shader);
 
     if (indices->getNumIndices() > 0)
-        gl20->glDrawElements(primitiveType, count, GL_UNSIGNED_SHORT, offset * 2);
+        gl20->glDrawElements(primitiveType, count, GL_UNSIGNED_SHORT, (void*)(offset * 2));
     else
         gl20->glDrawArrays(primitiveType, offset, count);
 

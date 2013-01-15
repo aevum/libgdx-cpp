@@ -30,7 +30,7 @@ using namespace gdx;
 
 int VertexBufferObjectSubData::createBufferObject () {
     if (gl20 != NULL) {
-        gl20->glGenBuffers(1, &tmpHandle);
+        gl20->glGenBuffers(1, (unsigned int*) &tmpHandle);
         gl20->glBindBuffer(GL_ARRAY_BUFFER, tmpHandle);
         gl20->glBufferData(GL_ARRAY_BUFFER, byteBuffer.capacity(), NULL, usage);
         gl20->glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -223,7 +223,7 @@ void VertexBufferObjectSubData::dispose () {
         
         GL20& gl = *gl20;
         gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
-        gl.glDeleteBuffers(1, &tmpHandle);
+        gl.glDeleteBuffers(1, (unsigned int*) &tmpHandle);
 
         bufferHandle = 0;
     } else {
