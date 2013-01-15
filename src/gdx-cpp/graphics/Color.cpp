@@ -188,4 +188,8 @@ Color::Color(const Color& color) {
     set(color);
 }
 
+Color::Color ( int colorAsInteger ) {
+    set(fromRgb(colorAsInteger));
+}
+
 

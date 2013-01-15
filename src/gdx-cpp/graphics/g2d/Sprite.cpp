@@ -134,22 +134,27 @@ void Sprite::translate (float xAmount,float yAmount) {
 }
 
 void Sprite::setColor (const Color& tint) {
-    float color = tint.toFloatBits();
-    vertices[C1] = color;
-    vertices[C2] = color;
-    vertices[C3] = color;
-    vertices[C4] = color;
+    float floatColor = tint.toFloatBits();
+    
+    vertices[C1] = floatColor;
+    vertices[C2] = floatColor;
+    vertices[C3] = floatColor;
+    vertices[C4] = floatColor;
+    
+    color.set(tint);
 }
 
 void Sprite::setColor (float r,float g,float b,float a) {
     int intBits = ((int)(255 * a) << 24) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r));
 
-    float color =  NumberUtils::intBitsToFloat(intBits & 0xfeffffff);
-
-    vertices[C1] = color;
-    vertices[C2] = color;
-    vertices[C3] = color;
-    vertices[C4] = color;
+    float floatColor =  NumberUtils::intBitsToFloat(intBits & 0xfeffffff);
+// 
+    vertices[C1] = floatColor;
+    vertices[C2] = floatColor;
+    vertices[C3] = floatColor;
+    vertices[C4] = floatColor;
+    
+    color.set(r, g, b, a);
 }
 
 void Sprite::setOrigin (float originX,float originY) {
