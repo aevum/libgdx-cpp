@@ -89,7 +89,7 @@ elseif (UNIX)
             find_libraries("GL")
         endif()
 
-        find_libraries("vorbis;vorbisfile;openal;ogg;SDL;GLU;gdx-cpp-backend-linux;gdx-cpp-agg-svg;pthread;rt;")
+        find_libraries("vorbis;vorbisfile;openal;ogg;SDL;GLU;EGL;X11;gdx-cpp-backend-linux;gdx-cpp-agg-svg;pthread;rt;")
     endif()
 
     find_libraries(gdx-cpp)

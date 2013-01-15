@@ -6,7 +6,7 @@
 #include "gdx-cpp/ApplicationListener.hpp"
 
 extern "C" void gdxcpp_init(int argc, char** argv);
-extern "C" void gdxcpp_create_application(gdx::ApplicationListener* listener, const std::string& applicationName, int width, int height, bool useOpenGLES2);
+extern "C" void gdxcpp_create_application(gdx::ApplicationListener* listener, const std::string& applicationName, int width, int height, bool useOpenGLES2 = false);
 
 typedef int (*gdx_main)(int, char**);
 
