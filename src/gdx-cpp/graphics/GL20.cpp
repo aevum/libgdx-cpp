@@ -23,7 +23,6 @@
 using namespace gdx;
 using namespace std;
 
-#include <EGL/egl.h>
 #include <GLES2/gl2.h>
 
 #undef GL_ES_VERSION_2_0
