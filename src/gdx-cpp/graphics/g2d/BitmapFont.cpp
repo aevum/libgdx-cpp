@@ -37,7 +37,7 @@ using namespace gdx;
 #define IS_IN_RANGE(c, f, l)    (((c) >= (f)) && ((c) <= (l)))
 
 //function grabbed on http://stackoverflow.com/questions/2948308/how-do-i-read-utf-8-characters-via-a-pointer/2953960#2953960
-ulong readNextChar (const char* p, unsigned int& index) 
+uint32_t readNextChar (const char* p, unsigned int& index) 
 {  
     // TODO: since UTF-8 is a variable-length
     // encoding, you should pass in the input
@@ -46,7 +46,7 @@ ulong readNextChar (const char* p, unsigned int& index)
     // sequence would exceed the end of the buffer...
 
     unsigned char c1, c2, *ptr = (unsigned char*) p;
-    ulong uc = 0;
+    uint32_t uc = 0;
     int seqlen;
     // int datalen = ... available length of p ...;    
 
@@ -62,28 +62,28 @@ ulong readNextChar (const char* p, unsigned int& index)
 
     if( (c1 & 0x80) == 0 )
     {
-        uc = (ulong) (c1 & 0x7F);
+        uc = (uint32_t) (c1 & 0x7F);
         seqlen = 1;
     }
     else if( (c1 & 0xE0) == 0xC0 )
     {
-        uc = (ulong) (c1 & 0x1F);
+        uc = (uint32_t) (c1 & 0x1F);
         seqlen = 2;
     }
     else if( (c1 & 0xF0) == 0xE0 )
     {
-        uc = (ulong) (c1 & 0x0F);
+        uc = (uint32_t) (c1 & 0x0F);
         seqlen = 3;
     }
     else if( (c1 & 0xF8) == 0xF0 )
     {
-        uc = (ulong) (c1 & 0x07);
+        uc = (uint32_t) (c1 & 0x07);
         seqlen = 4;
     }
     else
     {
         // malformed data, do something !!!
-        return (ulong) -1;
+        return (uint32_t) -1;
     }
 
     /*
@@ -101,7 +101,7 @@ ulong readNextChar (const char* p, unsigned int& index)
         if( (c1 & 0xC0) != 0x80 )
         {
             // malformed data, do something !!!
-            return (ulong) -1;
+            return (uint32_t) -1;
         }
     }
 
@@ -114,7 +114,7 @@ ulong readNextChar (const char* p, unsigned int& index)
             if( !IS_IN_RANGE(c1, 0xC2, 0xDF) )
             {
                 // malformed data, do something !!!
-                return (ulong) -1;
+                return (uint32_t) -1;
             }
 
             break;
@@ -130,7 +130,7 @@ ulong readNextChar (const char* p, unsigned int& index)
                 (!IS_IN_RANGE(c1, 0xE1, 0xEC) && !IS_IN_RANGE(c1, 0xEE, 0xEF)) )
             {
                 // malformed data, do something !!!
-                return (ulong) -1;
+                return (uint32_t) -1;
             }
 
             break;
@@ -146,7 +146,7 @@ ulong readNextChar (const char* p, unsigned int& index)
                 !IS_IN_RANGE(c1, 0xF1, 0xF3) )
             {
                 // malformed data, do something !!!
-                return (ulong) -1;
+                return (uint32_t) -1;
             }
 
             break;
@@ -155,7 +155,7 @@ ulong readNextChar (const char* p, unsigned int& index)
 
     for(int i = 1; i < seqlen; ++i)
     {
-        uc = ((uc << 6) | (ulong)(ptr[i] & 0x3F));
+        uc = ((uc << 6) | (uint32_t)(ptr[i] & 0x3F));
     }
 
     index += seqlen;

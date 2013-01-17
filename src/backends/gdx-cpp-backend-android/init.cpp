@@ -26,7 +26,7 @@ namespace android {
 AndroidApplication* app = 0;
 }
 }
-extern "C" void gdxcpp_create_application(gdx::ApplicationListener* listener, const std::string& applicationName, int width, int height)
+extern "C" void gdxcpp_create_application(gdx::ApplicationListener* listener, const std::string& applicationName, int width, int height, bool useGl20)
 {
     applicationListener = listener;
 }
