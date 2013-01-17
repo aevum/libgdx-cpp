@@ -39,13 +39,13 @@ void GLCommon::glBindTexture(int target, int texture) const {
 }
 
 void GLCommon::glBlendFunc(int sfactor, int dfactor) const {
-    static int lastSfactor = -1, lastDfactor = -1;
+//     static int lastSfactor = -1, lastDfactor = -1;
     
-    if (lastSfactor != sfactor && lastDfactor != dfactor) {
+//     if (lastSfactor != sfactor && lastDfactor != dfactor) {
         ::glBlendFunc ( sfactor, dfactor);
-        lastDfactor = dfactor;
-        lastSfactor = sfactor;
-    }
+//         lastDfactor = dfactor;
+//         lastSfactor = sfactor;
+//     }
 }
 
 void GLCommon::glClear(int mask) const {
