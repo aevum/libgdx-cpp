@@ -242,15 +242,22 @@ void gdx::android::AndroidInput::handleTouchUp(float x, float y, int pointer)
     }
 }
 
-void AndroidInput::backPressed()
-{
-    if (this->processor) {
-        this->processor->onBackPressed();
-    }
-}
-
 void gdx::android::AndroidInput::setKeyboardRepeat(int delay, int repeatInterval)
 {
 
+}
+
+void AndroidInput::handleKeyDown(int keyCode)
+{
+    if (this->processor) {
+        this->processor->keyDown(keyCode);
+    }
+}
+
+void AndroidInput::handleKeyUp(int keyCode)
+{
+    if (this->processor) {
+        this->processor->keyUp(keyCode);
+    }
 }
 

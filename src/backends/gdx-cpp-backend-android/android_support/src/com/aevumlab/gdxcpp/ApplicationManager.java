@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -56,6 +57,8 @@ public class ApplicationManager {
 	static native void nativeTouchUpEvent(float x, float y, int button);
 
 	static native void nativeTouchDragEvent(float x, float y, int button);
+	
+	static native void nativeKeyEvent(int key, int event);
 	
 	static native void nativeBackPressed();
 
@@ -245,5 +248,9 @@ public class ApplicationManager {
 		}
 		
 		return 0;
+	}
+
+	public static void onKeyEvent(KeyEvent arg2) {
+		nativeKeyEvent(arg2.getKeyCode(), arg2.getAction());
 	}
 }

@@ -258,8 +258,6 @@ void gdx::nix::LinuxInput::processEvents(SDL_Event& evt)
     }
     else if (evt.type == SDL_KEYDOWN) {
         if (gdx::Input::Keys::ESCAPE == getGdxEventKey(evt)) {
-            this->processor->onBackPressed();
-        } else {
             this->processor->keyDown(getGdxEventKey(evt));
         }
     } else if (evt.type == SDL_KEYUP) {
