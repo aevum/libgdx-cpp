@@ -19,6 +19,10 @@
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
 #include <new>
 
+#include "Box2D/Collision/Shapes/b2Shape.h"
+#include "Box2D/Collision/b2Collision.h"
+#include "Box2D/Common/b2BlockAllocator.h"
+
 b2Shape* b2PolygonShape::Clone(b2BlockAllocator* allocator) const
 {
 	void* mem = allocator->Allocate(sizeof(b2PolygonShape));

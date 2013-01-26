@@ -15,18 +15,22 @@
 */
 
 
-#include "LinuxOpenALAudio.hpp"
-#include "LinuxOpenALAudioDevice.hpp"
-#include "LinuxOpenALAudioRecorder.hpp"
-#include "LinuxOpenALSound.hpp"
-#include "LinuxOpenALMusic.hpp"
 #include <AL/al.h>
 #include <AL/alc.h>
-#include "gdx-cpp/utils/Buffer.hpp"
-#include <stdexcept>
-#include "gdx-cpp/files/FileHandle.hpp"
-#include <iostream>
+#include <stddef.h>
+#include <memory>
+#include <string>
+
 #include "LinuxOgg.hpp"
+#include "LinuxOpenALAudio.hpp"
+#include "LinuxOpenALMusic.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/files/FileHandle.hpp"
+
+namespace gdx {
+class AudioDevice;
+class AudioRecorder;
+}  // namespace gdx
 
 using namespace gdx::nix;
 

@@ -20,6 +20,8 @@
 #include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Dynamics/b2TimeStep.h>
 
+#include "Box2D/Dynamics/Joints/b2Joint.h"
+
 // p = attached point, m = mouse point
 // C = p - m
 // Cdot = v

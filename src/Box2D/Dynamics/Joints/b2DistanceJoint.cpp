@@ -20,6 +20,8 @@
 #include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Dynamics/b2TimeStep.h>
 
+#include "Box2D/Dynamics/Joints/b2Joint.h"
+
 // 1-D constrained system
 // m (v2 - v1) = lambda
 // v2 + (beta/h) * x1 + gamma * lambda = 0, gamma has units of inverse mass.

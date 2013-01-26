@@ -21,31 +21,31 @@
 #ifndef GDX_CPP_GRAPHICS_PIXMAP_HPP_
 #define GDX_CPP_GRAPHICS_PIXMAP_HPP_
 
-#include "gdx-cpp/utils/Disposable.hpp"
-#include "gdx-cpp/internal/memory"
 #include <string>
+#include <memory>
 
-#include "gdx-cpp/files/FileHandle.hpp"
+#include "gdx-cpp/utils/Disposable.hpp"
 
 namespace gdx {
 
 class Color;
+class FileHandle;
 
-class Pixmap: public Disposable {
+class Pixmap : public Disposable {
 public:
-    typedef ref_ptr_maker<Pixmap>::shared_ptr_t ptr;
+    typedef std::shared_ptr<Pixmap> ptr;
 
-    enum Blending {
-        None, SourceOver
+    enum class Blending {
+        Blending_None, Blending_SourceOver
     };
 
-    enum Filter {
-        NearestNeighbour, BiLinear
+    enum class Filter {
+        Filter_NearestNeighbour, Filter_BiLinear
     };
 
-    enum PixmapType {
-        Gdx2d,
-        Svg
+    enum class PixmapType {
+        PixmapType_Gdx2d,
+        PixmapType_Svg
     };
 
     class Format {
@@ -85,7 +85,7 @@ public:
 
     static Pixmap::ptr newFromRect(int width, int height, const Format& format, PixmapType pixType);
     static Pixmap::ptr newFromPixmap(const Pixmap& pixmap);
-    static Pixmap::ptr newFromFile(const gdx::FileHandle::ptr file);
+    static Pixmap::ptr newFromFile(const std::shared_ptr<FileHandle>& file);
       
 
     virtual PixmapType getType() const = 0;

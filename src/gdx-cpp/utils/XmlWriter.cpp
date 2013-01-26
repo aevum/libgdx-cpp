@@ -18,10 +18,12 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "XmlWriter.hpp"
-#include "XmlReader.hpp"
-
 #include <gdx-cpp/Log.hpp>
+#include <stddef.h>
+#include <algorithm>
+
+#include "XmlReader.hpp"
+#include "XmlWriter.hpp"
 
 using namespace gdx;
 

@@ -18,18 +18,27 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "ShaderProgram.hpp"
-#include "gdx-cpp/graphics/GL20.hpp"
-#include "gdx-cpp/Gdx.hpp"
-#include "gdx-cpp/Graphics.hpp"
-#include "gdx-cpp/Application.hpp"
-#include "gdx-cpp/internal/unordered_map"
-
-#include <stdexcept>
-#include "gdx-cpp/math/Matrix3.hpp"
-#include "gdx-cpp/math/Matrix4.hpp"
+#include <stddef.h>
 #include <set>
 #include <sstream>
+#include <unordered_map>
+#include <utility>
+
+#include "ShaderProgram.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Graphics.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/graphics/GL20.hpp"
+#include "gdx-cpp/internal/unordered_map"
+#include "gdx-cpp/math/Matrix3.hpp"
+#include "gdx-cpp/math/Matrix4.hpp"
+#include "gdx-cpp/utils/Buffer.hpp"
+
+#include "gdx-cpp/gl.hpp"
+
+namespace gdx {
+class Application;
+}  // namespace gdx
 
 using namespace gdx;
 
@@ -66,8 +75,8 @@ refCount(0)
 }
 
 void ShaderProgram::compileShaders (const std::string& vertexShader,const std::string& fragmentShader) {
-    vertexShaderHandle = loadShader(GL20::GL_VERTEX_SHADER, vertexShader);
-    fragmentShaderHandle = loadShader(GL20::GL_FRAGMENT_SHADER, fragmentShader);
+    vertexShaderHandle = loadShader(GL_VERTEX_SHADER, vertexShader);
+    fragmentShaderHandle = loadShader(GL_FRAGMENT_SHADER, fragmentShader);
 
     if (vertexShaderHandle == -1 || fragmentShaderHandle == -1) {
         isCompiledVar = false;
@@ -126,7 +135,7 @@ int ShaderProgram::linkProgram () {
 //     tmp.order(ByteOrder.nativeOrder());
 //     IntBuffer intbuf = tmp.asIntBuffer();
 //
-     gl->glGetProgramiv(program, GL20::GL_LINK_STATUS, intbuf);
+     gl->glGetProgramiv(program, GL_LINK_STATUS, intbuf);
 //     int linked = intbuf.get(0);
 //     if (linked == 0) {
 //         return -1;
@@ -143,7 +152,7 @@ int ShaderProgram::linkProgram () {
 
 std::string ShaderProgram::getLog () {
     if (isCompiledVar) {
-        gl20->glGetProgramiv(program, GL20::GL_INFO_LOG_LENGTH, &intbuf);
+        gl20->glGetProgramiv(program, GL_INFO_LOG_LENGTH, &intbuf);
         int infoLogLength = intbuf;//.get(0);
         if (infoLogLength > 1) log = gl20->glGetProgramInfoLog(program);
         return log;
@@ -430,7 +439,7 @@ void ShaderProgram::ensureBufferCapacity (int numBytes) {
 
 void ShaderProgram::fetchUniforms () {
     params=0;
-    gl20->glGetProgramiv(program, GL20::GL_ACTIVE_UNIFORMS, &params);
+    gl20->glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &params);
     int numUniforms = params;
 
     //uniformNames.reserve(numUniforms);
@@ -449,7 +458,7 @@ void ShaderProgram::fetchUniforms () {
 
 void ShaderProgram::fetchAttributes () {
     params = 0;
-    gl20->glGetProgramiv(program, GL20::GL_ACTIVE_ATTRIBUTES, &params);
+    gl20->glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &params);
     int numAttributes = params;
     //attributeNames.reserve(numAttributes);
     for (int i = 0; i < numAttributes; i++) {

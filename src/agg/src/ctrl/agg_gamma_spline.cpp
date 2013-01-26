@@ -17,6 +17,7 @@
 //
 //----------------------------------------------------------------------------
 
+#include "agg_basics.h"
 #include "ctrl/agg_gamma_spline.h"
 
 namespace agg

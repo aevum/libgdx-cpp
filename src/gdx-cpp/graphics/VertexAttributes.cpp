@@ -18,13 +18,11 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "VertexAttributes.hpp"
-
 #include <sstream>
-#include <cassert>
 
-#include "gdx-cpp/Gdx.hpp"
-#include <stdexcept>
+#include "VertexAttributes.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/graphics/VertexAttribute.hpp"
 
 using namespace gdx;
 

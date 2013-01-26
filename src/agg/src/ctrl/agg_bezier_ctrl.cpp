@@ -17,9 +17,9 @@
 //
 //----------------------------------------------------------------------------
 
-#include <string.h>
-#include <stdio.h>
+#include "agg_basics.h"
 #include "ctrl/agg_bezier_ctrl.h"
+#include "ctrl/agg_polygon_ctrl.h"
 
 namespace agg
 {

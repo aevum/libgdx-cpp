@@ -19,18 +19,24 @@
 #ifndef B2_CONTACT_H
 #define B2_CONTACT_H
 
-#include <Box2D/Common/b2Math.h>
-#include <Box2D/Collision/b2Collision.h>
 #include <Box2D/Collision/Shapes/b2Shape.h>
+#include <Box2D/Collision/b2Collision.h>
+#include <Box2D/Common/b2Math.h>
 #include <Box2D/Dynamics/b2Fixture.h>
+#include <stddef.h>
+#include <cmath>
 
+#include "Box2D/Common/b2Settings.h"
+#include "Box2D/Dynamics/b2Body.h"
+
+class b2BlockAllocator;
 class b2Body;
 class b2Contact;
-class b2Fixture;
-class b2World;
-class b2BlockAllocator;
-class b2StackAllocator;
 class b2ContactListener;
+class b2Fixture;
+class b2StackAllocator;
+class b2World;
+struct b2Transform;
 
 /// Friction mixing law. The idea is to allow either fixture to drive the restitution to zero.
 /// For example, anything slides on ice.

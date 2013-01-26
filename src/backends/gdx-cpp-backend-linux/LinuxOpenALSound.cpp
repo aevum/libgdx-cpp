@@ -15,15 +15,11 @@
 */
 
 
-#include "LinuxOpenALSound.hpp"
-#include "gdx-cpp/files/FileHandle.hpp"
 #include "AL/al.h"
 #include "LinuxOpenALAudio.hpp"
-#include "gdx-cpp/utils/Buffer.hpp"
+#include "LinuxOpenALSound.hpp"
 
 using namespace gdx::nix;
-
-class LinuxOpenALAudio;
 
 LinuxOpenALSound::LinuxOpenALSound(LinuxOpenALAudio * _audio) : bufferID(-1),
 audio(_audio)

@@ -21,24 +21,31 @@
 #ifndef GDX_CPP_GDX_HPP_
 #define GDX_CPP_GDX_HPP_
 
+#include <string>
+
 #include "Application.hpp"
-#include "Graphics.hpp"
 #include "Audio.hpp"
-#include "Input.hpp"
 #include "Files.hpp"
-#include "implementation/System.hpp"
-#include "backend.hpp"
+#include "Graphics.hpp"
+#include "Input.hpp"
 #include "Log.hpp"
+#include "backend.hpp"
+#include "implementation/System.hpp"
 
 namespace gdx {
 
-class GLCommon;
 class GL10;
 class GL11;
 class GL20;
+class GLCommon;
 class GLU;
-
 class System;
+class Application;
+class Audio;
+class Files;
+class Graphics;
+class Input;
+class Log;
 
 extern Application* app;
 extern Graphics* graphics;

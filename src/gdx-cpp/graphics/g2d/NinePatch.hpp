@@ -21,16 +21,16 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_NINEPATCH_HPP_
 #define GDX_CPP_GRAPHICS_G2D_NINEPATCH_HPP_
 
-#include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
-#include "gdx-cpp/graphics/Texture.hpp"
-#include "gdx-cpp/graphics/Color.hpp"
-
 #include <array>
 
-namespace gdx {
-class Texture;
+#include "gdx-cpp/graphics/Color.hpp"
+#include "gdx-cpp/graphics/Texture.hpp"
+#include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
+#include "gdx-cpp/internal/memory"
 
+namespace gdx {
 class SpriteBatch;
+class Texture;
 class TextureRegion;
 
 class NinePatch {

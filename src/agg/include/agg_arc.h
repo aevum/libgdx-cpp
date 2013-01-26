@@ -21,6 +21,7 @@
 #define AGG_ARC_INCLUDED
 
 #include <math.h>
+
 #include "agg_basics.h"
 
 namespace agg

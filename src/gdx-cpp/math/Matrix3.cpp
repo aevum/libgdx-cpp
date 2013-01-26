@@ -15,17 +15,17 @@
 */
 
 
-#include "Matrix3.hpp"
-#include "MathUtils.hpp"
-
-#include <string>
-#include <sstream>
-#include <cassert>
-
-#include "gdx-cpp/Gdx.hpp"
-#include "gdx-cpp/Application.hpp"
-#include "Vector3.hpp"
 #include <string.h>
+#include <cassert>
+#include <cmath>
+#include <sstream>
+#include <string>
+
+#include "MathUtils.hpp"
+#include "Matrix3.hpp"
+#include "Vector3.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/math/Vector2.hpp"
 
 using namespace gdx;
 

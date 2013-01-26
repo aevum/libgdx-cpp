@@ -21,8 +21,13 @@
 #ifndef GDX_CPP_BACKENDS_LINUX_LINUXINPUT_HPP
 #define GDX_CPP_BACKENDS_LINUX_LINUXINPUT_HPP
 
-#include <gdx-cpp/Input.hpp>
 #include <SDL/SDL_events.h>
+#include <gdx-cpp/Input.hpp>
+#include <string>
+
+namespace gdx {
+class InputProcessor;
+}  // namespace gdx
 
 namespace gdx {
 

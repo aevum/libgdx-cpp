@@ -21,17 +21,18 @@
 #ifndef GDX_CPP_UTILS_XMLREADER_HPP_
 #define GDX_CPP_UTILS_XMLREADER_HPP_
 
-#include <string>
-#include <sstream>
 #include <fstream>
-#include "gdx-cpp/internal/unordered_map"
+#include <sstream>
+#include <string>
 #include <vector>
 
-#include "gdx-cpp/internal/memory"
-
 #include "gdx-cpp/files/FileHandle.hpp"
+#include "gdx-cpp/internal/memory"
+#include "gdx-cpp/internal/unordered_map"
 
 namespace gdx {
+
+class FileHandle;
 
 class XmlReader {
        

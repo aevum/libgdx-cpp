@@ -18,6 +18,11 @@
 
 #include <Box2D/Collision/Shapes/b2EdgeShape.h>
 #include <new>
+
+#include "Box2D/Collision/Shapes/b2Shape.h"
+#include "Box2D/Collision/b2Collision.h"
+#include "Box2D/Common/b2BlockAllocator.h"
+
 using namespace std;
 
 void b2EdgeShape::Set(const b2Vec2& v1, const b2Vec2& v2)

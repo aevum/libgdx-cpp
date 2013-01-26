@@ -15,13 +15,15 @@
 */
 
 
-#include "LinuxOgg.hpp"
-#include "LinuxOpenALAudio.hpp"
-#include "gdx-cpp/files/FileHandle.hpp"
-#include "LinuxOggInputStream.hpp"
-#include <sstream>
-#include <cstdlib>
 #include <cassert>
+#include <cstdlib>
+#include <memory>
+
+#include "LinuxOgg.hpp"
+#include "LinuxOggInputStream.hpp"
+#include "backends/gdx-cpp-backend-linux/LinuxOpenALMusic.hpp"
+#include "backends/gdx-cpp-backend-linux/LinuxOpenALSound.hpp"
+#include "gdx-cpp/files/FileHandle.hpp"
 
 using namespace gdx::nix;
 

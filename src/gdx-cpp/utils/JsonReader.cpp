@@ -20,14 +20,16 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "JsonReader.hpp"
-#include <stdexcept>
-#include <list>
-#include "StringConvertion.hpp"
 #include <string.h>
-#include "ArrayUtils.hpp"
+#include <list>
+#include <ostream>
+#include <stdexcept>
+#include <vector>
 
-#include "gdx-cpp/Gdx.hpp"
+#include "JsonReader.hpp"
+#include "StringConvertion.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/utils/JsonValue.hpp"
 
 using namespace gdx;
 

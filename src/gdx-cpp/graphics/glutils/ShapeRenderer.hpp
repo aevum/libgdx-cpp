@@ -21,11 +21,13 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_SHAPERENDERER_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_SHAPERENDERER_HPP_
 
+#include "ImmediateModeRenderer.hpp"
 #include "gdx-cpp/graphics/Color.hpp"
 #include "gdx-cpp/math/Matrix4.hpp"
-#include "ImmediateModeRenderer.hpp"
 
 namespace gdx {
+
+class ImmediateModeRenderer;
 
 class ShapeRenderer {
 public:

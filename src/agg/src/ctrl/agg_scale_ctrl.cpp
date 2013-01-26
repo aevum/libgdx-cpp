@@ -17,6 +17,11 @@
 //
 //----------------------------------------------------------------------------
 
+#include <math.h>
+
+#include "agg_basics.h"
+#include "agg_math.h"
+#include "ctrl/agg_ctrl.h"
 #include "ctrl/agg_scale_ctrl.h"
 
 namespace agg

@@ -26,10 +26,10 @@
 
 namespace gdx {
 
-class Matrix4;
-
-class Ray;
 class BoundingBox;
+class Matrix4;
+class Ray;
+class Plane;
 
 class Frustum {
 public:

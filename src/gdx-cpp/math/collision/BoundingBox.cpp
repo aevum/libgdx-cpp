@@ -18,14 +18,17 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "BoundingBox.hpp"
+#include <algorithm>
+#include <limits>
+#include <sstream>
+#include <string>
 
+#include "BoundingBox.hpp"
 #include "gdx-cpp/math/Vector3.hpp"
 
-#include <limits>
-#include <cmath>
-#include <string>
-#include <sstream>
+namespace gdx {
+class Matrix4;
+}  // namespace gdx
 
 using namespace gdx;
 

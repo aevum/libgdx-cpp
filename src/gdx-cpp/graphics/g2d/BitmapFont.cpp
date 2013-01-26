@@ -18,12 +18,21 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "BitmapFont.hpp"
-
-#include <stdexcept>
+#include <ctype.h>
+#include <stdint.h>
+#include <stdio.h>
 #include <string.h>
+#include <algorithm>
+#include <exception>
 
+#include "BitmapFont.hpp"
+#include "gdx-cpp/Files.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/graphics/Texture.hpp"
+#include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
 #include "gdx-cpp/utils/ArrayUtils.hpp"
+#include "gdx-cpp/utils/NumberUtils.hpp"
 
 #define LOG2_PAGE_SIZE 9
 #define GDX_BITMAPFONT_PAGE_SIZE  (1 << LOG2_PAGE_SIZE)

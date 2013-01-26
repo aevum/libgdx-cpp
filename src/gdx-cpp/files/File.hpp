@@ -1,6 +1,7 @@
 #ifndef GDX_CPP_FILES_FILE_HPP_
 #define GDX_CPP_FILES_FILE_HPP_
 
+#include <stdint.h>
 #include <cstdio>
 #include <string>
 #include <vector>

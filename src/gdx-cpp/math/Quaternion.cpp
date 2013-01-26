@@ -16,14 +16,14 @@
 */
 
 
+#include <cmath>
+#include <sstream>
+#include <string>
+
+#include "MathUtils.hpp"
+#include "Matrix4.hpp"
 #include "Quaternion.hpp"
 #include "Vector3.hpp"
-#include "Matrix4.hpp"
-#include "MathUtils.hpp"
-#include <cstdlib>
-#include <cmath>
-#include <string>
-#include <sstream>
 
 using namespace gdx;
 

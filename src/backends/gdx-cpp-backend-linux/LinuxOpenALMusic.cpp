@@ -15,12 +15,14 @@
 */
 
 
-#include "LinuxOpenALMusic.hpp"
-#include "LinuxOpenALAudio.hpp"
-#include <gdx-cpp/files/FileHandle.hpp>
 #include <AL/al.h>
-#include <stdexcept>
 #include <gdx-cpp/Log.hpp>
+#include <stddef.h>
+#include <vector>
+
+#include "LinuxOpenALAudio.hpp"
+#include "LinuxOpenALMusic.hpp"
+#include "backends/gdx-cpp-backend-linux/LinuxOpenALMusic.hpp"
 
 using namespace gdx::nix;
 

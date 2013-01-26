@@ -16,13 +16,11 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include <Box2D/Collision/b2Collision.h>
 #include <Box2D/Collision/b2Distance.h>
 #include <Box2D/Collision/b2TimeOfImpact.h>
-#include <Box2D/Collision/Shapes/b2CircleShape.h>
-#include <Box2D/Collision/Shapes/b2PolygonShape.h>
 
-#include <cstdio>
+#include "Box2D/Common/b2Math.h"
+
 using namespace std;
 
 int32 b2_toiCalls, b2_toiIters, b2_toiMaxIters;

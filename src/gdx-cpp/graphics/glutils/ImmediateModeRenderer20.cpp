@@ -18,9 +18,15 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
+#include <stddef.h>
+#include <ostream>
+
 #include "ImmediateModeRenderer20.hpp"
-#include "gdx-cpp/graphics/VertexAttribute.hpp"
+#include "gdx-cpp/Log.hpp"
 #include "gdx-cpp/graphics/Color.hpp"
+#include "gdx-cpp/graphics/VertexAttribute.hpp"
+#include "gdx-cpp/graphics/VertexAttributes.hpp"
+#include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
 #include "gdx-cpp/utils/StringConvertion.hpp"
 
 using namespace gdx;

@@ -21,15 +21,18 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_FRAMEBUFFER_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_FRAMEBUFFER_HPP_
 
+#include <set>
+#include <string>
+
 #include "gdx-cpp/graphics/Pixmap.hpp"
 #include "gdx-cpp/graphics/Texture.hpp"
 #include "gdx-cpp/internal/memory"
-
 #include "gdx-cpp/internal/unordered_map"
-
-#include <set>
+#include "gdx-cpp/utils/Disposable.hpp"
 
 namespace gdx {
+
+class Application;
 
 class FrameBuffer:
     public Disposable {

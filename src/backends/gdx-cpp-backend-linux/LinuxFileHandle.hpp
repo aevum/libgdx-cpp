@@ -22,6 +22,11 @@
 #define GDX_CPP_BACKENDS_LINUX_LINUXFILEHANDLE_HPP
 
 #include <gdx-cpp/files/FileHandle.hpp>
+#include <stdint.h>
+#include <string>
+
+#include "gdx-cpp/Files.hpp"
+#include "gdx-cpp/files/File.hpp"
 
 namespace gdx {
 

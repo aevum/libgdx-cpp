@@ -21,16 +21,19 @@
 #include <set>
 #include <vector>
 
-struct ALCdevice_struct;
+#include "gdx-cpp/Audio.hpp"
+
 class ALCcontext_struct;
+struct ALCdevice_struct;
 
 namespace gdx {
-class FileHandle;
-
-class Music;
-class Sound;
 class Device;
+class FileHandle;
+class Music;
 class Recorder;
+class Sound;
+class AudioDevice;
+class AudioRecorder;
 
 namespace nix {
   class LinuxOpenALMusic;

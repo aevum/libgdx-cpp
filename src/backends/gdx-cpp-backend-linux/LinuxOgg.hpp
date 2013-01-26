@@ -17,16 +17,17 @@
 
 #ifndef LINUXOGG_HPP
 #define LINUXOGG_HPP
-#include "LinuxOpenALSound.hpp"
 #include "LinuxOpenALMusic.hpp"
+#include "LinuxOpenALSound.hpp"
+#include "gdx-cpp/utils/Buffer.hpp"
 
 
 namespace gdx {
 class FileHandle;
 
 namespace nix {
-class LinuxOpenALAudio;
 class LinuxOggInputStream;
+class LinuxOpenALAudio;
 
 class LinuxOggSound : public LinuxOpenALSound
 {

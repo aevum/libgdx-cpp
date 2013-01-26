@@ -18,7 +18,6 @@
  */
 
 #include "GL11.hpp"
-
 #include <gdx-cpp/gl.hpp>
 
 using namespace gdx;

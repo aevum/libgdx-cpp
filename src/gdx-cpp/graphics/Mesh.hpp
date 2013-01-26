@@ -21,25 +21,30 @@
 #ifndef GDX_CPP_GRAPHICS_MESH_HPP_
 #define GDX_CPP_GRAPHICS_MESH_HPP_
 
-#include <unordered_map>
 #include <list>
+#include <set>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
-#include "gdx-cpp/utils/Disposable.hpp"
-#include "gdx-cpp/utils/Buffer.hpp"
-#include "gdx-cpp/Application.hpp"
 #include "VertexAttribute.hpp"
 #include "VertexAttributes.hpp"
-#include <set>
+#include "gdx-cpp/Application.hpp"
+#include "gdx-cpp/internal/memory"
 #include "gdx-cpp/internal/unordered_map"
+#include "gdx-cpp/utils/Buffer.hpp"
+#include "gdx-cpp/utils/Disposable.hpp"
 
 namespace gdx {
 
 class BoundingBox;
 class BoundingBox;
-
-class VertexData;
 class IndexData;
 class ShaderProgram;
+class VertexData;
+class Application;
+class VertexAttribute;
+class VertexAttributes;
 
 class Mesh: public Disposable {
 public:

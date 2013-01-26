@@ -18,9 +18,11 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
+#include <stddef.h>
+#include <memory>
+
 #include "PixmapTextureData.hpp"
-#include "gdx-cpp/Gdx.hpp"
-#include "gdx-cpp/Application.hpp"
+#include "gdx-cpp/Log.hpp"
 
 using namespace gdx;
 

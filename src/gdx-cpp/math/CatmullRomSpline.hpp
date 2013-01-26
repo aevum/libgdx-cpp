@@ -22,6 +22,7 @@
 #define GDX_CPP_MATH_CATMULLROMSPLINE_HPP_
 
 #include <vector>
+
 #include "Vector3.hpp"
 #include "gdx-cpp/internal/memory"
 

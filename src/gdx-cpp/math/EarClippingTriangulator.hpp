@@ -29,6 +29,8 @@
 
 namespace gdx {
 
+class Vector2;
+
 class EarClippingTriangulator {
 public:
   std::vector<Vector2> computeTriangles (const std::vector<Vector2>& polygon);

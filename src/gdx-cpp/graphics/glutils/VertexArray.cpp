@@ -18,13 +18,13 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "VertexArray.hpp"
-
-#include "gdx-cpp/Gdx.hpp"
-#include "gdx-cpp/graphics/GL10.hpp"
-#include "gdx-cpp/graphics/GL11.hpp"
-#include "gdx-cpp/Application.hpp"
 #include "gdx-cpp/gl.hpp"
+
+#include "VertexArray.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/graphics/GL10.hpp"
+#include "gdx-cpp/graphics/VertexAttribute.hpp"
 
 using namespace gdx;
 

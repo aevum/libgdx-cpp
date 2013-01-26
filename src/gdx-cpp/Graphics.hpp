@@ -157,14 +157,14 @@ public:
     virtual bool supportsExtension (const std::string& extension) = 0;
 
     
-    virtual TextureData::ptr resolveTextureData(FileHandle::ptr fileHandle,
+    virtual TextureData::ptr resolveTextureData(const ref_ptr_maker<FileHandle>::shared_ptr_t& fileHandle,
                                                           Pixmap::ptr preloadedPixmap,
                                                           const gdx::Pixmap::Format* format,
                                                           bool useMipMaps) = 0;
 
     virtual Pixmap* resolvePixmap(const Pixmap& other) = 0;
-    virtual Pixmap* resolvePixmap(const FileHandle::ptr& file) = 0;
-    virtual Pixmap* resolvePixmap(int width, int height,  const gdx::Pixmap::Format& format, int pixType) = 0;
+    virtual Pixmap* resolvePixmap(const ref_ptr_maker<FileHandle>::shared_ptr_t& file) = 0;
+    virtual Pixmap* resolvePixmap(int width, int height,  const gdx::Pixmap::Format& format, Pixmap::PixmapType pixType) = 0;
     
     virtual ~Graphics() { }
 };

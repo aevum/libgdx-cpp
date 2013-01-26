@@ -21,15 +21,21 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_AGGSVGPIXMAP_HPP
 #define GDX_CPP_GRAPHICS_G2D_AGGSVGPIXMAP_HPP
 
+#include <stdint.h>
+#include <memory>
 #include <stdexcept>
 
-#include "SvgPixmapInterface.hpp"
-#include "gdx-cpp/graphics/Pixmap.hpp"
-#include "gdx-cpp/Files.hpp"
-#include "gdx-cpp/utils/XmlReader.hpp"
 #include "SvgParser.hpp"
+#include "SvgPixmapInterface.hpp"
+#include "gdx-cpp/Files.hpp"
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/files/FileHandle.hpp"
+#include "gdx-cpp/graphics/Color.hpp"
+#include "gdx-cpp/graphics/Pixmap.hpp"
+#include "gdx-cpp/implementation/System.hpp"
+#include "gdx-cpp/utils/SvgRendererHandler.hpp"
+#include "gdx-cpp/utils/XmlReader.hpp"
 
 namespace gdx {
 
@@ -170,6 +176,7 @@ private:
     AggSvgPixmap(const AggSvgPixmap& other);
     
     struct impl;
+
     impl* pimpl;
 
     float scaleX,scaleY;

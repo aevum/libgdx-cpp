@@ -22,6 +22,7 @@
 #define GDX_CPP_GRAPHICS_PERSPECTIVECAMERA_HPP_
 
 #include "gdx-cpp/graphics/Camera.hpp"
+#include "gdx-cpp/math/Vector3.hpp"
 
 namespace gdx {
 

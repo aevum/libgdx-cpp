@@ -21,6 +21,9 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_TEXTUREREGION_HPP_
 #define GDX_CPP_GRAPHICS_G2D_TEXTUREREGION_HPP_
 
+#include <cstddef>
+#include <memory>
+
 #include "gdx-cpp/graphics/Texture.hpp"
 #include "gdx-cpp/utils/MatrixBase.hpp"
 

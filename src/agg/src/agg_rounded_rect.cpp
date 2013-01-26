@@ -18,6 +18,8 @@
 //----------------------------------------------------------------------------
 
 #include <math.h>
+
+#include "agg_basics.h"
 #include "agg_rounded_rect.h"
 
 

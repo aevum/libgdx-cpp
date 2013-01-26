@@ -18,14 +18,13 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "Polygon.hpp"
-
 #include <cassert>
 #include <iostream>
 
 #include "MathUtils.hpp"
-#include "gdx-cpp/Gdx.hpp"
-#include "gdx-cpp/Application.hpp"
+#include "Polygon.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/math/Rectangle.hpp"
 
 using namespace gdx;
 

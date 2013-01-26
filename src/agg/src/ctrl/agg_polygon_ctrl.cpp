@@ -17,6 +17,7 @@
 //
 //----------------------------------------------------------------------------
 
+#include "ctrl/agg_ctrl.h"
 #include "ctrl/agg_polygon_ctrl.h"
 
 namespace agg

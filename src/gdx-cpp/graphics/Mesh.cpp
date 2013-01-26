@@ -18,25 +18,34 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
+#include "gdx-cpp/gl.hpp"
+#include <stddef.h>
+#include <stdint.h>
+#include <iostream>
+#include <unordered_map>
+#include <utility>
+
 #include "Mesh.hpp"
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/Graphics.hpp"
+#include "gdx-cpp/Log.hpp"
 #include "gdx-cpp/graphics/GL10.hpp"
 #include "gdx-cpp/graphics/GL11.hpp"
 #include "gdx-cpp/graphics/GL20.hpp"
-#include "gdx-cpp/graphics/glutils/VertexData.hpp"
-#include "gdx-cpp/graphics/glutils/VertexArray.hpp"
-#include "gdx-cpp/graphics/glutils/IndexData.hpp"
-#include "gdx-cpp/graphics/glutils/VertexBufferObject.hpp"
-#include "gdx-cpp/graphics/glutils/VertexBufferObjectSubData.hpp"
+#include "gdx-cpp/graphics/VertexAttribute.hpp"
+#include "gdx-cpp/graphics/VertexAttributes.hpp"
 #include "gdx-cpp/graphics/glutils/IndexBufferObject.hpp"
 #include "gdx-cpp/graphics/glutils/IndexBufferObjectSubData.hpp"
-#include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
+#include "gdx-cpp/graphics/glutils/IndexData.hpp"
+#include "gdx-cpp/graphics/glutils/VertexArray.hpp"
+#include "gdx-cpp/graphics/glutils/VertexBufferObject.hpp"
+#include "gdx-cpp/graphics/glutils/VertexBufferObjectSubData.hpp"
+#include "gdx-cpp/graphics/glutils/VertexData.hpp"
 #include "gdx-cpp/math/collision/BoundingBox.hpp"
-#include "gdx-cpp/gl.hpp"
 
-#include <stdexcept>
-#include <iostream>
+namespace gdx {
+class Application;
+}  // namespace gdx
 
 using namespace gdx;
 

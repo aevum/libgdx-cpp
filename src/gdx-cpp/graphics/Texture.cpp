@@ -18,22 +18,32 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "Texture.hpp"
 
-#include "gdx-cpp/Gdx.hpp"
-#include "gdx-cpp/graphics/Pixmap.hpp"
-#include "gdx-cpp/math/MathUtils.hpp"
-#include "GL10.hpp"
-#include "gdx-cpp/graphics/glutils/MipMapGenerator.hpp"
-#include "gdx-cpp/assets/AssetLoaderParameters.hpp"
-#include "gdx-cpp/assets/loaders/TextureParameter.hpp"
-#include "gdx-cpp/graphics/glutils/PixmapTextureData.hpp"
+#include <iostream>
+#include <list>
+#include <unordered_map>
+#include <utility>
+
 #include "gdx-cpp/gl.hpp"
 
-#include <list>
-#include <sstream>
-#include "glutils/FileTextureData.hpp"
-#include <stdexcept>
+#include "Texture.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Graphics.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/assets/AssetType.hpp"
+#include "gdx-cpp/graphics/GLCommon.hpp"
+#include "gdx-cpp/graphics/Pixmap.hpp"
+#include "gdx-cpp/graphics/TextureData.hpp"
+#include "gdx-cpp/graphics/glutils/MipMapGenerator.hpp"
+#include "gdx-cpp/graphics/glutils/PixmapTextureData.hpp"
+#include "gdx-cpp/math/MathUtils.hpp"
+
+
+
+namespace gdx {
+class Application;
+class AssetManager;
+}  // namespace gdx
 
 using namespace gdx;
 

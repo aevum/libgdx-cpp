@@ -21,8 +21,10 @@
 #ifndef GDX_CPP_MATH_COLLISION_RAY_HPP_
 #define GDX_CPP_MATH_COLLISION_RAY_HPP_
 
-#include "gdx-cpp/math/Vector3.hpp"
+#include <string>
+
 #include "gdx-cpp/internal/memory"
+#include "gdx-cpp/math/Vector3.hpp"
 
 namespace gdx {
 class Matrix4;

@@ -18,6 +18,7 @@
 //----------------------------------------------------------------------------
 
 #include "agg_arrowhead.h"
+#include "agg_basics.h"
 
 namespace agg
 {

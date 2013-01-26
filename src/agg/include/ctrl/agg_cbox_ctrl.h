@@ -21,11 +21,11 @@
 #define AGG_CBOX_CTRL_INCLUDED
 
 #include "agg_basics.h"
+#include "agg_color_rgba.h"
 #include "agg_conv_stroke.h"
+#include "agg_ctrl.h"
 #include "agg_gsv_text.h"
 #include "agg_trans_affine.h"
-#include "agg_color_rgba.h"
-#include "agg_ctrl.h"
 
 
 

@@ -18,9 +18,11 @@
  *  @author aevum team
  */
 
-#include "LinuxInput.hpp"
+#include <SDL/SDL_keyboard.h>
+#include <SDL/SDL_keysym.h>
 #include <gdx-cpp/InputProcessor.hpp>
-#include "iostream"
+
+#include "LinuxInput.hpp"
 #include "gdx-cpp/Input.hpp"
 
 using namespace gdx::nix;

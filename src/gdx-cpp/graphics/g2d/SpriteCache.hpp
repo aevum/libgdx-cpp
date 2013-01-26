@@ -21,9 +21,14 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_SPRITECACHE_HPP_
 #define GDX_CPP_GRAPHICS_G2D_SPRITECACHE_HPP_
 
-#include "gdx-cpp/utils/Disposable.hpp"
+#include <vector>
+
 #include "Sprite.hpp"
+#include "gdx-cpp/graphics/Color.hpp"
+#include "gdx-cpp/graphics/Texture.hpp"
+#include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
 #include "gdx-cpp/math/Matrix4.hpp"
+#include "gdx-cpp/utils/Disposable.hpp"
 
 namespace gdx {
 class Mesh;

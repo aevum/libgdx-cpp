@@ -16,11 +16,18 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include <Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.h>
 #include <Box2D/Common/b2BlockAllocator.h>
+#include <Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.h>
 #include <Box2D/Dynamics/b2Fixture.h>
-
 #include <new>
+
+#include "Box2D/Collision/b2Collision.h"
+#include "Box2D/Dynamics/Contacts/b2Contact.h"
+
+class b2EdgeShape;
+class b2PolygonShape;
+struct b2Transform;
+
 using namespace std;
 
 b2Contact* b2EdgeAndPolygonContact::Create(b2Fixture* fixtureA, int32, b2Fixture* fixtureB, int32, b2BlockAllocator* allocator)

@@ -17,11 +17,11 @@
 //
 //----------------------------------------------------------------------------
 
-#include <stdio.h>
-#include "agg_svg_path_renderer.h"
-#include <iostream>
-#include <stdexcept>
 #include <gdx-cpp/Log.hpp>
+#include <stdio.h>
+
+#include "agg_path_storage.h"
+#include "agg_svg_path_renderer.h"
 
 namespace agg
 {

@@ -21,14 +21,18 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_IMMEDIATEMODERENDERER20_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_IMMEDIATEMODERENDERER20_HPP_
 
-#include "ImmediateModeRenderer.hpp"
-#include "ShaderProgram.hpp"
-#include "gdx-cpp/graphics/Mesh.hpp"
-
 #include <string>
 #include <vector>
 
+#include "ImmediateModeRenderer.hpp"
+#include "ShaderProgram.hpp"
+#include "gdx-cpp/graphics/Mesh.hpp"
+#include "gdx-cpp/graphics/VertexAttribute.hpp"
+#include "gdx-cpp/math/Matrix4.hpp"
+
 namespace gdx {
+class ShaderProgram;
+
 class ImmediateModeRenderer20 : public ImmediateModeRenderer {
 public:
     RendererType getRendererType() { return RendererType::IMMEDIATE_GLES20; }

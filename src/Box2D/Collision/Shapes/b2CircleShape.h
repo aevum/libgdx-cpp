@@ -21,6 +21,14 @@
 
 #include <Box2D/Collision/Shapes/b2Shape.h>
 
+#include "Box2D/Common/b2Math.h"
+#include "Box2D/Common/b2Settings.h"
+
+class b2BlockAllocator;
+struct b2AABB;
+struct b2RayCastInput;
+struct b2RayCastOutput;
+
 /// A circle shape.
 class b2CircleShape : public b2Shape
 {

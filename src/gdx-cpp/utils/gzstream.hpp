@@ -29,10 +29,11 @@
 #ifndef GZSTREAM_H
 #define GZSTREAM_H 1
 
+#include <stdio.h>
+#include <zlib.h>
+#include <fstream>
 // standard C++ with new header file names and std:: namespace
 #include <iostream>
-#include <fstream>
-#include <zlib.h>
 
 #define GZSTREAM_NAMESPACE gz
 #ifdef GZSTREAM_NAMESPACE

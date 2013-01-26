@@ -18,13 +18,19 @@
 #ifndef GDX_CPP_IMPLEMENTATION_SYSTEM_HPP
 #define GDX_CPP_IMPLEMENTATION_SYSTEM_HPP
 
-#include <sys/types.h>
 #include <gdx-cpp/files/File.hpp>
+#include <stdint.h>
+#include <sys/types.h>
+#include <string>
+#include <vector>
+
 #include "MutexFactory.hpp"
 #include "ThreadFactory.hpp"
-#include <stdint.h>
 
 namespace gdx {
+
+class MutexFactory;
+class ThreadFactory;
 
 class System
 {

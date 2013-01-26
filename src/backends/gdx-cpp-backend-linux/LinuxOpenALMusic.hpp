@@ -18,8 +18,10 @@
 #ifndef LINUXMUSIC_HPP
 #define LINUXMUSIC_HPP
 
-#include "gdx-cpp/audio/Music.hpp"
 #include <gdx-cpp/internal/memory>
+
+#include "gdx-cpp/audio/Music.hpp"
+#include "gdx-cpp/internal/memory"
 
 namespace gdx {
 class FileHandle;

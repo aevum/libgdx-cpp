@@ -22,6 +22,7 @@
 #define GDX_CPP_GRAPHICS_ORTHOGRAPHICCAMERA_HPP_
 
 #include "Camera.hpp"
+#include "gdx-cpp/math/Vector3.hpp"
 
 namespace gdx {
 

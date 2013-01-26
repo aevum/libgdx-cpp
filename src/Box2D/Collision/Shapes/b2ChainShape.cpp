@@ -18,8 +18,13 @@
 
 #include <Box2D/Collision/Shapes/b2ChainShape.h>
 #include <Box2D/Collision/Shapes/b2EdgeShape.h>
-#include <new>
 #include <cstring>
+#include <new>
+
+#include "Box2D/Collision/Shapes/b2Shape.h"
+#include "Box2D/Collision/b2Collision.h"
+#include "Box2D/Common/b2BlockAllocator.h"
+
 using namespace std;
 
 b2ChainShape::~b2ChainShape()

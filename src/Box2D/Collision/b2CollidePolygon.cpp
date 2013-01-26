@@ -16,8 +16,11 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include <Box2D/Collision/b2Collision.h>
 #include <Box2D/Collision/Shapes/b2PolygonShape.h>
+#include <Box2D/Collision/b2Collision.h>
+
+#include "Box2D/Common/b2Math.h"
+#include "Box2D/Common/b2Settings.h"
 
 // Find the separation between poly1 and poly2 for a give edge normal on poly1.
 static float32 b2EdgeSeparation(const b2PolygonShape* poly1, const b2Transform& xf1, int32 edge1,

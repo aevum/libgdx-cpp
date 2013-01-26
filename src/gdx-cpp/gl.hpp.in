@@ -4,6 +4,7 @@
 #include <gdx-cpp/config.hpp>
 
 #ifdef GDX_BACKEND_LINUX
+
 #define GL_GLEXT_PROTOTYPES
 
 #include <GL/gl.h>

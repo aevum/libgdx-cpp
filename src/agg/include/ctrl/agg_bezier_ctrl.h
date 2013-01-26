@@ -20,13 +20,15 @@
 #ifndef AGG_BEZIER_CTRL_INCLUDED
 #define AGG_BEZIER_CTRL_INCLUDED
 
-#include "agg_math.h"
-#include "agg_ellipse.h"
-#include "agg_trans_affine.h"
 #include "agg_color_rgba.h"
-#include "agg_conv_stroke.h"
 #include "agg_conv_curve.h"
+#include "agg_conv_stroke.h"
+#include "agg_curves.h"
+#include "agg_ellipse.h"
+#include "agg_math.h"
 #include "agg_polygon_ctrl.h"
+#include "agg_trans_affine.h"
+#include "ctrl/agg_ctrl.h"
 
 
 namespace agg

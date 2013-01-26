@@ -18,8 +18,11 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "PerspectiveCamera.hpp"
 #include <cmath>
+
+#include "PerspectiveCamera.hpp"
+#include "gdx-cpp/math/Frustum.hpp"
+#include "gdx-cpp/math/Matrix4.hpp"
 
 using namespace gdx;
 

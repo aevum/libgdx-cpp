@@ -20,8 +20,8 @@
 #ifndef AGG_ROUNDED_RECT_INCLUDED
 #define AGG_ROUNDED_RECT_INCLUDED
 
-#include "agg_basics.h"
 #include "agg_arc.h"
+#include "agg_basics.h"
 
 namespace agg
 {

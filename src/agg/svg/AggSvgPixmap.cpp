@@ -17,16 +17,24 @@
  */
 
 
-#include <gdx-cpp/graphics/g2d/svg/AggSvgPixmap.hpp>
-
-#include <gdx-cpp/graphics/GL10.hpp>
-
-#include <agg_svg_path_renderer.h>
+#include <GL/gl.h>
 #include <agg_rendering_buffer.h>
-#include <agg_pixfmt_rgb.h>
 #include <agg_scanline_p.h>
+#include <agg_svg_path_renderer.h>
+#include <gdx-cpp/graphics/g2d/svg/AggSvgPixmap.hpp>
+#include <string.h>
+#include <vector>
 
-#include <gdx-cpp/gl.hpp>
+#include "agg_array.h"
+#include "agg_basics.h"
+#include "agg_color_rgba.h"
+#include "agg_math_stroke.h"
+#include "agg_pixfmt_rgba.h"
+#include "agg_rasterizer_scanline_aa.h"
+#include "agg_renderer_base.h"
+#include "agg_renderer_scanline.h"
+#include "agg_trans_affine.h"
+#include "gdx-cpp/graphics/g2d/svg/SvgPixmapInterface.hpp"
 
 using namespace gdx;
 
@@ -411,7 +419,7 @@ void AggSvgPixmap::setColor(const gdx::Color& color) {
 }
 
 Pixmap::PixmapType AggSvgPixmap::getType() const {
-    return Pixmap::Svg;
+    return Pixmap::PixmapType::PixmapType_Svg;
 }
 
 int AggSvgPixmap::getWidth() const {

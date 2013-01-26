@@ -18,19 +18,13 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "Pixmap.hpp"
-
-#include "gdx-cpp/graphics/g2d/Gdx2DPixmap.hpp"
-#include "Color.hpp"
-#include "gdx-cpp/Gdx.hpp"
-#include "gdx-cpp/files/FileHandle.hpp"
-
-#include <cassert>
-#include <stdexcept>
-#include <sstream>
-#include <iostream>
-#include <iostream>
 #include <gdx-cpp/graphics/g2d/detail/gdx2d.h>
+
+#include "gdx-cpp/graphics/Pixmap.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Graphics.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/files/FileHandle.hpp"
 
 using namespace gdx;
 
@@ -90,7 +84,7 @@ const Pixmap::Format& Pixmap::Format::fromGdx2DPixmapFormat(int format) {
 //     this->pixmap = pixmap;
 // }
 
-Pixmap::ptr Pixmap::newFromFile(const FileHandle::ptr file)
+Pixmap::ptr Pixmap::newFromFile(const FileHandle::ptr& file)
 {
     return Pixmap::ptr(graphics->resolvePixmap(file));
 }

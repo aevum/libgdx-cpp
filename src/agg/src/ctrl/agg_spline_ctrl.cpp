@@ -17,6 +17,8 @@
 //
 //----------------------------------------------------------------------------
 
+#include "agg_math.h"
+#include "ctrl/agg_ctrl.h"
 #include "ctrl/agg_spline_ctrl.h"
 
 

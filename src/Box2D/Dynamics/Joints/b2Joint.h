@@ -20,11 +20,14 @@
 #define B2_JOINT_H
 
 #include <Box2D/Common/b2Math.h>
+#include <stddef.h>
 
+#include "Box2D/Common/b2Settings.h"
+
+class b2BlockAllocator;
 class b2Body;
 class b2Joint;
 struct b2SolverData;
-class b2BlockAllocator;
 
 enum b2JointType
 {

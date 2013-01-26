@@ -1,9 +1,16 @@
-#include <cassert>
-#include <gdx-cpp/ApplicationListener.hpp>
 #include <gdx-cpp/Gdx.hpp>
+#include <stdlib.h>
+#include <cassert>
+#include <string>
+
 #include "LinuxApplication.hpp"
 #include "LinuxSystem.hpp"
 #include "Log.hpp"
+#include "gdx-cpp/backend.hpp"
+
+namespace gdx {
+class ApplicationListener;
+}  // namespace gdx
 
 using namespace gdx;
 using namespace gdx::nix;

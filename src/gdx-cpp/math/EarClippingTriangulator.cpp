@@ -18,12 +18,11 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "EarClippingTriangulator.hpp"
-
 #include <algorithm>
-#include <cmath>
 
+#include "EarClippingTriangulator.hpp"
 #include "MathUtils.hpp"
+#include "gdx-cpp/math/Vector2.hpp"
 
 using namespace gdx;
 

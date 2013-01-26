@@ -18,8 +18,11 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "Base64Coder.hpp"
+#include <algorithm>
+#include <ostream>
 #include <stdexcept>
+
+#include "Base64Coder.hpp"
 
 using namespace gdx;
 

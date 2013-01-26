@@ -21,7 +21,12 @@
 
 #include <Box2D/Dynamics/Contacts/b2Contact.h>
 
+#include "Box2D/Common/b2Settings.h"
+
 class b2BlockAllocator;
+class b2Fixture;
+struct b2Manifold;
+struct b2Transform;
 
 class b2ChainAndPolygonContact : public b2Contact
 {

@@ -1,9 +1,12 @@
-#include <cstdio>
-#include <cassert>
-#include <string>
-#include <gdx-cpp/implementation/System.hpp>
 #include <gdx-cpp/Gdx.hpp>
+#include <gdx-cpp/implementation/System.hpp>
+#include <stdint.h>
+#include <cassert>
 #include <stdexcept>
+#include <string>
+#include <vector>
+
+#include "gdx-cpp/files/File.hpp"
 
 using namespace gdx;
 

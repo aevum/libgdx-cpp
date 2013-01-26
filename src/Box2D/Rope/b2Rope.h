@@ -20,6 +20,9 @@
 #define B2_ROPE_H
 
 #include <Box2D/Common/b2Math.h>
+#include <stddef.h>
+
+#include "Box2D/Common/b2Settings.h"
 
 class b2Draw;
 

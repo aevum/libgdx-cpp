@@ -18,12 +18,25 @@
 #ifndef GDX_CPP_BACKENDS_NIX_LINUXGRAPHICS_HPP
 #define GDX_CPP_BACKENDS_NIX_LINUXGRAPHICS_HPP
 
-#include <gdx-cpp/Graphics.hpp>
-#include <SDL/SDL.h>
-#include <gdx-cpp/graphics/Pixmap.hpp>
-
 #include <EGL/egl.h>
+#include <SDL/SDL.h>
 #include <X11/Xlib.h>
+#include <gdx-cpp/Graphics.hpp>
+#include <gdx-cpp/graphics/Pixmap.hpp>
+#include <stdint.h>
+#include <string>
+#include <vector>
+
+#include "gdx-cpp/files/FileHandle.hpp"
+#include "gdx-cpp/graphics/TextureData.hpp"
+
+namespace gdx {
+class GL10;
+class GL11;
+class GL20;
+class GLCommon;
+class GLU;
+}  // namespace gdx
 
 namespace gdx {
 
@@ -70,9 +83,9 @@ public:
     virtual void update();
     void updateTime();
 
-    TextureData::ptr resolveTextureData(FileHandle::ptr fileHandle, Pixmap::ptr preloadedPixmap, const gdx::Pixmap::Format* format, bool useMipMaps);
+    TextureData::ptr resolveTextureData(const FileHandle::ptr& fileHandle, Pixmap::ptr preloadedPixmap, const gdx::Pixmap::Format* format, bool useMipMaps);
 
-    Pixmap* resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, int pixType);
+    Pixmap* resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, Pixmap::PixmapType pixType);
     Pixmap* resolvePixmap(const gdx::Pixmap& other);
     Pixmap* resolvePixmap(const gdx::FileHandle::ptr& file);
 

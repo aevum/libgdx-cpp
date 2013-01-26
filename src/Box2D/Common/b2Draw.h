@@ -18,6 +18,11 @@
 
 #include <Box2D/Common/b2Math.h>
 
+#include "Box2D/Common/b2Settings.h"
+
+struct b2Transform;
+struct b2Vec2;
+
 /// Color for debug drawing. Each value has the range [0,1].
 struct b2Color
 {

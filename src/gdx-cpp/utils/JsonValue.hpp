@@ -21,13 +21,18 @@
 #ifndef GDX_CPP_UTILS_JSONITEM_HPP
 #define GDX_CPP_UTILS_JSONITEM_HPP
 
-#include "gdx-cpp/internal/memory"
-#include <vector>
-#include <string>
-#include <fstream>
+#include <stddef.h>
 #include <cassert>
-#include <stdexcept>
+#include <fstream>
+#include <initializer_list>
 #include <map>
+#include <memory>
+#include <new>
+#include <stdexcept>
+#include <string>
+#include <vector>
+
+#include "gdx-cpp/internal/memory"
 
 namespace gdx {
 

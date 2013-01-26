@@ -21,18 +21,19 @@
 #ifndef GDX_CPP_MATH_INTERSECTOR_HPP_
 #define GDX_CPP_MATH_INTERSECTOR_HPP_
 
-#include "Vector3.hpp"
-#include "Plane.hpp"
 #include <vector>
+
+#include "Plane.hpp"
+#include "Vector3.hpp"
 
 
 
 namespace gdx {
-class Ray;
+class BoundingBox;
 class BoundingBox;
 class Circle;
+class Ray;
 class Rectangle;
-class BoundingBox;
 class Vector2;
 
 

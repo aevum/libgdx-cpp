@@ -18,10 +18,12 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
+#include <stdlib.h>
+
 #include "TextureAtlas.hpp"
-#include <climits>
-#include <unordered_map>
-#include <sstream>
+#include "gdx-cpp/graphics/Texture.hpp"
+#include "gdx-cpp/graphics/g2d/Sprite.hpp"
+#include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
 
 using namespace gdx;
 

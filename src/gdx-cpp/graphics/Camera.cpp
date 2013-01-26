@@ -18,13 +18,15 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
+#include "gdx-cpp/gl.hpp"
+
 #include "Camera.hpp"
+#include "gdx-cpp/graphics/GL10.hpp"
 
 using namespace gdx;
 
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/Graphics.hpp"
-#include "gdx-cpp/gl.hpp"
 
 Camera::Camera()
 : direction(0, 0, -1),

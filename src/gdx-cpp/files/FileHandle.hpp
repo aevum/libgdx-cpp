@@ -20,26 +20,25 @@
 #ifndef GDX_CPP_FILES_FILEHANDLE_HPP_
 #define GDX_CPP_FILES_FILEHANDLE_HPP_
 
-#include <iostream>
-#include <fstream>
-#include <cstdio>
-#include <string>
+#include <stdint.h>
 #include <sys/types.h>
-
-#include "gdx-cpp/Files.hpp"
-#include "gdx-cpp/Application.hpp"
-#include "gdx-cpp/files/File.hpp"
-#include "gdx-cpp/internal/memory"
-
+#include <cstdio>
+#include <fstream>
 #include <iosfwd>
+#include <iostream>
+#include <string>
 #include <string>
 #include <vector>
 
+#include "gdx-cpp/Application.hpp"
+#include "gdx-cpp/Files.hpp"
+#include "gdx-cpp/files/File.hpp"
+#include "gdx-cpp/internal/memory"
+
 namespace gdx {
 
-class Files;
-
 class File;
+class Files;
   
 class FileHandle {
 public:

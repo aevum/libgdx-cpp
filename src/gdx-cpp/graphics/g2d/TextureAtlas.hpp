@@ -21,18 +21,19 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_TEXTUREATLAS_HPP_
 #define GDX_CPP_GRAPHICS_G2D_TEXTUREATLAS_HPP_
 
-#include <gdx-cpp/utils/Disposable.hpp>
 #include <gdx-cpp/files/FileHandle.hpp>
 #include <gdx-cpp/graphics/Texture.hpp>
-#include <gdx-cpp/graphics/g2d/TextureRegion.hpp>
 #include <gdx-cpp/graphics/g2d/Sprite.hpp>
-
-#include <gdx-cpp/internal/memory>
-
+#include <gdx-cpp/graphics/g2d/TextureRegion.hpp>
+#include <gdx-cpp/utils/Disposable.hpp>
 #include <cmath>
+#include <gdx-cpp/internal/memory>
+#include <memory>
+#include <set>
 #include <string>
 #include <vector>
-#include <set>
+
+#include "gdx-cpp/internal/memory"
 
 namespace gdx {
 

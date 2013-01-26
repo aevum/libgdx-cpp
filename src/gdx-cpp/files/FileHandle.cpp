@@ -19,12 +19,8 @@
 */
 
 #include "FileHandle.hpp"
-#include <iostream>
-#include <stdexcept>
-#include <stdlib.h>
-#include <cassert>
-
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Log.hpp"
 
 using namespace gdx;
 

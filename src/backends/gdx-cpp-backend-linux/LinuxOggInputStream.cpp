@@ -1,7 +1,7 @@
-#include "LinuxOggInputStream.hpp"
-#include <stdexcept>
-#include <gdx-cpp/utils/Buffer.hpp>
 #include <string>
+
+#include "LinuxOggInputStream.hpp"
+#include "gdx-cpp/Log.hpp"
 
 using namespace gdx::nix;
 

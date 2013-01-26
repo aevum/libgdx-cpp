@@ -21,6 +21,11 @@
 
 #include <Box2D/Dynamics/Joints/b2Joint.h>
 
+#include "Box2D/Common/b2Math.h"
+#include "Box2D/Common/b2Settings.h"
+
+struct b2SolverData;
+
 /// Mouse joint definition. This requires a world target point,
 /// tuning parameters, and the time step.
 struct b2MouseJointDef : public b2JointDef
