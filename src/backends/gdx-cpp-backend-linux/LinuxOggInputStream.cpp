@@ -65,3 +65,9 @@ int LinuxOggInputStream::read(char * pcm, int max)
     }
     return size;
 }
+
+void LinuxOggInputStream::reset()
+{
+    ov_raw_seek(&oggStream, 0);
+}
+

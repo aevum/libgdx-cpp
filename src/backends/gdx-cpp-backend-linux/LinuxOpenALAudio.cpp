@@ -47,11 +47,11 @@ LinuxOpenALAudio::LinuxOpenALAudio (int simultaneousSources)
     idleSources = allSources;
 
     ALfloat orientation[] = {0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f};
-    alListenerfv(AL_ORIENTATION, orientation);
+    CHECK_OPENAL_ERROR(alListenerfv(AL_ORIENTATION, orientation));
     ALfloat velocity[] = {0.0f, 0.0f, 0.0f};
-    alListenerfv(AL_VELOCITY, velocity);
+    CHECK_OPENAL_ERROR(alListenerfv(AL_VELOCITY, velocity));
     ALfloat position[] = {0.0f, 0.0f, 0.0f};
-    alListenerfv(AL_POSITION, position);
+    CHECK_OPENAL_ERROR(alListenerfv(AL_POSITION, position));
 }
 
 void LinuxOpenALAudio::createAl() {
@@ -62,7 +62,7 @@ void LinuxOpenALAudio::createAl() {
 
     context = alcCreateContext(device, NULL);
 
-    alcMakeContextCurrent(context);
+    CHECK_OPENAL_ERROR(alcMakeContextCurrent(context));
 }
 
 gdx::Sound * LinuxOpenALAudio::newSound (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_t file) {
@@ -90,11 +90,11 @@ int LinuxOpenALAudio::obtainSource (bool isMusic) {
     for (; sit != send; sit++) {
         int sourceID = *sit;
         int state;
-        alGetSourcei(sourceID, AL_SOURCE_STATE, &state);
+        CHECK_OPENAL_ERROR(alGetSourcei(sourceID, AL_SOURCE_STATE, &state));
         if (state != AL_PLAYING && state != AL_PAUSED) {
             if (isMusic) idleSources.erase(sit);
-            alSourceStop(sourceID);
-            alSourcei(sourceID, AL_BUFFER, 0);
+            CHECK_OPENAL_ERROR(alSourceStop(sourceID));
+            CHECK_OPENAL_ERROR(alSourcei(sourceID, AL_BUFFER, 0));
             return sourceID;
         }
     }
@@ -102,8 +102,8 @@ int LinuxOpenALAudio::obtainSource (bool isMusic) {
 }
 
 void LinuxOpenALAudio::freeSource (int sourceID) {
-    alSourceStop(sourceID);
-    alSourcei(sourceID, AL_BUFFER, 0);
+    CHECK_OPENAL_ERROR(alSourceStop(sourceID));
+    CHECK_OPENAL_ERROR(alSourcei(sourceID, AL_BUFFER, 0));
     idleSources.insert(sourceID);
 }
 

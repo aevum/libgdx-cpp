@@ -31,7 +31,6 @@ char LinuxOpenALMusic::tempBytes[bufferSize];
 LinuxOpenALMusic::LinuxOpenALMusic(LinuxOpenALAudio * _audio, ref_ptr_maker< gdx::FileHandle >::shared_ptr_t _file) :
         file(_file),
 audio(_audio),
-buffers(NULL),
 sourceID(-1),
 format(0),
 sampleRate(0),
@@ -46,59 +45,53 @@ secondsPerBuffer(0)
 
 void LinuxOpenALMusic::setup (int _channels, int _sampleRate)
 {
-    this->format = _channels > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16;
+    sourceID = audio->obtainSource(true);
+    
     this->sampleRate = _sampleRate;
-    secondsPerBuffer = (float)bufferSize / bytesPerSample / _channels / _sampleRate;
+    this->format = _channels > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16;
+
+    CHECK_OPENAL_ERROR(alGenBuffers(bufferCount, buffers));    
+    CHECK_OPENAL_ERROR(alSourcei(sourceID, AL_LOOPING, AL_FALSE));    
+    CHECK_OPENAL_ERROR(alSourcef(sourceID, AL_GAIN, volume));
 }
 
 void LinuxOpenALMusic::play ()
 {
-    if (sourceID == -1) {
-        sourceID = audio->obtainSource(true);
-        if (sourceID == -1) return;
-        if (buffers == NULL) {
-            buffers =  new unsigned[bufferCount];
-            alGenBuffers(bufferCount,  buffers);
-            if (alGetError() != AL_NO_ERROR) gdx_log_error("gdx","Unabe to allocate audio buffers.");
-        }
-        alSourcei(sourceID, AL_LOOPING, AL_FALSE);
-        alSourcef(sourceID, AL_GAIN, volume);
-        for (int i = 0; i < bufferCount; i++) {
-            ALuint bufferID = buffers[i];
-            if (!fill(bufferID)) break;
-            alSourceQueueBuffers(sourceID, 1, &bufferID);
-        }
-        if (alGetError() != AL_NO_ERROR) {
-            stop();
-            return;
-        }
-    }
-    alSourcePlay(sourceID);
-    isPlayingVar = true;
+    reset();
 
+    int i;
+    for (i = 0; i < bufferCount; ++i) {
+        if (!fill(buffers[i])) {
+            break;
+        }            
+    }
+   
+    CHECK_OPENAL_ERROR(alSourceQueueBuffers(sourceID, i, buffers));
+    CHECK_OPENAL_ERROR(alSourcePlay(sourceID));
+    isPlayingVar = true;
 }
+
 void LinuxOpenALMusic::pause ()
 {
-    if (sourceID != -1) alSourcePause(sourceID);
+    if (sourceID != -1) CHECK_OPENAL_ERROR(alSourcePause(sourceID));
     isPlayingVar = false;
 }
 void LinuxOpenALMusic::stop ()
 {
-    if (sourceID == -1) return;
-    reset();
-    audio->freeSource(sourceID);
-    sourceID = -1;
+    CHECK_OPENAL_ERROR(alSourceStop(sourceID));
     renderedSeconds = 0;
     isPlayingVar = false;
 }
 bool LinuxOpenALMusic::isPlaying ()
 {
-    if (sourceID == -1) return false;
-    return isPlayingVar;
+    return sourceID != -1 && isPlayingVar;
 }
 void LinuxOpenALMusic::setLooping (bool isLooping)
 {
     isLoopingVar = isLooping;
+    if (sourceID != -1) {
+        CHECK_OPENAL_ERROR(alSourcei(sourceID, AL_LOOPING, isLooping ? AL_TRUE : AL_FALSE));
+    }
 }
 bool LinuxOpenALMusic::isLooping ()
 {
@@ -107,7 +100,7 @@ bool LinuxOpenALMusic::isLooping ()
 void LinuxOpenALMusic::setVolume (float volume)
 {
     this->volume = volume;
-    if (sourceID != -1) alSourcef(sourceID, AL_GAIN, volume);
+    if (sourceID != -1) CHECK_OPENAL_ERROR(alSourcef(sourceID, AL_GAIN, volume));
 }
 float LinuxOpenALMusic::getPosition ()
 {
@@ -117,7 +110,7 @@ float LinuxOpenALMusic::getPosition ()
     return renderedSeconds + value;
 }
 void LinuxOpenALMusic::dispose ()
-{
+{    
     if (buffers == NULL) return;
     if (sourceID != -1) {
         reset();
@@ -133,36 +126,42 @@ void LinuxOpenALMusic::dispose ()
         audio->freeSource(sourceID);
         sourceID = -1;
     }
-    alDeleteBuffers(bufferCount, buffers);
-    delete [] buffers;
-    buffers = NULL;
+    
+    CHECK_OPENAL_ERROR(alDeleteBuffers(bufferCount, buffers));
 }
 void LinuxOpenALMusic::update()
 {
-    if (sourceID == -1) return;
+    if (sourceID == -1 || !isPlayingVar) return;
+  
+    //we query for processed buffers
+    int processed = 0;
+    CHECK_OPENAL_ERROR(alGetSourcei(sourceID, AL_BUFFERS_PROCESSED, &processed));
 
-    bool end = false;
-    int buffers;
-    alGetSourcei(sourceID, AL_BUFFERS_PROCESSED, &buffers);
-    while (buffers-- > 0) {
+    //and unqueue them
+    while (processed-- > 0) {
         unsigned bufferID;
-        alSourceUnqueueBuffers(sourceID, 1, &bufferID);
-        if (bufferID == AL_INVALID_VALUE) break;
-        renderedSeconds += secondsPerBuffer;
-        if (end) continue;
-        if (fill(bufferID))
-            alSourceQueueBuffers(sourceID, 1, &bufferID);
-        else
-            end = true;
+        CHECK_OPENAL_ERROR(alSourceUnqueueBuffers(sourceID, 1, &bufferID));
+        if (bufferID == AL_INVALID_VALUE) break;        
+        
+        //then request for more bytes
+        if (!fill(bufferID)) {
+            break;
+        }
+        
+        CHECK_OPENAL_ERROR(alSourceQueueBuffers(sourceID, 1, (const ALuint*) &bufferID));
     }
-    int abq;
-    alGetSourcei(sourceID, AL_BUFFERS_QUEUED, &abq);
-    if (end && abq == 0) stop();
+
+     // if we do not have queued buffers anymore, then we can safely exit
+    ALint queued = 0;
+    CHECK_OPENAL_ERROR(alGetSourcei(sourceID, AL_BUFFERS_QUEUED, &queued));
+    if (queued == 0) {
+        stop();
+    }
 
     // A buffer underflow will cause the source to stop.
     int ss;
-    alGetSourcei(sourceID, AL_SOURCE_STATE, &ss);
-    if (isPlayingVar && ss != AL_PLAYING) alSourcePlay(sourceID);
+    CHECK_OPENAL_ERROR(alGetSourcei(sourceID, AL_SOURCE_STATE, &ss));
+    if (isPlayingVar && ss != AL_PLAYING) CHECK_OPENAL_ERROR(alSourcePlay(sourceID));
 }
 
 bool LinuxOpenALMusic::fill (int bufferID) {
@@ -176,6 +175,7 @@ bool LinuxOpenALMusic::fill (int bufferID) {
         } else
             return false;
     }
-    alBufferData(bufferID, format, tempBytes, length, sampleRate);
+    
+    CHECK_OPENAL_ERROR(alBufferData(bufferID, format, tempBytes, length, sampleRate));
     return true;
 }

@@ -27,7 +27,9 @@ public:
     int read(char* pcm, int max);
     int getChannels();
     int getSampleRate();
-
+    
+    void reset();
+    
 protected:
 
 private:

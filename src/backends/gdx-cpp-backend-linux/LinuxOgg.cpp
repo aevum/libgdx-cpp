@@ -65,18 +65,11 @@ LinuxOggMusic::~LinuxOggMusic()
 }
 
 int LinuxOggMusic::read (char * buffer, int bufferSize)
-{
-    if (input == NULL) {
-        input = new LinuxOggInputStream();
-        input->open(file->path());  
-        setup(input->getChannels(), input->getSampleRate());
-    }
+{  
     return input->read(buffer, bufferSize);
-
 }
 void LinuxOggMusic::reset ()
 {
     if (input == NULL) return;
-    input->release();
-    input = NULL;
+    input->reset();
 }

@@ -23,6 +23,14 @@
 
 #include "gdx-cpp/Audio.hpp"
 
+#define CHECK_OPENAL_ERROR(func) do { \
+  func;\
+  ALenum al_error = alGetError(); \
+  if (al_error != AL_NO_ERROR) { \
+    gdx_log_error("LinuxAudio", "Error [%d] %s", al_error, alGetString(al_error));\
+  }\
+} while (false)
+
 class ALCcontext_struct;
 struct ALCdevice_struct;
 
