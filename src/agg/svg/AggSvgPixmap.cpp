@@ -17,13 +17,14 @@
  */
 
 
-#include <GL/gl.h>
 #include <agg_rendering_buffer.h>
 #include <agg_scanline_p.h>
 #include <agg_svg_path_renderer.h>
 #include <gdx-cpp/graphics/g2d/svg/AggSvgPixmap.hpp>
 #include <string.h>
 #include <vector>
+
+#include <gdx-cpp/gl.hpp>
 
 #include "agg_array.h"
 #include "agg_basics.h"
