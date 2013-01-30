@@ -20,6 +20,7 @@
 
 #include <gdx-cpp/Graphics.hpp>
 #include <gdx-cpp/graphics/Pixmap.hpp>
+#include <gdx-cpp/files/FileHandle.hpp>
 #include <stdint.h>
 
 namespace gdx {
@@ -64,9 +65,9 @@ public:
 
     void resize(int width, int height);
 
-    TextureData::ptr resolveTextureData(FileHandle::ptr fileHandle, Pixmap::ptr preloadedPixmap, const gdx::Pixmap::Format* format, bool useMipMaps);
+    TextureData::ptr resolveTextureData(const FileHandle::ptr& fileHandle, Pixmap::ptr preloadedPixmap, const gdx::Pixmap::Format* format, bool useMipMaps);
 
-    virtual Pixmap* resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, int pixType);
+    virtual Pixmap* resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, gdx::Pixmap::PixmapType pixType);
     virtual Pixmap* resolvePixmap(const gdx::Pixmap& other);
     virtual Pixmap* resolvePixmap(const gdx::FileHandle::ptr& file);    
     

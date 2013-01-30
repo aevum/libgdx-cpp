@@ -251,7 +251,7 @@ void android::AndroidGraphics::resize(int width, int height)
     glCommon->glViewport(0, 0, width, height);
 }
 
-TextureData::ptr android::AndroidGraphics::resolveTextureData(FileHandle::ptr fileHandle,
+TextureData::ptr android::AndroidGraphics::resolveTextureData(const FileHandle::ptr& fileHandle,
                                                                         Pixmap::ptr preloadedPixmap,
                                                                         const gdx::Pixmap::Format* format,
                                                                         bool useMipMaps)
@@ -259,12 +259,12 @@ TextureData::ptr android::AndroidGraphics::resolveTextureData(FileHandle::ptr fi
     return TextureData::ptr(new FileTextureData(fileHandle, preloadedPixmap, format, useMipMaps));
 }
 
-Pixmap* android::AndroidGraphics::resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, int pixType)
+Pixmap* android::AndroidGraphics::resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, Pixmap::PixmapType pixType)
 {
     switch(pixType) {
-        case Pixmap::Gdx2d:
+        case Pixmap::PixmapType::PixmapType_Gdx2d:
             return Gdx2DPixmap::newPixmap(width, height, Gdx2DPixmap::Format::toGdx2DPixmapFormat(format));
-        case Pixmap::Svg:
+        case Pixmap::PixmapType::PixmapType_Svg:
             return new AggSvgPixmap(width, height);
     }
 }
@@ -272,9 +272,9 @@ Pixmap* android::AndroidGraphics::resolvePixmap(int width, int height, const gdx
 Pixmap* android::AndroidGraphics::resolvePixmap(const gdx::Pixmap& other)
 {
     switch(other.getType()) {
-        case Pixmap::Gdx2d:
+        case Pixmap::PixmapType::PixmapType_Gdx2d:
             return new Gdx2DPixmap((Gdx2DPixmap&)other);
-        case Pixmap::Svg:
+        case Pixmap::PixmapType::PixmapType_Svg:
         default:
             gdx_log_error("gdx","Pixmap of type Svg doesnt provide a copy constructor");
     } 
