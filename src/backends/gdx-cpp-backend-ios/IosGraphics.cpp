@@ -245,7 +245,7 @@ void gdx::ios::IosGraphics::update()
 {
 }
 
-TextureData::ptr ios::IosGraphics::resolveTextureData(gdx::FileHandle::ptr fileHandle,
+TextureData::ptr ios::IosGraphics::resolveTextureData(const std::shared_ptr<FileHandle>& fileHandle,
                                                                   Pixmap::ptr preloadedPixmap,
                                                                   const gdx::Pixmap::Format* format,
                                                                   bool useMipMaps)
@@ -253,12 +253,12 @@ TextureData::ptr ios::IosGraphics::resolveTextureData(gdx::FileHandle::ptr fileH
     return TextureData::ptr(new FileTextureData(fileHandle, preloadedPixmap, format, useMipMaps));
 }
 
-Pixmap* ios::IosGraphics::resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, int pixType)
+Pixmap* ios::IosGraphics::resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, Pixmap::PixmapType pixType)
 {
     switch(pixType) {
-        case Pixmap::Gdx2d:
+        case Pixmap::PixmapType::PixmapType_Gdx2d:
             return Gdx2DPixmap::newPixmap(width, height, Gdx2DPixmap::Format::toGdx2DPixmapFormat(format));
-        case Pixmap::Svg:
+        case Pixmap::PixmapType::PixmapType_Svg:
             return new gdx::AggSvgPixmap(width, height);
     }
     return NULL;
@@ -267,9 +267,9 @@ Pixmap* ios::IosGraphics::resolvePixmap(int width, int height, const gdx::Pixmap
 Pixmap* ios::IosGraphics::resolvePixmap(const gdx::Pixmap& other)
 {
     switch(other.getType()) {
-        case Pixmap::Gdx2d:
+        case Pixmap::PixmapType::PixmapType_Gdx2d:
             return new Gdx2DPixmap((Gdx2DPixmap&)other);
-		case Pixmap::Svg:
+		case Pixmap::PixmapType::PixmapType_Svg:
 			break;			
     } 
     return NULL;

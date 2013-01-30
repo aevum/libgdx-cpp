@@ -31,6 +31,11 @@ gdx::FileHandle::ptr IosFiles::internal (const std::string &path)
     return gdx::FileHandle::ptr(new IosFileHandle(path, gdx::Files::Internal));
 }
 
+gdx::FileHandle::ptr IosFiles::internal_private (const std::string &path)
+{
+    return gdx::FileHandle::ptr(new IosFileHandle(path, gdx::Files::Internal));
+}
+
 gdx::FileHandle::ptr IosFiles::external (const std::string &path)
 {
     return gdx::FileHandle::ptr(new IosFileHandle(path, gdx::Files::External));
