@@ -13,6 +13,7 @@
 #elif defined GDX_BACKEND_ANDROID
 
 #include <GLES/gl.h>
+#include <GLES2/gl2.h>
 
 #elif defined GDX_BACKEND_IOS
 

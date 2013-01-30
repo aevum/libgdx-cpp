@@ -508,8 +508,7 @@ install(DIRECTORY internal DESTINATION include/gdx-cpp
           FILES_MATCHING PATTERN "*")
 
 install(FILES config.hpp.in DESTINATION include/gdx-cpp)
-install(FILES gl.hpp.in DESTINATION include/gdx-cpp)
-         
+
 gdx_setup_target(gdx-cpp SHARED "${GDX_HEADERS};${GDX_SRC}")
 target_link_libraries(gdx-cpp z)
 
