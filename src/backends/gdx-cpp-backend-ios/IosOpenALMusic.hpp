@@ -20,6 +20,11 @@
 
 #include "gdx-cpp/audio/Music.hpp"
 #include <gdx-cpp/internal/memory>
+#include <gdx-cpp/files/FileHandle.hpp>
+#import <AudioToolbox/AudioToolbox.h>
+
+#define GDX_IOS_OPENALMUSIC_BUFFER_COUNT 4
+#define GDX_IOS_OPENALMUSIC_BUFFER_SIZE 65536
 
 namespace gdx {
 class FileHandle;
@@ -30,7 +35,7 @@ class   IosOpenALAudio;
 class IosOpenALMusic : public gdx::Music
 {
 public:
-    IosOpenALMusic(IosOpenALAudio * _audio, int format, void* buffer, int length, int _sampleRate);
+    IosOpenALMusic(IosOpenALAudio * _audio, const FileHandle::ptr& filehandle);
    
     void play ();
     void pause ();
@@ -42,20 +47,27 @@ public:
     float getPosition ();
     void dispose ();
     void update ();
+    void setup();
     
 protected:
     virtual void reset ();
-
+    bool fill(int bufferID);
+    int read();
+    
 private:
     IosOpenALAudio * audio;
-    unsigned int alBuffer;
-    void* musicBuffer;
-    int bufferLength;
+    
+    unsigned int alBuffers[GDX_IOS_OPENALMUSIC_BUFFER_COUNT];
+    void* musicBuffer[GDX_IOS_OPENALMUSIC_BUFFER_SIZE];
+    
     int sourceID;
+    int channels;
     int format, sampleRate;
     bool isLoopingVar, isPlayingVar;
     float volume;
-    float renderedSeconds, secondsPerBuffer;
+    float renderedSeconds;
+    ExtAudioFileRef audioFile;
+    FileHandle::ptr file;
 };
 
 }
