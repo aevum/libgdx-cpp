@@ -278,7 +278,7 @@ Version.cpp
 # assets/loaders/PixmapLoader.cpp
 # assets/loaders/SoundParameter.cpp
 # assets/loaders/TextureAtlasParameter.cpp
-assets/AssetType.cpp
+# assets/AssetType.cpp
 # assets/AssetDescriptor.cpp
 # scenes/scene2d/Group.cpp
 # scenes/scene2d/Stage.cpp
