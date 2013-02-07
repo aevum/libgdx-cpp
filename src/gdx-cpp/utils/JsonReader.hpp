@@ -38,25 +38,26 @@ public:
     static JsonValue parse (const char* data, int offset, int length);
 
 protected:
-    static void startObject (const std::string& name);
-    static void startArray (const std::string& name);
+    JsonValue doParse (const char* data, int offset, int length);
+    void startObject (const std::string& name);
+    void startArray (const std::string& name);
 
-    static void pop ();
+    void pop ();
 
-    static void string (const std::string& name,  const std::string& value);
-    static void number (const std::string& name,  float value);
-    static void number (const std::string& name,  int value);
-    static void boolean (const std::string& name, bool value);
-    static void null (const std::string& name);
+    void string (const std::string& name,  const std::string& value);
+    void number (const std::string& name,  float value);
+    void number (const std::string& name,  int value);
+    void boolean (const std::string& name, bool value);
+    void null (const std::string& name);
     
 private:    
-    static std::string unescape (const std::string& value);
-    static JsonValue* set( const std::string& name, const gdx::JsonValue& value );
+    std::string unescape (const std::string& value);
+    JsonValue* set( const std::string& name, const gdx::JsonValue& value );
     
-    static JsonValue root;
-    static JsonValue* current;
+    JsonValue root;
+    JsonValue* current;
 
-    static std::list< JsonValue* > elements;
+    std::list< JsonValue* > elements;
 };
 
 } // namespace gdx

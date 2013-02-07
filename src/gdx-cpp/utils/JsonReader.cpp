@@ -34,11 +34,6 @@
 using namespace gdx;
 
 
-JsonValue JsonReader::root;
-JsonValue* JsonReader::current = nullptr;
-std::list< JsonValue* > JsonReader::elements;
-
-
 /* #line 42 "JsonReader.cpp" */
 static const int json_start = 1;
 static const int json_first_final = 71;
@@ -71,7 +66,13 @@ JsonValue JsonReader::parse (const FileHandle& file) {
     }
 }
 
-JsonValue JsonReader::parse (const char* data, int offset, int length) {
+JsonValue JsonReader::parse(const char* data, int offset, int length)
+{
+    JsonReader reader;
+    return reader.doParse(data,offset, length);
+}
+
+JsonValue JsonReader::doParse (const char* data, int offset, int length) {
     root = JsonValue();
     current = nullptr;
     
