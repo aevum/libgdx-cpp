@@ -19,6 +19,8 @@
 #include <Box2D/Collision/b2Collision.h>
 #include <Box2D/Collision/b2Distance.h>
 
+#include "Box2D/Common/b2Math.h"
+
 void b2WorldManifold::Initialize(const b2Manifold* manifold,
 						  const b2Transform& xfA, float32 radiusA,
 						  const b2Transform& xfB, float32 radiusB)

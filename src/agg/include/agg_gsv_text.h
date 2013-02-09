@@ -21,8 +21,11 @@
 #define AGG_GSV_TEXT_INCLUDED
 
 #include "agg_array.h"
+#include "agg_basics.h"
 #include "agg_conv_stroke.h"
 #include "agg_conv_transform.h"
+#include "agg_math_stroke.h"
+#include "agg_trans_affine.h"
 
 namespace agg
 {

@@ -25,6 +25,10 @@
 #include <gdx-cpp/graphics/GLU.hpp>
 
 namespace gdx {
+class GL10;
+}  // namespace gdx
+
+namespace gdx {
 
 namespace nix {
 

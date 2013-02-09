@@ -19,23 +19,28 @@
 #ifndef AGG_SVG_PATH_RENDERER_INCLUDED
 #define AGG_SVG_PATH_RENDERER_INCLUDED
 
+#include <agg_ellipse.h>
 #include <agg_path_storage.h>
-#include "agg_conv_transform.h"
-#include "agg_conv_stroke.h"
+#include <math.h>
+#include <stddef.h>
+#include <iostream>
+
+#include "agg_array.h"
+#include "agg_basics.h"
+#include "agg_bounding_rect.h"
+#include "agg_color_rgba.h"
 #include "agg_conv_contour.h"
 #include "agg_conv_curve.h"
-#include "agg_color_rgba.h"
-#include "agg_renderer_scanline.h"
-#include "agg_bounding_rect.h"
+#include "agg_conv_stroke.h"
+#include "agg_conv_transform.h"
+#include "agg_math_stroke.h"
+#include "agg_pixfmt_rgba.h"
 #include "agg_rasterizer_scanline_aa.h"
-#include "agg_span_interpolator_linear.h"
+#include "agg_renderer_scanline.h"
 #include "agg_span_allocator.h"
 #include "agg_span_gradient.h"
-#include "agg_pixfmt_rgba.h"
-
-
-#include <iostream>
-#include <agg_ellipse.h>
+#include "agg_span_interpolator_linear.h"
+#include "agg_trans_affine.h"
 
 namespace agg
 {

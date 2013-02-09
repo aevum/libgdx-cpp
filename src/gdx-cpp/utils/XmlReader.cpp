@@ -18,11 +18,15 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "XmlReader.hpp"
-#include <stdexcept>
-#include <cassert>
+#include <algorithm>
+#include <memory>
+#include <unordered_map>
+#include <utility>
+
 #include "StringConvertion.hpp"
-#include "gdx-cpp/Gdx.hpp"
+#include "XmlReader.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/files/FileHandle.hpp"
 
 using namespace gdx;
 

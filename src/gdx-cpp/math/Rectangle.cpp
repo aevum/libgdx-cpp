@@ -15,10 +15,11 @@
 */
 
 
-#include "Rectangle.hpp"
-#include <string>
+#include <algorithm>
 #include <sstream>
-#include <cmath>
+#include <string>
+
+#include "Rectangle.hpp"
 
 using namespace gdx;
 

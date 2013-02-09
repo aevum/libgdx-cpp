@@ -18,19 +18,21 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
+#include <math.h>
+#include <stddef.h>
+#include <cassert>
+#include <limits>
+#include <vector>
+
+#include "Circle.hpp"
 #include "Intersector.hpp"
+#include "Plane.hpp"
+#include "Rectangle.hpp"
 #include "Vector2.hpp"
 #include "Vector3.hpp"
-#include "Rectangle.hpp"
-#include <math.h>
-#include <vector>
-#include "Plane.hpp"
 #include "collision/BoundingBox.hpp"
-#include <limits>
 #include "collision/Ray.hpp"
-#include <cassert>
-#include "gdx-cpp/Gdx.hpp"
-#include "Circle.hpp"
+#include "gdx-cpp/Log.hpp"
 
 
 

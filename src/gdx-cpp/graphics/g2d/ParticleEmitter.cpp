@@ -18,17 +18,21 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "ParticleEmitter.hpp"
-#include "gdx-cpp/math/MathUtils.hpp"
-#include "gdx-cpp/graphics/GL10.hpp"
 #include "gdx-cpp/gl.hpp"
-
-#include <cmath>
-
-#include "SpriteBatch.hpp"
-#include <iostream>
-#include <stdexcept>
+#include <ctype.h>
+#include <stdlib.h>
 #include <algorithm>
+#include <cmath>
+#include <functional>
+#include <iostream>
+#include <memory>
+
+#include "ParticleEmitter.hpp"
+#include "SpriteBatch.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/graphics/Texture.hpp"
+#include "gdx-cpp/graphics/g2d/Sprite.hpp"
+#include "gdx-cpp/math/MathUtils.hpp"
 
 using namespace gdx;
 

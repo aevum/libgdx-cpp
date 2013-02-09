@@ -21,11 +21,17 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_VERTEXBUFFEROBJECTSUBDATA_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_VERTEXBUFFEROBJECTSUBDATA_HPP_
 
+#include <vector>
+
 #include "VertexData.hpp"
+#include "gdx-cpp/graphics/VertexAttributes.hpp"
+#include "gdx-cpp/utils/Buffer.hpp"
 
 class tm;
+
 namespace gdx {
 class ShaderProgram;
+class VertexAttribute;
 
 
 class VertexBufferObjectSubData : public VertexData {

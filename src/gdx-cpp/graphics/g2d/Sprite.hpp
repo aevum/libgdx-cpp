@@ -21,11 +21,13 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_SPRITE_HPP_
 #define GDX_CPP_GRAPHICS_G2D_SPRITE_HPP_
 
+#include <array>
+
 #include "gdx-cpp/graphics/Color.hpp"
 #include "gdx-cpp/graphics/Texture.hpp"
-#include "gdx-cpp/math/Rectangle.hpp"
 #include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
 #include "gdx-cpp/internal/memory"
+#include "gdx-cpp/math/Rectangle.hpp"
 
 namespace gdx {
 

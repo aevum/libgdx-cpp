@@ -20,6 +20,8 @@
 #include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Dynamics/b2TimeStep.h>
 
+#include "Box2D/Dynamics/Joints/b2Joint.h"
+
 // Linear constraint (point-to-line)
 // d = pB - pA = xB + rB - xA - rA
 // C = dot(ay, d)

@@ -23,12 +23,18 @@
 #include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Dynamics/b2TimeStep.h>
 
+#include "Box2D/Common/b2Settings.h"
+
 class b2Contact;
+class b2ContactListener;
 class b2Joint;
 class b2StackAllocator;
-class b2ContactListener;
 struct b2ContactVelocityConstraint;
+struct b2Position;
 struct b2Profile;
+struct b2TimeStep;
+struct b2Vec2;
+struct b2Velocity;
 
 /// This is an internal class.
 class b2Island

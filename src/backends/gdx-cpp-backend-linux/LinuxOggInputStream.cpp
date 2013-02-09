@@ -1,7 +1,7 @@
-#include "LinuxOggInputStream.hpp"
-#include <stdexcept>
-#include <gdx-cpp/utils/Buffer.hpp>
 #include <string>
+
+#include "LinuxOggInputStream.hpp"
+#include "gdx-cpp/Log.hpp"
 
 using namespace gdx::nix;
 
@@ -65,3 +65,9 @@ int LinuxOggInputStream::read(char * pcm, int max)
     }
     return size;
 }
+
+void LinuxOggInputStream::reset()
+{
+    ov_raw_seek(&oggStream, 0);
+}
+

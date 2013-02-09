@@ -22,6 +22,9 @@
 #include <Box2D/Collision/b2Collision.h>
 #include <Box2D/Common/b2GrowableStack.h>
 
+#include "Box2D/Common/b2Math.h"
+#include "Box2D/Common/b2Settings.h"
+
 #define b2_nullNode (-1)
 
 /// A node in the dynamic tree. The client does not interact with this directly.

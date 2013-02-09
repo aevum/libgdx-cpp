@@ -15,13 +15,15 @@
 */
 
 
-#include "LinuxOgg.hpp"
-#include "LinuxOpenALAudio.hpp"
-#include "gdx-cpp/files/FileHandle.hpp"
-#include "LinuxOggInputStream.hpp"
-#include <sstream>
-#include <cstdlib>
 #include <cassert>
+#include <cstdlib>
+#include <memory>
+
+#include "LinuxOgg.hpp"
+#include "LinuxOggInputStream.hpp"
+#include "backends/gdx-cpp-backend-linux/LinuxOpenALMusic.hpp"
+#include "backends/gdx-cpp-backend-linux/LinuxOpenALSound.hpp"
+#include "gdx-cpp/files/FileHandle.hpp"
 
 using namespace gdx::nix;
 
@@ -63,18 +65,11 @@ LinuxOggMusic::~LinuxOggMusic()
 }
 
 int LinuxOggMusic::read (char * buffer, int bufferSize)
-{
-    if (input == NULL) {
-        input = new LinuxOggInputStream();
-        input->open(file->path());  
-        setup(input->getChannels(), input->getSampleRate());
-    }
+{  
     return input->read(buffer, bufferSize);
-
 }
 void LinuxOggMusic::reset ()
 {
     if (input == NULL) return;
-    input->release();
-    input = NULL;
+    input->reset();
 }

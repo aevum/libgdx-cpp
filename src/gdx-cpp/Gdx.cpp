@@ -18,18 +18,18 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "Gdx.hpp"
-
-#include "graphics/GL10.hpp"
-#include "graphics/GL11.hpp"
-#include "graphics/GL20.hpp"
-#include "graphics/GLCommon.hpp"
-#include "graphics/GLU.hpp"
-#include <cassert>
-#include <stdio.h>
 #include <stdarg.h>
 
+#include "Gdx.hpp"
+#include "gdx-cpp/Graphics.hpp"
+#include "gdx-cpp/Log.hpp"
+
 namespace gdx {
+class Application;
+class Audio;
+class Files;
+class Input;
+
 Application* app = 0;
 Graphics* graphics = 0;
 Audio* audio = 0;

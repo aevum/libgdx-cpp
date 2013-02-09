@@ -22,6 +22,7 @@
 #define GDX_CPP_MATH_POLYGON_HPP_
 
 #include <vector>
+
 #include "Rectangle.hpp"
 
 namespace gdx {

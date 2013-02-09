@@ -23,6 +23,9 @@
 
 #include <gdx-cpp/Files.hpp>
 #include <gdx-cpp/files/FileHandle.hpp>
+#include <string>
+
+#include "gdx-cpp/Files.hpp"
 
 namespace gdx {
 

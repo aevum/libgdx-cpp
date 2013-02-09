@@ -80,8 +80,7 @@ void gdx::android::AndroidAudio::setupJNI(jobject androidAudioObj)
 {
     JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::system)->getJniEnv();
     env = env;
-    this->androidAudioObj = androidAudioObj;
-    env->NewGlobalRef(androidAudioObj);
+    this->androidAudioObj = env->NewGlobalRef(androidAudioObj);
 
     jclass cls = env->GetObjectClass(androidAudioObj);
 

@@ -21,51 +21,47 @@
 
 
 #include <OpenAL/al.h>
+#include <OpenAL/alc.h>
 #include <stdexcept>
 
-
-#define GDX_IOS_OPENALMUSIC_BUFFER_SIZE 40960.0f
-#define GDX_IOS_OPENALMUSIC_BUFFER_COUNT 1
-#define GDX_IOS_OPENALMUSIC_BYTES_PER_SAMPLE 2.0f
+#import <Foundation/Foundation.h>
 
 using namespace gdx::ios;
 
-
-IosOpenALMusic::IosOpenALMusic(IosOpenALAudio * _audio, int channels, void* buffer, int length, int _sampleRate) :
+IosOpenALMusic::IosOpenALMusic(IosOpenALAudio * _audio, const FileHandle::ptr& _file) :
 audio(_audio),
-musicBuffer(buffer),
-bufferLength(length),
 sourceID(-1),
-sampleRate(_sampleRate),
+sampleRate(0),
 isLoopingVar(false),
 isPlayingVar(false),
 volume(1),
 renderedSeconds(0),
-secondsPerBuffer(0),
-alBuffer(0)
+channels(1),
+file(_file)
 {
     audio->music.push_back(this);
-    
     sourceID = audio->obtainSource(true);
-        
-    this->format = channels > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16;
     
-    CHECK_OPENAL_ERROR(alGenBuffers(GDX_IOS_OPENALMUSIC_BUFFER_COUNT, &alBuffer));
-    
+    CHECK_OPENAL_ERROR(alGenBuffers(GDX_IOS_OPENALMUSIC_BUFFER_COUNT, alBuffers));
     CHECK_OPENAL_ERROR(alSourcei(sourceID, AL_LOOPING, AL_FALSE));
-    
-    CHECK_OPENAL_ERROR(alSourcef(sourceID, AL_GAIN, volume));   
-    
-    CHECK_OPENAL_ERROR(alBufferData(alBuffer, format, musicBuffer, bufferLength, sampleRate));
-    
-    CHECK_OPENAL_ERROR(alSourceQueueBuffers(sourceID, 1, &alBuffer));
+    CHECK_OPENAL_ERROR(alSourcef(sourceID, AL_GAIN, volume));
 }
 
 void IosOpenALMusic::play ()
 {
-    CHECK_OPENAL_ERROR(alSourcePlay(sourceID));
-    isPlayingVar = true;
+    setup();
+
+    int i;
+    for (i = 0; i < GDX_IOS_OPENALMUSIC_BUFFER_COUNT; ++i) {
+        if (!fill(alBuffers[i])) {
+            break;
+        }
+    }
     
+    CHECK_OPENAL_ERROR(alSourceQueueBuffers(sourceID, i, alBuffers));
+    CHECK_OPENAL_ERROR(alSourcePlay(sourceID));
+    
+    isPlayingVar = true;
 }
 
 void IosOpenALMusic::pause ()
@@ -84,6 +80,60 @@ void IosOpenALMusic::stop ()
 bool IosOpenALMusic::isPlaying ()
 {
     return sourceID != -1 && isPlayingVar;
+}
+
+void IosOpenALMusic::setup() {
+    OSStatus    err;
+    UInt32      size;
+    
+    err = ExtAudioFileOpenURL((CFURLRef)[NSURL fileURLWithPath:[NSString stringWithCString:file->path().c_str() encoding:NSUTF8StringEncoding]], &audioFile);
+    
+    if (err) {
+		gdx_log_error("GdxIosAudio","GetOpenALAudioData: failed to open audioFile");
+        ExtAudioFileDispose(audioFile);
+        return;
+    }
+    
+    AudioStreamBasicDescription fileFormat;
+    size = sizeof(fileFormat);
+    err = ExtAudioFileGetProperty(audioFile, kExtAudioFileProperty_FileDataFormat, &size, &fileFormat);
+    if (err) {
+		gdx_log_error("GdxIosAudio","GetOpenALAudioData: failed to get fileFormat");
+        ExtAudioFileDispose(audioFile);
+        return;
+    }
+    
+    AudioStreamBasicDescription outputFormat;
+    outputFormat.mSampleRate = fileFormat.mSampleRate;
+    outputFormat.mChannelsPerFrame = fileFormat.mChannelsPerFrame;
+    outputFormat.mFormatID = kAudioFormatLinearPCM;
+    outputFormat.mBytesPerPacket = 2 * outputFormat.mChannelsPerFrame;
+    outputFormat.mFramesPerPacket = 1;
+    outputFormat.mBytesPerFrame = 2 * outputFormat.mChannelsPerFrame;
+    outputFormat.mBitsPerChannel = 16;
+    outputFormat.mFormatFlags = kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger;
+   
+    err = ExtAudioFileSetProperty(audioFile, kExtAudioFileProperty_ClientDataFormat, sizeof(outputFormat), &outputFormat);
+    
+    if (err) {
+		gdx_log_error("GdxIosAudio","GetOpenALAudioData: failed to set outputFormat");
+        ExtAudioFileDispose(audioFile);
+        return;
+    }
+    
+    SInt64  fileLengthFrames = 0;
+    size = sizeof(fileLengthFrames);
+    err = ExtAudioFileGetProperty(audioFile, kExtAudioFileProperty_FileLengthFrames, &size, &fileLengthFrames);
+    
+    if (err) {
+		gdx_log_error("GdxIosAudio","GetOpenALAudioData: failed to get fileLengthFrames");
+        ExtAudioFileDispose(audioFile);
+        return;
+    }
+    
+    this->format = outputFormat.mChannelsPerFrame > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16;
+    this->channels = outputFormat.mChannelsPerFrame;
+    this->sampleRate = outputFormat.mSampleRate;
 }
 
 void IosOpenALMusic::setLooping (bool isLooping)
@@ -115,7 +165,6 @@ float IosOpenALMusic::getPosition ()
 
 void IosOpenALMusic::dispose ()
 {   
-    if (alBuffer == 0) return;
     if (sourceID != -1) {
         reset();
         unsigned length = audio->music.size();
@@ -131,35 +180,78 @@ void IosOpenALMusic::dispose ()
         sourceID = -1;
     }
     
-    CHECK_OPENAL_ERROR(alDeleteBuffers(GDX_IOS_OPENALMUSIC_BUFFER_COUNT, &alBuffer));
+    CHECK_OPENAL_ERROR(alDeleteBuffers(GDX_IOS_OPENALMUSIC_BUFFER_COUNT, alBuffers));
 }
 
 void IosOpenALMusic::reset() {
     
 }
 
+int IosOpenALMusic::read() {
+    AudioBufferList dataBuffer;
+    dataBuffer.mNumberBuffers = 1;
+    dataBuffer.mBuffers[0].mDataByteSize = GDX_IOS_OPENALMUSIC_BUFFER_SIZE;
+    dataBuffer.mBuffers[0].mNumberChannels = this->channels;
+    dataBuffer.mBuffers[0].mData = musicBuffer;
+    
+    UInt32 frames = GDX_IOS_OPENALMUSIC_BUFFER_SIZE / 4;
+    int err = ExtAudioFileRead(audioFile, (UInt32*)&frames, &dataBuffer);
+    
+    if (err) {
+		gdx_log_error("GdxIosAudio","GetOpenALAudioData: failed to read audioFile");
+        ExtAudioFileDispose(audioFile);
+        return -1;
+    }
+    
+    return frames * 4;
+}
+
+bool IosOpenALMusic::fill(int bufferID) {
+    int readed = read();
+    
+    if (readed <= 0) {
+        if (isLoopingVar) {
+            reset();
+            renderedSeconds = 0;
+            readed = this->read();
+            if (readed <= 0) return false;
+        } else
+            return false;
+    }
+     
+    CHECK_OPENAL_ERROR(alBufferData(bufferID, format, musicBuffer, readed, sampleRate));
+    
+    return true;
+}
+
 void IosOpenALMusic::update()
 {
-    if (sourceID == -1) return;
+    if (sourceID == -1 || !isPlayingVar) return;
     
-    bool end = false;
-    int buffers;
-    CHECK_OPENAL_ERROR(alGetSourcei(sourceID, AL_BUFFERS_PROCESSED, &buffers));
-    while (buffers-- > 0) {
+    //we query for processed buffers
+    int processed = 0;
+    CHECK_OPENAL_ERROR(alGetSourcei(sourceID, AL_BUFFERS_PROCESSED, &processed));
+    
+    //and unqueue them
+    while (processed-- > 0) {
         unsigned bufferID;
-        (alSourceUnqueueBuffers(sourceID, 1, &bufferID));
+        CHECK_OPENAL_ERROR(alSourceUnqueueBuffers(sourceID, 1, &bufferID));
         if (bufferID == AL_INVALID_VALUE) break;
-        renderedSeconds += secondsPerBuffer;
-        if (end) continue;
         
+        //then request for more bytes
+        if (!fill(bufferID)) {
+            break;
+        }
         
-        CHECK_OPENAL_ERROR(alBufferData(bufferID, format, musicBuffer, bufferLength, sampleRate));
-        CHECK_OPENAL_ERROR(alSourceQueueBuffers(sourceID, 1, &bufferID));
+        CHECK_OPENAL_ERROR(alSourceQueueBuffers(sourceID, 1, (const ALuint*) &bufferID));
     }
-
-    int abq;
-    CHECK_OPENAL_ERROR(alGetSourcei(sourceID, AL_BUFFERS_QUEUED, &abq));
-    if (end && abq == 0) stop();
+    
+    // if we do not have queued buffers anymore, then we can safely exit
+    ALint queued = 0;
+    CHECK_OPENAL_ERROR(alGetSourcei(sourceID, AL_BUFFERS_QUEUED, &queued));
+    if (queued == 0) {
+        stop();
+    }
     
     // A buffer underflow will cause the source to stop.
     int ss;

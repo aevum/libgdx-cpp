@@ -18,6 +18,7 @@
 #define AGG_CURVES_INCLUDED
 
 #include "agg_array.h"
+#include "agg_basics.h"
 
 namespace agg
 {

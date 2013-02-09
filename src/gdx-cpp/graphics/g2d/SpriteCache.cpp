@@ -18,20 +18,28 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
+#include "gdx-cpp/gl.hpp"
+#include <string.h>
+#include <array>
+#include <memory>
+#include <sstream>
+#include <string>
+
 #include "SpriteCache.hpp"
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/Graphics.hpp"
-#include "gdx-cpp/graphics/GL20.hpp"
+#include "gdx-cpp/Log.hpp"
 #include "gdx-cpp/graphics/Color.hpp"
+#include "gdx-cpp/graphics/GL10.hpp"
+#include "gdx-cpp/graphics/GL20.hpp"
 #include "gdx-cpp/graphics/Mesh.hpp"
-#include "gdx-cpp/utils/NumberUtils.hpp"
+#include "gdx-cpp/graphics/VertexAttribute.hpp"
+#include "gdx-cpp/graphics/VertexAttributes.hpp"
+#include "gdx-cpp/graphics/g2d/Sprite.hpp"
 #include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
 #include "gdx-cpp/math/MathUtils.hpp"
-
-#include <string.h>
-#include <stdexcept>
-
-#include <gdx-cpp/gl.hpp>
+#include "gdx-cpp/utils/Buffer.hpp"
+#include "gdx-cpp/utils/NumberUtils.hpp"
 
 using namespace gdx;
 
@@ -171,7 +179,7 @@ int SpriteCache::endCache () {
         if ( cacheCount > currentCache->maxCount ) {
             std::stringstream ss;
             ss << "If a cache is not the last created, it cannot be redefined with more entries than when it was first created: "
-               << cacheCount << " (" + currentCache->maxCount  << " max)";
+               << cacheCount << " (" << currentCache->maxCount  << " max)";
             gdx_log_error("gdx", ss.str().c_str() );
         }
 

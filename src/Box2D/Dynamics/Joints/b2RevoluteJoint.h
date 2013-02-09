@@ -21,6 +21,12 @@
 
 #include <Box2D/Dynamics/Joints/b2Joint.h>
 
+#include "Box2D/Common/b2Math.h"
+#include "Box2D/Common/b2Settings.h"
+
+class b2Body;
+struct b2SolverData;
+
 /// Revolute joint definition. This requires defining an
 /// anchor point where the bodies are joined. The definition
 /// uses local anchor points so that the initial configuration

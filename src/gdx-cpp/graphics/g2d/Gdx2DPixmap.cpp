@@ -18,27 +18,19 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "Gdx2DPixmap.hpp"
-
-#include <gdx-cpp/graphics/g2d/detail/gdx2d.h>
-
-#include "gdx-cpp/graphics/GL10.hpp"
-#include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/gl.hpp"
-
-
-#include <cassert>
-#include <fstream>
-#include <cstdlib>
+#include <gdx-cpp/graphics/g2d/detail/gdx2d.h>
 #include <string.h>
-#include <stdexcept>
-#include <sstream>
-#include <iostream>
+#include <cassert>
 #include <cstdio>
+#include <memory>
+
+#include "Gdx2DPixmap.hpp"
+#include "gdx-cpp/Log.hpp"
 
 using namespace gdx;
 
-Gdx2DPixmap::Blending Gdx2DPixmap::blending = SourceOver;
+Gdx2DPixmap::Blending Gdx2DPixmap::blending = Blending::Blending_SourceOver;
 
 //these were the private native Jni-wrapped methods
 
@@ -70,7 +62,7 @@ void Gdx2DPixmap::setBlending(const Pixmap::Blending& _blending)
 
 void Gdx2DPixmap::setFilter(const Pixmap::Filter& filter)
 {
-    setScale(filter == NearestNeighbour ? GDX2D_SCALE_NEAREST : GDX2D_SCALE_LINEAR);
+    setScale(filter == Filter::Filter_NearestNeighbour ? GDX2D_SCALE_NEAREST : GDX2D_SCALE_LINEAR);
 }
 
 void Gdx2DPixmap::setStrokeWidth(int width)
@@ -207,7 +199,7 @@ void Gdx2DPixmap::drawPixmap (const Pixmap& src, int srcX, int srcY, int dstX, i
 void Gdx2DPixmap::drawPixmap (const Pixmap& src, int srcX, int srcY, int srcWidth, int srcHeight, int dstX, int dstY, int dstWidth, int dstHeight) {
     assert(pixData != NULL);
 
-    if (src.getType() == Pixmap::Gdx2d) {    
+    if (src.getType() == Pixmap::PixmapType::PixmapType_Gdx2d) {    
         gdx2d_draw_pixmap((gdx2d_pixmap*)((Gdx2DPixmap&) src).pixData, (gdx2d_pixmap*)pixData, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight);
     } else {
         gdx_log_error("gdx","Unsupported conversion: expected a Gdx2DPixmap");

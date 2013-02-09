@@ -104,8 +104,7 @@ void* GetOpenALAudioData(CFURLRef fileURL, ALsizei* dataSize,
     
     AudioStreamBasicDescription fileFormat;
     size = sizeof(fileFormat);
-    err = ExtAudioFileGetProperty(
-								  audioFile, kExtAudioFileProperty_FileDataFormat, &size, &fileFormat);
+    err = ExtAudioFileGetProperty(audioFile, kExtAudioFileProperty_FileDataFormat, &size, &fileFormat);
     if (err) {
 		gdx_log_error("GdxIosAudio","GetOpenALAudioData: failed to get fileFormat");
         ExtAudioFileDispose(audioFile);
@@ -186,30 +185,12 @@ gdx::Sound * IosOpenALAudio::newSound (const ref_ptr_maker< gdx::FileHandle >::s
     }
     
     gdx_log_error("IosOpenALAudio", "Failed to load sound: %s", file->name().c_str());
+    return nullptr;
 }
 
 gdx::Music * IosOpenALAudio::newMusic (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_t file) {
-    bool audioLoaded;
-    void* audioData;
-    ALsizei dataSize;
-    ALsizei sampleRate;
-    ALsizei channels;
-    
-    gdx_log_debug("IosOpenALAudio", "File is %s", file->path().c_str());
-    
-    audioData = GetOpenALAudioData((CFURLRef)[NSURL fileURLWithPath:[NSString stringWithCString:file->path().c_str() encoding:NSUTF8StringEncoding]], &dataSize, &sampleRate, &audioLoaded, &channels);
-    
-    
-    if (audioLoaded) {        
-        IosOpenALMusic* music = new IosOpenALMusic(this, channels, audioData, dataSize, sampleRate);
-        free(audioData);
-        
-        return music;
-    }
-    
-    gdx_log_error("IosOpenALAudio", "Failed to load sound: %s", file->name().c_str());    
+   return new IosOpenALMusic(this, file);
 }
-
 
 int IosOpenALAudio::obtainSource (bool isMusic) {
     std::set<int>::iterator sit = idleSources.begin();

@@ -21,6 +21,12 @@
 
 #include <Box2D/Dynamics/Joints/b2Joint.h>
 
+#include "Box2D/Common/b2Math.h"
+#include "Box2D/Common/b2Settings.h"
+
+class b2Body;
+struct b2SolverData;
+
 /// Distance joint definition. This requires defining an
 /// anchor point on both bodies and the non-zero length of the
 /// distance joint. The definition uses local anchor points

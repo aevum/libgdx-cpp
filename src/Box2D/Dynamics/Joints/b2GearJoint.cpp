@@ -17,10 +17,12 @@
 */
 
 #include <Box2D/Dynamics/Joints/b2GearJoint.h>
-#include <Box2D/Dynamics/Joints/b2RevoluteJoint.h>
 #include <Box2D/Dynamics/Joints/b2PrismaticJoint.h>
+#include <Box2D/Dynamics/Joints/b2RevoluteJoint.h>
 #include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Dynamics/b2TimeStep.h>
+
+#include "Box2D/Dynamics/Joints/b2Joint.h"
 
 // Gear Joint:
 // C0 = (coordinate1 + ratio * coordinate2)_initial

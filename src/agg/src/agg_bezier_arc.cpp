@@ -20,7 +20,9 @@
 
 
 #include <math.h>
+
 #include "agg_bezier_arc.h"
+#include "agg_trans_affine.h"
 
 
 namespace agg

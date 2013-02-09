@@ -17,15 +17,11 @@
  *  @author Ozires Bortolon de Faria ozires@aevumlab.com
  */
 
-#include "GL10.hpp"
-
 #include <gdx-cpp/gl.hpp>
 
+#include "GL10.hpp"
+
 using namespace gdx;
-
-
-
-
 
 void GL10::glAlphaFunc(int func, float ref) const {
     ::glAlphaFunc(func, ref);

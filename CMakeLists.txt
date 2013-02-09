@@ -64,7 +64,6 @@ elseif(WIN32)
     SET(GDX_BACKEND_LIB gdx-cpp-backend-win32)
 endif()
 
-CONFIGURE_FILE(src/gdx-cpp/gl.hpp.in ${CMAKE_BINARY_DIR}/gen/gdx-cpp/gl.hpp )
 CONFIGURE_FILE(src/gdx-cpp/config.hpp.in ${CMAKE_BINARY_DIR}/gen/gdx-cpp/config.hpp )
 include_directories(${CMAKE_BINARY_DIR}/gen)
 

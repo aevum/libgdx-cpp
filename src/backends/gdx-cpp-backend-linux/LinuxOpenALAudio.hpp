@@ -21,16 +21,27 @@
 #include <set>
 #include <vector>
 
-struct ALCdevice_struct;
+#include "gdx-cpp/Audio.hpp"
+
+#define CHECK_OPENAL_ERROR(func) do { \
+  func;\
+  ALenum al_error = alGetError(); \
+  if (al_error != AL_NO_ERROR) { \
+    gdx_log_error("LinuxAudio", "Error [%d] %s", al_error, alGetString(al_error));\
+  }\
+} while (false)
+
 class ALCcontext_struct;
+struct ALCdevice_struct;
 
 namespace gdx {
-class FileHandle;
-
-class Music;
-class Sound;
 class Device;
+class FileHandle;
+class Music;
 class Recorder;
+class Sound;
+class AudioDevice;
+class AudioRecorder;
 
 namespace nix {
   class LinuxOpenALMusic;

@@ -17,6 +17,7 @@
 #define AGG_VPGEN_SEGMENTATOR_INCLUDED
 
 #include <math.h>
+
 #include "agg_basics.h"
 
 namespace agg

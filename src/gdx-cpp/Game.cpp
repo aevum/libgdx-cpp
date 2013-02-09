@@ -18,9 +18,12 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
+#include <stddef.h>
+
 #include "Game.hpp"
 #include "Gdx.hpp"
 #include "Graphics.hpp"
+#include "gdx-cpp/Screen.hpp"
 
 using namespace gdx;
 

@@ -17,8 +17,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
+
+#include "agg_basics.h"
+#include "agg_math.h"
+#include "agg_math_stroke.h"
+#include "ctrl/agg_ctrl.h"
 #include "ctrl/agg_slider_ctrl.h"
 
 namespace agg

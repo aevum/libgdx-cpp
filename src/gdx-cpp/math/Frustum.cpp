@@ -18,13 +18,14 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "Frustum.hpp"
-
-#include "Vector3.hpp"
-#include "Matrix4.hpp"
-#include "collision/BoundingBox.hpp"
-
 #include <string.h>
+#include <vector>
+
+#include "Frustum.hpp"
+#include "Matrix4.hpp"
+#include "Vector3.hpp"
+#include "collision/BoundingBox.hpp"
+#include "gdx-cpp/math/Plane.hpp"
 
 using namespace gdx;
 

@@ -13,19 +13,18 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-#include "Matrix4.hpp"
-
-#include "Vector3.hpp"
-#include "Matrix3.hpp"
-#include "MathUtils.hpp"
-#include "Quaternion.hpp"
-
-#include <string>
-#include <sstream>
+#include <string.h>
+#include <cassert>
 #include <cmath>
 #include <iostream>
-#include <cassert>
-#include <string.h>
+#include <string>
+#include <sstream>
+
+#include "MathUtils.hpp"
+#include "Matrix3.hpp"
+#include "Matrix4.hpp"
+#include "Quaternion.hpp"
+#include "Vector3.hpp"
 
 using namespace gdx;
 

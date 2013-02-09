@@ -21,13 +21,15 @@
 #ifndef GDX_CPP_GRAPHICS_CAMERA_HPP_
 #define GDX_CPP_GRAPHICS_CAMERA_HPP_
 
-#include "gdx-cpp/math/Vector3.hpp"
-#include "gdx-cpp/math/Matrix4.hpp"
-#include "gdx-cpp/math/collision/Ray.hpp"
-#include "gdx-cpp/math/Frustum.hpp"
 #include "gdx-cpp/graphics/GL10.hpp"
+#include "gdx-cpp/math/Frustum.hpp"
+#include "gdx-cpp/math/Matrix4.hpp"
+#include "gdx-cpp/math/Vector3.hpp"
+#include "gdx-cpp/math/collision/Ray.hpp"
 
 namespace gdx {
+
+class GL10;
 
 class Camera {
 public:

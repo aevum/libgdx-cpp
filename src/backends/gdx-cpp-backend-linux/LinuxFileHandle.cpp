@@ -18,12 +18,14 @@
  *  @author aevum team
  */
 
-#include "LinuxFileHandle.hpp"
-#include <cassert>
-#include <stdexcept>
-#include <sys/stat.h>
-
 #include <gdx-cpp/Log.hpp>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <cassert>
+
+#include "LinuxFileHandle.hpp"
+#include "gdx-cpp/files/FileHandle.hpp"
 
 using namespace gdx::nix;
 

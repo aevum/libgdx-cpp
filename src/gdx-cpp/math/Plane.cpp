@@ -18,9 +18,10 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "Plane.hpp"
-
 #include <sstream>
+
+#include "Plane.hpp"
+#include "gdx-cpp/math/Vector3.hpp"
 
 using namespace gdx;
 

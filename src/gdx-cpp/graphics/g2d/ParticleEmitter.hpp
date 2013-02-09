@@ -20,11 +20,15 @@
 
 #ifndef GDX_CPP_GRAPHICS_G2D_PARTICLEEMITTER_HPP_
 #define GDX_CPP_GRAPHICS_G2D_PARTICLEEMITTER_HPP_
-#include <vector>
-#include "Sprite.hpp"
+#include <iosfwd>
 #include <string>
+#include <vector>
+
+#include "Sprite.hpp"
 
 namespace gdx {
+
+class SpriteBatch;
 
 class ParticleEmitter {
 public:

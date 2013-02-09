@@ -64,7 +64,8 @@ public:
     void stopSourcesWithBuffer (int bufferID);
     void update ();
     void dispose ();
-
+    void setup();
+    
     std::vector<IosOpenALMusic * > music;
 
     ALCcontext_struct * getContext();

@@ -21,9 +21,10 @@
 #ifndef GDX_CPP_MATH_MATHUTILS_H
 #define GDX_CPP_MATH_MATHUTILS_H
 
-#include <cstdlib>
 #include <cmath>
+#include <cstdlib>
 #include <iostream>
+
 #include "gdx-cpp/utils/NumberUtils.hpp"
 
 namespace gdx {

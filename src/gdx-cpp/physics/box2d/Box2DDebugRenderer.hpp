@@ -21,11 +21,19 @@
 #ifndef GDX_CPP_PHYSICS_BOX2D_BOX2DDEBUGRENDERER_HPP_
 #define GDX_CPP_PHYSICS_BOX2D_BOX2DDEBUGRENDERER_HPP_
 
+#include <Box2D/Box2D.h>
+
+#include "Box2D/Common/b2Math.h"
+#include "gdx-cpp/graphics/Color.hpp"
 #include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
 #include "gdx-cpp/graphics/glutils/ShapeRenderer.hpp"
+#include "gdx-cpp/math/Matrix4.hpp"
 #include "gdx-cpp/math/Vector2.hpp"
 
-#include <Box2D/Box2D.h>
+class b2Contact;
+class b2Fixture;
+class b2Joint;
+class b2World;
 
 namespace gdx {
 

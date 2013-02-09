@@ -9,6 +9,5 @@ libs/
 .svn/
 android/assets
 src/tests/backends/android/assets/
-gl.hpp
 
 src/gdx-cpp/config.hpp

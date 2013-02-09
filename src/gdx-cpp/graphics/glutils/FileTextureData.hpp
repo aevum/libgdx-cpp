@@ -21,8 +21,9 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_FILETEXTUREDATA_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_FILETEXTUREDATA_HPP_
 
-#include "gdx-cpp/graphics/TextureData.hpp"
 #include "gdx-cpp/files/FileHandle.hpp"
+#include "gdx-cpp/graphics/Pixmap.hpp"
+#include "gdx-cpp/graphics/TextureData.hpp"
 
 namespace gdx {
 

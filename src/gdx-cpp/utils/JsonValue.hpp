@@ -21,13 +21,18 @@
 #ifndef GDX_CPP_UTILS_JSONITEM_HPP
 #define GDX_CPP_UTILS_JSONITEM_HPP
 
-#include "gdx-cpp/internal/memory"
-#include <vector>
-#include <string>
-#include <fstream>
+#include <stddef.h>
 #include <cassert>
-#include <stdexcept>
+#include <fstream>
+#include <initializer_list>
 #include <map>
+#include <memory>
+#include <new>
+#include <stdexcept>
+#include <string>
+#include <vector>
+
+#include "gdx-cpp/internal/memory"
 
 namespace gdx {
 
@@ -202,13 +207,13 @@ public:
     template <typename T>
     JsonValue& operator = (const T& other) = delete;
 
-    JsonValue& operator = (int value) { this->item_val = value;  }
-    JsonValue& operator = (bool value) { this->item_val = value;  }    
-    JsonValue& operator = (float value) { this->item_val = value;  }
-    JsonValue& operator = (const array& value) { this->item_val = value;  }
-    JsonValue& operator = (const item_map& value) { this->item_val = value;  }
-    JsonValue& operator = (const std::string& value) { this->item_val = value;  }
-    JsonValue& operator = (std::nullptr_t value) { this->item_val = nullptr;  }
+    JsonValue& operator = (int value) { this->item_val = value; return *this; }
+    JsonValue& operator = (bool value) { this->item_val = value; return *this;  }    
+    JsonValue& operator = (float value) { this->item_val = value; return *this; }
+    JsonValue& operator = (const array& value) { this->item_val = value; return *this; }
+    JsonValue& operator = (const item_map& value) { this->item_val = value; return *this; }
+    JsonValue& operator = (const std::string& value) { this->item_val = value; return *this; }
+    JsonValue& operator = (std::nullptr_t value) { this->item_val = nullptr; return *this; }
     
     JsonValue& operator = (const JsonValue& other) ;
 

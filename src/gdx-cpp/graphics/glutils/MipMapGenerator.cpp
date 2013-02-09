@@ -18,18 +18,20 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "MipMapGenerator.hpp"
-
-#include "gdx-cpp/graphics/Pixmap.hpp"
-#include "gdx-cpp/graphics/GL20.hpp"
-#include "gdx-cpp/graphics/GL10.hpp"
-#include "gdx-cpp/Application.hpp"
-#include "gdx-cpp/Graphics.hpp"
-#include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/gl.hpp"
 
-#include <stdexcept>
+#include <stddef.h>
+#include <memory>
 
+#include "MipMapGenerator.hpp"
+#include "gdx-cpp/Application.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Graphics.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/graphics/Pixmap.hpp"
+#include "gdx-cpp/graphics/GLCommon.hpp"
+
+#include <gdx-cpp/graphics/GL20.hpp>
 using namespace gdx;
 
 bool MipMapGenerator::useHWMipMap = true;

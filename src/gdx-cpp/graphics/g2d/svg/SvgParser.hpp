@@ -21,9 +21,14 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_SVG_SVGPARSER_HPP
 #define GDX_CPP_GRAPHICS_G2D_SVG_SVGPARSER_HPP
 
-#include "gdx-cpp/utils/XmlReader.hpp"
-#include "gdx-cpp/utils/SvgRendererHandler.hpp"
+#include <stddef.h>
+#include <string>
+#include <utility>
+#include <vector>
+
 #include "gdx-cpp/graphics/Color.hpp"
+#include "gdx-cpp/utils/SvgRendererHandler.hpp"
+#include "gdx-cpp/utils/XmlReader.hpp"
 
 namespace gdx {
 

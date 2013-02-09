@@ -18,8 +18,9 @@
  *  @author Ozires Bortolon de Faria ozires@aevumlab.com
  */
 
-#include "gdx-cpp/graphics/GLCommon.hpp"
 #include "gdx-cpp/gl.hpp"
+
+#include "gdx-cpp/graphics/GLCommon.hpp"
 
 using namespace gdx;
 

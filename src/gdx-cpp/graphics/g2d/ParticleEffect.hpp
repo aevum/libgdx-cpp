@@ -20,19 +20,21 @@
 
 #ifndef GDX_CPP_GRAPHICS_G2D_PARTICLEEFFECT_HPP_
 #define GDX_CPP_GRAPHICS_G2D_PARTICLEEFFECT_HPP_
-#include "gdx-cpp/utils/Disposable.hpp"
-#include <vector>
 #include <string>
-#include "gdx-cpp/internal/memory"
+#include <vector>
+
+#include "gdx-cpp/files/File.hpp"
+#include "gdx-cpp/files/FileHandle.hpp"
 #include "gdx-cpp/graphics/Texture.hpp"
+#include "gdx-cpp/internal/memory"
+#include "gdx-cpp/utils/Disposable.hpp"
 
 namespace gdx {
-class FileHandle;
-
-class TextureAtlas;
-class SpriteBatch;
-class ParticleEmitter;
 class File;
+class FileHandle;
+class ParticleEmitter;
+class SpriteBatch;
+class TextureAtlas;
 
 class ParticleEffect: public Disposable {
 public:

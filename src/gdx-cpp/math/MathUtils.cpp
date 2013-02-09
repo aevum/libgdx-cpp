@@ -1,4 +1,7 @@
+#include <cmath>
+
 #include "MathUtils.hpp"
+#include "gdx-cpp/utils/NumberUtils.hpp"
 
 using namespace gdx;
 

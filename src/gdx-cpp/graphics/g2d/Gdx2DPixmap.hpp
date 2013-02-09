@@ -21,14 +21,15 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_GDX2DPIXMAP_HPP_
 #define GDX_CPP_GRAPHICS_G2D_GDX2DPIXMAP_HPP_
 
-#include "gdx-cpp/utils/Disposable.hpp"
-#include "gdx-cpp/internal/memory"
-
+#include <istream>
 #include <string>
 #include <vector>
-#include <istream>
-#include "gdx-cpp/graphics/Pixmap.hpp"
+
+#include "gdx-cpp/files/FileHandle.hpp"
 #include "gdx-cpp/graphics/Color.hpp"
+#include "gdx-cpp/graphics/Pixmap.hpp"
+#include "gdx-cpp/internal/memory"
+#include "gdx-cpp/utils/Disposable.hpp"
 
 extern "C" struct gdx2d_pixmap;
 
@@ -72,7 +73,7 @@ public:
     void setStrokeWidth ( int width );
 
     PixmapType getType() const {
-        return Pixmap::Gdx2d;
+        return Pixmap::PixmapType::PixmapType_Gdx2d;
     }
 
     const unsigned char* getPixels ();

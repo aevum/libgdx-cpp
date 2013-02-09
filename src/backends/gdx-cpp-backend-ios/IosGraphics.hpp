@@ -61,11 +61,11 @@ public:
     void update();
     void updateTime();
 
-    TextureData::ptr resolveTextureData(gdx::FileHandle::ptr fileHandle, Pixmap::ptr preloadedPixmap, const gdx::Pixmap::Format* format, bool useMipMaps);
+    TextureData::ptr resolveTextureData(const std::shared_ptr<FileHandle>& fileHandle, Pixmap::ptr preloadedPixmap, const gdx::Pixmap::Format* format, bool useMipMaps);
 
-    Pixmap* resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, int pixType);
+    Pixmap* resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, Pixmap::PixmapType pixType);
     Pixmap* resolvePixmap(const gdx::Pixmap& other);
-    Pixmap* resolvePixmap(const gdx::FileHandle::ptr& file);
+    Pixmap* resolvePixmap(const std::shared_ptr<FileHandle>&  file);
     
 protected:
     bool vsync;    

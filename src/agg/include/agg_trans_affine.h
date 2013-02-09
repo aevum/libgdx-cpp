@@ -20,8 +20,10 @@
 #define AGG_TRANS_AFFINE_INCLUDED
 
 #include <math.h>
-#include "agg_basics.h"
 #include <stdio.h>
+
+#include "agg_basics.h"
+
 namespace agg
 {
     const double affine_epsilon = 1e-14; 

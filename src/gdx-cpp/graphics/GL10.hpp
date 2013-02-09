@@ -21,8 +21,9 @@
 #ifndef GDX_CPP_GRAPHICS_GL10_HPP_
 #define GDX_CPP_GRAPHICS_GL10_HPP_
 
-#include "GLCommon.hpp"
 #include <set>
+
+#include "GLCommon.hpp"
 
 namespace gdx {
 

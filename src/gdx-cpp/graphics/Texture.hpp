@@ -21,25 +21,35 @@
 #ifndef GDX_CPP_GRAPHICS_TEXTURE_HPP_
 #define GDX_CPP_GRAPHICS_TEXTURE_HPP_
 
-#include "gdx-cpp/utils/Disposable.hpp"
-#include "gdx-cpp/graphics/GL10.hpp"
-#include "gdx-cpp/assets/AssetManager.hpp"
-#include "gdx-cpp/Application.hpp"
-#include "TextureData.hpp"
-
+#include <stddef.h>
 #include <list>
-#include "gdx-cpp/assets/Asset.hpp"
-#include "gdx-cpp/internal/unordered_map"
+#include <memory>
+#include <string>
 
-#undef GL_NEAREST
-#undef GL_LINEAR
+#include "TextureData.hpp"
+#include "gdx-cpp/Application.hpp"
+// #include "gdx-cpp/assets/Asset.hpp"
+// #include "gdx-cpp/assets/AssetManager.hpp"
+#include "gdx-cpp/files/FileHandle.hpp"
+#include "gdx-cpp/graphics/GL10.hpp"
+#include "gdx-cpp/graphics/Pixmap.hpp"
+#include "gdx-cpp/internal/memory"
+#include "gdx-cpp/internal/unordered_map"
+#include "gdx-cpp/utils/Disposable.hpp"
+
+namespace gdx {
+class Application;
+class AssetManager;
+class AssetType;
+}  // namespace gdx
 
 namespace gdx {
 
 class FileHandle;
+
 class Texture
     : public Disposable,
-    public Asset , public std::enable_shared_from_this<Texture> {
+      public std::enable_shared_from_this<Texture> {
 public:
     typedef ref_ptr_maker<Texture>::shared_ptr_t ptr;
     typedef ref_ptr_maker<Texture>::weak_ptr_t weak_ptr;
@@ -91,7 +101,6 @@ public:
     Texture (const Pixmap::ptr pixmap, const Pixmap::Format& format, bool useMipMaps) ;
     Texture (const TextureData& data) ;
 
-    const AssetType& getAssetType();
     void load (const TextureData::ptr& data);
     void bind ();
     void bind (int unit);

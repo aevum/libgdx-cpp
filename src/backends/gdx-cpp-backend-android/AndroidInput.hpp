@@ -101,8 +101,11 @@ public:
     void handleTouchDrag(float x, float y, int pointer);
     void handleTouchDown(float arg1, float arg2, int pointer);
     void handleTouchUp(float x, float y, int pointer);
-    void backPressed();
     void setKeyboardRepeat(int delay, int repeatInterval);
+    
+    void handleKeyDown(int keyCode);
+    void handleKeyUp(int keyCode);
+    
 protected:
     gdx::InputProcessor* processor;
 

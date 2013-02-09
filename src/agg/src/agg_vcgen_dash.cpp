@@ -18,8 +18,11 @@
 //----------------------------------------------------------------------------
 
 #include <math.h>
-#include "agg_vcgen_dash.h"
+
+#include "agg_array.h"
+#include "agg_basics.h"
 #include "agg_shorten_path.h"
+#include "agg_vcgen_dash.h"
 
 namespace agg
 {

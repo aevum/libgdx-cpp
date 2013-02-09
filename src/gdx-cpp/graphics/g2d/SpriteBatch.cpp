@@ -18,22 +18,28 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "SpriteBatch.hpp"
-
+#include "gdx-cpp/gl.hpp"
+#include <stdlib.h>
 #include <string.h>
+#include <algorithm>
 #include <stdexcept>
+#include <string>
 
+#include "Sprite.hpp"
+#include "SpriteBatch.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Graphics.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/graphics/GL10.hpp"
+#include "gdx-cpp/graphics/GLCommon.hpp"
 #include "gdx-cpp/graphics/Mesh.hpp"
 #include "gdx-cpp/graphics/VertexAttribute.hpp"
-#include "gdx-cpp/graphics/GL20.hpp"
-#include "gdx-cpp/Gdx.hpp"
-#include "Sprite.hpp"
-#include "gdx-cpp/utils/NumberUtils.hpp"
-#include "gdx-cpp/math/MathUtils.hpp"
+#include "gdx-cpp/graphics/VertexAttributes.hpp"
 #include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
-#include "gdx-cpp/graphics/Mesh.hpp"
 #include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
-#include "gdx-cpp/gl.hpp"
+#include "gdx-cpp/math/MathUtils.hpp"
+#include "gdx-cpp/utils/Buffer.hpp"
+#include "gdx-cpp/utils/NumberUtils.hpp"
 
 using namespace gdx;
 

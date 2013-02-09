@@ -22,6 +22,8 @@
 #define GDX_CPP_GRAPHICS_GLUTILS_VERTEXARRAY_HPP_
 
 #include "VertexData.hpp"
+#include "gdx-cpp/graphics/VertexAttributes.hpp"
+#include "gdx-cpp/utils/Buffer.hpp"
 
 namespace gdx {
 

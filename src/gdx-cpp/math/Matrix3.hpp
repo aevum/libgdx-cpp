@@ -18,12 +18,13 @@
 #ifndef GDX_CPP_MATH_MATRIX3_HPP
 #define GDX_CPP_MATH_MATRIX3_HPP
 
-#include <string>
 #include <gdx-cpp/math/Vector2.hpp>
+#include <string>
 
 namespace gdx {
 
 class Vector3;
+class Vector2;
 
 class Matrix3
 {

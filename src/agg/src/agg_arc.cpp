@@ -18,7 +18,9 @@
 //----------------------------------------------------------------------------
 
 #include <math.h>
+
 #include "agg_arc.h"
+#include "agg_basics.h"
 
 
 namespace agg

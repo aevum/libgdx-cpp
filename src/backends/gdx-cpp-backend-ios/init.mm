@@ -43,8 +43,7 @@ public:
     }
 };
 
-void gdxcpp_create_application(gdx::ApplicationListener* listener, const std::string& applicationName,
-                               int width, int height) {
+extern "C" void gdxcpp_create_application(gdx::ApplicationListener* listener, const std::string& applicationName, int width, int height, bool useOpenGLES2) {
     g_Listener = listener;
 }
 

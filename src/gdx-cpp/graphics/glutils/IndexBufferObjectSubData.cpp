@@ -18,13 +18,14 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "IndexBufferObjectSubData.hpp"
+#include <stddef.h>
 
-#include "gdx-cpp/Gdx.hpp"
-#include "gdx-cpp/graphics/GL20.hpp"
-#include "gdx-cpp/graphics/GL11.hpp"
-#include "gdx-cpp/graphics/GL10.hpp"
+#include "IndexBufferObjectSubData.hpp"
 #include "gdx-cpp/gl.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/graphics/GL11.hpp"
+#include "gdx-cpp/graphics/GL20.hpp"
 
 using namespace gdx;
 

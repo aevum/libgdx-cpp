@@ -18,7 +18,10 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
+#include <algorithm>
+
 #include "Animation.hpp"
+#include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
 
 using namespace gdx;
 

@@ -21,17 +21,18 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_SPRITEBATCH_HPP_
 #define GDX_CPP_GRAPHICS_G2D_SPRITEBATCH_HPP_
 
-#include "gdx-cpp/graphics/Texture.hpp"
+#include <vector>
+
 #include "gdx-cpp/graphics/Color.hpp"
+#include "gdx-cpp/graphics/Texture.hpp"
 #include "gdx-cpp/math/Matrix4.hpp"
+#include "gdx-cpp/utils/Disposable.hpp"
 
 namespace gdx {
 
 class Mesh;
 class ShaderProgram;
-
 class Sprite;
-
 class TextureRegion;
 
 

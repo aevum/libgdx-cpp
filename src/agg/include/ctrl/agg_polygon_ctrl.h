@@ -20,11 +20,14 @@
 #ifndef POLYGON_CTRL_INCLUDED
 #define POLYGON_CTRL_INCLUDED
 
+#include <math.h>
+
 #include "agg_array.h"
-#include "agg_conv_stroke.h"
-#include "agg_ellipse.h"
+#include "agg_basics.h"
 #include "agg_color_rgba.h"
+#include "agg_conv_stroke.h"
 #include "agg_ctrl.h"
+#include "agg_ellipse.h"
 
 namespace agg
 {

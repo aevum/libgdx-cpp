@@ -18,12 +18,13 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
+#include "gdx-cpp/gl.hpp"
+
 #include "ImmediateModeRenderer10.hpp"
-#include "gdx-cpp/graphics/GL10.hpp"
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/graphics/GL10.hpp"
 #include "gdx-cpp/math/Matrix4.hpp"
 #include "gdx-cpp/math/Vector3.hpp"
-#include "gdx-cpp/gl.hpp"
 
 using namespace gdx;
 

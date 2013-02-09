@@ -13,6 +13,8 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
+#include "agg_array.h"
+#include "agg_basics.h"
 #include "agg_renderer_outline_aa.h"
 
 namespace agg

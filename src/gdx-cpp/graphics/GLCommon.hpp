@@ -24,14 +24,10 @@
 #include <string>
 #include <set>
 
-#undef GL_GENERATE_MIPMAP
-
 namespace gdx {
 
 class GLCommon {
 public:
-    static const int GL_GENERATE_MIPMAP;
-  
     virtual void glActiveTexture (int texture) const;
     virtual void glBindTexture (int target,int texture) const;
     virtual void glBlendFunc (int sfactor,int dfactor) const;

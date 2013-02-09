@@ -21,6 +21,14 @@
 
 #include <Box2D/Collision/Shapes/b2Shape.h>
 
+#include "Box2D/Common/b2Math.h"
+#include "Box2D/Common/b2Settings.h"
+
+class b2BlockAllocator;
+struct b2AABB;
+struct b2RayCastInput;
+struct b2RayCastOutput;
+
 /// A line segment (edge) shape. These can be connected in chains or loops
 /// to other edge shapes. The connectivity information is used to ensure
 /// correct contact normals.

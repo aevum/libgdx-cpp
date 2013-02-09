@@ -44,6 +44,8 @@ namespace ios {
 
         //Override
         gdx::FileHandle::ptr absolute (const std::string &path);
+      
+        gdx::FileHandle::ptr internal_private(const std::string &path);
 
         //Override
         std::string getExternalStoragePath ();

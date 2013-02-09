@@ -25,6 +25,7 @@
 #include <vector>
 
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/implementation/System.hpp"
 
 namespace gdx {
 
@@ -41,6 +42,7 @@ public:
 
 private:
     struct static_impl;
+
     static static_impl* staticImpl;
     
     static char map1[64];

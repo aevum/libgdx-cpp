@@ -18,6 +18,8 @@
 
 #include <Box2D/Common/b2Timer.h>
 
+#include "Box2D/Common/b2Settings.h"
+
 #if defined(_WIN32)
 
 float64 b2Timer::s_invFrequency = 0.0f;

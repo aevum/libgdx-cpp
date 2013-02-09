@@ -18,7 +18,10 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
+#include <memory>
+
 #include "CatmullRomSpline.hpp"
+#include "gdx-cpp/math/Vector3.hpp"
 
 using namespace gdx;
 

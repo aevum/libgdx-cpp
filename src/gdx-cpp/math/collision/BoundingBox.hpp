@@ -28,6 +28,7 @@
 
 namespace gdx {
 class Vector3;
+class Matrix4;
 
 class BoundingBox {
 public:

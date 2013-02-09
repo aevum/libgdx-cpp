@@ -18,14 +18,19 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "VertexBufferObject.hpp"
-
-#include "gdx-cpp/Gdx.hpp"
-#include "gdx-cpp/graphics/GL20.hpp"
-#include "gdx-cpp/graphics/GL11.hpp"
-#include "gdx-cpp/graphics/GL10.hpp"
-#include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
 #include "gdx-cpp/gl.hpp"
+#include <stddef.h>
+#include <stdint.h>
+#include <string>
+
+#include "VertexBufferObject.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/graphics/GL11.hpp"
+#include "gdx-cpp/graphics/GL20.hpp"
+#include "gdx-cpp/graphics/VertexAttribute.hpp"
+#include "gdx-cpp/graphics/glutils/ShaderProgram.hpp"
+#include "gdx-cpp/graphics/glutils/VertexData.hpp"
 
 using namespace gdx;
 

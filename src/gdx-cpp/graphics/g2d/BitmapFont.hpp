@@ -21,16 +21,22 @@
 #ifndef GDX_CPP_GRAPHICS_G2D_BITMAPFONT_HPP_
 #define GDX_CPP_GRAPHICS_G2D_BITMAPFONT_HPP_
 
-#include "gdx-cpp/utils/Disposable.hpp"
-#include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
-#include "gdx-cpp/files/FileHandle.hpp"
-#include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
-#include "gdx-cpp/utils/NumberUtils.hpp"
-
+#include <array>
+#include <memory>
 #include <string>
+#include <vector>
+
+#include "gdx-cpp/files/FileHandle.hpp"
+#include "gdx-cpp/graphics/Color.hpp"
+#include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
+#include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
+#include "gdx-cpp/internal/memory"
+#include "gdx-cpp/utils/Disposable.hpp"
+#include "gdx-cpp/utils/NumberUtils.hpp"
 
 namespace gdx {
 class BitmapFontCache;
+class SpriteBatch;
 
 class BitmapFont: public Disposable {
     friend class BitmapFontCache;

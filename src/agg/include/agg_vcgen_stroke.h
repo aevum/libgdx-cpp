@@ -16,7 +16,12 @@
 #ifndef AGG_VCGEN_STROKE_INCLUDED
 #define AGG_VCGEN_STROKE_INCLUDED
 
+#include <math.h>
+
+#include "agg_array.h"
+#include "agg_basics.h"
 #include "agg_math_stroke.h"
+#include "agg_vertex_sequence.h"
 
 
 namespace agg

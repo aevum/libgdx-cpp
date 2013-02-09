@@ -16,11 +16,19 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+#include <Box2D/Dynamics/Contacts/b2Contact.h>
+#include <Box2D/Dynamics/Joints/b2Joint.h>
 #include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Dynamics/b2Fixture.h>
 #include <Box2D/Dynamics/b2World.h>
-#include <Box2D/Dynamics/Contacts/b2Contact.h>
-#include <Box2D/Dynamics/Joints/b2Joint.h>
+#include <new>
+
+#include "Box2D/Collision/Shapes/b2Shape.h"
+#include "Box2D/Common/b2BlockAllocator.h"
+#include "Box2D/Common/b2Math.h"
+#include "Box2D/Dynamics/b2ContactManager.h"
+
+class b2BroadPhase;
 
 b2Body::b2Body(const b2BodyDef* bd, b2World* world)
 {

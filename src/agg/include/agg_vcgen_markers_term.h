@@ -16,6 +16,7 @@
 #ifndef AGG_VCGEN_MARKERS_TERM_INCLUDED
 #define AGG_VCGEN_MARKERS_TERM_INCLUDED
 
+#include "agg_array.h"
 #include "agg_basics.h"
 #include "agg_vertex_sequence.h"
 

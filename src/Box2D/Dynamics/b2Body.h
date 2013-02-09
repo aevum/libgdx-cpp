@@ -19,18 +19,21 @@
 #ifndef B2_BODY_H
 #define B2_BODY_H
 
-#include <Box2D/Common/b2Math.h>
 #include <Box2D/Collision/Shapes/b2Shape.h>
+#include <Box2D/Common/b2Math.h>
+#include <stddef.h>
 #include <memory>
 
-class b2Fixture;
-class b2Joint;
+#include "Box2D/Common/b2Settings.h"
+
 class b2Contact;
 class b2Controller;
+class b2Fixture;
+class b2Joint;
 class b2World;
+struct b2ContactEdge;
 struct b2FixtureDef;
 struct b2JointEdge;
-struct b2ContactEdge;
 
 /// The body type.
 /// static: zero mass, zero velocity, may be manually moved

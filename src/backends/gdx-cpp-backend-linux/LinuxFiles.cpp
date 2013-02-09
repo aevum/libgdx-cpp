@@ -18,9 +18,11 @@
  *  @author aevum team
  */
 
-#include "LinuxFiles.hpp"
-#include "LinuxFileHandle.hpp"
 #include <unistd.h>
+
+#include "LinuxFileHandle.hpp"
+#include "LinuxFiles.hpp"
+#include "gdx-cpp/files/FileHandle.hpp"
 
 using namespace gdx::nix;
 

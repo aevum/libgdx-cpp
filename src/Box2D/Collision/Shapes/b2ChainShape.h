@@ -20,8 +20,16 @@
 #define B2_CHAIN_SHAPE_H
 
 #include <Box2D/Collision/Shapes/b2Shape.h>
+#include <stddef.h>
 
+#include "Box2D/Common/b2Math.h"
+#include "Box2D/Common/b2Settings.h"
+
+class b2BlockAllocator;
 class b2EdgeShape;
+struct b2AABB;
+struct b2RayCastInput;
+struct b2RayCastOutput;
 
 /// A chain shape is a free form sequence of line segments.
 /// The chain has two-sided collision, so you can use inside and outside collision.

@@ -90,6 +90,7 @@ void IosApplication::update()
             runnables.clear();
         }
 	
+        audio->update();
         listener->render();
         graphics->update();
     } catch( std::exception& e ) {

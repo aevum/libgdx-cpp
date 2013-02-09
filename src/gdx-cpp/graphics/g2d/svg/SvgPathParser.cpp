@@ -1,8 +1,12 @@
 
+#include <stddef.h>
+#include <stdint.h>
+#include <wctype.h>
+#include <cassert>
+
 /* #line 1 "svg-path.rl" */
 #include "SvgParser.hpp"
-#include <cassert>
-#include <inttypes.h>
+#include "gdx-cpp/utils/SvgRendererHandler.hpp"
 
 
 /* #line 9 "/home/victor/git/libgdx-cpp/src/gdx-cpp/graphics/g2d/svg/SvgPathParser.cpp" */

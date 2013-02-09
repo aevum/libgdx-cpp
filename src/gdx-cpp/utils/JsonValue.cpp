@@ -18,12 +18,12 @@
  *  @author aevum team
  */
 
-#include "JsonValue.hpp"
-
-#include <cassert>
-#include <algorithm>
 #include <gdx-cpp/Log.hpp>
+#include <cassert>
+#include <utility>
 #include <sstream>
+
+#include "JsonValue.hpp"
 
 using namespace gdx;
 

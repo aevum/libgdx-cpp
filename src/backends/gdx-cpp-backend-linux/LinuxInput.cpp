@@ -18,9 +18,11 @@
  *  @author aevum team
  */
 
-#include "LinuxInput.hpp"
+#include <SDL/SDL_keyboard.h>
+#include <SDL/SDL_keysym.h>
 #include <gdx-cpp/InputProcessor.hpp>
-#include "iostream"
+
+#include "LinuxInput.hpp"
 #include "gdx-cpp/Input.hpp"
 
 using namespace gdx::nix;
@@ -258,8 +260,6 @@ void gdx::nix::LinuxInput::processEvents(SDL_Event& evt)
     }
     else if (evt.type == SDL_KEYDOWN) {
         if (gdx::Input::Keys::ESCAPE == getGdxEventKey(evt)) {
-            this->processor->onBackPressed();
-        } else {
             this->processor->keyDown(getGdxEventKey(evt));
         }
     } else if (evt.type == SDL_KEYUP) {

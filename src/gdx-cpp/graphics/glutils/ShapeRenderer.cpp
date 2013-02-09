@@ -18,15 +18,17 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "ShapeRenderer.hpp"
+#include "gdx-cpp/gl.hpp"
+#include <stddef.h>
 
-#include "gdx-cpp/graphics/GL10.hpp"
-#include "gdx-cpp/Gdx.hpp"
 #include "ImmediateModeRenderer10.hpp"
 #include "ImmediateModeRenderer20.hpp"
-#include "gdx-cpp/gl.hpp"
-
-#include <stdexcept>
+#include "ShapeRenderer.hpp"
+#include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Graphics.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/graphics/GL10.hpp"
+#include "gdx-cpp/graphics/glutils/ImmediateModeRenderer.hpp"
 
 using namespace gdx;
 

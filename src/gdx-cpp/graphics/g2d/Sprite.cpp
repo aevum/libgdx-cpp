@@ -18,14 +18,16 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "Sprite.hpp"
-#include <cmath>
+#include <stdlib.h>
 #include <string.h>
+#include <cmath>
+#include <memory>
 
-#include "gdx-cpp/utils/NumberUtils.hpp"
-#include "gdx-cpp/math/MathUtils.hpp"
+#include "Sprite.hpp"
+#include "gdx-cpp/Log.hpp"
 #include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
-#include <stdexcept>
+#include "gdx-cpp/math/MathUtils.hpp"
+#include "gdx-cpp/utils/NumberUtils.hpp"
 
 using namespace gdx;
 

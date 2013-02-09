@@ -68,72 +68,46 @@ extern "C" {
         static_cast<AndroidGraphics*>(gdx::android::app->getGraphics())->resize(width, height);
     }
 
-    enum EventType {
-        MOUSE_DOWN,
-        MOUSE_DRAG,
-        MOUSE_UP,
-        BACK_PRESSED
-    };
-
-
-    class EventRunnable : public Runnable {
-    public:
-        EventRunnable(float _x, float _y, int _button, char _type) :
-        x(_x),
-y(_y),
-button(_button),
-type(_type) {
-        }
-        
-        EventRunnable(char _type) :
-        type(_type) {
-        }
-        
-        virtual void onRunnableStop() {
-            delete this;
-        }
-        
-        virtual void run() {
-            switch (type) {
-                case MOUSE_DOWN:
-                    static_cast<AndroidInput*>(gdx::android::app->getInput())->handleTouchDown(x, y, button);
-                    return;
-                case MOUSE_DRAG:
-                    static_cast<AndroidInput*>(gdx::android::app->getInput())->handleTouchDrag(x, y, button);
-                    return;
-                case MOUSE_UP:
-                    static_cast<AndroidInput*>(gdx::android::app->getInput())->handleTouchUp(x, y, button);
-                    return;
-                case BACK_PRESSED:
-                    static_cast<AndroidInput*>(gdx::android::app->getInput())->backPressed();
-                    return;
-            }            
-        }
-        
-        float x, y;
-        int button;
-        char type;
-    };
+    void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeKeyEvent(JNIEnv* env, jobject object, jint keycode, jint action ) {
+        assert(applicationListener);        
+        static AndroidInput* input = static_cast<AndroidInput*>(gdx::android::app->getInput());
+        gdx::android::app->postRunnable([=] {            
+            switch(action) {
+                case 0:
+                    input->handleKeyDown(keycode);
+                    break;
+                case 1:
+                    input->handleKeyUp(keycode);
+                    break;
+                default:
+                    gdx_log_debug("gdx", "received an unhandler onKey action: %d", action);
+                    break;
+            };
+        });
+    }
     
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeTouchDownEvent(JNIEnv* env, jobject object, jfloat x, jfloat y, int button ) {
         assert(applicationListener);
-        gdx::android::app->postRunnable(Runnable::ptr(new EventRunnable(x, y, button, MOUSE_DOWN)));
+        static AndroidInput* input = static_cast<AndroidInput*>(gdx::android::app->getInput());
+        gdx::android::app->postRunnable([=] {
+            input->handleTouchDown(x, y, button);            
+        });
     }
     
-    void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeBackPressed(JNIEnv* env, jobject object) {
-        assert(applicationListener);
-//         gdx_log_debug("Android", "Back Pressed");
-        gdx::android::app->postRunnable(Runnable::ptr(new EventRunnable(BACK_PRESSED)));
-    }
-
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeTouchUpEvent(JNIEnv* env, jobject object, jfloat x, jfloat y, int button ) {
         assert(applicationListener);
-        gdx::android::app->postRunnable(Runnable::ptr(new EventRunnable(x, y, button, MOUSE_UP)));
+        static AndroidInput* input = static_cast<AndroidInput*>(gdx::android::app->getInput());
+        gdx::android::app->postRunnable([=] {
+            input->handleTouchUp(x, y, button);            
+        });
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeTouchDragEvent(JNIEnv* env, jobject object, jfloat x, jfloat y, int button ) {
-        assert(applicationListener);
-        gdx::android::app->postRunnable(Runnable::ptr(new EventRunnable(x, y, button, MOUSE_DRAG)));
+        assert(applicationListener);       
+        static AndroidInput* input = static_cast<AndroidInput*>(gdx::android::app->getInput());       
+        gdx::android::app->postRunnable([=] {
+            input->handleTouchDrag(x, y, button);
+        });
     }
 
     void Java_com_badlogic_gdx_backends_android_AndroidAudio_registerAudioEngine(JNIEnv* env, jclass clazz, jobject object) {

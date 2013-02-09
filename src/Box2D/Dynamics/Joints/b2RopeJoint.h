@@ -21,6 +21,11 @@
 
 #include <Box2D/Dynamics/Joints/b2Joint.h>
 
+#include "Box2D/Common/b2Math.h"
+#include "Box2D/Common/b2Settings.h"
+
+struct b2SolverData;
+
 /// Rope joint definition. This requires two body anchor points and
 /// a maximum lengths.
 /// Note: by default the connected objects will not collide.

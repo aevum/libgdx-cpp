@@ -18,6 +18,11 @@
 //----------------------------------------------------------------------------
 
 #include <string.h>
+
+#include "agg_basics.h"
+#include "agg_math.h"
+#include "agg_math_stroke.h"
+#include "ctrl/agg_ctrl.h"
 #include "ctrl/agg_rbox_ctrl.h"
 
 namespace agg

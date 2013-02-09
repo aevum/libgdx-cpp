@@ -21,6 +21,12 @@
 
 #include <Box2D/Dynamics/Joints/b2Joint.h>
 
+#include "Box2D/Common/b2Math.h"
+#include "Box2D/Common/b2Settings.h"
+
+class b2Body;
+struct b2SolverData;
+
 /// Weld joint definition. You need to specify local anchor points
 /// where they are attached and the relative body angle. The position
 /// of the anchor points is important for computing the reaction torque.

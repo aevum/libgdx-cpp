@@ -18,7 +18,16 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
+#include <stddef.h>
+#include <algorithm>
+#include <memory>
+
 #include "BitmapFontCache.hpp"
+#include "gdx-cpp/graphics/Texture.hpp"
+#include "gdx-cpp/graphics/g2d/BitmapFont.hpp"
+#include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
+#include "gdx-cpp/graphics/g2d/TextureRegion.hpp"
+#include "gdx-cpp/utils/NumberUtils.hpp"
 
 using namespace gdx;
 

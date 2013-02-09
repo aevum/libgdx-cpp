@@ -18,6 +18,13 @@
 
 #include <Box2D/Collision/b2BroadPhase.h>
 #include <cstring>
+
+#include "Box2D/Collision/b2DynamicTree.h"
+#include "Box2D/Common/b2Math.h"
+#include "Box2D/Common/b2Settings.h"
+
+struct b2AABB;
+
 using namespace std;
 
 b2BroadPhase::b2BroadPhase()

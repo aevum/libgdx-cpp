@@ -15,30 +15,36 @@
 */
 
 
-#include "LinuxGraphics.hpp"
-
-#include "LinuxGLU.hpp"
-#include <stdexcept>
-
+#include <EGL/eglplatform.h>
+#include <GL/gl.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_stdinc.h>
+#include <SDL/SDL_syswm.h>
+#include <SDL/SDL_version.h>
+#include <SDL/SDL_video.h>
 #include <gdx-cpp/Gdx.hpp>
 #include <gdx-cpp/Graphics.hpp>
-#include <gdx-cpp/implementation/System.hpp>
-#include <gdx-cpp/graphics/glutils/FileTextureData.hpp>
-
-#include <iostream>
-#include <gdx-cpp/Application.hpp>
-
-#include <gdx-cpp/graphics/Texture.hpp>
-
+#include <gdx-cpp/graphics/GL10.hpp>
+#include <gdx-cpp/graphics/GL11.hpp>
+#include <gdx-cpp/graphics/GL20.hpp>
 #include <gdx-cpp/graphics/g2d/Gdx2DPixmap.hpp>
 #include <gdx-cpp/graphics/g2d/svg/AggSvgPixmap.hpp>
+#include <gdx-cpp/graphics/glutils/FileTextureData.hpp>
+#include <gdx-cpp/graphics/Pixmap.hpp>
+#include <gdx-cpp/implementation/System.hpp>
+#include <stdlib.h>
+#include <iostream>
+#include <memory>
 
-#include <gdx-cpp/graphics/GL10.hpp>
-#include <gdx-cpp/graphics/GL20.hpp>
-#include <gdx-cpp/graphics/GL11.hpp>
+#include "LinuxGLU.hpp"
+#include "LinuxGraphics.hpp"
+#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/graphics/GLCommon.hpp"
+#include "gdx-cpp/graphics/Pixmap.hpp"
 
-#include <gdx-cpp/gl.hpp>
-#include <SDL/SDL_syswm.h>
+namespace gdx {
+class GLU;
+}  // namespace gdx
 
 
 using namespace gdx::nix;
@@ -343,25 +349,25 @@ void gdx::nix::LinuxGraphics::update() {
         SDL_GL_SwapBuffers();
 }
 
-TextureData::ptr nix::LinuxGraphics::resolveTextureData ( FileHandle::ptr fileHandle,
+TextureData::ptr nix::LinuxGraphics::resolveTextureData (const FileHandle::ptr& fileHandle,
         Pixmap::ptr preloadedPixmap,
         const gdx::Pixmap::Format* format,
 bool useMipMaps ) {
     return TextureData::ptr ( new FileTextureData ( fileHandle, preloadedPixmap, format, useMipMaps ) );
 }
 
-gdx::Pixmap* nix::LinuxGraphics::resolvePixmap ( int width, int height, const gdx::Pixmap::Format& format, int pixType ) {
+gdx::Pixmap* nix::LinuxGraphics::resolvePixmap ( int width, int height, const gdx::Pixmap::Format& format, Pixmap::PixmapType pixType ) {
     switch ( pixType ) {
-    case Pixmap::Gdx2d:
+        case Pixmap::PixmapType::PixmapType_Gdx2d:
         return Gdx2DPixmap::newPixmap ( width, height, Gdx2DPixmap::Format::toGdx2DPixmapFormat ( format ) );
-    case Pixmap::Svg:
+        case Pixmap::PixmapType::PixmapType_Svg:
         return new AggSvgPixmap ( width, height );
     }
 }
 
 gdx::Pixmap* nix::LinuxGraphics::resolvePixmap ( const gdx::Pixmap& other ) {
     switch ( other.getType() ) {
-    case Pixmap::Gdx2d:
+    case Pixmap::PixmapType::PixmapType_Gdx2d:
         return new Gdx2DPixmap ( ( Gdx2DPixmap& ) other );
     }
 }

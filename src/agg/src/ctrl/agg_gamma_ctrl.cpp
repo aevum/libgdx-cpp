@@ -18,8 +18,13 @@
 //----------------------------------------------------------------------------
 
 #include <stdio.h>
+
+#include "agg_basics.h"
 #include "agg_math.h"
+#include "agg_math_stroke.h"
+#include "ctrl/agg_ctrl.h"
 #include "ctrl/agg_gamma_ctrl.h"
+#include "ctrl/agg_gamma_spline.h"
 
 namespace agg
 {

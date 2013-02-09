@@ -244,7 +244,15 @@ class IosMutex : public gdx::Mutex {
 public:
     IosMutex()
     {
-        pthread_mutex_init(&mutex, NULL);
+        pthread_mutexattr_t attributes;
+        if (!pthread_mutexattr_init(&attributes)) {
+            pthread_mutexattr_settype(&attributes, PTHREAD_MUTEX_RECURSIVE);
+            pthread_mutex_init(&mutex, &attributes);
+            pthread_mutexattr_destroy(&attributes);
+        } else {
+            gdx_log_info("LinuxMutex", "Failed to initialize mutex attributes, mutex will not be recursive");
+            pthread_mutex_init(&mutex, &attributes);
+        }
     }
     
     void lock(){
@@ -259,11 +267,7 @@ protected:
     pthread_mutex_t mutex;
 };
 
-void* run_runnable(void* runnable) {
-    ((Runnable*)runnable)->run();
-
-    return NULL;
-}
+void* run_runnable(void* runnable);
 
 class IosThread : public gdx::Thread {
 public:
@@ -277,17 +281,16 @@ public:
     }
 
     void start() {
-        if (pthread_create(&thread, NULL, run_runnable, (void*) runnable) != 0) {
+        self = shared_from_this();
+        if (pthread_create(&thread, NULL, run_runnable, (void*) this) != 0) {
             gdx_log_error("gdx","pthread_create failed");
         }
     }
 
     void join() {
-        std::cout << "antes do join" << std::endl;
         if( pthread_join(thread, NULL) != 0) {
             gdx_log_error("gdx","pthread_join failed");
         }
-        std::cout << "depois do join" << std::endl;
     }
 
     void sleep(long int millis) {
@@ -299,14 +302,19 @@ public:
     }
 
     virtual ~IosThread() {
-        join();
-        runnable->onRunnableStop();
     }    
     
-private:
     Runnable* runnable;
     pthread_t thread;
+    ptr self;
 };
+
+void* run_runnable(void* runnable) {
+    ((IosThread*)runnable)->runnable->run();
+    ((IosThread*)runnable)->self = nullptr;
+    
+    return NULL;
+}
 
 gdx::Thread::ptr gdx::ios::IosSystem::IosThreadFactory::createThread(Runnable* t)
 {

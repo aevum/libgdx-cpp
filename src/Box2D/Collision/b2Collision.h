@@ -22,14 +22,17 @@
 #include <Box2D/Common/b2Math.h>
 #include <climits>
 
+#include "Box2D/Common/b2Settings.h"
+#include "limits.h"
+
 /// @file
 /// Structures and functions used for computing contact points, distance
 /// queries, and TOI queries.
 
-class b2Shape;
 class b2CircleShape;
 class b2EdgeShape;
 class b2PolygonShape;
+class b2Shape;
 
 const uint8 b2_nullFeature = UCHAR_MAX;
 

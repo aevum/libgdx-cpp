@@ -21,14 +21,14 @@
 
 #include <Box2D/Common/b2Settings.h>
 
-struct b2Vec2;
-struct b2Transform;
-class b2Fixture;
 class b2Body;
-class b2Joint;
 class b2Contact;
+class b2Fixture;
+class b2Joint;
 struct b2ContactResult;
 struct b2Manifold;
+struct b2Transform;
+struct b2Vec2;
 
 /// Joints and fixtures are destroyed when their associated
 /// body is destroyed. Implement this listener so that you

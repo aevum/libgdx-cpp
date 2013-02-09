@@ -18,8 +18,10 @@
 #ifndef LINUXMUSIC_HPP
 #define LINUXMUSIC_HPP
 
-#include "gdx-cpp/audio/Music.hpp"
 #include <gdx-cpp/internal/memory>
+
+#include "gdx-cpp/audio/Music.hpp"
+#include "gdx-cpp/internal/memory"
 
 namespace gdx {
 class FileHandle;
@@ -44,13 +46,12 @@ public:
     float getPosition ();
     void dispose ();
     void update ();
-
-
     
 protected:
     virtual int read (char * buffer, int bufferSize) = 0;
     virtual void reset () = 0;
     ref_ptr_maker< gdx::FileHandle >::shared_ptr_t file;
+
 private:
     const static int bufferSize = 40960;
     const static int bufferCount = 3;
@@ -58,7 +59,7 @@ private:
     static char tempBytes [];
 
     LinuxOpenALAudio * audio;
-    unsigned int  * buffers;
+    unsigned int  buffers[bufferCount];
     int sourceID;
     int format, sampleRate;
     bool isLoopingVar, isPlayingVar;

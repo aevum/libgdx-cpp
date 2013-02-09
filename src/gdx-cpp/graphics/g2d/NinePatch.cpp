@@ -18,11 +18,13 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
+#include <stdint.h>
+
 #include "NinePatch.hpp"
-#include <stdexcept>
+#include "TextureRegion.hpp"
+#include "gdx-cpp/Log.hpp"
 #include "gdx-cpp/graphics/Texture.hpp"
 #include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
-#include "TextureRegion.hpp"
 
 using namespace gdx;
 

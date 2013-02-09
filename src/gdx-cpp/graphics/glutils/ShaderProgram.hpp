@@ -21,16 +21,19 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_SHADERPROGRAM_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_SHADERPROGRAM_HPP_
 
-#include "gdx-cpp/utils/Disposable.hpp"
-#include <set>
-#include <string>
 #include <gdx-cpp/Application.hpp>
 #include <gdx-cpp/utils/Buffer.hpp>
+#include <set>
+#include <string>
+#include <vector>
+
 #include "gdx-cpp/internal/unordered_map"
+#include "gdx-cpp/utils/Disposable.hpp"
 
 namespace gdx {
-class Matrix4;
 class Matrix3;
+class Matrix4;
+class Application;
 
 class ShaderProgram: public Disposable {
 public:

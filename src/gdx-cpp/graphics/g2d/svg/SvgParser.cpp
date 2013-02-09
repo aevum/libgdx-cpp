@@ -18,16 +18,18 @@
  *  @author aevum team
  */
 
-#include "SvgParser.hpp"
-#include <stdexcept>
-#include "gdx-cpp/math/Matrix3.hpp"
+#include <stdio.h>
 #include <string.h>
-#include <cassert>
 #include <algorithm>
+#include <cassert>
+#include <memory>
+#include <unordered_map>
+
+#include "SvgParser.hpp"
 #include "SvgPixmapInterface.hpp"
+#include "gdx-cpp/Log.hpp"
 #include "gdx-cpp/math/MathUtils.hpp"
 #include "gdx-cpp/utils/StringConvertion.hpp"
-#include "gdx-cpp/Gdx.hpp"
 
 using namespace gdx;
 

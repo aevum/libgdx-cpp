@@ -18,12 +18,16 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "OrthographicCamera.hpp"
 #include <cmath>
 
-#include "gdx-cpp/math/Vector2.hpp"
-#include "gdx-cpp/math/MathUtils.hpp"
+#include "OrthographicCamera.hpp"
 #include "gdx-cpp/Gdx.hpp"
+#include "gdx-cpp/Graphics.hpp"
+#include "gdx-cpp/graphics/Camera.hpp"
+#include "gdx-cpp/math/Frustum.hpp"
+#include "gdx-cpp/math/MathUtils.hpp"
+#include "gdx-cpp/math/Matrix4.hpp"
+#include "gdx-cpp/math/Vector2.hpp"
 
 using namespace gdx;
 

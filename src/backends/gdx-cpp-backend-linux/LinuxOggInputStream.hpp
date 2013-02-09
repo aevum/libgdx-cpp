@@ -1,12 +1,13 @@
 #ifndef __ogg_h__
 #define __ogg_h__
 
-#include <string>
-#include <iostream>
-
 #include <AL/al.h>
 #include <ogg/ogg.h>
+#include <stdio.h>
+#include <vorbis/codec.h>
 #include <vorbis/vorbisfile.h>
+#include <iostream>
+#include <string>
 
 #include "gdx-cpp/utils/Buffer.hpp"
 
@@ -26,7 +27,9 @@ public:
     int read(char* pcm, int max);
     int getChannels();
     int getSampleRate();
-
+    
+    void reset();
+    
 protected:
 
 private:

@@ -17,9 +17,10 @@
 #ifndef LINUXSOUND_HPP
 #define LINUXSOUND_HPP
 
+#include <AL/al.h>
+
 #include "gdx-cpp/audio/Sound.hpp"
 #include "gdx-cpp/utils/Buffer.hpp"
-#include <AL/al.h>
 
 namespace gdx {
 namespace nix {

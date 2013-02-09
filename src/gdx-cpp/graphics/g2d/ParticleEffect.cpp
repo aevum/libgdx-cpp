@@ -18,11 +18,14 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
+#include <stddef.h>
+#include <iostream>
+#include <memory>
+
 #include "ParticleEffect.hpp"
 #include "ParticleEmitter.hpp"
 #include "gdx-cpp/graphics/Pixmap.hpp"
-
-#include <iostream>
+#include "gdx-cpp/graphics/g2d/Sprite.hpp"
 
 using namespace gdx;
 
@@ -216,7 +219,7 @@ void ParticleEffect::loadEmitterImagesTest () {
     for (unsigned int i = 0, n = emitters.size(); i < n; i++) {
         ParticleEmitter * emitter = emitters[i];
 
-        Pixmap::ptr pixmap = Pixmap::newFromRect(16, 16, Pixmap::Format::RGBA8888, Pixmap::Gdx2d);
+        Pixmap::ptr pixmap = Pixmap::newFromRect(16, 16, Pixmap::Format::RGBA8888, Pixmap::PixmapType::PixmapType_Gdx2d);
         
         pixmap->setColor(1 ,1 ,1 ,0.5f);
         pixmap->fill();

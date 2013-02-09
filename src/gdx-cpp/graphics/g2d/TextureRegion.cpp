@@ -18,9 +18,9 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include "TextureRegion.hpp"
-#include "gdx-cpp/utils/MatrixBase.hpp"
 #include <cmath>
+
+#include "TextureRegion.hpp"
 
 using namespace gdx;
 

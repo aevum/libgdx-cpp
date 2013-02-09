@@ -23,6 +23,8 @@
 #include "Screen.hpp"
 
 namespace gdx {
+class Screen;
+
 namespace  {
 
 class Game {

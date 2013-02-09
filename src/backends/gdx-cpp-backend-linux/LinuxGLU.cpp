@@ -1,6 +1,11 @@
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 #include "LinuxGLU.hpp"
 
-#include <GL/glu.h>
+namespace gdx {
+class GL10;
+}  // namespace gdx
 
 using namespace gdx::nix;
 

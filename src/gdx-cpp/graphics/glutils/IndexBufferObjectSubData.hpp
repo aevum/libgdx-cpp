@@ -21,7 +21,10 @@
 #ifndef GDX_CPP_GRAPHICS_GLUTILS_INDEXBUFFEROBJECTSUBDATA_HPP_
 #define GDX_CPP_GRAPHICS_GLUTILS_INDEXBUFFEROBJECTSUBDATA_HPP_
 
+#include <vector>
+
 #include "IndexData.hpp"
+#include "gdx-cpp/utils/Buffer.hpp"
 
 namespace gdx {
 

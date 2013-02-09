@@ -69,6 +69,7 @@
 
 */
 
+#include <stddef.h>
 #ifndef STBI_INCLUDE_STB_IMAGE_H
 #define STBI_INCLUDE_STB_IMAGE_H
 
@@ -178,11 +179,9 @@
 //
 //     stbi_is_hdr(char *filename);
 
-#ifndef STBI_NO_STDIO
-#include <stdio.h>
-#endif
-
 #define STBI_VERSION 1
+
+#include <stdio.h>
 
 enum
 {
@@ -421,10 +420,8 @@ extern int      stbi_gif_info_from_file   (FILE *f,                  int *x, int
 #ifndef STBI_NO_STDIO
 #include <stdio.h>
 #endif
-#include <stdlib.h>
-#include <memory.h>
 #include <assert.h>
-#include <stdarg.h>
+#include <stdlib.h>
 
 #ifndef _MSC_VER
   #ifdef __cplusplus
@@ -4848,11 +4845,6 @@ int stbi_info_from_file(FILE *f, int *x, int *y, int *comp)
        return 1;
    if (stbi_gif_info_from_file(f, x, y, comp))
        return 1;
-   // @TODO: stbi_bmp_info_from_file
-   // @TODO: stbi_psd_info_from_file
-   #ifndef STBI_NO_HDR
-   // @TODO: stbi_hdr_info_from_file
-   #endif
    // test tga last because it's a crappy test!
    if (stbi_tga_info_from_file(f, x, y, comp))
        return 1;
@@ -4868,11 +4860,6 @@ int stbi_info_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *c
        return 1;
    if (stbi_gif_info_from_memory(buffer, len, x, y, comp))
        return 1;
-   // @TODO: stbi_bmp_info_from_memory
-   // @TODO: stbi_psd_info_from_memory
-   #ifndef STBI_NO_HDR
-   // @TODO: stbi_hdr_info_from_memory
-   #endif
    // test tga last because it's a crappy test!
    if (stbi_tga_info_from_memory(buffer, len, x, y, comp))
        return 1;

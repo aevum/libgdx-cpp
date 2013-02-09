@@ -116,6 +116,8 @@ void gdx::nix::LinuxApplication::exit()
         delete listener;
         listener = NULL;
     }
+    
+    std::exit(0);
 }
 
 Audio* gdx::nix::LinuxApplication::getAudio()
