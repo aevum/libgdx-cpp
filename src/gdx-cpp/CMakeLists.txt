@@ -418,6 +418,9 @@ graphics/Pixmap.cpp
 # graphics/g3d/decals/DecalBatch.cpp
 # graphics/g3d/decals/Decal.cpp
 # graphics/g3d/Material.cpp
+ graphics/g3d/model/SubMesh.cpp
+ graphics/g3d/model/still/StillSubMesh.cpp
+ graphics/g3d/model/still/StillModel.cpp
 # graphics/g3d/loaders/obj/ObjLoader.cpp
 # graphics/g3d/loaders/md5/MD5Animation.cpp
 # graphics/g3d/loaders/md5/MD5Animator.cpp
