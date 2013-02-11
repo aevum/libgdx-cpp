@@ -74,6 +74,10 @@ public class AndroidMusic implements Music {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override public boolean isPaused() {		
+		return !player.isPlaying() && isPrepared;
+	}
 
 	@Override public void setLooping (boolean isLooping) {
 		player.setLooping(isLooping);
@@ -90,7 +94,7 @@ public class AndroidMusic implements Music {
 		player.stop();		
 		isPrepared = false;
 	}
-
+	
 	public float getPosition () {
 		return player.getCurrentPosition() / 1000f;
 	}

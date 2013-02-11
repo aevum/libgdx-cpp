@@ -28,10 +28,12 @@ namespace gdx {
 
 class Music: public Disposable {
 public:
+    enum class ExecutionStatus {MUSIC_PLAYING, MUSIC_STOPPED, MUSIC_PAUSED};
     virtual   void play () = 0;
     virtual   void pause () = 0;
     virtual   void stop () = 0;
     virtual   bool isPlaying () = 0;
+    virtual   bool isPaused () = 0;
     virtual   void setLooping (bool isLooping) = 0;
     virtual   bool isLooping () = 0;
     virtual   void setVolume (float volume) = 0;

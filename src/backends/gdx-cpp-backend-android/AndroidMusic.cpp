@@ -47,6 +47,7 @@ gdx::android::AndroidMusic::AndroidMusic(jobject musicObj)
     stopJNI = env->GetMethodID(cls, "stop", "()V");
     isLoopingJNI = env->GetMethodID(cls, "isLooping", "()Z");
     isPlayingJNI = env->GetMethodID(cls, "isPlaying", "()Z");
+    isPausedJNI = env->GetMethodID(cls, "isPaused", "()Z");
     setLoopingJNI = env->GetMethodID(cls, "setLooping", "(Z)V");
     setVolumeJNI = env->GetMethodID(cls, "setVolume", "(F)V");
     getPositionJNI = env->GetMethodID(cls, "getPosition", "()F");
@@ -56,6 +57,7 @@ gdx::android::AndroidMusic::AndroidMusic(jobject musicObj)
     assert(getPositionJNI);
     assert(isLoopingJNI);
     assert(isPlayingJNI);
+    assert(isPausedJNI);
     assert(pauseJNI);
     assert(playJNI);
     assert(setLoopingJNI);
@@ -87,6 +89,13 @@ bool gdx::android::AndroidMusic::isPlaying()
     JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::system)->getJniEnv();
     return env->CallBooleanMethod(jniMusicObj, isPlayingJNI);
 }
+
+bool AndroidMusic::isPaused()
+{
+    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::system)->getJniEnv();
+    return env->CallBooleanMethod(jniMusicObj, isPausedJNI);
+}
+
 
 void gdx::android::AndroidMusic::pause()
 {

@@ -36,6 +36,7 @@ format(0),
 sampleRate(0),
 isLoopingVar(false),
 isPlayingVar(false),
+isPausedVar(false),
 volume(1),
 renderedSeconds(0),
 secondsPerBuffer(0)
@@ -53,10 +54,7 @@ void LinuxOpenALMusic::setup (int _channels, int _sampleRate)
     CHECK_OPENAL_ERROR(alGenBuffers(bufferCount, buffers));    
     CHECK_OPENAL_ERROR(alSourcei(sourceID, AL_LOOPING, AL_FALSE));    
     CHECK_OPENAL_ERROR(alSourcef(sourceID, AL_GAIN, volume));
-}
-
-void LinuxOpenALMusic::play ()
-{
+            
     reset();
 
     int i;
@@ -65,16 +63,24 @@ void LinuxOpenALMusic::play ()
             break;
         }            
     }
-   
+    
     CHECK_OPENAL_ERROR(alSourceQueueBuffers(sourceID, i, buffers));
+}
+
+void LinuxOpenALMusic::play ()
+{
     CHECK_OPENAL_ERROR(alSourcePlay(sourceID));
     isPlayingVar = true;
+    isPausedVar = false;
 }
 
 void LinuxOpenALMusic::pause ()
 {
-    if (sourceID != -1) CHECK_OPENAL_ERROR(alSourcePause(sourceID));
-    isPlayingVar = false;
+    if (sourceID != -1) {
+        CHECK_OPENAL_ERROR(alSourcePause(sourceID));
+        isPausedVar = true;
+    }
+    
 }
 void LinuxOpenALMusic::stop ()
 {
@@ -82,10 +88,18 @@ void LinuxOpenALMusic::stop ()
     renderedSeconds = 0;
     isPlayingVar = false;
 }
+
 bool LinuxOpenALMusic::isPlaying ()
 {
     return sourceID != -1 && isPlayingVar;
 }
+
+bool LinuxOpenALMusic::isPaused()
+{
+    return isPausedVar;
+}
+
+
 void LinuxOpenALMusic::setLooping (bool isLooping)
 {
     isLoopingVar = isLooping;
@@ -131,7 +145,7 @@ void LinuxOpenALMusic::dispose ()
 }
 void LinuxOpenALMusic::update()
 {
-    if (sourceID == -1 || !isPlayingVar) return;
+    if (sourceID == -1 || !isPlayingVar || isPausedVar) return;
   
     //we query for processed buffers
     int processed = 0;

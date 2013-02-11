@@ -58,6 +58,9 @@ public interface Music extends Disposable {
 
 	/** @return whether the music stream is playing. */
 	public boolean isLooping ();
+	
+	/** @return whether the music is paused. */
+	public boolean isPaused();
 
 	/** Sets the volume of this music stream. The volume must be given in the range [0,1] with 0 being silent and 1 being the
 	 * maximum volume.
@@ -70,4 +73,5 @@ public interface Music extends Disposable {
 
 	/** Needs to be called when the Music is no longer needed. */
 	public void dispose ();
+	
 }

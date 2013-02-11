@@ -36,6 +36,7 @@ public:
     float getPosition();
     bool isLooping();
     bool isPlaying();
+    bool isPaused();
     void pause();
     void play();
     void setLooping(bool isLooping);
@@ -51,6 +52,7 @@ protected:
     jmethodID getPositionJNI;
     jmethodID isLoopingJNI;
     jmethodID isPlayingJNI;
+    jmethodID isPausedJNI;
     jmethodID pauseJNI;
     jmethodID playJNI;
     jmethodID setLoopingJNI;

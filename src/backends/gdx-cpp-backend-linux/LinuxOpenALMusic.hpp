@@ -39,7 +39,8 @@ public:
     void play ();
     void pause ();
     void stop ();
-    bool isPlaying ();
+    bool isPlaying ();    
+    bool isPaused ();
     void setLooping (bool isLooping);
     bool isLooping ();
     void setVolume (float volume);
@@ -62,7 +63,7 @@ private:
     unsigned int  buffers[bufferCount];
     int sourceID;
     int format, sampleRate;
-    bool isLoopingVar, isPlayingVar;
+    bool isLoopingVar, isPlayingVar, isPausedVar;
     float volume;
     float renderedSeconds, secondsPerBuffer;
 
