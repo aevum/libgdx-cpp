@@ -30,7 +30,7 @@
 #include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/Graphics.hpp"
 #include "gdx-cpp/Log.hpp"
-#include "gdx-cpp/assets/AssetType.hpp"
+// #include "gdx-cpp/assets/AssetType.hpp"
 #include "gdx-cpp/graphics/GLCommon.hpp"
 #include "gdx-cpp/graphics/Pixmap.hpp"
 #include "gdx-cpp/graphics/TextureData.hpp"
@@ -246,11 +246,6 @@ void Texture::addManagedTexture (Application* app, const Texture::ptr& texture) 
 
 void Texture::clearAllTextures (Application* app) {
     managedTextures.erase(app);
-}
-
-const AssetType& Texture::getAssetType()
-{
-    return AssetType::Texture;
 }
 
 void Texture::invalidateAllTextures (Application* app) {

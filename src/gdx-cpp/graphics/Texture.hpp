@@ -28,8 +28,8 @@
 
 #include "TextureData.hpp"
 #include "gdx-cpp/Application.hpp"
-#include "gdx-cpp/assets/Asset.hpp"
-#include "gdx-cpp/assets/AssetManager.hpp"
+// #include "gdx-cpp/assets/Asset.hpp"
+// #include "gdx-cpp/assets/AssetManager.hpp"
 #include "gdx-cpp/files/FileHandle.hpp"
 #include "gdx-cpp/graphics/GL10.hpp"
 #include "gdx-cpp/graphics/Pixmap.hpp"
@@ -49,7 +49,7 @@ class FileHandle;
 
 class Texture
     : public Disposable,
-    public Asset , public std::enable_shared_from_this<Texture> {
+      public std::enable_shared_from_this<Texture> {
 public:
     typedef ref_ptr_maker<Texture>::shared_ptr_t ptr;
     typedef ref_ptr_maker<Texture>::weak_ptr_t weak_ptr;
@@ -101,7 +101,6 @@ public:
     Texture (const Pixmap::ptr pixmap, const Pixmap::Format& format, bool useMipMaps) ;
     Texture (const TextureData& data) ;
 
-    const AssetType& getAssetType();
     void load (const TextureData::ptr& data);
     void bind ();
     void bind (int unit);
