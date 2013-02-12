@@ -13,22 +13,23 @@
 
 namespace gdx
 {
+using namespace std;
 
 class StillModel : public Model
 {
 private:
 	static BoundingBox tmpbox;
 public:
-	vector<StillSubMesh> subMeshes;
-	StillModel(vector<SubMesh> subMeshes);
+	vector<StillSubMesh*> subMeshes;
+	StillModel(vector<SubMesh*>& subMeshes);
 	virtual ~StillModel();
 	void render();
-	void render(ShaderProgram program);
-	Model& getSubModel(const vector<string>& subMeshNames);
-	StillSubMesh& getSubMesh(string name);
-	vector<StillSubMesh> getSubMeshes() const;
-	void setMaterials(vector<Material> materials);
-	void setMaterial(Material material);
+	void render(ShaderProgram& program);
+	Model* getSubModel(const vector<string>& subMeshNames);
+	StillSubMesh* getSubMesh(string name);
+	vector<SubMesh*>& getSubMeshes();
+	void setMaterials(vector<Material*> materials);
+	void setMaterial(Material* material);
 	void getBoundingBox(BoundingBox& bbox);
 	void dispose();
 };

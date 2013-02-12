@@ -10,12 +10,16 @@
 
 #include "gdx-cpp/graphics/g3d/ModelLoaderHints.hpp"
 #include "gdx-cpp/graphics/g3d/model/Model.hpp"
+#include "gdx-cpp/files/FileHandle.hpp"
+
+namespace gdx {
 
 class ModelLoader
 {
 public:
-	Model* load(const FileHandle& file, ModelLoaderHints hints) = 0;
+	virtual Model* load(const FileHandle& file, ModelLoaderHints hints) = 0;
 };
 
-} /* namespace gdx */
+}
+ /* namespace gdx */
 #endif /* MODELLOADER_H_ */

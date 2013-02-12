@@ -9,13 +9,15 @@
 #define STILLMODELLOADER_H_
 
 #include "ModelLoader.hpp"
+#include "gdx-cpp/graphics/g3d/model/still/StillModel.hpp"
 
 namespace gdx
 {
 
 class StillModelLoader: public ModelLoader
 {
-	StillModel* load(const FileHandle&, ModelLoaderHints hints) = 0;
+public:
+	virtual StillModel* load(const FileHandle&, ModelLoaderHints hints) = 0;
 };
 
 } /* namespace gdx */
