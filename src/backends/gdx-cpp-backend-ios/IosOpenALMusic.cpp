@@ -37,7 +37,8 @@ isPlayingVar(false),
 volume(1),
 renderedSeconds(0),
 channels(1),
-file(_file)
+file(_file),
+paused(false)
 {
     audio->music.push_back(this);
     sourceID = audio->obtainSource(true);
@@ -47,27 +48,21 @@ file(_file)
     CHECK_OPENAL_ERROR(alSourcef(sourceID, AL_GAIN, volume));
 }
 
+bool IosOpenALMusic::isPaused() {
+    return paused;
+}
+
 void IosOpenALMusic::play ()
 {
-    setup();
-
-    int i;
-    for (i = 0; i < GDX_IOS_OPENALMUSIC_BUFFER_COUNT; ++i) {
-        if (!fill(alBuffers[i])) {
-            break;
-        }
-    }
-    
-    CHECK_OPENAL_ERROR(alSourceQueueBuffers(sourceID, i, alBuffers));
-    CHECK_OPENAL_ERROR(alSourcePlay(sourceID));
-    
+    CHECK_OPENAL_ERROR(alSourcePlay(sourceID));    
+    paused = false;
     isPlayingVar = true;
 }
 
 void IosOpenALMusic::pause ()
 {
     if (sourceID != -1) CHECK_OPENAL_ERROR(alSourcePause(sourceID));
-    isPlayingVar = false;
+    paused = true;
 }
 
 void IosOpenALMusic::stop ()
@@ -134,6 +129,15 @@ void IosOpenALMusic::setup() {
     this->format = outputFormat.mChannelsPerFrame > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16;
     this->channels = outputFormat.mChannelsPerFrame;
     this->sampleRate = outputFormat.mSampleRate;
+    
+    int i;
+    for (i = 0; i < GDX_IOS_OPENALMUSIC_BUFFER_COUNT; ++i) {
+        if (!fill(alBuffers[i])) {
+            break;
+        }
+    }
+    
+    CHECK_OPENAL_ERROR(alSourceQueueBuffers(sourceID, i, alBuffers));
 }
 
 void IosOpenALMusic::setLooping (bool isLooping)
@@ -226,7 +230,7 @@ bool IosOpenALMusic::fill(int bufferID) {
 
 void IosOpenALMusic::update()
 {
-    if (sourceID == -1 || !isPlayingVar) return;
+    if (sourceID == -1 || !isPlayingVar || paused) return;
     
     //we query for processed buffers
     int processed = 0;

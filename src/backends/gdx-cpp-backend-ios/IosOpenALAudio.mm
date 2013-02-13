@@ -189,7 +189,9 @@ gdx::Sound * IosOpenALAudio::newSound (const ref_ptr_maker< gdx::FileHandle >::s
 }
 
 gdx::Music * IosOpenALAudio::newMusic (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_t file) {
-   return new IosOpenALMusic(this, file);
+    IosOpenALMusic* music = new IosOpenALMusic(this, file);
+    music->setup();
+    return music;
 }
 
 int IosOpenALAudio::obtainSource (bool isMusic) {

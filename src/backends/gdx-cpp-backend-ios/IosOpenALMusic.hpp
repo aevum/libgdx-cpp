@@ -48,6 +48,7 @@ public:
     void dispose ();
     void update ();
     void setup();
+    bool isPaused();
     
 protected:
     virtual void reset ();
@@ -66,6 +67,7 @@ private:
     bool isLoopingVar, isPlayingVar;
     float volume;
     float renderedSeconds;
+    bool paused;
     ExtAudioFileRef audioFile;
     FileHandle::ptr file;
 };

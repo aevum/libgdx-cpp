@@ -74,6 +74,10 @@ public:
         
     }
     
+    virtual bool isPaused() {
+        return false;
+    }
+    
     virtual void stop () {
         [audioPlayer stop];
     }
