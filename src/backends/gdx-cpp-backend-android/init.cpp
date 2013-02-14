@@ -45,7 +45,11 @@ extern "C" {
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeCreate(JNIEnv* env) {
         assert(applicationListener);
-        applicationListener->create();        
+        applicationListener->create();
+        //we reset the time here as the latest place we updated was before the create,
+        //and if the create took a lot of time (loading resources)
+        //the first deltaTime will be giant
+        static_cast<AndroidGraphics*>(gdx::graphics)->initializeTime();
     }
 
     void Java_com_aevumlab_gdxcpp_ApplicationManager_nativeUpdate(JNIEnv* env) {

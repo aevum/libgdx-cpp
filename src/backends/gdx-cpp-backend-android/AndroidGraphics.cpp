@@ -294,3 +294,8 @@ Pixmap* android::AndroidGraphics::resolvePixmap(const gdx::FileHandle::ptr& file
         gdx_log_error("gdx","unsupported image format: %s", extension.c_str());
     }
 }
+
+void AndroidGraphics::initializeTime()
+{
+    this->lastTime = system->nanoTime();
+}

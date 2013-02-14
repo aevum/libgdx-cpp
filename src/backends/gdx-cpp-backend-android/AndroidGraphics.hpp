@@ -64,7 +64,9 @@ public:
     void updateTime();
 
     void resize(int width, int height);
-
+    
+    void initializeTime();
+    
     TextureData::ptr resolveTextureData(const FileHandle::ptr& fileHandle, Pixmap::ptr preloadedPixmap, const gdx::Pixmap::Format* format, bool useMipMaps);
 
     virtual Pixmap* resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, gdx::Pixmap::PixmapType pixType);
