@@ -155,6 +155,10 @@ void gdx::ios::IosGraphics::updateTime()
     frames++;
 }
 
+void gdx::ios::IosGraphics::resetTimer() {
+    lastTime = system->nanoTime();
+}
+
 gdx::Graphics::GraphicsType gdx::ios::IosGraphics::getType()
 {
     return gdx::Graphics::IOsGL;

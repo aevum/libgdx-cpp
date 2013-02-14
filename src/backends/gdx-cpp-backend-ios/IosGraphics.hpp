@@ -60,7 +60,8 @@ public:
     bool supportsExtension (const std::string& extension);
     void update();
     void updateTime();
-
+    void resetTimer();
+    
     TextureData::ptr resolveTextureData(const std::shared_ptr<FileHandle>& fileHandle, Pixmap::ptr preloadedPixmap, const gdx::Pixmap::Format* format, bool useMipMaps);
 
     Pixmap* resolvePixmap(int width, int height, const gdx::Pixmap::Format& format, Pixmap::PixmapType pixType);
