@@ -47,7 +47,6 @@ LinuxOggSound::LinuxOggSound(gdx::nix::LinuxOpenALAudio* audio, const ref_ptr_ma
 
     setup(buffer, i, input.getChannels(), input.getSampleRate());
     free(buffer);
-    input.release();
 }
 
 

@@ -84,13 +84,7 @@ JsonValue& JsonValue::operator[](const char* name)
     
     assert(item_val.type == json_json);
     
-    item_map& thisAsMap = this->as_item_map();
-    
-    if (thisAsMap.count(name) == 0) {
-        thisAsMap[name] = JsonValue();
-    }
-    
-    return thisAsMap[name];
+    return this->as_item_map()[name];
 }
 
 

@@ -21,21 +21,19 @@ namespace nix {
 class LinuxOggInputStream
 {
 public:
-
     void open(std::string path);
-    void release();
+    
     int read(char* pcm, int max);
     int getChannels();
     int getSampleRate();
     
     void reset();
     
-    ~LinuxOggInputStream();
-    
+    ~LinuxOggInputStream();    
 protected:
 
 private:
-
+    void release();
     FILE*           oggFile;
     OggVorbis_File  oggStream;
     vorbis_info*    vorbisInfo;

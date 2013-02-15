@@ -42,8 +42,6 @@ void LinuxOggInputStream::release()
     ov_clear(&oggStream);
 }
 
-
-
 int LinuxOggInputStream::read(char * pcm, int max)
 {
 
@@ -73,6 +71,5 @@ void LinuxOggInputStream::reset()
 
 LinuxOggInputStream::~LinuxOggInputStream()
 {
-    fclose(oggFile);
-    ov_clear(&oggStream);
+    release();
 }
