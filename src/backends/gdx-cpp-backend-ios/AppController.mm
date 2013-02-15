@@ -27,7 +27,7 @@
 
 #import <OpenGLES/EAGLDrawable.h>
 #include <gdx-cpp/Gdx.hpp>
-
+#include "IosGraphics.hpp"
 #include "init.hpp"
 
 @implementation AppController
@@ -49,6 +49,8 @@
 	gdxcpp_initialize_application(screenRect.size.width, screenRect.size.height);
 	
 	gdxcpp_create_listener();
+    
+    static_cast<gdx::ios::IosGraphics*>(gdx::graphics)->resetTimer();
     
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     
