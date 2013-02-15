@@ -78,7 +78,23 @@ protected:
         explicit json_value_t(const T& val) {
             *this = val;
         }        
-
+        
+        ~json_value_t() {
+            switch(type) {
+                case json_json:
+                    value.item_map_val.~map();
+                    break;
+                case json_list:
+                    value.array_val.~vector();
+                    break;
+                case json_string:
+                    value.string_val.~basic_string();                    
+                    break;
+                default:
+                    break;
+            }
+        }
+        
         json_value_t() : type(json_null) {
         }
         

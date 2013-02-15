@@ -71,3 +71,8 @@ void LinuxOggInputStream::reset()
     ov_raw_seek(&oggStream, 0);
 }
 
+LinuxOggInputStream::~LinuxOggInputStream()
+{
+    fclose(oggFile);
+    ov_clear(&oggStream);
+}

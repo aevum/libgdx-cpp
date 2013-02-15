@@ -30,6 +30,8 @@ public:
     
     void reset();
     
+    ~LinuxOggInputStream();
+    
 protected:
 
 private:
