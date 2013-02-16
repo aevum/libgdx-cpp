@@ -26,6 +26,7 @@ public class AndroidMusic implements Music {
 	private final AndroidAudio audio;
 	private MediaPlayer player;
 	private boolean isPrepared = true;
+	private boolean isPaused = false;
 
 	AndroidMusic (AndroidAudio audio, MediaPlayer player) {
 		this.audio = audio;
@@ -57,6 +58,7 @@ public class AndroidMusic implements Music {
 
 	@Override public void pause () {
 		if (player.isPlaying()) player.pause();
+		isPaused = true;
 	}
 
 	@Override public void play () {
@@ -68,6 +70,7 @@ public class AndroidMusic implements Music {
 				isPrepared = true;
 			}
 			player.start();
+			isPaused = false;
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -75,8 +78,8 @@ public class AndroidMusic implements Music {
 		}
 	}
 	
-	@Override public boolean isPaused() {		
-		return !player.isPlaying() && isPrepared;
+	@Override public boolean isPaused() {
+		return isPaused;
 	}
 
 	@Override public void setLooping (boolean isLooping) {
@@ -88,6 +91,7 @@ public class AndroidMusic implements Music {
 	}
 
 	@Override public void stop () {
+		isPaused = false;
 		if(isPrepared) {
 			player.seekTo(0);
 		}
