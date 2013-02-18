@@ -114,7 +114,7 @@ def setup():
 
 			os.chdir(java_src_path)
 			os.mkdir('libs/armeabi-v7a')
-			os.mkdir('assets')
+			os.mkdir('assets')s
 
 			call(['ln', '-s', root_path + '/android/lib/lib' + args.project_name + '.so', 'libs/armeabi-v7a' ])
 			call(['ln', '-s', root_path + '/data', java_src_path + '/assets/data' ])
@@ -139,17 +139,11 @@ def setup():
 		if not os.path.exists(source_path + '/bind.mm'):
 			call(['cp', gdx_source_dir + '/template/bind.mm', source_path])
 		
-		if cleanup_and_prepare(gdx_build_path):
-			call(['cmake', '-DCMAKE_BUILD_TYPE=Release', '-GXcode','-DCOMPANY_NAME=' + args.package_name,
-			'-DSDKVER=' + args.ios_sdk_ver, gdx_source_dir ])
-		
-		call(['xcodebuild', '-sdk', 'iphoneos'+ args.ios_sdk_ver, '-configuration', 'Release'])
-
 		if cleanup_and_prepare(project_build_path):
 			call(['cmake', '-DGDX_SOURCE=' + gdx_source_dir, '-DGDX_ROOT=' + gdx_build_path, '-GXcode', 
-			 '-DCOMPANY_NAME=' + args.package_name, '-DSDKVER=' + args.ios_sdk_ver, source_path])
+			 '-DCOMPANY_NAME=' + args.package_name, source_path])
 
-		call(['xcodebuild', '-sdk', 'iphoneos'+ args.ios_sdk_ver, '-configuration', 'Release'])
+		call(['xcodebuild', '-sdk', 'iphoneos', '-configuration', 'Release'])
 		
 	if not args.gen_mode:
 		print 'No target specified (--gen-mode). Exiting.'
