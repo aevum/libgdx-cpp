@@ -164,7 +164,8 @@ JsonValue JsonReader::doParse (const char* data, int offset, int length) {
                         if (debug) {
                            gdx_log_debug("JsonReader","nulll: %s", name.c_str());
                         }
-                        string(name, "");
+                        
+                        null(name);
                 }
                 action startObject {
                         std::string name = "";
