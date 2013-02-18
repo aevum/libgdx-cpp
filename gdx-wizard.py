@@ -143,8 +143,6 @@ def setup():
 			call(['cmake', '-DGDX_SOURCE=' + gdx_source_dir, '-DGDX_ROOT=' + gdx_build_path, '-GXcode', 
 			 '-DCOMPANY_NAME=' + args.package_name, source_path])
 
-		call(['xcodebuild', '-sdk', 'iphoneos', '-configuration', 'Release'])
-		
 	if not args.gen_mode:
 		print 'No target specified (--gen-mode). Exiting.'
 

@@ -24,6 +24,8 @@ gdx_setup_target({ProjectName} EXECUTABLE "${{{ProjectName}_SRCS}};${{ADDITIONAL
 target_link_libraries({ProjectName} 
                         ${{GDXCPP_LIBRARIES}} ${{GDX_BACKEND_LIBRARY}})
 
+add_dependencies({ProjectName} ${{GDXCPP_LIBRARIES}})
+
 if (GDX_BACKEND_IOS)
   set_target_properties({ProjectName} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${{CMAKE_CURRENT_SOURCE_DIR}}/Info.plist)
   gdx_ios_copy_resources({ProjectName} ${{CMAKE_CURRENT_SOURCE_DIR}}/../../data "")
