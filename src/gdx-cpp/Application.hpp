@@ -22,6 +22,7 @@
 
 #include <string>
 #include <ostream>
+#include <functional>
 #include "gdx-cpp/utils/Runnable.hpp"
 
 class Runnable;

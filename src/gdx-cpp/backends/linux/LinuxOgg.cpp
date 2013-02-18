@@ -21,8 +21,8 @@
 
 #include "LinuxOgg.hpp"
 #include "LinuxOggInputStream.hpp"
-#include "backends/gdx-cpp-backend-linux/LinuxOpenALMusic.hpp"
-#include "backends/gdx-cpp-backend-linux/LinuxOpenALSound.hpp"
+#include "LinuxOpenALMusic.hpp"
+#include "LinuxOpenALSound.hpp"
 #include "gdx-cpp/files/FileHandle.hpp"
 
 using namespace gdx::nix;

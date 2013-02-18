@@ -45,10 +45,8 @@ macro(find_libraries)
         FIND_LIBRARY(GDXCPP_${lib}
             NAMES
             ${lib}
-            libgdx-cpp-backend-android.a
             PATHS
-            ${GDX_ROOT}
-            /Users/mahmood1/Documents/test/android/gdx/lib
+            ${GDX_ROOT}            
             PATH_SUFFIXES 
             lib
             lib/Release

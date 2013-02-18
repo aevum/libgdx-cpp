@@ -22,7 +22,7 @@
 
 #include "LinuxOpenALAudio.hpp"
 #include "LinuxOpenALMusic.hpp"
-#include "backends/gdx-cpp-backend-linux/LinuxOpenALMusic.hpp"
+#include "LinuxOpenALMusic.hpp"
 
 using namespace gdx::nix;
 

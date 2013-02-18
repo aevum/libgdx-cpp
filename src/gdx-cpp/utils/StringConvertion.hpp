@@ -26,6 +26,7 @@
 #include <sstream>
 #include <cstdio>
 #include <stdexcept>
+#include <cstdlib>
 
 namespace gdx {
 

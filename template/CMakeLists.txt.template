@@ -2,26 +2,32 @@ project({ProjectName})
 
 cmake_minimum_required(VERSION 2.8)
 
-LIST(APPEND CMAKE_MODULE_PATH ${{GDX_SOURCE}}/cmake/finders)
-find_package(GdxCpp REQUIRED TRUE)
+include(gdx-cpp/cmake/gdx.cmake)
 
 initialize_gdx()
 
+include_directories(gdx-cpp/src)
+
+set({ProjectName}_SRCS src/{ProjectName}/main.cpp)
+
+if (GDX_BACKEND_IOS)
+  set(ADDITIONAL_SRCS src/{ProjectName}/bind.mm)
+endif()
+
+set(EXECUTABLE_OUTPUT_PATH ${{PROJECT_BINARY_DIR}}/bin)
 set(LIBRARY_OUTPUT_PATH ${{PROJECT_BINARY_DIR}}/lib)
 
-include_directories(${{GDXCPP_INCLUDE_DIR}})
-
-set({ProjectName}_SRCS main.cpp)
-
-if (APPLE)
-  set(ADDITIONAL_SRCS bind.mm)
-endif()
+add_subdirectory(gdx-cpp)
 
 gdx_setup_target({ProjectName} EXECUTABLE "${{{ProjectName}_SRCS}};${{ADDITIONAL_SRCS}}")
 
-if (APPLE)
+target_link_libraries({ProjectName} 
+                        ${{GDXCPP_LIBRARIES}} ${{GDX_BACKEND_LIBRARY}})
+
+if (GDX_BACKEND_IOS)
   set_target_properties({ProjectName} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${{CMAKE_CURRENT_SOURCE_DIR}}/Info.plist)
   gdx_ios_copy_resources({ProjectName} ${{CMAKE_CURRENT_SOURCE_DIR}}/../../data "")
 endif()
 
-target_link_libraries({ProjectName} ${{GDXCPP_LIBRARIES}})
+
+

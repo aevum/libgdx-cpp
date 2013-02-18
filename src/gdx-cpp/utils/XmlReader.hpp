@@ -28,7 +28,7 @@
 
 #include "gdx-cpp/files/FileHandle.hpp"
 #include "gdx-cpp/internal/memory"
-#include "gdx-cpp/internal/unordered_map"
+#include <unordered_map>
 
 namespace gdx {
 
@@ -47,7 +47,7 @@ public:
     public:        
         typedef ref_ptr_maker<Element>::shared_ptr_t ptr;
         typedef std::vector<Element::ptr> ElementVector;
-        typedef gdx_unordered_map<std::string, std::string> AttributesMap;
+        typedef std::unordered_map<std::string, std::string> AttributesMap;
         
         bool operator==(const Element& other) {
             return other.name == this->name;

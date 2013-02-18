@@ -857,7 +857,7 @@ std::string JsonReader::unescape (const std::string& value) {
             c = '\t';
             break;
         default:
-            gdx_log_error("gdx","Illegal escaped character: \\" + c);
+            gdx_log_error("gdx","Illegal escaped character: \\%c", c);
         }
 
         buffer << c;
