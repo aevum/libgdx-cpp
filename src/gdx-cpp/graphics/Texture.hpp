@@ -34,8 +34,8 @@
 #include "gdx-cpp/graphics/GL10.hpp"
 #include "gdx-cpp/graphics/Pixmap.hpp"
 #include "gdx-cpp/internal/memory"
-#include "gdx-cpp/internal/unordered_map"
 #include "gdx-cpp/utils/Disposable.hpp"
+#include <unordered_map>
 
 namespace gdx {
 class Application;
@@ -143,7 +143,7 @@ private:
     static AssetManager* assetManager;
 
     typedef std::list< Texture::weak_ptr > textureList;
-    typedef gdx_unordered_map< Application* , textureList > managedTextureMap;
+    typedef std::unordered_map< Application* , textureList > managedTextureMap;
 
     static managedTextureMap managedTextures;
 

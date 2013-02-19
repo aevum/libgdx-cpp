@@ -31,7 +31,6 @@
 #include "VertexAttributes.hpp"
 #include "gdx-cpp/Application.hpp"
 #include "gdx-cpp/internal/memory"
-#include "gdx-cpp/internal/unordered_map"
 #include "gdx-cpp/utils/Buffer.hpp"
 #include "gdx-cpp/utils/Disposable.hpp"
 #include "gdx-cpp/math/collision/BoundingBox.hpp"
@@ -102,7 +101,7 @@ protected:
     bool isVertexArray;
     bool disposed;
 private:
-    typedef gdx_unordered_map<Application*, std::set<Mesh*> > MeshMap;
+    typedef std::unordered_map<Application*, std::set<Mesh*> > MeshMap;
     static MeshMap meshes;
     static void addManagedMesh (Application* app, Mesh* mesh);
     

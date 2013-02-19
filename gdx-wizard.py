@@ -58,12 +58,13 @@ def setup():
 
 	data_path = root_path + '/data'
 	source_path = root_path + '/src/' + args.project_name
+	gdx_source_path = root_path + '/gdx-cpp'
 
 	if 'source' in args.gen_mode or not os.path.exists(source_path):
 		cleanup_and_prepare(source_path, True)		
 		cleanup_and_prepare(data_path)
 
-		write_template(gdx_source_dir + '/template/CMakeLists.txt', source_path,
+		write_template(gdx_source_dir + '/template/CMakeLists.txt', root_path,
 						'CMakeLists.txt',
 						ProjectName = args.project_name )
 
@@ -72,27 +73,14 @@ def setup():
 				   ProjectName = args.project_name )
 
 		call(['cp', gdx_source_dir + '/etc/assets/data/logo.png', data_path])
+		call(['ln', '-s', gdx_source_dir, gdx_source_path])
 
 	if 'linux' in args.gen_mode:					
 		project_path = root_path + '/linux/'
-		project_build_path  = project_path + args.project_name
-		gdx_build_path = project_path + '/gdx' 
 
-		if not os.path.exists(project_path):
-			os.mkdir(project_path)
-
-		if cleanup_and_prepare(gdx_build_path):		
-			call(['cmake', '-DCMAKE_BUILD_TYPE=Release', gdx_source_dir ])
-
-		call(['make', '-j' + str(multiprocessing.cpu_count())])
-
-		if cleanup_and_prepare(project_build_path):		
-			call(['cmake', '-DCMAKE_BUILD_TYPE=Release',
-			  '-DGDX_SOURCE=' + gdx_source_dir,
-			  '-DGDX_ROOT=' + gdx_build_path, root_path + '/src/' + args.project_name])
-
-		call(['make', '-j' + str(multiprocessing.cpu_count())])
-		call(['ln', '-s', data_path, '.'])
+		if cleanup_and_prepare(project_path):		
+			call(['cmake', '-DCMAKE_BUILD_TYPE=Release', root_path])
+			call(['ln', '-s', data_path, 'bin/'])
 
 	if 'android' in args.gen_mode:
 		if not args.android_sdk:
@@ -104,32 +92,16 @@ def setup():
 			sys.exit(1)
 
 		project_path = root_path + '/android'
-		gdx_build_path = project_path + '/gdx'
-		project_build_path  = project_path + '/' + args.project_name
-
 		os.environ['ANDROID_NDK'] = args.android_ndk
 
 		if not os.path.exists(root_path + '/src/java'):
 			args.gen_mode.append('android-src')
 
-		if not os.path.exists(project_path):
-			os.mkdir(project_path)
 
-		if cleanup_and_prepare(gdx_build_path):
-			call(['cmake', '-DCMAKE_BUILD_TYPE=Release', 
-				'-DCMAKE_TOOLCHAIN_FILE=' + gdx_source_dir + '/cmake/android.toolchain.cmake'
-		 , gdx_source_dir ])
-		
-		call(['make', '-j' + str(multiprocessing.cpu_count())])
-
-		if cleanup_and_prepare(project_build_path):
-			call(['cmake', '-DGDX_SOURCE=' + gdx_source_dir, 
-				'-DCMAKE_TOOLCHAIN_FILE=' + gdx_source_dir + '/cmake/android.toolchain.cmake',
-			    '-DGDX_ROOT=' + gdx_build_path, source_path])
-			
-		call(['make', '-j' + str(multiprocessing.cpu_count())])
-		
-		del os.environ["ANDROID_NDK"]
+		if cleanup_and_prepare(project_path):
+			call(['cmake', '-DCMAKE_TOOLCHAIN_FILE=' + gdx_source_dir + '/cmake/android.toolchain.cmake',
+			 	  root_path])
+			del os.environ["ANDROID_NDK"]
 
 	if 'android-src' in args.gen_mode:
 		os.chdir(root_path)
@@ -142,9 +114,9 @@ def setup():
 
 			os.chdir(java_src_path)
 			os.mkdir('libs/armeabi-v7a')
-			os.mkdir('assets')
+			os.mkdir('assets')s
 
-			call(['ln', '-s', root_path + '/android/'+ args.project_name +'/lib/lib' + args.project_name + '.so', 'libs/armeabi-v7a' ])
+			call(['ln', '-s', root_path + '/android/lib/lib' + args.project_name + '.so', 'libs/armeabi-v7a' ])
 			call(['ln', '-s', root_path + '/data', java_src_path + '/assets/data' ])
 
 			write_template(gdx_source_dir + '/template/MainActivity.java', 
@@ -167,18 +139,10 @@ def setup():
 		if not os.path.exists(source_path + '/bind.mm'):
 			call(['cp', gdx_source_dir + '/template/bind.mm', source_path])
 		
-		if cleanup_and_prepare(gdx_build_path):
-			call(['cmake', '-DCMAKE_BUILD_TYPE=Release', '-GXcode','-DCOMPANY_NAME=' + args.package_name,
-			'-DSDKVER=' + args.ios_sdk_ver, gdx_source_dir ])
-		
-		call(['xcodebuild', '-sdk', 'iphoneos'+ args.ios_sdk_ver, '-configuration', 'Release'])
-
 		if cleanup_and_prepare(project_build_path):
 			call(['cmake', '-DGDX_SOURCE=' + gdx_source_dir, '-DGDX_ROOT=' + gdx_build_path, '-GXcode', 
-			 '-DCOMPANY_NAME=' + args.package_name, '-DSDKVER=' + args.ios_sdk_ver, source_path])
+			 '-DCOMPANY_NAME=' + args.package_name, source_path])
 
-		call(['xcodebuild', '-sdk', 'iphoneos'+ args.ios_sdk_ver, '-configuration', 'Release'])
-		
 	if not args.gen_mode:
 		print 'No target specified (--gen-mode). Exiting.'
 

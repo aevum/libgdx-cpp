@@ -1,8 +1,6 @@
 #ifndef GDX_GL_H
 #define GDX_GL_H
 
-#include <gdx-cpp/config.hpp>
-
 #ifdef GDX_BACKEND_LINUX
 
 #define GL_GLEXT_PROTOTYPES

@@ -27,7 +27,6 @@
 #include "gdx-cpp/graphics/Pixmap.hpp"
 #include "gdx-cpp/graphics/Texture.hpp"
 #include "gdx-cpp/internal/memory"
-#include "gdx-cpp/internal/unordered_map"
 #include "gdx-cpp/utils/Disposable.hpp"
 
 namespace gdx {
@@ -52,7 +51,7 @@ public:
     int getWidth ();
 
 private:
-    typedef gdx_unordered_map<Application*, std::set < FrameBuffer* > > buffer_map;
+    typedef std::unordered_map<Application*, std::set < FrameBuffer* > > buffer_map;
     static buffer_map buffers;
     void build ();
     void addManagedFrameBuffer (Application* app, FrameBuffer* frameBuffer);

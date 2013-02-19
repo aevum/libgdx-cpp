@@ -1,7 +1,6 @@
 #ifndef GDX_CPP_LOG
 #define GDX_CPP_LOG
 
-#include <gdx-cpp/config.hpp>
 #include <gdx-cpp/utils/ScopedGuard.hpp>
 #include <string>
 #include <stdexcept>

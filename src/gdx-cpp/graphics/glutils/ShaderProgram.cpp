@@ -29,7 +29,6 @@
 #include "gdx-cpp/Graphics.hpp"
 #include "gdx-cpp/Log.hpp"
 #include "gdx-cpp/graphics/GL20.hpp"
-#include "gdx-cpp/internal/unordered_map"
 #include "gdx-cpp/math/Matrix3.hpp"
 #include "gdx-cpp/math/Matrix4.hpp"
 #include "gdx-cpp/utils/Buffer.hpp"
@@ -49,7 +48,7 @@ const std::string ShaderProgram::TEXCOORD_ATTRIBUTE = "a_texCoord";
 const std::string ShaderProgram::TANGENT_ATTRIBUTE = "a_tangent";
 const std::string ShaderProgram::BINORMAL_ATTRIBUTE = "a_binormal";
 
-gdx_unordered_map <Application *, std::set<ShaderProgram *> * > ShaderProgram::shaders;
+std::unordered_map <Application *, std::set<ShaderProgram *> * > ShaderProgram::shaders;
 
 bool ShaderProgram::pedantic = true;
 int ShaderProgram::intbuf = 0;
@@ -414,7 +413,7 @@ void ShaderProgram::clearAllShaderPrograms (Application* app) {
 std::string ShaderProgram::getManagedStatus () {
     std::stringstream builder;
     builder << "Managed shaders/app: { ";
-    gdx_unordered_map<Application *, std::set<ShaderProgram *> * >::iterator it;
+    std::unordered_map<Application *, std::set<ShaderProgram *> * >::iterator it;
     for (it = shaders.begin(); it != shaders.end(); ++it) {
         builder << it->second->size();
         builder << " ";

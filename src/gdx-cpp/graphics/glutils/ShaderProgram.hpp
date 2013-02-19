@@ -27,8 +27,8 @@
 #include <string>
 #include <vector>
 
-#include "gdx-cpp/internal/unordered_map"
 #include "gdx-cpp/utils/Disposable.hpp"
+#include <unordered_map>
 
 namespace gdx {
 class Matrix3;
@@ -109,20 +109,20 @@ private:
     void fetchUniforms ();
     void fetchAttributes ();
 
-    static gdx_unordered_map <Application *, std::set< ShaderProgram* > * > shaders;
+    static std::unordered_map <Application *, std::set< ShaderProgram* > * > shaders;
 
     std::string log;
     bool isCompiledVar;
 
 //     const
-    gdx_unordered_map <std::string, int> uniforms;
+    std::unordered_map <std::string, int> uniforms;
 //     const
-    gdx_unordered_map <std::string, int> uniformTypes;
+    std::unordered_map <std::string, int> uniformTypes;
     std::vector<std::string> uniformNames;
 
-    gdx_unordered_map <std::string, int> attributes;
+    std::unordered_map <std::string, int> attributes;
 //     const
-    gdx_unordered_map <std::string, int> attributeTypes;
+    std::unordered_map <std::string, int> attributeTypes;
     std::vector<std::string> attributeNames;
 
     int program;
