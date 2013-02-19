@@ -419,7 +419,9 @@ graphics/Pixmap.cpp
 # graphics/g3d/decals/Decal.cpp
  graphics/g3d/materials/Material.cpp
  graphics/g3d/materials/MaterialAttribute.cpp
- graphics/g3d/materials/BlendingAttribute.cpp 
+ graphics/g3d/materials/BlendingAttribute.cpp
+ graphics/g3d/materials/ColorAttribute.cpp
+ graphics/g3d/materials/TextureAttribute.cpp 
  graphics/g3d/model/SubMesh.cpp
  graphics/g3d/model/still/StillSubMesh.cpp
  graphics/g3d/model/still/StillModel.cpp
