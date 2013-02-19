@@ -19,17 +19,17 @@ ObjLoader::~ObjLoader()
 {
 }
 
-StillModel* ObjLoader::loadObj(FileHandle& file, bool flipV)
+StillModel* ObjLoader::loadObj(const FileHandle& file, bool flipV)
 {
 	FileHandle textureFolder = file.parent();
 	return loadObj(file, textureFolder, flipV);
 }
 
-StillModel* ObjLoader::loadObj(FileHandle& file, FileHandle& textureDir, bool filpV)
+StillModel* ObjLoader::loadObj(const FileHandle& file, FileHandle& textureDir, bool flipV)
 {
 	string line;
 	string tokens;
-	char firstChar;
+	string key;
 	MtlLoader mtl;
 
 	Group activeGroup("default");
@@ -38,23 +38,53 @@ StillModel* ObjLoader::loadObj(FileHandle& file, FileHandle& textureDir, bool fi
 	file.readBytes(buffer);
 	std::istringstream content(buffer.get());
 	string currentLine;
-	while(getline(content, currentLine)) {
-		if (currentLine.size() == 0) {
+	while(content.good() && !content.eof() && getline(content, currentLine)) {
+		stringstream str(currentLine);
+		str >> key >> ws;
+		if (key == "#") {
 			continue;
-		} else if ((firstChar = currentLine[0]) == '#') {
-			continue;
-		} else if (firstChar == 'v') {
-			if (currentLine[1] == ' ') {
-				proccessVerteOrNormal(currentLine, "v %f %f %f", verts);
-			} else if (currentLine[1] == 'n') {
-				proccessVerteOrNormal(currentLine, "vn %f %f %f", norms);
-			}else if (currentLine[1] == 't') {
-				proccessUV(currentLine);
+		} else if (key == "v") {
+			proccessVerteOrNormal(currentLine, "v %f %f %f", verts);
+		} else if (key == "vn") {
+			proccessVerteOrNormal(currentLine, "vn %f %f %f", norms);
+		} else if (key == "vt") {
+			proccessUV(currentLine, flipV);
+		} else if (key == "f") {
+			vector<int>& faces = activeGroup.faces;
+			int i = 0;
+			while (!str.eof()) {
+				int a, b, c = 0;
+				str >> a;
+				a--;
+				faces.push_back(a);
+				if (str.get() == '/') {
+					if (str.get() != '/') {
+						str >> b;
+						b--;
+					}
+					if (str.get() == '/') {
+						str >> c;
+						c--;
+					}
+				}
 			}
-		} else if (firstChar == 'f') {
-			
+
+		} else if (key == "o" || key == "g") {
 		}
+//		} else if ("mtllib" )
 		//if (currentLine[0] == 'v' && currentLine[1] == ' ')
+	}
+}
+
+int ObjLoader::getIndex(string index, int size) {
+	if (index.empty()) {
+		return 0;
+	}
+	int idx = atoi(index.c_str());
+	if (idx < 0) {
+		return size + idx;
+	} else {
+		return idx - 1;
 	}
 }
 
@@ -66,14 +96,14 @@ void ObjLoader::proccessVerteOrNormal(string& line, const char* templ, vector<fl
 	container.push_back(tmp3);
 }
 
-void ObjLoader::proccessUV(string& line) {
+void ObjLoader::proccessUV(string& line, bool isFlip) {
 	float tmp1, tmp2;
 	sscanf(line.c_str(), "vt %f %f", &tmp1, &tmp2);
 	uvs.push_back(tmp1);
-	uvs.push_back(tmp2);
+	uvs.push_back(isFlip ? 1 - tmp2 : tmp2);
 }
 
-StillModel* ObjLoader::load(FileHandle& handle, ModelLoaderHints hints) {
+StillModel* ObjLoader::load(const FileHandle& handle, ModelLoaderHints hints) {
 	return loadObj(handle, hints.flipV);
 }
 

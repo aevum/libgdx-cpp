@@ -25,10 +25,17 @@
 
 #include "GLCommon.hpp"
 
+//#undef GL_SRC_ALPHA
+//#undef GL_ONE_MINUS_DST_COLOR
+//#undef GL_ONE_MINUS_SRC_ALPHA
 namespace gdx {
 
 class GL10 : virtual public GLCommon {
 public:
+//	const static int GL_SRC_ALPHA;
+//	const static int GL_ONE_MINUS_DST_COLOR;
+//	const static int GL_ONE_MINUS_SRC_ALPHA;
+
     enum VertexStates {
         VERTEX_STATE_GL_COLOR_ARRAY = 1 << 0,
         VERTEX_STATE_GL_EDGE_FLAG_ARRAY = 1 << 1,

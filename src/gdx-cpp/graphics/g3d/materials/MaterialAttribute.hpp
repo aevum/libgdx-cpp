@@ -26,7 +26,7 @@ public:
 	virtual MaterialAttribute& copy() = 0;
 	virtual MaterialAttribute& pooledCopy() = 0;
 	virtual void free() = 0;
-	virtual void set(const MaterialAttribute& attr) = 0;
+	virtual void set(MaterialAttribute& attr) = 0;
 	string getShaderFlag();
 protected:
 	bool isPooled;

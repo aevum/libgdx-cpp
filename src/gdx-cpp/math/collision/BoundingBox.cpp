@@ -32,6 +32,14 @@ class Matrix4;
 
 using namespace gdx;
 
+BoundingBox::BoundingBox() {
+	crn_dirty = true;
+	for (int l_idx = 0; l_idx < 8; l_idx++) {
+		crn.push_back(Vector3());
+	}
+	clr();
+}
+
 BoundingBox::BoundingBox (const BoundingBox& bounds) : crn_dirty(true) {
     this->crn.reserve(8);
     this->set(bounds);

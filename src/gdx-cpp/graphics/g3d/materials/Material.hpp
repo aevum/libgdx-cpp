@@ -23,6 +23,7 @@
 
 #include <vector>
 #include "gdx-cpp/graphics/g3d/materials/MaterialAttribute.hpp"
+#include "gdx-cpp/graphics/g3d/materials/BlendingAttribute.h"
 
 using namespace std;
 

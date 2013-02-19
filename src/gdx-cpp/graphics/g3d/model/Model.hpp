@@ -18,6 +18,7 @@ using namespace gdx;
 class Model
 {
 public:
+	virtual ~Model() {};
 	virtual void render() = 0;
 	virtual void render(ShaderProgram& program) = 0;
 	virtual Model* getSubModel (const vector<string>& subMeshNames) = 0;

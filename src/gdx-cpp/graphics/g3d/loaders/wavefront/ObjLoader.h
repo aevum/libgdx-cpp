@@ -10,6 +10,7 @@
 
 #include "gdx-cpp/graphics/g3d/loaders/StillModelLoader.hpp"
 #include "gdx-cpp/graphics/Texture.hpp"
+#include <algorithm>
 
 using namespace std;
 using namespace gdx;
@@ -21,6 +22,7 @@ class ObjLoader : public StillModelLoader
 private:
 	class Group
 	{
+	friend class ObjLoader;
 	private:
 		string name;
 		string materialName;
@@ -58,14 +60,14 @@ private:
 	int getIndex(string index, int size);
 	
 	void proccessVerteOrNormal(string& line, const char* templ, vector<float>& container);
-	void proccessUV(string& line);
+	void proccessUV(string& line, bool isFlip);
 public:
 
 	ObjLoader();
 	virtual ~ObjLoader();
-	StillModel* loadObj(FileHandle& file, bool flipV = false);
-	StillModel* loadObj(FileHandle& file, FileHandle& textureDir, bool flipV);
-	StillModel* load(FileHandle& handle, ModelLoaderHints hints);
+	StillModel* loadObj(const FileHandle& file, bool flipV = false);
+	StillModel* loadObj(const FileHandle& file, FileHandle& textureDir, bool flipV);
+	StillModel* load(const FileHandle& handle, ModelLoaderHints hints);
 };
 
 }

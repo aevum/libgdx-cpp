@@ -17,11 +17,50 @@
 //    @author Victor Vicente de Carvalho victor.carvalho@aevumlab.com
 //    @author Ozires Bortolon de Faria ozires@aevumlab.com
 //*/
-//
-//#include "Material.hpp"
-//
-//using namespace gdx;
-//
+
+#include "Material.hpp"
+
+using namespace gdx;
+
+Material::Material() {
+}
+
+Material::Material(string name, const vector<MaterialAttribute*>& attributes) {
+	this->name = name;
+	for (size_t i = 0; i < attributes.size(); i++) {
+		this->attributes.push_back(attributes[i]);
+	}
+	checkAttributes();
+}
+
+void Material::checkAttributes() {
+	this->needBlending = false;
+	this->mHasTexture = false;
+	for (size_t i = 0; i < this->attributes.size(); i++) {
+		if (!needBlending && dynamic_cast<BlendingAttribute*>(this->attributes[i]) != NULL) {
+			this->needBlending = true;
+//		} else if (!mHasTexture && dynamic_cast<>this->attributes[i])) {
+//			this->mHasTexture = true;
+		}
+	}
+}
+
+void Material::bind() {
+	for (size_t i = 0; i < attributes.size(); i++) {
+		attributes[i]->bind();
+	}
+}
+
+void Material::bind(ShaderProgram& program) {
+	for (size_t i = 0; i < attributes.size(); i++) {
+		attributes[i]->bind(program);
+	}
+}
+
+string& Material::getName() {
+	return name;
+}
+
 //void Material::setTmpArray (float r,float g,float b,float a) {
 //    tmp[0] = r;
 //    tmp[1] = g;

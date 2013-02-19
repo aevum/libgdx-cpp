@@ -9,6 +9,12 @@
 
 using namespace gdx;
 
+BoundingBox StillModel::tmpbox;
+
+StillModel::~StillModel() {
+
+}
+
 StillModel::StillModel(vector<SubMesh*>& meshes) {
 	for(int i = 0; i < meshes.size(); i++) {
 		subMeshes.push_back(static_cast<StillSubMesh*>(meshes[i]));
