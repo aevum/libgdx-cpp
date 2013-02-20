@@ -1,21 +1,9 @@
 macro(gdx_add_ios_framework target_name framework additional_paths)
-    if (APPLE)
-        execute_process(COMMAND xcode-select -print-path OUTPUT_VARIABLE _output OUTPUT_STRIP_TRAILING_WHITESPACE)                
-        SET(DEVROOT "${_output}/Platforms/iPhoneOS.platform/Developer")
-        SET(SDKROOT "${DEVROOT}/SDKs/iPhoneOS${SDKVER}.sdk")
-        
-        if (NOT EXISTS ${SDKROOT})
-            message(FATAL_ERROR "Could not find the base SDK for version ${SDKVER}. Please verify if you have it correctly installed")
-        endif()
+    LIST(APPEND CMAKE_FRAMEWORK_PATH ${additional_paths})
+    find_library(FOUND_FRAMEWORK_${framework} NAMES ${framework})
 
-        find_library(FOUND_FRAMEWORK_${framework} NAMES ${framework} PATHS ${SDKROOT}/System/Library
-            ${additional_paths}
-            PATH_SUFFIXES Frameworks
-            NO_DEFAULT_PATH)
-
-        message("Library: " ${FOUND_FRAMEWORK_${framework}})
-        target_link_libraries(${target_name} ${FOUND_FRAMEWORK_${framework}})
-    endif()
+    message("Library: " ${FOUND_FRAMEWORK_${framework}})
+    target_link_libraries(${target_name} ${FOUND_FRAMEWORK_${framework}})
 endmacro()
 
 macro(gdx_ios_copy_resources target_name target_files destination)
@@ -57,25 +45,7 @@ macro(gdx_setup_target target_name target_type sources)
     endif()
 
     if (APPLE)
-        if (NOT SDKVER)
-            message(FATAL_ERROR "Missing SDKVER variable. Please define it with the latest version of the ios SDK")
-        endif()
-
-        if (NOT COMPANY_NAME)
-            message(FATAL_ERROR "Missing COMPANY_NAME variable. Please define it with the company namespace eg: com.mycompany")
-        endif()
-
-        execute_process(COMMAND xcode-select -print-path OUTPUT_VARIABLE _output OUTPUT_STRIP_TRAILING_WHITESPACE)
-        
-        set(CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos;-iphonesimulator")
-
-        SET(DEVROOT "${_output}/Platforms/iPhoneOS.platform/Developer")
-        SET(SDKROOT "${DEVROOT}/SDKs/iPhoneOS${SDKVER}.sdk")
-        SET(CMAKE_OSX_SYSROOT ${SDKROOT})
-
-        SET (CMAKE_OSX_ARCHITECTURES "$(ARCHS_UNIVERSAL_IPHONE_OS)")
-
-        set(CMAKE_CXX_FLAGS "-x objective-c++ -mno-thumb")      
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -x objective-c++ -mno-thumb")      
         set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11")
         set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
         
@@ -118,8 +88,8 @@ SET(GDX_BACKEND_WIN32 0)
 
 if(APPLE)
     message("MacOSX (iOS) found. Setting the backend to IOS")
-    SET(GDX_BACKEND_IOS TRUE CACHE BOOL "" FORCE)
-    SET(GDX_BACKEND_LIB "gdx-cpp-backend-ios" FORCE)
+    SET(GDX_BACKEND_IOS TRUE CACHE BOOL "")
+    SET(GDX_BACKEND_LIB "gdx-cpp-backend-ios")
     add_definitions(-DGDX_BACKEND_IOS -DGDX_BACKEND_SUFFIX="ios")
     set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11")
     set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
@@ -128,16 +98,16 @@ if(APPLE)
 elseif (UNIX)
      if (ANDROID_NDK)
         message("ANDROID_NDK Found. Setting the backend to ANDROID")
-        SET(GDX_BACKEND_ANDROID TRUE CACHE BOOL "" FORCE)
-        SET(GDX_BACKEND_LIB "gdx-cpp-backend-android" CACHE STRING "" FORCE)
+        SET(GDX_BACKEND_ANDROID TRUE CACHE BOOL "")
+        SET(GDX_BACKEND_LIB "gdx-cpp-backend-android" CACHE STRING "")
         add_definitions(-DGDX_BACKEND_ANDROID -DGDX_BACKEND_SUFFIX="android")
         set(BOX2D_BUILD_STATIC FALSE)
         set(BOX2D_BUILD_SHARED TRUE)
      else()
         message("Linux found. Setting the backend to LINUX")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-        SET(GDX_BACKEND_LINUX TRUE CACHE BOOL "" FORCE)
-        SET(GDX_BACKEND_LIB "gdx-cpp-backend-linux" CACHE STRING "" FORCE)
+        SET(GDX_BACKEND_LINUX TRUE CACHE BOOL "")
+        SET(GDX_BACKEND_LIB "gdx-cpp-backend-linux" CACHE STRING "")
         add_definitions(-DGDX_BACKEND_LINUX -DGDX_BACKEND_SUFFIX="linux" -DLIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES) 
               if (BUILD_AS_SHARED_LIBRARIES)
             set(BOX2D_BUILD_STATIC FALSE)

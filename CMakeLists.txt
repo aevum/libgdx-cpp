@@ -42,7 +42,7 @@ if (BUILD_BOX2D)
 endif()
 
 if (GDX_BACKEND_IOS)
-    add_subdirectory(src/backends/ios)
+    add_subdirectory(src/gdx-cpp/backends/ios)
     SET(BUILD_AGG TRUE)
 elseif(GDX_BACKEND_ANDROID)
     add_subdirectory(src/gdx-cpp/backends/android)
