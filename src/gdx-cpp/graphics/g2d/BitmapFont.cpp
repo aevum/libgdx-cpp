@@ -222,7 +222,11 @@ unsigned int BitmapFont::BitmapFontData::getGlyph ( const std::string& str, unsi
         ch = str[pos];        
         pos++;
     } else if (pos + 1 < str.length()) { //we're handling utf-8
-        ch = readNextChar(&str[pos], pos);        
+        ch = readNextChar(&str[pos], pos); 
+        if (ch == -1) {
+            pos += 2;
+            return 0;
+        }
     }
     
     auto& page = glyphs[ch / GDX_BITMAPFONT_PAGE_SIZE];
