@@ -34,6 +34,8 @@ IosOpenALAudio.hpp
 )
 
 gdx_setup_target(gdx-cpp-backend-ios STATIC "${GDX_CPP_BACKEND_IOS_SRC};${GDX_CPP_BACKEND_IOS_HEADERS}")
+
+target_link_libraries(gdx-cpp-backend-ios gdx-cpp gdx-cpp-agg-svg)
 add_dependencies(gdx-cpp-backend-ios gdx-cpp gdx-cpp-agg-svg)
 gdx_add_ios_framework(gdx-cpp-backend-ios OpenAL "")
 

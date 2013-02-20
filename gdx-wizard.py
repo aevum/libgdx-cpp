@@ -38,7 +38,6 @@ def setup():
 	parser.add_argument('--android-sdk', type=str, help="The path to the android sdk")
 	parser.add_argument('--android-ndk', type=str, help="The path to the android ndk")
 	parser.add_argument('--package-name', type=str, help="The package name when generating Android/iOS deps")
-	parser.add_argument('--ios-sdk-ver', type=str, help="The sdk version in which the project will be built (ios 5.0 or later)")
 	parser.add_argument('--android-target', type=str, help="The android target. ex: 'android-10'")
 
 	args = parser.parse_args()
@@ -114,7 +113,7 @@ def setup():
 
 			os.chdir(java_src_path)
 			os.mkdir('libs/armeabi-v7a')
-			os.mkdir('assets')s
+			os.mkdir('assets')
 
 			call(['ln', '-s', root_path + '/android/lib/lib' + args.project_name + '.so', 'libs/armeabi-v7a' ])
 			call(['ln', '-s', root_path + '/data', java_src_path + '/assets/data' ])
@@ -126,11 +125,6 @@ def setup():
 
 	if 'ios' in args.gen_mode:
 		project_path = root_path + '/ios'
-		gdx_build_path = project_path + '/gdx'		
-		project_build_path  = project_path + '/' + args.project_name
-
-		if not os.path.exists(project_path):
-			os.mkdir(project_path)
 
 		if not os.path.exists(source_path + '/Info.plist'):
 			write_template(gdx_source_dir + '/template/Info.plist', source_path, 'Info.plist', 
@@ -139,9 +133,8 @@ def setup():
 		if not os.path.exists(source_path + '/bind.mm'):
 			call(['cp', gdx_source_dir + '/template/bind.mm', source_path])
 		
-		if cleanup_and_prepare(project_build_path):
-			call(['cmake', '-DGDX_SOURCE=' + gdx_source_dir, '-DGDX_ROOT=' + gdx_build_path, '-GXcode', 
-			 '-DCOMPANY_NAME=' + args.package_name, source_path])
+		if cleanup_and_prepare(project_path):
+			call(['cmake','-GXcode', '-DCMAKE_TOOLCHAIN_FILE=' + gdx_source_dir + '/cmake/iOS.toolchain.cmake', root_path])
 
 	if not args.gen_mode:
 		print 'No target specified (--gen-mode). Exiting.'
