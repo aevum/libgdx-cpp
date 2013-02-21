@@ -53,38 +53,53 @@ StillModel* ObjLoader::loadObj(const FileHandle& file, FileHandle& textureDir, b
 			vector<int>& faces = activeGroup.faces;
 			int i = 0;
 			while (!str.eof()) {
-				int a, b, c = 0;
-				str >> a;
-				a--;
-				faces.push_back(a);
+				int vertexIndex, textureIndex, normalIndex = 0;
+				str >> vertexIndex;
+				vertexIndex--;
+				faces.push_back(getIndex(vertexIndex, verts.size()));
 				if (str.get() == '/') {
-					if (str.get() != '/') {
-						str >> b;
-						b--;
+					if (str.peek() != '/') {
+						str >> textureIndex;
+						textureIndex--;
+						activeGroup.hasUVs = true;
+					} else {
+						str >> normalIndex;
+						normalIndex--;
+						activeGroup.hasNorms = true;
 					}
 					if (str.get() == '/') {
-						str >> c;
-						c--;
+						str >> normalIndex;
+						normalIndex--;
+						activeGroup.hasNorms = true;
+					}
+					if (activeGroup.hasNorms) {
+						faces.push_back(normalIndex);
+					}
+					if (activeGroup.hasUVs) {
+						faces.push_back(textureIndex);
 					}
 				}
 			}
-
+			activeGroup.numFaces++;
 		} else if (key == "o" || key == "g") {
+			string name;
+			str >> name;
+			if (!name.empty()) {
+				activeGroup = setActiveGroup(name);
+			} else {
+				activeGroup = setActiveGroup("default");
+			}
 		}
 //		} else if ("mtllib" )
 		//if (currentLine[0] == 'v' && currentLine[1] == ' ')
 	}
 }
 
-int ObjLoader::getIndex(string index, int size) {
-	if (index.empty()) {
-		return 0;
-	}
-	int idx = atoi(index.c_str());
-	if (idx < 0) {
-		return size + idx;
+int ObjLoader::getIndex(int index, int size) {
+	if (index < 0) {
+		return size + index;
 	} else {
-		return idx - 1;
+		return index - 1;
 	}
 }
 
@@ -105,6 +120,17 @@ void ObjLoader::proccessUV(string& line, bool isFlip) {
 
 StillModel* ObjLoader::load(const FileHandle& handle, ModelLoaderHints hints) {
 	return loadObj(handle, hints.flipV);
+}
+
+ObjLoader::Group& ObjLoader::setActiveGroup(const string& name) {
+	for (size_t i = 0; i < groups.size(); i++) {
+		if (groups[i].name == name) {
+			return groups[i];
+		}
+	}
+	Group* group = new Group(name);
+	groups.push_back(*group);
+	return *group;
 }
 
 ObjLoader::MtlLoader::MtlLoader() {

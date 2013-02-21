@@ -14,6 +14,8 @@
 using namespace std;
 using namespace gdx;
 
+class GL10;
+
 class MaterialAttribute
 {
 private:

@@ -10,6 +10,7 @@
 
 #include "MaterialAttribute.hpp"
 #include "gdx-cpp/graphics/Texture.hpp"
+#include "gdx-cpp/utils/Pool.hpp"
 
 using namespace gdx;
 
@@ -17,11 +18,11 @@ class TextureAttribute: public MaterialAttribute {
 
 public:
 	const static int MAX_TEXTURE_UNITS = 16;
-	const static char* diffuseTexture = "diffuseTexture";
-	const static char* lightmapTexture = "lightmapTexture";
-	const static char* specularTexture = "specularTexture";
+	const static char* diffuseTexture;
+	const static char* lightmapTexture;
+	const static char* specularTexture;
 
-	Texture& texture;
+	Texture* texture;
 	int unit;
 	int minFilter;
 	int magFilter;
@@ -40,7 +41,7 @@ public:
 	void free();
 private:
 	static Pool<TextureAttribute> pool;
-protected:
+public:
 	TextureAttribute();
 };
 

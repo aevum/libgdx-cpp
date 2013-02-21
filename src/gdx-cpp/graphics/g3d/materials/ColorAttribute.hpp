@@ -10,9 +10,10 @@
 
 #include "gdx-cpp/graphics/Color.hpp"
 #include "gdx-cpp/graphics/g3d/materials/MaterialAttribute.hpp"
+#include "gdx-cpp/utils/Pool.hpp"
 
-using namespace gdx;
-
+//using namespace gdx;
+//namespace gdx {
 class ColorAttribute : public MaterialAttribute {
 public:
 	static const char* diffuse;
@@ -31,9 +32,9 @@ public:
 	void free();
 private:
 	static Pool<ColorAttribute> pool;
-protected:
+public:
 	ColorAttribute();
 
 };
-
+//}
 #endif /* COLORATTRIBUTE_HPP_ */

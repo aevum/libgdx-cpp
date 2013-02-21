@@ -56,8 +56,8 @@ private:
 	vector<float> norms;
 	vector<float> uvs;
 	vector<Group> groups;
-	Group setActiveGroup(const string& group);
-	int getIndex(string index, int size);
+	Group& setActiveGroup(const string& group);
+	int getIndex(int index, int size);
 	
 	void proccessVerteOrNormal(string& line, const char* templ, vector<float>& container);
 	void proccessUV(string& line, bool isFlip);

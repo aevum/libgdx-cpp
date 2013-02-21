@@ -6,6 +6,7 @@
  */
 
 #include "ColorAttribute.hpp"
+#include "gdx-cpp/Gdx.hpp"
 
 const char* ColorAttribute::diffuse = "diffuseColor";
 const char* ColorAttribute::specular = "specularColor";
@@ -14,6 +15,9 @@ const char* ColorAttribute::rim = "rimColor";
 const char* ColorAttribute::fog = "fogColor";
 Pool<ColorAttribute> ColorAttribute::pool;
 
+using namespace gdx;
+
+//namespace gdx {
 ColorAttribute::ColorAttribute() {
 
 }
@@ -22,14 +26,15 @@ ColorAttribute::ColorAttribute(const Color& color, const char* name)
 : MaterialAttribute(string(name)) {
 	this->color.set(color);
 }
+class GL10;
 
 void ColorAttribute::bind() {
-	if (gdx::gl10 == NULL) {
+	if (gl10 == NULL) {
 		gdx_log_error("gdx", "Can't call ColorAttribute.bind() in a GL20 context");
 	}
-	if (diffuse == diffuse) {
+//	if (diffuse == diffuse) {
 		gdx::gl10->glColor4f(color.r, color.g, color.b, color.a);
-	}
+//	}
 }
 
 void ColorAttribute::bind(ShaderProgram& program) {
@@ -60,3 +65,4 @@ void ColorAttribute::free() {
 		pool.free(this);
 	}
 }
+//}

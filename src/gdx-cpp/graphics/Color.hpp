@@ -34,6 +34,7 @@ public:
 
     float r, g, b, a;
 
+    Color() {}
     Color (int colorAsInteger);    
     Color (float r, float g, float b, float a) ;
     Color (const gdx::Color& color) ;

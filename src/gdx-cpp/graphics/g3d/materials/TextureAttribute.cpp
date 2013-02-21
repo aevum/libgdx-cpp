@@ -11,6 +11,8 @@ const char* TextureAttribute::diffuseTexture = "diffuseTexture";
 const char* TextureAttribute::lightmapTexture = "lightmapTexture";
 const char* TextureAttribute::specularTexture = "specularTexture";
 
+Pool<TextureAttribute> TextureAttribute::pool;
+
 TextureAttribute::TextureAttribute() {
 }
 
@@ -20,13 +22,13 @@ TextureAttribute::TextureAttribute(const Texture& texture, int unit, const char*
 
 TextureAttribute::TextureAttribute(const Texture& texture, int unit, const char* name, int minFilter, int magFilter, int uWrap, int vWrap)
 : MaterialAttribute(name),
-  texture(texture),
+  texture(const_cast<Texture*>(&texture)),
   unit(unit),
   uWrap(uWrap),
   vWrap(vWrap),
   minFilter(minFilter),
   magFilter(magFilter){
-	if (uint > MAX_TEXTURE_UNITS) {
+	if (unit > MAX_TEXTURE_UNITS) {
 		gdx_log_error("gdx", "%d is max texture units supported", MAX_TEXTURE_UNITS);
 	}
 }
@@ -37,7 +39,7 @@ TextureAttribute::TextureAttribute(const Texture& texture, int unit, const char*
 }
 
 void TextureAttribute::bind() {
-	texture.bind(unit);
+	texture->bind(unit);
 //	gdx::gl->glTexParameterf(GL10::GL_TEXTURE_2D, GL10::GL_TEXTURE_MIN_FILTER, minFilter);
 //	gdx::gl->glTexParameterf(GL10::GL_TEXTURE_2D, GL10::GL_TEXTURE_MAG_FILTER, magFilter);
 //	gdx::gl->glTexParameterf(GL10::GL_TEXTURE_2D, GL10::GL_TEXTURE_WRAP_S, uWrap);
@@ -45,7 +47,7 @@ void TextureAttribute::bind() {
 }
 
 void TextureAttribute::bind(ShaderProgram& program) {
-	texture.bind(unit);
+	texture->bind(unit);
 	//	gdx::gl->glTexParameterf(GL10::GL_TEXTURE_2D, GL10::GL_TEXTURE_MIN_FILTER, minFilter);
 	//	gdx::gl->glTexParameterf(GL10::GL_TEXTURE_2D, GL10::GL_TEXTURE_MAG_FILTER, magFilter);
 	//	gdx::gl->glTexParameterf(GL10::GL_TEXTURE_2D, GL10::GL_TEXTURE_WRAP_S, uWrap);
@@ -54,7 +56,7 @@ void TextureAttribute::bind(ShaderProgram& program) {
 }
 
 MaterialAttribute& TextureAttribute::copy() {
-	return *new TextureAttribute(texture, unit, name.c_str(), minFilter, magFilter, uWrap, vWrap);
+	return *new TextureAttribute(*texture, unit, name.c_str(), minFilter, magFilter, uWrap, vWrap);
 }
 
 void TextureAttribute::set(MaterialAttribute& attr) {
