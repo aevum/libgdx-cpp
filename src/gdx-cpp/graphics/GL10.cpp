@@ -23,10 +23,6 @@
 
 using namespace gdx;
 
-//const int GL10::GL_SRC_ALPHA = 0x0302;
-//const int GL10::GL_ONE_MINUS_DST_COLOR = 0x0307;
-//const int GL10::GL_ONE_MINUS_SRC_ALPHA = 0x0303;
-
 void GL10::glAlphaFunc(int func, float ref) const {
     ::glAlphaFunc(func, ref);
 }

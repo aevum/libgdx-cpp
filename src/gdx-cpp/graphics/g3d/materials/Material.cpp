@@ -33,6 +33,10 @@ Material::Material(string name, const vector<MaterialAttribute*>& attributes) {
 	checkAttributes();
 }
 
+Material::Material(string name) {
+	this->name = name;
+}
+
 void Material::checkAttributes() {
 	this->needBlending = false;
 	this->mHasTexture = false;

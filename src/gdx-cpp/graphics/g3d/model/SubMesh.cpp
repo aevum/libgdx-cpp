@@ -10,21 +10,23 @@
 namespace gdx
 {
 
-SubMesh::SubMesh(const string& name, const Mesh& mesh, int primitiveType, Material* material)
+SubMesh::SubMesh(const char* newName, const Mesh& mesh, int primitiveType, Material* material)
+: name(newName)
 {
-	this->name = name;
-	this->setMesh(mesh);
+	setMesh(mesh);
 	this->primitiveType = primitiveType;
 	this->material = material;
 }
 
-SubMesh::SubMesh(const string& name, const Mesh& mesh, int primitiveType)
+SubMesh::SubMesh(const char* newName, const Mesh& mesh, int primitiveType)
+: SubMesh(newName, mesh, primitiveType, nullptr)
 {
-	SubMesh(name, mesh, primitiveType, nullptr);
 }
 
 SubMesh::~SubMesh()
 {
+	delete material;
+	delete mesh;
 }
 
 Mesh& SubMesh::getMesh()

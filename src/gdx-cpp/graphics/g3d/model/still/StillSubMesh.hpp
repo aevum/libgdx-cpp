@@ -16,8 +16,8 @@ namespace gdx
 class StillSubMesh : public SubMesh
 {
 public:
-	StillSubMesh(const string& name, const Mesh& mesh, int primitiveType, Material* material);
-	StillSubMesh(const string& name, const Mesh& mesh, int primitiveType);
+	StillSubMesh(const char* name, const Mesh& mesh, int primitiveType, Material* material);
+	StillSubMesh(const char* name, const Mesh& mesh, int primitiveType);
 	virtual ~StillSubMesh();
 	void getBoundingBox(BoundingBox& bbox);
 

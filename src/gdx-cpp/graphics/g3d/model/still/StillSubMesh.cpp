@@ -10,13 +10,13 @@
 namespace gdx
 {
 
-StillSubMesh::StillSubMesh(const string& name, const Mesh& mesh, int primitiveType, Material* material)
+StillSubMesh::StillSubMesh(const char* name, const Mesh& mesh, int primitiveType, Material* material)
 : SubMesh(name, mesh, primitiveType, material)
 {
 }
 
-StillSubMesh::StillSubMesh(const string& name, const Mesh& mesh, int primitiveType)
-: SubMesh(name, mesh, primitiveType)
+StillSubMesh::StillSubMesh(const char* newName, const Mesh& mesh, int primitiveType)
+: SubMesh(newName, mesh, primitiveType)
 {
 }
 

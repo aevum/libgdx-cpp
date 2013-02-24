@@ -21,6 +21,7 @@ private:
 	static BoundingBox tmpbox;
 public:
 	vector<StillSubMesh*> subMeshes;
+	StillModel();
 	StillModel(vector<SubMesh*>& subMeshes);
 	virtual ~StillModel();
 	void render();

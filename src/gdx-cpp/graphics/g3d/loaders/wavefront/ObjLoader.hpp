@@ -10,6 +10,11 @@
 
 #include "gdx-cpp/graphics/g3d/loaders/StillModelLoader.hpp"
 #include "gdx-cpp/graphics/Texture.hpp"
+#include "gdx-cpp/graphics/g3d/model/still/StillSubMesh.hpp"
+#include "gdx-cpp/graphics/Color.hpp"
+#include "gdx-cpp/graphics/Texture.hpp"
+#include "gdx-cpp/graphics/g3d/materials/TextureAttribute.hpp"
+#include "gdx-cpp/graphics/g3d/materials/ColorAttribute.hpp"
 #include <algorithm>
 
 using namespace std;
@@ -30,7 +35,7 @@ private:
 		int numFaces;
 		bool hasNorms;
 		bool hasUVs;
-		Material mat;
+		Material* mat;
 
 	public:
 		Group(string name) {
@@ -39,24 +44,26 @@ private:
 			hasNorms = false;
 			hasUVs = false;
 			materialName = "default";
+			mat = new Material("");
 		}
 	};
 	
 	class MtlLoader {
 	private:
-		vector<Material> materials;
+		vector<Material*> materials;
 		//static AssetManager
 		static Texture* emptyTexture;
 	public:
 		MtlLoader();
 		void load(string fileName, FileHandle& textureDir);
+		Material* getMaterial(string name);
 	};
 	
 	vector<float> verts;
 	vector<float> norms;
 	vector<float> uvs;
-	vector<Group> groups;
-	Group& setActiveGroup(const string& group);
+	vector<Group*> groups;
+	Group* setActiveGroup(const string& group);
 	int getIndex(int index, int size);
 	
 	void proccessVerteOrNormal(string& line, const char* templ, vector<float>& container);

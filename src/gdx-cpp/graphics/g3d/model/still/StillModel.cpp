@@ -12,6 +12,13 @@ using namespace gdx;
 BoundingBox StillModel::tmpbox;
 
 StillModel::~StillModel() {
+	for(size_t i = 0; i < subMeshes.size(); i++) {
+		delete subMeshes[i];
+	}
+	subMeshes.clear();
+}
+
+StillModel::StillModel() {
 
 }
 

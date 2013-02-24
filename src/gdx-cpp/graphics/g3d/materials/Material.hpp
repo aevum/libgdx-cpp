@@ -33,6 +33,7 @@ class Material {
 public:
 	Material();
 	Material(string name, const vector<MaterialAttribute*>& attributes);
+	Material(string name);
 
 	void bind();
 	void bind(ShaderProgram& program);

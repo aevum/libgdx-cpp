@@ -28,8 +28,8 @@ public:
 	int primitiveType;
 	Mesh* mesh;
 
-	SubMesh(const string& name, const Mesh& mesh, int primitiveType, Material* material);
-	SubMesh(const string& name, const Mesh& mesh, int primitiveType);
+	SubMesh(const char* name, const Mesh& mesh, int primitiveType, Material* material);
+	SubMesh(const char* name, const Mesh& mesh, int primitiveType);
 	virtual ~SubMesh();
 	void getBoundingBox(BoundingBox& bbox);
 	Mesh& getMesh();
