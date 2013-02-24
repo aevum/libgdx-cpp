@@ -22,9 +22,9 @@ add_subdirectory(gdx-cpp)
 gdx_setup_target({ProjectName} EXECUTABLE "${{{ProjectName}_SRCS}};${{ADDITIONAL_SRCS}}")
 
 target_link_libraries({ProjectName} 
-                        ${{GDXCPP_LIBRARIES}} ${{GDX_BACKEND_LIBRARY}})
+                        gdx-cpp ${{GDX_BACKEND_LIB}})
 
-add_dependencies({ProjectName} ${{GDXCPP_LIBRARIES}})
+add_dependencies({ProjectName} gdx-cpp ${{GDX_BACKEND_LIB}})
 
 if (GDX_BACKEND_IOS)
   set_target_properties({ProjectName} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${{CMAKE_CURRENT_SOURCE_DIR}}/Info.plist)

@@ -114,7 +114,7 @@ def setup():
 
 			os.chdir(java_src_path)
 			os.mkdir('libs/armeabi-v7a')
-			os.mkdir('assets')s
+			os.mkdir('assets')
 
 			call(['ln', '-s', root_path + '/android/lib/lib' + args.project_name + '.so', 'libs/armeabi-v7a' ])
 			call(['ln', '-s', root_path + '/data', java_src_path + '/assets/data' ])
