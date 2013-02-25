@@ -32,6 +32,7 @@ class Matrix4;
 
 class BoundingBox {
 public:
+	BoundingBox();
    BoundingBox (const BoundingBox& bounds);
    
     Vector3& getCenter ();

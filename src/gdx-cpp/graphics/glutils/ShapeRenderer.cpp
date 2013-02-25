@@ -32,11 +32,11 @@
 
 using namespace gdx;
 
-const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Point(GL_POINTS);
-const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Line(GL_LINES);
-const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Rectangle(GL_LINES);
-const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::FilledRectangle(GL_TRIANGLES);
-const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Box(GL_LINES);
+const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Point(GL10::GL_POINTS);
+const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Line(GL10::GL_LINES);
+const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Rectangle(GL10::GL_LINES);
+const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::FilledRectangle(GL10::GL_TRIANGLES);
+const ShapeRenderer::ShapeType ShapeRenderer::ShapeType::Box(GL10::GL_LINES);
 
 int ShapeRenderer::getGlType () {
     return glType;
@@ -90,9 +90,9 @@ void ShapeRenderer::begin (const ShapeType& type) {
     }
     
     if(renderer->getRendererType() == ImmediateModeRenderer::RendererType::IMMEDIATE_GLES10) {
-        gl10->glMatrixMode(GL_PROJECTION);
+        gl10->glMatrixMode(GL10::GL_PROJECTION);
         gl10->glLoadMatrixf(combined.val);
-        gl10->glMatrixMode(GL_MODELVIEW);
+        gl10->glMatrixMode(GL10::GL_MODELVIEW);
         gl10->glLoadIdentity();
         ((ImmediateModeRenderer10*)renderer)->begin(currType->getGlType());
     } else {
