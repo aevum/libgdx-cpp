@@ -109,29 +109,29 @@ void VertexBufferObjectSubData::bind () {
 
         switch (attribute.usage) {
         case VertexAttributes::Usage::Position:
-            gl.glEnableClientState(GL_VERTEX_ARRAY);
-            gl.glVertexPointer(attribute.numComponents, GL_FLOAT, attributes.vertexSize, &attribute.offset);
+            gl.glEnableClientState(GL10::GL_VERTEX_ARRAY);
+            gl.glVertexPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, &attribute.offset);
             break;
 
         case VertexAttributes::Usage::Color:
         case VertexAttributes::Usage::ColorPacked:
         {
-            int colorType = GL_FLOAT;
-            if (attribute.usage == VertexAttributes::Usage::ColorPacked) colorType = GL_UNSIGNED_BYTE;
+            int colorType = GL10::GL_FLOAT;
+            if (attribute.usage == VertexAttributes::Usage::ColorPacked) colorType = GL10::GL_UNSIGNED_BYTE;
 
-            gl.glEnableClientState(GL_COLOR_ARRAY);
+            gl.glEnableClientState(GL10::GL_COLOR_ARRAY);
             gl.glColorPointer(attribute.numComponents, colorType, attributes.vertexSize, &attribute.offset);
             break;
         }
         case VertexAttributes::Usage::Normal:
-            gl.glEnableClientState(GL_NORMAL_ARRAY);
-            gl.glNormalPointer(GL_FLOAT, attributes.vertexSize, &attribute.offset);
+            gl.glEnableClientState(GL10::GL_NORMAL_ARRAY);
+            gl.glNormalPointer(GL10::GL_FLOAT, attributes.vertexSize, &attribute.offset);
             break;
 
         case VertexAttributes::Usage::TextureCoordinates:
-            gl.glClientActiveTexture(GL_TEXTURE0 + textureUnit);
-            gl.glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-            gl.glTexCoordPointer(attribute.numComponents, GL_FLOAT, attributes.vertexSize, &attribute.offset);
+            gl.glClientActiveTexture(GL10::GL_TEXTURE0 + textureUnit);
+            gl.glEnableClientState(GL10::GL_TEXTURE_COORD_ARRAY);
+            gl.glTexCoordPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, &attribute.offset);
             textureUnit++;
             break;
 
@@ -160,10 +160,10 @@ void VertexBufferObjectSubData::bind (ShaderProgram& shader) {
     for (int i = 0; i < numAttributes; i++) {
         VertexAttribute& attribute = attributes.get(i);
         shader.enableVertexAttribute(attribute.alias);
-        int colorType = GL_FLOAT;
+        int colorType = GL10::GL_FLOAT;
         bool normalize = false;
         if (attribute.usage == VertexAttributes::Usage::ColorPacked) {
-            colorType = GL_UNSIGNED_BYTE;
+            colorType = GL10::GL_UNSIGNED_BYTE;
             normalize = true;
         }
         shader.setVertexAttribute(attribute.alias, attribute.numComponents, colorType, normalize, attributes.vertexSize,
@@ -185,14 +185,14 @@ void VertexBufferObjectSubData::unbind () {
             break; // no-op, we also need a position bound in gles
         case VertexAttributes::Usage::Color:
         case VertexAttributes::Usage::ColorPacked:
-            gl.glDisableClientState(GL_COLOR_ARRAY);
+            gl.glDisableClientState(GL10::GL_COLOR_ARRAY);
             break;
         case VertexAttributes::Usage::Normal:
-            gl.glDisableClientState(GL_NORMAL_ARRAY);
+            gl.glDisableClientState(GL10::GL_NORMAL_ARRAY);
             break;
         case VertexAttributes::Usage::TextureCoordinates:
-            gl.glClientActiveTexture(GL_TEXTURE0 + textureUnit);
-            gl.glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+            gl.glClientActiveTexture(GL10::GL_TEXTURE0 + textureUnit);
+            gl.glDisableClientState(GL10::GL_TEXTURE_COORD_ARRAY);
             textureUnit++;
             break;
         default:

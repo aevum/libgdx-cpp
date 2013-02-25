@@ -64,7 +64,7 @@ public:
     virtual void list (const std::string& suffix, std::vector<FileHandle> &handles);
     virtual bool isDirectory ();
     virtual FileHandle child (const std::string &name);
-    virtual FileHandle parent ();
+    virtual FileHandle parent () const;
     virtual void mkdirs ();
     virtual bool exists () const;
     virtual bool deleteFile ();

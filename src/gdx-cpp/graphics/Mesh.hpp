@@ -33,11 +33,11 @@
 #include "gdx-cpp/internal/memory"
 #include "gdx-cpp/utils/Buffer.hpp"
 #include "gdx-cpp/utils/Disposable.hpp"
+#include "gdx-cpp/math/collision/BoundingBox.hpp"
 
 namespace gdx {
 
-class BoundingBox;
-class BoundingBox;
+//class BoundingBox;
 class IndexData;
 class ShaderProgram;
 class VertexData;

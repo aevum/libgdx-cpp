@@ -26,6 +26,7 @@
 #include "graphics/Pixmap.hpp"
 #include "Files.hpp"
 #include "graphics/TextureData.hpp"
+#include "graphics/GL10.hpp"
 
 namespace gdx {
 
