@@ -41,12 +41,9 @@ GL11* gl11 = 0;
 GL20* gl20 = 0;
 GLU* glu = 0;
 
-System* system = 0;       
-
+System* system = 0;
 Log* log = 0;
 }
-
-
 
 void gdx::initialize(gdx::Application* application,
                      gdx::Graphics* graphics, gdx::Audio* audio, gdx::Input*  input , gdx::Files* files)
@@ -67,25 +64,4 @@ void gdx::initializeSystem(gdx::System* system, Log* log)
 {
     gdx::system = system;
     gdx::log = log;
-}
-
-void gdx::internal_log_debug(const std::string& tag, const std::string& line, const std::string& file, const char* format, ...) {
-    va_list ap;
-    va_start(ap, format);
-    log->debug(tag, line, file, format, ap);
-    va_end(ap);
-}
-
-void gdx::internal_log_info(const std::string& tag, const std::string& line, const std::string& file, const char* format, ...) {
-    va_list ap;
-    va_start(ap, format);
-    log->info(tag, line, file, format, ap);
-    va_end(ap);
-}
-
-void gdx::internal_log_error(const std::string& tag, const std::string& line, const std::string& file, const char* format, ...) {
-    va_list ap;
-    va_start(ap, format);
-    log->info(tag, line, file, format, ap);
-    va_end(ap);
 }

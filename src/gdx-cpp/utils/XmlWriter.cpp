@@ -18,7 +18,7 @@
     @author Ozires Bortolon de Faria ozires@aevumlab.com
 */
 
-#include <gdx-cpp/Log.hpp>
+#include <gdx-cpp/Gdx.hpp>
 #include <stddef.h>
 #include <algorithm>
 

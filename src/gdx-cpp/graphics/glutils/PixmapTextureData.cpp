@@ -22,7 +22,7 @@
 #include <memory>
 
 #include "PixmapTextureData.hpp"
-#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/Gdx.hpp"
 
 using namespace gdx;
 

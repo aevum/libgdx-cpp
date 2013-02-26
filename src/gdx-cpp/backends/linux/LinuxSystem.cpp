@@ -32,7 +32,7 @@
 #include <sys/types.h>
 #include <sys/dir.h>
 
-#include <gdx-cpp/Log.hpp>
+#include <gdx-cpp/Gdx.hpp>
 
 using namespace gdx::nix;
 

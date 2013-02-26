@@ -8,11 +8,9 @@
 
 namespace gdx {
 namespace nix {
-class Log : public gdx::Log{
+class Log : public gdx::Log {
 public:
-    virtual void debug ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list );
-    virtual void error ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list );
-    virtual void info ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list );
+    virtual void log( gdx::Log::LogLevel logLevel, const std::string& tag, const std::string& line, const std::string& file, const char* format, ... ) override;
 };
 }
 }

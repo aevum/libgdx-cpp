@@ -26,7 +26,7 @@
 #include <memory>
 
 #include "Gdx2DPixmap.hpp"
-#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/Gdx.hpp"
 
 using namespace gdx;
 

@@ -18,7 +18,7 @@
  *  @author aevum team
  */
 
-#include <gdx-cpp/Log.hpp>
+#include <gdx-cpp/Gdx.hpp>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>

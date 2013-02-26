@@ -32,7 +32,7 @@
 #include "Vector3.hpp"
 #include "collision/BoundingBox.hpp"
 #include "collision/Ray.hpp"
-#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/Gdx.hpp"
 
 
 

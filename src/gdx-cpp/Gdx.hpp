@@ -34,19 +34,6 @@
 
 namespace gdx {
 
-class GL10;
-class GL11;
-class GL20;
-class GLCommon;
-class GLU;
-class System;
-class Application;
-class Audio;
-class Files;
-class Graphics;
-class Input;
-class Log;
-
 extern Application* app;
 extern Graphics* graphics;
 extern Audio* audio;
@@ -57,16 +44,12 @@ extern GL10* gl10;
 extern GL11* gl11;
 extern GL20* gl20;
 extern GLU* glu;
+extern Log* log;
 
 extern System* system;
 
 void initializeSystem(System* system, Log* log);
-void initialize(Application* application, Graphics* graphics,
-                        Audio* audio, Input* input, Files* files);
-
-void internal_log_error(const std::string& tag, const std::string& line, const std::string& file, const char* format, ...);
-void internal_log_info(const std::string& tag, const std::string& line, const std::string& file, const char* format, ...);
-void internal_log_debug(const std::string& tag, const std::string& line, const std::string& file,const char* format, ...);
+void initialize(Application* application, Graphics* graphics, Audio* audio, Input* input, Files* files);
 
 } // namespace gdx
 

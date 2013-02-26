@@ -22,7 +22,7 @@
 
 #include "NinePatch.hpp"
 #include "TextureRegion.hpp"
-#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/graphics/Texture.hpp"
 #include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
 

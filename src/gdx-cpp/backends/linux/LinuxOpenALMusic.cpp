@@ -16,7 +16,7 @@
 
 
 #include <AL/al.h>
-#include <gdx-cpp/Log.hpp>
+#include <gdx-cpp/Gdx.hpp>
 #include <stddef.h>
 #include <vector>
 

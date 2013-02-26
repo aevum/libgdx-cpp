@@ -24,7 +24,7 @@
 #include <memory>
 
 #include "Sprite.hpp"
-#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/graphics/g2d/SpriteBatch.hpp"
 #include "gdx-cpp/math/MathUtils.hpp"
 #include "gdx-cpp/utils/NumberUtils.hpp"

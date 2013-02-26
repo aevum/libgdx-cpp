@@ -24,7 +24,7 @@
 #include <sstream>
 #include <string.h>
 #include <cassert>
-#include <gdx-cpp/Log.hpp>
+#include <gdx-cpp/Gdx.hpp>
 
 namespace gdx {
 

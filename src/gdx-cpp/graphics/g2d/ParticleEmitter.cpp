@@ -29,7 +29,7 @@
 
 #include "ParticleEmitter.hpp"
 #include "SpriteBatch.hpp"
-#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/graphics/Texture.hpp"
 #include "gdx-cpp/graphics/g2d/Sprite.hpp"
 #include "gdx-cpp/math/MathUtils.hpp"

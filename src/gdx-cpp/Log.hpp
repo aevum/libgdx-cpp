@@ -9,29 +9,26 @@
 #define GDX_TO_STRING_MACRO_(x) GDX_TO_STRING_MACRO(x)
 #define GDX_TO_STRING_MACRO_LINE_ GDX_TO_STRING_MACRO_(__LINE__)
 
-namespace gdx {
-    void internal_log_debug(const std::string&, const std::string&, const std::string&, const char*, ...);
-    void internal_log_info(const std::string&, const std::string&, const std::string&, const char*, ...);
-    void internal_log_error(const std::string&, const std::string&, const std::string&, const char*, ...);
-}
-
 #ifdef GDX_LOG_LEVEL_DEBUG
-#define gdx_log_debug(tag, format, ...) gdx::internal_log_debug(tag, GDX_TO_STRING_MACRO_LINE_, __FILE__, format, ##__VA_ARGS__)
+#define gdx_log_debug(tag, format, ...) gdx::log->log(gdx::Log::LogLevel::DEBUG, tag, GDX_TO_STRING_MACRO_LINE_, __FILE__, format, ##__VA_ARGS__)
 #else
 #define gdx_log_debug(tag, format, ...) ((void) 0)
 #endif
 
 #ifdef GDX_LOG_LEVEL_INFO
-#define gdx_log_info(tag, format, ...) gdx::internal_log_info(tag, GDX_TO_STRING_MACRO_LINE_, __FILE__, format, ##__VA_ARGS__)
+#define gdx_log_info(tag, format, ...) gdx::log->log(gdx::Log::LogLevel::INFO, tag, GDX_TO_STRING_MACRO_LINE_, __FILE__, format, ##__VA_ARGS__)
 #else
 #define gdx_log_info(tag, format, ...) ((void) 0)
 #endif
 
 #ifdef GDX_LOG_LEVEL_ERROR
-#define gdx_log_error(tag, format, ...) do { gdx::internal_log_error(tag, GDX_TO_STRING_MACRO_LINE_, __FILE__, format,  ##__VA_ARGS__); gdx::ScopedGuard<RuntimeLogErrorExecutor> guard( (RuntimeLogErrorExecutor()) ); } while (false)
+#define gdx_log_error(tag, format, ...) do { gdx::log->log(gdx::Log::LogLevel::ERROR, tag, GDX_TO_STRING_MACRO_LINE_, __FILE__, format,  ##__VA_ARGS__); gdx::ScopedGuard<RuntimeLogErrorExecutor> guard( (RuntimeLogErrorExecutor()) ); } while (false)
 #else
 #define gdx_log_error(tag, format, ...) ((void) 0)
 #endif
+
+#define gdx_log(logLevel, tag, format, ...) do { gdx::log->log(logLevel, tag, GDX_TO_STRING_MACRO_LINE_, __FILE__, format,  ##__VA_ARGS__); } while (false)
+
 
 struct RuntimeLogErrorExecutor {
     void operator()() const {         
@@ -42,10 +39,14 @@ struct RuntimeLogErrorExecutor {
 namespace gdx {
 class Log {
 public:
-    virtual void debug ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list ) = 0;
-    virtual void error ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list ) = 0;
-    virtual void info ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list ) = 0;
-    
+    enum LogLevel {
+        DEBUG,
+        INFO,
+        ERROR,
+        OTHER
+    };
+
+    virtual void log(LogLevel log_level, const std::string& tag, const std::string& line, const std::string& file, const char* format, ...) = 0;
     virtual ~Log() { }
 };
 }

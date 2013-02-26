@@ -26,6 +26,7 @@
 #include "Vector3.hpp"
 #include "gdx-cpp/Log.hpp"
 #include "gdx-cpp/math/Vector2.hpp"
+#include <gdx-cpp/Gdx.hpp>
 
 using namespace gdx;
 

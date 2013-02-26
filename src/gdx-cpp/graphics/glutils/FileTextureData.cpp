@@ -22,7 +22,7 @@
 #include <memory>
 
 #include "FileTextureData.hpp"
-#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/files/FileHandle.hpp"
 #include "gdx-cpp/graphics/Pixmap.hpp"
 

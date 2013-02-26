@@ -18,7 +18,7 @@
  *  @author aevum team
  */
 
-#include <gdx-cpp/Log.hpp>
+#include <gdx-cpp/Gdx.hpp>
 #include <cassert>
 #include <utility>
 #include <sstream>

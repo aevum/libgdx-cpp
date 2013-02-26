@@ -27,7 +27,7 @@
 
 #include "SvgParser.hpp"
 #include "SvgPixmapInterface.hpp"
-#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/math/MathUtils.hpp"
 #include "gdx-cpp/utils/StringConvertion.hpp"
 

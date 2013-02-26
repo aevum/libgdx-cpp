@@ -17,7 +17,7 @@
 //
 //----------------------------------------------------------------------------
 
-#include <gdx-cpp/Log.hpp>
+#include <gdx-cpp/Gdx.hpp>
 #include <stdio.h>
 
 #include "agg_path_storage.h"

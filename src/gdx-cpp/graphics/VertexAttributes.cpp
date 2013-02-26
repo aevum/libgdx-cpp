@@ -21,7 +21,7 @@
 #include <sstream>
 
 #include "VertexAttributes.hpp"
-#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/graphics/VertexAttribute.hpp"
 
 using namespace gdx;
