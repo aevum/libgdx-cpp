@@ -131,7 +131,7 @@ FileHandle FileHandle::child (const std::string& name) {
     return FileHandle(File(file, name), type);
 }
 
-FileHandle FileHandle::parent () {
+FileHandle FileHandle::parent () const{
     
     File parent;
     parent = file.getParentFile();

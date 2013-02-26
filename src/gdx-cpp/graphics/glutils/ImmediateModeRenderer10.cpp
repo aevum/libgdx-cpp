@@ -66,9 +66,9 @@ float_buffer ImmediateModeRenderer10::allocateBuffer (int numFloats) {
 
 void ImmediateModeRenderer10::begin (Matrix4& projModelView,int primitiveType) {
     GL10 * gl = gl10;
-    gl->glMatrixMode(GL_PROJECTION);
+    gl->glMatrixMode(GL10::GL_PROJECTION);
     gl->glLoadMatrixf(projModelView.val);
-    gl->glMatrixMode(GL_MODELVIEW);
+    gl->glMatrixMode(GL10::GL_MODELVIEW);
     gl->glLoadIdentity();
     begin(primitiveType);
 }
@@ -125,38 +125,38 @@ void ImmediateModeRenderer10::end () {
     if (idxPos == 0) return;
 
     GL10 * gl = gl10;
-    gl->glEnableClientState(GL_VERTEX_ARRAY);
+    gl->glEnableClientState(GL10::GL_VERTEX_ARRAY);
     positionsBuffer.clear();
     positionsBuffer.copy<float>(positions, idxPos, 0);
-    gl->glVertexPointer(3, GL_FLOAT, 0, positionsBuffer);
+    gl->glVertexPointer(3, GL10::GL_FLOAT, 0, positionsBuffer);
 
     if (hasCols) {
-        gl->glEnableClientState(GL_COLOR_ARRAY);
+        gl->glEnableClientState(GL10::GL_COLOR_ARRAY);
         colorsBuffer.clear();
         colorsBuffer.copy<float>(colors, idxCols, 0);
-        gl->glColorPointer(4, GL_FLOAT, 0, colorsBuffer);
+        gl->glColorPointer(4, GL10::GL_FLOAT, 0, colorsBuffer);
     }
 
     if (hasNors) {
-        gl->glEnableClientState(GL_NORMAL_ARRAY);
+        gl->glEnableClientState(GL10::GL_NORMAL_ARRAY);
         normalsBuffer.clear();
         normalsBuffer.copy<float>(normals, idxNors, 0);
-        gl->glNormalPointer(GL_FLOAT, 0, normalsBuffer);
+        gl->glNormalPointer(GL10::GL_FLOAT, 0, normalsBuffer);
     }
 
     if (hasTexCoords) {
-        gl->glClientActiveTexture(GL_TEXTURE0);
-        gl->glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        gl->glClientActiveTexture(GL10::GL_TEXTURE0);
+        gl->glEnableClientState(GL10::GL_TEXTURE_COORD_ARRAY);
         texCoordsBuffer.clear();
         texCoordsBuffer.copy<float>(texCoords, idxTexCoords, 0);
-        gl->glTexCoordPointer(2, GL_FLOAT, 0, texCoordsBuffer);
+        gl->glTexCoordPointer(2, GL10::GL_FLOAT, 0, texCoordsBuffer);
     }
 
     gl->glDrawArrays(primitiveType, 0, idxPos / 3);
 
-    if (hasCols) gl->glDisableClientState(GL_COLOR_ARRAY);
-    if (hasNors) gl->glDisableClientState(GL_NORMAL_ARRAY);
-    if (hasTexCoords) gl->glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    if (hasCols) gl->glDisableClientState(GL10::GL_COLOR_ARRAY);
+    if (hasNors) gl->glDisableClientState(GL10::GL_NORMAL_ARRAY);
+    if (hasTexCoords) gl->glDisableClientState(GL10::GL_TEXTURE_COORD_ARRAY);
 }
 
 void ImmediateModeRenderer10::vertex (const Vector3& point) {

@@ -54,8 +54,8 @@ idx(0),
 currBufferIdx(0),
 drawing(false),
 blendingDisabled(false),
-blendSrcFunc(GL_SRC_ALPHA),
-blendDstFunc(GL_ONE_MINUS_SRC_ALPHA),
+blendSrcFunc(GL10::GL_SRC_ALPHA),
+blendDstFunc(GL10::GL_ONE_MINUS_SRC_ALPHA),
 shader(0),
 tempColor(1,1,1,1),
 customShader(0)
@@ -139,7 +139,7 @@ void SpriteBatch::begin () {
         	shader->begin();
     }else
     {
-    	gl->glEnable(GL_TEXTURE_2D);
+    	gl->glEnable(GL10::GL_TEXTURE_2D);
     }
     
     setupMatrices();
@@ -159,7 +159,7 @@ void SpriteBatch::end () {
 
     GLCommon& gl = *::gl;
     gl.glDepthMask(true);
-    if (isBlendingEnabled()) gl.glDisable(GL_BLEND);
+    if (isBlendingEnabled()) gl.glDisable(GL10::GL_BLEND);
 
     if (graphics->isGL20Available()) {
         if (customShader != NULL)
@@ -169,7 +169,7 @@ void SpriteBatch::end () {
     }
     else
     {
-    	gl.glDisable(GL_TEXTURE_2D);
+    	gl.glDisable(GL10::GL_TEXTURE_2D);
     }
 }
 
@@ -851,19 +851,19 @@ void SpriteBatch::renderMesh () {
     mesh->getIndicesBuffer().limit(spritesInBatch * 6);
 
     if (blendingDisabled) {
-		gdx::gl->glDisable(GL_BLEND);
+		gdx::gl->glDisable(GL10::GL_BLEND);
 	} else {
 		//GL20& gl20 = *::gl20;
-		gdx::gl->glEnable(GL_BLEND);
+		gdx::gl->glEnable(GL10::GL_BLEND);
 		if (blendSrcFunc != -1) gdx::gl->glBlendFunc(blendSrcFunc, blendDstFunc);
 	}
 
     if (graphics->isGL20Available()) {
 
         if (customShader != NULL)
-            mesh->render(*customShader, GL_TRIANGLES, 0, spritesInBatch * 6);
+            mesh->render(*customShader, GL10::GL_TRIANGLES, 0, spritesInBatch * 6);
         else
-            mesh->render(*shader, GL_TRIANGLES, 0, spritesInBatch * 6);
+            mesh->render(*shader, GL10::GL_TRIANGLES, 0, spritesInBatch * 6);
     } else {
 //        if (blendingDisabled) {
 //            gl10->glDisable(GL_BLEND);
@@ -872,7 +872,7 @@ void SpriteBatch::renderMesh () {
 //            gl10.glEnable(GL_BLEND);
 //            gl10.glBlendFunc(blendSrcFunc, blendDstFunc);
 //        }
-        mesh->render(GL_TRIANGLES, 0, spritesInBatch * 6);
+        mesh->render(GL10::GL_TRIANGLES, 0, spritesInBatch * 6);
     }
 
     idx = 0;
@@ -946,8 +946,8 @@ idx(0),
 currBufferIdx(0),
 drawing(false),
 blendingDisabled(false),
-blendSrcFunc(GL_SRC_ALPHA),
-blendDstFunc(GL_ONE_MINUS_SRC_ALPHA),
+blendSrcFunc(GL10::GL_SRC_ALPHA),
+blendDstFunc(GL10::GL_ONE_MINUS_SRC_ALPHA),
 shader(0),
 tempColor(1,1,1,1),
 customShader(0)
@@ -1048,9 +1048,9 @@ void SpriteBatch::setupMatrices()
 {
     if (!graphics->isGL20Available()) {
         GL10& gl = *gl10;
-        gl.glMatrixMode(GL_PROJECTION);
+        gl.glMatrixMode(GL10::GL_PROJECTION);
         gl.glLoadMatrixf(projectionMatrix.val);
-        gl.glMatrixMode(GL_MODELVIEW);
+        gl.glMatrixMode(GL10::GL_MODELVIEW);
         gl.glLoadMatrixf(transformMatrix.val);
     } else {
         combinedMatrix.set(projectionMatrix).mul(transformMatrix);

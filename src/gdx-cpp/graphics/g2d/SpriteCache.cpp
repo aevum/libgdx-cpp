@@ -796,11 +796,11 @@ void SpriteCache::begin () {
     if ( graphics->isGL20Available() == false ) {
         GL10& gl = *gl10;
         gl.glDepthMask ( false );
-        gl.glEnable ( GL_TEXTURE_2D );
+        gl.glEnable(GL10::GL_TEXTURE_2D);
 
-        gl.glMatrixMode ( GL_PROJECTION );
-        gl.glLoadMatrixf ( projectionMatrix.val );
-        gl.glMatrixMode ( GL_MODELVIEW );
+        gl.glMatrixMode(GL10::GL_PROJECTION);
+        gl.glLoadMatrixf( projectionMatrix.val);
+        gl.glMatrixMode(GL10::GL_MODELVIEW);
         gl.glLoadMatrixf ( transformMatrix.val );
 
         mesh->bind();
@@ -809,7 +809,7 @@ void SpriteCache::begin () {
 
         GL20& gl = *gl20;
         gl.glDepthMask ( false );
-        gl.glEnable ( GL_TEXTURE_2D );
+        gl.glEnable(GL10::GL_TEXTURE_2D );
 
         if ( customShader != NULL ) {
             customShader->begin();
@@ -837,13 +837,13 @@ void SpriteCache::end () {
     if ( graphics->isGL20Available() == false ) {
         GL10& gl = *gl10;
         gl.glDepthMask ( true );
-        gl.glDisable ( GL_TEXTURE_2D );
+        gl.glDisable ( GL10::GL_TEXTURE_2D );
         mesh->unbind();
     } else {
         shader->end();
         GL20& gl = *gl20;
         gl.glDepthMask ( true );
-        gl.glDisable ( GL_TEXTURE_2D );
+        gl.glDisable ( GL10::GL_TEXTURE_2D );
         mesh->unbind ( *shader );
     }
 }
@@ -865,9 +865,9 @@ void SpriteCache::draw ( int cacheID ) {
             int count = counts[i];
             textures[i]->bind();
             if ( customShader != NULL )
-                mesh->render ( *customShader, GL_TRIANGLES, offset, count );
+                mesh->render ( *customShader, GL10::GL_TRIANGLES, offset, count );
             else
-                mesh->render ( *shader, GL_TRIANGLES, offset, count );
+                mesh->render ( *shader, GL10::GL_TRIANGLES, offset, count );
             offset += count;
         }
     } else {
@@ -875,7 +875,7 @@ void SpriteCache::draw ( int cacheID ) {
             int count = counts[i];
             textures[i]->bind();
 
-            mesh->render ( GL_TRIANGLES, offset, count );
+            mesh->render ( GL10::GL_TRIANGLES, offset, count );
             offset += count;
         }
     }
@@ -900,9 +900,9 @@ void SpriteCache::draw ( int cacheID,int offset,int length ) {
             } else
                 length -= count;
             if ( customShader != NULL )
-                mesh->render ( *customShader, GL_TRIANGLES, offset, count );
+                mesh->render ( *customShader, GL10::GL_TRIANGLES, offset, count );
             else
-                mesh->render ( *shader, GL_TRIANGLES, offset, count );
+                mesh->render ( *shader, GL10::GL_TRIANGLES, offset, count );
             offset += count;
         }
     } else {
@@ -914,7 +914,7 @@ void SpriteCache::draw ( int cacheID,int offset,int length ) {
                 count = length;
             } else
                 length -= count;
-            mesh->render ( GL_TRIANGLES, offset, count );
+            mesh->render ( GL10::GL_TRIANGLES, offset, count );
             offset += count;
         }
     }
