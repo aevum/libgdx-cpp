@@ -23,7 +23,8 @@
 using namespace gdx;
 using namespace std;
 
-#include <gdx-cpp/gl.hpp>
+#include<gdx-cpp/internal/gl>
+
 #include <stddef.h>
 
 void GL20::glAttachShader(int program, int shader) const

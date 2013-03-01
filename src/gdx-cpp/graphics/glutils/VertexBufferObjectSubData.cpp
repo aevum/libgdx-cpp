@@ -34,14 +34,14 @@ using namespace gdx;
 int VertexBufferObjectSubData::createBufferObject () {
     if (gl20 != NULL) {
         gl20->glGenBuffers(1, (unsigned int*) &tmpHandle);
-        gl20->glBindBuffer(GL_ARRAY_BUFFER, tmpHandle);
-        gl20->glBufferData(GL_ARRAY_BUFFER, byteBuffer.capacity(), NULL, usage);
-        gl20->glBindBuffer(GL_ARRAY_BUFFER, 0);
+        gl20->glBindBuffer(gdx::GL::ARRAY_BUFFER, tmpHandle);
+        gl20->glBufferData(gdx::GL::ARRAY_BUFFER, byteBuffer.capacity(), NULL, usage);
+        gl20->glBindBuffer(gdx::GL::ARRAY_BUFFER, 0);
     } else {
         gl11->glGenBuffers(1, &tmpHandle);
-        gl11->glBindBuffer(GL_ARRAY_BUFFER, tmpHandle);
-        gl11->glBufferData(GL_ARRAY_BUFFER, byteBuffer.capacity(), NULL, usage);
-        gl11->glBindBuffer(GL_ARRAY_BUFFER, 0);
+        gl11->glBindBuffer(gdx::GL::ARRAY_BUFFER, tmpHandle);
+        gl11->glBufferData(gdx::GL::ARRAY_BUFFER, byteBuffer.capacity(), NULL, usage);
+        gl11->glBindBuffer(gdx::GL::ARRAY_BUFFER, 0);
     }
     return tmpHandle;
 }
@@ -80,10 +80,10 @@ void VertexBufferObjectSubData::setVertices (const float* vertices, int offset, 
     if (isBound) {
         if (gl20 != NULL) {
             GL20& gl = *gl20;
-            gl.glBufferSubData(GL_ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
+            gl.glBufferSubData(gdx::GL::ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
         } else {
             GL11& gl = *gl11;
-            gl.glBufferSubData(GL_ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
+            gl.glBufferSubData(gdx::GL::ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
         }
         isDirty = false;
     }
@@ -92,11 +92,11 @@ void VertexBufferObjectSubData::setVertices (const float* vertices, int offset, 
 void VertexBufferObjectSubData::bind () {
     GL11& gl = *gl11;
 
-    gl.glBindBuffer(GL_ARRAY_BUFFER, bufferHandle);
+    gl.glBindBuffer(gdx::GL::ARRAY_BUFFER, bufferHandle);
     if (isDirty) {
         byteBuffer.limit(buffer.limit() * 4);
-        gl.glBufferSubData(GL_ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
-// gl.glBufferData(GL_ARRAY_BUFFER, byteBuffer.limit(),
+        gl.glBufferSubData(gdx::GL::ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
+// gl.glBufferData(gdx::GL::ARRAY_BUFFER, byteBuffer.limit(),
 // byteBuffer, usage);
         isDirty = false;
     }
@@ -109,29 +109,29 @@ void VertexBufferObjectSubData::bind () {
 
         switch (attribute.usage) {
         case VertexAttributes::Usage::Position:
-            gl.glEnableClientState(GL10::GL_VERTEX_ARRAY);
-            gl.glVertexPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, &attribute.offset);
+            gl.glEnableClientState(gdx::GL::VERTEX_ARRAY);
+            gl.glVertexPointer(attribute.numComponents, gdx::GL::FLOAT, attributes.vertexSize, &attribute.offset);
             break;
 
         case VertexAttributes::Usage::Color:
         case VertexAttributes::Usage::ColorPacked:
         {
-            int colorType = GL10::GL_FLOAT;
-            if (attribute.usage == VertexAttributes::Usage::ColorPacked) colorType = GL10::GL_UNSIGNED_BYTE;
+            int colorType = gdx::GL::FLOAT;
+            if (attribute.usage == VertexAttributes::Usage::ColorPacked) colorType = gdx::GL::UNSIGNED_BYTE;
 
-            gl.glEnableClientState(GL10::GL_COLOR_ARRAY);
+            gl.glEnableClientState(gdx::GL::COLOR_ARRAY);
             gl.glColorPointer(attribute.numComponents, colorType, attributes.vertexSize, &attribute.offset);
             break;
         }
         case VertexAttributes::Usage::Normal:
-            gl.glEnableClientState(GL10::GL_NORMAL_ARRAY);
-            gl.glNormalPointer(GL10::GL_FLOAT, attributes.vertexSize, &attribute.offset);
+            gl.glEnableClientState(gdx::GL::NORMAL_ARRAY);
+            gl.glNormalPointer(gdx::GL::FLOAT, attributes.vertexSize, &attribute.offset);
             break;
 
         case VertexAttributes::Usage::TextureCoordinates:
-            gl.glClientActiveTexture(GL10::GL_TEXTURE0 + textureUnit);
-            gl.glEnableClientState(GL10::GL_TEXTURE_COORD_ARRAY);
-            gl.glTexCoordPointer(attribute.numComponents, GL10::GL_FLOAT, attributes.vertexSize, &attribute.offset);
+            gl.glClientActiveTexture(gdx::GL::TEXTURE0 + textureUnit);
+            gl.glEnableClientState(gdx::GL::TEXTURE_COORD_ARRAY);
+            gl.glTexCoordPointer(attribute.numComponents, gdx::GL::FLOAT, attributes.vertexSize, &attribute.offset);
             textureUnit++;
             break;
 
@@ -147,11 +147,11 @@ void VertexBufferObjectSubData::bind () {
 void VertexBufferObjectSubData::bind (ShaderProgram& shader) {
     GL20& gl = *gl20;
 
-    gl.glBindBuffer(GL_ARRAY_BUFFER, bufferHandle);
+    gl.glBindBuffer(gdx::GL::ARRAY_BUFFER, bufferHandle);
     if (isDirty) {
         byteBuffer.limit(buffer.limit() * 4);
-        gl.glBufferSubData(GL_ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
-// gl.glBufferData(GL_ARRAY_BUFFER, byteBuffer.limit(),
+        gl.glBufferSubData(gdx::GL::ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
+// gl.glBufferData(gdx::GL::ARRAY_BUFFER, byteBuffer.limit(),
 // byteBuffer, usage);
         isDirty = false;
     }
@@ -160,10 +160,10 @@ void VertexBufferObjectSubData::bind (ShaderProgram& shader) {
     for (int i = 0; i < numAttributes; i++) {
         VertexAttribute& attribute = attributes.get(i);
         shader.enableVertexAttribute(attribute.alias);
-        int colorType = GL10::GL_FLOAT;
+        int colorType = gdx::GL::FLOAT;
         bool normalize = false;
         if (attribute.usage == VertexAttributes::Usage::ColorPacked) {
-            colorType = GL10::GL_UNSIGNED_BYTE;
+            colorType = gdx::GL::UNSIGNED_BYTE;
             normalize = true;
         }
         shader.setVertexAttribute(attribute.alias, attribute.numComponents, colorType, normalize, attributes.vertexSize,
@@ -185,14 +185,14 @@ void VertexBufferObjectSubData::unbind () {
             break; // no-op, we also need a position bound in gles
         case VertexAttributes::Usage::Color:
         case VertexAttributes::Usage::ColorPacked:
-            gl.glDisableClientState(GL10::GL_COLOR_ARRAY);
+            gl.glDisableClientState(gdx::GL::COLOR_ARRAY);
             break;
         case VertexAttributes::Usage::Normal:
-            gl.glDisableClientState(GL10::GL_NORMAL_ARRAY);
+            gl.glDisableClientState(gdx::GL::NORMAL_ARRAY);
             break;
         case VertexAttributes::Usage::TextureCoordinates:
-            gl.glClientActiveTexture(GL10::GL_TEXTURE0 + textureUnit);
-            gl.glDisableClientState(GL10::GL_TEXTURE_COORD_ARRAY);
+            gl.glClientActiveTexture(gdx::GL::TEXTURE0 + textureUnit);
+            gl.glDisableClientState(gdx::GL::TEXTURE_COORD_ARRAY);
             textureUnit++;
             break;
         default:
@@ -200,7 +200,7 @@ void VertexBufferObjectSubData::unbind () {
         }
     }
 
-    gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
+    gl.glBindBuffer(gdx::GL::ARRAY_BUFFER, 0);
     isBound = false;
 }
 
@@ -211,7 +211,7 @@ void VertexBufferObjectSubData::unbind (ShaderProgram& shader) {
         VertexAttribute attribute = attributes.get(i);
         shader.disableVertexAttribute(attribute.alias);
     }
-    gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
+    gl.glBindBuffer(gdx::GL::ARRAY_BUFFER, 0);
     isBound = false;
 }
 
@@ -225,7 +225,7 @@ void VertexBufferObjectSubData::dispose () {
         tmpHandle = bufferHandle;
         
         GL20& gl = *gl20;
-        gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
+        gl.glBindBuffer(gdx::GL::ARRAY_BUFFER, 0);
         gl.glDeleteBuffers(1, (unsigned int*) &tmpHandle);
 
         bufferHandle = 0;
@@ -233,7 +233,7 @@ void VertexBufferObjectSubData::dispose () {
         tmpHandle = bufferHandle;
         
         GL11& gl = *gl11;
-        gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
+        gl.glBindBuffer(gdx::GL::ARRAY_BUFFER, 0);
         gl.glDeleteBuffers(1, &tmpHandle);
         bufferHandle = 0;
     }
@@ -251,7 +251,7 @@ byteBuffer(this->attributes.vertexSize * numVertices),
 bufferHandle(0),
 isDirect(true),
 isStatic(isStatic),
-usage(isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW),
+usage(isStatic ? gdx::GL::STATIC_DRAW : gdx::GL::DYNAMIC_DRAW),
 isDirty(false),
 isBound(false),
 tmpHandle(0)

@@ -261,6 +261,7 @@ InputAdapter.hpp)
 
 set(GDX_SRC
 Version.cpp
+gl.cpp
 # assets/AssetLoadingTask.cpp
 # assets/AssetManager.cpp
 # assets/loaders/BitmapFontLoader.cpp

@@ -292,7 +292,7 @@ void ParticleEmitter::update (float delta) {
 }
 
 void ParticleEmitter::draw (SpriteBatch& spriteBatch) {
-    if (additive) spriteBatch.setBlendFunction(GL10::GL_SRC_ALPHA, GL10::GL_ONE);
+    if (additive) spriteBatch.setBlendFunction(gdx::GL::SRC_ALPHA, gdx::GL::ONE);
 
     for (unsigned index = 0; index < active.size(); index++) {
         if (active[index])
@@ -301,7 +301,7 @@ void ParticleEmitter::draw (SpriteBatch& spriteBatch) {
         }
     }
 
-    if (additive) spriteBatch.setBlendFunction(GL10::GL_SRC_ALPHA, GL10::GL_ONE_MINUS_SRC_ALPHA);
+    if (additive) spriteBatch.setBlendFunction(gdx::GL::SRC_ALPHA, gdx::GL::ONE_MINUS_SRC_ALPHA);
 }
 
 void ParticleEmitter::draw (SpriteBatch& spriteBatch,float delta) {
@@ -313,7 +313,7 @@ void ParticleEmitter::draw (SpriteBatch& spriteBatch,float delta) {
     int deltaMillis = (int)accumulator;
     accumulator -= deltaMillis;
 
-    if (additive) spriteBatch.setBlendFunction(GL10::GL_SRC_ALPHA, GL10::GL_ONE);
+    if (additive) spriteBatch.setBlendFunction(gdx::GL::SRC_ALPHA, gdx::GL::ONE);
 
     for (unsigned int index = 0; index < active.size(); index++) {
         if (active[index])
@@ -330,7 +330,7 @@ void ParticleEmitter::draw (SpriteBatch& spriteBatch,float delta) {
         }
     }
 
-    if (additive) spriteBatch.setBlendFunction(GL10::GL_SRC_ALPHA, GL10::GL_ONE_MINUS_SRC_ALPHA);
+    if (additive) spriteBatch.setBlendFunction(gdx::GL::SRC_ALPHA, gdx::GL::ONE_MINUS_SRC_ALPHA);
 
     if (delayTimer < delay) {
         delayTimer += deltaMillis;

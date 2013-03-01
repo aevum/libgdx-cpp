@@ -37,6 +37,8 @@
 #include <gdx-cpp/graphics/GL20.hpp>
 #include <gdx-cpp/graphics/GLU.hpp>
 #include <gdx-cpp/gl.hpp>
+#include <gdx-cpp/internal/gl>
+
 #include "AndroidGLU.hpp"
 
 using namespace gdx::android;
@@ -212,7 +214,8 @@ bool gdx::android::AndroidGraphics::supportsExtension(const std::string& extensi
 
 void gdx::android::AndroidGraphics::initialize()
 {
-    const GLubyte* version = ::glGetString(GL_VERSION);
+    const unsigned char* version = ::glGetString(gdx::GL::VERSION);
+    
     int major = atoi((const char*) version);
     int minor = atoi((const char*) &version[2]);
     

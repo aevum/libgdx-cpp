@@ -57,9 +57,9 @@ void MipMapGenerator::generateMipMap (Pixmap::ptr pixmap,int textureWidth,int te
 }
 
 void MipMapGenerator::generateMipMapGLES20 (Pixmap::ptr pixmap,bool disposePixmap) {
-    gl->glTexImage2D(GL10::GL_TEXTURE_2D, 0, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
+    gl->glTexImage2D(gdx::GL::TEXTURE_2D, 0, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
                         pixmap->getGLFormat(), pixmap->getGLType(), pixmap->getPixels());
-    gl20->glGenerateMipmap(GL10::GL_TEXTURE_2D);
+    gl20->glGenerateMipmap(gdx::GL::TEXTURE_2D);
     if (disposePixmap) pixmap->dispose();
 }
 
@@ -67,17 +67,17 @@ void MipMapGenerator::generateMipMapDesktop (Pixmap::ptr pixmap,int textureWidth
     if (graphics->isGL20Available()
             && (graphics->supportsExtension("GL_ARB_framebuffer_object") || graphics
                 ->supportsExtension("GL_EXT_framebuffer_object"))) {
-        gl->glTexImage2D(GL10::GL_TEXTURE_2D, 0, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
+        gl->glTexImage2D(gdx::GL::TEXTURE_2D, 0, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
                             pixmap->getGLFormat(), pixmap->getGLType(), pixmap->getPixels());
-        gl20->glGenerateMipmap(GL10::GL_TEXTURE_2D);
+        gl20->glGenerateMipmap(gdx::GL::TEXTURE_2D);
         if (disposePixmap) pixmap->dispose();
     } else if (graphics->supportsExtension("GL_SGIS_generate_mipmap")) {
         if ((gl20 == NULL) && textureWidth != textureHeight) {
             gdx_log_error("gdx","texture width and height must be square when using mipmapping in OpenGL ES 1.x");
         }
         
-        gl->glTexParameterf(GL10::GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL10::GL_TRUE);
-        gl->glTexImage2D(GL10::GL_TEXTURE_2D, 0, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
+        gl->glTexParameterf(gdx::GL::TEXTURE_2D, gdx::GL::GENERATE_MIPMAP, gdx::GL::TRUE);
+        gl->glTexImage2D(gdx::GL::TEXTURE_2D, 0, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
                             pixmap->getGLFormat(), pixmap->getGLType(), pixmap->getPixels());
         if (disposePixmap) pixmap->dispose();
     } else {
@@ -86,7 +86,7 @@ void MipMapGenerator::generateMipMapDesktop (Pixmap::ptr pixmap,int textureWidth
 }
 
 void MipMapGenerator::generateMipMapCPU (Pixmap::ptr pixmap,int textureWidth,int textureHeight,bool disposePixmap) {
-    gl->glTexImage2D(GL10::GL_TEXTURE_2D, 0, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
+    gl->glTexImage2D(gdx::GL::TEXTURE_2D, 0, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
                         pixmap->getGLFormat(), pixmap->getGLType(), pixmap->getPixels());
     if ((gl20 == NULL) && textureWidth != textureHeight) { 
         gdx_log_error("gdx","texture width and height must be square when using mipmapping.");
@@ -103,7 +103,7 @@ void MipMapGenerator::generateMipMapCPU (Pixmap::ptr pixmap,int textureWidth,int
 
         pixmap.swap(tmp);
 
-        gl->glTexImage2D(GL10::GL_TEXTURE_2D, level, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
+        gl->glTexImage2D(gdx::GL::TEXTURE_2D, level, pixmap->getGLInternalFormat(), pixmap->getWidth(), pixmap->getHeight(), 0,
                             pixmap->getGLFormat(), pixmap->getGLType(), pixmap->getPixels());
 
         width = pixmap->getWidth() / 2;

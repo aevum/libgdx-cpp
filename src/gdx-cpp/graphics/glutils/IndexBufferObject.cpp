@@ -61,10 +61,10 @@ void IndexBufferObject::setIndices (const std::vector< short int >& indices, int
     if (isBound) {
         if (gl11 != NULL) {
             GL11& gl = *gl11;
-            gl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
+            gl.glBufferData(gdx::GL::ELEMENT_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
         } else if (gl20 != NULL) {
             GL20& gl = *gl20;
-            gl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
+            gl.glBufferData(gdx::GL::ELEMENT_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
         }
         isDirty = false;
     }
@@ -81,18 +81,18 @@ void IndexBufferObject::bind () {
 
     if (gl11 != NULL) {
         GL11& gl = *gl11;
-        gl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferHandle);
+        gl.glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, bufferHandle);
         if (isDirty) {
             byteBuffer.limit(buffer.limit() * 2);
-            gl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
+            gl.glBufferData(gdx::GL::ELEMENT_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
             isDirty = false;
         }
     } else {
         GL20& gl = *gl20;
-        gl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferHandle);
+        gl.glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, bufferHandle);
         if (isDirty) {
             byteBuffer.limit(buffer.limit() * 2);
-            gl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
+            gl.glBufferData(gdx::GL::ELEMENT_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
             isDirty = false;
         }
     }
@@ -101,9 +101,9 @@ void IndexBufferObject::bind () {
 
 void IndexBufferObject::unbind () {
     if (gl11 != NULL) {
-        gl11->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        gl11->glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, 0);
     } else if (gl20 != NULL) {
-        gl20->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        gl20->glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, 0);
     }
     isBound = false;
 }
@@ -117,13 +117,13 @@ void IndexBufferObject::dispose () {
     if (gl20 != NULL) {
         tmpHandle = bufferHandle;
         GL20& gl = *gl20;
-        gl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        gl.glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, 0);
         gl.glDeleteBuffers(1, (unsigned int*) &tmpHandle);
         bufferHandle = 0;
     } else if (gl11 != NULL) {
         tmpHandle = bufferHandle;
         GL11& gl = *gl11;
-        gl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        gl.glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, 0);
         gl.glDeleteBuffers(1, &tmpHandle);
         bufferHandle = 0;
     }
@@ -144,7 +144,7 @@ tmpHandle(0)
     buffer.flip();
     byteBuffer.flip();
     bufferHandle = createBufferObject();
-    usage = isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW;
+    usage = isStatic ? gdx::GL::STATIC_DRAW : gdx::GL::DYNAMIC_DRAW;
 }
 
 IndexBufferObject::IndexBufferObject(int maxIndices)
@@ -160,7 +160,7 @@ tmpHandle(0)
     buffer.flip();
     byteBuffer.flip();
     bufferHandle = createBufferObject();
-    usage = GL_STATIC_DRAW;
+    usage = gdx::GL::STATIC_DRAW;
 }
 
 

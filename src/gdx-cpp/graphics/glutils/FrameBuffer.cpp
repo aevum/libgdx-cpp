@@ -55,27 +55,27 @@ void FrameBuffer::build () {
         depthbufferHandle = handle;
     }
 
-    gl.glBindTexture(GL_TEXTURE_2D, colorTexture->getTextureObjectHandle());
+    gl.glBindTexture(gdx::GL::TEXTURE_2D, colorTexture->getTextureObjectHandle());
 
     if (hasDepth) {
-        gl.glBindRenderbuffer(GL_RENDERBUFFER, depthbufferHandle);
-        gl.glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, colorTexture->getWidth(),
+        gl.glBindRenderbuffer(gdx::GL::RENDERBUFFER, depthbufferHandle);
+        gl.glRenderbufferStorage(gdx::GL::RENDERBUFFER, gdx::GL::DEPTH_COMPONENT16, colorTexture->getWidth(),
                                  colorTexture->getHeight());
     }
 
-    gl.glBindFramebuffer(GL_FRAMEBUFFER, framebufferHandle);
-    gl.glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+    gl.glBindFramebuffer(gdx::GL::FRAMEBUFFER, framebufferHandle);
+    gl.glFramebufferTexture2D(gdx::GL::FRAMEBUFFER, gdx::GL::COLOR_ATTACHMENT0, gdx::GL::TEXTURE_2D,
                               colorTexture->getTextureObjectHandle(), 0);
     if (hasDepth) {
-        gl.glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthbufferHandle);
+        gl.glFramebufferRenderbuffer(gdx::GL::FRAMEBUFFER, gdx::GL::DEPTH_ATTACHMENT, gdx::GL::RENDERBUFFER, depthbufferHandle);
     }
-    int result = gl.glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    int result = gl.glCheckFramebufferStatus(gdx::GL::FRAMEBUFFER);
 
-    gl.glBindRenderbuffer(GL_RENDERBUFFER, 0);
-    gl.glBindTexture(GL_TEXTURE_2D, 0);
-    gl.glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    gl.glBindRenderbuffer(gdx::GL::RENDERBUFFER, 0);
+    gl.glBindTexture(gdx::GL::TEXTURE_2D, 0);
+    gl.glBindFramebuffer(gdx::GL::FRAMEBUFFER, 0);
 
-    if (result != GL_FRAMEBUFFER_COMPLETE) {
+    if (result != gdx::GL::FRAMEBUFFER_COMPLETE) {
         colorTexture.reset();
         if (hasDepth) {
             handle = depthbufferHandle;
@@ -86,9 +86,9 @@ void FrameBuffer::build () {
         
         gl.glDeleteFramebuffers(1, (const unsigned int*) &handle);
 
-        if (result == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
+        if (result == gdx::GL::FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
             gdx_log_error("gdx","frame buffer couldn't be constructed: incomplete attachment");        
-        if (result == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
+        if (result == gdx::GL::FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
             gdx_log_error("gdx","frame buffer couldn't be constructed: missing attachment");
     }
 }
@@ -113,12 +113,12 @@ void FrameBuffer::dispose () {
 
 void FrameBuffer::begin () {
     gl20->glViewport(0, 0, colorTexture->getWidth(), colorTexture->getHeight());
-    gl20->glBindFramebuffer(GL_FRAMEBUFFER, framebufferHandle);
+    gl20->glBindFramebuffer(gdx::GL::FRAMEBUFFER, framebufferHandle);
 }
 
 void FrameBuffer::end () {
     gl20->glViewport(0, 0, graphics->getWidth(), graphics->getHeight());
-    gl20->glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    gl20->glBindFramebuffer(gdx::GL::FRAMEBUFFER, 0);
 }
 
 void FrameBuffer::addManagedFrameBuffer (Application* app,

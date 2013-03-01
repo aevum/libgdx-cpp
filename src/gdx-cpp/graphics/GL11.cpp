@@ -18,23 +18,17 @@
  */
 
 #include "GL11.hpp"
+
 #include <gdx-cpp/gl.hpp>
+#include <gdx-cpp/internal/gl>
 
 using namespace gdx;
 
 void GL11::glClipPlanef(int plane, const float* equation) const {
-#ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
-    ::glClipPlane (plane, (GLdouble*) equation);
-#else
     ::glClipPlanef (plane, (GLfloat*) equation);
-#endif
 }
 void GL11::glGetClipPlanef(int pname, const float* eqn) const {
-#ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
-    ::glGetClipPlane (pname, (GLdouble*) eqn);
-#else
     ::glGetClipPlanef (pname, (GLfloat*) eqn);
-#endif
 }
 void GL11::glGetFloatv(int pname, const float* params) const {
     ::glGetFloatv (pname, (GLfloat*) params);
@@ -49,20 +43,11 @@ void GL11::glGetTexParameterfv(int target, int pname, const float* params) const
     ::glGetTexParameterfv (target, pname, (GLfloat*) params);
 }
 void GL11::glPointParameterf(int pname, float param) const {
-
-#ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
-    ::glPointParameterfARB (pname, param);
-#else
     ::glPointParameterf (pname, param);
-#endif
 }
 
 void GL11::glPointParameterfv (int pname,const float* params) const {
-#ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
-    ::glPointParameterfvARB ( pname, params);
-#else
     ::glPointParameterfv ( pname, params);
-#endif
 }
 
 void GL11::glTexParameterfv (int target,int pname,const float* params) const {

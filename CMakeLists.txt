@@ -6,17 +6,16 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 include(cmake/gdx.cmake)
 
+set(ANDROID_NDK $ENV{ANDROID_NDK})
+
 initialize_gdx()
 
 include_directories(src)
 
 link_directories(${LIBRARY_OUTPUT_PATH})
 
-set(ANDROID_NDK $ENV{ANDROID_NDK})
-
 option(BUILD_BOX2D "Builds Box2D" TRUE)
 option(BUILD_AS_SHARED_LIBRARIES "Build libraries as shared libraries instead of static" FALSE)
-
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     # get gnu compiler version number

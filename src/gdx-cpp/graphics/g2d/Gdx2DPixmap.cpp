@@ -240,15 +240,15 @@ const Pixmap::Format& Gdx2DPixmap::getFormat () {
 int Gdx2DPixmap::getGLInternalFormat () const {
     switch (pixData->format) {
     case GDX2D_FORMAT_ALPHA:
-        return GL_ALPHA;
+        return gdx::GL::ALPHA;
     case GDX2D_FORMAT_LUMINANCE_ALPHA:
-        return GL_LUMINANCE_ALPHA;
+        return gdx::GL::LUMINANCE_ALPHA;
     case GDX2D_FORMAT_RGB888:
     case GDX2D_FORMAT_RGB565:
-        return GL_RGB;
+        return gdx::GL::RGB;
     case GDX2D_FORMAT_RGBA8888:
     case GDX2D_FORMAT_RGBA4444:
-        return GL_RGBA;
+        return gdx::GL::RGBA;
     default:
     {
         gdx_log_error("gdx","unknown format: %d",pixData->format);
@@ -266,11 +266,11 @@ int Gdx2DPixmap::getGLType () const {
     case GDX2D_FORMAT_LUMINANCE_ALPHA:
     case GDX2D_FORMAT_RGB888:
     case GDX2D_FORMAT_RGBA8888:
-        return GL_UNSIGNED_BYTE;
+        return gdx::GL::UNSIGNED_BYTE;
     case GDX2D_FORMAT_RGB565:
-        return GL_UNSIGNED_SHORT_5_6_5;
+        return gdx::GL::UNSIGNED_SHORT_5_6_5;
     case GDX2D_FORMAT_RGBA4444:
-        return GL_UNSIGNED_SHORT_4_4_4_4;
+        return gdx::GL::UNSIGNED_SHORT_4_4_4_4;
     default:
         gdx_log_error("gdx","unknown format: %d", pixData->format);    
     }

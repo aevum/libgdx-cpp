@@ -185,7 +185,7 @@ void Mesh::render (int primitiveType,int offset,int count) {
             int oldLimit = buffer.limit();
             buffer.position(offset);
             buffer.limit(offset + count);
-            gl10->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, (void *) ((char*)buffer + offset));
+            gl10->glDrawElements(primitiveType, count, gdx::GL::UNSIGNED_SHORT, (void *) ((char*)buffer + offset));
             buffer.position(oldPosition);
             buffer.limit(oldLimit);
         } else
@@ -193,7 +193,7 @@ void Mesh::render (int primitiveType,int offset,int count) {
     } else {
         if (indices->getNumIndices() > 0) {
             int newoffset = offset * 2;
-            gl11->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, (void *) (intptr_t) newoffset );
+            gl11->glDrawElements(primitiveType, count, gdx::GL::UNSIGNED_SHORT, (void *) (intptr_t) newoffset );
         }
         else
             gl11->glDrawArrays(primitiveType, offset, count);
@@ -212,7 +212,7 @@ void Mesh::render (ShaderProgram& shader,int primitiveType,int offset,int count)
     if (autoBind) bind(shader);
 
     if (indices->getNumIndices() > 0)
-        gl20->glDrawElements(primitiveType, count, GL10::GL_UNSIGNED_SHORT, (void*)(offset * 2));
+        gl20->glDrawElements(primitiveType, count, gdx::GL::UNSIGNED_SHORT, (void*)(offset * 2));
     else
         gl20->glDrawArrays(primitiveType, offset, count);
 

@@ -20,6 +20,7 @@
 #include <gdx-cpp/gl.hpp>
 
 #include "GL10.hpp"
+#include <gdx-cpp/internal/gl>
 
 using namespace gdx;
 
@@ -96,6 +97,7 @@ void GL10::glDisableClientState(int array) {
         ::glDisableClientState(array);
     }
 }
+
 void GL10::glEnableClientState(int array) {
     unsigned char state = 0;
     switch(array) {
@@ -140,14 +142,8 @@ void GL10::glFogf(int pname, float param) const {
 }
 
 void GL10::glFrustumf(float left, float right, float bottom, float top, float zNear, float zFar) const {
-    #ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
-    ::glFrustum(left, right,bottom,top, zNear, zFar);
-    #else
     ::glFrustumf(left, right,bottom,top, zNear, zFar);
-    #endif
 }
-
-
 
 void GL10::glLightf(int light, int pname, float param) const {
     ::glLightf(light, pname, param);
@@ -200,11 +196,7 @@ void GL10::glNormalPointer(int type, int stride, const void* pointer) const {
     ::glNormalPointer(type, stride, pointer);
 }
 void GL10::glOrthof(float left, float right, float bottom, float top, float zNear, float zFar) const {
-    #ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
-    ::glOrtho(left,right,bottom,top,zNear,zFar);
-    #else
     ::glOrthof(left,right,bottom,top,zNear,zFar);
-    #endif
 }
 
 void GL10::glPointSize(float size) const {

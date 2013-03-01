@@ -300,13 +300,13 @@ const gdx::Pixmap::Format& AggSvgPixmap::getFormat() {
     return Pixmap::Format::RGBA8888;
 }
 int AggSvgPixmap::getGLFormat() const {
-    return GL_RGBA;
+    return gdx::GL::RGBA;
 }
 int AggSvgPixmap::getGLInternalFormat() const {
-    return GL_RGBA;
+    return gdx::GL::RGBA;
 }
 int AggSvgPixmap::getGLType() const {
-    return GL_UNSIGNED_BYTE;
+    return gdx::GL::UNSIGNED_BYTE;
 }
 int AggSvgPixmap::getHeight() const {
     return height * scaleY;

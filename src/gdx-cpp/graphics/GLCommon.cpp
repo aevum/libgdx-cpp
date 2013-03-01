@@ -18,9 +18,9 @@
  *  @author Ozires Bortolon de Faria ozires@aevumlab.com
  */
 
-#include "gdx-cpp/gl.hpp"
+#include "GLCommon.hpp"
 
-#include "gdx-cpp/graphics/GLCommon.hpp"
+#include "gdx-cpp/internal/gl"
 
 using namespace gdx;
 
@@ -58,12 +58,7 @@ void GLCommon::glClearColor(float red, float green, float blue, float alpha) con
 }
 
 void GLCommon::glClearDepthf(float depth) const {
-    
-    #ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
-    ::glClearDepth ( depth);
-    #else
     ::glClearDepthf ( depth);
-    #endif
 }
 
 void GLCommon::glClearStencil(int s) const {
@@ -111,13 +106,7 @@ void GLCommon::glDepthMask(bool flag) const {
 }
 
 void GLCommon::glDepthRangef(float zNear, float zFar) const {
-    #ifdef LIBGDX_CPP_BUILD_OPENGL_INSTEAD_GLES
-    ::glDepthRange ( zNear, zFar);
-    #else
     ::glDepthRangef ( zNear, zFar);
-    #endif
-
-    
 }
 void GLCommon::glDisable(int cap) {
     if (enabled_states.count(cap)) {

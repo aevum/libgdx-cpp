@@ -49,9 +49,9 @@ viewportHeight(viewportHeight)
 }
 
 void Camera::apply (const GL10& gl) {
-    gl.glMatrixMode(GL10::GL_PROJECTION);
+    gl.glMatrixMode(gdx::GL::PROJECTION);
     gl.glLoadMatrixf(projection.val);
-    gl.glMatrixMode(GL10::GL_MODELVIEW);
+    gl.glMatrixMode(gdx::GL::MODELVIEW);
     gl.glLoadMatrixf(view.val);
 }
 
