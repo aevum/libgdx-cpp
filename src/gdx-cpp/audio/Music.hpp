@@ -39,7 +39,7 @@ public:
     virtual   void setVolume (float volume) = 0;
     virtual   float getPosition () = 0;
     virtual   void dispose () = 0;
-
+    virtual   float getVolume() const = 0;
 protected:
 
 

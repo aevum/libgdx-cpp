@@ -193,3 +193,8 @@ bool LinuxOpenALMusic::fill (int bufferID) {
     CHECK_OPENAL_ERROR(alBufferData(bufferID, format, tempBytes, length, sampleRate));
     return true;
 }
+
+float LinuxOpenALMusic::getVolume() const
+{
+    return this->volume;
+}

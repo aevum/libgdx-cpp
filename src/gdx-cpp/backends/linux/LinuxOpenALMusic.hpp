@@ -47,7 +47,7 @@ public:
     float getPosition ();
     void dispose ();
     void update ();
-    
+    virtual float getVolume() const;
 protected:
     virtual int read (char * buffer, int bufferSize) = 0;
     virtual void reset () = 0;

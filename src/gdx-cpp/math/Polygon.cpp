@@ -23,7 +23,7 @@
 
 #include "MathUtils.hpp"
 #include "Polygon.hpp"
-#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/Gdx.hpp"
 #include "gdx-cpp/math/Rectangle.hpp"
 
 using namespace gdx;

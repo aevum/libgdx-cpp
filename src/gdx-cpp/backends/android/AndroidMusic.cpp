@@ -52,6 +52,7 @@ gdx::android::AndroidMusic::AndroidMusic(jobject musicObj)
     setVolumeJNI = env->GetMethodID(cls, "setVolume", "(F)V");
     getPositionJNI = env->GetMethodID(cls, "getPosition", "()F");
     pauseJNI = env->GetMethodID(cls, "pause", "()V");
+    getVolumeJNI = env->GetMethodID(cls, "getVolume", "()F");
     
     assert(disposeJNI);
     assert(getPositionJNI);
@@ -63,6 +64,7 @@ gdx::android::AndroidMusic::AndroidMusic(jobject musicObj)
     assert(setLoopingJNI);
     assert(setVolumeJNI);
     assert(stopJNI);
+    assert(getVolumeJNI);
 }
 
 void gdx::android::AndroidMusic::dispose()
@@ -132,5 +134,9 @@ gdx::android::AndroidMusic::~AndroidMusic()
     dispose();
 }
 
-
+float AndroidMusic::getVolume() const
+{
+    JNIEnv* env = static_cast<gdx::android::AndroidSystem*>(gdx::system)->getJniEnv();
+    return env->CallFloatMethod(jniMusicObj, getVolumeJNI);
+}
 

@@ -74,4 +74,5 @@ public interface Music extends Disposable {
 	/** Needs to be called when the Music is no longer needed. */
 	public void dispose ();
 	
+	public float getVolume();
 }

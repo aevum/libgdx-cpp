@@ -42,7 +42,7 @@ public:
     void setLooping(bool isLooping);
     void setVolume(float volume);
     void stop();
-
+    virtual float getVolume() const;
     ~AndroidMusic();
     
 protected:
@@ -58,6 +58,7 @@ protected:
     jmethodID setLoopingJNI;
     jmethodID setVolumeJNI;
     jmethodID stopJNI;
+    jmethodID getVolumeJNI;
 };
 
 }

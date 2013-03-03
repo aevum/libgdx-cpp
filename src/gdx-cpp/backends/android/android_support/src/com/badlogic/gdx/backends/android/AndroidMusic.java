@@ -27,7 +27,8 @@ public class AndroidMusic implements Music {
 	private MediaPlayer player;
 	private boolean isPrepared = true;
 	private boolean isPaused = false;
-
+	private float volume = 1;
+	
 	AndroidMusic (AndroidAudio audio, MediaPlayer player) {
 		this.audio = audio;
 		this.player = player;
@@ -88,6 +89,7 @@ public class AndroidMusic implements Music {
 
 	@Override public void setVolume (float volume) {
 		player.setVolume(volume, volume);
+		this.volume = volume;
 	}
 
 	@Override public void stop () {
@@ -101,5 +103,10 @@ public class AndroidMusic implements Music {
 	
 	public float getPosition () {
 		return player.getCurrentPosition() / 1000f;
+	}
+	
+	@Override
+	public float getVolume() {
+		return volume;
 	}
 }
