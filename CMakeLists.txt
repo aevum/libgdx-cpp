@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 2.8)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 include(cmake/gdx.cmake)
+include(cmake/cotire.cmake)
 
 set(ANDROID_NDK $ENV{ANDROID_NDK})
 
@@ -65,4 +66,7 @@ install(FILES cmake/finders/FindGdxCpp.cmake
         DESTINATION share/gdx/cmake)
 
 install(FILES cmake/gdx.cmake
+        DESTINATION share/gdx/cmake)
+
+install(FILES cmake/cotire.cmake
         DESTINATION share/gdx/cmake)
