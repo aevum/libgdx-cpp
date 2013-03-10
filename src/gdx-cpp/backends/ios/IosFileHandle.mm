@@ -19,7 +19,7 @@
 #include "IosFileHandle.hpp"
 #import <UIKit/UIKit.h>
 #include <stdexcept>
-#include <gdx-cpp/Log.hpp>
+#include <gdx-cpp/Gdx.hpp>
 
 using namespace gdx::ios;
 

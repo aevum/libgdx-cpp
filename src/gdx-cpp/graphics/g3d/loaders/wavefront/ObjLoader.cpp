@@ -7,6 +7,7 @@
 
 #include "gdx-cpp/graphics/g3d/loaders/wavefront/ObjLoader.hpp"
 #include <limits.h>
+#include <gdx-cpp/gl.hpp>
 
 using namespace gdx;
 
@@ -155,7 +156,7 @@ StillModel* ObjLoader::loadObj(const FileHandle& file, FileHandle& textureDir, b
 			mesh->setIndices(finalIndices);
 		}
 		const char* subMeshName = group.name.c_str();
-		StillSubMesh* subMesh = new StillSubMesh(subMeshName, *mesh, GL_TRIANGLES);
+		StillSubMesh* subMesh = new StillSubMesh(subMeshName, *mesh, gdx::GL::TRIANGLES);
 		subMesh->material = mtl.getMaterial(group.materialName);
 		model->subMeshes.push_back(subMesh);
 	}

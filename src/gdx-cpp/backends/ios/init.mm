@@ -30,16 +30,17 @@ static gdx::ApplicationListener* g_Listener = 0;
 
 class IosLog : public gdx::Log {
 public:
-    virtual void debug ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list) {
-        NSLogv([NSString stringWithFormat:@"%s [LINE: %s] %s", tag.c_str(), line.c_str(), format], list);
-    }
-
-    virtual void error ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list ) {
-         NSLogv([NSString stringWithFormat:@"%s [LINE: %s] %s", tag.c_str(), line.c_str(), format], list);
-    }
-
-    virtual void info ( const std::string& tag, const std::string& line, const std::string& file, const char* format, va_list& list ) {
-         NSLogv([NSString stringWithFormat:@"%s [LINE: %s] %s", tag.c_str(), line.c_str(), format], list);
+    virtual void log (LogLevel log_level, const std::string& tag, const std::string& line, const std::string& file, const char* format, ...) {
+        
+        static char* levels[] = { "DEBUG" , "INFO", "ERROR", "OTHER" };
+        
+        va_list list;
+        va_start(list, format);
+        
+        
+        NSLogv([NSString stringWithFormat:@"[%s] %s [LINE: %s] %s", levels[(int) log_level], tag.c_str(), line.c_str(), format], list);
+        
+        va_end(list);
     }
 };
 

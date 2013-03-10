@@ -30,7 +30,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include "gdx-cpp/Log.hpp"
+#include "gdx-cpp/Gdx.hpp"
 
 #import <mach/mach.h>
 #import <mach/mach_time.h>

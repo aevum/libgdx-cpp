@@ -23,6 +23,7 @@
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
 #include <stdexcept>
+#include <gdx-cpp/Gdx.hpp>
 
 #import <Foundation/Foundation.h>
 
@@ -261,4 +262,8 @@ void IosOpenALMusic::update()
     int ss;
     CHECK_OPENAL_ERROR(alGetSourcei(sourceID, AL_SOURCE_STATE, &ss));
     if (isPlayingVar && ss != AL_PLAYING) CHECK_OPENAL_ERROR(alSourcePlay(sourceID));
+}
+
+float IosOpenALMusic::getVolume() const {
+    return this->volume;
 }

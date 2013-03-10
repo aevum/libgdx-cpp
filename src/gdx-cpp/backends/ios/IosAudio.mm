@@ -107,6 +107,9 @@ public:
         [audioPlayer release];
     }
     
+    virtual float getVolume() const {
+        return audioPlayer.volume;
+    }
 private:
     AVAudioPlayer *audioPlayer;
 };

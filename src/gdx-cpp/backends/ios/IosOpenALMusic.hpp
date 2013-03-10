@@ -49,6 +49,7 @@ public:
     void update ();
     void setup();
     bool isPaused();
+    float getVolume() const;
     
 protected:
     virtual void reset ();
