@@ -43,15 +43,15 @@ void StillModel::render() {
 
 void StillModel::render(ShaderProgram& shader) {
 	size_t len = subMeshes.size();
-		for (size_t i = 0; i < len; i++) {
-			StillSubMesh* subMesh = subMeshes[i];
-			if (i == 0) {
-				subMesh->material->bind();
-			} else if (subMeshes[i - 1]->material != subMesh->material) {
-				subMesh->material->bind();
-			}
-			subMesh->mesh->render(shader, subMesh->primitiveType);
+	for (size_t i = 0; i < len; i++) {
+		StillSubMesh* subMesh = subMeshes[i];
+		if (i == 0) {
+			subMesh->material->bind();
+		} else if (subMeshes[i - 1]->material != subMesh->material) {
+			subMesh->material->bind();
 		}
+		subMesh->mesh->render(shader, subMesh->primitiveType);
+	}
 }
 
 Model* StillModel::getSubModel(const vector<string>& subMeshNames) {
@@ -78,7 +78,7 @@ StillSubMesh* StillModel::getSubMesh(string name) {
 	return NULL;
 }
 
-vector<SubMesh*>& StillModel::getSubMeshes() {
+vector<SubMesh*>& StillModel::getSubMeshes() const {
 	return (vector<SubMesh*>&) subMeshes;
 }
 

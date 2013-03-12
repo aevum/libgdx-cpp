@@ -21,18 +21,20 @@
 #ifndef GDX_CPP__INPUTADAPTER_HPP_
 #define GDX_CPP__INPUTADAPTER_HPP_
 
+#include "gdx-cpp/InputProcessor.hpp"
+
 namespace gdx {
 
-class InputAdapter {
+class InputAdapter : public InputProcessor {
 public:
-    bool keyDown (int keycode);
-    bool keyUp (int keycode);
-    bool keyTyped (char character);
-    bool touchDown (int x,int y,int pointer,int button);
-    bool touchUp (int x,int y,int pointer,int button);
-    bool touchDragged (int x,int y,int pointer);
-    bool touchMoved (int x,int y);
-    bool scrolled (int amount);
+    virtual bool keyDown (int keycode);
+    virtual bool keyUp (int keycode);
+    virtual bool keyTyped (char character);
+    virtual bool touchDown (int x,int y,int pointer,int button);
+    virtual bool touchUp (int x,int y,int pointer,int button);
+    virtual bool touchDragged (int x,int y,int pointer);
+    virtual bool touchMoved (int x,int y);
+    virtual bool scrolled (int amount);
 
 protected:
 

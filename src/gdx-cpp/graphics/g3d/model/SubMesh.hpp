@@ -14,8 +14,6 @@
 
 using namespace std;
 
-class Mesh;
-
 namespace gdx
 {
 
@@ -32,7 +30,7 @@ public:
 	SubMesh(const char* name, const Mesh& mesh, int primitiveType);
 	virtual ~SubMesh();
 	void getBoundingBox(BoundingBox& bbox);
-	Mesh& getMesh();
+	Mesh& getMesh() const;
 	void setMesh(const Mesh& mesh);
 };
 

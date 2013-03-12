@@ -103,20 +103,22 @@ int ShaderProgram::loadShader (int type,const std::string& source) {
 
     gl->glShaderSource(shader, source);
     gl->glCompileShader(shader);
-//     gl->glGetShaderiv(shader, GL20.gdx::GL::COMPILE_STATUS, intbuf);
-//
-//     int compiled = intbuf.get(0);
-//     if (compiled == 0) {
+	
+	int intbuf[4];
+	gl->glGetShaderiv(shader, gdx::GL::COMPILE_STATUS, intbuf);
+
+	if (intbuf[0] == 0) {
 //         gl->glGetShaderiv(shader, GL20.gdx::GL::INFO_LOG_LENGTH, intbuf);
 //         int infoLogLength = intbuf.get(0);
-//         if (infoLogLength > 1) {
+//		if (infoLogLength > 1) {
 //             String infoLog = gl->glGetShaderInfoLog(shader);
 //             log += infoLog;
 //         }
-//         return -1;
-//     }
+		gdx_log_info("gdx", "%s", gl->glGetShaderInfoLog(shader).c_str());
+		return -1;
+	}
 
-    return shader;
+	return shader;
 }
 
 int ShaderProgram::linkProgram () {
@@ -140,9 +142,8 @@ int ShaderProgram::linkProgram () {
 //         return -1;
 //     }
 
-     if (intbuf[0] == 0)
-     {
-    	 gdx_log_info("gdx", "%s", gl->glGetShaderInfoLog(program).c_str());
+     if (intbuf[0] == GL_FALSE) {
+    	 gdx_log_info("gdx", "%s", gl->glGetProgramInfoLog(program).c_str());
     	 return -1;
      }
 

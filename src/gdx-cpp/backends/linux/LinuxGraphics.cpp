@@ -40,6 +40,7 @@
 #include "LinuxGraphics.hpp"
 #include "gdx-cpp/Log.hpp"
 #include "gdx-cpp/graphics/GLCommon.hpp"
+#include <gdx-cpp/gl.hpp>
 #include "gdx-cpp/graphics/Pixmap.hpp"
 
 namespace gdx {
@@ -388,19 +389,20 @@ bool gdx::nix::LinuxGraphics::setupGLModes() {
     if ( isUseOpenGLES2 ) {
         gl20 = new GL20;
         glCommon = gl20;
-        std::string version = ( const char* ) ::glGetString ( GL_VERSION );
-        std::cerr << version;
         if ( glCommon == NULL )
             gdx_log_error ( "gdx", "error init gl" );
 
-    } else {
-        std::string version = ( const char* ) ::glGetString ( GL_VERSION );
+    } else { 
+		const char* ver = (const char*) ::glGetString ( gdx::GL::VERSION );
+		if (ver != nullptr) {
+			gdx_log_error("gdx", "error init gl");
+			return false;
+		}
+        std::string version(ver);
 
         if ( !version.empty() ) {
-
             int major = atoi ( ( const char* ) version.c_str() );
             int minor = atoi ( ( const char* ) &version.c_str() [2] );
-            std::cerr << version;
             if ( major == 1 && minor < 5 ) {
                 glCommon = gl10 = new GL10;
             } else {
