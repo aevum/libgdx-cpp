@@ -29,7 +29,7 @@ SubMesh::~SubMesh()
 	delete mesh;
 }
 
-Mesh& SubMesh::getMesh()
+Mesh& SubMesh::getMesh() const
 {
 	return *mesh;
 }
