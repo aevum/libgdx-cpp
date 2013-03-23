@@ -283,7 +283,7 @@ const static unsigned int VERSION_ES_CL_1_1;
 const static unsigned int TEXTURE_ENV_MODE;
 const static unsigned int TEXTURE22;
 const static unsigned int BLEND_DST_RGB;
-const static unsigned int STENCIL_INDEX;
+// const static unsigned int STENCIL_INDEX;
 const static unsigned int DEPTH_TEST;
 const static unsigned int COLOR_ARRAY_STRIDE;
 const static unsigned int TRIANGLE_FAN;
