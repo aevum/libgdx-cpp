@@ -28,7 +28,7 @@ public:
 	void render(ShaderProgram& program);
 	Model* getSubModel(const vector<string>& subMeshNames);
 	StillSubMesh* getSubMesh(string name);
-	vector<SubMesh*>& getSubMeshes();
+	vector<SubMesh*>& getSubMeshes() const;
 	void setMaterials(vector<Material*> materials);
 	void setMaterial(Material* material);
 	void getBoundingBox(BoundingBox& bbox);
