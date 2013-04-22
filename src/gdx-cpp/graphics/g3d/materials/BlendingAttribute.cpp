@@ -6,6 +6,7 @@
  */
 
 #include "BlendingAttribute.h"
+#include <gdx-cpp/internal/gl>
 
 Pool<BlendingAttribute> BlendingAttribute::pool;
 
@@ -17,7 +18,7 @@ BlendingAttribute::BlendingAttribute() {
 BlendingAttribute::~BlendingAttribute() {
 }
 
-BlendingAttribute::BlendingAttribute(string name, int srcFunc, int dstFunc)
+BlendingAttribute::BlendingAttribute(string name, int srcFunc = GL_SRC_ALPHA, int dstFunc = GL_ONE_MINUS_DST_COLOR)
 : MaterialAttribute(name),
   blendSrcFunc(srcFunc),
   blendDstFunc(dstFunc){

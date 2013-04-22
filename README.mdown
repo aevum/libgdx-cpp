@@ -145,11 +145,9 @@ how to load and create TextureData (etc1, wich is not supported in all platforms
 * The linux backend has input, file and audio working
 * The android backend has input, file and audio working
 * SVG support through AntiGrainGeometry
+* iOS support
+* GLES 2
 
 ### What has to be done
 
 * Backend polishing. Seriously, it's working, but there is a lot of stuff that is ugly and in a haste.
-* iOS support
-* GLES 2. Check if it's working
-* etc
-

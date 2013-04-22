@@ -85,7 +85,7 @@ StillSubMesh* StillModel::getSubMesh ( string name )
     return NULL;
 }
 
-vector<SubMesh*>& StillModel::getSubMeshes()
+vector<SubMesh*>& StillModel::getSubMeshes() const
 {
     return ( vector<SubMesh*>& ) subMeshes;
 }

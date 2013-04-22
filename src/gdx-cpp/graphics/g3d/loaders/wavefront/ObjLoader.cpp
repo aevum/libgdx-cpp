@@ -7,6 +7,7 @@
 
 #include "gdx-cpp/graphics/g3d/loaders/wavefront/ObjLoader.hpp"
 #include <limits.h>
+#include <gdx-cpp/gl.hpp>
 
 using namespace gdx;
 
@@ -111,14 +112,14 @@ StillModel* ObjLoader::loadObj ( const FileHandle& file, FileHandle& textureDir,
     for ( size_t g = 0; g < numGroups; g++ ) {
         Group& group = *groups[g];
         vector<int>& faces = group.faces;
-        const unsigned numElements = faces.size();
+        const unsigned int numElements = faces.size();
         const int numFaces = group.numFaces;
         const bool hasNorms = group.hasNorms;
         const bool hasUVs = group.hasUVs;
         const int numVerts = ( numFaces * 3 ) * ( 3 + ( hasNorms ? 3 : 0 ) + ( hasUVs ? 2 : 0 ) );
         float finalVerts[numVerts];
         for ( size_t i = 0, vi = 0; i < numElements; ) {
-            unsigned vertIndex = faces[i++] * 3;
+            int vertIndex = faces[i++] * 3;
             finalVerts[vi++] = verts[vertIndex++];
             finalVerts[vi++] = verts[vertIndex++];
             finalVerts[vi++] = verts[vertIndex];
@@ -134,7 +135,7 @@ StillModel* ObjLoader::loadObj ( const FileHandle& file, FileHandle& textureDir,
                 finalVerts[vi++] = uvs[uvIndex];
             }
         }
-        unsigned numIndices = numFaces * 3 >= SHRT_MAX ? 0 : numFaces * 3;
+        unsigned int numIndices = numFaces * 3 >= SHRT_MAX ? 0 : numFaces * 3;
         vector<short> finalIndices;
         if ( numIndices > 0 ) {
             for ( size_t in = 0; in < numIndices; in++ ) {
@@ -156,7 +157,7 @@ StillModel* ObjLoader::loadObj ( const FileHandle& file, FileHandle& textureDir,
             mesh->setIndices ( finalIndices );
         }
         const char* subMeshName = group.name.c_str();
-        StillSubMesh* subMesh = new StillSubMesh ( subMeshName, *mesh, GL_TRIANGLES );
+        StillSubMesh* subMesh = new StillSubMesh ( subMeshName, *mesh, gdx::GL::TRIANGLES );
         subMesh->material = mtl.getMaterial ( group.materialName );
         model->subMeshes.push_back ( subMesh );
     }
