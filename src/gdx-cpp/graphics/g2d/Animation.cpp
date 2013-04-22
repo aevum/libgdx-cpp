@@ -91,7 +91,7 @@ int Animation::getKeyFrameIndex ( float stateTime )
     }
     break;
     case REVERSED: {
-        frameNumber = std::max ( keyFrames.size() - frameNumber - 1, 0u );
+        frameNumber = std::max ((int) keyFrames.size() - frameNumber - 1, 0u );
     }
     break;
     case LOOP_REVERSED: {
