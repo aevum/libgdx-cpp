@@ -142,7 +142,7 @@ Input* gdx::nix::LinuxApplication::getInput()
 
 Preferences* gdx::nix::LinuxApplication::getPreferences(std::string& name)
 {
-
+    return nullptr;
 }
 
 gdx::Application::ApplicationType gdx::nix::LinuxApplication::getType()

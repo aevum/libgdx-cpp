@@ -419,6 +419,8 @@ m_move_what(move_nothing) {
                 m_value1 = m_value2 - dv;
             }
             return true;
+        default:
+            return false;
         }
 
         return false;

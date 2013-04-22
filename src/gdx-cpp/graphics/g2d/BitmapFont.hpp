@@ -173,10 +173,10 @@ public:
                                   bool integer = true,
                                   bool generateMipmaps = false);
 
-    static int indexOf (const std::string& text, wchar_t ch, int start) {
-        int n = text.length();
+    static unsigned indexOf (const std::string& text, wchar_t ch, unsigned start) {
+        unsigned n = text.length();
         for (; start < n; start++)
-            if (text[start] == ch) return start;
+            if ((wchar_t)text[start] == ch) return start;
         return n;
     }
 

@@ -165,6 +165,8 @@ protected:
                 case json_string:
                     new (&value.string_val) std::string(other.value.string_val);
                     break;
+                case json_null:
+                    break;
             }
             
             this->type = other.type;            

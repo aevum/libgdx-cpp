@@ -44,6 +44,8 @@ int Pixmap::Format::toGdx2DPixmapFormat(const Pixmap::Format& format) {
     if (format == Pixmap::Format::RGBA8888) return GDX2D_FORMAT_RGBA8888;
 
     gdx_log_error("gdx","Unknown Format: %s", format.toString().c_str());
+    
+    return 0;
 }
 
 const Pixmap::Format& Pixmap::Format::fromGdx2DPixmapFormat(int format) {
@@ -55,6 +57,8 @@ const Pixmap::Format& Pixmap::Format::fromGdx2DPixmapFormat(int format) {
     if (format == GDX2D_FORMAT_RGBA8888) return Pixmap::Format::RGBA8888;
 
     gdx_log_error("gdx","Unknown Gdx2DPixmap Format: %d", format);
+    
+    return *(Format*) nullptr;
 }
 
 // Pixmap::Pixmap(int width, int height, const Pixmap::Format& format)

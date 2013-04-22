@@ -18,11 +18,11 @@ void LinuxGLU::gluOrtho2D(const gdx::GL10& gl, float left, float right, float bo
 }
 
 bool LinuxGLU::gluUnProject(float winX, float winY, float winZ, float* model, float* proj, int* view, float* objX, float* objY, float* objZ) const {
-    ::gluUnProject ((GLdouble) winX, (GLdouble) winY, (GLdouble) winZ,
+    return ::gluUnProject ((GLdouble) winX, (GLdouble) winY, (GLdouble) winZ,
                     (GLdouble*) model,(GLdouble*) proj,(GLint*) view, (GLdouble*)objX, (GLdouble*)objY, (GLdouble*)objZ);
 }
 bool LinuxGLU::gluProject(float objX, float objY, float objZ, float* model, float* projection, int* view, float* winX, float* winY, float* winZ) const {
-    ::gluProject ((GLdouble) objX, (GLdouble) objY, (GLdouble) objZ,(GLdouble*) model,
+    return ::gluProject ((GLdouble) objX, (GLdouble) objY, (GLdouble) objZ,(GLdouble*) model,
                   (GLdouble*) projection,(GLint*) view,(GLdouble*) winX,(GLdouble*) winY,(GLdouble*) winZ);
 }
 void LinuxGLU::gluPerspective(const gdx::GL10& gl, float fovy, float aspect, float zNear, float zFar) const {

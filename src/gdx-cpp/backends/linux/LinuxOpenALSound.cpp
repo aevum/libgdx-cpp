@@ -28,7 +28,7 @@ audio(_audio)
 }
 
 void LinuxOpenALSound::setup (char* buffer, int size, int channels, int sampleRate) {
-    if (bufferID == -1) {
+    if (bufferID == (uint) -1) {
         alGenBuffers(1, &bufferID);
     }
     alBufferData(bufferID, channels > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16, buffer, size, sampleRate);
@@ -61,7 +61,7 @@ void LinuxOpenALSound::stop () {
 }
 
 void LinuxOpenALSound::dispose () {
-    if (bufferID == -1) return;
+    if (bufferID == (uint)-1) return;
     audio->freeBuffer(bufferID);
     alDeleteBuffers(1, &bufferID);
     bufferID = -1;

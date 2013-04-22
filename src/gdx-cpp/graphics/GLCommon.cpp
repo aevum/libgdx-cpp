@@ -30,7 +30,7 @@ void GLCommon::glActiveTexture(int texture) const
 }
 
 void GLCommon::glBindTexture(int target, int texture) const {
-    static unsigned int lastTarget = -1, lastTexture = -1;
+    static int lastTarget = -1, lastTexture = -1;
     
     if (target != lastTarget && texture != lastTexture) {
         ::glBindTexture ( target, texture);

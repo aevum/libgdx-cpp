@@ -212,7 +212,7 @@ void Mesh::render (ShaderProgram& shader,int primitiveType,int offset,int count)
     if (autoBind) bind(shader);
 
     if (indices->getNumIndices() > 0)
-        gl20->glDrawElements(primitiveType, count, gdx::GL::UNSIGNED_SHORT, (void*)(offset * 2));
+        gl20->glDrawElements(primitiveType, count, gdx::GL::UNSIGNED_SHORT, (void*)(intptr_t)(offset * 2));
     else
         gl20->glDrawArrays(primitiveType, offset, count);
 

@@ -36,7 +36,7 @@ LinuxOggSound::LinuxOggSound(gdx::nix::LinuxOpenALAudio* audio, const ref_ptr_ma
     int size = 0;
     int i = 0;
 
-    while (size = input.read(&buffer[i], 16384)) {
+    while ((size = input.read(&buffer[i], 16384)) > 0) {
         i += size;
         if (i == bufSize) {
             buffer = (char *) realloc(buffer, bufSize * 2);

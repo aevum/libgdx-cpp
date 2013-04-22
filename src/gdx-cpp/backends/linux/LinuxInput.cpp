@@ -27,13 +27,13 @@
 
 using namespace gdx::nix;
 
-LinuxInput::LinuxInput() : _justTouched(false),
+LinuxInput::LinuxInput() : processor(nullptr),
+    _justTouched(false),
     touching(false),
     touchX(0),
     deltaX(0),
     touchY(0),
-    deltaY(0),
-    processor(nullptr)
+    deltaY(0)    
 {
 }
 
@@ -99,17 +99,17 @@ gdx::Input::Orientation gdx::nix::LinuxInput::getNativeOrientation()
 
 float gdx::nix::LinuxInput::getPitch()
 {
-    0;
+    return 0;
 }
 
 float gdx::nix::LinuxInput::getRoll()
 {
-    0;
+    return 0;
 }
 
 int gdx::nix::LinuxInput::getRotation()
 {
-    0;
+    return 0;
 }
 
 void gdx::nix::LinuxInput::getTextInput(const gdx::Input::TextInputListener& listener,
@@ -125,7 +125,7 @@ int gdx::nix::LinuxInput::getX()
 
 int gdx::nix::LinuxInput::getX(int pointer)
 {
-
+    return 0;
 }
 
 int gdx::nix::LinuxInput::getY()
@@ -135,22 +135,22 @@ int gdx::nix::LinuxInput::getY()
 
 int gdx::nix::LinuxInput::getY(int pointer)
 {
-
+    return 0;
 }
 
 bool gdx::nix::LinuxInput::isButtonPressed(int button)
 {
-
+    return false;
 }
 
 bool gdx::nix::LinuxInput::isCursorCatched()
 {
-
+    return false;
 }
 
 bool gdx::nix::LinuxInput::isKeyPressed(int key)
 {
-
+    return false;
 }
 
 bool gdx::nix::LinuxInput::isPeripheralAvailable(int peripheral)

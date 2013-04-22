@@ -18,51 +18,63 @@ Pool<ColorAttribute> ColorAttribute::pool;
 using namespace gdx;
 
 //namespace gdx {
-ColorAttribute::ColorAttribute() {
+ColorAttribute::ColorAttribute()
+{
 
 }
 
-ColorAttribute::ColorAttribute(const Color& color, const char* name)
-: MaterialAttribute(string(name)) {
-	this->color.set(color);
+ColorAttribute::ColorAttribute ( const Color& color, const char* name )
+    : MaterialAttribute ( string ( name ) )
+{
+    this->color.set ( color );
 }
 class GL10;
 
-void ColorAttribute::bind() {
-	if (gl10 == NULL) {
-		gdx_log_error("gdx", "Can't call ColorAttribute.bind() in a GL20 context");
-	}
+void ColorAttribute::bind()
+{
+    if ( gl10 == NULL ) {
+        gdx_log_error ( "gdx", "Can't call ColorAttribute.bind() in a GL20 context" );
+    }
 //	if (diffuse == diffuse) {
-		gdx::gl10->glColor4f(color.r, color.g, color.b, color.a);
+    gdx::gl10->glColor4f ( color.r, color.g, color.b, color.a );
 //	}
 }
 
-void ColorAttribute::bind(ShaderProgram& program) {
-	program.setUniformf(name, color.r, color.g, color.b, color.a);
+void ColorAttribute::bind ( ShaderProgram& program )
+{
+    program.setUniformf ( name, color.r, color.g, color.b, color.a );
 }
 
-MaterialAttribute& ColorAttribute::copy() {
-	return *new ColorAttribute(color, name.c_str());
+MaterialAttribute& ColorAttribute::copy()
+{
+    return *new ColorAttribute ( color, name.c_str() );
 }
 
-void ColorAttribute::set(MaterialAttribute& attr) {
-	ColorAttribute& colorAttr = static_cast<ColorAttribute&>(attr);
-	name = colorAttr.name;
-	color.r = colorAttr.color.r;
-	color.g = colorAttr.color.g;
-	color.b = colorAttr.color.b;
-	color.a = colorAttr.color.a;
+void ColorAttribute::set ( MaterialAttribute& attr )
+{
+    ColorAttribute& colorAttr = static_cast<ColorAttribute&> ( attr );
+    name = colorAttr.name;
+    color.r = colorAttr.color.r;
+    color.g = colorAttr.color.g;
+    color.b = colorAttr.color.b;
+    color.a = colorAttr.color.a;
 }
 
-MaterialAttribute& ColorAttribute::pooledCopy() {
-	ColorAttribute* attr = pool.obtain();
-	attr->set(*this);
-	return *attr;
+MaterialAttribute& ColorAttribute::pooledCopy()
+{
+    ColorAttribute* attr = pool.obtain();
+    attr->set ( *this );
+    return *attr;
 }
 
-void ColorAttribute::free() {
-	if (isPooled) {
-		pool.free(this);
-	}
+void ColorAttribute::free()
+{
+    if ( isPooled ) {
+        pool.free ( this );
+    }
 }
 //}
+
+ColorAttribute::~ColorAttribute()
+{    
+}

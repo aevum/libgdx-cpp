@@ -245,6 +245,6 @@ int EarClippingTriangulator::computePreviousIndex (const std::vector<Vector2>& p
 }
 
 int EarClippingTriangulator::computeNextIndex (const std::vector<Vector2>& pVertices, int pIndex) {
-    return pIndex == (pVertices.size() - 1) ? 0 : pIndex + 1;
+    return pIndex == ((int)pVertices.size() - 1) ? 0 : pIndex + 1;
 }
 

@@ -31,7 +31,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
         message(FATAL_ERROR "gdx++ requires a gcc that's newer than 4.5 to fully support the new c++11 standard. Please upgrade your ndk to r8b or newer if using android.")
     endif()
     
-    #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wreorder")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wreorder")
 endif()
 
 if (BUILD_BOX2D)

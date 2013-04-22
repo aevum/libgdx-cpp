@@ -176,7 +176,7 @@ public:
     ParticleEmitter(ParticleEmitter& emitter);
     void setMaxParticleCount (int maxParticleCount);
     void addParticle ();
-    void addParticles (int count);
+    void addParticles ( unsigned int count );
     void update (float delta);
     void draw (gdx::SpriteBatch& spriteBatch);
     void draw (gdx::SpriteBatch& spriteBatch, float delta);

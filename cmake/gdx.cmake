@@ -43,7 +43,7 @@ macro(gdx_setup_target target_name target_type sources)
         add_definitions(-DGDX_LOG_LEVEL_INFO)
         add_definitions(-DGDX_LOG_LEVEL_ERROR)
     endif()
-
+    
     if (APPLE)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -x objective-c++ -mno-thumb")      
         set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11")
@@ -85,6 +85,10 @@ SET(GDX_BACKEND_IOS 0)
 SET(GDX_BACKEND_ANDROID 0)
 SET(GDX_BACKEND_LINUX 0)
 SET(GDX_BACKEND_WIN32 0)
+
+if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    add_definitions(-DGDX_DEBUG)
+endif()
 
 if(APPLE)
     message("MacOSX (iOS) found. Setting the backend to IOS")

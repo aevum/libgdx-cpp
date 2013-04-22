@@ -142,7 +142,6 @@ void SpriteCache::beginCache () {
     if ( currentCache != NULL )
         gdx_log_error("gdx", "endCache must be called before begin." );
 
-    int verticesPerImage = mesh->getNumIndices() > 0 ? 4 : 6;
     currentCache = new Cache ( caches.size(), mesh->getVerticesBuffer().limit() );
     caches.push_back ( currentCache );
     mesh->getVerticesBuffer().compact();
@@ -209,7 +208,7 @@ int SpriteCache::endCache () {
 }
 
 void SpriteCache::clear () {
-    for ( int i = 0; i < caches.size(); ++i ) {
+    for ( unsigned i = 0; i < caches.size(); ++i ) {
         delete caches[i];
     }
     caches.clear();
@@ -966,7 +965,7 @@ void SpriteCache::add ( const Texture::ptr& texture, const float* vertices, int 
     float_buffer& buffer = mesh->getVerticesBuffer();
     if (buffer.capacity() - (buffer.position() + size) < 0) {
         int pos = -1;
-        for (int i=0; i<caches.size(); i++) {
+        for (unsigned i = 0; i<caches.size(); i++) {
             if (caches[i] != NULL) {
                 if (pos == -1) {
                     pos = caches[i]->offset;
@@ -982,7 +981,7 @@ void SpriteCache::add ( const Texture::ptr& texture, const float* vertices, int 
 }
 
 void SpriteCache::disposeCache ( int cacheID ) {
-    for ( int i = 0; i < caches.size(); ++i ) {
+    for ( unsigned i = 0; i < caches.size(); ++i ) {
         if ( caches[i] != NULL && caches[i]->id == cacheID ) {
             delete caches[i];
             caches[i] = NULL;

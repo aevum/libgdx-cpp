@@ -22,9 +22,9 @@
 #endif
 
 #ifdef GDX_LOG_LEVEL_ERROR
-#define gdx_log_error(tag, format, ...) do { gdx::log->log(gdx::Log::LogLevel::ERROR, tag, GDX_TO_STRING_MACRO_LINE_, __FILE__, format,  ##__VA_ARGS__); gdx::ScopedGuard<RuntimeLogErrorExecutor> guard( (RuntimeLogErrorExecutor()) ); } while (false)
+#define gdx_log_error(tag, format, ...) do { gdx::log->log(gdx::Log::LogLevel::ERROR, tag, GDX_TO_STRING_MACRO_LINE_, __FILE__, format,  ##__VA_ARGS__); throw std::runtime_error("gdx runtime error, see the error output for detail"); } while (false)
 #else
-#define gdx_log_error(tag, format, ...) ((void) 0)
+#define gdx_log_error(tag, format, ...) throw std::runtime_error("gdx runtime error, see the error output for detail");
 #endif
 
 #define gdx_log(logLevel, tag, format, ...) do { gdx::log->log(logLevel, tag, GDX_TO_STRING_MACRO_LINE_, __FILE__, format,  ##__VA_ARGS__); } while (false)

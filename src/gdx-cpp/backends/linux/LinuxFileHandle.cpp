@@ -46,7 +46,7 @@ int LinuxFileHandle::readBytes(gdx::FileHandle::buffer_ptr& c) const
 
     std::string filepath;
     if (type == gdx::Files::Internal && !file.exists()) {
-        int found;
+        unsigned found;
         filepath = "/" + file.getPath();
 
         while((found = filepath.find("//")) != filepath.npos)

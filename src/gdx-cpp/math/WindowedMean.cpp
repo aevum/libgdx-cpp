@@ -71,7 +71,7 @@ float WindowedMean::getOldest () {
 }
 
 float WindowedMean::getLatest () {
-    return values[(last_value - 1 == -1) ? values.size() - 1 : last_value - 1];
+    return values[(int(last_value) - 1 == -1) ? values.size() - 1 : last_value - 1];
 }
 
 float WindowedMean::standardDeviation () {

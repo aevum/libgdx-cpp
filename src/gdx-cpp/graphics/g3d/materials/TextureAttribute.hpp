@@ -14,35 +14,38 @@
 
 using namespace gdx;
 
-class TextureAttribute: public MaterialAttribute {
+class TextureAttribute: public MaterialAttribute
+{
 
 public:
-	const static int MAX_TEXTURE_UNITS = 16;
-	const static char* diffuseTexture;
-	const static char* lightmapTexture;
-	const static char* specularTexture;
+    const static int MAX_TEXTURE_UNITS = 16;
+    const static char* diffuseTexture;
+    const static char* lightmapTexture;
+    const static char* specularTexture;
 
-	Texture* texture;
-	int unit;
-	int minFilter;
-	int magFilter;
-	int uWrap;
-	int vWrap;
+    Texture* texture;
+    int unit;
+    int minFilter;
+    int magFilter;
+    int uWrap;
+    int vWrap;
 
-	TextureAttribute(const Texture& texture, int unit, const char* name, const Texture::TextureFilter& minFilter, const Texture::TextureFilter& magFilter, const Texture::TextureWrap& uWarp, const Texture::TextureWrap& vWarp);
-	TextureAttribute(const Texture& texture, int unit, const char* name, int minFilter, int magFilter,int uWrap, int vWrap);
-	TextureAttribute(const Texture& texture, int unit, const char* name);
-	void bind();
-	void bind(ShaderProgram& program);
-	MaterialAttribute& copy();
-	void set(MaterialAttribute& attr);
-	bool texturePortionEquals(const TextureAttribute* other);
-	MaterialAttribute& pooledCopy();
-	void free();
+    TextureAttribute ( const Texture& texture, int unit, const char* name, const Texture::TextureFilter& minFilter, const Texture::TextureFilter& magFilter, const Texture::TextureWrap& uWarp, const Texture::TextureWrap& vWarp );
+    TextureAttribute ( const Texture& texture, int unit, const char* name, int minFilter, int magFilter,int uWrap, int vWrap );
+    TextureAttribute ( const Texture& texture, int unit, const char* name );
+    void bind();
+    void bind ( ShaderProgram& program );
+    MaterialAttribute& copy();
+    void set ( MaterialAttribute& attr );
+    bool texturePortionEquals ( const TextureAttribute* other );
+    MaterialAttribute& pooledCopy();
+    void free();
+    
+    virtual ~TextureAttribute();
 private:
-	static Pool<TextureAttribute> pool;
+    static Pool<TextureAttribute> pool;
 public:
-	TextureAttribute();
+    TextureAttribute();
 };
 
 #endif /* TEXTUREATTRIBUTE_HPP_ */
