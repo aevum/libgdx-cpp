@@ -130,19 +130,19 @@ int ShaderProgram::linkProgram () {
     gl->glAttachShader(program, fragmentShaderHandle);
     gl->glLinkProgram(program);
 
-    int intbuf[4];
+    unsigned int intbuf[4];
 
 //     ByteBuffer tmp = ByteBuffer.allocateDirect(4);
 //     tmp.order(ByteOrder.nativeOrder());
 //     IntBuffer intbuf = tmp.asIntBuffer();
 //
-     gl->glGetProgramiv(program, gdx::GL::LINK_STATUS, intbuf);
+     gl->glGetProgramiv(program, gdx::GL::LINK_STATUS, (int*) intbuf);
 //     int linked = intbuf.get(0);
 //     if (linked == 0) {
 //         return -1;
 //     }
 
-     if (intbuf[0] == GL_FALSE) {
+     if (intbuf[0] == gdx::GL::FALSE) {
     	 gdx_log_info("gdx", "%s", gl->glGetProgramInfoLog(program).c_str());
     	 return -1;
      }

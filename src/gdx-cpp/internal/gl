@@ -18,8 +18,16 @@
 
 #include <OpenGLES/ES1/gl.h>
 #include <OpenGLES/ES2/gl.h>
-#else
 
+#elif defined GDX_BACKEND_EMSCRIPTEN
+
+#define GL_GLEXT_PROTOTYPES
+#include <GLES/gl.h>
+#include <GLES/glext.h>
+#include <GLES2/gl2.h>
+
+#else
+#error "MISSING BACKEND TO DETERMINE THE CORRECT GL IMPLEMENTATION"
 #endif
 
 #endif // GDX_GL_INTERNAL_H

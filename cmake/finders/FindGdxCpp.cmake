@@ -46,7 +46,7 @@ macro(find_libraries)
             NAMES
             ${lib}
             PATHS
-            ${GDX_ROOT}            
+            ${GDX_ROOT}
             PATH_SUFFIXES 
             lib
             lib/Release
@@ -64,7 +64,15 @@ macro(find_libraries)
     endforeach()
 endmacro()
 
-if (APPLE)
+STRING(FIND ${CMAKE_CXX_COMPILER} "em++" EMSCRIPTENPP_FOUND)
+STRING(FIND ${CMAKE_C_COMPILER} "emcc" EMSCRIPTEN_FOUND)
+
+if (EMSCRIPTEN_FOUND AND EMSCRIPTENPP_FOUND)
+    if (GdxCpp_USE_BOX2D)
+        find_libraries("Box2D;gdx-cpp-box2d-layer")
+    endif()    
+    find_libraries("gdx-cpp-backend-emscripten;gdx-cpp-agg-svg;gdx-cpp;GL")
+elseif (APPLE)
     find_libraries(gdx-cpp)
 
     if (GdxCpp_USE_BOX2D)

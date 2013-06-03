@@ -26,9 +26,9 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     string(REGEX REPLACE "[^0-9]*([0-9]+)\\.[0-9]+.*" "\\1" gcc_major_vers "${_gcc_version}")
     string(REGEX REPLACE "[^0-9]*[0-9]+\\.([0-9]+).*" "\\1" gcc_minor_vers "${_gcc_version}")
     # g++' -Wdouble-promotion needs at least version 4.6
-    
+
     if(${gcc_major_vers} LESS 4 AND ${gcc_minor_vers} LESS 6)
-        message(FATAL_ERROR "gdx++ requires a gcc that's newer than 4.5 to fully support the new c++11 standard. Please upgrade your ndk to r8b or newer if using android.")
+        message(FATAL_ERROR "gdx++ requires a gcc that's newer than 4.6 to fully support the new c++11 standard. Please upgrade your ndk to r8b or newer if using android.")
     endif()
     
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wreorder")
@@ -53,6 +53,9 @@ elseif(GDX_BACKEND_WIN32)
 elseif(GDX_BACKEND_LINUX)
   SET(BUILD_AGG TRUE)
   add_subdirectory(src/gdx-cpp/backends/linux)
+elseif(GDX_BACKEND_EMSCRIPTEN)
+    SET(BUILD_AGG TRUE)
+    add_subdirectory(src/gdx-cpp/backends/emscripten)
 endif()
 
 if (BUILD_AGG)

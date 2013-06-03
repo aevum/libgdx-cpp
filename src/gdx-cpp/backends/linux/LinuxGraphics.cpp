@@ -442,10 +442,11 @@ bool gdx::nix::LinuxGraphics::setupGLModes()
 
     } else {
         const char* ver = ( const char* ) ::glGetString ( gdx::GL::VERSION );
-        if ( ver != nullptr ) {
+        if ( ver == nullptr ) {
             gdx_log_error ( "gdx", "error init gl" );
             return false;
         }
+        
         std::string version ( ver );
 
         if ( !version.empty() ) {
