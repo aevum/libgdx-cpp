@@ -23,6 +23,11 @@ macro(gdx_make_resources target_name target_files destination)
         if (NOT EXISTS ${GDX_JAVA_APPLICATION_DIR}/assets/${destination})
             execute_process(COMMAND ln -s ${target_files} ${GDX_JAVA_APPLICATION_DIR}/assets/${destination})
         endif()
+    elseif(GDX_BACKEND_EMSCRIPTEN)
+        if (NOT EXISTS ${PROJECT_BINARY_DIR}/${destination})
+            execute_process(COMMAND ln -s ${target_files} ${PROJECT_BINARY_DIR}/${destination})
+        endif()
+        set_property(TARGET "${target_name}-html" APPEND_STRING PROPERTY LINK_FLAGS " --preload-file ${destination}")
     else()
         if (NOT EXISTS ${PROJECT_BINARY_DIR}/${destination})
             execute_process(COMMAND ln -s ${target_files} ${PROJECT_BINARY_DIR}/${destination})
@@ -34,10 +39,6 @@ macro(gdx_setup_target target_name target_type sources)
     string(TOUPPER ${target_type} target_type)
 
     if (APPLE)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -x objective-c++ -mno-thumb")
-        set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11")
-        set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
-
         if (${target_type} STREQUAL "EXECUTABLE")
             add_executable(${target_name} MACOSX_BUNDLE ${sources})
             set(IOS_FRAMEWORKS "Foundation;AudioToolbox;CoreGraphics;QuartzCore;UIKit;OpenGLES;AVFoundation;OpenAL")
@@ -64,12 +65,22 @@ macro(gdx_setup_target target_name target_type sources)
             #the linking process doesn't work
             set_property(TARGET ${target_name} PROPERTY SUFFIX ".so")
             
-            add_custom_target(${target_name}-html 
-                COMMAND ${CMAKE_C_COMPILER} ${target_name}.so -g -O2 --closure 0 -s FULL_ES2=1 -s LINKABLE=1 -s WARN_ON_UNDEFINED_SYMBOLS=1 -o ${target_name}.html
-                    DEPENDS ${target_name})
+#add_custom_target(${target_name}-html 
+#               COMMAND ${CMAKE_C_COMPILER} ${target_name}.so -O2 -s FULL_ES2=1 -s WARN_ON_UNDEFINED_SYMBOLS=1 -o ${target_name}.html
+#                   DEPENDS ${target_name})
+            
+            add_executable(${target_name}-html ${sources})
+            
+            set_target_properties(${target_name}-html 
+                PROPERTIES 
+                    LINK_FLAGS "-O2 -s FULL_ES2=1 -s WARN_ON_UNDEFINED_SYMBOLS=1 -s TOTAL_MEMORY=268435456"
+                    SUFFIX ".html"
+                    OUTPUT_NAME ${target_name})
+            
+            link_libraries(${target_name}-html ${target_name})
             
             add_custom_target(${target_name}-js 
-                COMMAND ${CMAKE_C_COMPILER} ${target_name}.so -g -O2 --closure 0 -s FULL_ES2=1 -s LINKABLE=1 -s WARN_ON_UNDEFINED_SYMBOLS=1 -o ${target_name}.js
+                COMMAND ${CMAKE_C_COMPILER} ${target_name}.so -O2 -s FULL_ES2=1 -s WARN_ON_UNDEFINED_SYMBOLS=1 -o ${target_name}.js
                 DEPENDS ${target_name})
         else()
             #On emscripten we want everything as shared libraries
@@ -98,7 +109,7 @@ endif()
 if(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo" OR GDX_LOG_LEVEL STREQUAL "INFO")
     add_definitions(-DGDX_LOG_LEVEL_INFO)
     add_definitions(-DGDX_LOG_LEVEL_ERROR)
-    elseif(CMAKE_BUILD_TYPE STREQUAL "Release" OR GDX_LOG_LEVEL STREQUAL "RELEASE")
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release" OR GDX_LOG_LEVEL STREQUAL "RELEASE")
     add_definitions(-DGDX_LOG_LEVEL_ERROR)
 else()
     add_definitions(-DGDX_LOG_LEVEL_DEBUG)
@@ -122,6 +133,7 @@ if ("${EMSCRIPTEN_FOUND}" GREATER "-1" AND "${EMSCRIPTENPP_FOUND}" GREATER "-1Ŝ
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -s LINKABLE=1 -s WARN_ON_UNDEFINED_SYMBOLS=1 --remove-duplicates")
 elseif(APPLE)
     message("MacOSX (iOS) found. Setting the backend to IOS")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -x objective-c++ -mno-thumb")
     SET(GDX_BACKEND_IOS TRUE)
     SET(GDX_BACKEND_LIB "gdx-cpp-backend-ios")
     add_definitions(-DGDX_BACKEND_IOS -DGDX_BACKEND_SUFFIX="ios")

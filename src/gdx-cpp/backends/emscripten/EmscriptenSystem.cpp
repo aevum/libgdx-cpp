@@ -31,6 +31,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/dir.h>
+#include <emscripten.h>
 
 #include <gdx-cpp/Gdx.hpp>
 
@@ -342,9 +343,6 @@ gdx::Mutex::ptr gdx::scripten::EmscriptenSystem::EmscriptenMutexFactory::createM
 
 uint64_t gdx::scripten::EmscriptenSystem::nanoTime()
 {
-    static timespec ts;
-    ::clock_gettime(CLOCK_MONOTONIC, &ts);
-
-    return (uint64_t)ts.tv_sec * 1000000000LL + (uint64_t)ts.tv_nsec;
+    return emscripten_get_now() * 1000000L;
 }
 
