@@ -93,7 +93,6 @@ void BitmapFontCache::draw (SpriteBatch& spriteBatch,float alphaModulation) {
 }
 
 Color& BitmapFontCache::getColor () {
-    float floatBits = color;
     int intBits = NumberUtils::floatToRawIntBits(color);
     
     tmpColor.r = (intBits & 0xff) / 255.f;
@@ -108,7 +107,7 @@ void BitmapFontCache::reset (int glyphCount) {
     y = 0;
     idx = 0;
 
-    int vertexCount = glyphCount * 20;
+    unsigned vertexCount = glyphCount * 20;
     if (vertices.empty() || vertices.size() < vertexCount) vertices.resize(vertexCount);
 }
 

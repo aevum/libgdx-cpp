@@ -103,20 +103,22 @@ int ShaderProgram::loadShader (int type,const std::string& source) {
 
     gl->glShaderSource(shader, source);
     gl->glCompileShader(shader);
-//     gl->glGetShaderiv(shader, GL20.gdx::GL::COMPILE_STATUS, intbuf);
-//
-//     int compiled = intbuf.get(0);
-//     if (compiled == 0) {
+	
+	int intbuf[4];
+	gl->glGetShaderiv(shader, gdx::GL::COMPILE_STATUS, intbuf);
+
+	if (intbuf[0] == 0) {
 //         gl->glGetShaderiv(shader, GL20.gdx::GL::INFO_LOG_LENGTH, intbuf);
 //         int infoLogLength = intbuf.get(0);
-//         if (infoLogLength > 1) {
+//		if (infoLogLength > 1) {
 //             String infoLog = gl->glGetShaderInfoLog(shader);
 //             log += infoLog;
 //         }
-//         return -1;
-//     }
+		gdx_log_info("gdx", "%s", gl->glGetShaderInfoLog(shader).c_str());
+		return -1;
+	}
 
-    return shader;
+	return shader;
 }
 
 int ShaderProgram::linkProgram () {
@@ -128,21 +130,20 @@ int ShaderProgram::linkProgram () {
     gl->glAttachShader(program, fragmentShaderHandle);
     gl->glLinkProgram(program);
 
-    int intbuf[4];
+    unsigned int intbuf[4];
 
 //     ByteBuffer tmp = ByteBuffer.allocateDirect(4);
 //     tmp.order(ByteOrder.nativeOrder());
 //     IntBuffer intbuf = tmp.asIntBuffer();
 //
-     gl->glGetProgramiv(program, gdx::GL::LINK_STATUS, intbuf);
+     gl->glGetProgramiv(program, gdx::GL::LINK_STATUS, (int*) intbuf);
 //     int linked = intbuf.get(0);
 //     if (linked == 0) {
 //         return -1;
 //     }
 
-     if (intbuf[0] == 0)
-     {
-    	 gdx_log_info("gdx", "%s", gl->glGetShaderInfoLog(program).c_str());
+     if (intbuf[0] == gdx::GL::FALSE) {
+    	 gdx_log_info("gdx", "%s", gl->glGetProgramInfoLog(program).c_str());
     	 return -1;
      }
 

@@ -253,7 +253,7 @@ namespace agg
     }
 
     //------------------------------------------------------------------------
-    static double MSC60_fix_ICE(double v) { return v; }
+    //static double MSC60_fix_ICE(double v) { return v; }
 
     //------------------------------------------------------------------------
     void curve4_inc::init(double x1, double y1, 

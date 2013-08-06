@@ -40,10 +40,12 @@ gdx::android::AndroidAudio::AndroidAudio()
 
 gdx::AudioDevice* gdx::android::AndroidAudio::newAudioDevice(int samplingRate, bool isMono)
 {
+    return nullptr;
 }
 
 gdx::AudioRecorder* gdx::android::AndroidAudio::newAudioRecoder(int samplingRate, bool isMono)
 {
+    return nullptr;
 }
 
 gdx::Music* gdx::android::AndroidAudio::newMusic(const gdx::FileHandle::ptr file)

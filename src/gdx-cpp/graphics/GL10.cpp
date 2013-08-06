@@ -33,7 +33,7 @@ void GL10::glFogfv(int pname, const float* params) const
     ::glFogfv(pname, params);
 }
 void GL10::glClientActiveTexture(int texture) const {
-    static unsigned int lastTexture = -1;
+    static int lastTexture = -1;
     if (texture != lastTexture) {
         ::glClientActiveTexture(texture);
         lastTexture = texture;

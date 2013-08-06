@@ -90,13 +90,13 @@ void GL11::glGetTexParameteriv (int target,int pname,const int* params) const {
     ::glGetTexParameteriv (target, pname, (GLint*) params);
 }
 bool GL11::glIsBuffer (int buffer) const {
-    ::glIsBuffer ( buffer );
+    return ::glIsBuffer ( buffer );
 }
 bool GL11::glIsEnabled (int cap) const {
-    ::glIsEnabled (cap);
+    return ::glIsEnabled (cap);
 }
 bool GL11::glIsTexture (int texture) const {
-    ::glIsTexture (texture);
+    return ::glIsTexture (texture);
 }
 void GL11::glTexEnvi (int target,int pname,int param) const {
     ::glTexEnvi (target, pname, param);

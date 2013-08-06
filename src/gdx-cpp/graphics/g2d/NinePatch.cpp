@@ -28,11 +28,11 @@
 
 using namespace gdx;
 
-NinePatch::NinePatch ( const Texture::ptr& texture, int left, int right, int top, int bottom ) : blending(true) , color(gdx::Color::WHITE) {
+NinePatch::NinePatch ( const Texture::ptr& texture, int left, int right, int top, int bottom ) : color(gdx::Color::WHITE), blending(true) {
     initialize(TextureRegion(texture), left, right, top, bottom);
 }
 
-NinePatch::NinePatch (TextureRegion region, int left, int right, int top, int bottom) : blending(true) , color(gdx::Color::WHITE) {
+NinePatch::NinePatch (TextureRegion region, int left, int right, int top, int bottom) : color(gdx::Color::WHITE), blending(true) {
     initialize(region, left, right, top, bottom);
 }
 
@@ -72,7 +72,7 @@ void NinePatch::initialize(TextureRegion region, int left, int right, int top, i
     }
 }
 
-NinePatch::NinePatch ( std::array< TextureRegion, 9 >& _patches ): patches(_patches), color(gdx::Color::WHITE), blending(true)
+NinePatch::NinePatch ( std::array< TextureRegion, 9 >& _patches ): color(gdx::Color::WHITE), blending(true),  patches(_patches)
 {
     if (patches.size() != 9) gdx_log_error("NinePatch","NinePatch needs nine TextureRegions");
     this->patches = patches;
@@ -217,7 +217,7 @@ std::array< TextureRegion, 9 > NinePatch::getPatches()
     return patches;
 }
 
-NinePatch::NinePatch( TextureRegion region ) : blending(true), color(gdx::Color::WHITE)
+NinePatch::NinePatch( TextureRegion region ) : color(gdx::Color::WHITE), blending(true)
 {
     patches[4] = region;
 }

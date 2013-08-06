@@ -2077,8 +2077,8 @@ float mystrtof( char *pen ) {
 
 void gdx::SvgParser::parse_path_data(const char* data, int length) {
 	bool relative = false;
-	char* s = NULL, *p = (char*)data,* pe = (char*)data + length,* eof = pe;
-	unsigned int cs, top = 0;
+	char* p = (char*) data,* pe = (char*)data + length,* eof = pe;
+	unsigned int cs;
 	char* start = NULL;
     
     float argv[7] = { 0 };

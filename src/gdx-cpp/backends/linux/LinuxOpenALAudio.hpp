@@ -66,7 +66,7 @@ public:
     void dispose ();
 
     std::vector<LinuxOpenALMusic * > music;
-
+    virtual ~LinuxOpenALAudio();
 private :
     void createAl();
     std::set<int> idleSources, allSources;

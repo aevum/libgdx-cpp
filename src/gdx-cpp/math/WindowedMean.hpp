@@ -39,7 +39,7 @@ public:
 protected:
     std::vector<float> values;
     unsigned int added_values;
-    int last_value;
+    uint32_t last_value;
     float mean;
     bool dirty;
 

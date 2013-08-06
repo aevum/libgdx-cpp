@@ -95,7 +95,7 @@ private:
     float invTexHeight;
     
     int idx;
-    int currBufferIdx;
+    unsigned currBufferIdx;
     
     Matrix4 transformMatrix;
     Matrix4 projectionMatrix;

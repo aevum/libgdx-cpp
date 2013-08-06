@@ -28,17 +28,29 @@ namespace gdx {
 
 class Animation {
 public:
-
+	const static int NORMAL = 0;
+	const static int REVERSED = 1;
+	const static int LOOP = 2;
+	const static int LOOP_REVERSED = 3;
+	const static int LOOP_PINGPONG = 4;
+	const static int LOOP_RANDOM = 5;
+	
     Animation (float frameDuration, const std::vector<TextureRegion>& keyFrames);
-    
-    const TextureRegion& getKeyFrame ( float stateTime, bool looping );
+	Animation (float frameDuration, const std::vector<TextureRegion>& keyFrames, int playType);
+	
+    const TextureRegion& getKeyFrame(float stateTime, bool looping);
+	const TextureRegion& getKeyFrame(float stateTime);
+	int getKeyFrameIndex(float stateTime);
+	void setPlayMode(int playMode);
+	bool isAnimationFinished(float stateTime) const;
     
     float frameDuration;
+	float animationDuration;
 protected:
     std::vector<TextureRegion> keyFrames;
 
 private:
-
+	int playMode;
 };
 
 } // namespace gdx

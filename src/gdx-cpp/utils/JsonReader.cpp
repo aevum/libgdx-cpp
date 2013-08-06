@@ -1,5 +1,5 @@
 
-#line 1 "JsonReader.rl"
+
 
 /*
     Copyright 2011 Aevum Software aevum @ aevumlab.com
@@ -32,7 +32,6 @@
 using namespace gdx;
 
 
-#line 36 "JsonReader.cpp"
 static const int json_start = 1;
 static const int json_first_final = 71;
 static const int json_error = 0;
@@ -40,9 +39,6 @@ static const int json_error = 0;
 static const int json_en_object = 9;
 static const int json_en_array = 43;
 static const int json_en_main = 1;
-
-
-#line 35 "JsonReader.rl"
 
 
 JsonReader::JsonReader()
@@ -92,13 +88,11 @@ JsonValue JsonReader::doParse (const char* data, int offset, int length) {
 
     try {
         
-#line 96 "JsonReader.cpp"
 	{
 	cs = json_start;
 	top = 0;
 	}
 
-#line 102 "JsonReader.cpp"
 	{
 	if ( p == pe )
 		goto _test_eof;
@@ -248,14 +242,12 @@ case 2:
 	}
 	goto tr12;
 tr12:
-#line 90 "JsonReader.rl"
 	{
                         s = p;
                         needsUnescape = false;
                 }
 	goto st3;
 tr18:
-#line 94 "JsonReader.rl"
 	{
                         needsUnescape = true;
                 }
@@ -264,14 +256,12 @@ st3:
 	if ( ++p == pe )
 		goto _test_eof3;
 case 3:
-#line 268 "JsonReader.cpp"
 	switch( (*p) ) {
 		case 34: goto tr16;
 		case 92: goto st4;
 	}
 	goto st3;
 tr7:
-#line 190 "JsonReader.rl"
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -289,7 +279,6 @@ tr7:
                 }
 	goto st71;
 tr11:
-#line 170 "JsonReader.rl"
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -307,12 +296,10 @@ tr11:
                 }
 	goto st71;
 tr13:
-#line 90 "JsonReader.rl"
 	{
                         s = p;
                         needsUnescape = false;
                 }
-#line 104 "JsonReader.rl"
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -328,7 +315,6 @@ tr13:
                 }
 	goto st71;
 tr16:
-#line 104 "JsonReader.rl"
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -344,7 +330,6 @@ tr16:
                 }
 	goto st71;
 tr145:
-#line 117 "JsonReader.rl"
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -363,7 +348,6 @@ tr145:
                 }
 	goto st71;
 tr152:
-#line 145 "JsonReader.rl"
 	{
                         std::string name;
                         if (names.size() > 0) {
@@ -378,7 +362,6 @@ tr152:
                 }
 	goto st71;
 tr156:
-#line 157 "JsonReader.rl"
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -394,7 +377,7 @@ tr156:
                 }
 	goto st71;
 tr160:
-#line 133 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -412,14 +395,14 @@ st71:
 	if ( ++p == pe )
 		goto _test_eof71;
 case 71:
-#line 416 "JsonReader.cpp"
+
 	if ( (*p) == 32 )
 		goto st71;
 	if ( 9 <= (*p) && (*p) <= 13 )
 		goto st71;
 	goto st0;
 tr14:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -429,7 +412,7 @@ st4:
 	if ( ++p == pe )
 		goto _test_eof4;
 case 4:
-#line 433 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 34: goto tr18;
 		case 47: goto tr18;
@@ -443,7 +426,7 @@ case 4:
 		goto tr18;
 	goto st0;
 tr3:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -453,7 +436,7 @@ st72:
 	if ( ++p == pe )
 		goto _test_eof72;
 case 72:
-#line 457 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr16;
 		case 44: goto st0;
@@ -465,7 +448,7 @@ case 72:
 		goto tr16;
 	goto st72;
 tr4:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -475,14 +458,14 @@ st5:
 	if ( ++p == pe )
 		goto _test_eof5;
 case 5:
-#line 479 "JsonReader.cpp"
+
 	if ( (*p) == 48 )
 		goto st73;
 	if ( 49 <= (*p) && (*p) <= 57 )
 		goto st76;
 	goto st0;
 tr5:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -492,7 +475,7 @@ st73:
 	if ( ++p == pe )
 		goto _test_eof73;
 case 73:
-#line 496 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr145;
 		case 46: goto st6;
@@ -555,7 +538,7 @@ case 75:
 		goto tr145;
 	goto st0;
 tr6:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -565,7 +548,7 @@ st76:
 	if ( ++p == pe )
 		goto _test_eof76;
 case 76:
-#line 569 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr145;
 		case 46: goto st6;
@@ -579,7 +562,7 @@ case 76:
 		goto tr145;
 	goto st0;
 tr8:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -589,7 +572,7 @@ st77:
 	if ( ++p == pe )
 		goto _test_eof77;
 case 77:
-#line 593 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr16;
 		case 44: goto st0;
@@ -656,7 +639,7 @@ case 81:
 		goto tr152;
 	goto st0;
 tr9:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -666,7 +649,7 @@ st82:
 	if ( ++p == pe )
 		goto _test_eof82;
 case 82:
-#line 670 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr16;
 		case 44: goto st0;
@@ -718,7 +701,7 @@ case 85:
 		goto tr156;
 	goto st0;
 tr10:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -728,7 +711,7 @@ st86:
 	if ( ++p == pe )
 		goto _test_eof86;
 case 86:
-#line 732 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr16;
 		case 44: goto st0;
@@ -810,14 +793,14 @@ case 10:
 	}
 	goto tr29;
 tr29:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
                 }
 	goto st11;
 tr89:
-#line 94 "JsonReader.rl"
+
 	{
                         needsUnescape = true;
                 }
@@ -826,19 +809,19 @@ st11:
 	if ( ++p == pe )
 		goto _test_eof11;
 case 11:
-#line 830 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 34: goto tr33;
 		case 92: goto st42;
 	}
 	goto st11;
 tr30:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
                 }
-#line 97 "JsonReader.rl"
+
 	{
                         std::string name(s, p-s);
                         s = p;
@@ -848,7 +831,7 @@ tr30:
                 }
 	goto st12;
 tr33:
-#line 97 "JsonReader.rl"
+
 	{
                         std::string name(s, p-s);
                         s = p;
@@ -861,7 +844,7 @@ st12:
 	if ( ++p == pe )
 		goto _test_eof12;
 case 12:
-#line 865 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto st12;
 		case 58: goto st13;
@@ -870,7 +853,7 @@ case 12:
 		goto st12;
 	goto st0;
 tr55:
-#line 97 "JsonReader.rl"
+
 	{
                         std::string name(s, p-s);
                         s = p;
@@ -883,7 +866,7 @@ st13:
 	if ( ++p == pe )
 		goto _test_eof13;
 case 13:
-#line 887 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto st13;
 		case 34: goto st14;
@@ -919,14 +902,14 @@ case 14:
 	}
 	goto tr47;
 tr47:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
                 }
 	goto st15;
 tr56:
-#line 94 "JsonReader.rl"
+
 	{
                         needsUnescape = true;
                 }
@@ -935,14 +918,14 @@ st15:
 	if ( ++p == pe )
 		goto _test_eof15;
 case 15:
-#line 939 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 34: goto tr51;
 		case 92: goto st19;
 	}
 	goto st15;
 tr42:
-#line 190 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -960,7 +943,7 @@ tr42:
                 }
 	goto st16;
 tr46:
-#line 170 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -978,12 +961,12 @@ tr46:
                 }
 	goto st16;
 tr48:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
                 }
-#line 104 "JsonReader.rl"
+
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -999,7 +982,7 @@ tr48:
                 }
 	goto st16;
 tr51:
-#line 104 "JsonReader.rl"
+
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -1015,7 +998,7 @@ tr51:
                 }
 	goto st16;
 tr62:
-#line 117 "JsonReader.rl"
+
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -1034,7 +1017,7 @@ tr62:
                 }
 	goto st16;
 tr74:
-#line 145 "JsonReader.rl"
+
 	{
                         std::string name;
                         if (names.size() > 0) {
@@ -1049,7 +1032,7 @@ tr74:
                 }
 	goto st16;
 tr80:
-#line 157 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -1065,7 +1048,7 @@ tr80:
                 }
 	goto st16;
 tr86:
-#line 133 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -1083,7 +1066,7 @@ st16:
 	if ( ++p == pe )
 		goto _test_eof16;
 case 16:
-#line 1087 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto st16;
 		case 44: goto st17;
@@ -1093,7 +1076,7 @@ case 16:
 		goto st16;
 	goto st0;
 tr58:
-#line 104 "JsonReader.rl"
+
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -1109,7 +1092,7 @@ tr58:
                 }
 	goto st17;
 tr63:
-#line 117 "JsonReader.rl"
+
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -1128,7 +1111,7 @@ tr63:
                 }
 	goto st17;
 tr75:
-#line 145 "JsonReader.rl"
+
 	{
                         std::string name;
                         if (names.size() > 0) {
@@ -1143,7 +1126,7 @@ tr75:
                 }
 	goto st17;
 tr81:
-#line 157 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -1159,7 +1142,7 @@ tr81:
                 }
 	goto st17;
 tr87:
-#line 133 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -1177,7 +1160,7 @@ st17:
 	if ( ++p == pe )
 		goto _test_eof17;
 case 17:
-#line 1181 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto st17;
 		case 34: goto st10;
@@ -1195,7 +1178,7 @@ case 17:
 		goto tr26;
 	goto st0;
 tr26:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -1205,7 +1188,7 @@ st18:
 	if ( ++p == pe )
 		goto _test_eof18;
 case 18:
-#line 1209 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr33;
 		case 44: goto st0;
@@ -1217,7 +1200,7 @@ case 18:
 		goto tr33;
 	goto st18;
 tr28:
-#line 183 "JsonReader.rl"
+
 	{
                         if (debug) {
                            gdx_log_debug("JsonReader","endObject");
@@ -1227,7 +1210,7 @@ tr28:
                 }
 	goto st90;
 tr59:
-#line 104 "JsonReader.rl"
+
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -1241,7 +1224,7 @@ tr59:
                         if (debug)gdx_log_debug("JsonReader","string: %s = %s", name.c_str(), value.c_str());;
                         string(name, value);
                 }
-#line 183 "JsonReader.rl"
+
 	{
                         if (debug) {
                            gdx_log_debug("JsonReader","endObject");
@@ -1251,7 +1234,7 @@ tr59:
                 }
 	goto st90;
 tr66:
-#line 117 "JsonReader.rl"
+
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -1268,7 +1251,7 @@ tr66:
                             number(name, from_string<int>(value));
                         }
                 }
-#line 183 "JsonReader.rl"
+
 	{
                         if (debug) {
                            gdx_log_debug("JsonReader","endObject");
@@ -1278,7 +1261,7 @@ tr66:
                 }
 	goto st90;
 tr76:
-#line 145 "JsonReader.rl"
+
 	{
                         std::string name;
                         if (names.size() > 0) {
@@ -1291,7 +1274,7 @@ tr76:
                         }
                         boolean(name, false);
                 }
-#line 183 "JsonReader.rl"
+
 	{
                         if (debug) {
                            gdx_log_debug("JsonReader","endObject");
@@ -1301,7 +1284,7 @@ tr76:
                 }
 	goto st90;
 tr82:
-#line 157 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -1315,7 +1298,7 @@ tr82:
                         
                         null(name);
                 }
-#line 183 "JsonReader.rl"
+
 	{
                         if (debug) {
                            gdx_log_debug("JsonReader","endObject");
@@ -1325,7 +1308,7 @@ tr82:
                 }
 	goto st90;
 tr88:
-#line 133 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -1338,7 +1321,7 @@ tr88:
                         }
                         boolean(name, true);
                 }
-#line 183 "JsonReader.rl"
+
 	{
                         if (debug) {
                            gdx_log_debug("JsonReader","endObject");
@@ -1351,10 +1334,10 @@ st90:
 	if ( ++p == pe )
 		goto _test_eof90;
 case 90:
-#line 1355 "JsonReader.cpp"
+
 	goto st0;
 tr49:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -1364,7 +1347,7 @@ st19:
 	if ( ++p == pe )
 		goto _test_eof19;
 case 19:
-#line 1368 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 34: goto tr56;
 		case 47: goto tr56;
@@ -1378,7 +1361,7 @@ case 19:
 		goto tr56;
 	goto st0;
 tr38:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -1388,7 +1371,7 @@ st20:
 	if ( ++p == pe )
 		goto _test_eof20;
 case 20:
-#line 1392 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr51;
 		case 44: goto tr58;
@@ -1400,7 +1383,7 @@ case 20:
 		goto tr51;
 	goto st20;
 tr39:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -1410,14 +1393,14 @@ st21:
 	if ( ++p == pe )
 		goto _test_eof21;
 case 21:
-#line 1414 "JsonReader.cpp"
+
 	if ( (*p) == 48 )
 		goto st22;
 	if ( 49 <= (*p) && (*p) <= 57 )
 		goto st28;
 	goto st0;
 tr40:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -1427,7 +1410,7 @@ st22:
 	if ( ++p == pe )
 		goto _test_eof22;
 case 22:
-#line 1431 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr62;
 		case 44: goto tr63;
@@ -1497,7 +1480,7 @@ case 27:
 		goto tr62;
 	goto st0;
 tr41:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -1507,7 +1490,7 @@ st28:
 	if ( ++p == pe )
 		goto _test_eof28;
 case 28:
-#line 1511 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr62;
 		case 44: goto tr63;
@@ -1523,7 +1506,7 @@ case 28:
 		goto tr62;
 	goto st0;
 tr43:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -1533,7 +1516,7 @@ st29:
 	if ( ++p == pe )
 		goto _test_eof29;
 case 29:
-#line 1537 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr51;
 		case 44: goto tr58;
@@ -1603,7 +1586,7 @@ case 33:
 		goto tr74;
 	goto st0;
 tr44:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -1613,7 +1596,7 @@ st34:
 	if ( ++p == pe )
 		goto _test_eof34;
 case 34:
-#line 1617 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr51;
 		case 44: goto tr58;
@@ -1668,7 +1651,7 @@ case 37:
 		goto tr80;
 	goto st0;
 tr45:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -1678,7 +1661,7 @@ st38:
 	if ( ++p == pe )
 		goto _test_eof38;
 case 38:
-#line 1682 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr51;
 		case 44: goto tr58;
@@ -1733,7 +1716,7 @@ case 41:
 		goto tr86;
 	goto st0;
 tr31:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -1743,7 +1726,7 @@ st42:
 	if ( ++p == pe )
 		goto _test_eof42;
 case 42:
-#line 1747 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 34: goto tr89;
 		case 47: goto tr89;
@@ -1797,14 +1780,14 @@ case 44:
 	}
 	goto tr103;
 tr103:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
                 }
 	goto st45;
 tr142:
-#line 94 "JsonReader.rl"
+
 	{
                         needsUnescape = true;
                 }
@@ -1813,14 +1796,14 @@ st45:
 	if ( ++p == pe )
 		goto _test_eof45;
 case 45:
-#line 1817 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 34: goto tr107;
 		case 92: goto st70;
 	}
 	goto st45;
 tr97:
-#line 190 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -1838,7 +1821,7 @@ tr97:
                 }
 	goto st46;
 tr102:
-#line 170 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -1856,12 +1839,12 @@ tr102:
                 }
 	goto st46;
 tr104:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
                 }
-#line 104 "JsonReader.rl"
+
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -1877,7 +1860,7 @@ tr104:
                 }
 	goto st46;
 tr107:
-#line 104 "JsonReader.rl"
+
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -1893,7 +1876,7 @@ tr107:
                 }
 	goto st46;
 tr115:
-#line 117 "JsonReader.rl"
+
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -1912,7 +1895,7 @@ tr115:
                 }
 	goto st46;
 tr127:
-#line 145 "JsonReader.rl"
+
 	{
                         std::string name;
                         if (names.size() > 0) {
@@ -1927,7 +1910,7 @@ tr127:
                 }
 	goto st46;
 tr133:
-#line 157 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -1943,7 +1926,7 @@ tr133:
                 }
 	goto st46;
 tr139:
-#line 133 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -1961,7 +1944,7 @@ st46:
 	if ( ++p == pe )
 		goto _test_eof46;
 case 46:
-#line 1965 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto st46;
 		case 44: goto st47;
@@ -1971,7 +1954,7 @@ case 46:
 		goto st46;
 	goto st0;
 tr111:
-#line 104 "JsonReader.rl"
+
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -1987,7 +1970,7 @@ tr111:
                 }
 	goto st47;
 tr116:
-#line 117 "JsonReader.rl"
+
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -2006,7 +1989,7 @@ tr116:
                 }
 	goto st47;
 tr128:
-#line 145 "JsonReader.rl"
+
 	{
                         std::string name;
                         if (names.size() > 0) {
@@ -2021,7 +2004,7 @@ tr128:
                 }
 	goto st47;
 tr134:
-#line 157 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -2037,7 +2020,7 @@ tr134:
                 }
 	goto st47;
 tr140:
-#line 133 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -2055,7 +2038,7 @@ st47:
 	if ( ++p == pe )
 		goto _test_eof47;
 case 47:
-#line 2059 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto st47;
 		case 34: goto st44;
@@ -2083,7 +2066,7 @@ case 47:
 		goto tr96;
 	goto st0;
 tr92:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -2093,7 +2076,7 @@ st48:
 	if ( ++p == pe )
 		goto _test_eof48;
 case 48:
-#line 2097 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr107;
 		case 44: goto tr111;
@@ -2105,7 +2088,7 @@ case 48:
 		goto tr107;
 	goto st48;
 tr98:
-#line 203 "JsonReader.rl"
+
 	{
                         if (debug) {
                            gdx_log_debug("JsonReader","endArray");
@@ -2115,7 +2098,7 @@ tr98:
                 }
 	goto st91;
 tr112:
-#line 104 "JsonReader.rl"
+
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -2129,7 +2112,7 @@ tr112:
                         if (debug)gdx_log_debug("JsonReader","string: %s = %s", name.c_str(), value.c_str());;
                         string(name, value);
                 }
-#line 203 "JsonReader.rl"
+
 	{
                         if (debug) {
                            gdx_log_debug("JsonReader","endArray");
@@ -2139,7 +2122,7 @@ tr112:
                 }
 	goto st91;
 tr119:
-#line 117 "JsonReader.rl"
+
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -2156,7 +2139,7 @@ tr119:
                             number(name, from_string<int>(value));
                         }
                 }
-#line 203 "JsonReader.rl"
+
 	{
                         if (debug) {
                            gdx_log_debug("JsonReader","endArray");
@@ -2166,7 +2149,7 @@ tr119:
                 }
 	goto st91;
 tr129:
-#line 145 "JsonReader.rl"
+
 	{
                         std::string name;
                         if (names.size() > 0) {
@@ -2179,7 +2162,7 @@ tr129:
                         }
                         boolean(name, false);
                 }
-#line 203 "JsonReader.rl"
+
 	{
                         if (debug) {
                            gdx_log_debug("JsonReader","endArray");
@@ -2189,7 +2172,7 @@ tr129:
                 }
 	goto st91;
 tr135:
-#line 157 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -2203,7 +2186,7 @@ tr135:
                         
                         null(name);
                 }
-#line 203 "JsonReader.rl"
+
 	{
                         if (debug) {
                            gdx_log_debug("JsonReader","endArray");
@@ -2213,7 +2196,7 @@ tr135:
                 }
 	goto st91;
 tr141:
-#line 133 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -2226,7 +2209,7 @@ tr141:
                         }
                         boolean(name, true);
                 }
-#line 203 "JsonReader.rl"
+
 	{
                         if (debug) {
                            gdx_log_debug("JsonReader","endArray");
@@ -2239,10 +2222,10 @@ st91:
 	if ( ++p == pe )
 		goto _test_eof91;
 case 91:
-#line 2243 "JsonReader.cpp"
+
 	goto st0;
 tr94:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -2252,14 +2235,14 @@ st49:
 	if ( ++p == pe )
 		goto _test_eof49;
 case 49:
-#line 2256 "JsonReader.cpp"
+
 	if ( (*p) == 48 )
 		goto st50;
 	if ( 49 <= (*p) && (*p) <= 57 )
 		goto st56;
 	goto st0;
 tr95:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -2269,7 +2252,7 @@ st50:
 	if ( ++p == pe )
 		goto _test_eof50;
 case 50:
-#line 2273 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr115;
 		case 44: goto tr116;
@@ -2339,7 +2322,7 @@ case 55:
 		goto tr115;
 	goto st0;
 tr96:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -2349,7 +2332,7 @@ st56:
 	if ( ++p == pe )
 		goto _test_eof56;
 case 56:
-#line 2353 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr115;
 		case 44: goto tr116;
@@ -2365,7 +2348,7 @@ case 56:
 		goto tr115;
 	goto st0;
 tr99:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -2375,7 +2358,7 @@ st57:
 	if ( ++p == pe )
 		goto _test_eof57;
 case 57:
-#line 2379 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr107;
 		case 44: goto tr111;
@@ -2445,7 +2428,7 @@ case 61:
 		goto tr127;
 	goto st0;
 tr100:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -2455,7 +2438,7 @@ st62:
 	if ( ++p == pe )
 		goto _test_eof62;
 case 62:
-#line 2459 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr107;
 		case 44: goto tr111;
@@ -2510,7 +2493,7 @@ case 65:
 		goto tr133;
 	goto st0;
 tr101:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -2520,7 +2503,7 @@ st66:
 	if ( ++p == pe )
 		goto _test_eof66;
 case 66:
-#line 2524 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 32: goto tr107;
 		case 44: goto tr111;
@@ -2575,7 +2558,7 @@ case 69:
 		goto tr139;
 	goto st0;
 tr105:
-#line 90 "JsonReader.rl"
+
 	{
                         s = p;
                         needsUnescape = false;
@@ -2585,7 +2568,7 @@ st70:
 	if ( ++p == pe )
 		goto _test_eof70;
 case 70:
-#line 2589 "JsonReader.cpp"
+
 	switch( (*p) ) {
 		case 34: goto tr142;
 		case 47: goto tr142;
@@ -2706,7 +2689,7 @@ case 70:
 	case 86: 
 	case 87: 
 	case 88: 
-#line 104 "JsonReader.rl"
+
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -2725,7 +2708,7 @@ case 70:
 	case 74: 
 	case 75: 
 	case 76: 
-#line 117 "JsonReader.rl"
+
 	{
                         std::string value(s, p-s);
                         s = p;
@@ -2744,7 +2727,7 @@ case 70:
                 }
 	break;
 	case 89: 
-#line 133 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -2759,7 +2742,7 @@ case 70:
                 }
 	break;
 	case 81: 
-#line 145 "JsonReader.rl"
+
 	{
                         std::string name;
                         if (names.size() > 0) {
@@ -2774,7 +2757,7 @@ case 70:
                 }
 	break;
 	case 85: 
-#line 157 "JsonReader.rl"
+
 	{
                         std::string name = "";
                         if (names.size() > 0) {
@@ -2789,14 +2772,14 @@ case 70:
                         null(name);
                 }
 	break;
-#line 2793 "JsonReader.cpp"
+
 	}
 	}
 
 	_out: {}
 	}
 
-#line 235 "JsonReader.rl"
+
 
 
     } catch (std::runtime_error& ex) {
@@ -2814,10 +2797,12 @@ case 70:
 
         elements.clear();
 
-        if (element_type == JsonValue::json_json)
+        if (element_type == JsonValue::json_json) {
             gdx_log_error("gdx","Error parsing JSON, unmatched brace.");
-        else
+        }
+        else {
             gdx_log_error("gdx","Error parsing JSON, unmatched bracket.");
+        }
     }
 
     return root;

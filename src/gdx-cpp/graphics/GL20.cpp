@@ -1,19 +1,19 @@
 
 /*
  *    Copyright 2011 Aevum Software aevum @ aevumlab.com
- * 
+ *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
  *    You may obtain a copy of the License at
- * 
+ *
  *        http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *    Unless required by applicable law or agreed to in writing, software
  *    distributed under the License is distributed on an "AS IS" BASIS,
  *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
- * 
+ *
  *    @author Victor Vicente de Carvalho victor.carvalho@aevumlab.com
  *    @author Ozires Bortolon de Faria ozires@aevumlab.com
  */
@@ -27,443 +27,443 @@ using namespace std;
 
 #include <stddef.h>
 
-void GL20::glAttachShader(int program, int shader) const
+void GL20::glAttachShader ( int program, int shader ) const
 {
-	::glAttachShader(program, shader);
+    ::glAttachShader ( program, shader );
 }
 
-void GL20::glBindAttribLocation(int program, int index, const string& name) const
+void GL20::glBindAttribLocation ( int program, int index, const string& name ) const
 {
-	::glBindAttribLocation(program, index, name.c_str());
+    ::glBindAttribLocation ( program, index, name.c_str() );
 }
 
-void GL20::glBindBuffer (int target,int buffer) const
+void GL20::glBindBuffer ( int target,int buffer ) const
 {
-	::glBindBuffer(target, buffer);
+    ::glBindBuffer ( target, buffer );
 }
 
-void GL20::glBindFramebuffer (int target,int framebuffer) const
+void GL20::glBindFramebuffer ( int target,int framebuffer ) const
 {
-	::glBindFramebuffer(target, framebuffer);
+    ::glBindFramebuffer ( target, framebuffer );
 }
 
-void GL20::glBindRenderbuffer (int target,int renderbuffer) const
+void GL20::glBindRenderbuffer ( int target,int renderbuffer ) const
 {
-	::glBindRenderbuffer(target, renderbuffer);
+    ::glBindRenderbuffer ( target, renderbuffer );
 }
-void GL20::glBlendColor (float red,float green,float blue,float alpha) const
+void GL20::glBlendColor ( float red,float green,float blue,float alpha ) const
 {
-	::glBlendColor(red, green, blue, alpha);
+    ::glBlendColor ( red, green, blue, alpha );
 }
-void GL20::glBlendEquation (int mode) const
+void GL20::glBlendEquation ( int mode ) const
 {
-	::glBlendEquation(mode);
+    ::glBlendEquation ( mode );
 }
-void GL20::glBlendEquationSeparate (int modeRGB,int modeAlpha) const
+void GL20::glBlendEquationSeparate ( int modeRGB,int modeAlpha ) const
 {
-	::glBlendEquationSeparate(modeRGB, modeAlpha);
+    ::glBlendEquationSeparate ( modeRGB, modeAlpha );
 }
-void GL20::glBlendFuncSeparate (int srcRGB,int dstRGB,int srcAlpha,int dstAlpha) const
+void GL20::glBlendFuncSeparate ( int srcRGB,int dstRGB,int srcAlpha,int dstAlpha ) const
 {
-	::glBlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
+    ::glBlendFuncSeparate ( srcRGB, dstRGB, srcAlpha, dstAlpha );
 }
-void GL20::glBufferData (int target,int size,const unsigned char* data,int usage) const
+void GL20::glBufferData ( int target,int size,const unsigned char* data,int usage ) const
 {
-	::glBufferData(target, size, data, usage);
+    ::glBufferData ( target, size, data, usage );
 }
-void GL20::glBufferSubData (int target,int offset,int size,const char* data) const
+void GL20::glBufferSubData ( int target,int offset,int size,const char* data ) const
 {
-	::glBufferSubData(target, offset, size, data);
+    ::glBufferSubData ( target, offset, size, data );
 }
-int GL20::glCheckFramebufferStatus (int target) const
+int GL20::glCheckFramebufferStatus ( int target ) const
 {
-	return ::glCheckFramebufferStatus(target);
+    return ::glCheckFramebufferStatus ( target );
 }
-void GL20::glCompileShader (int shader) const
+void GL20::glCompileShader ( int shader ) const
 {
-	::glCompileShader(shader);
+    ::glCompileShader ( shader );
 }
 int GL20::glCreateProgram () const
 {
-	return ::glCreateProgram();
+    return ::glCreateProgram();
 }
-int GL20::glCreateShader (int type) const
+int GL20::glCreateShader ( int type ) const
 {
-	return ::glCreateShader(type);
+    return ::glCreateShader ( type );
 }
-void GL20::glDeleteBuffers(int n, unsigned int* buffers) const
+void GL20::glDeleteBuffers ( int n, unsigned int* buffers ) const
 {
-	::glDeleteBuffers(n, buffers);
+    ::glDeleteBuffers ( n, buffers );
 }
-void GL20::glDeleteFramebuffers (int n,const unsigned int* framebuffers) const
+void GL20::glDeleteFramebuffers ( int n,const unsigned int* framebuffers ) const
 {
-	::glDeleteFramebuffers(n, framebuffers);
+    ::glDeleteFramebuffers ( n, framebuffers );
 }
-void GL20::glDeleteProgram (int program) const
+void GL20::glDeleteProgram ( int program ) const
 {
-	::glDeleteProgram(program);
+    ::glDeleteProgram ( program );
 }
-void GL20::glDeleteRenderbuffers (int n,const unsigned int* renderbuffers) const
+void GL20::glDeleteRenderbuffers ( int n,const unsigned int* renderbuffers ) const
 {
-	::glDeleteRenderbuffers(n, renderbuffers);
+    ::glDeleteRenderbuffers ( n, renderbuffers );
 }
-void GL20::glDeleteShader (int shader) const
+void GL20::glDeleteShader ( int shader ) const
 {
-	::glDeleteShader(shader);
+    ::glDeleteShader ( shader );
 }
-void GL20::glDetachShader (int program,int shader) const
+void GL20::glDetachShader ( int program,int shader ) const
 {
-	::glDetachShader(program, shader);
+    ::glDetachShader ( program, shader );
 }
-void GL20::glDisableVertexAttribArray (int index) const
+void GL20::glDisableVertexAttribArray ( int index ) const
 {
-	::glDisableVertexAttribArray(index);
+    ::glDisableVertexAttribArray ( index );
 }
-void GL20::glDrawElements (int mode,int count,int type, const void* indices) const
+void GL20::glDrawElements ( int mode,int count,int type, const void* indices ) const
 {
-	::glDrawElements(mode, count, type, indices);
+    ::glDrawElements ( mode, count, type, indices );
 }
-void GL20::glEnableVertexAttribArray (int index) const
+void GL20::glEnableVertexAttribArray ( int index ) const
 {
-	::glEnableVertexAttribArray(index);
+    ::glEnableVertexAttribArray ( index );
 }
-void GL20::glFramebufferRenderbuffer (int target,int attachment,int renderbuffertarget,int renderbuffer) const
+void GL20::glFramebufferRenderbuffer ( int target,int attachment,int renderbuffertarget,int renderbuffer ) const
 {
-	::glFramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
+    ::glFramebufferRenderbuffer ( target, attachment, renderbuffertarget, renderbuffer );
 }
-void GL20::glFramebufferTexture2D (int target,int attachment,int textarget,int texture,int level) const
+void GL20::glFramebufferTexture2D ( int target,int attachment,int textarget,int texture,int level ) const
 {
-	::glFramebufferTexture2D(target, attachment, textarget, texture, level);
+    ::glFramebufferTexture2D ( target, attachment, textarget, texture, level );
 }
-void GL20::glGenBuffers (int n, unsigned int* buffers) const
+void GL20::glGenBuffers ( int n, unsigned int* buffers ) const
 {
 
-	::glGenBuffers(n, buffers);
+    ::glGenBuffers ( n, buffers );
 }
-void GL20::glGenerateMipmap (int target) const
+void GL20::glGenerateMipmap ( int target ) const
 {
-	::glGenerateMipmap(target);
+    ::glGenerateMipmap ( target );
 }
-void GL20::glGenFramebuffers (int n, unsigned int* framebuffers) const
+void GL20::glGenFramebuffers ( int n, unsigned int* framebuffers ) const
 {
-	::glGenFramebuffers(n, framebuffers);
+    ::glGenFramebuffers ( n, framebuffers );
 }
-void GL20::glGenRenderbuffers (int n, unsigned int* renderbuffers) const
+void GL20::glGenRenderbuffers ( int n, unsigned int* renderbuffers ) const
 {
-	::glGenRenderbuffers(n, renderbuffers);
-}
-
-std::string GL20::glGetActiveAttrib (int program,int index, const int* size, const char* type) const
-{
-	GLint max_length;
-	glGetProgramiv(program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &max_length);
-	char* buf = new char[max_length + 1];
-	::glGetActiveAttrib(program, index, max_length + 1, NULL, (int *) size, (unsigned int*)type, buf);
-	return buf;
+    ::glGenRenderbuffers ( n, renderbuffers );
 }
 
-std::string GL20::glGetActiveUniform (int program,int index,const int* size,const char* type) const
+std::string GL20::glGetActiveAttrib ( int program,int index, const int* size, const char* type ) const
 {
-	GLint max_length;
-	glGetProgramiv(program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &max_length);
-	char* buf = new char[max_length + 1];
-	::glGetActiveUniform(program, index, max_length + 1, NULL, (int*) size, (unsigned int*) type, buf);
-	return buf;
+    GLint max_length;
+    glGetProgramiv ( program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &max_length );
+    char* buf = new char[max_length + 1];
+    ::glGetActiveAttrib ( program, index, max_length + 1, NULL, ( int * ) size, ( unsigned int* ) type, buf );
+    return buf;
 }
 
-void GL20::glGetAttachedShaders (int program,int maxcount, int* count, unsigned int* shaders) const
+std::string GL20::glGetActiveUniform ( int program,int index,const int* size,const char* type ) const
 {
-	::glGetAttachedShaders(program, maxcount, count, shaders);
-}
-int GL20::glGetAttribLocation (int program, const char* name) const
-{
-	return ::glGetAttribLocation(program, name);
-}
-void GL20::glGetBooleanv (unsigned int pname, unsigned char* params) const
-{
-	::glGetBooleanv(pname, params);
-}
-void GL20::glGetBufferParameteriv (unsigned int target, unsigned int pname, int* params) const
-{
-	::glGetBufferParameteriv(target, pname, params);
-}
-void GL20::glGetFloatv (int pname, float* params) const
-{
-	::glGetFloatv(pname, params);
-}
-void GL20::glGetFramebufferAttachmentParameteriv (int target,int attachment,int pname, int* params) const
-{
-	::glGetFramebufferAttachmentParameteriv(target, attachment, pname, params);
-}
-void GL20::glGetProgramiv (int program, int pname, int* params) const
-{
-	::glGetProgramiv(program, pname, params);
-}
-std::string GL20::glGetProgramInfoLog (int program) const
-{
-	char buf[512];
-	int length = 0;
-	::glGetProgramInfoLog(program, 512, &length, buf);
-	return string(buf);
+    GLint max_length;
+    glGetProgramiv ( program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &max_length );
+    char* buf = new char[max_length + 1];
+    ::glGetActiveUniform ( program, index, max_length + 1, NULL, ( int* ) size, ( unsigned int* ) type, buf );
+    return buf;
 }
 
-void GL20::glGetRenderbufferParameteriv (int target,int pname, int* params) const
+void GL20::glGetAttachedShaders ( int program,int maxcount, int* count, unsigned int* shaders ) const
 {
-	::glGetRenderbufferParameteriv(target, pname, params);
+    ::glGetAttachedShaders ( program, maxcount, count, shaders );
 }
-void GL20::glGetShaderiv (int shader,int pname, int* params) const
+int GL20::glGetAttribLocation ( int program, const char* name ) const
 {
-	::glGetShaderiv(shader, pname, params);
+    return ::glGetAttribLocation ( program, name );
+}
+void GL20::glGetBooleanv ( unsigned int pname, unsigned char* params ) const
+{
+    ::glGetBooleanv ( pname, params );
+}
+void GL20::glGetBufferParameteriv ( unsigned int target, unsigned int pname, int* params ) const
+{
+    ::glGetBufferParameteriv ( target, pname, params );
+}
+void GL20::glGetFloatv ( int pname, float* params ) const
+{
+    ::glGetFloatv ( pname, params );
+}
+void GL20::glGetFramebufferAttachmentParameteriv ( int target,int attachment,int pname, int* params ) const
+{
+    ::glGetFramebufferAttachmentParameteriv ( target, attachment, pname, params );
+}
+void GL20::glGetProgramiv ( int program, int pname, int* params ) const
+{
+    ::glGetProgramiv ( program, pname, params );
+}
+std::string GL20::glGetProgramInfoLog ( int program ) const
+{
+    char buf[512];
+    int length = 0;
+    ::glGetProgramInfoLog ( program, 512, &length, buf );
+    return string ( buf );
 }
 
-std::string GL20::glGetShaderInfoLog (int shader) const
+void GL20::glGetRenderbufferParameteriv ( int target,int pname, int* params ) const
 {
-	int length = 0;
-	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
-	char buf[length];
-	::glGetShaderInfoLog(shader, length, NULL, buf);
-	return buf;
+    ::glGetRenderbufferParameteriv ( target, pname, params );
 }
-void GL20::glGetShaderPrecisionFormat (int shadertype,int precisiontype, int* range, int* precision) const
+void GL20::glGetShaderiv ( int shader,int pname, int* params ) const
 {
-	::glGetShaderPrecisionFormat(shadertype, precisiontype, range, precision);
+    ::glGetShaderiv ( shader, pname, params );
 }
-void GL20::glGetShaderSource (unsigned int shader,int bufsize, int* length, char* source) const
+
+std::string GL20::glGetShaderInfoLog ( int shader ) const
 {
-	::glGetShaderSource(shader, bufsize, length, source);
+    int length = 0;
+    glGetShaderiv ( shader, GL_INFO_LOG_LENGTH, &length );
+    char buf[length];
+    ::glGetShaderInfoLog ( shader, length, NULL, buf );
+    return buf;
 }
-void GL20::glGetTexParameterfv (int target,int pname, float* params) const
+void GL20::glGetShaderPrecisionFormat ( int shadertype,int precisiontype, int* range, int* precision ) const
 {
-	::glGetTexParameterfv(target, pname, params);
+    ::glGetShaderPrecisionFormat ( shadertype, precisiontype, range, precision );
 }
-void GL20::glGetTexParameteriv (int target,int pname, int* params) const
+void GL20::glGetShaderSource ( unsigned int shader,int bufsize, int* length, char* source ) const
 {
-	::glGetTexParameteriv(target, pname, params);
+    ::glGetShaderSource ( shader, bufsize, length, source );
 }
-void GL20::glGetUniformfv (int program,int location, float* params) const
+void GL20::glGetTexParameterfv ( int target,int pname, float* params ) const
 {
-	::glGetUniformfv(program, location, params);
+    ::glGetTexParameterfv ( target, pname, params );
 }
-void GL20::glGetUniformiv (int program,int location, int* params) const
+void GL20::glGetTexParameteriv ( int target,int pname, int* params ) const
 {
-	::glGetUniformiv(program, location, params);
+    ::glGetTexParameteriv ( target, pname, params );
 }
-int GL20::glGetUniformLocation (int program,const std::string& name) const
+void GL20::glGetUniformfv ( int program,int location, float* params ) const
 {
-	return ::glGetUniformLocation(program, name.c_str());
+    ::glGetUniformfv ( program, location, params );
 }
-void GL20::glGetVertexAttribfv (int index,int pname, float* params) const
+void GL20::glGetUniformiv ( int program,int location, int* params ) const
 {
-	::glGetVertexAttribfv(index, pname, params);
+    ::glGetUniformiv ( program, location, params );
 }
-void GL20::glGetVertexAttribiv (int index,int pname, int* params) const
+int GL20::glGetUniformLocation ( int program,const std::string& name ) const
 {
-	::glGetVertexAttribiv(index, pname, params);
+    return ::glGetUniformLocation ( program, name.c_str() );
 }
-void GL20::glGetVertexAttribPointerv (int index,int pname, void* pointer) const
+void GL20::glGetVertexAttribfv ( int index,int pname, float* params ) const
 {
-	::glGetVertexAttribPointerv(index, pname, &pointer);
+    ::glGetVertexAttribfv ( index, pname, params );
 }
-bool GL20::glIsBuffer (int buffer) const
+void GL20::glGetVertexAttribiv ( int index,int pname, int* params ) const
 {
-	return ::glIsBuffer(buffer);
+    ::glGetVertexAttribiv ( index, pname, params );
 }
-bool GL20::glIsEnabled (int cap) const
+void GL20::glGetVertexAttribPointerv ( int index,int pname, void* pointer ) const
 {
-	return ::glIsEnabled(cap);
+    ::glGetVertexAttribPointerv ( index, pname, &pointer );
 }
-bool GL20::glIsFramebuffer (int framebuffer) const
+bool GL20::glIsBuffer ( int buffer ) const
 {
-	return ::glIsFramebuffer(framebuffer);
+    return ::glIsBuffer ( buffer );
 }
-bool GL20::glIsProgram (int program) const
+bool GL20::glIsEnabled ( int cap ) const
 {
-	return ::glIsProgram(program);
+    return ::glIsEnabled ( cap );
 }
-bool GL20::glIsRenderbuffer (int renderbuffer) const
+bool GL20::glIsFramebuffer ( int framebuffer ) const
 {
-	return ::glIsRenderbuffer(renderbuffer);
+    return ::glIsFramebuffer ( framebuffer );
 }
-bool GL20::glIsShader (int shader) const
+bool GL20::glIsProgram ( int program ) const
 {
-	return ::glIsShader(shader);
+    return ::glIsProgram ( program );
 }
-bool GL20::glIsTexture (int texture) const
+bool GL20::glIsRenderbuffer ( int renderbuffer ) const
 {
-	return ::glIsTexture(texture);
+    return ::glIsRenderbuffer ( renderbuffer );
 }
-void GL20::glLinkProgram (int program) const
+bool GL20::glIsShader ( int shader ) const
 {
-	::glLinkProgram(program);
+    return ::glIsShader ( shader );
+}
+bool GL20::glIsTexture ( int texture ) const
+{
+    return ::glIsTexture ( texture );
+}
+void GL20::glLinkProgram ( int program ) const
+{
+    ::glLinkProgram ( program );
 }
 void GL20::glReleaseShaderCompiler () const
 {
-	::glReleaseShaderCompiler();
+    ::glReleaseShaderCompiler();
 }
-void GL20::glRenderbufferStorage (int target,int internalformat,int width,int height) const
+void GL20::glRenderbufferStorage ( int target,int internalformat,int width,int height ) const
 {
-	::glRenderbufferStorage(target, internalformat, width, height);
+    ::glRenderbufferStorage ( target, internalformat, width, height );
 }
-void GL20::glSampleCoverage (float value,bool invert) const
+void GL20::glSampleCoverage ( float value,bool invert ) const
 {
-	::glSampleCoverage(value, invert);
+    ::glSampleCoverage ( value, invert );
 }
-void GL20::glShaderBinary (int n,const unsigned int* shaders, int binaryformat,const void* binary,int length) const
+void GL20::glShaderBinary ( int n,const unsigned int* shaders, int binaryformat,const void* binary,int length ) const
 {
-	::glShaderBinary(n, shaders, binaryformat, binary, length);
+    ::glShaderBinary ( n, shaders, binaryformat, binary, length );
 }
 
-void GL20::glShaderSource (int shader, const std::string& shaderString) const
+void GL20::glShaderSource ( int shader, const std::string& shaderString ) const
 {
-	int length = shaderString.size();
-	const char* buf = shaderString.c_str();
-	::glShaderSource(shader, 1, &buf, &length);
+    int length = shaderString.size();
+    const char* buf = shaderString.c_str();
+    ::glShaderSource ( shader, 1, &buf, &length );
 }
-void GL20::glStencilFuncSeparate (int face,int func,int ref,int mask) const
+void GL20::glStencilFuncSeparate ( int face,int func,int ref,int mask ) const
 {
-	::glStencilFuncSeparate(face, func, ref, mask);
+    ::glStencilFuncSeparate ( face, func, ref, mask );
 }
-void GL20::glStencilMaskSeparate (int face,int mask) const
+void GL20::glStencilMaskSeparate ( int face,int mask ) const
 {
-	::glStencilMaskSeparate(face, mask);
+    ::glStencilMaskSeparate ( face, mask );
 }
-void GL20::glStencilOpSeparate (int face,int fail,int zfail,int zpass) const
+void GL20::glStencilOpSeparate ( int face,int fail,int zfail,int zpass ) const
 {
-	::glStencilOpSeparate(face, fail, zfail, zpass);
+    ::glStencilOpSeparate ( face, fail, zfail, zpass );
 }
-void GL20::glTexParameterfv (int target,int pname,const float* params) const
+void GL20::glTexParameterfv ( int target,int pname,const float* params ) const
 {
-	::glTexParameterfv(target, pname, params);
+    ::glTexParameterfv ( target, pname, params );
 }
-void GL20::glTexParameteri (int target,int pname,int param) const
+void GL20::glTexParameteri ( int target,int pname,int param ) const
 {
-	::glTexParameteri(target, pname, param);
+    ::glTexParameteri ( target, pname, param );
 }
-void GL20::glTexParameteriv (int target,int pname,const int* params) const
+void GL20::glTexParameteriv ( int target,int pname,const int* params ) const
 {
-	::glTexParameteriv(target, pname, params);
+    ::glTexParameteriv ( target, pname, params );
 }
-void GL20::glUniform1f (int location,float x) const
+void GL20::glUniform1f ( int location,float x ) const
 {
-	::glUniform1f(location, x);
+    ::glUniform1f ( location, x );
 }
-void GL20::glUniform1fv (int location,int count,const float* v) const
+void GL20::glUniform1fv ( int location,int count,const float* v ) const
 {
-	::glUniform1fv(location, count, v);
+    ::glUniform1fv ( location, count, v );
 }
-void GL20::glUniform1i (int location,int x) const
+void GL20::glUniform1i ( int location,int x ) const
 {
-	::glUniform1i(location, x);
+    ::glUniform1i ( location, x );
 }
-void GL20::glUniform1iv (int location,int count,const int* v) const
+void GL20::glUniform1iv ( int location,int count,const int* v ) const
 {
-	::glUniform1iv(location, count, v);
+    ::glUniform1iv ( location, count, v );
 }
-void GL20::glUniform2f (int location,float x,float y) const
+void GL20::glUniform2f ( int location,float x,float y ) const
 {
-	::glUniform2f(location, x, y);
+    ::glUniform2f ( location, x, y );
 }
-void GL20::glUniform2fv (int location,int count,const float* v) const
+void GL20::glUniform2fv ( int location,int count,const float* v ) const
 {
-	::glUniform2fv(location, count, v);
+    ::glUniform2fv ( location, count, v );
 }
-void GL20::glUniform2i (int location,int x,int y) const
+void GL20::glUniform2i ( int location,int x,int y ) const
 {
-	::glUniform2i(location, x, y);
+    ::glUniform2i ( location, x, y );
 }
-void GL20::glUniform2iv (int location,int count,const int* v) const
+void GL20::glUniform2iv ( int location,int count,const int* v ) const
 {
-	::glUniform2iv(location, count, v);
+    ::glUniform2iv ( location, count, v );
 }
-void GL20::glUniform3f (int location,float x,float y,float z) const
+void GL20::glUniform3f ( int location,float x,float y,float z ) const
 {
-	::glUniform3f(location, x, y, z);
+    ::glUniform3f ( location, x, y, z );
 }
-void GL20::glUniform3fv (int location,int count,const float* v) const
+void GL20::glUniform3fv ( int location,int count,const float* v ) const
 {
-	::glUniform3fv(location, count, v);
+    ::glUniform3fv ( location, count, v );
 }
-void GL20::glUniform3i (int location,int x,int y,int z) const
+void GL20::glUniform3i ( int location,int x,int y,int z ) const
 {
-	::glUniform3i(location, x, y, z);
+    ::glUniform3i ( location, x, y, z );
 }
-void GL20::glUniform3iv (int location,int count,const int* v) const
+void GL20::glUniform3iv ( int location,int count,const int* v ) const
 {
-	::glUniform3iv(location, count, v);
+    ::glUniform3iv ( location, count, v );
 }
-void GL20::glUniform4f (int location,float x,float y,float z,float w) const
+void GL20::glUniform4f ( int location,float x,float y,float z,float w ) const
 {
-	::glUniform4f(location, x, y, z, w);
+    ::glUniform4f ( location, x, y, z, w );
 }
-void GL20::glUniform4fv (int location,int count,const float* v) const
+void GL20::glUniform4fv ( int location,int count,const float* v ) const
 {
-	::glUniform4fv(location, count, v);
+    ::glUniform4fv ( location, count, v );
 }
-void GL20::glUniform4i (int location,int x,int y,int z,int w) const
+void GL20::glUniform4i ( int location,int x,int y,int z,int w ) const
 {
-	::glUniform4i(location, x, y, z, w);
+    ::glUniform4i ( location, x, y, z, w );
 }
-void GL20::glUniform4iv (int location,int count,const int* v) const
+void GL20::glUniform4iv ( int location,int count,const int* v ) const
 {
-	::glUniform4iv(location, count, v);
+    ::glUniform4iv ( location, count, v );
 }
-void GL20::glUniformMatrix2fv (int location,int count,bool transpose,const float* value) const
+void GL20::glUniformMatrix2fv ( int location,int count,bool transpose,const float* value ) const
 {
-	::glUniformMatrix2fv(location, count, transpose, value);
+    ::glUniformMatrix2fv ( location, count, transpose, value );
 }
-void GL20::glUniformMatrix3fv (int location,int count,bool transpose,const float* value) const
+void GL20::glUniformMatrix3fv ( int location,int count,bool transpose,const float* value ) const
 {
-	::glUniformMatrix3fv(location, count, transpose, value);
+    ::glUniformMatrix3fv ( location, count, transpose, value );
 }
-void GL20::glUniformMatrix4fv (int location,int count,bool transpose,const float* value) const
+void GL20::glUniformMatrix4fv ( int location,int count,bool transpose,const float* value ) const
 {
-	::glUniformMatrix4fv(location, count, transpose, value);
+    ::glUniformMatrix4fv ( location, count, transpose, value );
 }
-void GL20::glUseProgram (int program) const
+void GL20::glUseProgram ( int program ) const
 {
-	::glUseProgram(program);
+    ::glUseProgram ( program );
 }
-void GL20::glValidateProgram (int program) const
+void GL20::glValidateProgram ( int program ) const
 {
-	::glValidateProgram(program);
+    ::glValidateProgram ( program );
 }
-void GL20::glVertexAttrib1f (int indx,float x) const
+void GL20::glVertexAttrib1f ( int indx,float x ) const
 {
-	::glVertexAttrib1f(indx, x);
+    ::glVertexAttrib1f ( indx, x );
 }
-void GL20::glVertexAttrib1fv (int indx,const float* values) const
+void GL20::glVertexAttrib1fv ( int indx,const float* values ) const
 {
-	::glVertexAttrib1fv(indx, values);
+    ::glVertexAttrib1fv ( indx, values );
 }
-void GL20::glVertexAttrib2f (int indx,float x,float y) const
+void GL20::glVertexAttrib2f ( int indx,float x,float y ) const
 {
-	::glVertexAttrib2f(indx, x, y);
+    ::glVertexAttrib2f ( indx, x, y );
 }
-void GL20::glVertexAttrib2fv (int indx,const float* values) const
+void GL20::glVertexAttrib2fv ( int indx,const float* values ) const
 {
-	::glVertexAttrib2fv(indx, values);
+    ::glVertexAttrib2fv ( indx, values );
 }
-void GL20::glVertexAttrib3f (int indx,float x,float y,float z) const
+void GL20::glVertexAttrib3f ( int indx,float x,float y,float z ) const
 {
-	::glVertexAttrib3f(indx, x, y, z);
+    ::glVertexAttrib3f ( indx, x, y, z );
 }
-void GL20::glVertexAttrib3fv (int indx,const float* values) const
+void GL20::glVertexAttrib3fv ( int indx,const float* values ) const
 {
-	::glVertexAttrib3fv(indx, values);
+    ::glVertexAttrib3fv ( indx, values );
 }
-void GL20::glVertexAttrib4f (int indx,float x,float y,float z,float w) const
+void GL20::glVertexAttrib4f ( int indx,float x,float y,float z,float w ) const
 {
-	::glVertexAttrib4f(indx, x, y, z, w);
+    ::glVertexAttrib4f ( indx, x, y, z, w );
 }
-void GL20::glVertexAttrib4fv (int indx,const float* values) const
+void GL20::glVertexAttrib4fv ( int indx,const float* values ) const
 {
-	::glVertexAttrib4fv(indx, values);
+    ::glVertexAttrib4fv ( indx, values );
 }
-void GL20::glVertexAttribPointer (int indx,int size,int type,bool normalized,int stride,const void* ptr) const
+void GL20::glVertexAttribPointer ( int indx,int size,int type,bool normalized,int stride,const void* ptr ) const
 {
-	::glVertexAttribPointer(indx, size, type, normalized, stride, ptr);
+    ::glVertexAttribPointer ( indx, size, type, normalized, stride, ptr );
 }
-void GL20::glVertexAttribPointer (int indx,int size,int type,bool normalized,int stride,int ptr) const
+void GL20::glVertexAttribPointer ( int indx,int size,int type,bool normalized,int stride,int ptr ) const
 {
-	::glVertexAttribPointer(indx, size, type, normalized, stride, (void*)ptr);
+    ::glVertexAttribPointer ( indx, size, type, normalized, stride, ( void* ) (intptr_t) ptr );
 }

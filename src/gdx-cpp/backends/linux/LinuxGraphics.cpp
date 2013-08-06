@@ -40,9 +40,11 @@
 #include "LinuxGraphics.hpp"
 #include "gdx-cpp/Log.hpp"
 #include "gdx-cpp/graphics/GLCommon.hpp"
+#include <gdx-cpp/gl.hpp>
 #include "gdx-cpp/graphics/Pixmap.hpp"
 
-namespace gdx {
+namespace gdx
+{
 class GLU;
 }  // namespace gdx
 
@@ -59,89 +61,108 @@ EGLSurface gdx::nix::LinuxGraphics::g_eglSurface;
 Display* gdx::nix::LinuxGraphics::x11Disp = NULL;
 
 gdx::nix::LinuxGraphics::LinuxGraphics ( bool UseOpenGLES2 ) :
-vsync ( false ),
-      title ( "GDX-CPP" ),
-      window ( 0 ),
-      width ( 0 ),
-      height ( 0 ),
-      gl10 ( 0 ),
-      gl11 ( 0 ),
-      gl20 ( 0 ),
-      glu ( new LinuxGLU ),
-      glCommon ( 0 ),
-      iconPixmap ( 0 ),
-      lastTime ( 0 ),
-      frames ( 0 ),
-      frameStart ( 0 ),
-      deltaTime ( 0 ),
-isUseOpenGLES2 ( UseOpenGLES2 ) {
+    vsync ( false ),
+    title ( "GDX-CPP" ),
+    window ( 0 ),
+    width ( 0 ),
+    height ( 0 ),
+    gl10 ( 0 ),
+    gl11 ( 0 ),
+    gl20 ( 0 ),
+    glu ( new LinuxGLU ),
+    glCommon ( 0 ),
+    iconPixmap ( 0 ),
+    lastTime ( 0 ),
+    frames ( 0 ),
+    frameStart ( 0 ),
+    deltaTime ( 0 ),
+    isUseOpenGLES2 ( UseOpenGLES2 )
+{
 }
 
-gdx::GL10* gdx::nix::LinuxGraphics::getGL10() {
+gdx::GL10* gdx::nix::LinuxGraphics::getGL10()
+{
     return gl10;
 }
 
-gdx::GL11* gdx::nix::LinuxGraphics::getGL11() {
+gdx::GL11* gdx::nix::LinuxGraphics::getGL11()
+{
     return gl11;
 }
 
-gdx::GL20* gdx::nix::LinuxGraphics::getGL20() {
+gdx::GL20* gdx::nix::LinuxGraphics::getGL20()
+{
     return gl20;
 }
 
-gdx::GLU* gdx::nix::LinuxGraphics::getGLU() {
+gdx::GLU* gdx::nix::LinuxGraphics::getGLU()
+{
     return glu;
 }
 
-gdx::Graphics::BufferFormat gdx::nix::LinuxGraphics::getBufferFormat() {
+gdx::Graphics::BufferFormat gdx::nix::LinuxGraphics::getBufferFormat()
+{
     gdx_log_error ( "gdx","not implemented yet" );
+    return * ( BufferFormat* ) nullptr;
 }
 
-float gdx::nix::LinuxGraphics::getDeltaTime() {
+float gdx::nix::LinuxGraphics::getDeltaTime()
+{
     return deltaTime;
 }
 
-float gdx::nix::LinuxGraphics::getDensity() {
+float gdx::nix::LinuxGraphics::getDensity()
+{
     return 0;
 }
 
-gdx::Graphics::DisplayMode gdx::nix::LinuxGraphics::getDesktopDisplayMode() {
+gdx::Graphics::DisplayMode gdx::nix::LinuxGraphics::getDesktopDisplayMode()
+{
     gdx_log_error ( "gdx","not implemented yet" );
 }
 
-std::vector< gdx::Graphics::DisplayMode >& gdx::nix::LinuxGraphics::getDisplayModes() {
+std::vector< gdx::Graphics::DisplayMode >& gdx::nix::LinuxGraphics::getDisplayModes()
+{
     gdx_log_error ( "gdx","not implemented yet" );
 }
 
-int gdx::nix::LinuxGraphics::getFramesPerSecond() {
+int gdx::nix::LinuxGraphics::getFramesPerSecond()
+{
     return this->fps;
 }
 
-gdx::GLCommon* gdx::nix::LinuxGraphics::getGLCommon() {
+gdx::GLCommon* gdx::nix::LinuxGraphics::getGLCommon()
+{
     return glCommon;
 }
 
-int gdx::nix::LinuxGraphics::getHeight() {
+int gdx::nix::LinuxGraphics::getHeight()
+{
     return this->height;
 }
 
-float gdx::nix::LinuxGraphics::getPpcX() {
+float gdx::nix::LinuxGraphics::getPpcX()
+{
     return 0;
 }
 
-float gdx::nix::LinuxGraphics::getPpcY() {
+float gdx::nix::LinuxGraphics::getPpcY()
+{
     return 0;
 }
 
-float gdx::nix::LinuxGraphics::getPpiX() {
+float gdx::nix::LinuxGraphics::getPpiX()
+{
     return 0;
 }
 
-float gdx::nix::LinuxGraphics::getPpiY() {
+float gdx::nix::LinuxGraphics::getPpiY()
+{
     return 0;
 }
 
-void gdx::nix::LinuxGraphics::updateTime() {
+void gdx::nix::LinuxGraphics::updateTime()
+{
     uint64_t time = system->nanoTime();
 
     deltaTime = ( time - lastTime ) / 1000000000.0f;
@@ -155,63 +176,77 @@ void gdx::nix::LinuxGraphics::updateTime() {
     frames++;
 }
 
-gdx::Graphics::GraphicsType gdx::nix::LinuxGraphics::getType() {
+gdx::Graphics::GraphicsType gdx::nix::LinuxGraphics::getType()
+{
     return gdx::Graphics::SdlGL;
 }
 
-int gdx::nix::LinuxGraphics::getWidth() {
+int gdx::nix::LinuxGraphics::getWidth()
+{
     return this->width;
 }
 
-bool gdx::nix::LinuxGraphics::isGL11Available() {
+bool gdx::nix::LinuxGraphics::isGL11Available()
+{
     return gl11 != NULL;
 }
 
-bool gdx::nix::LinuxGraphics::isGL20Available() {
+bool gdx::nix::LinuxGraphics::isGL20Available()
+{
     return gl20 != NULL;
 }
 
-bool gdx::nix::LinuxGraphics::setDisplayMode ( gdx::Graphics::DisplayMode displayMode ) {
-    if ( !supportsDisplayModeChange() )
+bool gdx::nix::LinuxGraphics::setDisplayMode ( gdx::Graphics::DisplayMode displayMode )
+{
+    if ( !supportsDisplayModeChange() ) {
         return false;
+    }
     return true;
 }
 
-void gdx::nix::LinuxGraphics::setIcon ( gdx::Pixmap::ptr pixmap ) {
+void gdx::nix::LinuxGraphics::setIcon ( gdx::Pixmap::ptr pixmap )
+{
     this->iconPixmap = pixmap;
 }
 
-void gdx::nix::LinuxGraphics::setTitle ( const std::string& title ) {
+void gdx::nix::LinuxGraphics::setTitle ( const std::string& title )
+{
     this->title = title;
 }
 
-void gdx::nix::LinuxGraphics::setVSync ( bool vsync ) {
+void gdx::nix::LinuxGraphics::setVSync ( bool vsync )
+{
     this->vsync = true;
 }
 
-bool gdx::nix::LinuxGraphics::supportsDisplayModeChange() {
+bool gdx::nix::LinuxGraphics::supportsDisplayModeChange()
+{
     return false;
 }
 
-bool gdx::nix::LinuxGraphics::supportsExtension ( const std::string& extension ) {
+bool gdx::nix::LinuxGraphics::supportsExtension ( const std::string& extension )
+{
     return gdx::gl->glGetString ( GL_EXTENSIONS ).find ( extension ) != std::string::npos;
 }
 
-void gdx::nix::LinuxGraphics::initialize() {
+void gdx::nix::LinuxGraphics::initialize()
+{
     if ( SDL_Init ( SDL_INIT_VIDEO ) < 0 ) {
         gdx_log_error ( "gdx","Failed to initialize SDL video" );
     }
 }
 
-bool gdx::nix::LinuxGraphics::setDisplayMode ( int width, int height, bool fullscreen ) {
+bool gdx::nix::LinuxGraphics::setDisplayMode ( int width, int height, bool fullscreen )
+{
     this->lastTime = system->nanoTime();
     this->width = width;
     this->height = height;
     const SDL_VideoInfo* info = SDL_GetVideoInfo();
 
     Uint32 flags = SDL_OPENGL | SDL_HWSURFACE;
-    if ( fullscreen )
+    if ( fullscreen ) {
         flags |= SDL_FULLSCREEN;
+    }
 
     if ( isUseOpenGLES2 ) {
         x11Disp        = NULL;
@@ -286,7 +321,7 @@ bool gdx::nix::LinuxGraphics::setDisplayMode ( int width, int height, bool fulls
 
         /* Choose configuration */
         if ( eglChooseConfig ( g_eglDisplay, s_configAttribs, g_allConfigs, g_totalConfigsIn, &numConfigsOut ) != EGL_TRUE
-        || numConfigsOut == 0 ) {
+                || numConfigsOut == 0 ) {
             gdx_log_error ( "WINDOW", "Could not find suitable EGL configuration" );
             return false;
         }
@@ -342,65 +377,81 @@ bool gdx::nix::LinuxGraphics::setDisplayMode ( int width, int height, bool fulls
     return setupGLModes();
 }
 
-void gdx::nix::LinuxGraphics::update() {
-    if ( isUseOpenGLES2 )
+void gdx::nix::LinuxGraphics::update()
+{
+    if ( isUseOpenGLES2 ) {
         eglSwapBuffers ( g_eglDisplay, g_eglSurface );
-    else
+    } else {
         SDL_GL_SwapBuffers();
+    }
 }
 
-TextureData::ptr nix::LinuxGraphics::resolveTextureData (const FileHandle::ptr& fileHandle,
+TextureData::ptr nix::LinuxGraphics::resolveTextureData ( const FileHandle::ptr& fileHandle,
         Pixmap::ptr preloadedPixmap,
         const gdx::Pixmap::Format* format,
-bool useMipMaps ) {
+        bool useMipMaps )
+{
     return TextureData::ptr ( new FileTextureData ( fileHandle, preloadedPixmap, format, useMipMaps ) );
 }
 
-gdx::Pixmap* nix::LinuxGraphics::resolvePixmap ( int width, int height, const gdx::Pixmap::Format& format, Pixmap::PixmapType pixType ) {
+gdx::Pixmap* nix::LinuxGraphics::resolvePixmap ( int width, int height, const gdx::Pixmap::Format& format, Pixmap::PixmapType pixType )
+{
     switch ( pixType ) {
-        case Pixmap::PixmapType::PixmapType_Gdx2d:
+    case Pixmap::PixmapType::PixmapType_Gdx2d:
         return Gdx2DPixmap::newPixmap ( width, height, Gdx2DPixmap::Format::toGdx2DPixmapFormat ( format ) );
-        case Pixmap::PixmapType::PixmapType_Svg:
+    case Pixmap::PixmapType::PixmapType_Svg:
         return new AggSvgPixmap ( width, height );
     }
+
+    return nullptr;
 }
 
-gdx::Pixmap* nix::LinuxGraphics::resolvePixmap ( const gdx::Pixmap& other ) {
+gdx::Pixmap* nix::LinuxGraphics::resolvePixmap ( const gdx::Pixmap& other )
+{
     switch ( other.getType() ) {
     case Pixmap::PixmapType::PixmapType_Gdx2d:
         return new Gdx2DPixmap ( ( Gdx2DPixmap& ) other );
+    case gdx::Pixmap::PixmapType::PixmapType_Svg:
+        gdx_log_error ( "gdx", "Cannot copy a Svg pixmap" );
     }
+
+    return nullptr;
 }
 
-gdx::Pixmap* nix::LinuxGraphics::resolvePixmap ( const FileHandle::ptr& file ) {
+gdx::Pixmap* nix::LinuxGraphics::resolvePixmap ( const FileHandle::ptr& file )
+{
     std::string extension = file->extension();
 
-    if ( extension == "png" || extension == "jpg" || extension == "tga" || extension == "bmp" )
+    if ( extension == "png" || extension == "jpg" || extension == "tga" || extension == "bmp" ) {
         return Gdx2DPixmap::newPixmapFromFile ( file, 0 );
-    else if ( extension == "svg" ) {
+    } else if ( extension == "svg" ) {
         return AggSvgPixmap::newFromFile ( file );
     } else {
         gdx_log_error ( "gdx","unsupported image format: %s", extension.c_str() );
     }
 }
 
-bool gdx::nix::LinuxGraphics::setupGLModes() {
+bool gdx::nix::LinuxGraphics::setupGLModes()
+{
     if ( isUseOpenGLES2 ) {
         gl20 = new GL20;
         glCommon = gl20;
-        std::string version = ( const char* ) ::glGetString ( GL_VERSION );
-        std::cerr << version;
-        if ( glCommon == NULL )
+        if ( glCommon == NULL ) {
             gdx_log_error ( "gdx", "error init gl" );
+        }
 
     } else {
-        std::string version = ( const char* ) ::glGetString ( GL_VERSION );
+        const char* ver = ( const char* ) ::glGetString ( gdx::GL::VERSION );
+        if ( ver == nullptr ) {
+            gdx_log_error ( "gdx", "error init gl" );
+            return false;
+        }
+        
+        std::string version ( ver );
 
         if ( !version.empty() ) {
-
             int major = atoi ( ( const char* ) version.c_str() );
             int minor = atoi ( ( const char* ) &version.c_str() [2] );
-            std::cerr << version;
             if ( major == 1 && minor < 5 ) {
                 glCommon = gl10 = new GL10;
             } else {
@@ -418,14 +469,17 @@ bool gdx::nix::LinuxGraphics::setupGLModes() {
     return true;
 }
 
-LinuxGraphics::~LinuxGraphics() {
+LinuxGraphics::~LinuxGraphics()
+{
     if ( isUseOpenGLES2 ) {
         if ( g_eglDisplay ) {
             eglMakeCurrent ( g_eglDisplay, NULL, NULL, EGL_NO_CONTEXT );
-            if ( g_eglContext )
+            if ( g_eglContext ) {
                 eglDestroyContext ( g_eglDisplay, g_eglContext );
-            if ( g_eglSurface )
+            }
+            if ( g_eglSurface ) {
                 eglDestroySurface ( g_eglDisplay, g_eglSurface );
+            }
             eglTerminate ( g_eglDisplay );
 
             g_eglSurface = 0;
@@ -433,9 +487,12 @@ LinuxGraphics::~LinuxGraphics() {
             g_eglDisplay = 0;
         }
 
-        if ( x11Disp )
+        if ( x11Disp ) {
             XCloseDisplay ( x11Disp );
+        }
         x11Disp = NULL;
-    } else
+    } else {
         SDL_Quit();
+    }
 }
+

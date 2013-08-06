@@ -69,7 +69,7 @@ void FrameBuffer::build () {
     if (hasDepth) {
         gl.glFramebufferRenderbuffer(gdx::GL::FRAMEBUFFER, gdx::GL::DEPTH_ATTACHMENT, gdx::GL::RENDERBUFFER, depthbufferHandle);
     }
-    int result = gl.glCheckFramebufferStatus(gdx::GL::FRAMEBUFFER);
+    unsigned result = gl.glCheckFramebufferStatus(gdx::GL::FRAMEBUFFER);
 
     gl.glBindRenderbuffer(gdx::GL::RENDERBUFFER, 0);
     gl.glBindTexture(gdx::GL::TEXTURE_2D, 0);

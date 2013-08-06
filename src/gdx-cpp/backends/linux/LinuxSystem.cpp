@@ -45,7 +45,7 @@ std::string LinuxSystem::canonicalize(const std::string& path)
 
 void LinuxSystem::checkDelete(const std::string& path)
 {
-    int found;
+    unsigned found;
     std::string testPath = path;
     while(testPath != "")
     {
@@ -59,7 +59,7 @@ void LinuxSystem::checkDelete(const std::string& path)
 
 void LinuxSystem::checkRead(const std::string& path)
 {
-    int found;
+    unsigned found;
     std::string testPath = path;
     while(testPath != "")
     {
@@ -105,7 +105,7 @@ int LinuxSystem::getBooleanAttributes(const gdx::File& f)
     {
         attribs = attribs | this->BA_DIRECTORY;
     }
-    int pos = 0;
+    unsigned pos = 0;
     while(pos < absPath.length()-1)
     {
         if(absPath[pos] == '/' && absPath[pos+1] == '.')
@@ -239,7 +239,7 @@ std::string LinuxSystem::resolve(const std::string& parent, const std::string& c
 
 void LinuxSystem::checkWrite(const std::string& path)
 {
-     int found;
+    unsigned found;
      std::string testPath = path;
      while(testPath != "")
      {

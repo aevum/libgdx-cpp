@@ -22,6 +22,7 @@
 #include <assert.h>
 
 #include "Matrix4.hpp"
+#include <gdx-cpp/utils/NumberUtils.hpp>
 
 using namespace gdx;
 
@@ -269,14 +270,12 @@ float Vector3::dst(float x, float y, float z) {
 }
 
 int Vector3::hashCode() {
-    assert(false);
-//      TODO
-//     int prime = 31;
-//     int result = 1;
-//     result = prime * result + NumberUtils.floatToIntBits(x);
-//     result = prime * result + NumberUtils.floatToIntBits(y);
-//     result = prime * result + NumberUtils.floatToIntBits(z);
-//     return result;
+    int prime = 31;
+    int result = 1;
+    result = prime * result + NumberUtils::floatToIntBits(x);
+    result = prime * result + NumberUtils::floatToIntBits(y);
+    result = prime * result + NumberUtils::floatToIntBits(z);
+    return result;
 }
 
 Vector3& Vector3::scale(float scalarX, float scalarY, float scalarZ) {

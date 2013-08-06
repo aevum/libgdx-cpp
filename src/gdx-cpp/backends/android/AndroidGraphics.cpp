@@ -81,7 +81,7 @@ gdx::GLU* gdx::android::AndroidGraphics::getGLU()
 
 gdx::Graphics::BufferFormat gdx::android::AndroidGraphics::getBufferFormat()
 {
-
+    gdx_log_error("gdx", "not implemented");
 }
 
 float gdx::android::AndroidGraphics::getDeltaTime()
@@ -91,17 +91,17 @@ float gdx::android::AndroidGraphics::getDeltaTime()
 
 float gdx::android::AndroidGraphics::getDensity()
 {
-
+    return 0;
 }
 
 gdx::Graphics::DisplayMode gdx::android::AndroidGraphics::getDesktopDisplayMode()
 {
-
+    gdx_log_error("gdx", "not implemented");
 }
 
 std::vector< gdx::Graphics::DisplayMode >& gdx::android::AndroidGraphics::getDisplayModes()
 {
-
+    gdx_log_error("gdx", "not implemented");
 }
 
 int gdx::android::AndroidGraphics::getFramesPerSecond()
@@ -121,22 +121,22 @@ int gdx::android::AndroidGraphics::getHeight()
 
 float gdx::android::AndroidGraphics::getPpcX()
 {
-
+    return 0;
 }
 
 float gdx::android::AndroidGraphics::getPpcY()
 {
-
-}
+    return 0;
+}       
 
 float gdx::android::AndroidGraphics::getPpiX()
 {
-
+    return 0;
 }
 
 float gdx::android::AndroidGraphics::getPpiY()
 {
-
+    return 0;
 }
 
 void gdx::android::AndroidGraphics::updateTime()
@@ -144,7 +144,7 @@ void gdx::android::AndroidGraphics::updateTime()
     uint64_t time = system->nanoTime();
 
     //This is to fix a nasty bug on HTC devices. Somehow sometimes the nanotime returns
-    //with a very big value, this making the delta time go kucko :(
+    //with a huge value, thus making the delta time go kucko :(
     if (time - lastTime > 10000000000LL) {
         lastTime = system->nanoTime();        
         return;
@@ -185,6 +185,8 @@ bool gdx::android::AndroidGraphics::setDisplayMode(gdx::Graphics::DisplayMode di
 {    
     if (!supportsDisplayModeChange())
         return false;
+    
+    return true;
 }
 
 void gdx::android::AndroidGraphics::setIcon(gdx::Pixmap::ptr pixmap)
@@ -240,6 +242,8 @@ bool gdx::android::AndroidGraphics::setDisplayMode(int width, int height, bool f
 
     this->lastTime = system->nanoTime();
     glCommon->glViewport(0, 0, width, height);
+    
+    return true;
 }
 
 void gdx::android::AndroidGraphics::update()
@@ -270,6 +274,8 @@ Pixmap* android::AndroidGraphics::resolvePixmap(int width, int height, const gdx
         case Pixmap::PixmapType::PixmapType_Svg:
             return new AggSvgPixmap(width, height);
     }
+    
+    return nullptr;
 }
 
 Pixmap* android::AndroidGraphics::resolvePixmap(const gdx::Pixmap& other)

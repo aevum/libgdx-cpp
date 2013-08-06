@@ -898,7 +898,7 @@ void SpriteBatch::setBlendFunction (int srcFunc,int dstFunc) {
 }
 
 void SpriteBatch::dispose () {
-    for (int i = 0; i < buffers.size(); i++) {
+    for (unsigned i = 0; i < buffers.size(); i++) {
         buffers[i]->dispose();
     }
     if (shader != NULL)

@@ -72,6 +72,7 @@ gdx::Sound * LinuxOpenALAudio::newSound (const ref_ptr_maker< gdx::FileHandle >:
       return new LinuxOggSound(this, file);
     else {
       gdx_log_error("gdx", "Unknown file extension for sound: ", file->name().c_str());
+      return nullptr;
     }
 }
 
@@ -81,6 +82,7 @@ gdx::Music * LinuxOpenALAudio::newMusic (const ref_ptr_maker< gdx::FileHandle >:
       return new LinuxOggMusic(this, file);
     else {
       gdx_log_error("gdx","Unknown file extension for sound: %s", file->name().c_str());
+      return nullptr;
     }
 }
 
@@ -132,7 +134,7 @@ void LinuxOpenALAudio::stopSourcesWithBuffer (int bufferID) {
 }
 
 void LinuxOpenALAudio::update () {
-    for (int i = 0; i < music.size(); i++)
+    for (unsigned i = 0; i < music.size(); i++)
         music[i]->update();
 }
 
@@ -153,7 +155,7 @@ void LinuxOpenALAudio::dispose () {
         context = NULL;
     }
     if (device != NULL) {
-        bool result = alcCloseDevice(device);
+        CHECK_OPENAL_ERROR(alcCloseDevice(device));
         device = NULL;
     }
 }
@@ -165,4 +167,9 @@ gdx::AudioDevice* LinuxOpenALAudio::newAudioDevice (int samplingRate, bool isMon
 
 gdx::AudioRecorder* LinuxOpenALAudio::newAudioRecoder (int samplingRate, bool isMono) {
     return NULL;//new JavaSoundAudioRecorder(samplingRate, isMono);
+}
+
+LinuxOpenALAudio::~LinuxOpenALAudio()
+{
+    dispose();
 }

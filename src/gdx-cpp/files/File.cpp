@@ -301,7 +301,7 @@ std::string File::extension() const {
 
 std::string File::nameWithoutExtension () const {
     std::string name = getName();
-    int dotIndex = name.rfind('.');
+    std::size_t dotIndex = name.rfind('.');
     if (dotIndex == std::string::npos) return name;
     return name.substr(0, dotIndex);
 }

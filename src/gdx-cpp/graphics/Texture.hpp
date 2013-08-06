@@ -64,7 +64,7 @@ public:
         const static TextureFilter MipMapNearestLinear;
         const static TextureFilter MipMapLinearLinear;
 
-        int glEnum;
+        uint glEnum;
 
         bool isMipMap () ;
 

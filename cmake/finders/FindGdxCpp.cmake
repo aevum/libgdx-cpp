@@ -40,13 +40,16 @@ NO_CMAKE_FIND_ROOT_PATH
 
 include(${GDX_CPP_GDX_MACRO}/gdx.cmake)
 
+message("GDX_ROOT is:" ${GDX_ROOT})
+message("GDX_SOURCE is:" ${GDX_SOURCE})
+
 macro(find_libraries)
     foreach(lib ${ARGV0})
         FIND_LIBRARY(GDXCPP_${lib}
             NAMES
             ${lib}
             PATHS
-            ${GDX_ROOT}            
+            ${GDX_ROOT}
             PATH_SUFFIXES 
             lib
             lib/Release
@@ -64,7 +67,19 @@ macro(find_libraries)
     endforeach()
 endmacro()
 
-if (APPLE)
+STRING(FIND ${CMAKE_CXX_COMPILER} "em++" EMSCRIPTENPP_FOUND)
+STRING(FIND ${CMAKE_C_COMPILER} "emcc" EMSCRIPTEN_FOUND)
+
+if ($ENV{ANDROID_NDK})
+    set(ANDROID_NDK $ENV{ANDROID_NDK})
+endif()
+
+if (EMSCRIPTEN_FOUND GREATER "0" AND EMSCRIPTENPP_FOUND GREATER "0")
+    if (GdxCpp_USE_BOX2D)
+        find_libraries("Box2D;gdx-cpp-box2d-layer")
+    endif()    
+    find_libraries("gdx-cpp-backend-emscripten;gdx-cpp-agg-svg;gdx-cpp;")
+elseif (APPLE)
     find_libraries(gdx-cpp)
 
     if (GdxCpp_USE_BOX2D)

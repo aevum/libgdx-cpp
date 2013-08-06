@@ -323,8 +323,8 @@ const unsigned char* AggSvgPixmap::getPixels() {
         gdx_log_error("gdx","Missing width or height values to render svg");
     }
 
-    int scaledWidth = width * scaleX;
-    int scaledHeight = height * scaleY;
+    unsigned scaledWidth = width * scaleX;
+    unsigned scaledHeight = height * scaleY;
 
     if (!data || (strlen((char*) data) !=  scaledWidth * scaledHeight * 4)) {
         delete [] data;
@@ -376,7 +376,7 @@ void AggSvgPixmap::fillRadialGradient(const gdx::SvgRendererHandler::RadialGradi
         ra_gradient.transform = *static_cast<AggTransform*>(gradient.gradient_transform)->transform;
     }
 
-    for (int i = 0; i < gradient.stops.size(); ++i) {
+    for (unsigned i = 0; i < gradient.stops.size(); ++i) {
         agg::svg::svg_gradient::stop stop;
         const SvgRendererHandler::GradientStopData& data = gradient.stops[i];
 
@@ -401,7 +401,7 @@ void AggSvgPixmap::fillLinearGradient(const gdx::SvgRendererHandler::LinearGradi
         li_gradient.transform = *static_cast<AggTransform*>(gradient.gradient_transform)->transform;
     }
 
-    for (int i = 0; i < gradient.stops.size(); ++i) {
+    for (unsigned i = 0; i < gradient.stops.size(); ++i) {
         agg::svg::svg_gradient::stop stop;
         const SvgRendererHandler::GradientStopData& data = gradient.stops[i];
 

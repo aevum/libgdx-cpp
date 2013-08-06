@@ -92,7 +92,6 @@ float OrthographicCamera::calculateAngle (float a) {
 void OrthographicCamera::calculateDirection (float angle, Vector3& dir) {
     Matrix4 transform;
     dir = Vector3(-1, 0, 1).nor();
-    float rotAngle = toDegrees(std::asin(std::tan(toRadians(angle))));
     transform.setToRotation(Vector3(1, 0, 1).nor(), angle);
     dir.mul(transform).nor();
 }

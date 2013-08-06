@@ -14,26 +14,29 @@
 
 //using namespace gdx;
 //namespace gdx {
-class ColorAttribute : public MaterialAttribute {
+class ColorAttribute : public MaterialAttribute
+{
 public:
-	static const char* diffuse;
-	static const char* specular;
-	static const char* emissive;
-	static const char* rim;
-	static const char* fog;
+    static const char* diffuse;
+    static const char* specular;
+    static const char* emissive;
+    static const char* rim;
+    static const char* fog;
 
-	Color color;
-	ColorAttribute(const Color& color, const char* name);
-	void bind();
-	void bind(ShaderProgram& program);
-	MaterialAttribute& copy();
-	void set(MaterialAttribute& attr);
-	MaterialAttribute& pooledCopy();
-	void free();
+    Color color;
+    ColorAttribute ( const Color& color, const char* name );
+    void bind();
+    void bind ( ShaderProgram& program );
+    MaterialAttribute& copy();
+    void set ( MaterialAttribute& attr );
+    MaterialAttribute& pooledCopy();
+    void free();
+    
+    virtual ~ColorAttribute();
 private:
-	static Pool<ColorAttribute> pool;
+    static Pool<ColorAttribute> pool;
 public:
-	ColorAttribute();
+    ColorAttribute();
 
 };
 //}

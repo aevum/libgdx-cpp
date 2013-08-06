@@ -180,7 +180,7 @@ std::vector< std::pair< std::string , std::string > > gdx::SvgParser::parse_styl
     std::vector<std::string> res =  splitArgs<std::string>(style, ":;", result);
     std::vector< std::pair< std::string , std::string > > ret;
 
-    for (int i = 0; i < res.size(); i += 2) {
+    for (unsigned i = 0; i < res.size(); i += 2) {
         std::remove(res[i].begin(), res[i].end(), ' ');
         std::remove(res[i+1].begin(), res[i+1].end(), ' ');
         ret.push_back( std::make_pair(res[i], res[i+1]) );
@@ -194,7 +194,7 @@ bool gdx::SvgParser::parse_attr(const std::string& name, const std::string& valu
     if (name == "style")
     {
         std::vector< std::pair< std::string , std::string > > res = parse_style(value);
-        for (int i = 0; i < res.size(); ++i) {
+        for (unsigned i = 0; i < res.size(); ++i) {
             parse_attr(res[i].first, res[i].second);
         }
     }
@@ -406,6 +406,8 @@ gdx::Color gdx::SvgParser::parse_color(const std::string& colorValue)
     } else {
         gdx_log_error("gdx","No implemented yet");
     }
+    
+    return gdx::Color::WHITE;
 }
 
 void gdx::SvgParser::parse_line(gdx::XmlReader::Element* node)
@@ -589,7 +591,7 @@ void gdx::SvgParser::fetchStopData(gdx::XmlReader::Element* node , std::vector< 
             if (child->hasAttribute("style")) {
                 std::vector< std::pair< std::string , std::string > > res = parse_style(child->getAttribute("style"));
 
-                for (int i = 0; i < res.size(); ++i) {
+                for (unsigned i = 0; i < res.size(); ++i) {
                     if (res[i].first == "stop-color") {
                         stop.color = parse_color(res[i].second);
                     } else if (res[i].first == "stop-opacity") {

@@ -46,7 +46,7 @@ using namespace gdx;
 #define IS_IN_RANGE(c, f, l)    (((c) >= (f)) && ((c) <= (l)))
 
 //function grabbed on http://stackoverflow.com/questions/2948308/how-do-i-read-utf-8-characters-via-a-pointer/2953960#2953960
-uint32_t readNextChar (const char* p, unsigned int& index) 
+int readNextChar (const char* p, unsigned int& index) 
 {  
     // TODO: since UTF-8 is a variable-length
     // encoding, you should pass in the input
@@ -201,6 +201,7 @@ BitmapFont::Glyph* BitmapFont::BitmapFontData::getFirstGlyph () {
     }
 
     gdx_log_error ("BitmapFontData::getFirstGlyph", "No glyphs found!" );
+    return nullptr;
 }
 
 BitmapFont::Glyph* BitmapFont::BitmapFontData::getGlyph(unsigned int ch)
@@ -217,7 +218,7 @@ BitmapFont::Glyph* BitmapFont::BitmapFontData::getGlyph(unsigned int ch)
 unsigned int BitmapFont::BitmapFontData::getGlyph ( const std::string& str, unsigned int& pos, BitmapFont::Glyph*& result ) {
     result = nullptr;
     
-    unsigned int ch = 0;
+    int ch = 0;
     if (isascii(str[pos])) {
         ch = str[pos];        
         pos++;
@@ -810,7 +811,7 @@ fontSize(0) {
             gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
         }
 
-        char* common = strtok ( line, " " );
+        /*char* common = */strtok ( line, " " );
 
         if ( sscanf ( strtok ( NULL, " " ), "lineHeight=%f", &lineHeight ) != 1 ) {
             gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );

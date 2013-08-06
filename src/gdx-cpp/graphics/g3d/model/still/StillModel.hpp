@@ -18,21 +18,21 @@ using namespace std;
 class StillModel : public Model
 {
 private:
-	static BoundingBox tmpbox;
+    static BoundingBox tmpbox;
 public:
-	vector<StillSubMesh*> subMeshes;
-	StillModel();
-	StillModel(vector<SubMesh*>& subMeshes);
-	virtual ~StillModel();
-	void render();
-	void render(ShaderProgram& program);
-	Model* getSubModel(const vector<string>& subMeshNames);
-	StillSubMesh* getSubMesh(string name);
-	vector<SubMesh*>& getSubMeshes();
-	void setMaterials(vector<Material*> materials);
-	void setMaterial(Material* material);
-	void getBoundingBox(BoundingBox& bbox);
-	void dispose();
+    vector<StillSubMesh*> subMeshes;
+    StillModel();
+    StillModel ( vector<SubMesh*>& subMeshes );
+    virtual ~StillModel();
+    void render();
+    void render ( ShaderProgram& program );
+    Model* getSubModel ( const vector<string>& subMeshNames );
+    StillSubMesh* getSubMesh ( string name );
+    vector<SubMesh*>& getSubMeshes() const;
+    void setMaterials ( vector<Material*> materials );
+    void setMaterial ( Material* material );
+    void getBoundingBox ( BoundingBox& bbox );
+    void dispose();
 };
 
 } /* namespace gdx */

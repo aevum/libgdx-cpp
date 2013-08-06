@@ -25,7 +25,7 @@
 
 using namespace std;
 
-int32 b2BlockAllocator::s_blockSizes[b2_blockSizes] = 
+uint32 b2BlockAllocator::s_blockSizes[b2_blockSizes] = 
 {
 	16,		// 0
 	32,		// 1
@@ -69,8 +69,8 @@ b2BlockAllocator::b2BlockAllocator()
 
 	if (s_blockSizeLookupInitialized == false)
 	{
-		int32 j = 0;
-		for (int32 i = 1; i <= b2_maxBlockSize; ++i)
+		uint32 j = 0;
+		for (uint32 i = 1; i <= b2_maxBlockSize; ++i)
 		{
 			b2Assert(j < b2_blockSizes);
 			if (i <= s_blockSizes[j])
@@ -98,7 +98,7 @@ b2BlockAllocator::~b2BlockAllocator()
 	b2Free(m_chunks);
 }
 
-void* b2BlockAllocator::Allocate(int32 size)
+void* b2BlockAllocator::Allocate(uint32 size)
 {
 	if (size == 0)
 		return NULL;
@@ -110,7 +110,7 @@ void* b2BlockAllocator::Allocate(int32 size)
 		return b2Alloc(size);
 	}
 
-	int32 index = s_blockSizeLookup[size];
+	uint32 index = s_blockSizeLookup[size];
 	b2Assert(0 <= index && index < b2_blockSizes);
 
 	if (m_freeLists[index])
@@ -138,9 +138,9 @@ void* b2BlockAllocator::Allocate(int32 size)
 #endif
 		int32 blockSize = s_blockSizes[index];
 		chunk->blockSize = blockSize;
-		int32 blockCount = b2_chunkSize / blockSize;
+		uint32 blockCount = b2_chunkSize / blockSize;
 		b2Assert(blockCount * blockSize <= b2_chunkSize);
-		for (int32 i = 0; i < blockCount - 1; ++i)
+		for (uint32 i = 0; i < blockCount - 1; ++i)
 		{
 			b2Block* block = (b2Block*)((int8*)chunk->blocks + blockSize * i);
 			b2Block* next = (b2Block*)((int8*)chunk->blocks + blockSize * (i + 1));
@@ -156,7 +156,7 @@ void* b2BlockAllocator::Allocate(int32 size)
 	}
 }
 
-void b2BlockAllocator::Free(void* p, int32 size)
+void b2BlockAllocator::Free(void* p, uint32 size)
 {
 	if (size == 0)
 	{
@@ -171,7 +171,7 @@ void b2BlockAllocator::Free(void* p, int32 size)
 		return;
 	}
 
-	int32 index = s_blockSizeLookup[size];
+	uint32 index = s_blockSizeLookup[size];
 	b2Assert(0 <= index && index < b2_blockSizes);
 
 #ifdef _DEBUG

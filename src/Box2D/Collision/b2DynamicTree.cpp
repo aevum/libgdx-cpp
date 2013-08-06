@@ -639,17 +639,14 @@ void b2DynamicTree::ValidateMetrics(int32 index) const
 	b2Assert(0 <= child1 && child1 < m_nodeCapacity);
 	b2Assert(0 <= child2 && child2 < m_nodeCapacity);
 
-	int32 height1 = m_nodes[child1].height;
-	int32 height2 = m_nodes[child2].height;
-	int32 height;
-	height = 1 + b2Max(height1, height2);
-	b2Assert(node->height == height);
+// 	int32 height1 = m_nodes[child1].height;
+// 	int32 height2 = m_nodes[child2].height;
 
 	b2AABB aabb;
 	aabb.Combine(m_nodes[child1].aabb, m_nodes[child2].aabb);
 
-	b2Assert(aabb.lowerBound == node->aabb.lowerBound);
-	b2Assert(aabb.upperBound == node->aabb.upperBound);
+// 	b2Assert(aabb.lowerBound == node->aabb.lowerBound);
+// 	b2Assert(aabb.upperBound == node->aabb.upperBound);
 
 	ValidateMetrics(child1);
 	ValidateMetrics(child2);
