@@ -26,7 +26,6 @@ target_link_libraries({ProjectName} gdx-cpp ${{GDX_BACKEND_LIB}})
 add_dependencies({ProjectName} gdx-cpp ${{GDX_BACKEND_LIB}})
 
 if (GDX_BACKEND_IOS)
-  message(FATAL_ERROR ${{PROJECT_BINARY_DIR}}/lib/${{CMAKE_BUILD_TYPE}})
   link_directories(${{PROJECT_BINARY_DIR}}/lib/${{CMAKE_BUILD_TYPE}})
   set_target_properties({ProjectName} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${{CMAKE_CURRENT_SOURCE_DIR}}/src/{ProjectName}/Info.plist)
   gdx_ios_copy_resources({ProjectName} data "")
