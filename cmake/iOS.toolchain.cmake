@@ -36,12 +36,20 @@ set (UNIX True)
 set (APPLE True)
 set (IOS True)
 
+# Required as of cmake 2.8.10
+set (CMAKE_OSX_DEPLOYMENT_TARGET "" CACHE STRING "Force unset of the deployment target for iOS" FORCE)
+
 # Determine the cmake host system version so we know where to find the iOS SDKs
 find_program (CMAKE_UNAME uname /bin /usr/bin /usr/local/bin)
 if (CMAKE_UNAME)
 	exec_program(uname ARGS -r OUTPUT_VARIABLE CMAKE_HOST_SYSTEM_VERSION)
 	string (REGEX REPLACE "^([0-9]+)\\.([0-9]+).*$" "\\1" DARWIN_MAJOR_VERSION "${CMAKE_HOST_SYSTEM_VERSION}")
 endif (CMAKE_UNAME)
+
+# Force the compilers to gcc for iOS
+include (CMakeForceCompiler)
+CMAKE_FORCE_C_COMPILER (gcc gcc)
+CMAKE_FORCE_CXX_COMPILER (g++ g++)
 
 # Skip the platform compiler checks for cross compiling
 set (CMAKE_CXX_COMPILER_WORKS TRUE)
@@ -124,7 +132,7 @@ if (NOT DEFINED CMAKE_IOS_SDK_ROOT)
 		list (REVERSE _CMAKE_IOS_SDKS)
 		list (GET _CMAKE_IOS_SDKS 0 CMAKE_IOS_SDK_ROOT)
 	else (_CMAKE_IOS_SDKS)
-		message (FATAL_ERROR "No iOS SDK's found in default seach path ${CMAKE_IOS_DEVELOPER_ROOT}. Manually set CMAKE_IOS_SDK_ROOT or install the iOS SDK.")
+		message (FATAL_ERROR "No iOS SDK's found in default search path ${CMAKE_IOS_DEVELOPER_ROOT}. Manually set CMAKE_IOS_SDK_ROOT or install the iOS SDK.")
 	endif (_CMAKE_IOS_SDKS)
 	message (STATUS "Toolchain using default iOS SDK: ${CMAKE_IOS_SDK_ROOT}")
 endif (NOT DEFINED CMAKE_IOS_SDK_ROOT)
@@ -135,11 +143,7 @@ set (CMAKE_OSX_SYSROOT ${CMAKE_IOS_SDK_ROOT} CACHE PATH "Sysroot used for iOS su
 
 # set the architecture for iOS 
 # NOTE: Currently both ARCHS_STANDARD_32_BIT and ARCHS_UNIVERSAL_IPHONE_OS set armv7 only, so set both manually
-if (${IOS_PLATFORM} STREQUAL "OS")
-	set (IOS_ARCH "$(ARCHS_STANDARD_32_BIT)")
-else (${IOS_PLATFORM} STREQUAL "OS")
-	set (IOS_ARCH i386)
-endif (${IOS_PLATFORM} STREQUAL "OS")
+set (IOS_ARCH "$(ARCHS_STANDARD_32_BIT)")
 
 set (CMAKE_OSX_ARCHITECTURES ${IOS_ARCH} CACHE string  "Build architecture for iOS")
 

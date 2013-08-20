@@ -19,7 +19,7 @@
 
 #include <agg_rendering_buffer.h>
 #include <agg_scanline_p.h>
-#include <agg_svg_path_renderer.h>
+#include "agg_svg_path_renderer.h"
 #include <gdx-cpp/graphics/g2d/svg/AggSvgPixmap.hpp>
 #include <string.h>
 #include <vector>

@@ -65,6 +65,8 @@ public:
     float viewportHeight;
     
     Frustum frustum;
+    
+    virtual ~Camera() {}
 protected:
     Vector3 right;
     Ray ray;

@@ -529,7 +529,7 @@ if (ANDROID_NDK)
     target_link_libraries(gdx-cpp GLESv1_CM GLESv2 gdx-cpp-backend-android log )
 endif()
 
-cotire(gdx-cpp)
+#cotire(gdx-cpp)
 
 install(TARGETS gdx-cpp
     LIBRARY DESTINATION lib
