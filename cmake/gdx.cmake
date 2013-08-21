@@ -73,7 +73,7 @@ macro(gdx_setup_target target_name target_type sources)
             
             set_target_properties(${target_name}-html 
                 PROPERTIES 
-                    LINK_FLAGS "-O2 -s FULL_ES2=1 -s WARN_ON_UNDEFINED_SYMBOLS=1 -s TOTAL_MEMORY=268435456"
+                    LINK_FLAGS "-O2 --closure 0 -s FULL_ES2=1 -s WARN_ON_UNDEFINED_SYMBOLS=1 -s TOTAL_MEMORY=268435456"
                     SUFFIX ".html"
                     OUTPUT_NAME ${target_name})
             

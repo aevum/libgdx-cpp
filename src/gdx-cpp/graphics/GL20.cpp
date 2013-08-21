@@ -157,7 +157,7 @@ std::string GL20::glGetActiveAttrib ( int program,int index, const int* size, co
 {
     GLint max_length;
     glGetProgramiv ( program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &max_length );
-    char* buf = new char[max_length + 1];
+    char buf[max_length + 1];
     ::glGetActiveAttrib ( program, index, max_length + 1, NULL, ( int * ) size, ( unsigned int* ) type, buf );
     return buf;
 }
@@ -166,7 +166,7 @@ std::string GL20::glGetActiveUniform ( int program,int index,const int* size,con
 {
     GLint max_length;
     glGetProgramiv ( program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &max_length );
-    char* buf = new char[max_length + 1];
+    char buf[max_length + 1];
     ::glGetActiveUniform ( program, index, max_length + 1, NULL, ( int* ) size, ( unsigned int* ) type, buf );
     return buf;
 }
