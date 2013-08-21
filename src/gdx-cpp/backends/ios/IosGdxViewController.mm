@@ -32,14 +32,24 @@
 @synthesize context, displayLink;
 
 - (id) initWithNibName:(NSString* ) nibNameOrNil bundle:(NSBundle*)nibBundleOrNil {
-	if (self = [ super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {        
-        self.view = glView = [[EAGLView viewWithFrame: [UIScreen mainScreen].bounds
+	if (self = [ super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            self.view = glView = [[EAGLView viewWithFrame: [UIScreen mainScreen].bounds
                              pixelFormat: kEAGLColorFormatRGBA8
                              depthFormat: GL_DEPTH_COMPONENT16_OES
                       preserveBackbuffer: NO
                               sharegroup: nil
-                           multiSampling: NO
-                            numberOfSamples: 0] retain];
+                           multiSampling: YES
+                            numberOfSamples: 4] retain];
+        } else {
+            self.view = glView = [[EAGLView viewWithFrame: [UIScreen mainScreen].bounds
+                                              pixelFormat: kEAGLColorFormatRGBA8
+                                              depthFormat: GL_DEPTH_COMPONENT16_OES
+                                       preserveBackbuffer: NO
+                                               sharegroup: nil
+                                            multiSampling: NO
+                                          numberOfSamples: 0] retain];
+        }
 	}
 	return self;
 }

@@ -2,8 +2,6 @@ project(gdx-cpp)
 
 cmake_minimum_required(VERSION 2.8)
 
-set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
-
 include(cmake/gdx.cmake)
 include(cmake/cotire.cmake)
 

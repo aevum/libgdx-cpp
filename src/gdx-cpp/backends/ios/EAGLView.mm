@@ -126,6 +126,9 @@
 									[NSNumber numberWithBool:preserveBackbuffer_], kEAGLDrawablePropertyRetainedBacking,
 									pixelformat_, kEAGLDrawablePropertyColorFormat, nil];
 	
+    
+    NSLog(@"Screen scale is %f", [[UIScreen mainScreen] scale]);
+    
     eaglLayer.contentsScale = [[UIScreen mainScreen] scale];
 	
 	self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];

@@ -191,7 +191,7 @@ void FFT::buildTrigTables () {
     sinlookup = std::vector<float>(N);
     coslookup = std::vector<float>(N);
     for (int i = 0; i < N; i++) {
-        sinlookup[i] = (float)std::sin(-(float)PI / i);
-        coslookup[i] = (float)std::cos(-(float)PI / i);
+        sinlookup[i] = (float)std::sin(-(float)gdx::detail::PI / i);
+        coslookup[i] = (float)std::cos(-(float)gdx::detail::PI / i);
     }
 }

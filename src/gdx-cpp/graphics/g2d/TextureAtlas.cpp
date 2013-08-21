@@ -217,23 +217,23 @@ void TextureAtlas::AtlasSprite::flip(bool x, bool y) {
     setOrigin(oldOriginX, oldOriginY);
 }
 
-float TextureAtlas::AtlasSprite::getX() {
+float TextureAtlas::AtlasSprite::getX() const {
     return Sprite::getX() - region.offsetX;
 }
-float TextureAtlas::AtlasSprite::getY() {
+float TextureAtlas::AtlasSprite::getY() const {
     return Sprite::getY() - region.offsetY;
 }
-float TextureAtlas::AtlasSprite::getOriginX() {
+float TextureAtlas::AtlasSprite::getOriginX() const {
     return Sprite::getOriginX() + region.offsetX;
 }
-float TextureAtlas::AtlasSprite::getOriginY() {
+float TextureAtlas::AtlasSprite::getOriginY() const {
     return Sprite::getOriginY() + region.offsetY;
 }
-float TextureAtlas::AtlasSprite::getWidth() {
+float TextureAtlas::AtlasSprite::getWidth() const {
     float packedWidth = region.rotate ? region.packedHeight : region.packedWidth;
     return Sprite::getWidth() / packedWidth * region.originalWidth;
 }
-float TextureAtlas::AtlasSprite::getHeight() {
+float TextureAtlas::AtlasSprite::getHeight() const {
     float packedHeight = region.rotate ? region.packedWidth : region.packedHeight;
     return Sprite::getHeight() / packedHeight * region.originalHeight;
 }

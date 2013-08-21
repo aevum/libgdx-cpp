@@ -75,12 +75,12 @@ public:
         virtual void setSize (float width, float height);
         virtual void setOrigin (float originX, float originY);
         virtual void flip (bool x, bool y);
-        virtual float getX();
-        virtual float getY();
-        virtual float getOriginX();
-        virtual float getOriginY();
-        virtual float getWidth();
-        virtual float getHeight();
+        virtual float getX() const;
+        virtual float getY() const;
+        virtual float getOriginX() const;
+        virtual float getOriginY() const;
+        virtual float getWidth() const;
+        virtual float getHeight() const;
 
         AtlasRegion getAtlasRegion();
     };
