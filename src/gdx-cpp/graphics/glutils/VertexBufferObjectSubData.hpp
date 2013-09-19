@@ -27,8 +27,6 @@
 #include "gdx-cpp/graphics/VertexAttributes.hpp"
 #include "gdx-cpp/utils/Buffer.hpp"
 
-class tm;
-
 namespace gdx {
 class ShaderProgram;
 class VertexAttribute;
@@ -39,18 +37,18 @@ public:
 
     VertexBufferObjectSubData (bool isStatic, int numVertices, const std::vector<VertexAttribute>& attributes) ;
         
-    VertexAttributes& getAttributes ();
-    int getNumVertices ();
-    int getNumMaxVertices ();
-    void setVertices(const float* vertices, int offset,int count);
+    VertexAttributes& getAttributes () override;
+    int getNumVertices () override;
+    int getNumMaxVertices () override;
+    void setVertices(const float* vertices, int offset,int count) override;
 
-    float_buffer& getBuffer();
-    void bind ();
+    float_buffer& getBuffer() override;
+    void bind () override;
     void bind (ShaderProgram& shader);
-    void unbind ();
+    void unbind () override;
     void unbind (ShaderProgram& shader);
     void invalidate ();
-    void dispose ();
+    void dispose () override;
     int getBufferHandle ();
 
 protected:

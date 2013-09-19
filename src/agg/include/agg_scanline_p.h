@@ -60,9 +60,9 @@ namespace agg
         scanline_p8() :
             m_last_x(0x7FFFFFF0),
             m_covers(),
-            m_cover_ptr(0),
+            m_cover_ptr(nullptr),
             m_spans(),
-            m_cur_span(0)
+            m_cur_span(nullptr)
         {
         }
 
@@ -223,7 +223,7 @@ namespace agg
             m_max_len(0),
             m_last_x(0x7FFFFFF0),
             m_covers(),
-            m_cover_ptr(0)
+            m_cover_ptr(nullptr)
         {
         }
 

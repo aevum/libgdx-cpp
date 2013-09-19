@@ -38,7 +38,6 @@ class AndroidApplication : public Application, public Runnable, public Synchroni
 public:
     AndroidApplication(gdx::ApplicationListener* listener, const std::string& title, int width, int height, bool useGL20IfAvailable);
     
-    void error(const std::string& tag, const char* format, ...);
     void exit();
     Audio* getAudio();
     Files* getFiles();
@@ -51,8 +50,6 @@ public:
     void postRunnable(Runnable::ptr runnable);
     virtual void postRunnable(std::function< void() > runnable);
     
-    void setLogLevel(int logLevel);
-
     void onRunnableStop();
 
     void update();

@@ -33,6 +33,7 @@
 #include "gdx-cpp/graphics/Texture.hpp"
 #include "gdx-cpp/graphics/g2d/Sprite.hpp"
 #include "gdx-cpp/math/MathUtils.hpp"
+#include "gdx-cpp/utils/StringConvertion.hpp"
 
 using namespace gdx;
 
@@ -173,9 +174,9 @@ ParticleEmitter::ParticleEmitter ( ParticleEmitter& emitter ) : duration ( 1 ),
 
 ParticleEmitter::~ParticleEmitter()
 {
-    for ( unsigned int i = 0; i < particles.size(); i ++ ) {
-        if ( particles[i] != NULL ) {
-            delete particles[i];
+    for (auto & elem : particles) {
+        if ( elem != nullptr ) {
+            delete elem;
         }
     }
 }
@@ -198,9 +199,9 @@ void ParticleEmitter::setMaxParticleCount ( int maxParticleCount )
     active.clear();
     active.resize ( maxParticleCount );
     activeCount = 0;
-    for ( unsigned i = 0 ; i < particles.size(); i++ ) {
-        if ( particles[i] != NULL ) {
-            delete particles[i];
+    for (auto & elem : particles) {
+        if ( elem != nullptr ) {
+            delete elem;
         }
     }
     particles.clear();
@@ -460,7 +461,7 @@ void ParticleEmitter::restart ()
 void ParticleEmitter::activateParticle ( int index )
 {
     Particle * particle = particles[index];
-    if ( particle == NULL ) {
+    if ( particle == nullptr ) {
         particles[index] = particle = new Particle ( sprite );
         particle->flip ( flipX, flipY );
     }
@@ -718,9 +719,9 @@ void ParticleEmitter::setSprite ( gdx::Sprite::ptr sprite )
     float originX = sprite->getOriginX();
     float originY = sprite->getOriginY();
     Texture::ptr texture = sprite->getTexture();
-    for ( unsigned int i = 0, n = particles.size(); i < n; i++ ) {
-        Particle * particle = particles[i];
-        if ( particle == NULL ) {
+    for (auto & elem : particles) {
+        Particle * particle = elem;
+        if ( particle == nullptr ) {
             break;
         }
         particle->setTexture ( texture );
@@ -938,8 +939,8 @@ int ParticleEmitter::getActiveCount ()
 int ParticleEmitter::getDrawCount ()
 {
     int result = 0;
-    for ( unsigned int i = 0; i < active.size(); i++ ) {
-        if ( active[i] ) {
+    for (const auto& elem: active) {
+        if ( elem ) {
             result++;
         }
     }
@@ -963,9 +964,9 @@ void ParticleEmitter::setFlip ( bool flipX,bool flipY )
     if ( particles.size() == 0 ) {
         return;
     }
-    for ( unsigned int i = 0, n = particles.size(); i < n; i++ ) {
-        Particle * particle = particles[i];
-        if ( particle != NULL ) {
+    for (auto & elem : particles) {
+        Particle * particle = elem;
+        if ( particle != nullptr ) {
             particle->flip ( flipX, flipY );
         }
     }
@@ -1448,12 +1449,12 @@ void ParticleEmitter::ScaledNumericValue::load ( std::istream& reader )
     scaling.clear();
     scaling.resize ( readInt ( reader, "scalingCount" ) );
     for ( unsigned int i = 0; i < scaling.size(); i++ ) {
-        scaling[i] = readFloat ( reader, "scaling" + i );
+        scaling[i] = readFloat ( reader, "scaling" + gdx::to_string(i) );
     }
     timeline.clear();
     timeline.resize ( readInt ( reader, "timelineCount" ) );
     for ( unsigned int i = 0; i < timeline.size(); i++ ) {
-        timeline[i] = readFloat ( reader, "timeline" + i );
+        timeline[i] = readFloat ( reader, "timeline" + gdx::to_string(i) );
     }
 }
 
@@ -1534,11 +1535,11 @@ void ParticleEmitter::GradientColorValue::save ( std::ostream& output )
     if ( !active ) {
         return;
     }
-    output << "colorsCount: " + colors.size() << std::endl;
+    output << "colorsCount: " << colors.size() << std::endl;
     for ( unsigned int i = 0; i < colors.size(); i++ ) {
         output << "colors" << i << ": " << colors[i] << std::endl;
     }
-    output << "timelineCount: " + timeline.size() << std::endl;
+    output << "timelineCount: " << timeline.size() << std::endl;
     for ( unsigned int i = 0; i < timeline.size(); i++ ) {
         output << "timeline" << i << ": " << timeline[i] << std::endl;
     }
@@ -1553,12 +1554,12 @@ void ParticleEmitter::GradientColorValue::load ( std::istream& reader )
     colors.clear();
     colors.resize ( readInt ( reader, "colorsCount" ) );
     for ( unsigned int i = 0; i < colors.size(); i++ ) {
-        colors[i] = readFloat ( reader, "colors" + i );
+        colors[i] = readFloat ( reader, "colors" + gdx::to_string(i) );
     }
     timeline.clear();
     timeline.resize ( readInt ( reader, "timelineCount" ) );
     for ( unsigned int i = 0; i < timeline.size(); i++ ) {
-        timeline[i] = readFloat ( reader, "timeline" + i );
+        timeline[i] = readFloat ( reader, "timeline" + gdx::to_string(i) );
     }
 }
 

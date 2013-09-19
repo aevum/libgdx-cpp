@@ -36,9 +36,9 @@ public:
 
 class RunnableFunctionExecutor : public Runnable {
 public:
-    RunnableFunctionExecutor(std::function< void() > func) : function(func) { }
-    virtual void onRunnableStop() { }
-    virtual void run() { 
+    RunnableFunctionExecutor(std::function< void() > func) : function(std::move(func)) { }
+    virtual void onRunnableStop() override { }
+    virtual void run() override { 
         function(); 
     }
 private:

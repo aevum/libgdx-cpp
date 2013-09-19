@@ -13,8 +13,8 @@ BoundingBox StillModel::tmpbox;
 
 StillModel::~StillModel()
 {
-    for ( size_t i = 0; i < subMeshes.size(); i++ ) {
-        delete subMeshes[i];
+    for (auto & elem : subMeshes) {
+        delete elem;
     }
     subMeshes.clear();
 }
@@ -26,8 +26,8 @@ StillModel::StillModel()
 
 StillModel::StillModel ( vector<SubMesh*>& meshes )
 {
-    for ( unsigned i = 0; i < meshes.size(); i++ ) {
-        subMeshes.push_back ( static_cast<StillSubMesh*> ( meshes[i] ) );
+    for (auto & meshe : meshes) {
+        subMeshes.push_back ( static_cast<StillSubMesh*> ( meshe ) );
     }
 }
 
@@ -62,27 +62,27 @@ void StillModel::render ( ShaderProgram& shader )
 Model* StillModel::getSubModel ( const vector<string>& subMeshNames )
 {
     vector<SubMesh*> refSubMeshes;
-    for ( size_t i = 0; i < subMeshNames.size(); i++ ) {
-        for ( size_t j = 0; j < subMeshes.size(); j++ ) {
-            if ( subMeshNames[i] == subMeshes[j]->name ) {
-                refSubMeshes.push_back ( subMeshes[j] );
+    for (auto & subMeshName : subMeshNames) {
+        for (auto & elem : subMeshes) {
+            if ( subMeshName == elem->name ) {
+                refSubMeshes.push_back ( elem );
             }
         }
     }
     if ( refSubMeshes.size() > 0 ) {
         return new StillModel ( refSubMeshes );
     }
-    return NULL;
+    return nullptr;
 }
 
 StillSubMesh* StillModel::getSubMesh ( string name )
 {
-    for ( size_t i = 0; i < subMeshes.size(); i++ ) {
-        if ( subMeshes[i]->name == name ) {
-            return subMeshes[i];
+    for (auto & elem : subMeshes) {
+        if ( elem->name == name ) {
+            return elem;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 vector<SubMesh*>& StillModel::getSubMeshes() const
@@ -104,24 +104,24 @@ void StillModel::setMaterials ( vector<Material*> materials )
 
 void StillModel::setMaterial ( Material* material )
 {
-    for ( size_t i = 0; i < subMeshes.size(); i++ ) {
-        subMeshes[i]->material = material;
+    for (auto & elem : subMeshes) {
+        elem->material = material;
     }
 }
 
 void StillModel::getBoundingBox ( BoundingBox& bbox )
 {
     bbox.inf();
-    for ( size_t i = 0; i < subMeshes.size(); i++ ) {
-        subMeshes[i]->mesh->calculateBoundingBox ( tmpbox );
+    for (auto & elem : subMeshes) {
+        elem->mesh->calculateBoundingBox ( tmpbox );
         bbox.ext ( tmpbox );
     }
 }
 
 void StillModel::dispose()
 {
-    for ( size_t i = 0; i < subMeshes.size(); i++ ) {
-        subMeshes[i]->mesh->dispose();
+    for (auto & elem : subMeshes) {
+        elem->mesh->dispose();
     }
 }
 

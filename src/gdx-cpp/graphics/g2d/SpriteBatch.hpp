@@ -63,7 +63,7 @@ public:
     void disableBlending ();
     void enableBlending ();
     void setBlendFunction (int srcFunc,int dstFunc);
-    void dispose ();
+    void dispose () override;
     Matrix4& getProjectionMatrix ();
     const Matrix4& getTransformMatrix ();
     void setProjectionMatrix (const Matrix4& projection);

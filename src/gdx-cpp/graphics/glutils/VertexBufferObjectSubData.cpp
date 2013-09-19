@@ -32,15 +32,15 @@
 using namespace gdx;
 
 int VertexBufferObjectSubData::createBufferObject () {
-    if (gl20 != NULL) {
+    if (gl20 != nullptr) {
         gl20->glGenBuffers(1, (unsigned int*) &tmpHandle);
         gl20->glBindBuffer(gdx::GL::ARRAY_BUFFER, tmpHandle);
-        gl20->glBufferData(gdx::GL::ARRAY_BUFFER, byteBuffer.capacity(), NULL, usage);
+        gl20->glBufferData(gdx::GL::ARRAY_BUFFER, byteBuffer.capacity(), nullptr, usage);
         gl20->glBindBuffer(gdx::GL::ARRAY_BUFFER, 0);
     } else {
         gl11->glGenBuffers(1, &tmpHandle);
         gl11->glBindBuffer(gdx::GL::ARRAY_BUFFER, tmpHandle);
-        gl11->glBufferData(gdx::GL::ARRAY_BUFFER, byteBuffer.capacity(), NULL, usage);
+        gl11->glBufferData(gdx::GL::ARRAY_BUFFER, byteBuffer.capacity(), nullptr, usage);
         gl11->glBindBuffer(gdx::GL::ARRAY_BUFFER, 0);
     }
     return tmpHandle;
@@ -78,7 +78,7 @@ void VertexBufferObjectSubData::setVertices (const float* vertices, int offset, 
     }
 
     if (isBound) {
-        if (gl20 != NULL) {
+        if (gl20 != nullptr) {
             GL20& gl = *gl20;
             gl.glBufferSubData(gdx::GL::ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
         } else {
@@ -221,7 +221,7 @@ void VertexBufferObjectSubData::invalidate () {
 }
 
 void VertexBufferObjectSubData::dispose () {
-    if (gl20 != NULL) {
+    if (gl20 != nullptr) {
         tmpHandle = bufferHandle;
         
         GL20& gl = *gl20;

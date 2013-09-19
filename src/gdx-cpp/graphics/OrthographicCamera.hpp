@@ -33,7 +33,7 @@ public:
     OrthographicCamera (float viewportWidth, float viewportHeight, float diamondAngle);
     
     void findDirectionForIsoView (float targetAngle,float epsilon,int maxIterations);
-    void update ();
+    void update () override;
     void setToOrtho(bool yDown);
     void setToOrtho(bool yDown, float viewportWidth, float viewportHeight);
     

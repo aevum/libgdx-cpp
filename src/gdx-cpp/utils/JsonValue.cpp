@@ -67,7 +67,7 @@ const JsonValue& JsonValue::operator[](const char* name) const
 {
     assert(item_val.type == json_json);
     
-    item_map::const_iterator found = this->as_item_map().find(name);
+    auto found = this->as_item_map().find(name);
     
     if (found == this->as_item_map().end()) {
         gdx_log_error("gdx","Missing field named [%s]", name);
@@ -148,8 +148,8 @@ void JsonValue::toString(std::ostream& out, bool prettyPrint, int ident) const
         out << this->as_int();
         break;
     case json_list: {
-        JsonValue::array::const_iterator iit = this->as_array().begin();
-        JsonValue::array::const_iterator eend = this->as_array().end();
+        auto iit = this->as_array().begin();
+        auto eend = this->as_array().end();
 
         out << "[";
         for (; iit != eend;) {
@@ -167,8 +167,8 @@ void JsonValue::toString(std::ostream& out, bool prettyPrint, int ident) const
     break;
     case json_json: {
 
-        JsonValue::item_map::const_iterator it =  this->as_item_map().begin();
-        JsonValue::item_map::const_iterator end = this->as_item_map().end();
+        auto it =  this->as_item_map().begin();
+        auto end = this->as_item_map().end();
 
         out << "{";
         if (prettyPrint) out << std::endl;
@@ -222,8 +222,8 @@ JsonValue& JsonValue::operator+=(const JsonValue& other) {
     item_map& thisAsMap = this->as_item_map();
     const item_map& otherAsMap = other.as_item_map();
 
-    item_map::const_iterator it = otherAsMap.begin();
-    item_map::const_iterator end = otherAsMap.end();
+    auto it = otherAsMap.begin();
+    auto end = otherAsMap.end();
 
     for (; it != end; ++it) {
         thisAsMap[it->first] = it->second;
@@ -259,6 +259,11 @@ bool& JsonValue::as_bool() {
     if (item_val.type == json_null) {
         item_val = false;
     }
+
+    if (item_val.type != json_bool) {
+        gdx_log_debug("JsonValue", "deu pau %s", toString().c_str());
+    }
+
     assert(item_val.type == json_bool);
     return item_val.value.bool_val;
 }

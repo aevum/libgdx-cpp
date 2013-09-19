@@ -58,7 +58,7 @@ EGLDisplay gdx::nix::LinuxGraphics::g_eglDisplay;
 EGLContext gdx::nix::LinuxGraphics::g_eglContext;
 EGLSurface gdx::nix::LinuxGraphics::g_eglSurface;
 
-Display* gdx::nix::LinuxGraphics::x11Disp = NULL;
+Display* gdx::nix::LinuxGraphics::x11Disp = nullptr;
 
 gdx::nix::LinuxGraphics::LinuxGraphics ( bool UseOpenGLES2 ) :
     vsync ( false ),
@@ -66,12 +66,12 @@ gdx::nix::LinuxGraphics::LinuxGraphics ( bool UseOpenGLES2 ) :
     window ( 0 ),
     width ( 0 ),
     height ( 0 ),
-    gl10 ( 0 ),
-    gl11 ( 0 ),
-    gl20 ( 0 ),
+    gl10 ( nullptr ),
+    gl11 ( nullptr ),
+    gl20 ( nullptr ),
     glu ( new LinuxGLU ),
-    glCommon ( 0 ),
-    iconPixmap ( 0 ),
+    glCommon ( nullptr ),
+    iconPixmap ( nullptr ),
     lastTime ( 0 ),
     frames ( 0 ),
     frameStart ( 0 ),
@@ -188,12 +188,12 @@ int gdx::nix::LinuxGraphics::getWidth()
 
 bool gdx::nix::LinuxGraphics::isGL11Available()
 {
-    return gl11 != NULL;
+    return gl11 != nullptr;
 }
 
 bool gdx::nix::LinuxGraphics::isGL20Available()
 {
-    return gl20 != NULL;
+    return gl20 != nullptr;
 }
 
 bool gdx::nix::LinuxGraphics::setDisplayMode ( gdx::Graphics::DisplayMode displayMode )
@@ -249,12 +249,12 @@ bool gdx::nix::LinuxGraphics::setDisplayMode ( int width, int height, bool fulls
     }
 
     if ( isUseOpenGLES2 ) {
-        x11Disp        = NULL;
-        g_eglSurface   = 0;
-        g_eglContext   = 0;
-        g_eglDisplay   = 0;
+        x11Disp        = nullptr;
+        g_eglSurface   = nullptr;
+        g_eglContext   = nullptr;
+        g_eglDisplay   = nullptr;
 
-        x11Disp        = XOpenDisplay ( 0 );
+        x11Disp        = XOpenDisplay ( nullptr );
         if ( !x11Disp ) {
             gdx_log_error ( "WINDOW", "Failed to open X display" );
             return false;
@@ -266,7 +266,7 @@ bool gdx::nix::LinuxGraphics::setDisplayMode ( int width, int height, bool fulls
             return false;
         }
 
-        if ( !eglInitialize ( g_eglDisplay, NULL, NULL ) ) {
+        if ( !eglInitialize ( g_eglDisplay, nullptr, nullptr ) ) {
             gdx_log_error ( "WINDOW", "Failed to initialize EGL" );
             return false;
         }
@@ -348,7 +348,7 @@ bool gdx::nix::LinuxGraphics::setDisplayMode ( int width, int height, bool fulls
         }
 
         /* Create surface */
-        g_eglSurface = eglCreateWindowSurface ( g_eglDisplay, g_eglConfig, ( EGLNativeWindowType ) sysInfo.info.x11.window, NULL );
+        g_eglSurface = eglCreateWindowSurface ( g_eglDisplay, g_eglConfig, ( EGLNativeWindowType ) sysInfo.info.x11.window, nullptr );
         if ( g_eglSurface == EGL_NO_SURFACE ) {
             gdx_log_error ( "WINDOW", "Failed to create EGL surface" );
             return false;
@@ -367,7 +367,7 @@ bool gdx::nix::LinuxGraphics::setDisplayMode ( int width, int height, bool fulls
         SDL_GL_SetAttribute ( SDL_GL_DEPTH_SIZE, 16 );
         SDL_GL_SetAttribute ( SDL_GL_BUFFER_SIZE, 32 );
         SDL_GL_SetAttribute ( SDL_GL_DOUBLEBUFFER, 1 );
-
+        SDL_GL_SetAttribute( SDL_GL_SWAP_CONTROL, 1 );
         if ( !SDL_SetVideoMode ( width, height, info->vfmt->BitsPerPixel, flags ) ) {
             gdx_log_error ( "gdx","Failed to initialize SDL video" );
             return false;
@@ -436,7 +436,7 @@ bool gdx::nix::LinuxGraphics::setupGLModes()
     if ( isUseOpenGLES2 ) {
         gl20 = new GL20;
         glCommon = gl20;
-        if ( glCommon == NULL ) {
+        if ( glCommon == nullptr ) {
             gdx_log_error ( "gdx", "error init gl" );
         }
 
@@ -463,7 +463,7 @@ bool gdx::nix::LinuxGraphics::setupGLModes()
         }
     }
 
-    SDL_WM_SetCaption ( this->title.c_str(), NULL );
+    SDL_WM_SetCaption ( this->title.c_str(), nullptr );
     glCommon->glViewport ( 0, 0, width, height );
 
     return true;
@@ -473,7 +473,7 @@ LinuxGraphics::~LinuxGraphics()
 {
     if ( isUseOpenGLES2 ) {
         if ( g_eglDisplay ) {
-            eglMakeCurrent ( g_eglDisplay, NULL, NULL, EGL_NO_CONTEXT );
+            eglMakeCurrent ( g_eglDisplay, nullptr, nullptr, EGL_NO_CONTEXT );
             if ( g_eglContext ) {
                 eglDestroyContext ( g_eglDisplay, g_eglContext );
             }
@@ -482,15 +482,15 @@ LinuxGraphics::~LinuxGraphics()
             }
             eglTerminate ( g_eglDisplay );
 
-            g_eglSurface = 0;
-            g_eglContext = 0;
-            g_eglDisplay = 0;
+            g_eglSurface = nullptr;
+            g_eglContext = nullptr;
+            g_eglDisplay = nullptr;
         }
 
         if ( x11Disp ) {
             XCloseDisplay ( x11Disp );
         }
-        x11Disp = NULL;
+        x11Disp = nullptr;
     } else {
         SDL_Quit();
     }

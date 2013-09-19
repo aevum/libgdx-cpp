@@ -86,7 +86,7 @@ void Box2DDebugRenderer::renderBodies ( b2World& world) {
     
     renderer.end();
 
-    if (gl10 != NULL) {
+    if (gl10 != nullptr) {
         gl10->glPointSize(3);
     }
     
@@ -97,7 +97,7 @@ void Box2DDebugRenderer::renderBodies ( b2World& world) {
     }
     renderer.end();
     
-    if (gl10 != NULL) {
+    if (gl10 != nullptr) {
         gl10->glPointSize(1);
     }
 }

@@ -51,7 +51,7 @@ public:
     virtual void glDeleteShader (int shader) const;
     virtual void glDetachShader (int program,int shader) const;
     virtual void glDisableVertexAttribArray (int index) const;
-    virtual void glDrawElements (int mode,int count,int type, const void* indices) const;
+    virtual void glDrawElements (int mode,int count,unsigned int type, const void* indices) const override;
     virtual void glEnableVertexAttribArray (int index) const;
     virtual void glFramebufferRenderbuffer (int target,int attachment,int renderbuffertarget,int renderbuffer) const;
     virtual void glFramebufferTexture2D (int target,int attachment,int textarget,int texture,int level) const;

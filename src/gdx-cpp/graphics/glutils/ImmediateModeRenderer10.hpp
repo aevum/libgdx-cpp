@@ -33,19 +33,19 @@ public:
     ImmediateModeRenderer10(int maxVertices = 2000);
     ~ImmediateModeRenderer10();
 
-    RendererType getRendererType() { return RendererType::IMMEDIATE_GLES10; }
+    RendererType getRendererType() override { return RendererType::IMMEDIATE_GLES10; }
     
-    void begin (Matrix4& projModelView, int primitiveType);
+    void begin (Matrix4& projModelView, int primitiveType) override;
     void begin (int primitiveType);
-    void color (float r,float g,float b,float a);
-    void normal (float x,float y,float z);
-    void texCoord (float u,float v);
-    void vertex (float x,float y,float z);
-    int getNumVertices ();
-    void end ();
+    void color (float r,float g,float b,float a) override;
+    void normal (float x,float y,float z) override;
+    void texCoord (float u,float v) override;
+    void vertex (float x,float y,float z) override;
+    int getNumVertices () override;
+    void end () override;
     void vertex (const Vector3& point);
-    int getMaxVertices();
-    void dispose();
+    int getMaxVertices() override;
+    void dispose() override;
 protected:
 
 

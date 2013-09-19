@@ -294,15 +294,15 @@ void b2CollidePolygons(b2Manifold* manifold,
 	manifold->localPoint = planePoint;
 
 	int32 pointCount = 0;
-	for (int32 i = 0; i < b2_maxManifoldPoints; ++i)
+	for (auto & elem : clipPoints2)
 	{
-		float32 separation = b2Dot(normal, clipPoints2[i].v) - frontOffset;
+		float32 separation = b2Dot(normal, elem.v) - frontOffset;
 
 		if (separation <= totalRadius)
 		{
 			b2ManifoldPoint* cp = manifold->points + pointCount;
-			cp->localPoint = b2MulT(xf2, clipPoints2[i].v);
-			cp->id = clipPoints2[i].id;
+			cp->localPoint = b2MulT(xf2, elem.v);
+			cp->id = elem.id;
 			if (flip)
 			{
 				// Swap features

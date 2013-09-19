@@ -125,13 +125,13 @@ public:
     static int createGLHandle ();
 
     static ptr newFromFile(const FileHandle::ptr& file,
-                           const Pixmap::Format* format = NULL,
+                           const Pixmap::Format* format = nullptr,
                            bool useMipMaps = false);
 
     virtual ~Texture();
 
 protected:
-    void dispose ();
+    void dispose () override;
     void initialize(const gdx::FileHandle::ptr& file, const gdx::Pixmap::Format* format, bool useMipMaps);
     Texture ();
 

@@ -36,18 +36,18 @@ public:
 
     void setup (int _channels, int _sampleRate);
     
-    void play ();
-    void pause ();
-    void stop ();
-    bool isPlaying ();    
-    bool isPaused ();
-    void setLooping (bool isLooping);
-    bool isLooping ();
-    void setVolume (float volume);
-    float getPosition ();
-    void dispose ();
+    void play () override;
+    void pause () override;
+    void stop () override;
+    bool isPlaying () override;    
+    bool isPaused () override;
+    void setLooping (bool isLooping) override;
+    bool isLooping () override;
+    void setVolume (float volume) override;
+    float getPosition () override;
+    void dispose () override;
     void update ();
-    virtual float getVolume() const;
+    virtual float getVolume() const override;
 protected:
     virtual int read (char * buffer, int bufferSize) = 0;
     virtual void reset () = 0;
@@ -65,7 +65,7 @@ private:
     int format, sampleRate;
     bool isLoopingVar, isPlayingVar, isPausedVar;
     float volume;
-    float renderedSeconds, secondsPerBuffer;
+    float renderedSeconds;
 
     bool fill(int bufferID);
 

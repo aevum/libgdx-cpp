@@ -36,8 +36,8 @@ public:
 
     TextureRegion ();
     TextureRegion ( const gdx::Texture::ptr& _texture );
-    TextureRegion ( const gdx::Texture::ptr& _texture, int x, int y, int width, int height );
-    TextureRegion ( const gdx::Texture::ptr& _texture, float u, float v, float u2, float v2 );
+    TextureRegion ( gdx::Texture::ptr  _texture, int x, int y, int width, int height );
+    TextureRegion ( gdx::Texture::ptr  _texture, float u, float v, float u2, float v2 );
     TextureRegion ( const TextureRegion& region );
     TextureRegion ( TextureRegion& region, int x, int y, int width, int height );
     virtual void setRegion ( const Texture::ptr& texture );

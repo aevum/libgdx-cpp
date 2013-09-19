@@ -124,7 +124,7 @@ public:
     {
     }
 
-    virtual linear_gradient* clone() {
+    virtual linear_gradient* clone() override {
         return new linear_gradient(*this);
     }
 
@@ -184,7 +184,7 @@ class radial_gradient : public svg_gradient {
 public:
     double cx, cy, r, fx, fy;
 
-    virtual radial_gradient* clone() {
+    virtual radial_gradient* clone() override {
         return new radial_gradient(*this);
     }
 
@@ -272,7 +272,7 @@ struct path_attributes
             miter_limit(4.0),
             stroke_width(1.0),
             transform(),
-            gradient(0)
+            gradient(nullptr)
     {
     }
 
@@ -293,7 +293,7 @@ struct path_attributes
             delete this->gradient;
         }
 
-        this->gradient = other.gradient ? other.gradient->clone() : NULL;
+        this->gradient = other.gradient ? other.gradient->clone() : nullptr;
 
         return *this;
     }
@@ -311,7 +311,7 @@ struct path_attributes
             miter_limit(attr.miter_limit),
             stroke_width(attr.stroke_width),
             transform(attr.transform),
-            gradient(attr.gradient ? attr.gradient->clone() : NULL)
+            gradient(attr.gradient ? attr.gradient->clone() : nullptr)
     {
     }
 
@@ -328,13 +328,13 @@ struct path_attributes
             miter_limit(attr.miter_limit),
             stroke_width(attr.stroke_width),
             transform(attr.transform),
-            gradient(attr.gradient ? attr.gradient->clone() : NULL)
+            gradient(attr.gradient ? attr.gradient->clone() : nullptr)
     {
     }
 
     ~path_attributes() {
         delete gradient;
-        gradient = NULL;
+        gradient = nullptr;
     }
 };
 

@@ -40,10 +40,10 @@ public:
     LinuxFileHandle (const std::string &fileName, gdx::Files::FileType type);
     LinuxFileHandle (const gdx::File &file, gdx::Files::FileType type);
 
-    virtual int readBytes(buffer_ptr& c) const;
-    virtual int write(const char* data, int length, bool append);
-    virtual void copyTo(FileHandle& dest);
-    virtual int64_t length() const;
+    virtual int readBytes(buffer_ptr& c) const override;
+    virtual int write(const char* data, int length, bool append) override;
+    virtual void copyTo(FileHandle& dest) override;
+    virtual int64_t length() const override;
 private:
     void runtime_error(const char* arg1);
 };

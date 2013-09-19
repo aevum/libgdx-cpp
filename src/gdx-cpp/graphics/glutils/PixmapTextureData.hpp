@@ -35,15 +35,15 @@ public:
                        const Pixmap::Format* format,
                        bool useMipMaps, bool disposePixmap) ;
     
-    bool disposePixmap ();
-    Pixmap::ptr getPixmap ();
-    int getWidth ();
-    int getHeight ();
-    const Pixmap::Format* getFormat ();
-    bool useMipMaps ();
-    bool isManaged ();
-    const TextureData::TextureDataType& getType ();
-    void uploadCompressedData ();
+    bool disposePixmap () override;
+    Pixmap::ptr getPixmap () override;
+    int getWidth () override;
+    int getHeight () override;
+    const Pixmap::Format* getFormat () override;
+    bool useMipMaps () override;
+    bool isManaged () override;
+    const TextureData::TextureDataType& getType () override;
+    void uploadCompressedData () override;
 
 protected:
     Pixmap::ptr pixmap;

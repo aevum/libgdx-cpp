@@ -51,7 +51,7 @@ public:
     * @param iface The pixmap interface to be rendered
     * @param svg The parsed svg element pointer
     */
-    static void render(XmlReader::Element* const svg, SvgRendererHandler* handler = NULL);
+    static void render(XmlReader::Element* const svg, SvgRendererHandler* handler = nullptr);
 private:
     ///Initiate the current element parsing
     static bool beginElement(gdx::XmlReader::Element*const currentNode);

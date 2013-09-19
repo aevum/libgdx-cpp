@@ -99,8 +99,8 @@ namespace agg
             pod_allocator<T*>::deallocate(m_coord_blocks, m_max_blocks * 2);
             m_total_blocks   = 0;
             m_max_blocks     = 0;
-            m_coord_blocks   = 0;
-            m_cmd_blocks     = 0;
+            m_coord_blocks   = nullptr;
+            m_cmd_blocks     = nullptr;
             m_total_vertices = 0;
         }
     }
@@ -118,8 +118,8 @@ namespace agg
         m_total_vertices(0),
         m_total_blocks(0),
         m_max_blocks(0),
-        m_coord_blocks(0),
-        m_cmd_blocks(0)
+        m_coord_blocks(nullptr),
+        m_cmd_blocks(nullptr)
     {
     }
 
@@ -130,7 +130,7 @@ namespace agg
         m_total_blocks(0),
         m_max_blocks(0),
         m_coord_blocks(0),
-        m_cmd_blocks(0)
+        m_cmd_blocks(nullptr)
     {
         *this = v;
     }
@@ -163,7 +163,7 @@ namespace agg
     inline void vertex_block_storage<T,S,P>::add_vertex(double x, double y, 
                                                         unsigned cmd)
     {
-        T* coord_ptr = 0;
+        T* coord_ptr = nullptr;
         *storage_ptrs(&coord_ptr) = (int8u)cmd;
         coord_ptr[0] = T(x);
         coord_ptr[1] = T(y);

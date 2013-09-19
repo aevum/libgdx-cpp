@@ -76,7 +76,7 @@ public:
         transform* gradient_transform;
         std::vector< GradientStopData > stops;
 
-        LinearGradient() : x1(0), x2(0), y1(0), y2(0), gradient_transform(NULL) { }
+        LinearGradient() : x1(0), x2(0), y1(0), y2(0), gradient_transform(nullptr) { }
         virtual ~LinearGradient() { delete gradient_transform; }
     };
 
@@ -85,7 +85,7 @@ public:
         transform* gradient_transform;
         std::vector< GradientStopData > stops;
         
-        RadialGradient() : cx(0), cy(0), fx(0), fy(0), r(0), gradient_transform(NULL) { }
+        RadialGradient() : cx(0), cy(0), fx(0), fy(0), r(0), gradient_transform(nullptr) { }
         virtual ~RadialGradient() { delete gradient_transform; }
     };
     
@@ -95,7 +95,7 @@ public:
     virtual void endPath() = 0;
     virtual void end() = 0;
     virtual void fillNone() = 0;
-    virtual void fill(gdx::Color color) = 0;
+    virtual void fill(const gdx::Color& color) = 0;
     virtual void fillOpacity(float opactiy) = 0;
     virtual void strokeNone() = 0;
     virtual void stroke(gdx::Color color) = 0;

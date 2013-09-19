@@ -35,7 +35,7 @@ namespace agg
         ctrl(double x1, double y1, double x2, double y2, bool flip_y) :
             m_x1(x1), m_y1(y1), m_x2(x2), m_y2(y2), 
             m_flip_y(flip_y),
-            m_mtx(0)
+            m_mtx(nullptr)
         {
         }
 
@@ -48,7 +48,7 @@ namespace agg
 
         //--------------------------------------------------------------------
         void transform(const trans_affine& mtx) { m_mtx = &mtx; }
-        void no_transform() { m_mtx = 0; }
+        void no_transform() { m_mtx = nullptr; }
 
         //--------------------------------------------------------------------
         void transform_xy(double* x, double* y) const

@@ -41,8 +41,8 @@ public :
     LinuxOggMusic(gdx::nix::LinuxOpenALAudio* audio, const ref_ptr_maker< gdx::FileHandle >::shared_ptr_t file);
     ~LinuxOggMusic();
 protected:
-    int read (char * buffer, int bufferSize);
-    void reset ();
+    int read (char * buffer, int bufferSize) override;
+    void reset () override;
 private:
     LinuxOggInputStream * input;
 };

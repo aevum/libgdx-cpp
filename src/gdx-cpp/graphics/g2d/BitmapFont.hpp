@@ -158,7 +158,7 @@ public:
     float getAscent ();
     float getDescent ();
     bool isFlipped ();
-    void dispose ();
+    void dispose () override;
     void setFixedWidthGlyphs (const std::string& glyphs);
     bool containsCharacter (unsigned int character);
     void setUseIntegerPositions (bool use);

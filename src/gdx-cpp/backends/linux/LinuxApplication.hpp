@@ -36,33 +36,31 @@ namespace nix {
 class LinuxApplication : public Application, public Runnable, public Synchronizable
 {
 public:
-    LinuxApplication(gdx::ApplicationListener* listener, const std::string& title,
+    LinuxApplication(gdx::ApplicationListener* listener, std::string  title,
                      int width, int height, bool useGL20IfAvailable);
 
     void error(const std::string& tag, const char* format, ...);
-    void exit();
-    Audio* getAudio();
-    Files* getFiles();
-    Graphics* getGraphics();
-    Input* getInput();
-    Preferences* getPreferences(std::string& name);
-    ApplicationType getType();
-    int getVersion();
-    void log(const std::string& tag, const char* format, ...);
-    void postRunnable(Runnable::ptr runnable);
-    virtual void postRunnable(std::function< void() > runnable);
-    void setLogLevel(int logLevel);
+    void exit() override;
+    Audio* getAudio() override;
+    Files* getFiles() override;
+    Graphics* getGraphics() override;
+    Input* getInput() override;
+    Preferences* getPreferences(std::string& name) override;
+    ApplicationType getType() override;
+    int getVersion() override;
+    void postRunnable(Runnable::ptr runnable) override;
+    virtual void postRunnable(std::function< void() > runnable) override;
 
-    void onRunnableStop();
+    void onRunnableStop() override;
     virtual void initialize();
 
-    virtual void pause();
-    virtual void update();
+    virtual void pause() override;
+    virtual void update() override;
 
     virtual ~LinuxApplication();
 
 protected:
-    virtual void run();
+    virtual void run() override;
     virtual bool processEvents();
 
     bool useGL20iFAvailable;

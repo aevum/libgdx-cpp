@@ -33,12 +33,12 @@ using namespace gdx;
 
 
 static const int json_start = 1;
-static const int json_first_final = 71;
-static const int json_error = 0;
+//static const int json_first_final = 71;
+//tatic const int json_error = 0;
 
-static const int json_en_object = 9;
-static const int json_en_array = 43;
-static const int json_en_main = 1;
+//static const int json_en_object = 9;
+//static const int json_en_array = 43;
+//static const int json_en_main = 1;
 
 
 JsonReader::JsonReader()
@@ -74,7 +74,7 @@ JsonValue JsonReader::doParse (const char* data, int offset, int length) {
     unsigned int cs, top = 0;
 
     std::vector<int> stack;
-    char* s = NULL, *p = (char*)data + offset,* pe = (char*)data + length,* eof = pe;
+    char* s = nullptr, *p = (char*)data + offset,* pe = (char*)data + length,* eof = pe;
 
     std::list<std::string> names;
 
@@ -2870,7 +2870,7 @@ std::string JsonReader::unescape (const std::string& value) {
         if (c == 'u') {
             char result[5] = { 0, 0, 0, 0 ,0 };
             
-            int codepoint = strtol(value.substr(i, 4).c_str(), NULL, 16);            
+            int codepoint = strtol(value.substr(i, 4).c_str(), nullptr, 16);            
             
             if (codepoint <= 0x7f) {
                 result[0] = static_cast<char>(codepoint);
@@ -2913,7 +2913,7 @@ std::string JsonReader::unescape (const std::string& value) {
             c = '\t';
             break;
         default:
-            gdx_log_error("gdx","Illegal escaped character: \\" + c);
+            gdx_log_error("gdx","Illegal escaped character: %c" , c);
         }
 
         buffer << c;

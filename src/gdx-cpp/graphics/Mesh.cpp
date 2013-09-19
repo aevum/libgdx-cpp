@@ -53,11 +53,11 @@ bool Mesh::forceVBO = false;
 Mesh::MeshMap Mesh::meshes;
 
 Mesh::Mesh(bool isStatic, int maxVertices, int maxIndices, const std::vector< VertexAttribute >& attributes)
-: vertices(0),
+: vertices(nullptr),
 autoBind(true),
 disposed(false)
 {
-    if (gl20 != NULL || gl11 != NULL || Mesh::forceVBO) {
+    if (gl20 != nullptr || gl11 != nullptr || Mesh::forceVBO) {
         vertices = new VertexBufferObject(isStatic, maxVertices, attributes);
         indices = new IndexBufferObject(isStatic, maxIndices);
         isVertexArray = false;
@@ -237,7 +237,7 @@ VertexAttribute* const Mesh::getVertexAttribute (int usage) {
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 VertexAttributes& Mesh::getVertexAttributes () {
@@ -290,8 +290,8 @@ void Mesh::addManagedMesh (Application* app, Mesh* mesh) {
 }
 
 void Mesh::invalidateAllMeshes (Application* app) {
-    MeshMap::value_type::second_type::iterator it = meshes[app].begin();
-    MeshMap::value_type::second_type::iterator end = meshes[app].end();
+    auto it = meshes[app].begin();
+    auto end = meshes[app].end();
     
     for (; it != end; ++it) {
         if ((*it)->vertices->getKind() ==  VertexData::Kind::VertexBufferObject) {
@@ -309,8 +309,8 @@ std::string Mesh::getManagedStatus () {
     std::stringstream  builder;
     builder << "Managed meshes/app: { ";
 
-    MeshMap::iterator it = meshes.begin();
-    MeshMap::iterator end = meshes.end();
+    auto it = meshes.begin();
+    auto end = meshes.end();
     
     for (; it != end; ++it) {
         builder << it->second.size();
@@ -358,7 +358,7 @@ void Mesh::scale (float scaleX,float scaleY,float scaleZ) {
     setVertices(vertices);
 }
 Mesh::Mesh(int type, bool isStatic, int maxVertices, int maxIndices, const std::vector< VertexAttribute >& attributes)
-: vertices(0),
+: vertices(nullptr),
 autoBind(true),
 disposed(false)
 {

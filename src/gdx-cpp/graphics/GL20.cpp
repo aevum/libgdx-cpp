@@ -119,7 +119,7 @@ void GL20::glDisableVertexAttribArray ( int index ) const
 {
     ::glDisableVertexAttribArray ( index );
 }
-void GL20::glDrawElements ( int mode,int count,int type, const void* indices ) const
+void GL20::glDrawElements ( int mode,int count,unsigned int type, const void* indices ) const
 {
     ::glDrawElements ( mode, count, type, indices );
 }
@@ -158,7 +158,7 @@ std::string GL20::glGetActiveAttrib ( int program,int index, const int* size, co
     GLint max_length;
     glGetProgramiv ( program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &max_length );
     char buf[max_length + 1];
-    ::glGetActiveAttrib ( program, index, max_length + 1, NULL, ( int * ) size, ( unsigned int* ) type, buf );
+    ::glGetActiveAttrib ( program, index, max_length + 1, nullptr, ( int * ) size, ( unsigned int* ) type, buf );
     return buf;
 }
 
@@ -167,7 +167,7 @@ std::string GL20::glGetActiveUniform ( int program,int index,const int* size,con
     GLint max_length;
     glGetProgramiv ( program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &max_length );
     char buf[max_length + 1];
-    ::glGetActiveUniform ( program, index, max_length + 1, NULL, ( int* ) size, ( unsigned int* ) type, buf );
+    ::glGetActiveUniform ( program, index, max_length + 1, nullptr, ( int* ) size, ( unsigned int* ) type, buf );
     return buf;
 }
 
@@ -221,7 +221,7 @@ std::string GL20::glGetShaderInfoLog ( int shader ) const
     int length = 0;
     glGetShaderiv ( shader, GL_INFO_LOG_LENGTH, &length );
     char buf[length];
-    ::glGetShaderInfoLog ( shader, length, NULL, buf );
+    ::glGetShaderInfoLog ( shader, length, nullptr, buf );
     return buf;
 }
 void GL20::glGetShaderPrecisionFormat ( int shadertype,int precisiontype, int* range, int* precision ) const

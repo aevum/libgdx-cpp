@@ -62,7 +62,7 @@ public:
     void loadEmitterImages (const TextureAtlas& atlas);
     void loadEmitterImages (const FileHandle& imagesDir);
     void loadEmitterImagesTest ();
-    void dispose ();
+    void dispose () override;
 
 protected:
     Texture::ptr loadTexture (const FileHandle::ptr file);

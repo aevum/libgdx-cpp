@@ -12,7 +12,7 @@ void LinuxOggInputStream::open(std::string path)
     if (!(oggFile = fopen(path.c_str(), "rb")))
         gdx_log_error("gdx","Could not open Ogg file.");
 
-    if ((result = ov_open(oggFile, &oggStream, NULL, 0)) < 0)
+    if ((result = ov_open(oggFile, &oggStream, nullptr, 0)) < 0)
     {
         fclose(oggFile);
 

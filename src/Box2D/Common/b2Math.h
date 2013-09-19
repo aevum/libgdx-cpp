@@ -24,6 +24,7 @@
 #include <cmath>
 #include <cstddef>
 #include <limits>
+#include <utility>
 
 /// This function is used to ensure that a floating point number is
 /// not a NaN or infinity.
@@ -363,7 +364,7 @@ struct b2Transform
 	b2Transform() {}
 
 	/// Initialize using a position vector and a rotation.
-	b2Transform(const b2Vec2& position, const b2Rot& rotation) : p(position), q(rotation) {}
+	b2Transform(b2Vec2  position, b2Rot  rotation) : p(std::move(position)), q(std::move(rotation)) {}
 
 	/// Set this to the identity transform.
 	void SetIdentity()

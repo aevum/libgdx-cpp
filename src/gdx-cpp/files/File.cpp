@@ -294,7 +294,7 @@ std::string File::toString()
 
 std::string File::extension() const {
     std::string name = getName();
-	unsigned int  dotIndex = name.rfind('.');
+    std::string::size_type  dotIndex = name.rfind('.');
     if (dotIndex == std::string::npos) return "";
     return name.substr(dotIndex + 1);	
 }

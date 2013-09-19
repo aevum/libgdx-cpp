@@ -74,7 +74,7 @@ public:
     private:
         Format& operator = (const Format&) = delete;
         std::string name;
-        Format(const std::string& p_name) : name(p_name) {
+        Format(std::string  p_name) : name(std::move(p_name)) {
         }
     };
 
@@ -86,7 +86,6 @@ public:
     static Pixmap::ptr newFromRect(int width, int height, const Format& format, PixmapType pixType);
     static Pixmap::ptr newFromPixmap(const Pixmap& pixmap);
     static Pixmap::ptr newFromFile(const std::shared_ptr<FileHandle>& file);
-      
 
     virtual PixmapType getType() const = 0;
     virtual void setColor (float r,float g,float b,float a) = 0;

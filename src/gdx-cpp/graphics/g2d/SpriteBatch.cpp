@@ -47,7 +47,7 @@ SpriteBatch::SpriteBatch(int size) :
         renderCalls(0),
 maxSpritesInBatch(0),
 color(Color::WHITE.toFloatBits()),
-mesh(0),
+mesh(nullptr),
 invTexWidth(0),
 invTexHeight(0),
 idx(0),
@@ -56,9 +56,9 @@ drawing(false),
 blendingDisabled(false),
 blendSrcFunc(gdx::GL::SRC_ALPHA),
 blendDstFunc(gdx::GL::ONE_MINUS_SRC_ALPHA),
-shader(0),
+shader(nullptr),
 tempColor(1,1,1,1),
-customShader(0)
+customShader(nullptr)
 {
 
     std::vector<VertexAttribute> attributes;
@@ -133,7 +133,7 @@ void SpriteBatch::begin () {
     gl->glDepthMask(false);
 
     if (graphics->isGL20Available()) {
-        if (customShader != NULL)
+        if (customShader != nullptr)
             customShader->begin();
         else
         	shader->begin();
@@ -145,7 +145,7 @@ void SpriteBatch::begin () {
     setupMatrices();
 
     idx = 0;
-    lastTexture = NULL;
+    lastTexture = nullptr;
     drawing = true;
 }
 
@@ -153,7 +153,7 @@ void SpriteBatch::end () {
     if (!drawing)
         gdx_log_error("gdx","SpriteBatch.begin must be called before end.");
     if (idx > 0) renderMesh();
-    lastTexture = NULL;
+    lastTexture = nullptr;
     idx = 0;
     drawing = false;
 
@@ -162,7 +162,7 @@ void SpriteBatch::end () {
     if (isBlendingEnabled()) gl.glDisable(gdx::GL::BLEND);
 
     if (graphics->isGL20Available()) {
-        if (customShader != NULL)
+        if (customShader != nullptr)
             customShader->end();
         else
             shader->end();
@@ -860,7 +860,7 @@ void SpriteBatch::renderMesh () {
 
     if (graphics->isGL20Available()) {
 
-        if (customShader != NULL)
+        if (customShader != nullptr)
             mesh->render(*customShader, gdx::GL::TRIANGLES, 0, spritesInBatch * 6);
         else
             mesh->render(*shader, gdx::GL::TRIANGLES, 0, spritesInBatch * 6);
@@ -898,10 +898,10 @@ void SpriteBatch::setBlendFunction (int srcFunc,int dstFunc) {
 }
 
 void SpriteBatch::dispose () {
-    for (unsigned i = 0; i < buffers.size(); i++) {
-        buffers[i]->dispose();
+    for (auto & elem : buffers) {
+        elem->dispose();
     }
-    if (shader != NULL)
+    if (shader != nullptr)
         shader->dispose();
 }
 
@@ -939,7 +939,7 @@ SpriteBatch::SpriteBatch(int size, int buffers) :
         renderCalls(0),
 maxSpritesInBatch(0),
 color(Color::WHITE.toFloatBits()),
-mesh(0),
+mesh(nullptr),
 invTexWidth(0),
 invTexHeight(0),
 idx(0),
@@ -948,9 +948,9 @@ drawing(false),
 blendingDisabled(false),
 blendSrcFunc(gdx::GL::SRC_ALPHA),
 blendDstFunc(gdx::GL::ONE_MINUS_SRC_ALPHA),
-shader(0),
+shader(nullptr),
 tempColor(1,1,1,1),
-customShader(0)
+customShader(nullptr)
 {
     this->buffers.reserve(buffers);
 
@@ -1002,9 +1002,9 @@ SpriteBatch::~SpriteBatch()
         delete customShader;
     }
 
-    for (unsigned int i = 0; i < buffers.size(); ++i) {
-        buffers[i]->dispose();
-        delete buffers[i];
+    for (auto & elem : buffers) {
+        elem->dispose();
+        delete elem;
     }
 
     delete [] vertices;
@@ -1054,7 +1054,7 @@ void SpriteBatch::setupMatrices()
         gl.glLoadMatrixf(transformMatrix.val);
     } else {
         combinedMatrix.set(projectionMatrix).mul(transformMatrix);
-        if (customShader != NULL) {
+        if (customShader != nullptr) {
             customShader->setUniformMatrix("u_proj", projectionMatrix);
             customShader->setUniformMatrix("u_trans", transformMatrix);
             customShader->setUniformMatrix("u_projTrans", combinedMatrix);

@@ -25,12 +25,12 @@ public:
 
     Color color;
     ColorAttribute ( const Color& color, const char* name );
-    void bind();
-    void bind ( ShaderProgram& program );
-    MaterialAttribute& copy();
-    void set ( MaterialAttribute& attr );
-    MaterialAttribute& pooledCopy();
-    void free();
+    void bind() override;
+    void bind ( ShaderProgram& program ) override;
+    MaterialAttribute& copy() override;
+    void set ( MaterialAttribute& attr ) override;
+    MaterialAttribute& pooledCopy() override;
+    void free() override;
     
     virtual ~ColorAttribute();
 private:

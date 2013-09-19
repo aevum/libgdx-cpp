@@ -197,8 +197,8 @@ CatmullRomSpline::vector3_vector_ptr CatmullRomSpline::getTangentNormals (int nu
     vector3_vector_ptr tangents = getTangents(numPoints);
     vector3_vector_ptr normals = vector3_vector_ptr(new std::vector<Vector3>());
 
-    vector3_vector_ptr::element_type::iterator it = tangents->begin();
-    vector3_vector_ptr::element_type::iterator end = tangents->end();
+    auto it = tangents->begin();
+    auto end = tangents->end();
 
     for (;it != end; ++it)
         normals->push_back(it->crs(up).nor());
@@ -210,8 +210,8 @@ CatmullRomSpline::vector3_vector_ptr CatmullRomSpline::getTangentNormals (int nu
     vector3_vector_ptr tangents = getTangents(numPoints);
     vector3_vector_ptr normals = vector3_vector_ptr(new std::vector<Vector3>());
 
-    vector3_vector_ptr::element_type::iterator it = tangents->begin();
-    vector3_vector_ptr::element_type::iterator end = tangents->end();
+    auto it = tangents->begin();
+    auto end = tangents->end();
 
     int i = 0;
     for (;it != end; ++it) {

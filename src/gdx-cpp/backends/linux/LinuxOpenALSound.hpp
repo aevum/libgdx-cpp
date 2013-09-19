@@ -34,15 +34,15 @@ public:
 
     void setup (char * buffer, int size, int channels, int sampleRate);
 
-    void play ();
+    void play () override;
 
-    void play (float volume);
+    void play (float volume) override;
 
     void loop ();
 
-    void stop ();
+    void stop () override;
 
-    void dispose ();
+    void dispose () override;
 
 protected:
 

@@ -40,7 +40,7 @@ public:
     
     FrameBuffer (const Pixmap::Format& format, int width, int height, bool hasDepth) ;
     
-    void dispose ();
+    void dispose () override;
     void begin ();
     void end ();
     static void invalidateAllFrameBuffers (Application* app);

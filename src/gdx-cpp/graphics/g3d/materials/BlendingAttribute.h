@@ -25,12 +25,12 @@ public:
 	int blendDstFunc;
 	BlendingAttribute();
 	BlendingAttribute(string name, int srcFunc, int dstFunc);
-	void bind();
-	void bind(ShaderProgram& program);
-	MaterialAttribute& copy();
-	void set(MaterialAttribute& attr);
-	MaterialAttribute& pooledCopy();
-	void free();
+	void bind() override;
+	void bind(ShaderProgram& program) override;
+	MaterialAttribute& copy() override;
+	void set(MaterialAttribute& attr) override;
+	MaterialAttribute& pooledCopy() override;
+	void free() override;
 	virtual ~BlendingAttribute();
 };
 

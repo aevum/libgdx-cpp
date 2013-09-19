@@ -28,27 +28,27 @@
 using namespace gdx;
 
 void Game::dispose () {
-    if (screen != NULL) screen->hide();
+    if (screen != nullptr) screen->hide();
 }
 
 void Game::pause () {
-    if (screen != NULL) screen->pause();
+    if (screen != nullptr) screen->pause();
 }
 
 void Game::resume () {
-    if (screen != NULL) screen->resume();
+    if (screen != nullptr) screen->resume();
 }
 
 void Game::render () {
-    if (screen != NULL) screen->render(graphics->getDeltaTime());
+    if (screen != nullptr) screen->render(graphics->getDeltaTime());
 }
 
 void Game::resize (int width,int height) {
-    if (screen != NULL) screen->resize(width, height);
+    if (screen != nullptr) screen->resize(width, height);
 }
 
 void Game::setScreen (Screen* screen) {
-    if (this->screen != NULL) this->screen->hide();
+    if (this->screen != nullptr) this->screen->hide();
     this->screen = screen;
     screen->show();
     screen->resize(graphics->getWidth(), graphics->getHeight());

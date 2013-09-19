@@ -39,8 +39,8 @@ bool WindowedMean::hasEnoughData () {
 void WindowedMean::clear () {
     added_values = 0;
     last_value = 0;
-    for (unsigned int i = 0; i < values.size(); i++)
-        values[i] = 0;
+    for (auto & elem : values)
+        elem = 0;
     dirty = true;
 }
 
@@ -55,8 +55,8 @@ float WindowedMean::getMean () {
     if (hasEnoughData()) {
         if (dirty == true) {
             float mean = 0;
-            for (unsigned int i = 0; i < values.size(); i++)
-                mean += values[i];
+            for (auto & elem : values)
+                mean += elem;
 
             this->mean = mean / values.size();
             dirty = false;
@@ -79,8 +79,8 @@ float WindowedMean::standardDeviation () {
 
     float mean = getMean();
     float sum = 0;
-    for (unsigned int i = 0; i < values.size(); i++) {
-        sum += (values[i] - mean) * (values[i] - mean);
+    for (auto & elem : values) {
+        sum += (elem - mean) * (elem - mean);
     }
 
     return (float) std::sqrt(sum / values.size());

@@ -294,7 +294,7 @@ m_curved_trans_contour(m_curved_trans) {
     void path_renderer::fill_gradient(svg_gradient& gradient)
     {
         path_attributes& cur = cur_attr();
-        if (cur.gradient != NULL) {
+        if (cur.gradient != nullptr) {
             delete cur.gradient;
         }
 

@@ -55,38 +55,38 @@ should_del(true) {
 should_del(false) {
     }
 
-    virtual void affine(const std::vector< float >& matrix) {
+    virtual void affine(const std::vector< float >& matrix) override {
         transform->premultiply(agg::trans_affine(matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]));
     }
 
-    virtual void rotate(float radians) {
+    virtual void rotate(float radians) override {
         transform->rotate(radians);
     }
 
-    virtual void rotate_trasnlate(float radians, float x, float y) {
+    virtual void rotate_trasnlate(float radians, float x, float y) override {
         agg::trans_affine t = agg::trans_affine_translation(-x, -y);
         t *= agg::trans_affine_rotation(radians);
         t *= agg::trans_affine_translation(x, y);
         transform->premultiply(t);
     }
 
-    virtual void scale(float scale_x, float scale_y) {
+    virtual void scale(float scale_x, float scale_y) override {
         transform->premultiply(agg::trans_affine_scaling(scale_x, scale_y));
     }
 
-    virtual void skew(float x, float y) {
+    virtual void skew(float x, float y) override {
         transform->premultiply(agg::trans_affine_skewing(agg::deg2rad(x), agg::deg2rad(y)));
     }
 
-    virtual void skew_x(float skew) {
+    virtual void skew_x(float skew) override {
         transform->premultiply(agg::trans_affine_skewing(agg::deg2rad(skew), 0));
     }
 
-    virtual void skew_y(float skew) {
+    virtual void skew_y(float skew) override {
         transform->premultiply(agg::trans_affine_skewing(0, agg::deg2rad(skew)));
     }
 
-    virtual void translate(float x, float y) {
+    virtual void translate(float x, float y) override {
         //std::cout << "translate: " << x << " " << y << std::endl;
         transform->premultiply(agg::trans_affine_translation(x, y));
     }
@@ -119,7 +119,7 @@ scaleX(1),
 scaleY(1),
 width(width),
 height(height),
-data(0)
+data(nullptr)
 {
 }
 
@@ -151,7 +151,7 @@ scaleX(1),
 scaleY(1),
 width(0),
 height(0),
-data(0)
+data(nullptr)
 {
 }
 
@@ -177,7 +177,7 @@ void AggSvgPixmap::endPath() {
     pimpl->renderer.end_path();
 }
 
-void AggSvgPixmap::fill(Color color) {
+void AggSvgPixmap::fill(const Color &color) {
     pimpl->renderer.fill(agg::rgba_pre(color.r, color.g, color.b));
 }
 
@@ -251,8 +251,8 @@ void AggSvgPixmap::dispose() {
     delete [] data;
     delete pimpl;
 
-    data = NULL;
-    pimpl = NULL;
+    data = nullptr;
+    pimpl = nullptr;
 }
 
 void AggSvgPixmap::drawCircle(int x, int y, int radius) {
@@ -376,9 +376,9 @@ void AggSvgPixmap::fillRadialGradient(const gdx::SvgRendererHandler::RadialGradi
         ra_gradient.transform = *static_cast<AggTransform*>(gradient.gradient_transform)->transform;
     }
 
-    for (unsigned i = 0; i < gradient.stops.size(); ++i) {
+    for (auto & elem : gradient.stops) {
         agg::svg::svg_gradient::stop stop;
-        const SvgRendererHandler::GradientStopData& data = gradient.stops[i];
+        const SvgRendererHandler::GradientStopData& data = elem;
 
         stop.color = agg::rgba(data.color.r, data.color.g, data.color.b, data.color.a);
         stop.opacity = data.opacity;
@@ -401,9 +401,9 @@ void AggSvgPixmap::fillLinearGradient(const gdx::SvgRendererHandler::LinearGradi
         li_gradient.transform = *static_cast<AggTransform*>(gradient.gradient_transform)->transform;
     }
 
-    for (unsigned i = 0; i < gradient.stops.size(); ++i) {
+    for (auto & elem : gradient.stops) {
         agg::svg::svg_gradient::stop stop;
-        const SvgRendererHandler::GradientStopData& data = gradient.stops[i];
+        const SvgRendererHandler::GradientStopData& data = elem;
 
         stop.color = agg::rgba(data.color.r, data.color.g, data.color.b, data.color.a);
         stop.opacity = data.opacity;

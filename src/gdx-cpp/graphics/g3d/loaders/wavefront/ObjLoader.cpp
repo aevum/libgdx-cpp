@@ -11,7 +11,7 @@
 
 using namespace gdx;
 
-Texture* ObjLoader::MtlLoader::emptyTexture = NULL;
+Texture* ObjLoader::MtlLoader::emptyTexture = nullptr;
 
 ObjLoader::ObjLoader()
 {
@@ -108,7 +108,7 @@ StillModel* ObjLoader::loadObj ( const FileHandle& file, FileHandle& textureDir,
         return nullptr;
     }
     size_t numGroups = groups.size();
-    StillModel* model = new StillModel();
+    auto  model = new StillModel();
     for ( size_t g = 0; g < numGroups; g++ ) {
         Group& group = *groups[g];
         vector<int>& faces = group.faces;
@@ -157,7 +157,7 @@ StillModel* ObjLoader::loadObj ( const FileHandle& file, FileHandle& textureDir,
             mesh->setIndices ( finalIndices );
         }
         const char* subMeshName = group.name.c_str();
-        StillSubMesh* subMesh = new StillSubMesh ( subMeshName, *mesh, gdx::GL::TRIANGLES );
+        auto  subMesh = new StillSubMesh ( subMeshName, *mesh, gdx::GL::TRIANGLES );
         subMesh->material = mtl.getMaterial ( group.materialName );
         model->subMeshes.push_back ( subMesh );
     }
@@ -209,9 +209,9 @@ StillModel* ObjLoader::load ( const FileHandle& handle, ModelLoaderHints hints )
 
 ObjLoader::Group* ObjLoader::setActiveGroup ( const string& name )
 {
-    for ( size_t i = 0; i < groups.size(); i++ ) {
-        if ( groups[i]->name == name ) {
-            return groups[i];
+    for (auto & elem : groups) {
+        if ( elem->name == name ) {
+            return elem;
         }
     }
     Group* group = new Group ( name );
@@ -221,7 +221,7 @@ ObjLoader::Group* ObjLoader::setActiveGroup ( const string& name )
 
 ObjLoader::MtlLoader::MtlLoader()
 {
-    if ( emptyTexture == NULL ) {
+    if ( emptyTexture == nullptr ) {
         Pixmap::ptr pm = Pixmap::newFromRect ( 1, 1, Pixmap::Format::RGB888, Pixmap::PixmapType::PixmapType_Gdx2d );
         pm.get()->setColor ( 0.5, 0.5, 0.5, 1 );
         pm.get()->fill();
@@ -300,9 +300,9 @@ void ObjLoader::MtlLoader::load ( string fileName, FileHandle& textureDir )
 Material* ObjLoader::MtlLoader::getMaterial ( string name )
 {
     name = name.replace ( 0, name.length(), '.', '_' );
-    for ( size_t i = 0; i < materials.size(); i++ ) {
-        if ( materials[i]->getName() == name ) {
-            return materials[i];
+    for (auto & elem : materials) {
+        if ( elem->getName() == name ) {
+            return elem;
         }
     }
     return new Material ( "default" );

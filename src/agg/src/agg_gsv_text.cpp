@@ -509,7 +509,7 @@ m_flip(false) {
     void gsv_text::font(const void* font)
     {
         m_font = font;
-        if(m_font == 0) m_font = &m_loaded_font[0];
+        if(m_font == nullptr) m_font = &m_loaded_font[0];
     }
 
     //-------------------------------------------------------------------------
@@ -564,7 +564,7 @@ m_flip(false) {
     //-------------------------------------------------------------------------
     void gsv_text::text(const char* text)
     {
-        if(text == 0)
+        if(text == nullptr)
         {
             m_chr[0] = 0;
             m_text = m_chr;
@@ -583,7 +583,7 @@ m_flip(false) {
     void gsv_text::rewind(unsigned)
     {
         m_status = initial;
-        if(m_font == 0) return;
+        if(m_font == nullptr) return;
         
         m_indices = (int8u*)m_font;
         double base_height = value(m_indices + 4);
@@ -608,7 +608,7 @@ m_flip(false) {
             switch(m_status)
             {
             case initial:
-                if(m_font == 0) 
+                if(m_font == nullptr) 
                 {
                     quit = true;
                     break;

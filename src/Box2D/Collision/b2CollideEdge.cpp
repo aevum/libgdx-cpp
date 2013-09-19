@@ -590,11 +590,11 @@ void b2EPCollider::Collide(b2Manifold* manifold, const b2EdgeShape* edgeA, const
 	}
 	
 	int32 pointCount = 0;
-	for (int32 i = 0; i < b2_maxManifoldPoints; ++i)
+	for (auto & elem : clipPoints2)
 	{
 		float32 separation;
 		
-		separation = b2Dot(rf.normal, clipPoints2[i].v - rf.v1);
+		separation = b2Dot(rf.normal, elem.v - rf.v1);
 		
 		if (separation <= m_radius)
 		{
@@ -602,16 +602,16 @@ void b2EPCollider::Collide(b2Manifold* manifold, const b2EdgeShape* edgeA, const
 			
 			if (primaryAxis.type == b2EPAxis::e_edgeA)
 			{
-				cp->localPoint = b2MulT(m_xf, clipPoints2[i].v);
-				cp->id = clipPoints2[i].id;
+				cp->localPoint = b2MulT(m_xf, elem.v);
+				cp->id = elem.id;
 			}
 			else
 			{
-				cp->localPoint = clipPoints2[i].v;
-				cp->id.cf.typeA = clipPoints2[i].id.cf.typeB;
-				cp->id.cf.typeB = clipPoints2[i].id.cf.typeA;
-				cp->id.cf.indexA = clipPoints2[i].id.cf.indexB;
-				cp->id.cf.indexB = clipPoints2[i].id.cf.indexA;
+				cp->localPoint = elem.v;
+				cp->id.cf.typeA = elem.id.cf.typeB;
+				cp->id.cf.typeB = elem.id.cf.typeA;
+				cp->id.cf.indexA = elem.id.cf.indexB;
+				cp->id.cf.indexB = elem.id.cf.indexA;
 			}
 			
 			++pointCount;

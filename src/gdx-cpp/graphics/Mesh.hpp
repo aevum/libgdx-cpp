@@ -79,7 +79,7 @@ public:
     void render (int primitiveType,int offset,int count);
     void render (ShaderProgram& shader, int primitiveType);
     void render (ShaderProgram& shader, int primitiveType, int offset, int count);
-    void dispose ();
+    void dispose () override;
     VertexAttribute* const getVertexAttribute (int usage);
     VertexAttributes& getVertexAttributes ();
     float_buffer& getVerticesBuffer ();

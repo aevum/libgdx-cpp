@@ -62,8 +62,8 @@ program(0),
 vertexShaderHandle(0),
 fragmentShaderHandle(0),
 matrix(16),
-invalidated(false),
-refCount(0)
+invalidated(false)
+//refCount(0)
 {
     compileShaders(vertexShader, fragmentShader);
     if (isCompiled()) {
@@ -393,7 +393,7 @@ void ShaderProgram::addManagedShader (Application* app, ShaderProgram* shaderPro
 }
 
 void ShaderProgram::invalidateAllShaderPrograms (Application* app) {
-    if (graphics->getGL20() == NULL) return;
+    if (graphics->getGL20() == nullptr) return;
 
     if (shaders.count(app) > 0) return;
 

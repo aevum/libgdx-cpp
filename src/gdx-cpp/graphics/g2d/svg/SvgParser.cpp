@@ -57,10 +57,10 @@ std::vector<T> splitArgs(const std::string& item, const char* delimiters, std::s
     return result;
 }
 
-gdx::SvgRendererHandler* SvgParser::handler = NULL;
+gdx::SvgRendererHandler* SvgParser::handler = nullptr;
 bool SvgParser::m_titleFlag = false;
 bool SvgParser::m_pathFlag = false;
-gdx::XmlReader::Element* SvgParser::defsElement = NULL;
+gdx::XmlReader::Element* SvgParser::defsElement = nullptr;
 
 void SvgParser::render(gdx::XmlReader::Element*const svg, gdx::SvgRendererHandler* p_handler)
 {
@@ -69,10 +69,10 @@ void SvgParser::render(gdx::XmlReader::Element*const svg, gdx::SvgRendererHandle
 
     if (p_handler) {
         handler = p_handler;
-        defsElement = NULL;
+        defsElement = nullptr;
     }
 
-    assert(handler != NULL);
+    assert(handler != nullptr);
 
     if (beginElement(svg)) {
 
@@ -159,14 +159,14 @@ void SvgParser::endElement(XmlReader::Element* currentNode)
 
 void gdx::SvgParser::parse_attr(gdx::XmlReader::Element* node)
 {
-    XmlReader::Element::AttributesMap::const_iterator it = node->getAttributesBegin();
-    XmlReader::Element::AttributesMap::const_iterator end = node->getAttributesEnd();
+    auto it = node->getAttributesBegin();
+    auto end = node->getAttributesEnd();
 
     for (; it != end; ++it) {
         if (it->first == "style") {
             std::vector< std::pair< std::string , std::string > > res = parse_style(it->second);
-            for (unsigned int i = 0; i < res.size(); ++i) {
-                parse_attr(res[i].first, res[i].second);
+            for (auto & re : res) {
+                parse_attr(re.first, re.second);
             }
         } else {
             parse_attr(it->first, it->second);
@@ -194,8 +194,8 @@ bool gdx::SvgParser::parse_attr(const std::string& name, const std::string& valu
     if (name == "style")
     {
         std::vector< std::pair< std::string , std::string > > res = parse_style(value);
-        for (unsigned i = 0; i < res.size(); ++i) {
-            parse_attr(res[i].first, res[i].second);
+        for (auto & re : res) {
+            parse_attr(re.first, re.second);
         }
     }
     else if (name == "fill")
@@ -288,11 +288,11 @@ void gdx::SvgParser::parse_transform(const std::string& transform_string,
     };
 
     while (pos != std::string::npos && last != std::string::npos) {
-        for (int i = 0; i < 6; ++i) {
-            pos = transform_string.find(transform_parsers[i].name, last);
+        for (auto & transform_parser : transform_parsers) {
+            pos = transform_string.find(transform_parser.name, last);
             if (pos != std::string::npos) {
-                pos += strlen(transform_parsers[i].name);
-                last = (*transform_parsers[i].func)(transform_string.substr(pos, transform_string.length() - last - 1), transform);
+                pos += strlen(transform_parser.name);
+                last = (*transform_parser.func)(transform_string.substr(pos, transform_string.length() - last - 1), transform);
                 break;
             }
         }
@@ -591,11 +591,11 @@ void gdx::SvgParser::fetchStopData(gdx::XmlReader::Element* node , std::vector< 
             if (child->hasAttribute("style")) {
                 std::vector< std::pair< std::string , std::string > > res = parse_style(child->getAttribute("style"));
 
-                for (unsigned i = 0; i < res.size(); ++i) {
-                    if (res[i].first == "stop-color") {
-                        stop.color = parse_color(res[i].second);
-                    } else if (res[i].first == "stop-opacity") {
-                        stop.opacity = from_string< float >(res[i].second);
+                for (auto & re : res) {
+                    if (re.first == "stop-color") {
+                        stop.color = parse_color(re.second);
+                    } else if (re.first == "stop-opacity") {
+                        stop.opacity = from_string< float >(re.second);
                     }
                 }
             }
@@ -636,7 +636,7 @@ void gdx::SvgParser::parse_gradient(const std::string& gradient)
     float x1 = 0, y1 = 0, x2 = 0, y2 = 0;
     handler->boundingRect(x1, y1, x2, y2);
     
-    assert(defsElement != NULL);
+    assert(defsElement != nullptr);
 
     std::string gradientNodeUrl = url[1].substr(1);
 

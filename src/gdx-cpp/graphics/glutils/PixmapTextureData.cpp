@@ -66,7 +66,7 @@ PixmapTextureData::PixmapTextureData(Pixmap::ptr _pixmap,
                                      const Pixmap::Format* format,
                                      bool useMipMaps, bool disposePixmap)
 : pixmap(_pixmap),
-format(format == NULL ? _pixmap->getFormat() : *format),
+format(format == nullptr ? _pixmap->getFormat() : *format),
 _useMipMaps(useMipMaps),
 _disposePixmap(disposePixmap)
 {

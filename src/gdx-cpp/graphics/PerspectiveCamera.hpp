@@ -30,7 +30,7 @@ class PerspectiveCamera : public Camera {
 public:
     PerspectiveCamera();
     PerspectiveCamera (float fieldOfView, float viewportWidth, float viewportHeight);
-    void update ();
+    void update () override;
 
     float fieldOfView;
 protected:

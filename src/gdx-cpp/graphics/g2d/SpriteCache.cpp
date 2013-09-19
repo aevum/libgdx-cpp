@@ -46,7 +46,7 @@ using namespace gdx;
 float SpriteCache::tempVertices[Sprite::VERTEX_SIZE * 6];
 
 ShaderProgram* SpriteCache::createDefaultShader () {
-    if ( !graphics->isGL20Available() ) return NULL;
+    if ( !graphics->isGL20Available() ) return nullptr;
     std::string vertexShader = "attribute vec4 " + ShaderProgram::POSITION_ATTRIBUTE + ";\n" //
                                "attribute vec4 " + ShaderProgram::COLOR_ATTRIBUTE + ";\n" //
                                "attribute vec2 " + ShaderProgram::TEXCOORD_ATTRIBUTE + "0;\n" //
@@ -71,20 +71,20 @@ ShaderProgram* SpriteCache::createDefaultShader () {
                                  "  gl_FragColor = v_color * texture2D(u_texture, v_texCoords);\n" //
                                  "}";
 
-    ShaderProgram* shader = new ShaderProgram ( vertexShader, fragmentShader );
+    auto  shader = new ShaderProgram ( vertexShader, fragmentShader );
     if ( shader->isCompiled() == false )
         gdx_log_error("gdx", "Error compiling shader: %s", shader->getLog().c_str() );
     return shader;
 }
 
 SpriteCache::SpriteCache ( int size, bool useIndices, ShaderProgram* shader ) :
-    mesh ( 0 ),
+    mesh ( nullptr ),
 drawing ( false ),
 shader ( shader ),
-currentCache ( 0 ),
+currentCache ( nullptr ),
 color ( Color::WHITE.toFloatBits() ),
 tempColor ( 1,1,1,1 ),
-customShader ( 0 ) {
+customShader ( nullptr ) {
     textures.reserve ( 8 );
     counts.reserve ( 8 );
 
@@ -139,7 +139,7 @@ Color& SpriteCache::getColor () {
 }
 
 void SpriteCache::beginCache () {
-    if ( currentCache != NULL )
+    if ( currentCache != nullptr )
         gdx_log_error("gdx", "endCache must be called before begin." );
 
     currentCache = new Cache ( caches.size(), mesh->getVerticesBuffer().limit() );
@@ -148,7 +148,7 @@ void SpriteCache::beginCache () {
 }
 
 void SpriteCache::beginCache ( unsigned int cacheID ) {
-    if ( currentCache != NULL )
+    if ( currentCache != nullptr )
         gdx_log_error("gdx", "endCache must be called before begin." );
 
     if ( cacheID == caches.size() - 1 ) {
@@ -163,7 +163,7 @@ void SpriteCache::beginCache ( unsigned int cacheID ) {
 }
 
 int SpriteCache::endCache () {
-    if ( currentCache == NULL )
+    if ( currentCache == nullptr )
         gdx_log_error("gdx", "beginCache must be called before endCache." );
 
     int cacheCount = mesh->getVerticesBuffer().position() - currentCache->offset;
@@ -200,7 +200,7 @@ int SpriteCache::endCache () {
     }
 
     Cache* cache = currentCache;
-    currentCache = NULL;
+    currentCache = nullptr;
     textures.clear();
     counts.clear();
 
@@ -208,8 +208,8 @@ int SpriteCache::endCache () {
 }
 
 void SpriteCache::clear () {
-    for ( unsigned i = 0; i < caches.size(); ++i ) {
-        delete caches[i];
+    for (auto & elem : caches) {
+        delete elem;
     }
     caches.clear();
     mesh->getVerticesBuffer().clear().flip();
@@ -810,7 +810,7 @@ void SpriteCache::begin () {
         gl.glDepthMask ( false );
         gl.glEnable(gdx::GL::TEXTURE_2D );
 
-        if ( customShader != NULL ) {
+        if ( customShader != nullptr ) {
             customShader->begin();
             customShader->setUniformMatrix ( "u_proj", projectionMatrix );
             customShader->setUniformMatrix ( "u_trans", transformMatrix );
@@ -863,7 +863,7 @@ void SpriteCache::draw ( int cacheID ) {
         for ( int i = 0, n = textures.size(); i < n; i++ ) {
             int count = counts[i];
             textures[i]->bind();
-            if ( customShader != NULL )
+            if ( customShader != nullptr )
                 mesh->render ( *customShader, gdx::GL::TRIANGLES, offset, count );
             else
                 mesh->render ( *shader, gdx::GL::TRIANGLES, offset, count );
@@ -898,7 +898,7 @@ void SpriteCache::draw ( int cacheID,int offset,int length ) {
                 count = length;
             } else
                 length -= count;
-            if ( customShader != NULL )
+            if ( customShader != nullptr )
                 mesh->render ( *customShader, gdx::GL::TRIANGLES, offset, count );
             else
                 mesh->render ( *shader, gdx::GL::TRIANGLES, offset, count );
@@ -921,7 +921,7 @@ void SpriteCache::draw ( int cacheID,int offset,int length ) {
 
 void SpriteCache::dispose () {
     mesh->dispose();
-    if ( shader != NULL ) shader->dispose();
+    if ( shader != nullptr ) shader->dispose();
 }
 
 Matrix4& SpriteCache::getProjectionMatrix () {
@@ -949,7 +949,7 @@ void SpriteCache::setShader ( ShaderProgram* shader ) {
 }
 
 void SpriteCache::add ( const Texture::ptr& texture, const float* vertices, int size, int offset, int length ) {
-    if ( currentCache == NULL )
+    if ( currentCache == nullptr )
         gdx_log_error("gdx", "beginCache must be called before add." );
 
     int verticesPerImage = mesh->getNumIndices() > 0 ? 4 : 6;
@@ -965,12 +965,12 @@ void SpriteCache::add ( const Texture::ptr& texture, const float* vertices, int 
     float_buffer& buffer = mesh->getVerticesBuffer();
     if (buffer.capacity() - (buffer.position() + size) < 0) {
         int pos = -1;
-        for (unsigned i = 0; i<caches.size(); i++) {
-            if (caches[i] != NULL) {
+        for (auto & elem : caches) {
+            if (elem != nullptr) {
                 if (pos == -1) {
-                    pos = caches[i]->offset;
+                    pos = elem->offset;
                 }
-                caches[i]->offset -= pos;
+                elem->offset -= pos;
             }
         }
         buffer.position(pos);
@@ -981,10 +981,10 @@ void SpriteCache::add ( const Texture::ptr& texture, const float* vertices, int 
 }
 
 void SpriteCache::disposeCache ( int cacheID ) {
-    for ( unsigned i = 0; i < caches.size(); ++i ) {
-        if ( caches[i] != NULL && caches[i]->id == cacheID ) {
-            delete caches[i];
-            caches[i] = NULL;
+    for (auto & elem : caches) {
+        if ( elem != nullptr && elem->id == cacheID ) {
+            delete elem;
+            elem = nullptr;
             break;
         }
     }

@@ -2039,10 +2039,10 @@ static const char _path_eof_actions[] = {
 };
 
 static const int path_start = 232;
-static const int path_first_final = 232;
-static const int path_error = 0;
+//static const int path_first_final = 232;
+//static const int path_error = 0;
 
-static const int path_en_main = 232;
+//static const int path_en_main = 232;
 
 
 /* #line 8 "svg-path.rl" */
@@ -2079,7 +2079,7 @@ void gdx::SvgParser::parse_path_data(const char* data, int length) {
 	bool relative = false;
 	char* p = (char*) data,* pe = (char*)data + length,* eof = pe;
 	unsigned int cs;
-	char* start = NULL;
+	char* start = nullptr;
     
     float argv[7] = { 0 };
     int argc = 0;
@@ -2138,7 +2138,7 @@ _resume:
 		//argv[argc++] = strtod(start, NULL);
 		
 		*endmark = c;
-		start = NULL;
+		start = nullptr;
 	}
 	break;
 	case 2:
@@ -2260,7 +2260,7 @@ _again:
 		//argv[argc++] = strtod(start, NULL);
 		
 		*endmark = c;
-		start = NULL;
+		start = nullptr;
 	}
 	break;
 	case 6:

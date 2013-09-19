@@ -416,8 +416,8 @@ std::string XmlReader::Element::toString(const std::string& indent) const {
     buffer << indent << '<' << name ;
 
     if (attributes.size()) {
-        AttributesMap::const_iterator it = attributes.begin();
-        AttributesMap::const_iterator end = attributes.end();
+        auto it = attributes.begin();
+        auto end = attributes.end();
 
         for (; it != end; ++it) {
             buffer << ' ' << it->first << "=\"" << it->second << '\"';
@@ -433,8 +433,8 @@ std::string XmlReader::Element::toString(const std::string& indent) const {
             buffer << childIndent << text << '\n';
         }
         if (children.size()) {
-            ElementVector::const_iterator it = children.begin();
-            ElementVector::const_iterator end = children.end();
+            auto it = children.begin();
+            auto end = children.end();
 
             for (; it != end; ++it) {
                 buffer << (*it)->toString(childIndent) << '\n';
@@ -450,8 +450,8 @@ XmlReader::Element::ptr const XmlReader::Element::getChildByName(const std::stri
     if (children.empty())
         return nullptr;
 
-    for (unsigned int i = 0; i < children.size(); i++) {
-        Element::ptr& element = children[i];
+    for (auto & elem : children) {
+        Element::ptr& element = elem;
         if (element->name == name)
             return element;
     }
@@ -463,8 +463,8 @@ XmlReader::Element::ptr const XmlReader::Element::getChildByNameRecursive(const 
     if (children.empty())
         return nullptr;
 
-    for (unsigned int i = 0; i < children.size(); i++) {
-        const Element::ptr& element = children[i];
+    for (auto & elem : children) {
+        const Element::ptr& element = elem;
 
         if (element->name == name)
             return element;
@@ -479,8 +479,8 @@ XmlReader::Element::ptr const XmlReader::Element::getChildByNameRecursive(const 
 std::vector< XmlReader::Element::ptr > XmlReader::Element::getChildrenByName(const std::string& name) {
     ElementVector chld;
 
-    for (unsigned int i = 0; i < children.size(); i++) {
-        Element::ptr& child = children[i];
+    for (auto & elem : children) {
+        Element::ptr& child = elem;
         if (child->name ==  name) chld.push_back(child);
     }
 

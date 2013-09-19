@@ -80,10 +80,10 @@ void TextureAttribute::set ( MaterialAttribute& attr )
 
 bool TextureAttribute::texturePortionEquals ( const TextureAttribute* other )
 {
-    if ( other == NULL ) {
+    if ( other == nullptr ) {
         return false;
     }
-    if ( this == NULL ) {
+    if ( this == nullptr ) {
         return true;
     }
 

@@ -68,14 +68,14 @@ XmlWriter& XmlWriter::attribute (const std::string& name, const XmlReader::Eleme
     writer << (' ');
     writer << (name);
     writer << ("=\"");
-    writer << (value == NULL ? "null" : value->toString());
+    writer << (value == nullptr ? "null" : value->toString());
     writer << ('"');
     return *this;
 }
 
 XmlWriter& XmlWriter::text (const XmlReader::Element* text) {
     startElementContent();
-    std::string string = (text == NULL ? "null" : text->toString());
+    std::string string = (text == nullptr ? "null" : text->toString());
     indentNextClose = string.length() > 64;
     if (indentNextClose) {
         writer << ('\n');

@@ -81,7 +81,7 @@ void ShapeRenderer::scale (float scaleX,float scaleY,float scaleZ) {
 }
 
 void ShapeRenderer::begin (const ShapeType& type) {
-    if(currType != NULL) gdx_log_error("gdx","Call end() before beginning a new shape batch");
+    if(currType != nullptr) gdx_log_error("gdx","Call end() before beginning a new shape batch");
     currType = &type;
     if(matrixDirty) {
         combined.set(projView);
@@ -255,7 +255,7 @@ void ShapeRenderer::checkFlush (int newVertices) {
 
 void ShapeRenderer::end () {
     renderer->end();
-    currType = NULL;
+    currType = nullptr;
 }
 
 void ShapeRenderer::dispose () {
@@ -263,10 +263,10 @@ void ShapeRenderer::dispose () {
 }
 
 ShapeRenderer::ShapeRenderer ()
-: renderer(NULL),
+: renderer(nullptr),
 matrixDirty(false),
 color(1,1,1,1),
-currType(NULL)
+currType(nullptr)
 {
     if(graphics->isGL20Available())
         renderer = new ImmediateModeRenderer20(false, true, 0);

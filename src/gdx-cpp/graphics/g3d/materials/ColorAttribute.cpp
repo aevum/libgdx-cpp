@@ -32,7 +32,7 @@ class GL10;
 
 void ColorAttribute::bind()
 {
-    if ( gl10 == NULL ) {
+    if ( gl10 == nullptr ) {
         gdx_log_error ( "gdx", "Can't call ColorAttribute.bind() in a GL20 context" );
     }
 //	if (diffuse == diffuse) {

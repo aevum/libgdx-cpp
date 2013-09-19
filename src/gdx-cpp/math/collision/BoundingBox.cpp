@@ -99,8 +99,8 @@ BoundingBox& BoundingBox::set (const Vector3& minimum,const Vector3& maximum) {
 BoundingBox& BoundingBox::set (const std::vector<Vector3>& points) {
     this->inf();
 
-    std::vector<Vector3>::const_iterator it = points.begin();
-    std::vector<Vector3>::const_iterator end = points.end();
+    auto it = points.begin();
+    auto end = points.end();
 
     for (; it != end; ++it)
         this->ext(*it);

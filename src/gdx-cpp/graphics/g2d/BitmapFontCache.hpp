@@ -54,7 +54,7 @@ public:
     float getX ();
     float getY ();
     BitmapFont* getFont ();
-    void dispose ();
+    void dispose () override;
     void setUseIntegerPositions (bool use);
     bool usesIntegerPositions ();
     

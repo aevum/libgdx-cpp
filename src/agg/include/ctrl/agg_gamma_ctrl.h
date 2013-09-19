@@ -51,11 +51,11 @@ namespace agg
         // Event handlers. Just call them if the respective events
         // in your system occure. The functions return true if redrawing
         // is required.
-        virtual bool in_rect(double x, double y) const;
-        virtual bool on_mouse_button_down(double x, double y);
-        virtual bool on_mouse_button_up(double x, double y);
-        virtual bool on_mouse_move(double x, double y, bool button_flag);
-        virtual bool on_arrow_keys(bool left, bool right, bool down, bool up);
+        virtual bool in_rect(double x, double y) const override;
+        virtual bool on_mouse_button_down(double x, double y) override;
+        virtual bool on_mouse_button_up(double x, double y) override;
+        virtual bool on_mouse_move(double x, double y, bool button_flag) override;
+        virtual bool on_arrow_keys(bool left, bool right, bool down, bool up) override;
 
         void change_active_point();
 
@@ -96,7 +96,7 @@ namespace agg
         double m_ys2;
         double m_xt1;
         double m_yt1;
-        double m_xt2;
+        //double m_xt2;
         double m_yt2;
         conv_stroke<gamma_spline> m_curve_poly;
         ellipse                   m_ellipse;

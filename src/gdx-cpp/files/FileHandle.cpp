@@ -113,10 +113,10 @@ void FileHandle::list (const std::string& suffix, std::vector<FileHandle> &handl
     getFile().list(relativePaths);
     handles.resize(relativePaths.size());
     unsigned int count = 0, found;
-    for (int i = 0, n = relativePaths.size(); i < n; i++) {
-        found = relativePaths[i].rfind(suffix);
-        if(found == relativePaths[i].npos || found != (relativePaths[i].length() - suffix.length() ) ) continue;
-        handles[count++] = child(relativePaths[i]);
+    for (auto & relativePath : relativePaths) {
+        found = relativePath.rfind(suffix);
+        if(found == relativePath.npos || found != (relativePath.length() - suffix.length() ) ) continue;
+        handles[count++] = child(relativePath);
     }
     if (count < relativePaths.size()) handles.resize(count);
     return;
@@ -202,11 +202,11 @@ bool FileHandle::deleteDirectory (File& file) {
     {
         std::vector<File> files;
         file.listFiles(files);
-        for (int i = 0, n = files.size(); i < n; i++) {
-                if (files[i].isDirectory())
-                    deleteDirectory(files[i]);
+        for (auto & file : files) {
+                if (file.isDirectory())
+                    deleteDirectory(file);
                 else
-                    files[i].deleteFile();
+                    file.deleteFile();
         }
     }
     return file.deleteFile();

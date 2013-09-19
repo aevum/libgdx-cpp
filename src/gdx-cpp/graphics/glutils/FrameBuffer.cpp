@@ -127,10 +127,10 @@ void FrameBuffer::addManagedFrameBuffer (Application* app,
 }
 
 void FrameBuffer::invalidateAllFrameBuffers (Application* app) {
-    if (gl20 == NULL) return;
+    if (gl20 == nullptr) return;
 
-    buffer_map::value_type::second_type::iterator it = buffers[app].begin();
-    buffer_map::value_type::second_type::iterator end = buffers[app].end();
+    auto it = buffers[app].begin();
+    auto end = buffers[app].end();
        
     for (; it != end; ++it) {
         (*it)->build();
@@ -138,8 +138,8 @@ void FrameBuffer::invalidateAllFrameBuffers (Application* app) {
 }
 
 void FrameBuffer::clearAllFrameBuffers (Application* app) {
-    buffer_map::value_type::second_type::iterator it = buffers[app].begin();
-    buffer_map::value_type::second_type::iterator end = buffers[app].end();
+    auto it = buffers[app].begin();
+    auto end = buffers[app].end();
 
     for (; it != end; it++) {
         delete *it;
@@ -152,8 +152,8 @@ std::string FrameBuffer::getManagedStatus () {
     std::stringstream builder;
     builder << "Managed buffers/app: { ";
 
-    buffer_map::iterator it = buffers.begin();
-    buffer_map::iterator end = buffers.end();
+    auto it = buffers.begin();
+    auto end = buffers.end();
     
     for (; it != end; ++it) {
         builder << buffers[it->first].size();

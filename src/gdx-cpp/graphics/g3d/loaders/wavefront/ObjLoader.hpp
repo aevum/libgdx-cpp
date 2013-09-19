@@ -76,7 +76,7 @@ public:
     virtual ~ObjLoader();
     StillModel* loadObj ( const FileHandle& file, bool flipV = false );
     StillModel* loadObj ( const FileHandle& file, FileHandle& textureDir, bool flipV );
-    StillModel* load ( const FileHandle& handle, ModelLoaderHints hints );
+    StillModel* load ( const FileHandle& handle, ModelLoaderHints hints ) override;
 };
 
 }

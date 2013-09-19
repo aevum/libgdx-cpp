@@ -30,16 +30,16 @@
 using namespace gdx;
 
 int IndexBufferObjectSubData::createBufferObject () {
-    if (gl20 != NULL) {
+    if (gl20 != nullptr) {
         gl20->glGenBuffers(1, (unsigned int*) &tmpHandle);
         gl20->glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, tmpHandle);
-        gl20->glBufferData(gdx::GL::ELEMENT_ARRAY_BUFFER, byteBuffer.capacity(), NULL, usage);
+        gl20->glBufferData(gdx::GL::ELEMENT_ARRAY_BUFFER, byteBuffer.capacity(), nullptr, usage);
         gl20->glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, 0);
         return tmpHandle;
-    } else if (gl11 != NULL) {
+    } else if (gl11 != nullptr) {
         gl11->glGenBuffers(1, &tmpHandle);
         gl11->glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, tmpHandle);
-        gl11->glBufferData(gdx::GL::ELEMENT_ARRAY_BUFFER, byteBuffer.capacity(), NULL, usage);
+        gl11->glBufferData(gdx::GL::ELEMENT_ARRAY_BUFFER, byteBuffer.capacity(), nullptr, usage);
         gl11->glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, 0);
         return tmpHandle;
     }
@@ -64,12 +64,12 @@ void IndexBufferObjectSubData::setIndices (const std::vector<short>& indices, in
     byteBuffer.limit(count << 1);
 
     if (isBound) {
-        if (gl11 != NULL) {
+        if (gl11 != nullptr) {
             GL11& gl = *gl11;
 // gl.glBufferData(gdx::GL::ELEMENT_ARRAY_BUFFER, byteBuffer
 // .limit(), byteBuffer, usage);
             gl.glBufferSubData(gdx::GL::ELEMENT_ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
-        } else if (gl11 != NULL) {
+        } else if (gl11 != nullptr) {
             GL20& gl = *gl20;
 // gl.glBufferData(gdx::GL::ELEMENT_ARRAY_BUFFER, byteBuffer
 // .limit(), byteBuffer, usage);
@@ -88,7 +88,7 @@ gdx::short_buffer& IndexBufferObjectSubData::getBuffer () {
 void IndexBufferObjectSubData::bind () {
     if (bufferHandle == 0) gdx_log_error("gdx","buuh");
 
-    if (gl11 != NULL) {
+    if (gl11 != nullptr) {
         GL11& gl = *gl11;
         gl.glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, bufferHandle);
         if (isDirty) {
@@ -113,9 +113,9 @@ void IndexBufferObjectSubData::bind () {
 }
 
 void IndexBufferObjectSubData::unbind () {
-    if (gl11 != NULL) {
+    if (gl11 != nullptr) {
         gl11->glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, 0);
-    } else if (gl20 != NULL) {
+    } else if (gl20 != nullptr) {
         gl20->glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, 0);
     }
     isBound = false;
@@ -127,13 +127,13 @@ void IndexBufferObjectSubData::invalidate () {
 }
 
 void IndexBufferObjectSubData::dispose () {
-    if (gl20 != NULL) {
+    if (gl20 != nullptr) {
         tmpHandle = bufferHandle;
         GL20& gl = *gl20;
         gl.glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, 0);
         gl.glDeleteBuffers(1, (unsigned int*) &tmpHandle);
         bufferHandle = 0;
-    } else if (gl11 != NULL) {
+    } else if (gl11 != nullptr) {
         tmpHandle = bufferHandle;
         GL11& gl = *gl11;
         gl.glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, 0);

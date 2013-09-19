@@ -34,14 +34,14 @@ public:
     IndexBufferObject (bool isStatic, int maxIndices) ;
     IndexBufferObject (int maxIndices) ;
     
-    int getNumIndices ();
-    int getNumMaxIndices ();
-    void setIndices (const std::vector< short >& indices, int offset, int count);
-    short_buffer& getBuffer ();
-    void bind ();
-    void unbind ();
-    void invalidate ();
-    void dispose ();
+    int getNumIndices () override;
+    int getNumMaxIndices () override;
+    void setIndices (const std::vector< short >& indices, int offset, int count) override;
+    short_buffer& getBuffer () override;
+    void bind () override;
+    void unbind () override;
+    void invalidate () override;
+    void dispose () override;
 
 protected:
     short_buffer buffer;

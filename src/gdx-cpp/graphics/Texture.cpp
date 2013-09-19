@@ -60,7 +60,7 @@ const Texture::TextureFilter Texture::TextureFilter::MipMapLinearLinear = Textur
 
 Texture::managedTextureMap Texture::managedTextures;
 unsigned int Texture::buffer = 0;
-AssetManager* Texture::assetManager = 0;
+AssetManager* Texture::assetManager = nullptr;
 
 Texture::ptr Texture::newFromFile(const FileHandle::ptr& file,
                                   const Pixmap::Format* format,
@@ -76,7 +76,7 @@ void Texture::create (const TextureData::ptr& data) {
     this->glHandle = 0;
     this->enforcePotImages = true;
     this->useHWMipMap = true;
-    this->assetManager = 0;
+    this->assetManager = nullptr;
 
     glHandle = createGLHandle();
     std::cerr << glHandle;
@@ -116,7 +116,7 @@ void Texture::load (const TextureData::ptr& data) {
 }
 
 void Texture::uploadImageData (const Pixmap::ptr& pixmap) {
-    if (enforcePotImages && gl20 == NULL
+    if (enforcePotImages && gl20 == nullptr
             && (! isPowerOfTwo(data->getWidth()) || !isPowerOfTwo(data->getHeight())))
     {
         gdx_log_error("gdx","Texture.cpp: texture width and height must be powers of two");
@@ -251,9 +251,9 @@ void Texture::clearAllTextures (Application* app) {
 void Texture::invalidateAllTextures (Application* app) {
     textureList& managedTexureList = managedTextures[app];
 
-    if (assetManager == NULL) {
-        textureList::iterator it = managedTexureList.begin();
-        textureList::iterator end = managedTexureList.end();
+    if (assetManager == nullptr) {
+        auto it = managedTexureList.begin();
+        auto end = managedTexureList.end();
 
         for (; it != end; it++) {
             it->lock()->reload();
@@ -293,8 +293,8 @@ std::string Texture::getManagedStatus () {
     std::stringstream builder;
     builder << "Managed textures/app: { ";
 
-    managedTextureMap::iterator it = managedTextures.begin();
-    managedTextureMap::iterator end = managedTextures.end();
+    auto it = managedTextures.begin();
+    auto end = managedTextures.end();
 
     for(; it != end; it++) {
         builder << it->second.size() << " ";
@@ -322,7 +322,7 @@ uWrap(TextureWrap::ClampToEdge),
 vWrap(TextureWrap::ClampToEdge)
 {
     Pixmap::ptr pixmap = Pixmap::newFromRect(width, height, format, pixType);
-    PixmapTextureData::ptr ptd(new PixmapTextureData(pixmap, NULL, false, true));
+    PixmapTextureData::ptr ptd(new PixmapTextureData(pixmap, nullptr, false, true));
     create(ptd);
 }
 
@@ -352,7 +352,7 @@ magFilter(TextureFilter::Nearest),
 uWrap(TextureWrap::ClampToEdge),
 vWrap(TextureWrap::ClampToEdge)
 {
-    create(PixmapTextureData::ptr(new PixmapTextureData(pixmap, NULL , useMipMaps, false)));
+    create(PixmapTextureData::ptr(new PixmapTextureData(pixmap, nullptr , useMipMaps, false)));
 }
 
 void Texture::initialize(const FileHandle::ptr& file, const Pixmap::Format* format, bool useMipMaps)
@@ -360,7 +360,7 @@ void Texture::initialize(const FileHandle::ptr& file, const Pixmap::Format* form
     this->glHandle = 0;
     this->enforcePotImages = true;
     this->useHWMipMap = true;
-    this->assetManager = 0;
+    this->assetManager = nullptr;
 
     create(TextureData::ptr(graphics->resolveTextureData(file, nullptr, format, useMipMaps)));
 }

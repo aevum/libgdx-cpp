@@ -31,7 +31,7 @@
   }\
 } while (false)
 
-class ALCcontext_struct;
+struct ALCcontext_struct;
 struct ALCdevice_struct;
 
 namespace gdx {
@@ -51,10 +51,10 @@ class LinuxOpenALAudio : public gdx::Audio
 
 
 public:
-    gdx::AudioDevice * newAudioDevice (int samplingRate, bool isMono);
-    gdx::AudioRecorder * newAudioRecoder (int samplingRate, bool isMono);
-    gdx::Sound * newSound (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_t file);
-    gdx::Music * newMusic (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_t file);
+    gdx::AudioDevice * newAudioDevice (int samplingRate, bool isMono) override;
+    gdx::AudioRecorder * newAudioRecoder (int samplingRate, bool isMono) override;
+    gdx::Sound * newSound (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_t file) override;
+    gdx::Music * newMusic (const ref_ptr_maker< gdx::FileHandle >::shared_ptr_t file) override;
 
     LinuxOpenALAudio (int simultaneousSources = 16);
     

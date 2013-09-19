@@ -31,16 +31,16 @@ class FileTextureData: public gdx::TextureData {
 public:
     FileTextureData (FileHandle::ptr file, gdx::Pixmap::ptr preloadedPixmap, const gdx::Pixmap::Format* format, bool useMipMaps) ;
     
-    gdx::Pixmap::ptr getPixmap ();
-    bool disposePixmap ();
-    int getWidth ();
-    int getHeight ();
-    const gdx::Pixmap::Format* getFormat ();
-    bool useMipMaps ();
-    bool isManaged ();
+    gdx::Pixmap::ptr getPixmap () override;
+    bool disposePixmap () override;
+    int getWidth () override;
+    int getHeight () override;
+    const gdx::Pixmap::Format* getFormat () override;
+    bool useMipMaps () override;
+    bool isManaged () override;
     FileHandle::ptr getFileHandle ();
-    const gdx::TextureData::TextureDataType& getType ();
-    void uploadCompressedData ();
+    const gdx::TextureData::TextureDataType& getType () override;
+    void uploadCompressedData () override;
 
 private:
     FileHandle::ptr file;

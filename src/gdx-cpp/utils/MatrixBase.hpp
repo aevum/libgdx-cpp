@@ -35,10 +35,10 @@ public:
         return std::array<T, Rows> ( value[i] );
     }
 
-    constexpr std::size_t cols() {
+    constexpr std::size_t cols() const {
         return Cols;
     }
-    constexpr std::size_t rows() {
+    constexpr std::size_t rows() const {
         return Rows;
     }
 

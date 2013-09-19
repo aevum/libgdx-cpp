@@ -55,12 +55,12 @@ LinuxOpenALAudio::LinuxOpenALAudio (int simultaneousSources)
 }
 
 void LinuxOpenALAudio::createAl() {
-    device = alcOpenDevice(NULL);
-    if (device == NULL) {
+    device = alcOpenDevice(nullptr);
+    if (device == nullptr) {
         gdx_log_error("gdx","Could not open ALC device");
     }
 
-    context = alcCreateContext(device, NULL);
+    context = alcCreateContext(device, nullptr);
 
     CHECK_OPENAL_ERROR(alcMakeContextCurrent(context));
 }
@@ -87,8 +87,8 @@ gdx::Music * LinuxOpenALAudio::newMusic (const ref_ptr_maker< gdx::FileHandle >:
 }
 
 int LinuxOpenALAudio::obtainSource (bool isMusic) {
-    std::set<int>::iterator sit = idleSources.begin();
-    std::set<int>::iterator send = idleSources.end();
+    auto sit = idleSources.begin();
+    auto send = idleSources.end();
     for (; sit != send; sit++) {
         int sourceID = *sit;
         int state;
@@ -110,8 +110,8 @@ void LinuxOpenALAudio::freeSource (int sourceID) {
 }
 
 void LinuxOpenALAudio::freeBuffer (int bufferID) {
-    std::set<int>::iterator sit = idleSources.begin();
-    std::set<int>::iterator send = idleSources.end();
+    auto sit = idleSources.begin();
+    auto send = idleSources.end();
     for (; sit != send; sit++) {
         int sourceID = *sit;
         int state;
@@ -124,8 +124,8 @@ void LinuxOpenALAudio::freeBuffer (int bufferID) {
 }
 
 void LinuxOpenALAudio::stopSourcesWithBuffer (int bufferID) {
-    std::set<int>::iterator sit = idleSources.begin();
-    std::set<int>::iterator send = idleSources.end();
+    auto sit = idleSources.begin();
+    auto send = idleSources.end();
     for (; sit != send; sit++) {
         int sourceID = *sit;int state;
         alGetSourcei(sourceID, AL_BUFFER, &state);
@@ -134,13 +134,13 @@ void LinuxOpenALAudio::stopSourcesWithBuffer (int bufferID) {
 }
 
 void LinuxOpenALAudio::update () {
-    for (unsigned i = 0; i < music.size(); i++)
-        music[i]->update();
+    for (auto & elem : music)
+        elem->update();
 }
 
 void LinuxOpenALAudio::dispose () {
-    std::set<int>::iterator sit = idleSources.begin();
-    std::set<int>::iterator send = idleSources.end();
+    auto sit = idleSources.begin();
+    auto send = idleSources.end();
     for (; sit != send; sit++) {
         ALuint sourceID = *sit;
         int state;
@@ -149,24 +149,24 @@ void LinuxOpenALAudio::dispose () {
         alDeleteSources(1, &sourceID);
     }
 
-    if (context != NULL) {
-        alcMakeContextCurrent(NULL);
+    if (context != nullptr) {
+        alcMakeContextCurrent(nullptr);
         alcDestroyContext(context);
-        context = NULL;
+        context = nullptr;
     }
-    if (device != NULL) {
+    if (device != nullptr) {
         CHECK_OPENAL_ERROR(alcCloseDevice(device));
-        device = NULL;
+        device = nullptr;
     }
 }
 
 gdx::AudioDevice* LinuxOpenALAudio::newAudioDevice (int samplingRate, bool isMono) {
     // BOZO - Write OpenAL device.
-    return NULL;//new JavaSoundAudioDevice(samplingRate, isMono);
+    return nullptr;//new JavaSoundAudioDevice(samplingRate, isMono);
 }
 
 gdx::AudioRecorder* LinuxOpenALAudio::newAudioRecoder (int samplingRate, bool isMono) {
-    return NULL;//new JavaSoundAudioRecorder(samplingRate, isMono);
+    return nullptr;//new JavaSoundAudioRecorder(samplingRate, isMono);
 }
 
 LinuxOpenALAudio::~LinuxOpenALAudio()

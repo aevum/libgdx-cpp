@@ -77,7 +77,7 @@ Gdx2DPixmap::Gdx2DPixmap ( FileHandle::ptr fhandle, int requestedFormat )
     width ( 0 ),
     height ( 0 ),
     format ( 0 ),
-    pixData ( 0 )
+    pixData ( nullptr )
 {
     FileHandle::buffer_ptr buffer;
     int readed = fhandle->readBytes ( buffer );
@@ -90,7 +90,7 @@ Gdx2DPixmap::Gdx2DPixmap ( FileHandle::ptr fhandle, int requestedFormat )
     height = pixData->height;
     format = pixData->format;
 
-    if ( pixData == NULL ) {
+    if ( pixData == nullptr ) {
         gdx_log_error ( "gdx","couldn't load pixmap" );
 
     }
@@ -100,14 +100,14 @@ Gdx2DPixmap::Gdx2DPixmap ( int width, int height, int format )
     : width ( width ),
       height ( height ),
       format ( format ),
-      pixData ( 0 )
+      pixData ( nullptr )
 {
     pixData = ::newPixmap ( width, height, format );
     assert ( pixData );
 }
 
 Gdx2DPixmap::Gdx2DPixmap ( const Gdx2DPixmap& other )
-    : pixData ( 0 )
+    : pixData ( nullptr )
 {
     this->pixData = gdx2d_new ( other.width, other.height, other.format );
     memcpy ( ( void* ) this->pixData->pixels, other.pixData->pixels, other.width * other.height * gdx2d_bytes_per_pixel ( other.format ) );
@@ -118,7 +118,7 @@ Gdx2DPixmap::Gdx2DPixmap ( const Gdx2DPixmap& other )
 }
 
 Gdx2DPixmap::Gdx2DPixmap ( unsigned char* encodedData, int offset, int len, int requestedFormat )
-    : pixData ( 0 )
+    : pixData ( nullptr )
 {
     this->pixData = load ( encodedData, offset, len, requestedFormat );
     this->width = pixData->width;
@@ -147,59 +147,59 @@ void Gdx2DPixmap::setScale ( int scale )
 
 void Gdx2DPixmap::dispose ()
 {
-    if ( pixData != NULL ) {
+    if ( pixData != nullptr ) {
         gdx2d_free ( pixData );
-        pixData = NULL;
+        pixData = nullptr;
     }
 }
 
 void Gdx2DPixmap::fill ()
 {
-    assert ( pixData != NULL );
-    if ( pixData != NULL ) {
+    assert ( pixData != nullptr );
+    if ( pixData != nullptr ) {
         gdx2d_clear ( pixData, color );
     }
 }
 
 void Gdx2DPixmap::drawPixel ( int x,int y )
 {
-    assert ( pixData != NULL );
+    assert ( pixData != nullptr );
     gdx2d_set_pixel ( pixData, x, y, color );
 }
 
 int Gdx2DPixmap::getPixel ( int x,int y ) const
 {
-    assert ( pixData != NULL );
+    assert ( pixData != nullptr );
     return gdx2d_get_pixel ( pixData, x, y );
 }
 
 void Gdx2DPixmap::drawLine ( int x,int y,int x2,int y2 )
 {
-    assert ( pixData != NULL );
+    assert ( pixData != nullptr );
     gdx2d_draw_line ( pixData, x, y, x2, y2, color );
 }
 
 void Gdx2DPixmap::drawRectangle ( int x,int y,int width,int height )
 {
-    assert ( pixData != NULL );
+    assert ( pixData != nullptr );
     gdx2d_draw_rect ( ( gdx2d_pixmap* ) pixData, x, y, width, height, color );
 }
 
 void Gdx2DPixmap::drawCircle ( int x,int y,int radius )
 {
-    assert ( pixData != NULL );
+    assert ( pixData != nullptr );
     gdx2d_draw_circle ( ( gdx2d_pixmap* ) pixData, x, y, radius, color );
 }
 
 void Gdx2DPixmap::fillRectangle ( int x,int y,int width,int height )
 {
-    assert ( pixData != NULL );
+    assert ( pixData != nullptr );
     gdx2d_fill_rect ( ( gdx2d_pixmap* ) pixData, x, y, width, height, color );
 }
 
 void Gdx2DPixmap::fillCircle ( int x,int y,int radius )
 {
-    assert ( pixData != NULL );
+    assert ( pixData != nullptr );
     gdx2d_fill_circle ( ( gdx2d_pixmap* ) pixData, x, y, radius, color );
 }
 
@@ -210,7 +210,7 @@ void Gdx2DPixmap::drawPixmap ( const Pixmap& src, int srcX, int srcY, int dstX, 
 
 void Gdx2DPixmap::drawPixmap ( const Pixmap& src, int srcX, int srcY, int srcWidth, int srcHeight, int dstX, int dstY, int dstWidth, int dstHeight )
 {
-    assert ( pixData != NULL );
+    assert ( pixData != nullptr );
 
     if ( src.getType() == Pixmap::PixmapType::PixmapType_Gdx2d ) {
         gdx2d_draw_pixmap ( ( gdx2d_pixmap* ) ( ( Gdx2DPixmap& ) src ).pixData, ( gdx2d_pixmap* ) pixData, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight );
@@ -238,7 +238,7 @@ Gdx2DPixmap* Gdx2DPixmap::newPixmap ( int width, int height, int format )
 
 const unsigned char* Gdx2DPixmap::getPixels ()
 {
-    assert ( pixData != NULL );
+    assert ( pixData != nullptr );
     return pixData->pixels;
 }
 

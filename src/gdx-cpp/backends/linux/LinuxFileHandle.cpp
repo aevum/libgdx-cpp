@@ -46,7 +46,7 @@ int LinuxFileHandle::readBytes(gdx::FileHandle::buffer_ptr& c) const
 
     std::string filepath;
     if (type == gdx::Files::Internal && !file.exists()) {
-        unsigned found;
+        std::string::size_type found;
         filepath = "/" + file.getPath();
 
         while((found = filepath.find("//")) != filepath.npos)
@@ -57,7 +57,7 @@ int LinuxFileHandle::readBytes(gdx::FileHandle::buffer_ptr& c) const
 
     FILE* f = fopen(filepath.c_str(), "r");
 
-    if (f == NULL) {
+    if (f == nullptr) {
         gdx_log_error("gdx","File not found: %s", path().c_str());
     }
 
@@ -82,7 +82,7 @@ int LinuxFileHandle::write(const char* data, int length, bool append)
 {
     FILE* f = fopen(file.getPath().c_str(), append ? "a" : "w");
 
-    if (f == NULL) {
+    if (f == nullptr) {
         gdx_log_error("gdx","File not found: %s", path().c_str());
     }
 

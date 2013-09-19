@@ -30,13 +30,13 @@ using namespace std;
 b2ChainShape::~b2ChainShape()
 {
 	b2Free(m_vertices);
-	m_vertices = NULL;
+	m_vertices = nullptr;
 	m_count = 0;
 }
 
 void b2ChainShape::CreateLoop(const b2Vec2* vertices, int32 count)
 {
-	b2Assert(m_vertices == NULL && m_count == 0);
+	b2Assert(m_vertices == nullptr && m_count == 0);
 	b2Assert(count >= 3);
 	m_count = count + 1;
 	m_vertices = (b2Vec2*)b2Alloc(m_count * sizeof(b2Vec2));
@@ -50,7 +50,7 @@ void b2ChainShape::CreateLoop(const b2Vec2* vertices, int32 count)
 
 void b2ChainShape::CreateChain(const b2Vec2* vertices, int32 count)
 {
-	b2Assert(m_vertices == NULL && m_count == 0);
+	b2Assert(m_vertices == nullptr && m_count == 0);
 	b2Assert(count >= 2);
 	m_count = count;
 	m_vertices = (b2Vec2*)b2Alloc(count * sizeof(b2Vec2));
@@ -74,7 +74,7 @@ void b2ChainShape::SetNextVertex(const b2Vec2& nextVertex)
 b2Shape* b2ChainShape::Clone(b2BlockAllocator* allocator) const
 {
 	void* mem = allocator->Allocate(sizeof(b2ChainShape));
-	b2ChainShape* clone = new (mem) b2ChainShape;
+	auto  clone = new (mem) b2ChainShape;
 	clone->CreateChain(m_vertices, m_count);
 	clone->m_prevVertex = m_prevVertex;
 	clone->m_nextVertex = m_nextVertex;

@@ -166,10 +166,10 @@ bool Intersector::intersectRayPlane (const Ray& ray, Plane& plane, Vector3* inte
         float t = -(ray.origin.dot(plane.getNormal()) + plane.getD()) / denom;
         if (t < 0) return false;
 
-        if (intersection != NULL) intersection->set(ray.origin).add(ray.direction.tmp().mul(t));
+        if (intersection != nullptr) intersection->set(ray.origin).add(ray.direction.tmp().mul(t));
         return true;
     } else if (plane.testPoint(ray.origin) == Plane::PlaneSide_OnPlane) {
-        if (intersection != NULL) intersection->set(ray.origin);
+        if (intersection != nullptr) intersection->set(ray.origin);
         return true;
     } else
         return false;
@@ -196,7 +196,7 @@ bool Intersector::intersectRayTriangle (const Ray& ray,const Vector3& t1,const V
     float v = (dot00 * dot12 - dot01 * dot02) / denom;
 
     if (u >= 0 && v >= 0 && u + v <= 1) {
-        if (intersection != NULL) intersection->set(i);
+        if (intersection != nullptr) intersection->set(i);
         return true;
     } else {
         return false;
@@ -239,12 +239,12 @@ bool Intersector::intersectRaySphere (const Ray& ray,const Vector3& center,float
 
     // if t0 is less than zero, the intersection point is at t1
     if (t0 < 0) {
-        if (intersection != NULL) intersection->set(start).add(dir.tmp().mul(t1));
+        if (intersection != nullptr) intersection->set(start).add(dir.tmp().mul(t1));
         return true;
     }
     // else the intersection point is at t0
     else {
-        if (intersection != NULL) intersection->set(start).add(dir.tmp().mul(t0));
+        if (intersection != nullptr) intersection->set(start).add(dir.tmp().mul(t0));
         return true;
     }
 }
@@ -319,7 +319,7 @@ bool Intersector::intersectRayTriangles (const Ray& ray, const std::vector<float
     if (hit == false)
         return false;
     else {
-        if (intersection != NULL) intersection->set(best);
+        if (intersection != nullptr) intersection->set(best);
         return true;
     }
 }
@@ -356,7 +356,7 @@ bool Intersector::intersectRayTriangles (const Ray& ray, const std::vector<float
     if (hit == false)
         return false;
     else {
-        if (intersection != NULL) intersection->set(best);
+        if (intersection != nullptr) intersection->set(best);
         return true;
     }
 }
@@ -382,10 +382,10 @@ bool Intersector::intersectRayTriangles (const Ray& ray, const std::vector<Vecto
         }
     }
 
-    if (best == NULL)
+    if (best == nullptr)
         return false;
     else {
-        if (intersection != NULL) intersection->set(best);
+        if (intersection != nullptr) intersection->set(best);
         return true;
     }
 }
@@ -423,7 +423,7 @@ bool Intersector::intersectSegments (const Vector2& p1,const Vector2& p2,const V
     if (ua < 0 || ua > 1) return false;
     if (ub < 0 || ub > 1) return false;
 
-    if (intersection != NULL) intersection->set(x1 + (x2 - x1) * ua, y1 + (y2 - y1) * ua);
+    if (intersection != nullptr) intersection->set(x1 + (x2 - x1) * ua, y1 + (y2 - y1) * ua);
     return true;
 }
 

@@ -33,13 +33,13 @@ public:
     TextureAttribute ( const Texture& texture, int unit, const char* name, const Texture::TextureFilter& minFilter, const Texture::TextureFilter& magFilter, const Texture::TextureWrap& uWarp, const Texture::TextureWrap& vWarp );
     TextureAttribute ( const Texture& texture, int unit, const char* name, int minFilter, int magFilter,int uWrap, int vWrap );
     TextureAttribute ( const Texture& texture, int unit, const char* name );
-    void bind();
-    void bind ( ShaderProgram& program );
-    MaterialAttribute& copy();
-    void set ( MaterialAttribute& attr );
+    void bind() override;
+    void bind ( ShaderProgram& program ) override;
+    MaterialAttribute& copy() override;
+    void set ( MaterialAttribute& attr ) override;
     bool texturePortionEquals ( const TextureAttribute* other );
-    MaterialAttribute& pooledCopy();
-    void free();
+    MaterialAttribute& pooledCopy() override;
+    void free() override;
     
     virtual ~TextureAttribute();
 private:

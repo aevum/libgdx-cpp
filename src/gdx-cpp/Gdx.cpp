@@ -30,19 +30,19 @@ class Audio;
 class Files;
 class Input;
 
-Application* app = 0;
-Graphics* graphics = 0;
-Audio* audio = 0;
-Input* input = 0;
-Files* files = 0; 
-GLCommon* gl = 0;
-GL10* gl10 = 0;
-GL11* gl11 = 0;
-GL20* gl20 = 0;
-GLU* glu = 0;
+Application* app = nullptr;
+Graphics* graphics = nullptr;
+Audio* audio = nullptr;
+Input* input = nullptr;
+Files* files = nullptr; 
+GLCommon* gl = nullptr;
+GL10* gl10 = nullptr;
+GL11* gl11 = nullptr;
+GL20* gl20 = nullptr;
+GLU* glu = nullptr;
 
-System* system = 0;
-Log* log = 0;
+System* system = nullptr;
+Log* log = nullptr;
 }
 
 void gdx::initialize(gdx::Application* application,

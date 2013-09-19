@@ -46,9 +46,9 @@ TextureAtlas::AtlasRegion TextureAtlas::addRegion (const std::string& name, Text
 }
 
 bool TextureAtlas::findRegion (const std::string& name, TextureAtlas::AtlasRegion& placement) {
-    for (int i = 0, n = regions.size(); i < n; i++)
-        if (regions[i].name == name) {
-            placement = regions[i];
+    for (auto & elem : regions)
+        if (elem.name == name) {
+            placement = elem;
             return true;
         }
     
@@ -56,8 +56,8 @@ bool TextureAtlas::findRegion (const std::string& name, TextureAtlas::AtlasRegio
 }
 
 bool TextureAtlas::findRegion (const std::string& name, int index, AtlasRegion& placement) {
-    for (int i = 0, n = regions.size(); i < n; i++) {
-        AtlasRegion& region = regions[i];
+    for (auto & elem : regions) {
+        AtlasRegion& region = elem;
         if (region.name != name) continue;
         if (region.index != index) continue;
         placement = region;
@@ -70,8 +70,8 @@ bool TextureAtlas::findRegion (const std::string& name, int index, AtlasRegion& 
 std::vector< TextureAtlas::AtlasRegion > TextureAtlas::findRegions (const std::string& name) {
     std::vector< AtlasRegion > matched;
    
-    for (int i = 0, n = regions.size(); i < n; i++) {
-        AtlasRegion& region = regions[i];
+    for (auto & elem : regions) {
+        AtlasRegion& region = elem;
         if (region.name == name) matched.push_back(region);
     }
     
@@ -80,26 +80,26 @@ std::vector< TextureAtlas::AtlasRegion > TextureAtlas::findRegions (const std::s
 
 std::vector< Sprite::ptr > TextureAtlas::createSprites () {
     std::vector< Sprite::ptr > sprites;
-    for (int i = 0, n = regions.size(); i < n; i++) {
-        sprites.push_back(newSprite(regions[i]));
+    for (auto & elem : regions) {
+        sprites.push_back(newSprite(elem));
     }
     
     return sprites;
 }
 
 Sprite::ptr TextureAtlas::createSprite (const std::string& name) {
-    for (int i = 0, n = regions.size(); i < n; i++)
-        if (regions[i].name == name) return newSprite(regions[i]);
+    for (auto & elem : regions)
+        if (elem.name == name) return newSprite(elem);
     
     return nullptr;
 }
 
 Sprite::ptr TextureAtlas::createSprite (const std::string& name,int index) {
-    for (int i = 0, n = regions.size(); i < n; i++) {
-        AtlasRegion& region = regions[i];
+    for (auto & elem : regions) {
+        AtlasRegion& region = elem;
         if (region.name != name) continue;
         if (region.index != index) continue;
-        return newSprite(regions[i]);
+        return newSprite(elem);
     }
     
     return nullptr;
@@ -108,8 +108,8 @@ Sprite::ptr TextureAtlas::createSprite (const std::string& name,int index) {
 std::vector< Sprite::ptr > TextureAtlas::createSprites (const std::string& name) {
     std::vector< Sprite::ptr > matched;
     
-    for (int i = 0, n = regions.size(); i < n; i++) {
-        const AtlasRegion& region = regions[i];
+    for (auto & elem : regions) {
+        const AtlasRegion& region = elem;
         if (region.name == name) matched.push_back(newSprite(region));
     }
     
@@ -243,7 +243,7 @@ TextureAtlas::AtlasRegion TextureAtlas::AtlasSprite::getAtlasRegion() {
 }
 
 std::unique_ptr< TextureAtlas > TextureAtlas::newAtlasFromProvider(TextureAtlas::TextureAtlasDataProvider& provider) {
-    TextureAtlas* atlas = new TextureAtlas;    
+    auto  atlas = new TextureAtlas;    
     atlas->regions = provider.loadAtlasRegions();    
     return std::unique_ptr<TextureAtlas>(atlas);
 }

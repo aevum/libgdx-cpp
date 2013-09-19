@@ -77,7 +77,7 @@ public:
     void end ();
     void draw (int cacheID);
     void draw (int cacheID,int offset,int length);
-    void dispose ();
+    void dispose () override;
     Matrix4& getProjectionMatrix ();
     void setProjectionMatrix (const Matrix4& projection);
     Matrix4& getTransformMatrix ();

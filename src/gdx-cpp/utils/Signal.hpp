@@ -46,7 +46,7 @@ public:
 
     Signal& operator()(params... parameters) {
         auto functorsCopy = functors;
-        for (auto& functor: functorsCopy) {
+        for (const auto& functor: functorsCopy) {
             functor(parameters...);
         }
     }

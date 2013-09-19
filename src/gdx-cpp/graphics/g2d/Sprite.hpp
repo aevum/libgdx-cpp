@@ -75,8 +75,8 @@ public:
     virtual float getScaleY () const;
     virtual Color& getColor ();
     virtual const Color& getColor () const;
-    virtual void setRegion ( float u,float v,float u2,float v2 );
-    virtual void setRegion ( const TextureRegion& other );
+    virtual void setRegion ( float u,float v,float u2,float v2 ) override;
+    virtual void setRegion ( const TextureRegion& other ) override;
     virtual void setU ( float u );
     virtual void setV ( float v );
     virtual void setU2 ( float u2 );

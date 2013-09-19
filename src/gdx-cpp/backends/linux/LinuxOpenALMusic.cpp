@@ -29,7 +29,7 @@ using namespace gdx::nix;
 char LinuxOpenALMusic::tempBytes[bufferSize];
 
 LinuxOpenALMusic::LinuxOpenALMusic(LinuxOpenALAudio * _audio, ref_ptr_maker< gdx::FileHandle >::shared_ptr_t _file) :
-        file(_file),
+        file(std::move(_file)),
 audio(_audio),
 sourceID(-1),
 format(0),
@@ -38,8 +38,7 @@ isLoopingVar(false),
 isPlayingVar(false),
 isPausedVar(false),
 volume(1),
-renderedSeconds(0),
-secondsPerBuffer(0)
+renderedSeconds(0)
 {
     audio->music.push_back(this);
 }
@@ -125,7 +124,7 @@ float LinuxOpenALMusic::getPosition ()
 }
 void LinuxOpenALMusic::dispose ()
 {    
-    if (buffers == NULL) return;
+    if (buffers == nullptr) return;
     if (sourceID != -1) {
         reset();
         unsigned length = audio->music.size();

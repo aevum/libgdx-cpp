@@ -39,8 +39,8 @@ VertexAttributes::VertexAttributes (const std::vector<VertexAttribute>& attribut
 
 int VertexAttributes::calculateOffsets () {
     int count = 0;
-    for (unsigned int i = 0; i < attributes.size(); i++) {
-        VertexAttribute& attribute = attributes[i];
+    for (auto & elem : attributes) {
+        VertexAttribute& attribute = elem;
         attribute.offset = count;
         if (attribute.usage == VertexAttributes::Usage::ColorPacked)
             count += 4;
@@ -56,8 +56,8 @@ void VertexAttributes::checkValidity () {
     bool cols = false;
     bool nors = false;
 
-    for (unsigned int i = 0; i < attributes.size(); i++) {
-        const VertexAttribute& attribute = attributes[i];
+    for (auto & elem : attributes) {
+        const VertexAttribute& attribute = elem;
         if (attribute.usage == Usage::Position) {
             if (pos) {
                 gdx_log_error("gdx","two position attributes were specified");
@@ -100,11 +100,11 @@ VertexAttribute& VertexAttributes::get (int index) {
 
 std::string VertexAttributes::toString () {
     std::stringstream builder;
-    for (unsigned int i = 0; i < attributes.size(); i++) {
-        builder << attributes[i].alias << ", " <<
-        attributes[i].usage << ", " <<
-        attributes[i].numComponents <<  ", " <<
-        attributes[i].offset <<  std::endl;
+    for (auto & elem : attributes) {
+        builder << elem.alias << ", " <<
+        elem.usage << ", " <<
+        elem.numComponents <<  ", " <<
+        elem.offset <<  std::endl;
     }
     return builder.str();
 }

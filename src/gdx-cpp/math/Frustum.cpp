@@ -38,15 +38,15 @@ float Frustum::clipSpacePlanePointsArray[8 * 3];
 
 Frustum::Frustum()
 {
-    for (int i = 0; i < 6; i++) {
-        planes[i] = new Plane(Vector3(), 0);
+    for (auto & elem : planes) {
+        elem = new Plane(Vector3(), 0);
     }
 }
 
 Frustum::~Frustum()
 {
-  for (int i = 0; i < 6; i++) {
-    delete planes[i];
+  for (auto & elem : planes) {
+    delete elem;
   }
 }
 
@@ -70,8 +70,8 @@ void Frustum::update (const Matrix4& inverseProjectionView) {
 }
 
 bool Frustum::pointInFrustum (const Vector3& point) {
-    for (int i = 0; i < 6; i++) {
-        Plane::PlaneSide result = planes[i]->testPoint(point);
+    for (auto & elem : planes) {
+        Plane::PlaneSide result = elem->testPoint(point);
         if (result == Plane::PlaneSide_Back) return false;
     }
 
@@ -79,15 +79,15 @@ bool Frustum::pointInFrustum (const Vector3& point) {
 }
 
 bool Frustum::sphereInFrustum (const Vector3& center,float radius) {
-    for (int i = 0; i < 6; i++)
-        if (planes[i]->distance(center) < -radius) return false;
+    for (auto & elem : planes)
+        if (elem->distance(center) < -radius) return false;
 
     return true;
 }
 
 bool Frustum::sphereInFrustumWithoutNearFar (const Vector3& center,float radius) {
-    for (int i = 0; i < 6; i++)
-        if (planes[i]->distance(center) < -radius) return false;
+    for (auto & elem : planes)
+        if (elem->distance(center) < -radius) return false;
 
     return true;
 }

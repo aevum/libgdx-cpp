@@ -37,7 +37,7 @@ gdx::Pixmap::ptr FileTextureData::getPixmap () {
         Pixmap::ptr pixmap = Pixmap::newFromFile(file);
         width = pixmap->getWidth();
         height = pixmap->getHeight();
-        if (format == NULL) format = &pixmap->getFormat();
+        if (format == nullptr) format = &pixmap->getFormat();
         return pixmap;
     }
 }
@@ -81,15 +81,15 @@ void FileTextureData::uploadCompressedData () {
 FileTextureData::FileTextureData(FileHandle::ptr file, gdx::Pixmap::ptr preloadedPixmap,
                                  const Pixmap::Format* format, bool useMipMaps)
 :
-file(file),
+file(std::move(file)),
 format(format),
-pixmap(preloadedPixmap),
+pixmap(std::move(preloadedPixmap)),
 _useMipMaps(useMipMaps)
 {
     if (pixmap) {
         width = pixmap->getWidth();
         height = pixmap->getHeight();
-        if (format == NULL)
+        if (format == nullptr)
             this->format = &pixmap->getFormat();
     }
 }

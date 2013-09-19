@@ -19,13 +19,14 @@
 */
 
 #include "VertexAttribute.hpp"
+#include <utility>
 
 using namespace gdx;
 
-VertexAttribute::VertexAttribute(int usage, int numComponents, const std::string& alias)
+VertexAttribute::VertexAttribute(int usage, int numComponents, std::string  alias)
         : usage(usage),
 numComponents(numComponents),
 offset(0),
-alias(alias)
+alias(std::move(alias))
 {
 }

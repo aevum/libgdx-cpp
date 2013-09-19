@@ -40,42 +40,42 @@ ParticleEffect::ParticleEffect (ParticleEffect& effect) {
 }
 
 ParticleEffect::~ParticleEffect () {
-    for (unsigned int i = 0, n = emitters.size(); i < n; i++)
+    for (auto & elem : emitters)
     {
-        if (emitters[i] != NULL) {
-            delete emitters[i];
+        if (elem != nullptr) {
+            delete elem;
         }
     }
 }
 
 void ParticleEffect::start () {
-    for (unsigned int i = 0, n = emitters.size(); i < n; i++)
-        emitters[i]->start();
+    for (auto & elem : emitters)
+        elem->start();
 }
 
 void ParticleEffect::update (float delta) {
-    for (unsigned int i = 0, n = emitters.size(); i < n; i++)
-        emitters[i]->update(delta);
+    for (auto & elem : emitters)
+        elem->update(delta);
 }
 
 void ParticleEffect::draw (SpriteBatch& spriteBatch) {
-    for (unsigned int i = 0, n = emitters.size(); i < n; i++)
-        emitters[i]->draw(spriteBatch);
+    for (auto & elem : emitters)
+        elem->draw(spriteBatch);
 }
 
 void ParticleEffect::draw (SpriteBatch& spriteBatch, float delta) {
-    for (unsigned int i = 0, n = emitters.size(); i < n; i++)
-        emitters[i]->draw(spriteBatch, delta);
+    for (auto & elem : emitters)
+        elem->draw(spriteBatch, delta);
 }
 
 void ParticleEffect::allowCompletion () {
-    for (unsigned int i = 0, n = emitters.size(); i < n; i++)
-        emitters[i]->allowCompletion();
+    for (auto & elem : emitters)
+        elem->allowCompletion();
 }
 
 bool ParticleEffect::isComplete () {
-    for (unsigned int i = 0, n = emitters.size(); i < n; i++) {
-        ParticleEmitter * emitter = emitters[i];
+    for (auto & elem : emitters) {
+        ParticleEmitter * emitter = elem;
         if (emitter->isContinuous()) return false;
         if (!emitter->isComplete()) return false;
     }
@@ -83,8 +83,8 @@ bool ParticleEffect::isComplete () {
 }
 
 void ParticleEffect::setDuration (int duration) {
-    for (unsigned int i = 0, n = emitters.size(); i < n; i++) {
-        ParticleEmitter * emitter = emitters[i];
+    for (auto & elem : emitters) {
+        ParticleEmitter * emitter = elem;
         emitter->setContinuous(false);
         emitter->duration = duration;
         emitter->durationTimer = 0;
@@ -92,13 +92,13 @@ void ParticleEffect::setDuration (int duration) {
 }
 
 void ParticleEffect::setPosition (float x,float y) {
-    for (unsigned int i = 0, n = emitters.size(); i < n; i++)
-        emitters[i]->setPosition(x, y);
+    for (auto & elem : emitters)
+        elem->setPosition(x, y);
 }
 
 void ParticleEffect::setFlip (bool flipX,bool flipY) {
-    for (unsigned int i = 0, n = emitters.size(); i < n; i++)
-        emitters[i]->setFlip(flipX, flipY);
+    for (auto & elem : emitters)
+        elem->setFlip(flipX, flipY);
 }
 
 std::vector< ParticleEmitter * >& ParticleEffect::getEmitters () {
@@ -106,10 +106,10 @@ std::vector< ParticleEmitter * >& ParticleEffect::getEmitters () {
 }
 
 ParticleEmitter* ParticleEffect::findEmitter (const std::string& name) {
-    for (unsigned int i = 0, n = emitters.size(); i < n; i++) {
-        if (emitters[i]->getName() == name) return emitters[i];
+    for (auto & elem : emitters) {
+        if (elem->getName() == name) return elem;
     }
-    return NULL;
+    return nullptr;
 }
 
 void ParticleEffect::save (const File& file) {
@@ -203,7 +203,7 @@ void ParticleEffect::loadEmittersTest (std::string file) {
         std::istream * reader = new std::ifstream(file.c_str());
         std::string by;
         while (true) {
-            ParticleEmitter * emitter = new ParticleEmitter(*reader);
+            auto  emitter = new ParticleEmitter(*reader);
             std::getline(*reader, by);
             std::getline(*reader, by);
             emitter->setImagePath("");
@@ -216,8 +216,8 @@ void ParticleEffect::loadEmittersTest (std::string file) {
 
 
 void ParticleEffect::loadEmitterImagesTest () {
-    for (unsigned int i = 0, n = emitters.size(); i < n; i++) {
-        ParticleEmitter * emitter = emitters[i];
+    for (auto & elem : emitters) {
+        ParticleEmitter * emitter = elem;
 
         Pixmap::ptr pixmap = Pixmap::newFromRect(16, 16, Pixmap::Format::RGBA8888, Pixmap::PixmapType::PixmapType_Gdx2d);
         
@@ -233,7 +233,7 @@ void ParticleEffect::loadEmitterImagesTest () {
 }
 
 Texture::ptr ParticleEffect::loadTexture (const FileHandle::ptr file) {
-    return Texture::newFromFile(file, NULL, false);
+    return Texture::newFromFile(file, nullptr, false);
 }
 
 void ParticleEffect::dispose () {

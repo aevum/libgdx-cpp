@@ -27,7 +27,7 @@ namespace gdx {
 
 class VertexAttribute {
 public:
-  VertexAttribute(int usage, int numComponents, const std::string& alias);
+  VertexAttribute(int usage, int numComponents, std::string  alias);
   
   int usage;
   int numComponents;

@@ -113,12 +113,12 @@ void BitmapFontCache::reset (int glyphCount) {
 
 float BitmapFontCache::addToCache (const std::string& str,float x,float y, unsigned int start, unsigned int end) {
     float startX = x;
-    BitmapFont::Glyph* lastGlyph = NULL;
+    BitmapFont::Glyph* lastGlyph = nullptr;
     if (font->data->scaleX == 1 && font->data->scaleY == 1) {
         while (start < end) {
             font->data->getGlyph(str, start , lastGlyph);
             
-            if (lastGlyph != NULL) {
+            if (lastGlyph != nullptr) {
                 addGlyph(lastGlyph, x + lastGlyph->xoffset, y + lastGlyph->yoffset, lastGlyph->width, lastGlyph->height);
                 x += lastGlyph->xadvance;
                 break;
@@ -128,7 +128,7 @@ float BitmapFontCache::addToCache (const std::string& str,float x,float y, unsig
             BitmapFont::Glyph* g = nullptr;            
             unsigned int ch = font->data->getGlyph(str, start, g);
             
-            if (g != NULL) {
+            if (g != nullptr) {
                 x += lastGlyph->getKerning(ch);
                 lastGlyph = g;
                 addGlyph(lastGlyph, x + g->xoffset, y + g->yoffset, g->width, g->height);
@@ -139,7 +139,7 @@ float BitmapFontCache::addToCache (const std::string& str,float x,float y, unsig
         float scaleX = font->data->scaleX, scaleY = font->data->scaleY;
         while (start < end) {            
             font->data->getGlyph(str, start, lastGlyph);
-            if (lastGlyph != NULL) {
+            if (lastGlyph != nullptr) {
                 addGlyph(lastGlyph, //
                          x + lastGlyph->xoffset * scaleX, //
                          y + lastGlyph->yoffset * scaleY, //
@@ -153,7 +153,7 @@ float BitmapFontCache::addToCache (const std::string& str,float x,float y, unsig
             BitmapFont::Glyph* g = nullptr;            
             unsigned int ch = font->data->getGlyph(str, start, g);
 
-            if (g != NULL) {
+            if (g != nullptr) {
                 x += lastGlyph->getKerning(ch) * scaleX;
                 lastGlyph = g;
                 addGlyph(lastGlyph, //

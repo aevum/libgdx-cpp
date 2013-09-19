@@ -72,7 +72,7 @@ b2Timer::b2Timer()
 void b2Timer::Reset()
 {
     timeval t;
-    gettimeofday(&t, 0);
+    gettimeofday(&t, nullptr);
     m_start_sec = t.tv_sec;
     m_start_msec = t.tv_usec * 0.001f;
 }
@@ -80,7 +80,7 @@ void b2Timer::Reset()
 float32 b2Timer::GetMilliseconds() const
 {
     timeval t;
-    gettimeofday(&t, 0);
+    gettimeofday(&t, nullptr);
     return (t.tv_sec - m_start_sec) * 1000 + t.tv_usec * 0.001f - m_start_msec;
 }
 

@@ -32,7 +32,7 @@ struct buffer_base {
 public:
     typedef ref_ptr_maker<char>::shared_ptr_t char_ptr;
     buffer_base(char_ptr bf, int capacity, int position, int mark, int limit)
-            : bf(bf)
+            : bf(std::move(bf))
             , _capacity(capacity)
             , _position(position)
             , _mark(mark)

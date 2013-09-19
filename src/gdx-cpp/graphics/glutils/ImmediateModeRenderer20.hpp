@@ -35,19 +35,19 @@ class ShaderProgram;
 
 class ImmediateModeRenderer20 : public ImmediateModeRenderer {
 public:
-    RendererType getRendererType() { return RendererType::IMMEDIATE_GLES20; }
+    RendererType getRendererType() override { return RendererType::IMMEDIATE_GLES20; }
     
     std::string createVertexShader (bool hasNormals, bool hasColors, int numTexCoords);
-    void begin (Matrix4& projModelView,int primitiveType);
+    void begin (Matrix4& projModelView,int primitiveType) override;
     void begin (ShaderProgram* shader, int primitiveType);
-    void color (float r,float g,float b,float a);
-    void texCoord (float u,float v);
-    void normal (float x,float y,float z);
-    void vertex (float x,float y,float z);
-    void end ();
-    int getNumVertices ();
-    int getMaxVertices ();
-    void dispose ();
+    void color (float r,float g,float b,float a) override;
+    void texCoord (float u,float v) override;
+    void normal (float x,float y,float z) override;
+    void vertex (float x,float y,float z) override;
+    void end () override;
+    int getNumVertices () override;
+    int getMaxVertices () override;
+    void dispose () override;
     
     ImmediateModeRenderer20 (bool hasNormals,bool hasColors,int numTexCoords, int maxVertices = 5000);
 

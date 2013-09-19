@@ -39,8 +39,7 @@ listener(listener),
 graphics(NULL),
 input(NULL),
 files(NULL),
-audio(NULL),
-logLevel(gdx::Application::LOG_INFO)
+audio(NULL)
 {
     initialize();
 }
@@ -149,11 +148,6 @@ void gdx::android::AndroidApplication::postRunnable(Runnable::ptr runnable)
 {
     lock_holder hnd = synchronize();
     runnables.push_back(runnable);
-}
-
-void gdx::android::AndroidApplication::setLogLevel(int logLevel)
-{
-    this->logLevel = logLevel;
 }
 
 void AndroidApplication::postRunnable(std::function< void() > runnable)

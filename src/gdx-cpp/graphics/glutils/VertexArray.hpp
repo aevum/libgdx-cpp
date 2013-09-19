@@ -30,16 +30,16 @@ namespace gdx {
 class VertexArray : public VertexData {
 public:
 
-    VertexArray (int numVertices, const VertexAttributes& attributes) ;
+    VertexArray (int numVertices, VertexAttributes  attributes) ;
     
-    void dispose ();
-    float_buffer& getBuffer ();
-    int getNumVertices ();
-    int getNumMaxVertices ();
-    void setVertices (const float* vertices, int offset, int count);
-    void bind ();
-    void unbind ();
-    VertexAttributes& getAttributes ();
+    void dispose () override;
+    float_buffer& getBuffer () override;
+    int getNumVertices () override;
+    int getNumMaxVertices () override;
+    void setVertices (const float* vertices, int offset, int count) override;
+    void bind () override;
+    void unbind () override;
+    VertexAttributes& getAttributes () override;
 
 protected:
 

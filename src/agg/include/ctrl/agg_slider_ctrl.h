@@ -53,11 +53,11 @@ namespace agg
         double value() const { return m_value * (m_max - m_min) + m_min; }
         void value(double value);
 
-        virtual bool in_rect(double x, double y) const;
-        virtual bool on_mouse_button_down(double x, double y);
-        virtual bool on_mouse_button_up(double x, double y);
-        virtual bool on_mouse_move(double x, double y, bool button_flag);
-        virtual bool on_arrow_keys(bool left, bool right, bool down, bool up);
+        virtual bool in_rect(double x, double y) const override;
+        virtual bool on_mouse_button_down(double x, double y) override;
+        virtual bool on_mouse_button_up(double x, double y) override;
+        virtual bool on_mouse_move(double x, double y, bool button_flag) override;
+        virtual bool on_arrow_keys(bool left, bool right, bool down, bool up) override;
 
         // Vertex source interface
         unsigned num_paths() { return 6; };

@@ -15,7 +15,7 @@ class ApplicationListener;
 using namespace gdx;
 using namespace gdx::nix;
 
-gdx::ApplicationListener* applicationListener = 0;
+gdx::ApplicationListener* applicationListener = nullptr;
 int width,height = 0;
 std::string title;
 bool isUseOpenGLES2;

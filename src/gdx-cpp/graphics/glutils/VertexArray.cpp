@@ -129,9 +129,9 @@ VertexAttributes& VertexArray::getAttributes () {
     return attributes;
 }
 
-VertexArray::VertexArray(int numVertices, const VertexAttributes& attributes)
+VertexArray::VertexArray(int numVertices, VertexAttributes  attributes)
 :
-attributes(attributes),
+attributes(std::move(attributes)),
 byteBuffer(this->attributes.vertexSize * numVertices),
 isBound(false)
 {

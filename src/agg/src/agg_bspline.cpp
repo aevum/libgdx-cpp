@@ -25,8 +25,8 @@ namespace agg
     bspline::bspline() :
         m_max(0),
 m_num(0),
-m_x(0),
-m_y(0),
+m_x(nullptr),
+m_y(nullptr),
 m_last_idx(-1) {
     }
 
@@ -34,8 +34,8 @@ m_last_idx(-1) {
     bspline::bspline(int num) :
         m_max(0),
 m_num(0),
-m_x(0),
-m_y(0),
+m_x(nullptr),
+m_y(nullptr),
 m_last_idx(-1) {
         init(num);
     }
@@ -44,8 +44,8 @@ m_last_idx(-1) {
     bspline::bspline(int num, const double* x, const double* y) :
         m_max(0),
 m_num(0),
-m_x(0),
-m_y(0),
+m_x(nullptr),
+m_y(nullptr),
 m_last_idx(-1) {
         init(num, x, y);
     }

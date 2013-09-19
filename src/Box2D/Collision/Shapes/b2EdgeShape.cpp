@@ -36,7 +36,7 @@ void b2EdgeShape::Set(const b2Vec2& v1, const b2Vec2& v2)
 b2Shape* b2EdgeShape::Clone(b2BlockAllocator* allocator) const
 {
 	void* mem = allocator->Allocate(sizeof(b2EdgeShape));
-	b2EdgeShape* clone = new (mem) b2EdgeShape;
+	auto  clone = new (mem) b2EdgeShape;
 	*clone = *this;
 	return clone;
 }

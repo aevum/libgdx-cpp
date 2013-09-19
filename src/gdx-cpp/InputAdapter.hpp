@@ -27,14 +27,14 @@ namespace gdx {
 
 class InputAdapter : public InputProcessor {
 public:
-    virtual bool keyDown (int keycode);
-    virtual bool keyUp (int keycode);
-    virtual bool keyTyped (char character);
-    virtual bool touchDown (int x,int y,int pointer,int button);
-    virtual bool touchUp (int x,int y,int pointer,int button);
-    virtual bool touchDragged (int x,int y,int pointer);
-    virtual bool touchMoved (int x,int y);
-    virtual bool scrolled (int amount);
+    virtual bool keyDown (int keycode) override;
+    virtual bool keyUp (int keycode) override;
+    virtual bool keyTyped (char character) override;
+    virtual bool touchDown (int x,int y,int pointer,int button) override;
+    virtual bool touchUp (int x,int y,int pointer,int button) override;
+    virtual bool touchDragged (int x,int y,int pointer) override;
+    virtual bool touchMoved (int x,int y) override;
+    virtual bool scrolled (int amount) override;
 
 protected:
 

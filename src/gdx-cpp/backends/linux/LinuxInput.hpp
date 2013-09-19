@@ -37,77 +37,77 @@ class LinuxInput : public gdx::Input
 {
 public:
     LinuxInput();
-    float getAccelerometerX ();
-    float getAccelerometerY ();
-    float getAccelerometerZ ();
-    int getX ();
-    int getX (int pointer);
+    float getAccelerometerX () override;
+    float getAccelerometerY () override;
+    float getAccelerometerZ () override;
+    int getX () override;
+    int getX (int pointer) override;
 
-    int getDeltaX () ;
+    int getDeltaX () override ;
 
-    int getDeltaX (int pointer) ;
+    int getDeltaX (int pointer) override ;
 
-    int getY () ;
+    int getY () override ;
 
-    int getY (int pointer) ;
+    int getY (int pointer) override ;
 
-    int getDeltaY () ;
+    int getDeltaY () override ;
 
-    int getDeltaY (int pointer) ;
+    int getDeltaY (int pointer) override ;
 
-    bool isTouched () ;
+    bool isTouched () override ;
 
-    bool justTouched () ;
+    bool justTouched () override ;
 
-    bool isTouched (int pointer) ;
+    bool isTouched (int pointer) override ;
 
-    bool isButtonPressed (int button) ;
+    bool isButtonPressed (int button) override ;
 
-    bool isKeyPressed (int key) ;
+    bool isKeyPressed (int key) override ;
 
-    void getTextInput (const TextInputListener& listener, const std::string& title, const std::string& text) ;
+    void getTextInput (const TextInputListener& listener, const std::string& title, const std::string& text) override ;
 
-    void setOnscreenKeyboardVisible (bool visible) ;
+    void setOnscreenKeyboardVisible (bool visible) override ;
 
-    void vibrate (int milliseconds) ;
+    void vibrate (int milliseconds) override ;
 
-    void vibrate (long* pattern, int repeat) ;
+    void vibrate (long* pattern, int repeat) override ;
 
-    void cancelVibrate () ;
+    void cancelVibrate () override ;
 
-    float getAzimuth () ;
+    float getAzimuth () override ;
 
-    float getPitch () ;
+    float getPitch () override ;
 
-    float getRoll () ;
+    float getRoll () override ;
 
-    long getCurrentEventTime() ;
+    long getCurrentEventTime() override ;
 
-    void setCatchBackKey (bool catchBack) ;
+    void setCatchBackKey (bool catchBack) override ;
 
-    void setCatchMenuKey (bool catchMenu) ;
+    void setCatchMenuKey (bool catchMenu) override ;
 
-    void setInputProcessor (gdx::InputProcessor* processor) ;
+    void setInputProcessor (gdx::InputProcessor* processor) override ;
 
-    bool isPeripheralAvailable (int peripheral) ;
+    bool isPeripheralAvailable (int peripheral) override ;
 
-    int getRotation () ;
+    int getRotation () override ;
 
-    Orientation getNativeOrientation () ;
+    Orientation getNativeOrientation () override ;
 
 
-    void setCursorCatched (bool catched) ;
+    void setCursorCatched (bool catched) override ;
 
-    bool isCursorCatched () ;
+    bool isCursorCatched () override ;
 
-    void setCursorPosition (int x, int y) ;
+    void setCursorPosition (int x, int y) override ;
 
     void processEvents(SDL_Event& evt);
     void reset();
 
     int getGdxEventKey(SDL_Event& eventkey);
 
-    void setKeyboardRepeat(int delay, int repeatInterval);
+    void setKeyboardRepeat(int delay, int repeatInterval) override;
     
 protected:
     gdx::InputProcessor* processor;

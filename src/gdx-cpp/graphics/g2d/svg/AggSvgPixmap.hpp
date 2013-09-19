@@ -50,7 +50,7 @@ public:
 
         gdx_log_debug("WreckingBaller", "%s", file->path().c_str());
 
-        AggSvgPixmap* pix = new AggSvgPixmap;
+        auto  pix = new AggSvgPixmap;
 //         uint64_t before = gdx::system->nanoTime();
         SvgParser::render(reader.parse(*file).get(), pix);
 //         uint64_t after = gdx::system->nanoTime();
@@ -64,113 +64,113 @@ public:
 
     AggSvgPixmap(int width, int height);
 
-    void setImageDimension(int width, int height) ;
+    void setImageDimension(int width, int height) override ;
 
-    void begin() ;
+    void begin() override ;
 
-    void beginPath() ;
+    void beginPath() override ;
 
-    void closeSubPath() ;
+    void closeSubPath() override ;
 
-    void curve3(float x, float y, bool relative = false) ;
+    void curve3(float x, float y, bool relative = false) override ;
 
-    void curve3(float x, float y, float x1, float y1, bool relative = false) ;
+    void curve3(float x, float y, float x1, float y1, bool relative = false) override ;
 
-    void curve4(float x2, float y2, float x, float y, bool relative = false) ;
+    void curve4(float x2, float y2, float x, float y, bool relative = false) override ;
 
-    void curve4(float x1, float y1, float x2, float y2, float x, float y, bool relative = false) ;
+    void curve4(float x1, float y1, float x2, float y2, float x, float y, bool relative = false) override ;
 
-    void end() ;
+    void end() override ;
 
-    void endPath() ;
+    void endPath() override ;
 
-    virtual void fill();
+    virtual void fill() override;
 
-    void fillNone() ;
+    void fillNone() override ;
 
-    void fillOpacity(float opactiy) ;
+    void fillOpacity(float opactiy) override ;
 
-    void horizontalLineTo(float x, bool relative = false) ;
+    void horizontalLineTo(float x, bool relative = false) override ;
 
-    void lineTo(float x, float y, bool relative = false) ;
+    void lineTo(float x, float y, bool relative = false) override ;
 
-    void moveTo(float x, float y, bool relative = false) ;
+    void moveTo(float x, float y, bool relative = false) override ;
 
-    void setLineCap(LineCap cap) ;
+    void setLineCap(LineCap cap) override ;
 
-    void setLineJoin(LineJoin join) ;
+    void setLineJoin(LineJoin join) override ;
 
-    void setMiterLimit(float limit) ;
+    void setMiterLimit(float limit) override ;
 
     void setSkew(float skewX, float skewY) ;
 
-    void setStrokeOpacity(float opacit) ;
+    void setStrokeOpacity(float opacit) override ;
 
-    void setStrokeWidth(float width) ;
+    void setStrokeWidth(float width) override ;
 
-    void stroke(Color color) ;
+    void stroke(Color color) override ;
 
-    void strokeNone() ;
+    void strokeNone() override ;
 
-    void verticalLineTo(float y, bool relative = false) ;
+    void verticalLineTo(float y, bool relative = false) override ;
 
-    void setScale(float scaleX, float scaleY) ;
+    void setScale(float scaleX, float scaleY) override ;
 
-    void dispose() ;
+    void dispose() override ;
 
-    void drawCircle(int x, int y, int radius) ;
+    void drawCircle(int x, int y, int radius) override ;
 
-    void drawLine(int x, int y, int x2, int y2) ;
+    void drawLine(int x, int y, int x2, int y2) override ;
 
-    void drawPixel(int x, int y) ;
+    void drawPixel(int x, int y) override ;
 
-    void drawPixmap(const gdx::Pixmap& pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight) ;
+    void drawPixmap(const gdx::Pixmap& pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight) override ;
 
-    void drawPixmap(const gdx::Pixmap& pixmap, int srcx, int srcy, int srcWidth, int srcHeight, int dstx, int dsty, int dstWidth, int dstHeight) ;
+    void drawPixmap(const gdx::Pixmap& pixmap, int srcx, int srcy, int srcWidth, int srcHeight, int dstx, int dsty, int dstWidth, int dstHeight) override ;
 
-    void drawRectangle(int x, int y, int width, int height) ;
+    void drawRectangle(int x, int y, int width, int height) override ;
 
-    void fill(Color color) ;
+    void fill(const Color& color) override ;
 
-    void fillCircle(int x, int y, int radius) ;
+    void fillCircle(int x, int y, int radius) override ;
 
-    void fillRectangle(int x, int y, int width, int height) ;
+    void fillRectangle(int x, int y, int width, int height) override ;
 
-    const gdx::Pixmap::Format& getFormat() ;
+    const gdx::Pixmap::Format& getFormat() override ;
 
-    int getGLFormat() const ;
+    int getGLFormat() const override ;
 
-    int getGLInternalFormat() const ;
+    int getGLInternalFormat() const override ;
 
-    int getGLType() const ;
+    int getGLType() const override ;
 
-    int getHeight() const ;
+    int getHeight() const override ;
 
-    int getPixel(int x, int y) const ;
+    int getPixel(int x, int y) const override ;
 
-    const unsigned char* getPixels() ;
+    const unsigned char* getPixels() override ;
 
-    void setColor(float r, float g, float b, float a) ;
+    void setColor(float r, float g, float b, float a) override ;
 
-    virtual void boundingRect(float& x1, float& y1, float& x2, float& y2);
+    virtual void boundingRect(float& x1, float& y1, float& x2, float& y2) override;
 
-    virtual void fillRadialGradient(const gdx::SvgRendererHandler::RadialGradient& gradient) ;
+    virtual void fillRadialGradient(const gdx::SvgRendererHandler::RadialGradient& gradient) override ;
 
-    virtual void fillLinearGradient(const gdx::SvgRendererHandler::LinearGradient& gradient) ;
+    virtual void fillLinearGradient(const gdx::SvgRendererHandler::LinearGradient& gradient) override ;
 
-    void setColor(const gdx::Color& color) ;
+    void setColor(const gdx::Color& color) override ;
 
-    PixmapType getType() const ;
+    PixmapType getType() const override ;
 
-    int getWidth() const ;
+    int getWidth() const override ;
 
-    void setStrokeWidth(int width) ;
+    void setStrokeWidth(int width) override ;
 
     ~AggSvgPixmap() ;
 
-    virtual transform* createTransform() ;
+    virtual transform* createTransform() override ;
 
-    virtual transform& currentTransform() ;
+    virtual transform& currentTransform() override ;
 
 private:
     AggSvgPixmap(const AggSvgPixmap& other);

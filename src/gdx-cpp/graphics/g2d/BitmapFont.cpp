@@ -300,7 +300,7 @@ BitmapFont::TextBounds& BitmapFont::draw ( SpriteBatch& spriteBatch, const std::
 
         while ( start < end ) {            
             data->getGlyph ( str, start, lastGlyph );
-            if ( lastGlyph != NULL ) {
+            if ( lastGlyph != nullptr ) {
                 spriteBatch.draw ( *texture, //
                                    x + lastGlyph->xoffset, y + lastGlyph->yoffset, //
                                    lastGlyph->width, lastGlyph->height, //
@@ -470,10 +470,10 @@ BitmapFont::TextBounds& BitmapFont::getBounds ( const std::string& str ) {
 
 BitmapFont::TextBounds& BitmapFont::getBounds ( const std::string& str, unsigned int start, unsigned  int end ) {
     float width = 0;
-    Glyph* lastGlyph = NULL;
+    Glyph* lastGlyph = nullptr;
     while ( start < end ) {
         data->getGlyph ( str, start, lastGlyph );
-        if ( lastGlyph != NULL ) {
+        if ( lastGlyph != nullptr ) {
             width = lastGlyph->xadvance;
             break;
         }
@@ -481,7 +481,7 @@ BitmapFont::TextBounds& BitmapFont::getBounds ( const std::string& str, unsigned
     while ( start < end ) {
         Glyph* g = nullptr;         
         unsigned int ch = data->getGlyph ( str, start, g );
-        if ( g != NULL ) {
+        if ( g != nullptr ) {
             width += lastGlyph->getKerning ( ch );
             lastGlyph = g;
             width += g->xadvance;
@@ -554,14 +554,14 @@ void BitmapFont::computeGlyphAdvancesAndPositions ( const std::string& str,
     unsigned int end = str.length();
     
     float width = 0;
-    Glyph* lastGlyph = NULL;
+    Glyph* lastGlyph = nullptr;
 
     if ( data->scaleX == 1 ) {
         for ( ; index < end;) {
             Glyph* g = nullptr;            
             unsigned int ch = data->getGlyph ( str , index, g  );
-            if ( g != NULL ) {
-                if ( lastGlyph != NULL ) width += lastGlyph->getKerning ( ch );
+            if ( g != nullptr ) {
+                if ( lastGlyph != nullptr ) width += lastGlyph->getKerning ( ch );
                 lastGlyph = g;
                 glyphAdvances.push_back ( g->xadvance );
                 glyphPositions.push_back ( width );
@@ -575,8 +575,8 @@ void BitmapFont::computeGlyphAdvancesAndPositions ( const std::string& str,
         for ( ; index < end; ) {
             Glyph* g = nullptr;            
             unsigned int ch = data->getGlyph ( str , index, g  );
-            if ( g != NULL ) {
-                if ( lastGlyph != NULL ) {
+            if ( g != nullptr ) {
+                if ( lastGlyph != nullptr ) {
                     width += lastGlyph->getKerning ( ch ) * scaleX;
                 }
                 lastGlyph = g;
@@ -593,13 +593,13 @@ void BitmapFont::computeGlyphAdvancesAndPositions ( const std::string& str,
 int BitmapFont::computeVisibleGlyphs ( const std::string& str, unsigned int start, unsigned int end, float availableWidth ) {
     unsigned int index = start;
     float width = 0;
-    Glyph* lastGlyph = NULL;
+    Glyph* lastGlyph = nullptr;
     if ( data->scaleX == 1 ) {
         for ( ; index < end; ) {
             Glyph* g = nullptr;            
             unsigned int ch = data->getGlyph ( str , index, g  );
-            if ( g != NULL ) {
-                if ( lastGlyph != NULL ) width += lastGlyph->getKerning ( ch );
+            if ( g != nullptr ) {
+                if ( lastGlyph != nullptr ) width += lastGlyph->getKerning ( ch );
                 lastGlyph = g;
                 if ( width + g->xadvance > availableWidth ) break;
                 width += g->xadvance;
@@ -610,8 +610,8 @@ int BitmapFont::computeVisibleGlyphs ( const std::string& str, unsigned int star
         for ( ; index < end; ) {
             Glyph* g = nullptr;            
             unsigned int ch = data->getGlyph ( str , index, g  );
-            if ( g != NULL ) {
-                if ( lastGlyph != NULL ) width += lastGlyph->getKerning ( ch ) * scaleX;
+            if ( g != nullptr ) {
+                if ( lastGlyph != nullptr ) width += lastGlyph->getKerning ( ch ) * scaleX;
                 lastGlyph = g;
                 if ((width + g->xadvance * scaleX) - availableWidth > 0.000001f ) break;
                 width += g->xadvance * scaleX;
@@ -713,7 +713,7 @@ void BitmapFont::setFixedWidthGlyphs ( const std::string& glyphs ) {
     for ( unsigned int index = 0, end = glyphs.length(); index < end; ) {
         Glyph* g = nullptr;
         data->getGlyph ( glyphs, index, g );
-        if ( g != NULL && g->xadvance > maxAdvance ) maxAdvance = g->xadvance;
+        if ( g != nullptr && g->xadvance > maxAdvance ) maxAdvance = g->xadvance;
     }
     for ( unsigned int index = 0, end = glyphs.length(); index < end; ) {
         Glyph* g = nullptr;
@@ -727,7 +727,7 @@ void BitmapFont::setFixedWidthGlyphs ( const std::string& glyphs ) {
 }
 
 bool BitmapFont::containsCharacter ( unsigned int character ) {
-    return data->getGlyph ( character ) != NULL;
+    return data->getGlyph ( character ) != nullptr;
 }
 
 void BitmapFont::setUseIntegerPositions ( bool use ) {
@@ -755,7 +755,7 @@ flipped ( p_data->flipped ),
 integer ( p_integer ),
 data ( p_data ) {
     if ( !region.isValid() ) {
-        region = TextureRegion::newFromTexture ( Texture::newFromFile ( files->internal ( data->imagePath ), NULL, false ) );
+        region = TextureRegion::newFromTexture ( Texture::newFromFile ( files->internal ( data->imagePath ), nullptr, false ) );
     }
     load ( data );
 }
@@ -765,9 +765,9 @@ std::unique_ptr< BitmapFont > BitmapFont::fromFiles ( FileHandle::ptr fontFile, 
     
     TextureRegion region;
     if (!imageFile) {
-        region = TextureRegion::newFromTexture ( Texture::newFromFile ( gdx::files->internal(data->imagePath) , NULL, generateMipmaps ) );
+        region = TextureRegion::newFromTexture ( Texture::newFromFile ( gdx::files->internal(data->imagePath) , nullptr, generateMipmaps ) );
     } else {
-        region = TextureRegion::newFromTexture ( Texture::newFromFile ( imageFile , NULL, generateMipmaps ) );
+        region = TextureRegion::newFromTexture ( Texture::newFromFile ( imageFile , nullptr, generateMipmaps ) );
     }
 
     return std::unique_ptr<BitmapFont>(new BitmapFont ( data, region, integer ));
@@ -795,42 +795,42 @@ fontSize(0) {
         n_buffer.back() = 0;
     }
 
-    char* line_r = NULL;
+    char* line_r = nullptr;
 
     try {
         char* line = strtok_r ( &n_buffer[0], "\n", &line_r );
         
         strtok ( line, " " );
-        strtok ( NULL, " " );        
+        strtok ( nullptr, " " );        
         
-        if ( sscanf ( strtok ( NULL, " " ), "size=%f", &fontSize ) != 1 ) {
+        if ( sscanf ( strtok ( nullptr, " " ), "size=%f", &fontSize ) != 1 ) {
             gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
         }
         
-        if ( ( line = strtok_r ( NULL, "\n", &line_r ) ) == NULL ) {
+        if ( ( line = strtok_r ( nullptr, "\n", &line_r ) ) == nullptr ) {
             gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
         }
 
         /*char* common = */strtok ( line, " " );
 
-        if ( sscanf ( strtok ( NULL, " " ), "lineHeight=%f", &lineHeight ) != 1 ) {
+        if ( sscanf ( strtok ( nullptr, " " ), "lineHeight=%f", &lineHeight ) != 1 ) {
             gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
         }
 
         int baseLine = 0;
-        if ( sscanf ( strtok ( NULL, " " ), "base=%d", &baseLine ) != 1 ) {
+        if ( sscanf ( strtok ( nullptr, " " ), "base=%d", &baseLine ) != 1 ) {
             gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
         }
 
-        if ( ( line = strtok_r ( NULL, "\n", &line_r ) ) == NULL ) {
+        if ( ( line = strtok_r ( nullptr, "\n", &line_r ) ) == nullptr ) {
             gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
         }
 
         strtok ( line, " " );
-        strtok ( NULL, " " );
+        strtok ( nullptr, " " );
 
         char file[1024];
-        if ( sscanf ( strtok ( NULL, " " ), "file=%s", file ) < 0 ) {
+        if ( sscanf ( strtok ( nullptr, " " ), "file=%s", file ) < 0 ) {
             gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
         }
 
@@ -843,14 +843,14 @@ fontSize(0) {
         descent = 0;
 
         while ( true ) {
-            line = strtok_r ( NULL, "\n", &line_r );
+            line = strtok_r ( nullptr, "\n", &line_r );
 
-            if ( line == NULL ) {
+            if ( line == nullptr ) {
                 break;
             }
 
-            if ( strstr ( line, "kernings " ) != NULL ) break;
-            if ( strstr ( line, "char " ) == NULL ) continue;
+            if ( strstr ( line, "kernings " ) != nullptr ) break;
+            if ( strstr ( line, "char " ) == nullptr ) continue;
 
             Glyph::unique_ptr glyph = std::unique_ptr<Glyph>(new Glyph());
 
@@ -873,14 +873,14 @@ fontSize(0) {
         }
 
         while ( true ) {
-            line = strtok_r ( NULL, "\n", &line_r );
-            if ( line == NULL ) {
+            line = strtok_r ( nullptr, "\n", &line_r );
+            if ( line == nullptr ) {
                 break;
             }
 
-            if ( strstr ( line, "kerning " ) == NULL ) break;
+            if ( strstr ( line, "kerning " ) == nullptr ) break;
 
-            unsigned int first = 0, second = 0, amount = 0;
+            int first = 0, second = 0, amount = 0;
 
             if ( sscanf ( line, "kerning first=%d second=%d amount=%d", &first, &second, &amount ) != 3 ) {
                 gdx_log_error("gdx", "Invalid font file: %s", fontFile->toString().c_str() );
@@ -906,21 +906,21 @@ fontSize(0) {
 
         spaceWidth = spaceGlyph != nullptr ? spaceGlyph->xadvance + spaceGlyph->width : 1;
 
-        Glyph* xGlyph = NULL;
+        Glyph* xGlyph = nullptr;
         for ( int i = 0; i < array_size ( xChars ); i++ ) {
             xGlyph = getGlyph ( xChars[i] );
-            if ( xGlyph != NULL ) break;
+            if ( xGlyph != nullptr ) break;
         }
 
-        if ( xGlyph == NULL ) xGlyph = getFirstGlyph();
+        if ( xGlyph == nullptr ) xGlyph = getFirstGlyph();
         xHeight = xGlyph->height;
 
-        Glyph* capGlyph = NULL;
+        Glyph* capGlyph = nullptr;
         for ( int i = 0; i < array_size ( capChars ); i++ ) {
             capGlyph = getGlyph ( capChars[i] );
-            if ( capGlyph != NULL ) break;
+            if ( capGlyph != nullptr ) break;
         }
-        if ( xGlyph == NULL ) xGlyph = getFirstGlyph();
+        if ( xGlyph == nullptr ) xGlyph = getFirstGlyph();
         capHeight = capGlyph->height;
 
         ascent = baseLine - capHeight;

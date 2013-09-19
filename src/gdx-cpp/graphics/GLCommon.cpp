@@ -118,7 +118,7 @@ void GLCommon::glDisable(int cap) {
 void GLCommon::glDrawArrays(int mode, int first, int count) const {
     ::glDrawArrays ( mode, first, count);
 }
-void GLCommon::glDrawElements(int mode, int count, int type, const void* indices) const {
+void GLCommon::glDrawElements(int mode, int count, unsigned int type, const void* indices) const {
     ::glDrawElements ( mode, count, type, indices);
 }
 void GLCommon::glEnable(int cap) {

@@ -47,7 +47,7 @@ public:
     virtual void glDepthRangef (float zNear,float zFar) const;
     virtual void glDisable (int cap);
     virtual void glDrawArrays (int mode,int first,int count) const;
-    virtual void glDrawElements (int mode,int count,int type, const void* indices) const;
+    virtual void glDrawElements (int mode,int count,unsigned int type, const void* indices) const;
     virtual void glEnable (int cap);
     virtual void glFinish () const;
     virtual void glFlush () const;

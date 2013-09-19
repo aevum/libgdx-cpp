@@ -26,7 +26,7 @@
 b2Shape* b2PolygonShape::Clone(b2BlockAllocator* allocator) const
 {
 	void* mem = allocator->Allocate(sizeof(b2PolygonShape));
-	b2PolygonShape* clone = new (mem) b2PolygonShape;
+	auto  clone = new (mem) b2PolygonShape;
 	*clone = *this;
 	return clone;
 }

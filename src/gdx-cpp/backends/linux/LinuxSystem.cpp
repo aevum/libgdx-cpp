@@ -39,13 +39,13 @@ using namespace gdx::nix;
 std::string LinuxSystem::canonicalize(const std::string& path)    
 {
     char buffer[32768];
-    if(realpath(path.c_str(), buffer) == NULL) gdx_log_error("gdx","Error trying to canonicalize path: %s", path.c_str());
+    if(realpath(path.c_str(), buffer) == nullptr) gdx_log_error("gdx","Error trying to canonicalize path: %s", path.c_str());
     return std::string(buffer);
 }
 
 void LinuxSystem::checkDelete(const std::string& path)
 {
-    unsigned found;
+    std::string::size_type found;
     std::string testPath = path;
     while(testPath != "")
     {
@@ -59,7 +59,7 @@ void LinuxSystem::checkDelete(const std::string& path)
 
 void LinuxSystem::checkRead(const std::string& path)
 {
-    unsigned found;
+    std::string::size_type found;
     std::string testPath = path;
     while(testPath != "")
     {
@@ -154,7 +154,7 @@ void LinuxSystem::list(const gdx::File& f, std::vector< std::string > &paths)
     int count;
     std::string fname;
     struct direct **files;
-    count = scandir(f.getCanonicalPath().c_str(), &files, NULL, NULL);
+    count = scandir(f.getCanonicalPath().c_str(), &files, nullptr, nullptr);
     if(count == -1) gdx_log_error("gdx","Cannot retrieve fileList in directory %s", f.getCanonicalPath().c_str());
     for(int i=0;i<count; ++i)
     {
@@ -225,7 +225,7 @@ std::string LinuxSystem::resolve(const gdx::File& f)
 {
     if (isAbsolute(f)) return f.getPath();
     char buffer[2048];
-    if(getcwd(buffer, 2048) == NULL) gdx_log_error("gdx","Error trying to resolve path: %s", f.getPath().c_str());
+    if(getcwd(buffer, 2048) == nullptr) gdx_log_error("gdx","Error trying to resolve path: %s", f.getPath().c_str());
     return resolve(std::string(buffer), f.getPath());
 }
 
@@ -239,7 +239,7 @@ std::string LinuxSystem::resolve(const std::string& parent, const std::string& c
 
 void LinuxSystem::checkWrite(const std::string& path)
 {
-    unsigned found;
+     std::string::size_type found;
      std::string testPath = path;
      while(testPath != "")
      {
@@ -266,11 +266,11 @@ public:
         }
     }
     
-    void lock(){
+    void lock() override{
         pthread_mutex_lock(&mutex);
     }
 
-   void unlock() {
+   void unlock() override {
        pthread_mutex_unlock(&mutex);
    }
 
@@ -287,28 +287,28 @@ public:
     thread(0) {
     }
     
-    const std::string getThreadName() {
+    const std::string getThreadName() override {
         return "TODO";
     }
 
-    void start() {
+    void start() override {
         self = shared_from_this();
-        if (pthread_create(&thread, NULL, run_runnable, (void*) this) != 0) {
+        if (pthread_create(&thread, nullptr, run_runnable, (void*) this) != 0) {
             gdx_log_error("gdx","pthread_create failed");
         }
     }
 
-    void join() {
-        if( pthread_join(thread, NULL) != 0) {
+    void join() override {
+        if( pthread_join(thread, nullptr) != 0) {
             gdx_log_error("gdx","pthread_join failed");
         }
     }
 
-    void sleep(long int millis) {
+    void sleep(long int millis) override {
         usleep(millis * 1000);
     }
 
-    void yield() {
+    void yield() override {
         pthread_yield();
     }
 
@@ -323,7 +323,7 @@ public:
 void* run_runnable(void* runnable) {
     ((LinuxThread*)runnable)->runnable->run();        
     ((LinuxThread*)runnable)->self = nullptr;    
-    return NULL;
+    return nullptr;
 }
 
 gdx::Thread::ptr gdx::nix::LinuxSystem::LinuxThreadFactory::createThread(Runnable* t)

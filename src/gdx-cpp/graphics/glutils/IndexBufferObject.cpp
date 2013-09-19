@@ -31,10 +31,10 @@ using namespace gdx;
 
 
 int IndexBufferObject::createBufferObject () {
-    if (gl20 != NULL) {
+    if (gl20 != nullptr) {
         gl20->glGenBuffers(1, (unsigned int*) &tmpHandle);
         return tmpHandle;
-    } else if (gl11 != NULL) {
+    } else if (gl11 != nullptr) {
         gl11->glGenBuffers(1, &tmpHandle);
         return tmpHandle;
     }
@@ -59,10 +59,10 @@ void IndexBufferObject::setIndices (const std::vector< short int >& indices, int
     byteBuffer.limit(count << 1);
 
     if (isBound) {
-        if (gl11 != NULL) {
+        if (gl11 != nullptr) {
             GL11& gl = *gl11;
             gl.glBufferData(gdx::GL::ELEMENT_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
-        } else if (gl20 != NULL) {
+        } else if (gl20 != nullptr) {
             GL20& gl = *gl20;
             gl.glBufferData(gdx::GL::ELEMENT_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
         }
@@ -79,7 +79,7 @@ void IndexBufferObject::bind () {
     if (bufferHandle == 0)
         gdx_log_error("gdx",__FILE__ ": Buffer handler is not initialized?");
 
-    if (gl11 != NULL) {
+    if (gl11 != nullptr) {
         GL11& gl = *gl11;
         gl.glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, bufferHandle);
         if (isDirty) {
@@ -100,9 +100,9 @@ void IndexBufferObject::bind () {
 }
 
 void IndexBufferObject::unbind () {
-    if (gl11 != NULL) {
+    if (gl11 != nullptr) {
         gl11->glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, 0);
-    } else if (gl20 != NULL) {
+    } else if (gl20 != nullptr) {
         gl20->glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, 0);
     }
     isBound = false;
@@ -114,13 +114,13 @@ void IndexBufferObject::invalidate () {
 }
 
 void IndexBufferObject::dispose () {
-    if (gl20 != NULL) {
+    if (gl20 != nullptr) {
         tmpHandle = bufferHandle;
         GL20& gl = *gl20;
         gl.glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, 0);
         gl.glDeleteBuffers(1, (unsigned int*) &tmpHandle);
         bufferHandle = 0;
-    } else if (gl11 != NULL) {
+    } else if (gl11 != nullptr) {
         tmpHandle = bufferHandle;
         GL11& gl = *gl11;
         gl.glBindBuffer(gdx::GL::ELEMENT_ARRAY_BUFFER, 0);

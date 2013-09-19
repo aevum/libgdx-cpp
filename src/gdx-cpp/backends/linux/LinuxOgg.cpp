@@ -69,6 +69,6 @@ int LinuxOggMusic::read (char * buffer, int bufferSize)
 }
 void LinuxOggMusic::reset ()
 {
-    if (input == NULL) return;
+    if (input == nullptr) return;
     input->reset();
 }

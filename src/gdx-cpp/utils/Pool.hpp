@@ -30,7 +30,7 @@ public:
 
     Pool ( int initialCapacity = 16, int _max = std::numeric_limits<int>::max(),
            bool alocate = false ) :
-        max ( max ) {
+        max ( _max ) {
         create ( initialCapacity, max, alocate );
     }
     T* obtain() {
@@ -43,7 +43,7 @@ public:
         }
     }
     void free ( T* const object ) {
-        if ( object == NULL ) {
+        if ( object == nullptr ) {
             gdx_log_error ( "gdx", "object cannot be null." );
         }
         if ( freeObjects.size() < max ) {

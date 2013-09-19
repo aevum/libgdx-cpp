@@ -39,8 +39,8 @@ private:
     vorbis_info*    vorbisInfo;
     vorbis_comment* vorbisComment;
 
-    ALuint buffers[2];
-    ALuint source;
+    //ALuint buffers[2];
+    //ALuint source;
     ALenum format;
 
 

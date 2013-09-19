@@ -27,8 +27,8 @@ Material::Material() {
 
 Material::Material(string name, const vector<MaterialAttribute*>& attributes) {
 	this->name = name;
-	for (size_t i = 0; i < attributes.size(); i++) {
-		this->attributes.push_back(attributes[i]);
+	for (auto & attribute : attributes) {
+		this->attributes.push_back(attribute);
 	}
 	checkAttributes();
 }
@@ -40,8 +40,8 @@ Material::Material(string name) {
 void Material::checkAttributes() {
 	this->needBlending = false;
 	this->mHasTexture = false;
-	for (size_t i = 0; i < this->attributes.size(); i++) {
-		if (!needBlending && dynamic_cast<BlendingAttribute*>(this->attributes[i]) != NULL) {
+	for (auto & elem : this->attributes) {
+		if (!needBlending && dynamic_cast<BlendingAttribute*>(elem) != nullptr) {
 			this->needBlending = true;
 //		} else if (!mHasTexture && dynamic_cast<>this->attributes[i])) {
 //			this->mHasTexture = true;
@@ -50,14 +50,14 @@ void Material::checkAttributes() {
 }
 
 void Material::bind() {
-	for (size_t i = 0; i < attributes.size(); i++) {
-		attributes[i]->bind();
+	for (auto & elem : attributes) {
+		elem->bind();
 	}
 }
 
 void Material::bind(ShaderProgram& program) {
-	for (size_t i = 0; i < attributes.size(); i++) {
-		attributes[i]->bind(program);
+	for (auto & elem : attributes) {
+		elem->bind(program);
 	}
 }
 

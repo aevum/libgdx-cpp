@@ -44,23 +44,12 @@ public:
     enum ApplicationType {
       Android, Desktop, IOs
     };
-    
-    static const int LOG_NONE = 0;
-    static const int LOG_INFO = 1;
-    static const int LOG_ERROR = 2;
-    
-    virtual Graphics* getGraphics () = 0;
-    
-    virtual Audio* getAudio () = 0;
-    
-    virtual Input* getInput () = 0;
-    
-    virtual Files* getFiles () = 0;
-        
-    virtual void setLogLevel (int logLevel) = 0;
-    
-    virtual ApplicationType getType () = 0;
-    
+       
+    virtual Graphics* getGraphics () = 0;    
+    virtual Audio* getAudio () = 0;    
+    virtual Input* getInput () = 0;    
+    virtual Files* getFiles () = 0;   
+    virtual ApplicationType getType () = 0;    
     virtual int getVersion () = 0;
     
     virtual Preferences* getPreferences (std::string& name) = 0;

@@ -39,8 +39,8 @@ struct Base64Coder::static_impl {
         map1[i++] = '+';
         map1[i++] = '/';
 
-        for (int i = 0; i < 128; i++)
-            map2[i] = -1;
+        for (auto & elem : map2)
+            elem = -1;
         
         for (int i = 0; i < 64; i++)
             map2[(int) map1[i]] = (char)i;
@@ -116,8 +116,8 @@ std::vector<char> Base64Coder::decodeLines (const std::string& s) {
     buf.resize(s.length());
 
     int p = 0;
-    for (unsigned int ip = 0; ip < s.length(); ip++) {
-        char c = s[ip];
+    for (auto & elem : s) {
+        char c = elem;
         if (c != ' ' && c != '\r' && c != '\n' && c != '\t') buf[p++] = c;
     }
     

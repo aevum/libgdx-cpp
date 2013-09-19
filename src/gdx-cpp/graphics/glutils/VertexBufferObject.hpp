@@ -38,19 +38,19 @@ public:
     VertexBufferObject (bool isStatic, int numVertices, const VertexAttributes& attributes);
     VertexBufferObject (bool isStatic, int numVertices, const std::vector< VertexAttribute >& attributes);
     
-    VertexAttributes& getAttributes ();
-    int getNumVertices ();
-    int getNumMaxVertices ();
-    float_buffer& getBuffer ();
-    void setVertices (const float* vertices, int offset, int count);
-    void bind ();
+    VertexAttributes& getAttributes () override;
+    int getNumVertices () override;
+    int getNumMaxVertices () override;
+    float_buffer& getBuffer () override;
+    void setVertices (const float* vertices, int offset, int count) override;
+    void bind () override;
     void bind (ShaderProgram& shader);
-    void unbind ();
+    void unbind () override;
     void unbind (ShaderProgram& shader);
     void invalidate ();
-    void dispose ();
+    void dispose () override;
 
-    int getKind();
+    int getKind() override;
     
 protected:
     int bufferHandle;

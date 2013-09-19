@@ -26,17 +26,16 @@ using namespace gdx::nix;
 using namespace gdx;
 
 gdx::nix::LinuxApplication::LinuxApplication(gdx::ApplicationListener* listener,
-        const std::string& title, int width, int height,
+        std::string  title, int width, int height,
         bool useGL20IfAvailable)
     :  Synchronizable(gdx::system->getMutexFactory()),
 useGL20iFAvailable(useGL20IfAvailable),
-title(title),
+title(std::move(title)),
 height(height),
 width(width),
 listener(listener),
-graphics(0),
-input(0),
-logLevel(gdx::Application::LOG_INFO)
+graphics(nullptr),
+input(nullptr)
 {
 }
 
@@ -79,8 +78,8 @@ void nix::LinuxApplication::run()
         {
             lock_holder hnd = synchronize();
 
-            std::list < Runnable::ptr >::iterator it = runnables.begin();
-            std::list < Runnable::ptr >::iterator end = runnables.end();
+            auto it = runnables.begin();
+            auto end = runnables.end();
 
             for (; it != end; ++it) {
                 (*it)->run();
@@ -114,7 +113,7 @@ void gdx::nix::LinuxApplication::exit()
     if (listener) {
         this->listener->dispose();
         delete listener;
-        listener = NULL;
+        listener = nullptr;
     }
     
     std::exit(0);
@@ -150,33 +149,15 @@ gdx::Application::ApplicationType gdx::nix::LinuxApplication::getType()
     return gdx::Application::Desktop;
 }
 
-void LinuxApplication::log(const std::string& tag, const char* format, ...)
-{
-    if (logLevel == gdx::Application::LOG_NONE)
-        return;
-
-    va_list list;
-    va_start(list, format);
-    std::string newTag = tag + ":" + format + "\n";
-
-    vfprintf(stdout, newTag.c_str(), list);
-    fflush(stdout);
-}
-
 int gdx::nix::LinuxApplication::getVersion()
 {
-    return 0.1;
+    return 1;
 }
 
 void gdx::nix::LinuxApplication::postRunnable(Runnable::ptr runnable)
 {
     lock_holder hnd = synchronize();
     runnables.push_back(runnable);
-}
-
-void gdx::nix::LinuxApplication::setLogLevel(int logLevel)
-{
-    logLevel = logLevel;
 }
 
 bool gdx::nix::LinuxApplication::processEvents()

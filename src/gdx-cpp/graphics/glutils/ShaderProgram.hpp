@@ -76,7 +76,7 @@ public:
     void setVertexAttribute (const std::string& name, int size, int type, bool normalize, int stride, int offset);
     void begin ();
     void end ();
-    void dispose ();
+    void dispose () override;
     void disableVertexAttribute (const std::string& name);
     void enableVertexAttribute (const std::string& name);
     static void invalidateAllShaderPrograms (Application* app);
@@ -137,7 +137,7 @@ private:
     float_buffer floatBuffer;
     int_buffer intBuffer;
 
-    int refCount;
+    //int refCount;
 
 };
 

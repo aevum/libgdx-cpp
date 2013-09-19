@@ -55,36 +55,36 @@ public:
     static Gdx2DPixmap* newPixmapFromFile ( FileHandle::ptr fhandle, int requestedFormat );
     static Gdx2DPixmap* newPixmapFromBuffer ( unsigned char* data, int len, int requestedFormat );
 
-    void setColor ( float r, float g, float b, float a );
-    void setColor ( const gdx::Color& color );
+    void setColor ( float r, float g, float b, float a ) override;
+    void setColor ( const gdx::Color& color ) override;
 
-    void dispose ();
-    void fill ();
-    void drawPixel ( int x,int y );
-    int getPixel ( int x,int y ) const;
-    void drawLine ( int x, int y, int x2, int y2 );
-    void drawRectangle ( int x, int y, int width, int height );
-    void drawCircle ( int x, int y, int radius );
-    void fillRectangle ( int x, int y, int width, int height );
-    void fillCircle ( int x, int y, int radius );
+    void dispose () override;
+    void fill () override;
+    void drawPixel ( int x,int y ) override;
+    int getPixel ( int x,int y ) const override;
+    void drawLine ( int x, int y, int x2, int y2 ) override;
+    void drawRectangle ( int x, int y, int width, int height ) override;
+    void drawCircle ( int x, int y, int radius ) override;
+    void fillRectangle ( int x, int y, int width, int height ) override;
+    void fillCircle ( int x, int y, int radius ) override;
     void drawPixmap ( const gdx::Pixmap& src, int srcX, int srcY, int dstX, int dstY, int width );
-    void drawPixmap ( const Pixmap& src,int srcX,int srcY,int srcWidth,int srcHeight,int dstX,int dstY,int dstWidth,int dstHeight );
-    void drawPixmap ( const gdx::Pixmap& pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight );
-    void setStrokeWidth ( int width );
+    void drawPixmap ( const Pixmap& src,int srcX,int srcY,int srcWidth,int srcHeight,int dstX,int dstY,int dstWidth,int dstHeight ) override;
+    void drawPixmap ( const gdx::Pixmap& pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight ) override;
+    void setStrokeWidth ( int width ) override;
 
-    PixmapType getType() const {
+    PixmapType getType() const override {
         return Pixmap::PixmapType::PixmapType_Gdx2d;
     }
 
-    const unsigned char* getPixels ();
-    int getHeight () const;
-    int getWidth () const;
-    const Pixmap::Format& getFormat ();
+    const unsigned char* getPixels () override;
+    int getHeight () const override;
+    int getWidth () const override;
+    const Pixmap::Format& getFormat () override;
 
-    int getGLInternalFormat () const;
-    int getGLFormat () const;
-    int getGLType () const;
-    void setScale ( float scaleX, float scaleY );
+    int getGLInternalFormat () const override;
+    int getGLFormat () const override;
+    int getGLType () const override;
+    void setScale ( float scaleX, float scaleY ) override;
 
     const std::string getFormatString ();
 

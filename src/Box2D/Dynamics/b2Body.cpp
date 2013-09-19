@@ -74,10 +74,10 @@ b2Body::b2Body(const b2BodyDef* bd, b2World* world)
 	m_sweep.a = bd->angle;
 	m_sweep.alpha0 = 0.0f;
 
-	m_jointList = NULL;
-	m_contactList = NULL;
-	m_prev = NULL;
-	m_next = NULL;
+	m_jointList = nullptr;
+	m_contactList = nullptr;
+	m_prev = nullptr;
+	m_next = nullptr;
 
 	m_linearVelocity = bd->linearVelocity;
 	m_angularVelocity = bd->angularVelocity;
@@ -109,7 +109,7 @@ b2Body::b2Body(const b2BodyDef* bd, b2World* world)
 
 	m_userData = bd->userData;
 
-	m_fixtureList = NULL;
+	m_fixtureList = nullptr;
 	m_fixtureCount = 0;
 }
 
@@ -161,13 +161,13 @@ b2Fixture* b2Body::CreateFixture(const b2FixtureDef* def)
 	b2Assert(m_world->IsLocked() == false);
 	if (m_world->IsLocked() == true)
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	b2BlockAllocator* allocator = &m_world->m_blockAllocator;
 
 	void* memory = allocator->Allocate(sizeof(b2Fixture));
-	b2Fixture* fixture = new (memory) b2Fixture;
+	auto  fixture = new (memory) b2Fixture;
 	fixture->Create(allocator, this, def);
 
 	if (m_flags & e_activeFlag)
@@ -217,7 +217,7 @@ void b2Body::DestroyFixture(b2Fixture* fixture)
 	// Remove the fixture from this body's singly linked list.
 	b2Assert(m_fixtureCount > 0);
 	b2Fixture** node = &m_fixtureList;
-	while (*node != NULL)
+	while (*node != nullptr)
 	{
 		if (*node == fixture)
 		{
@@ -258,8 +258,8 @@ void b2Body::DestroyFixture(b2Fixture* fixture)
 	}
 
 	fixture->Destroy(allocator);
-	fixture->m_body = NULL;
-	fixture->m_next = NULL;
+	fixture->m_body = nullptr;
+	fixture->m_next = nullptr;
 	fixture->~b2Fixture();
 	allocator->Free(fixture, sizeof(b2Fixture));
 
@@ -485,7 +485,7 @@ void b2Body::SetActive(bool flag)
 			ce = ce->next;
 			m_world->m_contactManager.Destroy(ce0->contact);
 		}
-		m_contactList = NULL;
+		m_contactList = nullptr;
 	}
 }
 

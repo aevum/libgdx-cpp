@@ -33,8 +33,8 @@ namespace gdx {
 class SvgPixmapInterface : public Pixmap, public virtual SvgRendererHandler
 {
 public:
-    virtual void fill(Color color) = 0;    
-    virtual void setStrokeWidth(int) = 0;
+    //virtual void fill(const Color& color) = 0;
+    //virtual void setStrokeWidth(int) = 0;
 };
 
 }

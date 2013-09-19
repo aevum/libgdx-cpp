@@ -110,7 +110,7 @@ namespace agg
         typedef pod_array<T> self_type;
 
         ~pod_array() { pod_allocator<T>::deallocate(m_array, m_size); }
-        pod_array() : m_array(0), m_size(0) {}
+        pod_array() : m_array(nullptr), m_size(0) {}
 
         pod_array(unsigned size) : 
             m_array(pod_allocator<T>::allocate(size)), 
@@ -165,7 +165,7 @@ namespace agg
         typedef T value_type;
 
         ~pod_vector() { pod_allocator<T>::deallocate(m_array, m_capacity); }
-        pod_vector() : m_size(0), m_capacity(0), m_array(0) {}
+        pod_vector() : m_size(0), m_capacity(0), m_array(nullptr) {}
         pod_vector(unsigned cap, unsigned extra_tail=0);
 
         // Copying
@@ -224,7 +224,7 @@ namespace agg
         {
             pod_allocator<T>::deallocate(m_array, m_capacity);
             m_capacity = cap + extra_tail;
-            m_array = m_capacity ? pod_allocator<T>::allocate(m_capacity) : 0;
+            m_array = m_capacity ? pod_allocator<T>::allocate(m_capacity) : nullptr;
         }
     }
 
@@ -553,7 +553,7 @@ namespace agg
         m_size(0),
         m_num_blocks(0),
         m_max_blocks(0),
-        m_blocks(0),
+        m_blocks(nullptr),
         m_block_ptr_inc(block_size)
     {
     }
@@ -579,7 +579,7 @@ namespace agg
         m_max_blocks(v.m_max_blocks),
         m_blocks(v.m_max_blocks ? 
                  pod_allocator<T*>::allocate(v.m_max_blocks) : 
-                 0),
+                 nullptr),
         m_block_ptr_inc(v.m_block_ptr_inc)
     {
         unsigned i;
@@ -801,8 +801,8 @@ namespace agg
             }
             m_num_blocks = 0;
             m_max_blocks = 0;
-            m_blocks = 0;
-            m_buf_ptr = 0;
+            m_blocks = nullptr;
+            m_buf_ptr = nullptr;
             m_rest = 0;
         }
 
@@ -816,8 +816,8 @@ namespace agg
             m_block_ptr_inc(block_ptr_inc),
             m_num_blocks(0),
             m_max_blocks(0),
-            m_blocks(0),
-            m_buf_ptr(0),
+            m_blocks(nullptr),
+            m_buf_ptr(nullptr),
             m_rest(0)
         {
         }
@@ -825,7 +825,7 @@ namespace agg
 
         int8u* allocate(unsigned size, unsigned alignment=1)
         {
-            if(size == 0) return 0;
+            if(size == 0) return nullptr;
             if(size <= m_rest)
             {
                 int8u* ptr = m_buf_ptr;

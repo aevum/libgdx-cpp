@@ -64,7 +64,7 @@ std::string ImmediateModeRenderer20::createVertexShader (bool hasNormals, bool h
     shader << (hasColors ? "varying vec4 v_col;\n" : "");
 
     for (int i = 0; i < numTexCoords; i++) {
-        shader << "varying vec2 v_tex" << i + ";\n";
+        shader << "varying vec2 v_tex" << i << ";\n";
     }
 
     shader << "void main() {\n" << "   gl_Position = u_projModelView * " << ShaderProgram::POSITION_ATTRIBUTE << ";\n"
@@ -111,7 +111,7 @@ std::string ImmediateModeRenderer20::createFragmentShader (bool hasNormals,bool 
 }
 
 void ImmediateModeRenderer20::begin (Matrix4& projModelView, int primitiveType ) {
-    this->customShader = NULL;
+    this->customShader = nullptr;
     
     this->projModelView.set(projModelView);
     this->primitiveType = primitiveType;
@@ -152,7 +152,7 @@ void ImmediateModeRenderer20::vertex (float x,float y,float z) {
 }
 
 void ImmediateModeRenderer20::end () {
-    if (customShader != NULL) {
+    if (customShader != nullptr) {
         customShader->begin();
         mesh.setVertices(vertices, vertexIdx);
         mesh.render(*customShader, primitiveType);
@@ -161,7 +161,7 @@ void ImmediateModeRenderer20::end () {
         defaultShader->begin();
         defaultShader->setUniformMatrix("u_projModelView", projModelView);
         for (int i = 0; i < numTexCoords; i++) {
-            defaultShader->setUniformi("u_sampler" + i, i);
+            defaultShader->setUniformi("u_sampler" + gdx::to_string(i), i);
         }
         mesh.setVertices(vertices, vertexIdx);
         mesh.render(*defaultShader, primitiveType);
@@ -182,7 +182,7 @@ int ImmediateModeRenderer20::getMaxVertices () {
 }
 
 void ImmediateModeRenderer20::dispose () {
-    if(defaultShader != NULL) defaultShader->dispose();
+    if(defaultShader != nullptr) defaultShader->dispose();
     mesh.dispose();
 }
 
@@ -208,10 +208,10 @@ fragmentShader(createFragmentShader(hasNormals, hasColors, numTexCoords))
 
     vertices = new float[maxVertices * (mesh.getVertexAttributes().vertexSize / 4)];
     vertexSize = mesh.getVertexAttributes().vertexSize / 4;
-    normalOffset = mesh.getVertexAttribute(VertexAttributes::Usage::Normal) != NULL ? mesh.getVertexAttribute(VertexAttributes::Usage::Normal)->offset / 4 : 0;
-    colorOffset = mesh.getVertexAttribute(VertexAttributes::Usage::ColorPacked) != NULL ? mesh.getVertexAttribute(VertexAttributes::Usage::ColorPacked)->offset / 4
+    normalOffset = mesh.getVertexAttribute(VertexAttributes::Usage::Normal) != nullptr ? mesh.getVertexAttribute(VertexAttributes::Usage::Normal)->offset / 4 : 0;
+    colorOffset = mesh.getVertexAttribute(VertexAttributes::Usage::ColorPacked) != nullptr ? mesh.getVertexAttribute(VertexAttributes::Usage::ColorPacked)->offset / 4
                   : 0;
-                  texCoordOffset = mesh.getVertexAttribute(VertexAttributes::Usage::TextureCoordinates) != NULL ? mesh
+                  texCoordOffset = mesh.getVertexAttribute(VertexAttributes::Usage::TextureCoordinates) != nullptr ? mesh
                   .getVertexAttribute(VertexAttributes::Usage::TextureCoordinates)->offset / 4 : 0;
 }
 

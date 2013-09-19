@@ -70,17 +70,17 @@ public:
 
         AtlasSprite (AtlasRegion _region) ;
 
-        virtual void setPosition (float x, float y);
-        virtual void setBounds (float x, float y, float width, float height);
-        virtual void setSize (float width, float height);
-        virtual void setOrigin (float originX, float originY);
-        virtual void flip (bool x, bool y);
-        virtual float getX() const;
-        virtual float getY() const;
-        virtual float getOriginX() const;
-        virtual float getOriginY() const;
-        virtual float getWidth() const;
-        virtual float getHeight() const;
+        virtual void setPosition (float x, float y) override;
+        virtual void setBounds (float x, float y, float width, float height) override;
+        virtual void setSize (float width, float height) override;
+        virtual void setOrigin (float originX, float originY) override;
+        virtual void flip (bool x, bool y) override;
+        virtual float getX() const override;
+        virtual float getY() const override;
+        virtual float getOriginX() const override;
+        virtual float getOriginY() const override;
+        virtual float getWidth() const override;
+        virtual float getHeight() const override;
 
         AtlasRegion getAtlasRegion();
     };
@@ -94,7 +94,7 @@ public:
     Sprite::ptr createSprite (const std::string& name);
     Sprite::ptr createSprite (const std::string& name,int index);
     std::vector< Sprite::ptr > createSprites (const std::string& name);
-    void dispose ();
+    void dispose () override;
 
     static std::unique_ptr<TextureAtlas> newAtlasFromProvider(TextureAtlasDataProvider& provider) ;
 
