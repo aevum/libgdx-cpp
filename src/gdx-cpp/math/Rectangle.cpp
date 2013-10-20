@@ -52,6 +52,10 @@ Rectangle::~Rectangle()
 
 Rectangle& Rectangle::operator=(const Rectangle& other)
 {
+    this->x = other.x;
+    this->y = other.y;
+    this->width = other.width;
+    this->height = other.height; 
     return *this;
 }
 
