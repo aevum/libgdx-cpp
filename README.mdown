@@ -14,8 +14,8 @@
 
 ## Creating your cross-platform project (the easy way)
 
-You can use the python gdx-wizard script that will setup a project containing all dependencies, paths, symbolical links and 
-assets already built in. You can just modify it's source to your needs after that. A sample call to setup an ios and an android project on a Mac would be:
+You can use python's gdx-wizard script to setup a project containing all dependencies, paths, symbolical links and 
+assets pre-configurerd. A sample command to setup an iOS+Android project on Mac would be:
 
 ```bash
 #call this on libgdx source folder
@@ -24,13 +24,13 @@ python gdx-wizard.py --gen-mode ios,android --root-dir ~/projects/ --project-nam
 --android-ndk /data/applications/android-ndk/ --ios-sdk-ver 6.0 --android-target android-10
 ```
 
-To generate for android and linux, just change the gen-mode to android,linux. You can safely call the script many times 
-as it will try to only include missing stuff, never remove them. So you can start on linux and later on migrate to Mac without problems (I hope :)
+To generate a base application for android and linux just change the gen-mode to "android,linux". You can safely call the script as many times 
+as you want as it will try to include only the new deployments. So you can start on linux and later on add the Mac backend without problems (I hope :)
 
 ### iOS Note
 
 When using Xcode to edit your new project, ensure that the "Base SDK" configuration is correctly pointed to the iOS SDK. I haven't found a way to magically set
-this parameter from cmake yet, so this is needed by now.
+this parameter from cmake.
 
 ### Android Note
 
@@ -41,7 +41,7 @@ dependency to your project.
 
 Assuming you have the latest Android NDK on "ANDROID_NDK_HOME" and the android SDK on "ANDROID_SDK_HOME"
 
-__Optional__: I'm installing the built libraries and includes under build/local for convenience purposes as you won't need to sudo to install them.
+__Optional__: I'm installing the built libraries and includes under build/local for convenience as you won't need to sudo to install them.
 
 ```bash
 git clone git://github.com/aevum/libgdx-cpp.git 
@@ -72,9 +72,9 @@ find_package(GdxCpp REQUIRED TRUE)
 include_directories(${GDXCPP_INCLUDE_DIR})
 ```
 
-If the library is not on a default location (/usr, /usr/local) you can specify a flag named GDX_ROOT pointing to the installation root or GDX_SOURCE pointing to the library source folder.
+If the library is not on a default location (/usr, /usr/local) you can specify a flag named GDX_ROOT pointing to the installation root, or set GDX_SOURCE pointing to the library source folder. Using GDX_SOURCE will build libgdx aside with your project, so it's a simple option if you pretend to tinker with the library.
 
-To actually build, you'll have to use a custom macro that handles the way the libraries are generated on it's different targets:
+To build your application you'll have to use a custom macro that handles the way the libraries are generated on different targets:
 
 ```cmake
 #If you used the finder the macros required to create cross platform items are already included, so
@@ -92,7 +92,7 @@ gdx_setup_target(mytarget EXECUTABLE "${SOURCES};${HEADERS}")
 
 #pay attention to the quotes and the semicolon while passing variables as parameters to the macro (This is a cmake limitation).
 
-#then add linkage normally:
+#then link the libraries:
 target_link_libraries(mytarget ${GDXCPP_LIBRARIES})
 
 #to generate a shared/static library (note that a shared library on iOS will be converted to a static one)
@@ -115,9 +115,7 @@ cmake -DGDX_SOURCE=~/sourcecode/libgdx-cpp REST_OF_CONFIG_FLAGS
 
 ## Differences from libgdx
 
-* The texture class constructors that received an managed texture data had to be changed to static constructors.
-This is because C++ construction blocks us to use shared_pointers, so we had to make it two-phase-like. So instead of calling the constructor,
-you'll have to call, for example:
+* The texture class constructors that received a managed texture data had to be changed to use static constructors.
 
 ```c++
 Texture::newFromFile()
@@ -135,7 +133,7 @@ Pixmap::newFromPixmap()
 Pixmap::newFromRect()
 ```
 
-* The Pixmap class has turned into an interface. This had to be done because we can have different pixmap backends (currently we have Svg and Gdx2d).
+* The Pixmap class has turned into an interface. This had to be done because we can have different pixmap implementors (currently Svg and Gdx2d).
 The gdx_cpp::Graphics interface now have to handle the TextureData and Pixmap resolution and creation. This was made to decouple the texture class from determining
 how to load and create TextureData (etc1, wich is not supported in all platforms per example).
 
@@ -150,4 +148,4 @@ how to load and create TextureData (etc1, wich is not supported in all platforms
 
 ### What has to be done
 
-* Backend polishing. Seriously, it's working, but there is a lot of stuff that is ugly and in a haste.
+* Backend polishing. Seriously, it's working, but there is room for improvement.
