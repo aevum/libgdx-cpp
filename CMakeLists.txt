@@ -18,17 +18,11 @@ option(BUILD_AS_SHARED_LIBRARIES "Build libraries as shared libraries instead of
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     # get gnu compiler version number
-    exec_program(${CMAKE_C_COMPILER} ARGS --version OUTPUT_VARIABLE _gcc_version_info)
-
-    string (REGEX MATCH " [34]\\.[0-9]" _gcc_version "${_gcc_version_info}")
-    string(REGEX REPLACE "[^0-9]*([0-9]+)\\.[0-9]+.*" "\\1" gcc_major_vers "${_gcc_version}")
-    string(REGEX REPLACE "[^0-9]*[0-9]+\\.([0-9]+).*" "\\1" gcc_minor_vers "${_gcc_version}")
+    execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
     # g++' -Wdouble-promotion needs at least version 4.6
-
-    if(${gcc_major_vers} LESS 4 AND ${gcc_minor_vers} LESS 6)
+    if (GCC_VERSION VERSION_LESS 4.6)
         message(FATAL_ERROR "gdx++ requires a gcc that's newer than 4.6 to fully support the new c++11 standard. Please upgrade your ndk to r8b or newer if using android.")
     endif()
-    
     # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wreorder")
 endif()
 
